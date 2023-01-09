@@ -3,6 +3,8 @@ package util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,9 +25,13 @@ public class HttpRequestUtils {
 
         for (String parameter : query.split("&")) {
             String[] info = parameter.split("=");
-            result.put(info[0], info[1]);
+            result.put(info[0], decode(info[1]));
         }
 
         return result;
+    }
+
+    private static String decode(String value) {
+        return URLDecoder.decode(value, StandardCharsets.UTF_8);
     }
 }
