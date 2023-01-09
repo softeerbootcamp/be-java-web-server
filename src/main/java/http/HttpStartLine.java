@@ -20,4 +20,6 @@ public class HttpStartLine {
     public String getTarget() {
         return target;
     }
+
+    public boolean hasBody() { return method.hasBody();}
 }
