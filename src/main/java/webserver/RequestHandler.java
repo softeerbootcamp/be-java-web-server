@@ -2,9 +2,15 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.Utility;
 
 /**
  * 해야할 것
@@ -35,6 +41,8 @@ public class RequestHandler implements Runnable {
 
     private Socket connection;
 
+    public Utility utility = new Utility();
+
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
     }
@@ -48,6 +56,10 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
             String line = br.readLine();
             logger.debug("request Line : {}",line);
+
+            String indexString = utility.stringSplit(line);
+            logger.debug("index.html output: " + indexString);
+
             while (!line.equals("")) {
                 line = br.readLine();
                 logger.debug("header : {}",line);
@@ -55,6 +67,10 @@ public class RequestHandler implements Runnable {
 
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = "Hello World".getBytes();
+//            byte[] body = Files.readAllBytes(new File("./webapp/index.html").toPath());
+
+
+
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException e) {
