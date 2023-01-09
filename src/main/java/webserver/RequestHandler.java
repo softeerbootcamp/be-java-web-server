@@ -2,7 +2,7 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.HttpRequestHandlerUtils;
+import util.HttpRequestUtils;
 
 import java.io.*;
 import java.net.Socket;
@@ -29,7 +29,7 @@ public class RequestHandler implements Runnable {
             }
             logger.debug("request line : {}", line);
 
-            String url = HttpRequestHandlerUtils.getUrl(line);
+            String url = HttpRequestUtils.getUrl(line);
 
             if (url.contains("user/create")) {
                 UserRequetHandler userRequetHandler = new UserRequetHandler();

@@ -2,6 +2,9 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.HttpRequestUtils;
+
+import java.util.Map;
 
 public class UserRequetHandler {
 
@@ -9,10 +12,9 @@ public class UserRequetHandler {
 
     public void createUser(String url) {
         String[] splited = url.split("\\?");
-        String userInfo = splited[1];
+        String queryString = splited[1];
+        logger.debug("userInfo : {}" , queryString);
 
-        logger.debug("userInfo : {}" , userInfo);
-
-
+        Map<String, String> userInfo = HttpRequestUtils.parseQueryString(queryString);
     }
 }
