@@ -11,7 +11,7 @@ public enum HttpMethod {
     TRACE(false),
     PATCH(false);
 
-    boolean hasBody;
+    private final boolean hasBody;
 
     HttpMethod(boolean hasBody){
         this.hasBody = hasBody;
