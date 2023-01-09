@@ -25,11 +25,7 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in,"UTF-8"));
             String line = br.readLine();
             String path = RequestUtils.getFilePathByRequest(line);
-            while (!line.equals("")){
-                line = br.readLine();
-                System.out.println("request : "+line);
-            }
-
+            RequestUtils.printRequestLines(line,br);
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = Files.readAllBytes(new File("./src/main/resources/templates"+path).toPath());
