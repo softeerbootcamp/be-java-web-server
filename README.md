@@ -32,4 +32,6 @@ Java Web Application Server 2022
         assertThat(url).isEqualTo("/index.html");
         }
     ```
+    + 회원가입 요청 url 처리 - split 함수 활용(? split > & split > = split 처리)
+    
     

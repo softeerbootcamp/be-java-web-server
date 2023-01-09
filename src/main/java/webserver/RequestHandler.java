@@ -39,7 +39,6 @@ public class RequestHandler implements Runnable {
 //            }
             String url = HttpRequestUtils.getUrl(line);
             if(url.startsWith("/user/create")) {
-                logger.debug("URL : {}", url);
                 int index = url.indexOf("?");
                 String requestPath = url.substring(0, index);
                 String queryString = url.substring(index + 1);
