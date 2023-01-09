@@ -10,7 +10,7 @@ Java Web Application Server 2022
 ## 프로젝트 학습 내용
 
 ### 2주차
-  + Day 1
+  + Day 6
     + InputStream > InputStreamReader > BufferedReader로 Http Request Header 가져오기
     ``` java
       try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
