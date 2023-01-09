@@ -13,4 +13,12 @@ public class HttpRequestHeader {
     public static HttpRequestHeader of(Map<String, String> headers){
         return new HttpRequestHeader(headers);
     }
+
+    public void addHeader(String header, String value) {
+        headers.put(header, value);
+    }
+
+    public String getValue(String header) {
+        return headers.get(header);
+    }
 }
