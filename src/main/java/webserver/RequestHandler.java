@@ -10,7 +10,9 @@ import org.slf4j.LoggerFactory;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private static final String ABSOLUTE_PATH = "/Users/rentalhub/HMG/be-java-web-server/src/main/resources/templates";
+    private static final String ABSOLUTE_PATH = "/Users/rentalhub/HMG/be-java-web-server/src/main/resources";
+    private static final String TEMPLATES = "/templates";
+    private static final String STATIC = "/static";
     private Socket connection;
 
     public RequestHandler(Socket connectionSocket) {
@@ -31,6 +33,7 @@ public class RequestHandler implements Runnable {
             String reqURL = headers[1];
             if (reqURL.equals("/"))
                 reqURL = "/index.html";
+            String fileExtension = reqURL.substring(reqURL.lastIndexOf('.')+1);
             String httpVersion = headers[2];
             System.out.println("Http Method: "+httpMethod);
             System.out.println("Http reqURL: "+reqURL);
@@ -39,21 +42,24 @@ public class RequestHandler implements Runnable {
             while(!(strBr = br.readLine()).equals("")){
                 System.out.println(strBr);
             }
-            byte[] body = Files.readAllBytes(new File(ABSOLUTE_PATH+reqURL).toPath());
+            String fileURL = ABSOLUTE_PATH;
+            String contentType = fileExtension.equals("html")?"text/html":"text/css";
+            fileURL += fileExtension.equals("html")?TEMPLATES:STATIC;
+            byte[] body = Files.readAllBytes(new File(fileURL+reqURL).toPath());
             // TODO 사용자 요청에 대한 처리는 이 곳까지 구현하면 된다.
             DataOutputStream dos = new DataOutputStream(out);
             //byte[] body = "Hello World".getBytes();
-            response200Header(dos, body.length);
+            response200Header(dos, body.length,contentType);
             responseBody(dos, body);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: "+contentType+";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
