@@ -24,6 +24,10 @@ public class RequestHandler implements Runnable {
             String line = br.readLine();
             logger.debug("request line : {}", line);
 
+            String[] tokens = line.split(" ");
+            String url = tokens[1];
+            logger.debug("URL : {}", url);
+
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = "Hello World".getBytes();
