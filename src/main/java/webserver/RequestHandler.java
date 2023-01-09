@@ -23,19 +23,20 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            String line = br.readLine();
-            if (line == null) {
+            String requestLine = br.readLine();
+            if (requestLine == null) {
                 return;
             }
-            logger.debug("request line : {}", line);
+            logger.debug("request requestLine : {}", requestLine);
 
-            String url = HttpRequestUtils.getUrl(line);
+            //TODO: URL 요청에 따라 응답할 뷰 파일(ViewResolver)을 지정하는 역할을 메서드나 클래스로 분리
+            String url = HttpRequestUtils.getUrl(requestLine);
 
             String path = "src/main/resources/templates";
 
             if (url.contains("/user/create")) {
                 UserService userService = new UserService();
-                url = userService.createUser(line);
+                url = userService.signUp(requestLine);
             }
 
             byte[] body = Files.readAllBytes(new File(path + url).toPath());
