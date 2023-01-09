@@ -2,17 +2,37 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.utils.FilePathParser;
+import webserver.utils.RequestParser;
+
+import static webserver.utils.FilePathParser.getStaticFilesPath;
+import static webserver.utils.FilePathParser.getTemplateFilesPath;
+import static webserver.utils.RequestParser.parseRequestedHeader;
+import static webserver.utils.RequestParser.parseRequestedStatic;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
+    private RequestParser requestParser;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
+    }
+
+    public byte[] staticResolver(String fileName) throws IOException{
+        String[] type = fileName.split("\\.");
+        String typeName = type[type.length - 1];
+        if(typeName.equals("html") || typeName.equals("ico"))
+            return getTemplateFilesPath(fileName);
+        else
+            return getStaticFilesPath(fileName);
     }
 
     public void run() {
@@ -22,13 +42,20 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String line = br.readLine();
+            String fileName = parseRequestedStatic(line)[1];
+            line = br.readLine();
+            System.out.println("line : " + line);
+
             while(!line.equals("")){
-                logger.debug(line);
+                logger.debug("body : {}", line);
+                Map<String, String> reqMap = new HashMap<>();
+                String[] parsedReq = parseRequestedHeader(line);
+                reqMap.put(parsedReq[0], parsedReq[1]);
                 line = br.readLine();
             }
-            logger.debug(br.readLine());
+
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = "Hello World".getBytes();
+            byte[] body = staticResolver(fileName);
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException e) {
