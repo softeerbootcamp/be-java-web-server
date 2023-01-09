@@ -92,10 +92,10 @@ public class RequestHandler implements Runnable {
                 logger.debug("full url : {}" , "src/main/resources/static" + urlString);
                 logger.debug("css : " + extensionString);
                 logger.debug("urlString : " + urlString);
-                body = Files.readAllBytes(new File("src/main/resources/static" + urlString).toPath());
+                body = Files.readAllBytes(new File("src/main/resources" + urlString).toPath());
 
             }if(extensionString.equals("js")){
-                body = Files.readAllBytes(new File("src/main/resources/static" + urlString).toPath());
+                body = Files.readAllBytes(new File("src/main/resources" + urlString).toPath());
             }
 
             response200Header(dos, body.length);
