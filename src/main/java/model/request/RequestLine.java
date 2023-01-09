@@ -22,15 +22,7 @@ public class RequestLine {
         return new RequestLine(method, uri, httpVersion);
     }
 
-    public Method getMethod() {
-        return method;
-    }
-
     public String getUri() {
         return uri;
-    }
-
-    public String getHttpVersion() {
-        return httpVersion;
     }
 }
