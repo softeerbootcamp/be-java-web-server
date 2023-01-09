@@ -5,10 +5,10 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
+import model.request.RequestLine;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import util.HttpRequestUtil;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -27,9 +27,10 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             String line = br.readLine();
 
-            String url = HttpRequestUtil.getUrl(line);
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = Files.readAllBytes(new File("src/main/resources/templates" + url).toPath());
+            RequestLine requestLine = RequestLine.of(line);
+            byte[] body = Files.readAllBytes(new File("src/main/resources/templates" + requestLine.getUri()).toPath());
+
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException e) {
