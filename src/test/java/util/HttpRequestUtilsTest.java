@@ -22,6 +22,7 @@ public class HttpRequestUtilsTest {
 
         // then
         assertAll(
+                () -> assertEquals(2, querys.size()),
                 () -> assertEquals("sol", querys.get("name")),
                 () -> assertEquals("26", querys.get("age"))
         );
