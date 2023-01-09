@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class RequestParser{
     public static String REQUEST_LINE = "Request-line";
-    private static Map<String, String> parse(InputStream in) {
+    public static Map<String, String> parse(InputStream in) {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
         Map<String, String> requestMap = new HashMap<>();
         try {
@@ -33,22 +33,18 @@ public class RequestParser{
         }
     }
 
-    public static String getMethod(InputStream in) {
-        String[] token = parse(in).get(REQUEST_LINE).split(" ");
+    public static String getMethod(String requestLine) {
+        String[] token = requestLine.split(" ");
         return token[0];
     }
 
-    public static String getResource(InputStream in) {
-        String[] token = parse(in).get(REQUEST_LINE).split(" ");
+    public static String getResource(String requestLine) {
+        String[] token = requestLine.split(" ");
         return token[1];
     }
 
-    public static String getHTTPVersion(InputStream in) {
-        String[] token = parse(in).get(REQUEST_LINE).split(" ");
+    public static String getHTTPVersion(String requestLine) {
+        String[] token = requestLine.split(" ");
         return token[2];
-    }
-
-    public static Map<String, String> getAllHeaders(InputStream in) {
-        return parse(in);
     }
 }
