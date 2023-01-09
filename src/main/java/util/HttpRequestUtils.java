@@ -3,6 +3,8 @@ package util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +25,7 @@ public class HttpRequestUtils {
         for(String userInput : userInputs){
             logger.debug("UserInput : {}", userInput);
             String[] requestParam = userInput.split("=");
-            requestParamsMap.put(requestParam[0], requestParam[1]);
+            requestParamsMap.put(requestParam[0], URLDecoder.decode(requestParam[1], StandardCharsets.UTF_8));
         }
         return requestParamsMap;
     }
