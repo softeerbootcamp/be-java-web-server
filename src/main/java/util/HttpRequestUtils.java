@@ -23,7 +23,7 @@ public class HttpRequestUtils {
         Map<String, String> requestParamsMap = new HashMap<>();
         String[] userInputs = queryString.split("&");
         for(String userInput : userInputs){
-            logger.debug("UserInput : {}", userInput);
+            //logger.debug("UserInput : {}", userInput);
             String[] requestParam = userInput.split("=");
             requestParamsMap.put(requestParam[0], URLDecoder.decode(requestParam[1], StandardCharsets.UTF_8));
         }

@@ -24,7 +24,7 @@ Java Web Application Server 2022
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates/" + url).toPath());
     ```
     + 유틸 클래스 (HttpRequestUtils) 생성 및 리팩토링
-    + 테스트 코드 추가
+      + 테스트 코드 추가
     ``` java
         @Test
         public void getUrl(){
@@ -33,5 +33,9 @@ Java Web Application Server 2022
         }
     ```
     + 회원가입 요청 url 처리 - split 함수 활용(? split > & split > = split 처리)
+      + 테스트 코드 추가
     
-    
+    + http request stream에 한글이 있을 경우가 있으므로 parseQueryString 메소드에서 UTF_8 형식으로 변경
+    ``` java
+        requestParamsMap.put(requestParam[0], URLDecoder.decode(requestParam[1], StandardCharsets.UTF_8));
+    ```
