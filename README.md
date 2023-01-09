@@ -8,6 +8,7 @@ Java Web Application Server 2022
 를 참고하여 작성되었습니다.
 
 ## Step 1 
+2023.01.09(월)
 
 1. 요청들어오는 request들 출력해보기 [check]
 2. request들 중 index.html 파싱해서 빼기 [check]
