@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-
+    private static final String ABSOLUTE_PATH = "/Users/rentalhub/HMG/be-java-web-server/src/main/resources/templates";
     private Socket connection;
 
     public RequestHandler(Socket connectionSocket) {
@@ -39,7 +39,7 @@ public class RequestHandler implements Runnable {
             while(!(strBr = br.readLine()).equals("")){
                 System.out.println(strBr);
             }
-            byte[] body = Files.readAllBytes(new File("/Users/rentalhub/HMG/be-java-web-server/src/main/resources/templates"+reqURL).toPath());
+            byte[] body = Files.readAllBytes(new File(ABSOLUTE_PATH+reqURL).toPath());
             // TODO 사용자 요청에 대한 처리는 이 곳까지 구현하면 된다.
             DataOutputStream dos = new DataOutputStream(out);
             //byte[] body = "Hello World".getBytes();
