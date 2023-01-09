@@ -1,4 +1,4 @@
-package io;
+package io.request;
 
 public class RequestImpl implements Request {
 
