@@ -32,7 +32,7 @@ public class CustomHttpRequest {
         }
     }
 
-    public String getCurrentRootUrl(){
+    public String getUrl(){
         return url;
     }
 
