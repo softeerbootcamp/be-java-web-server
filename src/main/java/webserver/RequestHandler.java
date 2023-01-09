@@ -16,7 +16,7 @@ public class RequestHandler implements Runnable {
         this.connection = connectionSocket;
     }
 
-    public void run() {
+    public void run() { //즉 이미 클라이언트와 연결이 된 상태에서 돌아가는 메서드임
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
 
