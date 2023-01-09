@@ -8,6 +8,10 @@ public enum HttpMethod {
     NOT_MATCH("NOT_MATCH"),
     ;
 
+    public static HttpMethod findMethod(HttpRequest httpRequest) {
+        String headerFirstLine = httpRequest.getHeaderContents().get(0);
+        return HttpMethod.getMethod(headerFirstLine.split(" ")[0]);
+    }
     private String method;
 
     HttpMethod(String method) {
