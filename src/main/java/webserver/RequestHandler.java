@@ -31,40 +31,40 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
-
             String line = br.readLine();
             logger.debug("> input line : {}", line);
             String url = getUrl(line);
             logger.debug("> request url : {}", url);
 
-            // url쿼리 스트링 처리
-            // /user/create?userId=psm9718&password=11123&name=qq&email=124%401
             url = checkUrlQueryString(url);
 
-            String substring = url.substring(url.lastIndexOf(".")+1);
-            logger.debug(">>> substring : {}", substring);
-
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body;
-
             //TODO 리팩토링 필요!!
-            if (substring.equals("html")) {
-                body = Files.readAllBytes(new File("src/main/resources/templates/" + url).toPath());
-                response200Header(dos, body.length, "text/html");
-            } else{
-                body = Files.readAllBytes(new File("src/main/resources/static" + url).toPath());
-                logger.debug(">>>>> {}", url);
-                if (substring.equals("css")) {
-                    response200Header(dos, body.length, "text/css");
-                } else {
-                    response200Header(dos, body.length, "text/javascript");
-                }
-            }
+            byte[] body = response200HeaderByExtension(url, dos);
 
             responseBody(dos, body);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private byte[] response200HeaderByExtension(String url, DataOutputStream dos) throws IOException {
+        String substring = url.substring(url.lastIndexOf(".")+1);
+        logger.debug(">>> substring : {}", substring);
+
+        byte[] body;
+        if (substring.equals("html")) {
+            body = Files.readAllBytes(new File("src/main/resources/templates/" + url).toPath());
+            response200Header(dos, body.length, "text/html");
+        } else{
+            body = Files.readAllBytes(new File("src/main/resources/static" + url).toPath());
+            if (substring.equals("css")) {
+                response200Header(dos, body.length, "text/css");
+            } else {
+                response200Header(dos, body.length, "text/javascript");
+            }
+        }
+        return body;
     }
 
     private String checkUrlQueryString(String url) {
