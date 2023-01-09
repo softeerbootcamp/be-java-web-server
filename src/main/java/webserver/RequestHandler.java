@@ -25,9 +25,7 @@ public class RequestHandler implements Runnable {
             String line = br.readLine();
             logger.debug("request line : {}", line);
 
-            String[] tokens = line.split(" ");
-            String url = tokens[1];
-            logger.debug("URL : {}", url);
+            String url = getUrl(line);
 
             byte[] body = Files.readAllBytes(new File("src/main/resources/templates" + url).toPath());
 
@@ -38,6 +36,13 @@ public class RequestHandler implements Runnable {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private String getUrl(String line) {
+        String[] tokens = line.split(" ");
+        String url = tokens[1];
+        logger.debug("URL : {}", url);
+        return url;
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
