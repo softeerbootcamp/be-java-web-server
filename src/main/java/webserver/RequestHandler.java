@@ -24,6 +24,11 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
             String line = br.readLine();
             logger.debug("request : "+line);
+
+            String[] temp = line.split(" ");
+            String path = temp[1];
+            logger.debug("path : "+path);
+
             while(!line.equals("")){
                 line = br.readLine();
                 logger.debug("header: "+line);
