@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.Socket;
 
 //import com.github.jknack.handlebars.internal.Files;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,7 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
-            BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+            BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             String line = br.readLine();
             if(line == null) return;
 //          logger.debug("request line : {}", line);
