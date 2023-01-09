@@ -38,25 +38,10 @@ public class RequestHandler implements Runnable {
             String url = getUrl(line);
             logger.debug("> request url : {}", url);
 
-            // url : /user/create?userId=psm9718&password=11123&name=qq&email=124%401
-            String[] queryStrings = url.split("\\?");
-            if (queryStrings.length != 1) {
-                //userId=dd&password=&name=&email=ddd%40dd
-                String queryString = queryStrings[1];
-                logger.debug(">> {}", queryString);
-                /**
-                 * 회원가입 로직
-                 */
-                Map<String,String> requestParams = parseQuerystring(queryString);
+            // url쿼리 스트링 처리
+            // /user/create?userId=psm9718&password=11123&name=qq&email=124%401
+            url = checkUrlQueryString(url);
 
-                User user = new User(requestParams.get("userId"),
-                        requestParams.get("password"),
-                        requestParams.get("name"),
-                        requestParams.get("email"));
-                Database.addUser(user);
-
-                url = BASE_URL;
-            }
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = Files.readAllBytes(new File("src/main/resources/templates/" + url).toPath());
 
@@ -66,7 +51,34 @@ public class RequestHandler implements Runnable {
             logger.error(e.getMessage());
         }
     }
-    public static Map<String, String> parseQuerystring(String queryString) {
+
+    private String checkUrlQueryString(String url) {
+        String[] queryStrings = url.split("\\?");
+        if (queryStrings.length != 1) {
+            //userId=dd&password=&name=&email=ddd%40dd
+            String queryString = queryStrings[1];
+            logger.debug(">> {}", queryString);
+            signUpUser(queryString);
+
+            url = BASE_URL;
+        }
+        return url;
+    }
+
+    private void signUpUser(String queryString) {
+        /**
+         * 회원가입 로직
+         */
+        Map<String, String> requestParams = parseQuerystring(queryString);
+
+        User user = new User(requestParams.get("userId"),
+                requestParams.get("password"),
+                requestParams.get("name"),
+                requestParams.get("email"));
+        Database.addUser(user);
+    }
+
+    public Map<String, String> parseQuerystring(String queryString) {
         Map<String, String> map = new HashMap<>();
         if ((queryString == null) || (queryString.equals(""))) {
             return map;
