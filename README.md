@@ -23,6 +23,7 @@ Java Web Application Server 2022
         DataOutputStream dos = new DataOutputStream(out);
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates/" + url).toPath());
     ```
+    + 유틸 클래스 (HttpRequestUtils) 생성 및 리팩토링
     + 테스트 코드 추가
     ``` java
         @Test
