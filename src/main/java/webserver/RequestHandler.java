@@ -10,6 +10,8 @@ import reader.RequestReader;
 import reader.fileReader.FileReader;
 import reader.fileReader.TemplatesFileReader;
 import request.HttpRequest;
+import response.HttpResponse;
+import util.HttpStatus;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -32,35 +34,16 @@ public class RequestHandler implements Runnable {
             requestReader = RequestReader.selectRequestReaderByMethod(httpRequest.getHttpMethod());
             String url = requestReader.findPathInRequest(httpRequest);
 
-            DataOutputStream dos = new DataOutputStream(out);
             fileReader = new TemplatesFileReader();
-            byte[] body = fileReader.readFile(url);
-            response200Header(dos, body.length);
-            responseBody(dos, body);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
+            byte[] data = fileReader.readFile(url);
 
-
-
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
+            DataOutputStream clientOutPutStream = new DataOutputStream(out);
+            HttpResponse httpResponse = new HttpResponse(clientOutPutStream,data);
+            httpResponse.responseHeader(HttpStatus.OK);
+            httpResponse.responseBody();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 }
+
