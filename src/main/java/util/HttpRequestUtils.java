@@ -2,7 +2,6 @@ package util;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public final class HttpRequestUtils {
     public HttpRequestUtils() {}
@@ -16,13 +15,13 @@ public final class HttpRequestUtils {
                 : strOfRemovedHttpMethod;
     }
 
-    public static Map<String, String> parseQueryString(String queryString) {
-        if (Objects.isNull(queryString)) {
+    public static Map<String, String> parseQueryString(String requestLine) {
+        if (!requestLine.contains("?")) {
             return Map.of();
         }
 
         Map<String, String> querys = new HashMap<>();
-        String url = queryString.split(" ")[1];
+        String url = requestLine.split(" ")[1];
         int idxOfStartQueryString = url.indexOf("?") + 1;
         String[] queryparamsOfString = url.substring(idxOfStartQueryString).split("&");
 

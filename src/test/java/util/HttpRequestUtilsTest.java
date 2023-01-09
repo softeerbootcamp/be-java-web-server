@@ -29,6 +29,19 @@ public class HttpRequestUtilsTest {
     }
 
     @Test
+    @DisplayName("쿼리 스트링 파싱 테스트 - 쿼리 스트링이 없는 경우")
+    void testParseQueryStringWhenIsNotExist() {
+        // given
+        String requestLine = "GET / HTTP/1.1";
+
+        // when
+        Map<String, String> querys = HttpRequestUtils.parseQueryString(requestLine);
+
+        // then
+        assertEquals(0, querys.size());
+    }
+
+    @Test
     @DisplayName("요청 Path 파싱 테스트 - 쿼리스트링이 없는 경우")
     void testRequestURL() {
         // given
