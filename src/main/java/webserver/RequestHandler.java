@@ -3,6 +3,7 @@ package webserver;
 import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,9 @@ public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
+
+    private
+
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -25,19 +29,29 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
 
             String url = getUrl(in);
+            byte[] bytes;
+            if(url.contains("html") || url.contains("favicon"))
+                bytes = Files.readAllBytes(new File("./src/main/resources/templates" + url).toPath());
+            else
+                bytes = Files.readAllBytes(new File("./src/main/resources/static"+ url).toPath());
+            System.out.println(url);
 
-            byte[] bytes = Files.readAllBytes(new File("./src/main/resources/templates" + url).toPath());
-            response200Header(dos, bytes.length);
+            response200Header(dos, bytes.length, url);
             responseBody(dos, bytes);
         }catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String url) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            if(url.contains("html"))
+                dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            else if(url.contains("css"))
+                dos.writeBytes("Content-Type: text/css;charset=utf-8\r\n");
+            else if(url.contains("js"))
+                dos.writeBytes("Content-Type: text/javascript;charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
