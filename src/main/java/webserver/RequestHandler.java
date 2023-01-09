@@ -1,12 +1,17 @@
 package webserver;
 
+import db.Database;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -36,13 +41,22 @@ public class RequestHandler implements Runnable {
             // url : /user/create?userId=psm9718&password=11123&name=qq&email=124%401
             String[] queryStrings = url.split("\\?");
             if (queryStrings.length != 1) {
-                logger.debug(">> {}", queryStrings[1]);
+                //userId=dd&password=&name=&email=ddd%40dd
+                String queryString = queryStrings[1];
+                logger.debug(">> {}", queryString);
                 /**
                  * 회원가입 로직
                  */
+                Map<String,String> requestParams = parseQuerystring(queryString);
+
+                User user = new User(requestParams.get("userId"),
+                        requestParams.get("password"),
+                        requestParams.get("name"),
+                        requestParams.get("email"));
+                Database.addUser(user);
+
                 url = BASE_URL;
             }
-
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = Files.readAllBytes(new File("src/main/resources/templates/" + url).toPath());
 
@@ -51,6 +65,28 @@ public class RequestHandler implements Runnable {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+    public static Map<String, String> parseQuerystring(String queryString) {
+        Map<String, String> map = new HashMap<>();
+        if ((queryString == null) || (queryString.equals(""))) {
+            return map;
+        }
+        String[] params = queryString.split("&");
+        for (String param : params) {
+            try {
+                String[] keyValuePair = param.split("=", 2);
+                String name = URLDecoder.decode(keyValuePair[0], "UTF-8");
+                if (name == "") {
+                    continue;
+                }
+                String value = keyValuePair.length > 1 ? URLDecoder.decode(
+                        keyValuePair[1], "UTF-8") : "";
+                map.put(name, value);
+            } catch (UnsupportedEncodingException e) {
+                // ignore this parameter if it can't be decoded
+            }
+        }
+        return map;
     }
 
     private String getUrl(String line) {
