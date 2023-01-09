@@ -2,31 +2,30 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.utils.FilePathParser;
-import webserver.utils.RequestParser;
+import webserver.exception.HttpRequestError;
+import webserver.exception.NoFileException;
+import webserver.utils.RequestUtil;
 
-import static webserver.utils.FilePathParser.getStaticFilesPath;
-import static webserver.utils.FilePathParser.getTemplateFilesPath;
-import static webserver.utils.RequestParser.parseRequestedHeader;
-import static webserver.utils.RequestParser.parseRequestedStatic;
+import static webserver.utils.FilePathParser.*;
+import static webserver.utils.RequestUtil.*;
+import static webserver.utils.ResponseUtil.*;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
-    private RequestParser requestParser;
+    private RequestUtil requestUtil;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
     }
 
-    public byte[] staticResolver(String fileName) throws IOException{
+    public byte[] staticRequestResolver(String fileName) throws IOException, NoFileException {
         String[] type = fileName.split("\\.");
         String typeName = type[type.length - 1];
         if(typeName.equals("html") || typeName.equals("ico"))
@@ -38,48 +37,16 @@ public class RequestHandler implements Runnable {
     public void run() {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
-
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            String line = br.readLine();
-            String fileName = parseRequestedStatic(line)[1];
-            line = br.readLine();
-            System.out.println("line : " + line);
 
-            while(!line.equals("")){
-                logger.debug("body : {}", line);
-                Map<String, String> reqMap = new HashMap<>();
-                String[] parsedReq = parseRequestedHeader(line);
-                reqMap.put(parsedReq[0], parsedReq[1]);
-                line = br.readLine();
-            }
+            Map<String, String> reqMap = parseHttpRequest(in);
+            readHttpRequest(reqMap);  //Read Http Request Message
+            String fileName = findFilePath(reqMap); //Get an absolute file path for the requested static file
+            makeResponse(fileName, out);  //Create Http Response Message
 
-            DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = staticResolver(fileName);
-            response200Header(dos, body.length);
-            responseBody(dos, body);
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            logger.debug(e.getMessage());
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
 }
