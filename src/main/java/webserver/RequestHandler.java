@@ -38,8 +38,8 @@ public class RequestHandler implements Runnable {
     private void response(CustomHttpResponse response){
         try {
             DataOutputStream dos = new DataOutputStream(response.getOutputStream());
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("HTTP/1.1 "+ response.getStatusCode().getCode() + " " +  response.getStatusCode().getMessage()+ "\r\n");
+            dos.writeBytes("Content-Type: "+ response.getContentType().getContentType()+"; charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + response.getBody().size() + "\r\n");
             dos.writeBytes("\r\n");
             dos.write(Bytes.toArray(response.getBody()), 0, response.getBody().size());
