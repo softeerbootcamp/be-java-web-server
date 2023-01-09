@@ -20,7 +20,15 @@ Java Web Application Server 2022
     + Header의 첫 번째 라인에서 요청 URL을 추출
     + Path에 해당하는 파일을 응답하기
     ``` java
-    DataOutputStream dos = new DataOutputStream(out);
-    byte[] body = Files.readAllBytes(new File("./src/main/resources/templates/" + url).toPath());
+        DataOutputStream dos = new DataOutputStream(out);
+        byte[] body = Files.readAllBytes(new File("./src/main/resources/templates/" + url).toPath());
+    ```
+    + 테스트 코드 추가
+    ``` java
+        @Test
+        public void getUrl(){
+        String url = HttpRequestUtils.getUrl("GET /index.html HTTP/1.1");
+        assertThat(url).isEqualTo("/index.html");
+        }
     ```
     
