@@ -24,6 +24,9 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
             String line = br.readLine();
+            if (line == null) {
+                return;
+            }
             logger.debug("request line : {}", line);
 
             String url = HttpRequestHandlerUtils.getUrl(line);
