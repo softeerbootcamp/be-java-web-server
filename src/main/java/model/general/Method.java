@@ -1,5 +1,7 @@
 package model.general;
 
+import java.util.Arrays;
+
 public enum Method {
     GET("GET"),
     POST("POST"),
@@ -10,5 +12,12 @@ public enum Method {
 
     Method(String method) {
         this.method = method;
+    }
+
+    public static Method of(String method) {
+        return Arrays.stream(values())
+                .filter(m -> m.method.equals(method))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Not Supported Method"));
     }
 }
