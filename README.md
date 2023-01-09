@@ -1,6 +1,47 @@
 # java-was-2022
 Java Web Application Server 2022
 
+## Socket Programming
+![socket](https://t1.daumcdn.net/cfile/tistory/99BD563359E489460F)
+#### ServerSocket 클래스
+* 서버 프로그램에서 사용하는 소켓
+* 포트를 통해 연결 요청이 오기를 대기
+* 요청이 오면 클라이언트와 연결을 맺고 해당 클라이언트와 통신하는 새 소켓을 만드는 일을 한다.
+* 새로 만들어진 소켓은 클라이언트 소켓과 데이터를 주고받는다.
+* 자바 7에서 ServerSocket은 AutoCloseable 인터페이스를 구현하고 있으므로, try-with-resources 구문을 이용할 수 있다.
+  * try-with-resources는 try(...) 문에서 선언된 객체들에 대해서 try가 종료될 때 자동으로 자원을 해제해주는 기능
+  * AutoCloseable은 try에 선언된 객체가 AutoCloseable을 구현했더라면 Java는 try 구문이 종료될 때 객체의 close() 메소드를 자동으로 호출
+
+#### Socket 클래스
+* 서버 프로그램으로 연결 요청
+* 데이터 전송을 담당
+
+<pre>
+<code>
+public static void main(String args[]) throws Exception {
+        int port = 0;
+        if (args == null || args.length == 0) {
+            port = DEFAULT_PORT;
+        } else {
+            port = Integer.parseInt(args[0]);
+        }
+
+        // 1. 서버소켓을 생성한다. 웹서버는 기본적으로 8080번 포트를 사용한다.
+        // 생성자 내부에 bind()가 있고, bind() 내부에 listen() 있음
+        try (ServerSocket listenSocket = new ServerSocket(port)) {
+            Socket connection;//클라이언트 소켓과의 연결 객체
+            //2. 서버 소켓 listenSocket가 accpet를 호출하고 리턴을 해주면 소켓인 connection 객체가 생성됨
+            //accept()가 호출되면 프로그램은 여기서 실행을 멈추고 클라이언트가 port번으로 연결할 때까지 무한 대기
+            while ((connection = listenSocket.accept()) != null) {
+                Thread thread = new Thread(new RequestHandler(connection));
+                thread.start();
+            }
+        }
+    }
+</code>
+</pre>
+
+*** 
 ## HTTP 메시지 구조 및 핵심 내용
 1. **정의 : HyperText Transfer Protocol** <br>
    하이퍼텍스트(HTML) 문서를 교환하기 위해 만들어진 protocol(통신 규약).<br>
