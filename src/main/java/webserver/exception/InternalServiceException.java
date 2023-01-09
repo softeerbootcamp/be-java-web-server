@@ -1,11 +1,14 @@
 package webserver.exception;
 
-public class InternalServiceException extends RuntimeException{
+public class InternalServiceException extends HttpRequestError{
 
     private static final String msg = "서버 내부 오류";
+    private static final String errorCode = "500";
+
 
     public InternalServiceException() {
-        super(msg);
+        super(msg, errorCode);
     }
+
 }
 
