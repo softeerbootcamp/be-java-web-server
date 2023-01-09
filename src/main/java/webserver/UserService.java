@@ -12,10 +12,10 @@ public class UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    public String signUp(String requestLine) {
-        String[] splited = requestLine.split("\\?");
+    public String signUp(String url) {
+        String[] splited = url.split("\\?");
         String queryString = splited[1];
-        logger.debug("userInfo : {}" , queryString);
+        logger.debug("queryString : {}" , queryString);
 
         Map<String, String> userInfo = HttpRequestUtils.parseQueryString(queryString);
 
@@ -24,7 +24,7 @@ public class UserService {
 
         Database.addUser(user);
 
-        return "/user/login.html";
+        return "/user/login";
     }
 
     private User createUser(Map<String, String> userInfo) {
