@@ -13,8 +13,6 @@ public class RequestHandler implements Runnable {
 
     private Socket connection;
 
-    private
-
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -29,29 +27,24 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
 
             String url = getUrl(in);
+            String contentType = Files.probeContentType(new File(url).toPath());
             byte[] bytes;
             if(url.contains("html") || url.contains("favicon"))
                 bytes = Files.readAllBytes(new File("./src/main/resources/templates" + url).toPath());
             else
                 bytes = Files.readAllBytes(new File("./src/main/resources/static"+ url).toPath());
-            System.out.println(url);
 
-            response200Header(dos, bytes.length, url);
+            response200Header(dos, bytes.length, contentType);
             responseBody(dos, bytes);
         }catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String url) {
+    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            if(url.contains("html"))
-                dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            else if(url.contains("css"))
-                dos.writeBytes("Content-Type: text/css;charset=utf-8\r\n");
-            else if(url.contains("js"))
-                dos.writeBytes("Content-Type: text/javascript;charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: "+contentType+";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
