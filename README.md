@@ -6,3 +6,6 @@ Java Web Application Server 2022
 
 이 프로젝트는 우아한 테크코스 박재성님의 허가를 받아 https://github.com/woowacourse/jwp-was 
 를 참고하여 작성되었습니다.
+
+## 학습 정리
+[2022-01-09](./docs/0109.md)
