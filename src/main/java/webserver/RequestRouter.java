@@ -18,7 +18,7 @@ import java.util.Map;
 public class RequestRouter {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private static RequestRouter requestRouter;
-    public final Map<String, RequestService> requestMap = new HashMap<>() {{
+    private final Map<String, RequestService> requestMap = new HashMap<>() {{
         put("[^\\s]+\\.(html|js|css|ico|ttf|woff|svg|eot|woff2|png)$", (req, res) -> getFile(req, res));
     }};
 
@@ -39,6 +39,9 @@ public class RequestRouter {
             }
         }
         logger.info("Do not match any url. url is " + req.getUrl());
+        res.setStatusCode(StatusCode.OK);
+        res.setContentType(ContentType.TEXT_PLAIN);
+        res.addToBody(ArrayUtils.toObject("404 not found".getBytes()));
     }
 
     public void getFile(CustomHttpRequest req, CustomHttpResponse res){
