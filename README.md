@@ -1,6 +1,76 @@
 # java-was-2022
 Java Web Application Server 2022
 
+## HTTP 메시지 구조 및 핵심 내용
+1. **정의 : HyperText Transfer Protocol** <br>
+   하이퍼텍스트(HTML) 문서를 교환하기 위해 만들어진 protocol(통신 규약).<br>
+   즉 웹상에서 네트워크로 서버끼리 통신을 할때 어떠한 형식으로 서로 통신을 하자고 규정해 놓은 "통신 형식" 혹은 "통신 구조" 라고 보면 된다.<br>
+   HTTP는 TCP/IP 기반으로 되어있다.<br>
+2. **HTTP 특징**<br>
+   2-1. HTTP 기본적으로 요청/응답 (request/response) 구조로 되어있다.<br>
+   클라이언트가 HTTP request를 서버에 보내면 서버는 HTTP response를 보내는 구조.<br>
+   클라이언트와 서버의 모든 통신이 요청과 응답으로 이루어 진다.<br>
+   2-2. HTTP는 Stateless 이다.<br>
+   Stateless 란 말그대로 state(상태)를 저장하지 않는 다는 뜻.<br>
+   즉 각각의 요청/응답은 독립적인 요청/응답 이다.
+   예를 들어, 클라이언트가 요청을 보내고 응답을 받은후, 조금 있다 다시 요청을 보낼때, 전에 보낸 요청/응답에 대해 알지 못한다는 뜻이다.<br>
+   **그래서 만일 여러 요청과응답 의 진행과정이나 데이터가 필요할때는 쿠키나 세션 등등을 사용하게 된다.**
+
+### HTTP REQUEST MESSAGE 구조
+![http_request_message](https://blog.kakaocdn.net/dn/bUk1MH/btqD9Nwa5bh/NDK8mt53eo7gqIcJlTSqI1/img.png)
+#### Start Line
+* 말 그대로 메세지의 start line
+* 세 부분으로 나누어져 있음
+* HTTP METHOD
+  * 해당 request가 의도한 action을 정의
+  * GET, POST, PUT, DELETE ... 등
+* REQUEST TARGET
+  * 해당 request가 전송되는 목표 uri
+* HTTP VERSION
+  * 말 그대로 사용되는 HTTP version
+#### Headers
+* 해당 request에 대한 추가 정보를 담고 있는 부분
+* 자주 사용되는 header 정보에는 다음이 있다
+  * Host <br>
+    요청이 전송되는 target의 host url: 예를 들어, google.com
+  * User-Agent <br>
+    요청을 보내는 클라이언트의 대한 정보: 예를 들어, 웹브라우저에 대한 정보.
+  * Accept<br>
+    해당 요청이 받을 수 있는 응답(response) 타입.
+  * Connection <br>
+    해당 요청이 끝난후에 클라이언트와 서버가 계속해서 네트워크 컨넥션을 유지 할것인지 아니면 끊을것인지에 대해 지시하는 부분.
+  * Content-Type<br>
+    해당 요청이 보내는 메세지 body의 타입. 예를 들어, JSON을 보내면 application/json.
+  * Content-Length <br>
+    메세지 body의 길이.
+#### Body
+해당 reqeust의 실제 메세지/내용. Body가 없는 request도 많다. <br>
+예를 들어, GET request들은 대부분 body가 없는 경우가 많음.
+
+### HTTP RESPONSE MESSAGE 구조
+![http_response_message](https://www3.ntu.edu.sg/home/ehchua/programming/webprogramming/images/HTTP_ResponseMessageExample.png)
+Response도 request와 마찬가지로 크게 3부분으로 구성되어 있다.
+#### Status line
+* HTTP 버전
+* Status code: 응답 상태를 나타내는 코드. 숫자로 되어 있는 코드. 예를 들어, 200
+  * 200 OK
+  * 301 Moved Permanently : 해당 URI가 다른 주소로 바뀌었을때 보내는 코드.
+  * 400 Bad Request : 해당 요청이 잘못된 요청일 때, 예를 들어, 전화번호를 보내야 되는데 text가 보내졌을 때
+  * 401 Unauthorized
+  * 403 Forbidden : 유저가 해당 요청에 대한 권한이 없다는 뜻, 예를 들어, 오직 과금을 한 유저만 볼 수 있는 데이터를 요청 했을 때
+  * 404 Not Found : 요청된 uri가 존재 하지 않는다는 뜻.
+  * 500 Internal Server Error
+* Status text: 응답 상태를 간략하게 설명해주는 부분. 예를 들어, "Not Found"
+#### Headers
+* Response의 headers와 동일하다.
+* 다만 response에서만 사용되는 header 값들이 있다.
+  * 예를 들어, User-Agent 대신에 Server 헤더가 사용된다.
+#### Body
+Response의 body와 일반적으로 동일하다.<br>
+Request와 마찬가지로 모든 response가 body가 있지는 않다. 데이터를 전송할 필요가 없을경우 body가 비어있게 된다.
+
+*** 
+
 ## Static Page VS Dynamic Page
 ### Static Pages
 Web Server는 파일 경로 이름을 받아 경로와 일치하는 file contents를 반환한다.<br>
