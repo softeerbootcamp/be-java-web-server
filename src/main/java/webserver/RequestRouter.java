@@ -17,7 +17,7 @@ public class RequestRouter {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private static RequestRouter requestRouter;
     public final Map<String, RequestService> requestMap = new HashMap<>() {{
-        put("/index.html", (req, res) -> getFile(req, res));
+        put("./index.html", (req, res) -> getFile(req, res));
     }};
 
     private RequestRouter(){
@@ -31,22 +31,24 @@ public class RequestRouter {
     }
 
     public void doRoute(CustomHttpRequest req, CustomHttpResponse res){
-        if(requestMap.containsKey(req.getCurrentRootUrl())){
-            requestMap.get(req.getCurrentRootUrl()).doSomething(req, res);
+        for(String regex : requestMap.keySet()){
+            if(req.getUrl().matches(regex)){
+                requestMap.get(regex).doSomething(req, res);
+                logger.info(regex + " matches "  + req.getUrl());
+                return;
+            }
         }
-        else{
-            logger.info("Not match any url : ", req.getCurrentRootUrl());
-        }
+        logger.info("Do not match any url. url is " + req.getUrl());
     }
 
     public void getFile(CustomHttpRequest req, CustomHttpResponse res){
         try {
             URL resource = getClass().getClassLoader().getResource("./templates");
             String filePath = resource.getPath();
-            byte[] file = Files.readAllBytes(new File(filePath + req.getCurrentRootUrl()).toPath());
+            byte[] file = Files.readAllBytes(new File(filePath + req.getUrl()).toPath());
             res.addToBody(ArrayUtils.toObject(file));
         } catch (IOException e) {
-            logger.error("file not found at " + "./templates" + req.getCurrentRootUrl());
+            logger.error("file not found at " + "./templates" + req.getUrl());
             throw new RuntimeException(e);
         }
 
