@@ -26,7 +26,6 @@ public class RequestHandler implements Runnable {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             String line = br.readLine();
-            if(line == null) return;
 
             String url = HttpRequestUtil.getUrl(line);
             DataOutputStream dos = new DataOutputStream(out);
@@ -40,10 +39,10 @@ public class RequestHandler implements Runnable {
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
         try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
+            dos.writeBytes("HTTP/1.1 200 OK " + System.lineSeparator());
+            dos.writeBytes("Content-Type: text/html;charset=utf-8" + System.lineSeparator());
+            dos.writeBytes("Content-Length: " + lengthOfBodyContent + System.lineSeparator());
+            dos.writeBytes(System.lineSeparator());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
