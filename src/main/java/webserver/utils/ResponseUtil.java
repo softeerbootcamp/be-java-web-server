@@ -3,7 +3,7 @@ package webserver.utils;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class ResponseMaker {
+public class ResponseUtil {
 
     public static void response200Header(DataOutputStream dos, int lengthOfBodyContent) throws IOException {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
