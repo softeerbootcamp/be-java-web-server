@@ -31,12 +31,14 @@ public class RequestHandler implements Runnable {
 
             String url = HttpRequestUtils.getUrl(line);
 
-            if (url.contains("user/create")) {
-                UserRequetHandler userRequetHandler = new UserRequetHandler();
-                userRequetHandler.createUser(line);
+            String path = "src/main/resources/templates";
+
+            if (url.contains("/user/create")) {
+                UserService userService = new UserService();
+                url = userService.createUser(line);
             }
 
-            byte[] body = Files.readAllBytes(new File("src/main/resources/templates" + url).toPath());
+            byte[] body = Files.readAllBytes(new File(path + url).toPath());
 
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             DataOutputStream dos = new DataOutputStream(out);
