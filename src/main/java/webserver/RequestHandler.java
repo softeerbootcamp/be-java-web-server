@@ -6,6 +6,7 @@ import util.HttpRequestUtils;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 public class RequestHandler implements Runnable {
@@ -22,7 +23,7 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+            BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             String requestLine = br.readLine();
             if (requestLine == null) {
                 return;
@@ -32,14 +33,14 @@ public class RequestHandler implements Runnable {
             //TODO: URL 요청에 따라 응답할 뷰 파일(ViewResolver)을 지정하는 역할을 메서드나 클래스로 분리
             String url = HttpRequestUtils.getUrl(requestLine);
 
-            String path = "src/main/resources/templates";
-
             if (url.contains("/user/create")) {
                 UserService userService = new UserService();
                 url = userService.signUp(requestLine);
             }
 
-            byte[] body = Files.readAllBytes(new File(path + url).toPath());
+            String path = ViewResolver.process(url);
+
+            byte[] body = Files.readAllBytes(new File(path).toPath());
 
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             DataOutputStream dos = new DataOutputStream(out);

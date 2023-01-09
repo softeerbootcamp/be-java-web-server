@@ -20,7 +20,7 @@ public class UserService {
         Map<String, String> userInfo = HttpRequestUtils.parseQueryString(queryString);
 
         User user = createUser(userInfo);
-        logger.info("user : {}", user);
+        logger.debug("user : {}", user);
 
         Database.addUser(user);
 
