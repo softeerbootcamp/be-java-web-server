@@ -19,8 +19,8 @@ public class CustomHttpResponse {
         this.body = new ArrayList<>();
     }
 
-    public void setString(String contentType){
-
+    public void setContentType(ContentType contentType){
+        this.contentType = contentType;
     }
 
     public ContentType getContentType(){
