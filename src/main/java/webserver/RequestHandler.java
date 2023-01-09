@@ -11,6 +11,7 @@ import util.HttpRequestUtils;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final String requestFilePath = "./src/main/resources/templates/";
 
     private Socket connection;
 
@@ -35,7 +36,7 @@ public class RequestHandler implements Runnable {
             String url = HttpRequestUtils.getUrl(line);
 
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = Files.readAllBytes(new File("./src/main/resources/templates/" + url).toPath());
+            byte[] body = Files.readAllBytes(new File(requestFilePath + url).toPath());
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException e) {
