@@ -9,6 +9,6 @@ Java Web Application Server 2022
 
 ## Step 1 
 
-1. 요청들어오는 request들 출력해보기
-2. request들 중 index.html 파싱해서 빼기
-3. 해당 기능 객체 분리하기
+1. 요청들어오는 request들 출력해보기 [check]
+2. request들 중 index.html 파싱해서 빼기 [check]
+3. 해당 기능 객체 분리하기.[]
