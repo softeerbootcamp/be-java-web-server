@@ -1,11 +1,10 @@
-package util.reader;
+package util.reader.request;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import request.HttpMethod;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 class HttpMethodTest {
 
