@@ -7,12 +7,16 @@ import java.nio.file.Files;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reader.RequestReader;
+import reader.fileReader.FileReader;
+import reader.fileReader.TemplatesFileReader;
 import request.HttpRequest;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
+    private RequestReader requestReader;
+    private FileReader fileReader;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -25,11 +29,12 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest httpRequest = HttpRequest.getHttpRequest(in);
 
-            RequestReader requestReader = RequestReader.selectRequestReaderByMethod(httpRequest.getHttpMethod());
+            requestReader = RequestReader.selectRequestReaderByMethod(httpRequest.getHttpMethod());
             String url = requestReader.findPathInRequest(httpRequest);
 
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + url).toPath());
+            fileReader = new TemplatesFileReader();
+            byte[] body = fileReader.readFile(url);
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException e) {
