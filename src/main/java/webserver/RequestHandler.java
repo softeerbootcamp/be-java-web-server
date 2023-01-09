@@ -2,23 +2,22 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.file.Files;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.RequestParser;
-import request.RequestParserImpl;
+import request.ResponseGenerator;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-    private static final RequestParser requestParser = new RequestParserImpl();
+    private final ResponseGenerator responseGenerator;
 
     private Socket connection;
 
-    public RequestHandler(Socket connectionSocket) {
+    public RequestHandler(Socket connectionSocket, ResponseGenerator responseGenerator) {
         this.connection = connectionSocket;
+        this.responseGenerator = responseGenerator;
     }
 
     public void run() {
@@ -26,13 +25,10 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            //
-            Map<String, String> requestHeader = requestParser.parse(in);
-            System.out.println(connection.getPort() + " " + requestHeader);
-            //
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = Files.readAllBytes(new File("src/main/resources/templates"
-                    + requestParser.getResource(requestHeader.get(RequestParser.REQUEST_LINE))).toPath());
+            //
+            byte[] body = responseGenerator.generate(in);
+            //
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException e) {
