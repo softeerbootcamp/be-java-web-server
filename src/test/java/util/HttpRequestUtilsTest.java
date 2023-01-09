@@ -29,8 +29,21 @@ public class HttpRequestUtilsTest {
     }
 
     @Test
-    @DisplayName("요청 Path 파싱 테스트")
+    @DisplayName("요청 Path 파싱 테스트 - 쿼리스트링이 없는 경우")
     void testRequestURL() {
+        // given
+        String requestLine = "GET /favicon.ico HTTP/1.1";
+
+        // when
+        String path = HttpRequestUtils.requestPath(requestLine);
+
+        // then
+        assertEquals("/favicon.ico", path);
+    }
+
+    @Test
+    @DisplayName("요청 Path 파싱 테스트 - 쿼리스트링이 있는 경우")
+    void testRequestURLWhenExistQueryString() {
         // given
         String requestLine = "GET /index.html?name=sol&age=26 HTTP/1.1";
 

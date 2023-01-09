@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.HttpRequestUtils;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -22,10 +23,12 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            String line = br.readLine();
-            logger.debug("request line : {}", line);
-            while (!line.equals("")) {
-                line = br.readLine();
+            String requestLine = br.readLine();
+            logger.debug("request line : {}", requestLine);
+            HttpRequestUtils.requestPath(requestLine);
+
+            String line;
+            while (!(line = br.readLine()).equals("")) {
                 logger.debug("header : {}", line);
             }
 

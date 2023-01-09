@@ -8,9 +8,12 @@ public final class HttpRequestUtils {
     public HttpRequestUtils() {}
 
     public static String requestPath(String requestLine) {
+        System.out.println(requestLine);
         String strOfRemovedHttpMethod = requestLine.split(" ")[1];
         int idxOfLastPathChar = strOfRemovedHttpMethod.indexOf("?");
-        return strOfRemovedHttpMethod.substring(0, idxOfLastPathChar);
+        return idxOfLastPathChar != -1
+                ? strOfRemovedHttpMethod.substring(0, idxOfLastPathChar)
+                : strOfRemovedHttpMethod;
     }
 
     public static Map<String, String> parseQueryString(String queryString) {
