@@ -1,17 +1,19 @@
 package webserver;
 
-import java.io.*;
-import java.net.Socket;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-
+import io.request.Request;
+import io.request.RequestFactory;
+import io.response.Response;
+import io.response.ResponseFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.PathResolver;
+
+import java.io.*;
+import java.net.Socket;
 
 public class FacadeController implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(FacadeController.class);
-    private static final String ABSOLUTE_PATH = "/Users/rentalhub/Desktop/2주차/src/main/resources/%s";
+    private static final RequestFactory requestFactory = new RequestFactory();
+    private static final ResponseFactory responseFactory = new ResponseFactory();
 
     private Socket connection;
 
@@ -23,17 +25,13 @@ public class FacadeController implements Runnable {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(), connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            String requestMessage = getRequestMessage(getBufferedReader(in));
-
-            BufferedReader br = getBufferedReader(in);
-            String url = getRequestUrl(br);
-            String resourcePath = PathResolver.getResourcePath(url);
-
-            byte[] file = Files.readAllBytes(new File(String.format(ABSOLUTE_PATH, resourcePath)).toPath());
-
-            DataOutputStream dos = new DataOutputStream(out);
-            response200Header(dos, file.length);
-            responseBody(dos, file);
+            Request request = requestFactory.create(in);
+            Response response = responseFactory.create(request, new DataOutputStream(out));
+            response.send();
+            // byte[] file = Files.readAllBytes(new File(String.format(ABSOLUTE_PATH, resourcePath)).toPath());
+            // DataOutputStream dos = new DataOutputStream(out);
+            // response200Header(dos, file.length);
+            // responseBody(dos, file);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -51,10 +49,6 @@ public class FacadeController implements Runnable {
 
     private String getRequestUrl(BufferedReader br) throws IOException {
         return br.readLine().split(" ")[1];
-    }
-
-    private BufferedReader getBufferedReader(InputStream in) {
-        return new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
