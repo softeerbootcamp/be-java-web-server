@@ -2,10 +2,12 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.FileIoUtils;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -24,6 +26,8 @@ public class RequestHandler implements Runnable {
             // 모든 Request 출력
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             String line = br.readLine();
+            String[] tokens = line.split(" ");
+            String filename = tokens[1];
             logger.info("Request line : {}", line);
             while(!line.equals("")) {
                 line = br.readLine();
@@ -31,10 +35,12 @@ public class RequestHandler implements Runnable {
             }
 
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = "Hello World".getBytes();
+            //byte[] body = "Hello World".getBytes();
+
+            byte[] body = FileIoUtils.loadFile(filename);
             response200Header(dos, body.length);
             responseBody(dos, body);
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
     }
