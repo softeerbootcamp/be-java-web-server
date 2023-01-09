@@ -6,5 +6,10 @@ public class Utility {
         String[] token = line.split(" ");
         String indexString = token[1];
         return indexString;
+
+    }
+
+    public void reponsePrint() {
+
     }
 }

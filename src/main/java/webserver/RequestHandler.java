@@ -54,22 +54,20 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            String line = br.readLine();
-            logger.debug("request Line : {}",line);
 
-            String indexString = utility.stringSplit(line);
-            logger.debug("index.html output: " + indexString);
+            String brRead = br.readLine();
+            logger.debug("request Line : {}",brRead);
 
-            while (!line.equals("")) {
-                line = br.readLine();
-                logger.debug("header : {}",line);
+            String urlString = utility.stringSplit(brRead);
+            logger.debug("url: {} ", urlString);
+
+            while (!brRead.equals("")) {
+                logger.debug("header : {}", brRead);
+                brRead = br.readLine();
             }
 
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = "Hello World".getBytes();
-//            byte[] body = Files.readAllBytes(new File("./webapp/index.html").toPath());
-
-
+            byte[] body = Files.readAllBytes(new File("src/main/resources/templates" + urlString).toPath());
 
             response200Header(dos, body.length);
             responseBody(dos, body);
