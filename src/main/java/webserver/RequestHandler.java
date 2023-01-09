@@ -11,6 +11,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,14 +34,23 @@ public class RequestHandler implements Runnable {
 		try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
 			BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 			String url = parser.pathParse(br.readLine());
-
-			logger.debug("request path : {}", url);
+			String line = br.readLine();
+			while (!line.equals("")) {
+				System.out.println(line);
+				line = br.readLine();
+			}
+			logger.debug("threadID : {} request path : {}", Thread.currentThread().getId(), url);
 			byte[] body = Files.readAllBytes(new File("./webapp" + url).toPath());
 			DataOutputStream dos = new DataOutputStream(out);
 			response200Header(dos, body.length);
 			responseBody(dos, body);
 		} catch (IOException e) {
 			logger.error(e.getMessage());
+		}
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
 		}
 	}
 
