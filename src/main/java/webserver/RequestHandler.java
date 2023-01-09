@@ -35,7 +35,6 @@ public class RequestHandler implements Runnable {
             }
 
             DataOutputStream dos = new DataOutputStream(out);
-            //byte[] body = "Hello World".getBytes();
 
             byte[] body = FileIoUtils.loadFile(filename);
             response200Header(dos, body.length);
