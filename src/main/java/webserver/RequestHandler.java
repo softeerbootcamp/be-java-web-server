@@ -6,6 +6,9 @@ import java.net.Socket;
 //import com.github.jknack.handlebars.internal.Files;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
+import java.util.Map;
+
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpRequestUtils;
@@ -35,6 +38,18 @@ public class RequestHandler implements Runnable {
 //                logger.debug("header : {}", line);
 //            }
             String url = HttpRequestUtils.getUrl(line);
+            if(url.startsWith("/user/create")) {
+                logger.debug("URL : {}", url);
+                int index = url.indexOf("?");
+                String requestPath = url.substring(0, index);
+                String queryString = url.substring(index + 1);
+                logger.debug("QueryString : {}", queryString);
+                Map<String, String> params = HttpRequestUtils.parseQueryString(queryString);
+                User user = new User(params.get("userId"), params.get("password"), params.get("name"), params.get("email"));
+                logger.debug("User : {}", user);
+
+                url = "/index.html";
+            }
 
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = Files.readAllBytes(new File(requestFilePath + url).toPath());
