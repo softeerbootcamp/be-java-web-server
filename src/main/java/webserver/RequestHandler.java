@@ -27,7 +27,9 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
             HttpParser httpParser = new HttpParser();
             Map<String, String> map = httpParser.parseHttpRequest(in);
-            byte[] body = Files.readAllBytes(new File("./src/main/resources/templates/index.html").toPath());
+
+            String uri = httpParser.findRequestedUri(map);
+            byte[] body = Files.readAllBytes(new File("./src/main/resources/" + uri).toPath());
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException e) {
