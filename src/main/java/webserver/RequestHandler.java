@@ -28,6 +28,11 @@ public class RequestHandler implements Runnable {
 
             String url = HttpRequestHandlerUtils.getUrl(line);
 
+            if (url.contains("user/create")) {
+                UserRequetHandler userRequetHandler = new UserRequetHandler();
+                userRequetHandler.createUser(line);
+            }
+
             byte[] body = Files.readAllBytes(new File("src/main/resources/templates" + url).toPath());
 
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
