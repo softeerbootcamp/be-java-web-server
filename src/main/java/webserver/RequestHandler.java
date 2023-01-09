@@ -1,9 +1,6 @@
 package webserver;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 
 import org.slf4j.Logger;
@@ -24,8 +21,17 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
+            //브라우저에서 서버로 들어오는 모든 요청은 Inputstream 안에 담겨져 있음
+            //inputstream은 bufferedreader를 통해 line by line으로 읽을 수 있음
+            BufferedReader br = new BufferedReader(new InputStreamReader(in,"UTF-8"));
+            String line = br.readLine();
+            while(!line.equals(" ")){ // http 요청을 끝나는 지점은 null이 아니라 빈 공백 문자열임
+                System.out.println("request: "+line);
+                line = br.readLine();
+            }
+            //outputstream은 서버에서 브라우저로 보내는 응답
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = "Hello World".getBytes();
+            byte[] body = "Hello World".getBytes(); // 현재 사용자에게 넘겨지는 응답
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException e) {
