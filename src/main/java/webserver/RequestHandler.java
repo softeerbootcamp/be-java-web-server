@@ -2,11 +2,15 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.http.HttpRequest;
 import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.HttpRequestUtil;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -30,14 +34,11 @@ public class RequestHandler implements Runnable {
             String httpHeader = br.readLine();
             String[] headers = httpHeader.split(" ");
             String httpMethod = headers[0];
-            String reqURL = headers[1];
-            if (reqURL.equals("/"))
-                reqURL = "/index.html";
-            String fileExtension = reqURL.substring(reqURL.lastIndexOf('.')+1);
+            String reqURL = headers[1].equals("/")?"/index.html":headers[1];
+            Map<String,String> userInfo = HttpRequestUtil.parseQueryString(reqURL);
+            reqURL = HttpRequestUtil.getOnlyURL(reqURL);
+            String fileExtension = HttpRequestUtil.getFileExtension(reqURL);
             String httpVersion = headers[2];
-            System.out.println("Http Method: "+httpMethod);
-            System.out.println("Http reqURL: "+reqURL);
-            System.out.println("Http Version: "+httpVersion);
             String strBr = "";
             while(!(strBr = br.readLine()).equals("")){
                 System.out.println(strBr);
