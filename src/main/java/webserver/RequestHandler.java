@@ -35,7 +35,7 @@ public class RequestHandler implements Runnable {
             RequestLine requestLine = new RequestLine(line);
             logger.debug("request line : {}", requestLine);
 
-            byte[] body = Files.readAllBytes(new File("src/main/resources/templates" + requestLine.getUrl()).toPath());
+            byte[] body = Files.readAllBytes(new File("src/main/resources/templates" + requestLine.getUri().getPath()).toPath());
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException e) {
