@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import db.Database;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpRequestUtil;
@@ -17,6 +19,10 @@ public class RequestHandler implements Runnable {
     private static final String ABSOLUTE_PATH = "/Users/rentalhub/HMG/be-java-web-server/src/main/resources";
     private static final String TEMPLATES = "/templates";
     private static final String STATIC = "/static";
+    private static final String USER_ID = "userId";
+    private static final String PASSWORD = "password";
+    private static final String NAME = "name";
+    private static final String EMAIL = "email";
     private Socket connection;
 
     public RequestHandler(Socket connectionSocket) {
@@ -35,8 +41,10 @@ public class RequestHandler implements Runnable {
             String[] headers = httpHeader.split(" ");
             String httpMethod = headers[0];
             String reqURL = headers[1].equals("/")?"/index.html":headers[1];
-            Map<String,String> userInfo = HttpRequestUtil.parseQueryString(reqURL);
+            reqURL = createUser(reqURL);
+            System.out.println("Req URL: "+reqURL);
             reqURL = HttpRequestUtil.getOnlyURL(reqURL);
+            System.out.println("Req URL after getOnlyURL: "+reqURL);
             String fileExtension = HttpRequestUtil.getFileExtension(reqURL);
             String httpVersion = headers[2];
             String strBr = "";
@@ -56,6 +64,16 @@ public class RequestHandler implements Runnable {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private String createUser(String reqURL){
+        if (reqURL.contains("create")){
+            Map<String,String> userInfo = HttpRequestUtil.parseQueryString(reqURL);
+            Database.addUser(new User(userInfo.get(USER_ID),userInfo.get(PASSWORD),userInfo.get(NAME),userInfo.get(EMAIL)));
+            reqURL = "/index.html";
+            System.out.println("Req URL: "+reqURL);
+        }
+        return reqURL;
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
