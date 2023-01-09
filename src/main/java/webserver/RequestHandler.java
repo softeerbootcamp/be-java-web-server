@@ -2,10 +2,11 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 
+import http.common.HttpHeaders;
 import http.common.URI;
-import http.util.HttpURIParser;
+import http.request.HttpRequest;
+import http.util.HttpRequestParser;
 import util.ResourceUtils;
 
 import org.slf4j.Logger;
@@ -25,10 +26,10 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            String requestLine = br.readLine();
 
-            URI uri = HttpURIParser.parse(requestLine);
+            HttpRequest request = HttpRequestParser.parse(in);
+            URI uri = request.getUri();
+            HttpHeaders headers = request.getHeaders();
 
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = ResourceUtils.loadFileFromClasspath(uri.getPath());
