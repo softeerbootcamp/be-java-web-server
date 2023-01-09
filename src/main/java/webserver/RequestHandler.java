@@ -28,7 +28,9 @@ public class RequestHandler implements Runnable {
 
             String url = getUrl(in);
             String contentType = Files.probeContentType(new File(url).toPath());
+
             byte[] bytes;
+            // templates 폴더 안에 있는 것들과 static 폴더 안에 있는 것 구분
             if(url.contains("html") || url.contains("favicon"))
                 bytes = Files.readAllBytes(new File("./src/main/resources/templates" + url).toPath());
             else
@@ -44,7 +46,7 @@ public class RequestHandler implements Runnable {
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: "+contentType+";charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: " + contentType + ";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
