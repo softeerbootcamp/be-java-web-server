@@ -20,10 +20,11 @@ public class FacadeController implements Runnable {
     }
 
     public void run() {
-        logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
-                connection.getPort());
+        logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(), connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
+            String requestMessage = getRequestMessage(getBufferedReader(in));
+
             BufferedReader br = getBufferedReader(in);
             String url = getRequestUrl(br);
             String resourcePath = PathResolver.getResourcePath(url);
@@ -36,6 +37,16 @@ public class FacadeController implements Runnable {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private String getRequestMessage(BufferedReader bufferedReader) throws IOException {
+        String msg = "";
+        String line;
+        while (!(line = bufferedReader.readLine()).isEmpty()) {
+            msg += line + "\n\r";
+        }
+
+        return msg;
     }
 
     private String getRequestUrl(BufferedReader br) throws IOException {
