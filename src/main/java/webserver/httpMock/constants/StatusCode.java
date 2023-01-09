@@ -11,7 +11,7 @@ public enum StatusCode {
         message = msg;
     }
 
-    public int getStatuscode() {
+    public int getCode() {
         return statuscode;
     }
 
