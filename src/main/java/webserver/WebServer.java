@@ -18,7 +18,7 @@ public class WebServer {
     private static void run(ServerSocket serverSocket) throws IOException {
         Socket connection;
         while ((connection = serverSocket.accept()) != null) {
-            Thread thread = new Thread(new RequestHandler(connection));
+            Thread thread = new Thread(new FacadeController(connection));
             thread.start();
         }
     }

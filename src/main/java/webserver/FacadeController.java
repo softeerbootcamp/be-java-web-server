@@ -9,13 +9,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.PathResolver;
 
-public class RequestHandler implements Runnable {
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+public class FacadeController implements Runnable {
+    private static final Logger logger = LoggerFactory.getLogger(FacadeController.class);
     private static final String ABSOLUTE_PATH = "/Users/rentalhub/Desktop/2주차/src/main/resources/%s";
 
     private Socket connection;
 
-    public RequestHandler(Socket connectionSocket) {
+    public FacadeController(Socket connectionSocket) {
         this.connection = connectionSocket;
     }
 
