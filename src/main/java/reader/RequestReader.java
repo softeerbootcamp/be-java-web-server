@@ -2,7 +2,7 @@ package reader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import request.HttpMethod;
+import util.HttpMethod;
 import request.HttpRequest;
 import util.error.HttpsErrorMessage;
 

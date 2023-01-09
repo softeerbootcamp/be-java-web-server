@@ -2,15 +2,10 @@ package reader;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import request.HttpMethod;
-import reader.RequestGetReader;
-import reader.RequestReader;
-import request.HttpRequest;
+import util.HttpMethod;
 import util.error.HttpsErrorMessage;
 
 import java.net.ProtocolException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;

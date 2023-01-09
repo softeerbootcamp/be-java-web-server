@@ -6,7 +6,6 @@ import java.nio.file.Files;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import request.HttpMethod;
 import reader.RequestReader;
 import request.HttpRequest;
 
@@ -25,9 +24,8 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest httpRequest = HttpRequest.getHttpRequest(in);
-            HttpMethod httpMethod = HttpMethod.findMethod(httpRequest);
 
-            RequestReader requestReader = RequestReader.selectRequestReaderByMethod(httpMethod);
+            RequestReader requestReader = RequestReader.selectRequestReaderByMethod(httpRequest.getHttpMethod());
             String url = requestReader.findPathInRequest(httpRequest);
 
             DataOutputStream dos = new DataOutputStream(out);

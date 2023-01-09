@@ -1,9 +1,7 @@
-package request;
+package util;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import reader.RequestReader;
-import request.HttpMethod;
 import request.HttpRequest;
 
 import java.util.ArrayList;

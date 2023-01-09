@@ -1,4 +1,6 @@
-package request;
+package util;
+
+import request.HttpRequest;
 
 import java.util.Arrays;
 

@@ -1,5 +1,7 @@
 package request;
 
+import util.HttpMethod;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,10 +12,12 @@ import java.util.List;
 
 public class HttpRequest {
     private final List<String> headerContents;
+    private final HttpMethod httpMethod;
 
 
     public HttpRequest(List<String> headerContents) {
         this.headerContents = headerContents;
+        this.httpMethod = HttpMethod.findMethod(this);
     }
 
     public static HttpRequest getHttpRequest(InputStream inputStream) throws IOException {
@@ -26,7 +30,13 @@ public class HttpRequest {
         return new HttpRequest(requestHeaders);
     }
 
+
+
     public List<String> getHeaderContents() {
         return headerContents;
+    }
+
+    public HttpMethod getHttpMethod() {
+        return httpMethod;
     }
 }
