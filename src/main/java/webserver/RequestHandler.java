@@ -3,13 +3,14 @@ package webserver;
 import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.HttpParser;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private static final String DOMAIN = "http://localhost:8080/";
 
     private Socket connection;
 
@@ -24,23 +25,13 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             DataOutputStream dos = new DataOutputStream(out);
-            printHttpMessage(in);
+            HttpParser httpParser = new HttpParser();
+            Map<String, String> map = httpParser.parseHttpRequest(in);
             byte[] body = Files.readAllBytes(new File("./src/main/resources/templates/index.html").toPath());
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException e) {
             logger.error(e.getMessage());
-        }
-    }
-
-    private void printHttpMessage(InputStream in) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(in));
-        String nextLine = br.readLine();
-        logger.debug("request line : {}", nextLine);
-        while (!nextLine.equals("")) {
-            nextLine = br.readLine();
-            logger.debug("header : {}", nextLine);
-            System.out.println(nextLine);
         }
     }
 
