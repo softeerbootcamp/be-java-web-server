@@ -2,6 +2,7 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.file.Files;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,13 +26,20 @@ public class RequestHandler implements Runnable {
             //inputstream은 bufferedreader를 통해 line by line으로 읽을 수 있음
             BufferedReader br = new BufferedReader(new InputStreamReader(in,"UTF-8"));
             String line = br.readLine();
-            while(!line.equals(" ")){ // http 요청을 끝나는 지점은 null이 아니라 빈 공백 문자열임
-                System.out.println("request: "+line);
-                line = br.readLine();
-            }
+            if(line == null) return; // 헤더가 null일 경우 응답하지 않음
+            String[] headLine = line.split(" "); // 헤더의 첫 번째 줄을 공백을 기준으로 자른다
+            //GET
+            ///index.html
+            //HTTP/1.1
+            String url = headLine[1];// index.html
+            // header 전체를 출력하기
+//            while(!line.equals(" ")){ // http 요청을 끝나는 지점은 null이 아니라 빈 공백 문자열임
+//                System.out.println("request: "+line);
+//                line = br.readLine();
+//            }
             //outputstream은 서버에서 브라우저로 보내는 응답
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = "Hello World".getBytes(); // 현재 사용자에게 넘겨지는 응답
+            byte[] body = Files.readAllBytes(new File("src/main/resources/templates/" + url).toPath());// 현재 사용자에게 넘겨지는 응답
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException e) {
