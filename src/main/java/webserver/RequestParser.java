@@ -4,7 +4,7 @@ import java.io.*;
 
 public class RequestParser {
 
-    public static String parseRequestHeaderTarget(InputStream in) throws IOException {
+    public static String parseRequestStartLineTarget(InputStream in) throws IOException {
         //inputstream은 bufferedreader를 통해 line by line으로 읽을 수 있음
         BufferedReader br = new BufferedReader(new InputStreamReader(in,"UTF-8"));
         String line = br.readLine();
