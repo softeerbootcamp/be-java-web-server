@@ -24,11 +24,17 @@ public class RequestHandler implements Runnable {
             // TODO 사용자 요청에 대한 처리는 이 곳부터 구현하면 된다.
             InputStreamReader reader = new InputStreamReader(in);
             BufferedReader br = new BufferedReader(reader);
+            String httpHeader = br.readLine();
+            String httpMethod = httpHeader.substring(0,httpHeader.indexOf(' '));
+            String reqURL = httpHeader.substring(httpHeader.indexOf('/')+1,httpHeader.indexOf(' ',httpHeader.indexOf('/')+1));
+            //reqURL = (reqURL==null)?"index.html":reqURL;  기본 url index.html으로 설정해주기 (추후 작업 예정)
+            System.out.println("Http Method: "+httpMethod);
+            System.out.println("Http reqURL: "+reqURL);
+            System.out.println("reqHeader: "+httpHeader);
             String strBr = "";
-            while((strBr = br.readLine()) != null){
+            while(!(strBr = br.readLine()).equals("")){
                 System.out.println(strBr);
             }
-
 
             // TODO 사용자 요청에 대한 처리는 이 곳까지 구현하면 된다.
             DataOutputStream dos = new DataOutputStream(out);
