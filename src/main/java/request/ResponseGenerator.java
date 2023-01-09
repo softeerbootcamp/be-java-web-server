@@ -3,5 +3,5 @@ package request;
 import java.io.InputStream;
 
 public interface ResponseGenerator {
-    byte[] generate(InputStream in);
+    byte[] generate(InputStream in, int port);
 }
