@@ -3,9 +3,12 @@ package webserver;
 import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
+import java.nio.file.Path;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.HttpRequest;
+import util.HttpRequestParser;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -22,22 +25,15 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
-            BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            String line = br.readLine();
-            logger.debug("request : "+line);
 
-            String[] temp = line.split(" ");
-            String path = temp[1];
-            logger.debug("path : "+path);
+            HttpRequest httpRequest = new HttpRequest(in);
+            Path path = HttpRequestParser.mappingPath(httpRequest.getPath());
 
-            while(!line.equals("")){
-                line = br.readLine();
-                logger.debug("header: "+line);
-            }
-            byte[] body = Files.readAllBytes(new File("./src/main/resources/templates/"+path).toPath());
+            byte[] body = Files.readAllBytes(path);
             DataOutputStream dos = new DataOutputStream(out);
             response200Header(dos, body.length);
             responseBody(dos, body);
+            logger.debug("---------complete : "+path);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
