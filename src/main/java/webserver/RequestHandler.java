@@ -28,11 +28,11 @@ public class RequestHandler implements Runnable {
             if (requestLine == null) {
                 return;
             }
-            logger.debug("request requestLine : {}", requestLine);
+            logger.debug("requestLine : {}", requestLine);
 
             String url = HttpRequestUtils.getUrl(requestLine);
-            String viewName = searchRequestHandler(url);
 
+            String viewName = searchRequestHandler(url);
             String path = ViewResolver.process(viewName);
 
             byte[] body = Files.readAllBytes(new File(path).toPath());
