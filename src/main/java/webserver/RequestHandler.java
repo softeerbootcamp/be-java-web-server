@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -29,8 +30,6 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
-//            printHeaders(in);
-
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
             String line = br.readLine();
@@ -42,10 +41,26 @@ public class RequestHandler implements Runnable {
             // /user/create?userId=psm9718&password=11123&name=qq&email=124%401
             url = checkUrlQueryString(url);
 
-            DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = Files.readAllBytes(new File("src/main/resources/templates/" + url).toPath());
+            String substring = url.substring(url.lastIndexOf(".")+1);
+            logger.debug(">>> substring : {}", substring);
 
-            response200Header(dos, body.length);
+            DataOutputStream dos = new DataOutputStream(out);
+            byte[] body;
+
+            //TODO 리팩토링 필요!!
+            if (substring.equals("html")) {
+                body = Files.readAllBytes(new File("src/main/resources/templates/" + url).toPath());
+                response200Header(dos, body.length, "text/html");
+            } else{
+                body = Files.readAllBytes(new File("src/main/resources/static" + url).toPath());
+                logger.debug(">>>>> {}", url);
+                if (substring.equals("css")) {
+                    response200Header(dos, body.length, "text/css");
+                } else {
+                    response200Header(dos, body.length, "text/javascript");
+                }
+            }
+
             responseBody(dos, body);
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -65,10 +80,10 @@ public class RequestHandler implements Runnable {
         return url;
     }
 
+    /**
+     * 회원가입 로직
+     */
     private void signUpUser(String queryString) {
-        /**
-         * 회원가입 로직
-         */
         Map<String, String> requestParams = parseQuerystring(queryString);
 
         User user = new User(requestParams.get("userId"),
@@ -85,18 +100,14 @@ public class RequestHandler implements Runnable {
         }
         String[] params = queryString.split("&");
         for (String param : params) {
-            try {
-                String[] keyValuePair = param.split("=", 2);
-                String name = URLDecoder.decode(keyValuePair[0], "UTF-8");
-                if (name == "") {
-                    continue;
-                }
-                String value = keyValuePair.length > 1 ? URLDecoder.decode(
-                        keyValuePair[1], "UTF-8") : "";
-                map.put(name, value);
-            } catch (UnsupportedEncodingException e) {
-                // ignore this parameter if it can't be decoded
+            String[] keyValuePair = param.split("=", 2);
+            String name = URLDecoder.decode(keyValuePair[0], StandardCharsets.UTF_8);
+            if (Objects.equals(name, "")) {
+                continue;
             }
+            String value = keyValuePair.length > 1 ? URLDecoder.decode(
+                    keyValuePair[1], StandardCharsets.UTF_8) : "";
+            map.put(name, value);
         }
         return map;
     }
@@ -121,10 +132,10 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: " + contentType+";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
