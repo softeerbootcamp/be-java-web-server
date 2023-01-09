@@ -1,13 +1,15 @@
 package webserver;
 
+import http.HttpRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import utils.FileIoUtils;
+
 import java.io.*;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
+import java.util.Objects;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -23,25 +25,32 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            // 모든 Request 출력
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            String line = br.readLine();
-            String[] tokens = line.split(" ");
-            String filename = tokens[1];
-            logger.info("Request line : {}", line);
-            while(!line.equals("")) {
-                line = br.readLine();
-                logger.info("Request line : {}", line);
-            }
+
+            String headers = extractRequestHeaders(br);
+            logger.debug("\n" + headers);
+
+            HttpRequest httpRequest = HttpRequest.from(headers);
+            byte[] body = FileIoUtils.loadFile(httpRequest.getPath());
 
             DataOutputStream dos = new DataOutputStream(out);
-
-            byte[] body = FileIoUtils.loadFile(filename);
             response200Header(dos, body.length);
             responseBody(dos, body);
+
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private String extractRequestHeaders(BufferedReader br) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        String line;
+
+        while (Objects.nonNull(line = br.readLine()) && !line.isEmpty()) {
+            sb.append(line).append(System.lineSeparator());
+        }
+
+        return sb.toString();
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
