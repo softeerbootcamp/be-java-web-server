@@ -23,7 +23,7 @@ public class StaticFileService implements RequestService {
         return fileService;
     }
     @Override
-    public void doSomething(CustomHttpRequest req, CustomHttpResponse res) {
+    public void handleRequest(CustomHttpRequest req, CustomHttpResponse res) {
         getFile(req, res);
     }
 

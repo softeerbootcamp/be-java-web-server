@@ -30,7 +30,7 @@ public class RequestRouter {
     public void doRoute(CustomHttpRequest req, CustomHttpResponse res){
         for(String regex : requestMap.keySet()){
             if(req.getUrl().matches(regex)){
-                requestMap.get(regex).doSomething(req, res);
+                requestMap.get(regex).handleRequest(req, res);
                 logger.info(regex + " matches "  + req.getUrl());
                 return;
             }
