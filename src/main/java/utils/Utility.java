@@ -9,7 +9,5 @@ public class Utility {
 
     }
 
-    public void reponsePrint() {
 
-    }
 }

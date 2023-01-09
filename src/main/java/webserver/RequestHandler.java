@@ -42,12 +42,14 @@ public class RequestHandler implements Runnable {
     private Socket connection;
 
     public Utility utility = new Utility();
+    Thread thread = new Thread();
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
     }
 
     public void run() {
+        logger.info("thread : {}", thread.getName());
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
 
@@ -61,13 +63,40 @@ public class RequestHandler implements Runnable {
             String urlString = utility.stringSplit(brRead);
             logger.debug("url: {} ", urlString);
 
-            while (!brRead.equals("")) {
+            int extensionIdx = 0;
+
+            for (int i = 0; i < urlString.length(); i++) {
+                if(urlString.charAt(i) == '.'){
+                    extensionIdx = i;
+                }
+            }
+
+            String extensionString = urlString.substring(extensionIdx+1);
+
+            logger.debug("exteionsionString : {}",extensionString);
+
+
+            while (!brRead.equals("") && brRead != null) {
                 logger.debug("header : {}", brRead);
                 brRead = br.readLine();
             }
 
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = Files.readAllBytes(new File("src/main/resources/templates" + urlString).toPath());
+
+            byte[] body = {};
+
+            if(extensionString.equals("html")){
+                body = Files.readAllBytes(new File("src/main/resources/templates" + urlString).toPath());
+            }
+            if(extensionString.equals("css")){
+                logger.debug("full url : {}" , "src/main/resources/static" + urlString);
+                logger.debug("css : " + extensionString);
+                logger.debug("urlString : " + urlString);
+                body = Files.readAllBytes(new File("src/main/resources/static" + urlString).toPath());
+
+            }if(extensionString.equals("js")){
+                body = Files.readAllBytes(new File("src/main/resources/static" + urlString).toPath());
+            }
 
             response200Header(dos, body.length);
             responseBody(dos, body);
@@ -90,6 +119,7 @@ public class RequestHandler implements Runnable {
     private void responseBody(DataOutputStream dos, byte[] body) {
         try {
             dos.write(body, 0, body.length);
+            logger.debug("dos : {}");
             dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
