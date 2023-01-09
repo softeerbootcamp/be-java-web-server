@@ -5,9 +5,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-
+import com.google.common.primitives.Bytes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.httpMock.CustomHttpRequest;
+import webserver.httpMock.CustomHttpResponse;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -23,36 +25,29 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = "Hello World".getBytes();
-            CustomHttpRequest httpRequest = new CustomHttpRequest(in);
-            CustomHttpResponse httpResponse = new CustomHttpResponse(out);
-            RequestRouter requestRouter = new RequestRouter(httpRequest, httpResponse);
-
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+            CustomHttpRequest req = new CustomHttpRequest(in);
+            CustomHttpResponse res = new CustomHttpResponse(out);
+            RequestRouter requestRouter = RequestRouter.getRequestRouter();
+            requestRouter.doRoute(req, res);
+            response(res);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response(CustomHttpResponse response){
         try {
+            DataOutputStream dos = new DataOutputStream(response.getOutputStream());
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
             dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("Content-Length: " + response.getBody().size() + "\r\n");
             dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
+            dos.write(Bytes.toArray(response.getBody()), 0, response.getBody().size());
+            dos.flush();
+        }
+        catch (IOException e){
+            logger.error("While writing response " + e.getMessage());
         }
     }
 
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
 }
