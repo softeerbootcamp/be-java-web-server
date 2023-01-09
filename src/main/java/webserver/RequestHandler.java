@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
+import http.RequestLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,11 +32,10 @@ public class RequestHandler implements Runnable {
                 return;
             }
 
-            String[] split = line.split(" ");
-            String url = split[1];
-            logger.debug("request url : {}", url);
+            RequestLine requestLine = new RequestLine(line);
+            logger.debug("request line : {}", requestLine);
 
-            byte[] body = Files.readAllBytes(new File("src/main/resources/templates" + url).toPath());
+            byte[] body = Files.readAllBytes(new File("src/main/resources/templates" + requestLine.getUrl()).toPath());
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException e) {
