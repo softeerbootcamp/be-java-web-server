@@ -7,6 +7,11 @@ import java.util.Objects;
 public final class HttpRequestUtils {
     public HttpRequestUtils() {}
 
+    public static String requestPath(String requestLine) {
+        String strOfRemovedHttpMethod = requestLine.split(" ")[1];
+        int idxOfLastPathChar = strOfRemovedHttpMethod.indexOf("?");
+        return strOfRemovedHttpMethod.substring(0, idxOfLastPathChar);
+    }
 
     public static Map<String, String> parseQueryString(String queryString) {
         if (Objects.isNull(queryString)) {

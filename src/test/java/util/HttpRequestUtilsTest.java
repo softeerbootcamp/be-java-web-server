@@ -15,10 +15,10 @@ public class HttpRequestUtilsTest {
     @DisplayName("쿼리 스트링 파싱 테스트")
     void testParseQueryString() {
         // given
-        String queryString = "GET /?name=sol&age=26 HTTP/1.1";
+        String requestLine = "GET /?name=sol&age=26 HTTP/1.1";
 
         // when
-        Map<String, String> querys = HttpRequestUtils.parseQueryString(queryString);
+        Map<String, String> querys = HttpRequestUtils.parseQueryString(requestLine);
 
         // then
         assertAll(
@@ -26,6 +26,18 @@ public class HttpRequestUtilsTest {
                 () -> assertEquals("sol", querys.get("name")),
                 () -> assertEquals("26", querys.get("age"))
         );
+    }
 
+    @Test
+    @DisplayName("요청 Path 파싱 테스트")
+    void testRequestURL() {
+        // given
+        String requestLine = "GET /index.html?name=sol&age=26 HTTP/1.1";
+
+        // when
+        String path = HttpRequestUtils.requestPath(requestLine);
+
+        // then
+        assertEquals("/index.html", path);
     }
 }
