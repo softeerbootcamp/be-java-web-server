@@ -37,7 +37,6 @@ public class RequestHandler implements Runnable {
 
             byte[] body = Files.readAllBytes(new File(viewPath).toPath());
 
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             DataOutputStream dos = new DataOutputStream(out);
             response200Header(dos, body.length);
             responseBody(dos, body);
@@ -52,7 +51,7 @@ public class RequestHandler implements Runnable {
             return handler.handle(url);
         }
 
-        // 추후 다른 기능이 추가되면 수정할 예정
+        // TODO 추후 다른 기능이 추가되면 수정할 예정
         return url;
     }
 
