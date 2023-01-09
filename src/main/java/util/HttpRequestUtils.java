@@ -7,7 +7,6 @@ public final class HttpRequestUtils {
     public HttpRequestUtils() {}
 
     public static String requestPath(String requestLine) {
-        System.out.println(requestLine);
         String strOfRemovedHttpMethod = requestLine.split(" ")[1];
         int idxOfLastPathChar = strOfRemovedHttpMethod.indexOf("?");
         return idxOfLastPathChar != -1
