@@ -5,7 +5,6 @@ import java.net.Socket;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import request.RequestParser;
 import request.ResponseGenerator;
 
 public class RequestHandler implements Runnable {
@@ -27,7 +26,10 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             DataOutputStream dos = new DataOutputStream(out);
             //
-            byte[] body = responseGenerator.generate(in);
+            if(in.available() == 0) {
+                return;
+            }
+            byte[] body = responseGenerator.generate(in, connection.getPort());
             //
             response200Header(dos, body.length);
             responseBody(dos, body);
