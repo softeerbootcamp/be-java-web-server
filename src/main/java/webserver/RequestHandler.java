@@ -30,15 +30,10 @@ public class RequestHandler implements Runnable {
             }
             logger.debug("request requestLine : {}", requestLine);
 
-            //TODO: URL 요청에 따라 응답할 뷰 파일(ViewResolver)을 지정하는 역할을 메서드나 클래스로 분리
             String url = HttpRequestUtils.getUrl(requestLine);
+            String viewName = searchRequestHandler(url);
 
-            if (url.contains("/user/create")) {
-                UserService userService = new UserService();
-                url = userService.signUp(requestLine);
-            }
-
-            String path = ViewResolver.process(url);
+            String path = ViewResolver.process(viewName);
 
             byte[] body = Files.readAllBytes(new File(path).toPath());
 
@@ -49,6 +44,16 @@ public class RequestHandler implements Runnable {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private String searchRequestHandler(String url) {
+        if (url.contains("/user")) {
+            UserRequestHandler handler = new UserRequestHandler();
+            return handler.handle(url);
+        }
+
+        // 추후 다른 기능이 추가되면 수정할 예정
+        return url;
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
