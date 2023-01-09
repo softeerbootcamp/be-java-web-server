@@ -13,8 +13,6 @@ public class HttpRequestUtil {
                 String[] kv = str.split("=");
                 info.put(kv[0],kv[1]);
             }
-            for (String str: infoSet)
-                System.out.println(str);
             return info;
         }catch (ArrayIndexOutOfBoundsException e){
             return info;

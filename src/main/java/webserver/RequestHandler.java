@@ -42,9 +42,7 @@ public class RequestHandler implements Runnable {
             String httpMethod = headers[0];
             String reqURL = headers[1].equals("/")?"/index.html":headers[1];
             reqURL = createUser(reqURL);
-            System.out.println("Req URL: "+reqURL);
-            reqURL = HttpRequestUtil.getOnlyURL(reqURL);
-            System.out.println("Req URL after getOnlyURL: "+reqURL);
+            reqURL = HttpRequestUtil.getOnlyURL(reqURL);    //url without parameter
             String fileExtension = HttpRequestUtil.getFileExtension(reqURL);
             String httpVersion = headers[2];
             String strBr = "";
@@ -58,7 +56,6 @@ public class RequestHandler implements Runnable {
             byte[] body = Files.readAllBytes(new File(fileURL+reqURL).toPath());
             // TODO 사용자 요청에 대한 처리는 이 곳까지 구현하면 된다.
             DataOutputStream dos = new DataOutputStream(out);
-            //byte[] body = "Hello World".getBytes();
             response200Header(dos, body.length,contentType);
             responseBody(dos, body);
         } catch (IOException e) {
@@ -70,12 +67,15 @@ public class RequestHandler implements Runnable {
         if (reqURL.contains("create")){
             Map<String,String> userInfo = HttpRequestUtil.parseQueryString(reqURL);
             Database.addUser(new User(userInfo.get(USER_ID),userInfo.get(PASSWORD),userInfo.get(NAME),userInfo.get(EMAIL)));
+            Stream.of(userInfo.entrySet()).forEach(System.out::println);
             reqURL = "/index.html";
-            System.out.println("Req URL: "+reqURL);
         }
         return reqURL;
     }
 
+    private void responseHeader(DataOutputStream dos, int lengthOfBodyContent, String contentType){
+
+    }
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
@@ -83,6 +83,18 @@ public class RequestHandler implements Runnable {
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void response302Header(DataOutputStream dos, int lengthOfBodyContent, String contentType, String redirectURL) {
+        try{
+            dos.writeBytes("HTTP/1.1 301\r\n");
+            dos.writeBytes("Location:localhost:8080"+redirectURL+"\r\n");
+            dos.writeBytes("Content-Type: "+contentType+";charset=utf-8\r\n");
+            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
+        }catch (IOException e){
             logger.error(e.getMessage());
         }
     }
