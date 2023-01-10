@@ -1,6 +1,8 @@
 package webserver;
 
+import Controller.Controller;
 import http.HttpRequest;
+import http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,8 +28,11 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             HttpRequest httpRequest = new HttpRequest(new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
-
             DataOutputStream dos = new DataOutputStream(out);
+            HttpResponse httpResponse = new HttpResponse();
+            Controller controller = ControllerHandler.handleController(httpRequest);
+            controller.makeResponse(httpRequest, httpResponse);
+
             byte[] body = Files.readAllBytes(new File(requestFilePath + httpRequest.getUri()).toPath());
             response200Header(dos, body.length);
             responseBody(dos, body);
