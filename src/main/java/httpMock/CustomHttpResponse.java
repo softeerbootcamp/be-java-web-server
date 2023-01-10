@@ -17,11 +17,11 @@ public class CustomHttpResponse {
     public CustomHttpResponse(OutputStream out) {
         this.out = out;
         this.headers = new HashMap<>();
-        body = new byte[0];
+        body = "".getBytes();
     }
 
     public void setContentType(ContentType contentType) {
-        headers.put("Content-Type", contentType.getContentType());
+        headers.put("Content-Type", contentType.getContentType()+";charset=UTF-8");
     }
 
     public void addHeader(String key, String value){
@@ -57,6 +57,10 @@ public class CustomHttpResponse {
 
     public String getProtocolVersion(){
         return this.protocolVersion;
+    }
+
+    public String toString(){
+        return statusCode.getMessage() + " " + headers.toString();
     }
 
 }

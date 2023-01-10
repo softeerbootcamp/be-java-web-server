@@ -39,7 +39,7 @@ public class RequestHandler implements Runnable {
         try {
             DataOutputStream dos = new DataOutputStream(response.getOutputStream());
             dos.writeBytes(response.getProtocolVersion()+" " + response.getStatusCode().getCode() + " " + response.getStatusCode().getMessage() + "\r\n");
-            for(String key : response.getHeaders().values()){
+            for(String key : response.getHeaders().keySet()){
                 dos.writeBytes(key+": "+response.getHeaders().get(key)+"\r\n");
             }
             dos.writeBytes("Content-Length: " + response.getBody().length + "\r\n");
