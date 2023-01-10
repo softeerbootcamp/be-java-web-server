@@ -3,6 +3,6 @@ package request;
 import java.io.DataOutputStream;
 import java.io.InputStream;
 
-public interface ResponseGenerator {
-    void generate(InputStream in, DataOutputStream dos, int port);
+public interface RequestHandler {
+    void handleRequest(InputStream in, DataOutputStream dos, int port);
 }
