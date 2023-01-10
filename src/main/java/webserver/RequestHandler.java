@@ -7,6 +7,9 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
 
+import static webserver.StaticPath.TEMPLATE_PATH;
+import static webserver.StaticPath.STATIC_PATH;
+
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
@@ -26,7 +29,6 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
 
             String url = getUrl(in);
-            System.out.println(url);
             if(url.contains("/user/create"))
             {
                 SignUpController.enrollNewUser(url);
@@ -76,8 +78,8 @@ public class RequestHandler implements Runnable {
 class Byte {
     static byte[] urlToByte(String url) throws IOException {
         if (url.contains("html") || url.contains("favicon"))
-            return Files.readAllBytes(new File("./src/main/resources/templates" + url).toPath());
+            return Files.readAllBytes(new File(TEMPLATE_PATH.getPath() + url).toPath());
         else
-            return Files.readAllBytes(new File("./src/main/resources/static" + url).toPath());
+            return Files.readAllBytes(new File(STATIC_PATH.getPath() + url).toPath());
     }
 }

@@ -9,4 +9,9 @@ public enum StaticPath {
     StaticPath(String s) {
         path = s;
     }
+
+    public String getPath()
+    {
+        return path;
+    }
 }
