@@ -31,7 +31,13 @@ public class Response {
         dataOutputStream.writeBytes(statusLine.getHttpVersion() + " " +
                 statusLine.getStatusCode() + " " + statusLine.getReasonPhrase());
 
-        dataOutputStream.write(body, 0, body.length);
-        dataOutputStream.flush();
+        if(hasContent()) {
+            dataOutputStream.write(body, 0, body.length);
+            dataOutputStream.flush();
+        }g
+    }
+
+    private boolean hasContent() {
+        return headers.containsKey(Header.of("Content-Length"));
     }
 }
