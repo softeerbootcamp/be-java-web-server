@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class HttpResponse {
 
@@ -42,6 +43,10 @@ public class HttpResponse {
 
     public String getHeaderByKey(String key) {
         return headers.get(key);
+    }
+
+    public Set<String> getHeaderKeys() {
+        return headers.keySet();
     }
 
     public HttpStatus getStatus() {
