@@ -20,6 +20,10 @@ public class QueryParameters {
                 .collect(collectingAndThen(toMap(q -> q[0], q -> q[1]), QueryParameters::new));
     }
 
+    public boolean isParameterExist() {
+        return parameters.size() != 0;
+    }
+
     public String getParameter(String key) {
         return parameters.get(key);
     }
@@ -27,4 +31,6 @@ public class QueryParameters {
     public Map<String, String> getParameters() {
         return parameters;
     }
+
+
 }

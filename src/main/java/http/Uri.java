@@ -21,6 +21,9 @@ public class Uri {
         return new Uri(splitUri[0], null);
     }
 
+    public boolean isQueryParameterExist() {
+        return queryParameters.isParameterExist();
+    }
 
     public String getPath() {
         return path;
