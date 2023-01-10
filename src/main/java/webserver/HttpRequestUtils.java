@@ -20,38 +20,50 @@ import com.google.common.collect.Maps;
 public class HttpRequestUtils {
 
 	private static final Logger logger = LoggerFactory.getLogger(HttpRequestUtils.class);
+
 	public static HttpRequest httpRequestParse(InputStream in) {
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 			String line = br.readLine();
-			String url = line.split(" ")[1];
-			String method = line.split(" ")[0];
+
+			// 메서드 설정
+			String method = line.substring(0, line.indexOf(' '));
+			line = line.substring(line.indexOf(' ') + 1);
+			line = line.split(" ")[0];
+			// url 설정
+			String path = line;
+			int index = line.indexOf('?');
+			String queryString = "";
+			if (index != -1) {
+				path = line.substring(0, index);
+				queryString = line.substring(index + 1);
+			}
+			Url url = Url.of(path, parseQueryString(queryString));
+
 			line = br.readLine();
 			Map<String, String> headers = new HashMap<>();
-
-			while(!line.equals("")) {
+			while (!line.equals("")) {
 				headers.put(line.split(": ")[0], line.split(": ")[1]);
 				line = br.readLine();
-				logger.info(line);
 
 			}
+
 			return HttpRequest.of(url, method, headers);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public static Map<String, String> parseQueryString(String queryString) {
+		if (Strings.isNullOrEmpty(queryString)) {
+			return Maps.newHashMap();
+		}
+		String[] tokens = queryString.split("&");
+		return Arrays.stream(tokens)
+			.map(t -> t.split("="))
+			.collect(Collectors.toMap(p -> p[0], p -> p[1]));
 
 	}
-	// public static Map<String, String> parseQueryString(String queryString) {
-	// 	if (Strings.isNullOrEmpty(queryString)) {
-	// 		return Maps.newHashMap();
-	// 	}
-	//
-	// 	String[] tokens = queryString.split("&");
-	// 	return Arrays.stream(tokens)
-	// 		.map(t -> getKeyValue(t, "="))
-	// 		.filter(p -> p != null)
-	// 		.collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
-	// }
 
 	public static Pair<String, String> getKeyValue(String keyValue, String regex) {
 		if (Strings.isNullOrEmpty(keyValue)) {
