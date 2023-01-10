@@ -5,6 +5,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import reader.RequestReader;
 import util.HttpMethod;
+import util.Url;
+import util.UrlType;
 import util.error.HttpsErrorMessage;
 
 import java.io.File;
@@ -22,7 +24,7 @@ class TemplatesFileReaderTest {
     void readFile() throws IOException {
         String url = "/index.html";
         FileReader fileReader = new TemplatesFileReader();
-        Assertions.assertThat(fileReader.readFile(url)).isEqualTo(
+        Assertions.assertThat(fileReader.readFile(new Url(url, UrlType.TEMPLATES_FILE))).isEqualTo(
                 Files.readAllBytes(new File("./src/main/resources/templates" + url).toPath())
         );
     }
