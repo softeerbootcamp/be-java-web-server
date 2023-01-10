@@ -60,6 +60,10 @@ public class RequestHandler implements Runnable {
         }
     }
 
+    private void response(DataOutputStream dos, int lengthOfBodyContent, String contentType){
+        
+    }
+
     private boolean createUser(RequestHeaderMessage requestHeaderMessage){
         if (requestHeaderMessage.getHttpOnlyURL().contains("create")){
             Map<String,String> userInfo = HttpRequestUtil.parseQueryString(requestHeaderMessage.getHttpReqParams());
@@ -76,6 +80,16 @@ public class RequestHandler implements Runnable {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
             dos.writeBytes("Content-Type: "+contentType+";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void response301Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
+        try {
+            dos.writeBytes("HTTP/1.1 301 FOUND \r\n");
+            dos.writeBytes("Location: /index.html \r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
