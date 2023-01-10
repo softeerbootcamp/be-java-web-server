@@ -10,7 +10,7 @@ import httpMock.constants.ContentType;
 import httpMock.constants.StatusCode;
 
 public interface RequestController {
-    Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    Logger logger = LoggerFactory.getLogger(RequestController.class);
 
     void handleRequest(CustomHttpRequest req, CustomHttpResponse res);
 

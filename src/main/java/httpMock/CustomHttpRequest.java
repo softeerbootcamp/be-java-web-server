@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class CustomHttpRequest {
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(CustomHttpRequest.class);
     private String httpMethod;
     private String protocolVersion;
     private String url;

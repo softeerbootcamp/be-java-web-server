@@ -12,7 +12,7 @@ public class StaticFileService {
     private static final String TEMPLATE_PATH = StaticFileService.class.getClassLoader().getResource("./templates").getPath();
 
     private static final List<String> TEMPLATE_FILES = List.of("html", "ico");
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(StaticFileService.class);
 
     public static String getFileTypeFromUrl(String url) {
         int index = url.lastIndexOf(".");
