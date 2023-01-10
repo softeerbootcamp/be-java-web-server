@@ -29,11 +29,11 @@ public class HttpResponse {
             this.headers = new HttpHeaders();
         }
 
-        this.headers.setHeader(key, value);
+        this.headers.putHeader(key, value);
     }
 
     public void setBody(HttpBody body) {
-        this.headers.setHeader("Content-Length", String.valueOf(body.size()));
+        this.headers.putHeader("Content-Length", String.valueOf(body.size()));
         this.body = body;
     }
 
@@ -51,6 +51,6 @@ public class HttpResponse {
 
     public void redirect(String path) {
         this.status = HttpStatus.SEE_OTHER;
-        this.headers.setHeader("Location", path);
+        this.headers.putHeader("Location", path);
     }
 }

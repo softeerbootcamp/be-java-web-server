@@ -15,11 +15,11 @@ public class HttpHeaders {
         return this.headers.get(key);
     }
 
-    public void setHeader(String key, String value) {
+    public void putHeader(String key, String value) {
         this.headers.put(key, value);
     }
 
-    public void setHeaders(Map<String, String> headers) {
+    public void addHeaders(Map<String, String> headers) {
         this.headers.putAll(headers);
     }
 

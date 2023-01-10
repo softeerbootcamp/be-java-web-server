@@ -14,7 +14,7 @@ public class HttpHeaderParser {
 
         for (String strOfHeader: stringOfHeaders.split("\n")) {
             int idxOfColon = strOfHeader.indexOf(":");
-            headers.setHeader(
+            headers.putHeader(
                     strOfHeader.substring(0, idxOfColon).trim(),
                     strOfHeader.substring(idxOfColon + 1).trim());
         }
