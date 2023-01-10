@@ -1,18 +1,18 @@
 package webserver;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+
+import model.request.RequestLine;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-
-    private Socket connection;
+    private final Socket connection;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -24,8 +24,13 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
+            BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+            String line = br.readLine();
+
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = "Hello World".getBytes();
+            RequestLine requestLine = RequestLine.of(line);
+            byte[] body = Files.readAllBytes(new File("src/main/resources/templates" + requestLine.getUri()).toPath());
+
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException e) {
@@ -35,10 +40,10 @@ public class RequestHandler implements Runnable {
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
         try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
+            dos.writeBytes("HTTP/1.1 200 OK " + System.lineSeparator());
+            dos.writeBytes("Content-Type: text/html;charset=utf-8" + System.lineSeparator());
+            dos.writeBytes("Content-Length: " + lengthOfBodyContent + System.lineSeparator());
+            dos.writeBytes(System.lineSeparator());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
