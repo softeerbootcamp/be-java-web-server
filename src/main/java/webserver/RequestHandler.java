@@ -30,12 +30,10 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest httpRequest = HttpRequest.getHttpRequest(in);
-
             requestReader = RequestReader.selectRequestReaderByMethod(httpRequest.getHttpMethod());
-            String url = requestReader.findPathInRequest(httpRequest);
 
-            fileReader = FileReader.selectFileReader(url);
-            byte[] data = fileReader.readFile(url);
+            byte[] data = readData(httpRequest);
+
 
             DataOutputStream clientOutPutStream = new DataOutputStream(out);
             HttpResponse httpResponse = new HttpResponse(clientOutPutStream,data);
@@ -43,6 +41,18 @@ public class RequestHandler implements Runnable {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private byte[] readData(HttpRequest httpRequest) {
+        byte[] data=null;
+        fileReader = FileReader.selectFileReader(httpRequest.getUrl());
+        if(fileReader!=null){
+            //index.html과 같은 파일을 읽는 경우
+            data = fileReader.readFile(httpRequest.getUrl());
+        }else{
+            data = requestReader.readData(httpRequest);
+        }
+        return data;
     }
 }
 
