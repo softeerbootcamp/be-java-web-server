@@ -25,8 +25,10 @@ public class WebServer {
             // 클라이언트가 연결될때까지 대기한다.
             Socket connection;
             while ((connection = listenSocket.accept()) != null) {
-                Thread thread = new Thread(new RequestHandler(connection));
-                thread.start();
+                Thread thread = new Thread(new RequestHandler(connection)); // native thread
+                thread.start(); // 스레드 생성 및 run
+                // 스레드는 생성 및 소멸 오버헤드가 크기 때문에
+                // 스레드 풀을 이용하여 해당 코드를 개선할 수 있음
             }
         }
     }
