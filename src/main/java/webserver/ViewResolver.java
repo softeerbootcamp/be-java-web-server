@@ -14,19 +14,20 @@ public class ViewResolver {
     static final String STATIC_PATH = "src/main/resources/static/";
     static final String TEMPLATES_PATH = "src/main/resources/templates/";
 
-    public byte[] findFilePath(String url) throws IOException {
-        logger.debug(">> request url : {}", url);
-
+    public byte[] findFileBytes(Path path) throws IOException {
         try {
-            return Files.readAllBytes(new File(ViewResolver.STATIC_PATH + url).toPath());
+            return Files.readAllBytes(path);
         } catch (IOException e) {
-            return Files.readAllBytes(new File(ViewResolver.TEMPLATES_PATH + url).toPath());
+            return Files.readAllBytes(path);
         }
     }
 
-    public Path findPath(String url) {
-        return new File(ViewResolver.STATIC_PATH + url).toPath();
-
-
+    public Path findFilePath(String url) {
+        try {
+            Files.readAllBytes(new File(ViewResolver.STATIC_PATH + url).toPath());
+            return new File(ViewResolver.STATIC_PATH + url).toPath();
+        } catch (IOException e) {
+            return new File(ViewResolver.TEMPLATES_PATH + url).toPath();
+        }
     }
 }

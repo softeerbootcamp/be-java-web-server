@@ -2,7 +2,6 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.HttpRequestUtils;
 
 import java.io.*;
 import java.net.Socket;
@@ -37,35 +36,18 @@ public class RequestHandler implements Runnable {
             logger.debug("> input line : {}", line);
             String url = getUrl(line);
             url = checkUrlQueryString(url);
+            logger.debug("> url : {}", url);
 
             DataOutputStream dos = new DataOutputStream(out);
+            Path path = viewResolver.findFilePath(url);
+            String contentType = Files.probeContentType(path);
+            byte[] body = viewResolver.findFileBytes(path);
 
-
-            byte[] body = viewResolver.findFilePath(url);
-
-
-            response200HeaderByExtension(url, body, dos);
+            response200Header(dos, body.length, contentType);
             responseBody(dos, body);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
-    }
-
-    //TODO 리팩토링 필요!! src/main/resources/static/user/js/scripts.js 이렇게 옴.
-    private void response200HeaderByExtension(String url, byte[] body, DataOutputStream dos) throws IOException {
-        String extension = url.substring(url.lastIndexOf(".")+1);
-        logger.debug(">>> extension : {}", extension);
-
-        String contentType;
-        if (extension.equals("css")) {
-            contentType = "text/css";
-        } else if (extension.equals("js")) {
-            contentType = "text/javascript";
-        } else {
-            contentType = "text/html";
-        }
-        response200Header(dos, body.length, contentType);
-
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
