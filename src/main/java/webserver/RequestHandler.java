@@ -4,12 +4,13 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
+import http.repsonse.HttpResponse;
 import http.request.HttpRequest;
 import service.UserService;
-import utils.FileIoUtils;
 import utils.HttpRequestGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.HttpResponseGenerator;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -29,10 +30,10 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             HttpRequest httpRequest = HttpRequestGenerator.parseHttpMessage(br);
-            String target = httpRequest.getRequestTarget();
+            HttpResponse httpResponse = HttpResponseGenerator.generateResponse(httpRequest, userService);
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = FileIoUtils.loadFile(target);
-            response200Header(dos, body.length);
+            byte[] body = httpResponse.getBody();
+            dos.writeBytes(httpResponse.getResponseMessage());
             responseBody(dos, body);
         } catch (Exception e) {
             logger.error(e.getMessage());
