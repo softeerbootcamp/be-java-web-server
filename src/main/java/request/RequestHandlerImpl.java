@@ -1,11 +1,12 @@
 package request;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 public class ResponseGeneratorImpl implements ResponseGenerator {
     @Override
-    public byte[] generate(InputStream in, int port) {
+    public void generate(InputStream in, DataOutputStream dos, int port) {
         Request request = Request.of(in);
         System.out.println(port + ": " + request);
         byte[] body = new byte[0];
@@ -18,7 +19,5 @@ public class ResponseGeneratorImpl implements ResponseGenerator {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return body;
     }
 }

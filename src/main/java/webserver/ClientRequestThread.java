@@ -29,10 +29,10 @@ public class RequestHandler implements Runnable {
             if(in.available() == 0) {
                 return;
             }
-            byte[] body = responseGenerator.generate(in, connection.getPort());
+            responseGenerator.generate(in, dos, connection.getPort());
             //
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+            //response200Header(dos, body.length);
+            //responseBody(dos, body);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
