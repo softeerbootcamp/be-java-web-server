@@ -13,5 +13,4 @@ public class ManageDB {
     public static User findUserById(String userId){
         return Database.findUserById(userId);
     }
-
 }
