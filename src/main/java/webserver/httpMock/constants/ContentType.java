@@ -13,10 +13,10 @@ public enum ContentType {
     private final String contentType;
     private final List<String> fileTypes;
 
-    public static ContentType getContentTypeByFileType(String fileType){
+    public static ContentType getContentTypeByFileType(String fileType) {
         System.out.println(fileType);
-        for(ContentType content : ContentType.values()){
-            if(content.fileTypes.contains(fileType))
+        for (ContentType content : ContentType.values()) {
+            if (content.fileTypes.contains(fileType))
                 return content;
         }
         return TEXT_PLAIN;

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+
 import com.google.common.primitives.Bytes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,17 +36,16 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void response(CustomHttpResponse response){
+    private void response(CustomHttpResponse response) {
         try {
             DataOutputStream dos = new DataOutputStream(response.getOutputStream());
-            dos.writeBytes("HTTP/1.1 "+ response.getStatusCode().getCode() + " " +  response.getStatusCode().getMessage()+ "\r\n");
-            dos.writeBytes("Content-Type: "+ response.getContentType().getContentType()+"; charset=utf-8\r\n");
+            dos.writeBytes("HTTP/1.1 " + response.getStatusCode().getCode() + " " + response.getStatusCode().getMessage() + "\r\n");
+            dos.writeBytes("Content-Type: " + response.getContentType().getContentType() + "; charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + response.getBody().size() + "\r\n");
             dos.writeBytes("\r\n");
             dos.write(Bytes.toArray(response.getBody()), 0, response.getBody().size());
             dos.flush();
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             logger.error("While writing response " + e.getMessage());
         }
     }

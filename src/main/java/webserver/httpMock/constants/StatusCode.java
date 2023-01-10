@@ -16,7 +16,7 @@ public enum StatusCode {
     private final int statusCode;
     private final String message;
 
-    StatusCode(int code, String msg){
+    StatusCode(int code, String msg) {
         statusCode = code;
         message = msg;
     }
@@ -25,7 +25,7 @@ public enum StatusCode {
         return statusCode;
     }
 
-    public String getMessage(){
+    public String getMessage() {
         return message;
     }
 }
