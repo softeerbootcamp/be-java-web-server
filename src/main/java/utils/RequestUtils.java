@@ -8,6 +8,7 @@ public class RequestUtils {
 
     public static String getFilePathByRequest(String requestLine){
 
+        System.out.println("firstLine : "+requestLine);
         String[] filePath = requestLine.split(" ");
         return filePath[File_Line_Index];
     }
