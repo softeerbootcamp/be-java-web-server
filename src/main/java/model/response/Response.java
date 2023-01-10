@@ -1,6 +1,7 @@
 package model.response;
 
 import model.general.Header;
+import model.general.Status;
 
 import java.util.Collections;
 import java.util.Map;
@@ -15,9 +16,9 @@ public class Response {
         this.headers = headers;
         this.body = body;
     }
-ㅎ
-    public static Response of(StatusLine statusLine) {
-        return new Response(statusLine, Collections.emptyMap(), null);
+
+    public static Response of(Status status) {
+        return new Response(StatusLine.of(status), Collections.emptyMap(), null);
     }
 
     public static Response of(StatusLine statusLine, Map<Header, String> headers, byte[] body) {
