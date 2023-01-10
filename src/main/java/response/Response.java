@@ -6,13 +6,16 @@ import webserver.RequestHandler;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 public class Response {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    public Response(){
+    private DataOutputStream dos;
+    public Response(OutputStream outputStream){
+        this.dos = new DataOutputStream(outputStream);
 
     }
-    public static void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    public void response200Header(int lengthOfBodyContent) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
             dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
@@ -23,7 +26,7 @@ public class Response {
         }
     }
 
-    public static void responseBody(DataOutputStream dos, byte[] body) {
+    public void responseBody(byte[] body) {
         try {
             dos.write(body, 0, body.length);
             dos.flush();
