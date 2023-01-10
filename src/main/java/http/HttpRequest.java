@@ -16,13 +16,16 @@ public class HttpRequest {
 
     public HttpRequest(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
+        this.httpRequestLine = getHttpRequestLine(br);
+    }
+
+    private HttpRequestLine getHttpRequestLine(BufferedReader br) throws IOException {
         String requestLine = br.readLine();
         if (requestLine == null) {
-            httpRequestLine = null;
-            return;
+            return null;
         }
         logger.debug("requestLine : {}", requestLine);
 
-        this.httpRequestLine = new HttpRequestLine(requestLine);
+        return new HttpRequestLine(requestLine);
     }
 }
