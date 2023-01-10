@@ -13,7 +13,7 @@ public class RequestHeader {
         this.headers = headers;
     }
 
-    public RequestHeader from(List<String> requestHeader) {
+    public static RequestHeader from(List<String> requestHeader) {
         return requestHeader.stream()
                 .map(header -> header.split(" "))
                 .collect(collectingAndThen(toMap(header -> header[0], header -> header[1]), RequestHeader::new));
