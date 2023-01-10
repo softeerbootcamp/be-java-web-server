@@ -5,18 +5,18 @@ import java.net.Socket;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import request.ResponseGenerator;
+import request.RequestHandler;
 
-public class RequestHandler implements Runnable {
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+public class ClientRequestThread implements Runnable {
+    private static final Logger logger = LoggerFactory.getLogger(ClientRequestThread.class);
 
-    private final ResponseGenerator responseGenerator;
+    private final RequestHandler requestHandler;
 
     private Socket connection;
 
-    public RequestHandler(Socket connectionSocket, ResponseGenerator responseGenerator) {
+    public ClientRequestThread(Socket connectionSocket, RequestHandler requestHandler) {
         this.connection = connectionSocket;
-        this.responseGenerator = responseGenerator;
+        this.requestHandler = requestHandler;
     }
 
     public void run() {
@@ -29,7 +29,7 @@ public class RequestHandler implements Runnable {
             if(in.available() == 0) {
                 return;
             }
-            responseGenerator.generate(in, dos, connection.getPort());
+            requestHandler.handleRequest(in, dos, connection.getPort());
             //
             //response200Header(dos, body.length);
             //responseBody(dos, body);
