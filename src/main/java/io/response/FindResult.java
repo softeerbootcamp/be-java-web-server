@@ -14,7 +14,6 @@ public class FindResult {
         this.contentType = contentType;
         this.resource = resource;
     }
-
     public void update(Status status, ContentType contentType, byte[] resource) {
         this.status = status;
         this.contentType = contentType;
