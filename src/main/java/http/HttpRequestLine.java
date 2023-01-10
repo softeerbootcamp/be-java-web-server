@@ -11,7 +11,7 @@ public class HttpRequestLine {
         this.version = version;
     }
 
-    public HttpUri getUri(){
+    public HttpUri getHttpUri() {
         return this.uri;
     }
 }
