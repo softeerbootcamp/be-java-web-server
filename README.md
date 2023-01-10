@@ -20,3 +20,10 @@ Java Web Application Server 2022
 - Socket을 이용한 통신에는 ServerSocket, ClientSocket이 있으며, client가 요청이 오면 ClientSocket이 활성화 된다.
 - Thread를 효율적으로 다루기 위해서는 ThreadPool를 사용하면 오버헤드를 줄일 수 있다.
 - 왜 브라우저에는 웹소켓이 여러번 연결되는걸까?(아마 브라우저에서는 stylesheet에 대한 요청을 보내기 위해 또 다른 thread생성?)
+
+## Step2(기능 및 요구사항)
+- index.html 수정
+- index.html에는 회원가입 이동 링크가 필요
+- /user/form.html 수정(form태그를 활용한 회원가입 페이지생성 및 가입버튼)
+- 버튼을 누르면 해당 필드값을 Get요
+- Junit테스트
