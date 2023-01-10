@@ -19,7 +19,7 @@ public class ResponseWriter {
     }
 
     public void write(String target) throws IOException {
-        byte[] body = Files.readAllBytes(new File("src/main/resources/templates/" + target).toPath());// 현재 사용자에게 넘겨지는 응답
+        byte[] body = Files.readAllBytes(new File("src/main/resources/templates" + target).toPath());// 현재 사용자에게 넘겨지는 응답
         response200Header(dos, body.length);
         responseBody(dos, body);
     }
