@@ -26,10 +26,12 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
 
             String url = getUrl(in);
+            System.out.println(url);
             if(url.contains("/user/create"))
             {
                 SignUpController.enrollNewUser(url);
                 url = SignUpController.redirectToIndex();
+                // html 파일이 아닌 파일들도 정상적으로 처리될 수 있게 구현하기
             }
             String contentType = Files.probeContentType(new File(url).toPath());
 
