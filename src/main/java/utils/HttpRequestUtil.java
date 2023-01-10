@@ -5,7 +5,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HttpRequestUtil {
+public final class HttpRequestUtil {
+
+    private HttpRequestUtil() {}
 
     public static Map<String, String> parseQuerystring(String queryString) {
         Map<String, String> map = new HashMap<>();

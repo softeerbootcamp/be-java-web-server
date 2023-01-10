@@ -7,9 +7,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 
-public class FileIoUtils {
+public final class FileIoUtils {
     public static final String TEMPLATES_PREFIX = "./templates";
     public static final String STATIC_PREFIX = "./static";
+
+    private FileIoUtils() {}
+
     public static byte[] loadFile(String filename) throws IOException, URISyntaxException {
         return Files.readAllBytes(getPath(String.valueOf(filename)));
     }
