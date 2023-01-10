@@ -44,8 +44,8 @@ public class UserAccountController implements RequestController {
 
         Database.addUser(new User(userId, password, name, email));
 
-        res.setStatusCode(StatusCode.CREATED);
+        res.setStatusCode(StatusCode.FOUND);
         res.setContentType(ContentType.TEXT_PLAIN);
-        res.addToBody(("User " + userId + " created").getBytes());
+        res.addHeader("Location", "/index.html");
     }
 }
