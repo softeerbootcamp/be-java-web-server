@@ -1,6 +1,7 @@
 package model.response;
 
 import model.general.Status;
+import model.request.RequestLine;
 
 public class StatusLine {
     private final String httpVersion;
@@ -11,8 +12,8 @@ public class StatusLine {
         this.status = status;
     }
 
-    public static StatusLine of(Status status) {
-        return new StatusLine("HTTP/1.1", status);
+    public static StatusLine of(RequestLine requestLine, Status status) {
+        return new StatusLine(requestLine.getHttpVersion(), status);
     }
 
     public String getHttpVersion() {
