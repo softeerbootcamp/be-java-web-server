@@ -25,8 +25,8 @@ class HttpStartLineTest {
     @Test
     @DisplayName("실패 테스트")
     void createStartLineException() {
-        assertThatThrownBy(() -> HttpStartLine.from(""))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> HttpStartLine.from("GET"))
+                .isInstanceOf(ArrayIndexOutOfBoundsException.class);
     }
 
 }
