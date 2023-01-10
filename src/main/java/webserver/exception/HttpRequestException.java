@@ -1,11 +1,11 @@
 package webserver.exception;
 
-public class HttpRequestError extends RuntimeException{
+public class HttpRequestException extends RuntimeException{
 
     private static String msg;
     private static String errorCode;
 
-    public HttpRequestError(String msg, String errorCode) {
+    public HttpRequestException(String msg, String errorCode) {
         super(msg);
         this.msg = msg;
         this.errorCode = errorCode;
