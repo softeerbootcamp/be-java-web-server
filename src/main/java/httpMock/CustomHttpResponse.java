@@ -1,35 +1,36 @@
 package httpMock;
 
-import com.github.jknack.handlebars.internal.lang3.ArrayUtils;
 import httpMock.constants.StatusCode;
 import httpMock.constants.ContentType;
 
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class CustomHttpResponse {
 
     private final OutputStream out;
     private StatusCode statusCode;
-    private ContentType contentType;
     private String protocolVersion;
+    private final Map<String, String> headers;
     private byte[] body;
 
     public CustomHttpResponse(OutputStream out) {
         this.out = out;
+        this.headers = new HashMap<>();
         body = new byte[0];
     }
 
     public void setContentType(ContentType contentType) {
-        this.contentType = contentType;
+        headers.put("Content-Type", contentType.getContentType());
     }
 
-    public ContentType getContentType() {
-        return contentType;
+    public void addHeader(String key, String value){
+        headers.put(key, value);
     }
 
+    public Map<String,String> getHeaders(){
+        return this.headers;
+    }
     public OutputStream getOutputStream() {
         return this.out;
     }
@@ -57,4 +58,5 @@ public class CustomHttpResponse {
     public String getProtocolVersion(){
         return this.protocolVersion;
     }
+
 }

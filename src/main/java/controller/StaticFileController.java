@@ -36,13 +36,13 @@ public class StaticFileController implements RequestController {
             byte[] data = Files.readAllBytes(file.toPath());
             res.setStatusCode(StatusCode.OK);
             res.setContentType(ContentType.getContentTypeByFileType(fileType));
-            res.addToBody(data);
+            res.setBody(data);
         } catch (IOException e) {
             RequestController.NOT_FOUND(res);
         }
     }
 
-    public static boolean isFileTypeSupported(String url) {
+    public static boolean ifFileTypeRequested(String url) {
         String type = getFileTypeFromUrl(url);
         return Arrays.stream(supportedFileTypes).filter(item -> item.equals(type)).count() == 1L;
     }

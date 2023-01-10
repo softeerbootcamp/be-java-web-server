@@ -31,7 +31,7 @@ public class RequestRouter {
     public void doRoute(CustomHttpRequest req, CustomHttpResponse res) {
         res.setProtocolVersion(req.getProtocolVersion());
 
-        if(StaticFileController.isFileTypeSupported(req.getUrl())) {
+        if(StaticFileController.ifFileTypeRequested(req.getUrl())) {
             StaticFileController.get().handleRequest(req, res);
             return;
         }
