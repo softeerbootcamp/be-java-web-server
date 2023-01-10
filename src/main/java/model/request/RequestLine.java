@@ -33,4 +33,9 @@ public class RequestLine {
     public boolean hasQueryString() {
         return uri.contains("\\?");
     }
+
+    public String getControllerCriteria() {
+        String[] uriSplit = uri.split("/");
+        return uriSplit[1];
+    }
 }
