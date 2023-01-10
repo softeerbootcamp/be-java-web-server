@@ -42,19 +42,20 @@ public class RequestHandler implements Runnable {
             //String[] headers = httpHeader.split(" ");
             //String httpMethod = headers[0];
             //String reqURL = headers[1].equals("/")?"/index.html":headers[1];
-            reqURL = createUser(requestHeaderMessage.getHttpOnlyURL(), requestHeaderMessage.getHttpReqParams());
+            createUser(requestHeaderMessage);
             //reqURL = HttpRequestUtil.getOnlyURL(reqURL);    //url without parameter
-            String fileExtension = HttpRequestUtil.getFileExtension(reqURL);
+            //String fileExtension = HttpRequestUtil.getFileExtension(reqURL);
             //String httpVersion = headers[2];
             String strBr = "";
             while(!(strBr = br.readLine()).equals("")){
                 //System.out.println(strBr);
             }
             String fileURL = ABSOLUTE_PATH;
+            String fileExtension = requestHeaderMessage.getFileExtension();
             String contentType = fileExtension.equals("html")?"text/html":fileExtension.equals("css")
                     ?"text/css":"text/javascript";
             fileURL += (fileExtension.equals("html")||fileExtension.equals("ico"))?TEMPLATES:STATIC;
-            byte[] body = Files.readAllBytes(new File(fileURL+reqURL).toPath());
+            byte[] body = Files.readAllBytes(new File(fileURL+requestHeaderMessage.getHttpOnlyURL()).toPath());
             // TODO 사용자 요청에 대한 처리는 이 곳까지 구현하면 된다.
             DataOutputStream dos = new DataOutputStream(out);
             response200Header(dos, body.length,contentType);
@@ -64,14 +65,15 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private String createUser(String reqOnlyURL, String reqURLParams){
-        if (reqOnlyURL.contains("create")){
-            Map<String,String> userInfo = HttpRequestUtil.parseQueryString(reqURL);
+    private boolean createUser(RequestHeaderMessage requestHeaderMessage){
+        if (requestHeaderMessage.getHttpOnlyURL().contains("create")){
+            Map<String,String> userInfo = HttpRequestUtil.parseQueryString(requestHeaderMessage.getHttpReqParams());
             Database.addUser(new User(userInfo.get(USER_ID),userInfo.get(PASSWORD),userInfo.get(NAME),userInfo.get(EMAIL)));
             Stream.of(userInfo.entrySet()).forEach(System.out::println);
-            reqURL = "/index.html";
+            requestHeaderMessage.isRedirection();
+            return true;
         }
-        return reqURL;
+        return false;
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
