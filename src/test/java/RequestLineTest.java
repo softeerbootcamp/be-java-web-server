@@ -1,5 +1,7 @@
 import http.Method;
+import http.QueryParameters;
 import http.RequestLine;
+import http.Uri;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -22,14 +24,16 @@ public class RequestLineTest {
                 " HTTP/1.1";
 
         //when
-        RequestLine requestLine = new RequestLine(request);
+        RequestLine requestLine = RequestLine.from(request);
+        Uri uri = requestLine.getUri();
+        QueryParameters queryParameters = uri.getQueryParameters();
 
         //then
         assertThat(requestLine.getMethod()).isEqualTo(Method.GET);
-        assertThat(requestLine.getUri().getQuery().get("userId")).isEqualTo(userId);
-        assertThat(requestLine.getUri().getQuery().get("password")).isEqualTo(password);
-        assertThat(requestLine.getUri().getQuery().get("name")).isEqualTo(name);
-        assertThat(requestLine.getUri().getQuery().get("email")).isEqualTo(email);
+        assertThat(queryParameters.getParameter("userId")).isEqualTo(userId);
+        assertThat(queryParameters.getParameter("password")).isEqualTo(password);
+        assertThat(queryParameters.getParameter("name")).isEqualTo(name);
+        assertThat(queryParameters.getParameter("email")).isEqualTo(email);
         assertThat(requestLine.getVersion()).isEqualTo("HTTP/1.1");
 
     }
@@ -40,12 +44,12 @@ public class RequestLineTest {
         String request = "GET /index.html HTTP/1.1";
 
         //when
-        RequestLine requestLine = new RequestLine(request);
+        RequestLine requestLine = RequestLine.from(request);
 
         //then
-//        assertThat(requestLine.getMethod()).isEqualTo(Method.GET);
+        assertThat(requestLine.getMethod()).isEqualTo(Method.GET);
         assertThat(requestLine.getUri().getPath()).isEqualTo("/index.html");
-//        assertThat(requestLine.getVersion()).isEqualTo("HTTP/1.1");
+        assertThat(requestLine.getVersion()).isEqualTo("HTTP/1.1");
 
     }
 }

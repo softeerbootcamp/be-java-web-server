@@ -1,15 +1,13 @@
 package webserver;
 
+import http.HttpRequest;
+import http.HttpResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-
-import db.Database;
-import http.RequestLine;
-import model.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -29,46 +27,11 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
 
-            String line = br.readLine();
-            if(line == null) {
-                return;
-            }
-
-            RequestLine requestLine = new RequestLine(line);
-            if(requestLine.getUri().getPath().equals("/user/create")) {
-                User user = new User(
-                        requestLine.getUri().getQuery().get("userId"),
-                        requestLine.getUri().getQuery().get("password"),
-                        requestLine.getUri().getQuery().get("name"),
-                        requestLine.getUri().getQuery().get("email")
-                );
-                Database.addUser(user);
-            } else {
-                byte[] body = Files.readAllBytes(new File("src/main/resources/templates" + requestLine.getUri().getPath()).toPath());
-                response200Header(dos, body.length);
-                responseBody(dos, body);
-            }
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
+            HttpRequest httpRequest = HttpRequest.from(br);
+            HttpResponse httpResponse = new HttpResponse(dos);
+            Controller controller = ControllerHandler.findController(httpRequest);
+            controller.doService(httpRequest, httpResponse);
+        } catch (Exception e) {
             logger.error(e.getMessage());
         }
     }

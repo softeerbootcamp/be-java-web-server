@@ -1,38 +1,35 @@
 package http;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toMap;
-
 public class Uri {
 
     private final String path;
-    private final Map<String, String> query;
+    private final QueryParameters queryParameters;
 
-    public Uri(
-            String uri
+    private Uri(
+            String path,
+            QueryParameters queryParameters
     ) {
-        Map<String, String> query1 = new HashMap<>();
+        this.path = path;
+        this.queryParameters = queryParameters;
+    }
+
+    public static Uri from(String uri) {
         String[] splitUri = uri.split("\\?");
-        this.path = splitUri[0];
-
-        if(splitUri.length == 2) {
-            String[] queries = splitUri[1].split("&");
-            query1 = Stream.of(queries)
-                    .map(query -> query.split("="))
-                    .collect(toMap(query -> query[0], query -> query[1]));
+        if (splitUri.length == 2) {
+            return new Uri(splitUri[0], QueryParameters.from(splitUri[1]));
         }
+        return new Uri(splitUri[0], null);
+    }
 
-        this.query = query1;
+    public boolean isQueryParameterExist() {
+        return queryParameters != null;
     }
 
     public String getPath() {
         return path;
     }
 
-    public Map<String, String> getQuery() {
-        return query;
+    public QueryParameters getQueryParameters() {
+        return queryParameters;
     }
 }
