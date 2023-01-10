@@ -11,7 +11,8 @@ public class HttpStartLine {
 
     public static HttpStartLine from(String startLine) {
         String[] tokens = startLine.split(SPACE);
-        return new HttpStartLine(HttpMethod.valueOf(tokens[0]), tokens[1], tokens[2]);
+        HttpMethod httpMethod = HttpMethod.getHttpMethod(tokens[0]);
+        return new HttpStartLine(httpMethod, tokens[1], tokens[2]);
     }
 
     private HttpStartLine(HttpMethod method, String path, String version) {
