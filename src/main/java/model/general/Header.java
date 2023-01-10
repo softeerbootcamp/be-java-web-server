@@ -36,4 +36,8 @@ public enum Header {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Not Supported Header"));
     }
+
+    public String getHeader() {
+        return header;
+    }
 }
