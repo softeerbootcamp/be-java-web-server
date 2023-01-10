@@ -27,6 +27,14 @@ public class HttpRequestUtil {
         }
     }
 
+    public static String getURLParams(String reqURL){
+        try {
+            return reqURL.substring(reqURL.indexOf("?")+1);
+        } catch (StringIndexOutOfBoundsException e){
+            return reqURL;
+        }
+    }
+
     public static String getFileExtension(String reqURL){
         return reqURL.substring(reqURL.lastIndexOf('.')+1);
     }
