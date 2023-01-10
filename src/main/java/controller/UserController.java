@@ -27,7 +27,7 @@ public class UserController implements Controller {
 
         Database.addUser(user);
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + "/index.html").toPath());
-        response.response200Header(body.length);
+        response.response302Header(body.length);
         response.responseBody(body);
     }
 

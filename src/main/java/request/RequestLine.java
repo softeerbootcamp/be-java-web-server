@@ -21,10 +21,9 @@ public class RequestLine {
         return userRequest;
     }
     private boolean isUserRequest(String url){
-        String[] checker = url.split("\\?");
-        if(checker.length == 1){
-            return false;
-        }else return true;
+        if(url.contains("/create")){
+            return true;
+        }else return false;
     }
     public String getURL() {
         return URL;

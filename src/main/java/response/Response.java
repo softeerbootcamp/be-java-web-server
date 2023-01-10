@@ -25,6 +25,15 @@ public class Response {
             logger.error(e.getMessage());
         }
     }
+    public void response302Header(int lengthOfBodyContent) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 FOUND \r\n");
+            dos.writeBytes("Location: /index.html\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
     public void responseCssHeader(int lengthOfBodyContent){
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");

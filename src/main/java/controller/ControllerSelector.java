@@ -6,6 +6,8 @@ import request.RequestLine;
 public class ControllerSelector {
     private static final TemplateController templateController = new TemplateController();
     private static final UserController userController = new UserController();
+
+    private static final StaticController staticController = new StaticController();
     private RequestLine requestLine;
     private static final int _TOKEN_INDEX = 1;
 
@@ -16,6 +18,7 @@ public class ControllerSelector {
         if (requestLine.getUserRequest()){
             return userController;
         }
-        return null;
+
+        return staticController;
     }
 }
