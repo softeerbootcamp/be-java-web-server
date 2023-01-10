@@ -1,7 +1,6 @@
 package io.response;
 
 import enums.ContentType;
-import enums.LogMessage;
 import enums.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,15 +11,12 @@ import java.io.IOException;
 public class HttpResponse implements Response {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
-    private Status status;
-    private ContentType contentType;
-    private byte[] body;
+    private Status status = Status.NOT_FOUND;
+    private ContentType contentType = ContentType.HTML;
+    private byte[] body = "NOT FOUND".getBytes();
     private DataOutputStream out;
 
-    public HttpResponse(FindResult findResult, DataOutputStream out) {
-        this.status = findResult.getStatus();
-        this.contentType = findResult.getContentType();
-        this.body = findResult.getResource();
+    public HttpResponse(DataOutputStream out) {
         this.out = out;
     }
 
@@ -30,8 +26,15 @@ public class HttpResponse implements Response {
             assembleMessage();
             out.flush();
         } catch (IOException e) {
-            logger.error(LogMessage.SERVER_ERROR.getMessage());
+            logger.error("server error");
         }
+    }
+
+    @Override
+    public void update(FindResult findResult) {
+        this.status = findResult.getStatus();
+        this.contentType = findResult.getContentType();
+        this.body = findResult.getResource();
     }
 
     private void assembleMessage() {
