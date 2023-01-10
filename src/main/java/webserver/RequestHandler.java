@@ -1,15 +1,13 @@
 package webserver;
 
-import db.Database;
-import http.*;
-import model.User;
+import http.HttpRequest;
+import http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -31,17 +29,9 @@ public class RequestHandler implements Runnable {
 
             HttpRequest httpRequest = HttpRequest.from(br);
             HttpResponse httpResponse = new HttpResponse(dos);
-            RequestLine requestLine = httpRequest.getRequestLine();
-            Uri uri = requestLine.getUri();
-            if (uri.getPath().equals("/user/create")) {
-                QueryParameters queryParameters = uri.getQueryParameters();
-                Database.addUser(User.from(queryParameters.getParameters()));
-            } else {
-                byte[] body = Files.readAllBytes(new File("src/main/resources/templates" + requestLine.getUri().getPath()).toPath());
-                httpResponse.response200Header(body.length);
-                httpResponse.responseBody( body);
-            }
-        } catch (IOException e) {
+            Controller controller = ControllerHandler.findController(httpRequest);
+            controller.doService(httpRequest, httpResponse);
+        } catch (Exception e) {
             logger.error(e.getMessage());
         }
     }

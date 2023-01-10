@@ -1,5 +1,7 @@
 package http;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -17,7 +19,8 @@ public class QueryParameters {
     public static QueryParameters from(String query) {
         return Stream.of(query.split("&"))
                 .map(q -> q.split("="))
-                .collect(collectingAndThen(toMap(q -> q[0], q -> q[1]), QueryParameters::new));
+                .collect(collectingAndThen(toMap(q -> q[0], q -> URLDecoder.decode(q[1], StandardCharsets.UTF_8)), QueryParameters::new));
+
     }
 
     public String getParameter(String key) {
