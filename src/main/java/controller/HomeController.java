@@ -37,4 +37,3 @@ public class HomeController implements Controller {
         return Response.of(StatusLine.of(Status.OK), headers, body);
     }
 }
-g
