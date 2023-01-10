@@ -13,16 +13,16 @@ public enum StatusCode {
     PAYMENT_REQ(402, "Payment Required"),
     FORBIDDEN(403, "Forbidden"),
     NOT_FOUND(404, "NOT_FOUND");
-    private int statuscode;
-    private String message;
+    private final int statusCode;
+    private final String message;
 
-    private StatusCode(int code, String msg){
-        statuscode = code;
+    StatusCode(int code, String msg){
+        statusCode = code;
         message = msg;
     }
 
     public int getCode() {
-        return statuscode;
+        return statusCode;
     }
 
     public String getMessage(){

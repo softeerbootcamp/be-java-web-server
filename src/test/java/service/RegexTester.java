@@ -9,5 +9,6 @@ class RegexTester {
     void test1(){
         String regex = "(/user/create).*";
         assertTrue("/user/create?qwerqadxvqwer".matches(regex));
+
     }
 }

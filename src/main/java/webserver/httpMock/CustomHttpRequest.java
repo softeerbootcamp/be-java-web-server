@@ -14,8 +14,8 @@ public class CustomHttpRequest {
     private String httpMethod;
     private String protocolVersion;
     private String url;
-    private Map<String, String> requestParams;
-    private Map<String, List<String>> requestHeaders;
+    private final Map<String, String> requestParams;
+    private final Map<String, List<String>> requestHeaders;
     public CustomHttpRequest(InputStream inputStream){
         requestHeaders = new HashMap<>();
         setFirstLineHeaders(inputStream);
@@ -48,11 +48,11 @@ public class CustomHttpRequest {
                     String[] data = param.split("=");
                     requestParams.put(data[0], data[1]);
                 } catch(Exception e){
-                    logger.error("String split failed : ", param);
+                    logger.error("String split failed : "+ param);
                 }
             }
         }
-        logger.info("url splited : " + requestParams.toString());
+        logger.info("url splited : " + requestParams);
         return requestParams;
     }
 

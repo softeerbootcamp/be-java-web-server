@@ -14,7 +14,7 @@ import java.util.Map;
 public class UserAccountService implements RequestService {
     static UserAccountService userAccountService;
 
-    private Map<String, RequestService> routingTable = new HashMap<>() {{
+    private final Map<String, RequestService> routingTable = new HashMap<>() {{
         put("(/user/create).*", (req, res) -> makeAccount(req, res));
     }};
 
