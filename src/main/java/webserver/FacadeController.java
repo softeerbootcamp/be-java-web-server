@@ -11,9 +11,9 @@ import java.io.*;
 import java.net.Socket;
 
 public class FacadeController implements Runnable {
-    private static final Logger logger = LoggerFactory.getLogger(FacadeController.class);
-    private static final RequestFactory requestFactory = new RequestFactory();
-    private static final ResponseFactory responseFactory = new ResponseFactory();
+    private final Logger logger = LoggerFactory.getLogger(FacadeController.class);
+    private final RequestFactory requestFactory = new RequestFactory();
+    private final ResponseFactory responseFactory = new ResponseFactory();
 
     private Socket connection;
 
