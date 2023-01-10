@@ -15,19 +15,20 @@ public class CustomHttpResponse {
     private ContentType contentType;
     private final List<Byte> body;
 
-    public CustomHttpResponse(OutputStream out){
+    public CustomHttpResponse(OutputStream out) {
         this.out = out;
         this.body = new ArrayList<>();
     }
 
-    public void setContentType(ContentType contentType){
+    public void setContentType(ContentType contentType) {
         this.contentType = contentType;
     }
 
-    public ContentType getContentType(){
+    public ContentType getContentType() {
         return contentType;
     }
-    public OutputStream getOutputStream(){
+
+    public OutputStream getOutputStream() {
         return this.out;
     }
 
@@ -35,19 +36,19 @@ public class CustomHttpResponse {
         this.statusCode = statusCode;
     }
 
-    public StatusCode getStatusCode(){
+    public StatusCode getStatusCode() {
         return statusCode;
     }
 
-    public void addToBody(Byte[] datas){
+    public void addToBody(Byte[] datas) {
         body.addAll(List.of(datas));
     }
 
-    public void addToBody(byte[] datas){
+    public void addToBody(byte[] datas) {
         addToBody(ArrayUtils.toObject(datas));
     }
 
-    public List<Byte> getBody(){
+    public List<Byte> getBody() {
         return body;
     }
 }

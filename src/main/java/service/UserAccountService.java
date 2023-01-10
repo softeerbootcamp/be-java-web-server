@@ -19,16 +19,17 @@ public class UserAccountService implements RequestService {
     }};
 
 
-    public static UserAccountService get(){
-        if(userAccountService == null){
+    public static UserAccountService get() {
+        if (userAccountService == null) {
             userAccountService = new UserAccountService();
         }
         return userAccountService;
     }
+
     @Override
     public void handleRequest(CustomHttpRequest req, CustomHttpResponse res) {
-        for(String regex : routingTable.keySet()){
-            if(req.getUrl().matches(regex)){
+        for (String regex : routingTable.keySet()) {
+            if (req.getUrl().matches(regex)) {
                 routingTable.get(regex).handleRequest(req, res);
                 return;
             }
@@ -36,7 +37,7 @@ public class UserAccountService implements RequestService {
         RequestService.NOT_FOUND(res);
     }
 
-    public void makeAccount(CustomHttpRequest req, CustomHttpResponse res){
+    public void makeAccount(CustomHttpRequest req, CustomHttpResponse res) {
         String userId = req.getRequestParams().get("userId");
         String password = req.getRequestParams().get("password");
         String name = req.getRequestParams().get("name");

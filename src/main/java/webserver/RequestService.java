@@ -13,7 +13,7 @@ public interface RequestService {
 
     void handleRequest(CustomHttpRequest req, CustomHttpResponse res);
 
-    static void NOT_FOUND(CustomHttpResponse res){
+    static void NOT_FOUND(CustomHttpResponse res) {
         res.setStatusCode(StatusCode.NOT_FOUND);
         res.setContentType(ContentType.TEXT_PLAIN);
         res.addToBody(ArrayUtils.toObject("404 not found".getBytes()));

@@ -1,4 +1,4 @@
-package httpMock.constants;
+package webserver.httpMock.constants;
 
 import java.util.List;
 
@@ -14,6 +14,7 @@ public enum ContentType {
     private final List<String> fileTypes;
 
     public static ContentType getContentTypeByFileType(String fileType) {
+        System.out.println(fileType);
         for (ContentType content : ContentType.values()) {
             if (content.fileTypes.contains(fileType))
                 return content;

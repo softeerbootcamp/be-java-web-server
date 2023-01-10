@@ -55,7 +55,7 @@ public class StaticFileService implements RequestService {
         } catch (IOException e) {
             logger.error("file not found at " + filePath + req.getUrl());
             RequestService.NOT_FOUND(res);
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             logger.error("Cannot get resourcePath");
             throw new RuntimeException(e);
         }

@@ -19,19 +19,20 @@ public class RequestRouter {
         put("(/user).*", UserAccountService.get());
     }};
 
-    private RequestRouter(){}
+    private RequestRouter() {
+    }
 
-    public static RequestRouter getRequestRouter(){
-        if(requestRouter == null)
+    public static RequestRouter getRequestRouter() {
+        if (requestRouter == null)
             requestRouter = new RequestRouter();
         return requestRouter;
     }
 
-    public void doRoute(CustomHttpRequest req, CustomHttpResponse res){
-        for(String regex : requestMap.keySet()){
-            if(req.getUrl().matches(regex)){
+    public void doRoute(CustomHttpRequest req, CustomHttpResponse res) {
+        for (String regex : requestMap.keySet()) {
+            if (req.getUrl().matches(regex)) {
                 requestMap.get(regex).handleRequest(req, res);
-                logger.info(regex + " matches "  + req.getUrl());
+                logger.info(regex + " matches " + req.getUrl());
                 return;
             }
         }
