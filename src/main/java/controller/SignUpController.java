@@ -25,5 +25,6 @@ public class SignUpController implements Controller {
         );
 
         Database.addUser(user);
+        response.redirect("/user/login.html");
     }
 }

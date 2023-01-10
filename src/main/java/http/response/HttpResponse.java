@@ -48,4 +48,9 @@ public class HttpResponse {
     public HttpBody getBody() {
         return body;
     }
+
+    public void redirect(String path) {
+        this.status = HttpStatus.SEE_OTHER;
+        this.headers.setHeader("Location", path);
+    }
 }
