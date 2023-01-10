@@ -36,15 +36,19 @@ public class RequestHandler implements Runnable {
             logger.debug("> input line : {}", line);
             String url = getUrl(line);
             url = checkUrlQueryString(url);
-            logger.debug("> url : {}", url);
 
             DataOutputStream dos = new DataOutputStream(out);
             Path path = viewResolver.findFilePath(url);
-            String contentType = Files.probeContentType(path);
-            byte[] body = viewResolver.findFileBytes(path);
 
-            response200Header(dos, body.length, contentType);
-            responseBody(dos, body);
+            if (url.contains("create")) {
+                response302Header(dos);
+            } else {
+                String contentType = Files.probeContentType(path);
+                byte[] body = viewResolver.findFileBytes(path);
+                response200Header(dos, body.length, contentType);
+                responseBody(dos, body);
+            }
+
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -61,16 +65,23 @@ public class RequestHandler implements Runnable {
         }
     }
 
+    private void response302Header(DataOutputStream dos) {
+        try {
+            dos.writeBytes("HTTP/1.1 301 FOUND \r\n");
+            dos.writeBytes("Location: /index.html\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
     private String checkUrlQueryString(String url) {
         String[] queryStrings = url.split("\\?");
         if (queryStrings.length != 1) {
             String queryString = queryStrings[1];
-            logger.debug(">> {}", queryString);
 
             Map<String, String> requestParams = parseQuerystring(queryString);
             userService.signUpUser(requestParams);
-
-            url = BASE_URL;
         }
         return url;
     }
