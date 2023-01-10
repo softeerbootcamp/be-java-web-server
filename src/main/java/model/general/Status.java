@@ -3,7 +3,7 @@ package model.general;
 public enum Status {
     OK(200, "OK"),
     NOT_FOUND(404, "Not Found");
-g
+
     private final int statusCode;
     private final String reasonPhrase;
 
