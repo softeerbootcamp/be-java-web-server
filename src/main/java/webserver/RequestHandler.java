@@ -3,10 +3,10 @@ package webserver;
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 
 import controller.Controller;
 import util.ControllerMapper;
+import model.response.Response;
 import model.request.RequestLine;
 
 import org.slf4j.Logger;
@@ -33,10 +33,9 @@ public class RequestHandler implements Runnable {
             RequestLine requestLine = RequestLine.of(line);
 
             Controller controller = ControllerMapper.selectController(requestLine);
-            byte[] body = Files.readAllBytes(new File(filePath).toPath());
+            Response response = controller.getResponse(requestLine);
 
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+            response.writeOutputStream(dos);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
