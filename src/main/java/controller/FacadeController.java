@@ -25,6 +25,11 @@ public class FacadeController implements Runnable {
             Domain.MAIN, new MainController()
     );
 
+    private final Map<Domain, Controller> controllers = Map.of(
+            Domain.USER, new UserController(),
+            Domain.MAIN, new MainController()
+    );
+
     private Socket connection;
 
     public FacadeController(Socket connectionSocket) {
