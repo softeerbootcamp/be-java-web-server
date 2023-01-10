@@ -1,6 +1,7 @@
 package webserver;
 
 import controller.Controller;
+import controller.SignUpController;
 import http.common.HttpBody;
 import http.common.HttpStatus;
 import http.common.MediaType;
@@ -20,7 +21,9 @@ public class Dispatcher {
     private final static Map<String, Controller> controllers;
 
     static {
-        controllers = Map.of();
+        controllers = Map.of(
+                SignUpController.PATH, new SignUpController()
+        );
     }
 
     public static void handle(HttpRequest request, HttpResponse response) {

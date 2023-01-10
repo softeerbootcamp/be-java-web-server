@@ -4,6 +4,8 @@ import http.common.HttpHeaders;
 import http.common.HttpMethod;
 import http.common.URI;
 
+import java.util.Map;
+
 public class HttpRequest {
     private HttpMethod method;
     private URI uri;
@@ -25,5 +27,13 @@ public class HttpRequest {
 
     public HttpHeaders getHeaders() {
         return this.headers;
+    }
+
+    public String getPath() {
+        return this.uri.getPath();
+    }
+
+    public Map<String, String> getQuerys() {
+        return this.uri.getQuerys();
     }
 }
