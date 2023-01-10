@@ -15,7 +15,7 @@ public class HttpRequest {
         this.headers = headers;
     }
 
-    public HttpMethod method() {
+    public HttpMethod getMethod() {
         return this.method;
     }
 
