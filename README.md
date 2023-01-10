@@ -27,3 +27,9 @@ Java Web Application Server 2022
 - /user/form.html 수정(form태그를 활용한 회원가입 페이지생성 및 가입버튼)
 - 버튼을 누르면 해당 필드값을 Get요
 - Junit테스트
+
+## Step2(학습내용)
+- junit Test (도메인 객체 테스트)
+- 객체 분리(HttpStatus, HttpMethod 등을 enum 분리)
+- HttpStatus, HttpMethod에 대한 이해
+- ContentType에 대한 이해
