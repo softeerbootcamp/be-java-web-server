@@ -1,18 +1,12 @@
 package webserver;
 
-import db.Database;
-import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -31,7 +25,6 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String line = br.readLine();
             logger.debug("> input line : {}", line);
@@ -57,10 +50,10 @@ public class RequestHandler implements Runnable {
 
         byte[] body;
         if (substring.equals("html") || substring.equals("ico")) {
-            body = Files.readAllBytes(new File("src/main/resources/templates/" + url).toPath());
+            body = Files.readAllBytes(new File(ViewResolver.TEMPLATES_PATH + url).toPath());
             response200Header(dos, body.length, "text/html");
         } else{
-            body = Files.readAllBytes(new File("src/main/resources/static" + url).toPath());
+            body = Files.readAllBytes(new File(ViewResolver.STATIC_PATH + url).toPath());
             if (substring.equals("css")) {
                 response200Header(dos, body.length, "text/css");
             } else {
