@@ -22,6 +22,7 @@ public class SignUpController {
         {
             throw new AlreadyHasSameIdException("이미 같은 아이디의 유저가 있습니다.");
         }
+        // TODO 특수문자가 정상적으로 디비에 들어가도록 처리하기
         User newUser = new User(UserInfo.get(USER_ID), UserInfo.get(USER_PassWord), UserInfo.get(USER_Name), UserInfo.get(USER_Email));
         Database.addUser(newUser);
         System.out.println(Database.findAll());
