@@ -18,7 +18,7 @@ public interface RequestReader {
 
     static String findPathInRequest(HttpRequest httpRequest) {
         Pattern pattern = Pattern.compile(URL_REGEX);
-        Matcher matcher = pattern.matcher(httpRequest.getHeaderContents().get(0));
+        Matcher matcher = pattern.matcher(httpRequest.getHeaderContents().get(HttpRequest.REQUEST_LINE));
         String url = null;
         if (matcher.find()) {
             url = matcher.group(1); // Extract URL from first group

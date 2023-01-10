@@ -10,17 +10,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class HttpRequest {
-    private final List<String> headerContents;
+
+    public static final String REQUEST_LINE = "Request Line";
+
+    private final HashMap<String, String> headerContents;
     private final HttpMethod httpMethod;
 
     private final Url url;
 
 
-    public HttpRequest(List<String> headerContents) {
+    public HttpRequest(HashMap<String, String> headerContents) {
         this.headerContents = headerContents;
         this.httpMethod = HttpMethod.findMethod(this);
 
@@ -31,16 +33,23 @@ public class HttpRequest {
     public static HttpRequest getHttpRequest(InputStream inputStream) throws IOException {
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-        List<String> requestHeaders = new ArrayList<>();
+        HashMap<String,String > requestHeaders = new HashMap<>();
+
+        requestHeaders.put(REQUEST_LINE, bufferedReader.readLine());
+
         while (bufferedReader.ready()) {
-            requestHeaders.add(bufferedReader.readLine());
+            String headerContent = bufferedReader.readLine();
+            if(headerContent.contains(": ")){
+                String[] line = headerContent.split(": ");
+                requestHeaders.put(line[0], line[1]);
+            }
         }
         return new HttpRequest(requestHeaders);
     }
 
 
 
-    public List<String> getHeaderContents() {
+    public HashMap<String, String> getHeaderContents() {
         return headerContents;
     }
 

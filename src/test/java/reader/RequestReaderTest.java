@@ -8,6 +8,7 @@ import util.HttpMethod;
 import util.error.HttpsErrorMessage;
 
 import java.net.ProtocolException;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -35,7 +36,9 @@ class RequestReaderTest {
     @DisplayName("Get 메서드의 요청의 경우 url파싱 테스트")
     void findPathInRequest() {
         final String requestHeader = "GET /index.html HTTP/1.1";
-        HttpRequest httpRequest = new HttpRequest(List.of(requestHeader));
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put(HttpRequest.REQUEST_LINE, requestHeader);
+        HttpRequest httpRequest = new HttpRequest(hashMap);
         Assertions.assertThat(RequestReader.findPathInRequest(httpRequest)).isEqualTo("/index.html");
     }
 }
