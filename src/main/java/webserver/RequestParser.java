@@ -10,7 +10,7 @@ public class RequestParser {
         String line = br.readLine();
         if(line == null) return null; // 헤더가 null일 경우 null을 응답
         String[] headLine = line.split(" "); // 헤더의 첫 번째 줄을 공백을 기준으로 자른다
-        String url = headLine[1];// index.html
+        String url = headLine[1];//index.html, css파일, js 파일 등,,,
 
         return url;
     }

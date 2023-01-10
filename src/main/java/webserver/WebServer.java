@@ -30,12 +30,9 @@ public class WebServer {
             Socket connection;//클라이언트 소켓과의 연결 객체
             //accept()가 호출되면 프로그램은 여기서 실행을 멈추고 클라이언트가 port번으로 연결할 때까지 무한 대기
             //2. 서버 소켓 listenSocket가 accpet를 호출하고 리턴을 해주면 소켓인 connection 객체가 생성됨
-            int cnt =0;
             while ((connection = listenSocket.accept()) != null) {
-                System.out.println(++cnt);
-                //System.out.println(connection); //Socket[addr=/0:0:0:0:0:0:0:1,port=52360,localport=8080],Socket[addr=/0:0:0:0:0:0:0:1,port=52361,localport=8080]
                 Thread thread = new Thread(new RequestHandler(connection));
-                logger.info(thread.getName());
+                logger.debug("thread name: " + thread.getName());
                 thread.start();
             }
         }
