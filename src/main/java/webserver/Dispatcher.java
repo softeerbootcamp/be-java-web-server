@@ -3,6 +3,7 @@ package webserver;
 import controller.Controller;
 import http.common.HttpBody;
 import http.common.HttpStatus;
+import http.common.MediaType;
 import http.common.URI;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -42,7 +43,11 @@ public class Dispatcher {
                 ResourceUtils.loadFileFromClasspath(uri.getPath())
         );
         response.setBody(body);
-        // TODO: MedeyType Enum 만들어서 처리하기
-        response.addHeader("Content-Type", "text/html;charset=utf-8");
+
+        int idxOfDot = uri.getPath().lastIndexOf(".");
+        String extension = uri.getPath().substring(idxOfDot + 1);
+        MediaType mediaType = MediaType.fromExtension(extension).orElse(MediaType.TEXT_PLAIN);
+
+        response.addHeader("Content-Type", mediaType.getType());
     }
 }
