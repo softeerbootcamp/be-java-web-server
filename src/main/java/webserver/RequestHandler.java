@@ -45,8 +45,7 @@ public class RequestHandler implements Runnable {
             }
             String fileURL = ABSOLUTE_PATH;
             String fileExtension = requestHeaderMessage.getFileExtension();
-            String contentType = fileExtension.equals("html")?"text/html":fileExtension.equals("css")
-                    ?"text/css":"text/javascript";
+            String contentType = "text/" + (fileExtension.equals("js")?"javascript":fileExtension);
             fileURL += (fileExtension.equals("html")||fileExtension.equals("ico"))?TEMPLATES:STATIC;
             byte[] body = Files.readAllBytes(new File(fileURL+requestHeaderMessage.getHttpOnlyURL()).toPath());
             // TODO 사용자 요청에 대한 처리는 이 곳까지 구현하면 된다.
