@@ -22,9 +22,6 @@ public class HttpRequest {
         if (value[1].contains(".html") || value[1].contains(".ico")) {
             return "/templates" + value[1];
         }
-        if (value[1].contains(".js") || value[1].contains(".css")) {
-            return "/static" + value[1];
-        }
-        return value[1];
+        return "/static" + value[1];
     }
 }

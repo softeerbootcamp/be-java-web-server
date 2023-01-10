@@ -26,16 +26,20 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             DataOutputStream dos = new DataOutputStream(out);
+
             HttpParser httpParser = new HttpParser();
             HttpRequest httpRequest = HttpRequest.newInstance(httpParser.parseHttpRequest(in));
+
             String uri = httpRequest.getRequestUri();
             HttpResponse httpResponse = new HttpResponse(FileFinder.findFile(uri), uri);
+
             response200Header(dos, httpResponse);
             responseBody(dos, httpResponse);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
+
     private void response200Header(DataOutputStream dos, HttpResponse httpResponse) {
         try {
             dos.writeBytes(httpResponse.response200Headers());
