@@ -5,11 +5,15 @@ import java.net.Socket;
 import java.nio.file.Files;
 import java.util.Map;
 
+import controller.SignUpController;
+import db.Database;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.HttpRequestUtils;
 import utils.Utilites;
+
+import javax.xml.crypto.dom.DOMCryptoContext;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -29,20 +33,13 @@ public class RequestHandler implements Runnable {
             //브라우저에서 서버로 들어오는 모든 요청은 Inputstream 안에 담겨져 있음, outputstream은 서버에서 브라우저로 보내는 응답
             HttpRequest request = RequestParser.parseInputStreamToHttpRequest(in);
             String url = request.getUrl();
-            if(url.startsWith("/user/create")){
-                String userId = request.getQueryByKey("userId");
-                String password = request.getQueryByKey("password");
-                String name = request.getQueryByKey("name");
-                String email = request.getQueryByKey("email");//1234%40khu.ac.kr
-                email.replace("%40","@");
-                User user = new User(userId,password,name,email);
-            }
             HttpResponse response = new HttpResponse();
-            RequestDispatcher.handle(request,response);
-            System.out.println("status: "+response.getStatus());
+            //TODO 요청 url에 따라 컨트롤러 다르게 타게 하는 것 일반화하기
+            if(url.startsWith("/user/create")) response = SignUpController.createUserController(request);
+            //단순히 index.html로 리다이렉트 하는 것이 아니라 응답을 만들어야 하면
+            if(response.getStatus()!=HttpStatus.FOUND) RequestDispatcher.handle(request,response);
             ResponseWriter rw = new ResponseWriter(out);
-            rw.write(url);
-            //rw.writeByResponse(request,response);
+            rw.write(request,response);
 
         } catch (IOException e) {
             logger.error(e.getMessage());
