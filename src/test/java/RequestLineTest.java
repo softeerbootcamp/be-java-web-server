@@ -22,7 +22,7 @@ public class RequestLineTest {
                 " HTTP/1.1";
 
         //when
-        RequestLine requestLine = new RequestLine(request);
+        RequestLine requestLine = RequestLine.from(request);
 
         //then
         assertThat(requestLine.getMethod()).isEqualTo(Method.GET);
@@ -40,7 +40,7 @@ public class RequestLineTest {
         String request = "GET /index.html HTTP/1.1";
 
         //when
-        RequestLine requestLine = new RequestLine(request);
+        RequestLine requestLine = RequestLine.from(request);
 
         //then
         assertThat(requestLine.getMethod()).isEqualTo(Method.GET);

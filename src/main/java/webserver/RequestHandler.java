@@ -34,7 +34,7 @@ public class RequestHandler implements Runnable {
                 return;
             }
 
-            RequestLine requestLine = new RequestLine(line);
+            RequestLine requestLine = RequestLine.from(br.readLine());
             if(requestLine.getUri().getPath().equals("/user/create")) {
                 User user = new User(
                         requestLine.getUri().getQuery().getParameter("userId"),
