@@ -13,6 +13,7 @@ public class CustomHttpResponse {
     private final OutputStream out;
     private StatusCode statusCode;
     private ContentType contentType;
+    private String protocolVersion;
     private final List<Byte> body;
 
     public CustomHttpResponse(OutputStream out) {
@@ -50,5 +51,13 @@ public class CustomHttpResponse {
 
     public List<Byte> getBody() {
         return body;
+    }
+
+    public void setProtocolVersion(String protocolVersion){
+        this.protocolVersion = protocolVersion;
+    }
+
+    public String getProtocolVersion(){
+        return this.protocolVersion;
     }
 }
