@@ -1,14 +1,15 @@
-package webserver;
+package controller;
 
 import com.github.jknack.handlebars.internal.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.httpMock.CustomHttpRequest;
-import webserver.httpMock.CustomHttpResponse;
-import webserver.httpMock.constants.ContentType;
-import webserver.httpMock.constants.StatusCode;
+import webserver.RequestHandler;
+import httpMock.CustomHttpRequest;
+import httpMock.CustomHttpResponse;
+import httpMock.constants.ContentType;
+import httpMock.constants.StatusCode;
 
-public interface RequestService {
+public interface RequestController {
     Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     void handleRequest(CustomHttpRequest req, CustomHttpResponse res);

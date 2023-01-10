@@ -1,12 +1,13 @@
 package webserver;
 
 
+import controller.RequestController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import service.StaticFileService;
-import service.UserAccountService;
-import webserver.httpMock.CustomHttpRequest;
-import webserver.httpMock.CustomHttpResponse;
+import controller.StaticFileController;
+import controller.UserAccountController;
+import httpMock.CustomHttpRequest;
+import httpMock.CustomHttpResponse;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,9 +15,8 @@ import java.util.Map;
 public class RequestRouter {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private static RequestRouter requestRouter;
-    private final Map<String, RequestService> requestMap = new HashMap<>() {{
-        put("[^\\s]+\\.(html|js|css|ico|ttf|woff|svg|eot|woff2|png)$", StaticFileService.get());
-        put("(/user).*", UserAccountService.get());
+    private final Map<String, RequestController> requestMap = new HashMap<>() {{
+        put("/user", UserAccountController.get());
     }};
 
     private RequestRouter() {
@@ -29,13 +29,19 @@ public class RequestRouter {
     }
 
     public void doRoute(CustomHttpRequest req, CustomHttpResponse res) {
-        for (String regex : requestMap.keySet()) {
-            if (req.getUrl().matches(regex)) {
-                requestMap.get(regex).handleRequest(req, res);
-                logger.info(regex + " matches " + req.getUrl());
+        if(StaticFileController.isFileTypeSupported(req.getUrl())) {
+            StaticFileController.get().handleRequest(req, res);
+            return;
+        }
+
+        for (String keys : requestMap.keySet()) {
+            if (req.getUrl().startsWith(keys)) {
+                requestMap.get(keys).handleRequest(req, res);
+                logger.info(keys + " matches " + req.getUrl());
                 return;
             }
         }
-        RequestService.NOT_FOUND(res);
+
+        RequestController.NOT_FOUND(res);
     }
 }

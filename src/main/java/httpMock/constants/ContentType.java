@@ -1,4 +1,4 @@
-package webserver.httpMock.constants;
+package httpMock.constants;
 
 import java.util.List;
 

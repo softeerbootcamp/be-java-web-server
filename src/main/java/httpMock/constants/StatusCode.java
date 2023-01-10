@@ -1,4 +1,4 @@
-package webserver.httpMock.constants;
+package httpMock.constants;
 
 public enum StatusCode {
     OK(200, "OK"),
