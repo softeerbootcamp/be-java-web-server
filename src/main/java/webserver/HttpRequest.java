@@ -2,6 +2,7 @@ package webserver;
 
 import java.util.Map;
 
+// TODO: method를 enum으로 리팩토링할 예정
 public class HttpRequest {
 	private Url url;
 	private String method;
@@ -14,10 +15,13 @@ public class HttpRequest {
 		this.headers = headers;
 	}
 
+	public String getMethod() {
+		return method;
+	}
+
 	public Url getUrl() {
 		return url;
 	}
-
 
 	public static HttpRequest of(Url url, String method, Map<String, String> headers) {
 		return new HttpRequest(url, method, headers);
