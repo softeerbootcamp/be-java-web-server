@@ -10,10 +10,11 @@ import java.util.Map;
 public class HttpResponseGenerator {
     public static HttpResponse generateResponse(HttpRequest httpRequest, UserService userService){
         if (checkParams(httpRequest, userService)) {
-            return new HttpResponse(httpRequest.getVersion(), StatusCode.SEEOTHER, httpRequest.getContentType(), null);
+            return new HttpResponse(httpRequest.getVersion(), StatusCode.SEEOTHER,
+                    HttpUtils.setContentType(httpRequest.getContentType()), null);
         }
-        return new HttpResponse(httpRequest.getVersion(), StatusCode.OK, httpRequest.getContentType(),
-                FileIoUtils.loadFile(httpRequest.getRequestTarget()));
+        return new HttpResponse(httpRequest.getVersion(), StatusCode.OK,
+                HttpUtils.setContentType(httpRequest.getContentType()), FileIoUtils.loadFile(httpRequest.getRequestTarget()));
     }
 
     private static boolean checkParams(HttpRequest httpRequest, UserService userService){

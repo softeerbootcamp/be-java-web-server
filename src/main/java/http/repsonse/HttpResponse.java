@@ -21,6 +21,10 @@ public class HttpResponse {
         return body.length;
     }
 
+    public byte[] getBody() {
+        return body;
+    }
+
     public String getResponseMessage(){
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("%s %s \r\n", this.version, this.statusCode));
