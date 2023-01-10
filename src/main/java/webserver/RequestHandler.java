@@ -39,7 +39,7 @@ public class RequestHandler implements Runnable {
             url = checkUrlQueryString(url);
 
             DataOutputStream dos = new DataOutputStream(out);
-            //TODO 리팩토링 필요!!
+
             byte[] body = response200HeaderByExtension(url, dos);
 
             responseBody(dos, body);
@@ -48,6 +48,7 @@ public class RequestHandler implements Runnable {
         }
     }
 
+    //TODO 리팩토링 필요!! src/main/resources/static/user/js/scripts.js 이렇게 옴.
     private byte[] response200HeaderByExtension(String url, DataOutputStream dos) throws IOException {
         String substring = url.substring(url.lastIndexOf(".")+1);
         logger.debug(">>> substring : {}", substring);
