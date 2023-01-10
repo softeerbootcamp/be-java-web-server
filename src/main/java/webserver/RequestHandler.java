@@ -1,17 +1,13 @@
 package webserver;
 
-import java.io.*;
-import java.net.Socket;
-
-//import com.github.jknack.handlebars.internal.Files;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
-import java.util.Map;
-
-import model.User;
+import http.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.HttpRequestUtils;
+
+import java.io.*;
+import java.net.Socket;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -29,29 +25,10 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
-            BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            String line = br.readLine();
-            if(line == null) return;
-//          logger.debug("request line : {}", line);
-//            while(!line.equals("")){
-//                line = br.readLine();
-//                logger.debug("header : {}", line);
-//            }
-            String url = HttpRequestUtils.getUrl(line);
-            if(url.startsWith("/user/create")) {
-                int index = url.indexOf("?");
-                String requestPath = url.substring(0, index);
-                String queryString = url.substring(index + 1);
-                logger.debug("QueryString : {}", queryString);
-                Map<String, String> params = HttpRequestUtils.parseQueryString(queryString);
-                User user = new User(params.get("userId"), params.get("password"), params.get("name"), params.get("email"));
-                logger.debug("User : {}", user);
-
-                url = "/index.html";
-            }
+            HttpRequest httpRequest = new HttpRequest(new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
 
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = Files.readAllBytes(new File(requestFilePath + url).toPath());
+            byte[] body = Files.readAllBytes(new File(requestFilePath + httpRequest.getUrl()).toPath());
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException e) {
