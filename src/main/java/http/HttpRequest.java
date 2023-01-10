@@ -22,8 +22,7 @@ public class HttpRequest {
         String startLine = lines[0];
 
         return new HttpRequest(HttpStartLine.from(startLine),
-                Arrays.stream(
-                                Arrays.copyOfRange(lines, 1, lines.length))
+                Arrays.stream(Arrays.copyOfRange(lines, 1, lines.length))
                         .map(line -> line.split(COLON))
                         .collect(Collectors.toMap(pair -> pair[0], pair -> pair[1])
                         ));
