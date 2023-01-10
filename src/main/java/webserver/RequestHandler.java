@@ -31,7 +31,7 @@ public class RequestHandler implements Runnable {
             logger.debug("\n" + headers);
 
             HttpRequest httpRequest = HttpRequest.from(headers);
-            byte[] body = FileIoUtils.loadFile(httpRequest.getPath());
+            byte[] body = FileIoUtils.loadFile(httpRequest.getStartLine().getPath());
 
             DataOutputStream dos = new DataOutputStream(out);
             response200Header(dos, body.length);
