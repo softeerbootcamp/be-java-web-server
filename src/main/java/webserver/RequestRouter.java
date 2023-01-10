@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RequestRouter {
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(RequestRouter.class);
     private static RequestRouter requestRouter;
     private final Map<String, RequestController> requestMap = new HashMap<>() {{
         put("/user", UserAccountController.get());
