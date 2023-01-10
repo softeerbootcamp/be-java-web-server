@@ -2,6 +2,7 @@ package reader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reader.fileReader.FileReader;
 import request.HttpRequest;
 import util.error.HttpsErrorMessage;
 
@@ -17,13 +18,12 @@ public class RequestGetReader implements RequestReader{
     private static final String GET_METHOD_REGEX = "GET (/.*) HTTP/1.1";
     private static final Logger logger = LoggerFactory.getLogger(RequestGetReader.class);
 
-    public String findPathInRequest(HttpRequest httpRequest) {
-        Pattern pattern = Pattern.compile(GET_METHOD_REGEX);
-        Matcher matcher = pattern.matcher(httpRequest.getHeaderContents().get(0));
-        String url=null;
-        if (matcher.find()) {
-            url = matcher.group(1); // Extract URL from first group
-        }
-        return url;
+
+
+    @Override
+    public byte[] readData(HttpRequest httpRequest) {
+        return new byte[0];
     }
+
+
 }
