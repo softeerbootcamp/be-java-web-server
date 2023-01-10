@@ -11,6 +11,9 @@ public class RequestParser {
         if(line == null) return null; // 헤더가 null일 경우 null을 응답
         String[] headLine = line.split(" "); // 헤더의 첫 번째 줄을 공백을 기준으로 자른다
         String url = headLine[1];//index.html, css파일, js 파일 등,,,
+        System.out.println(url);
+        ///user/form.html
+        //user/create?userId=user&password=66a41ad2-bda9-4c70-807c-e0e13ff04475&name=1234&email=1234%40khu.ac.kr
 
         return url;
     }
