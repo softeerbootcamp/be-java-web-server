@@ -6,6 +6,7 @@ import httpMock.constants.ContentType;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CustomHttpResponse {
@@ -14,11 +15,11 @@ public class CustomHttpResponse {
     private StatusCode statusCode;
     private ContentType contentType;
     private String protocolVersion;
-    private final List<Byte> body;
+    private byte[] body;
 
     public CustomHttpResponse(OutputStream out) {
         this.out = out;
-        this.body = new ArrayList<>();
+        body = new byte[0];
     }
 
     public void setContentType(ContentType contentType) {
@@ -41,15 +42,11 @@ public class CustomHttpResponse {
         return statusCode;
     }
 
-    public void addToBody(Byte[] datas) {
-        body.addAll(List.of(datas));
+    public void setBody(byte[] datas){
+        body = datas;
     }
 
-    public void addToBody(byte[] datas) {
-        addToBody(ArrayUtils.toObject(datas));
-    }
-
-    public List<Byte> getBody() {
+    public byte[] getBody() {
         return body;
     }
 

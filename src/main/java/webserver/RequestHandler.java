@@ -41,9 +41,9 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(response.getOutputStream());
             dos.writeBytes(response.getProtocolVersion()+" " + response.getStatusCode().getCode() + " " + response.getStatusCode().getMessage() + "\r\n");
             dos.writeBytes("Content-Type: " + response.getContentType().getContentType() + "; charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + response.getBody().size() + "\r\n");
+            dos.writeBytes("Content-Length: " + response.getBody().length + "\r\n");
             dos.writeBytes("\r\n");
-            dos.write(Bytes.toArray(response.getBody()), 0, response.getBody().size());
+            dos.write(response.getBody(), 0, response.getBody().length);
             dos.flush();
         } catch (IOException e) {
             logger.error("While writing response " + e.getMessage());
