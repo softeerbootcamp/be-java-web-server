@@ -39,7 +39,7 @@ public class HttpResponse {
     private void responseHeader(HttpStatus httpStatus) {
         try {
             clientOutputStream.writeBytes("HTTP/1.1 " + httpStatus.getCode() + " " + httpStatus.getMessage() + " \r\n");
-            clientOutputStream.writeBytes("Content-Type: text/" + fileType.getType() + ";charset=utf-8\r\n");
+            clientOutputStream.writeBytes("Content-Type: "+fileType.getType() + ";charset=utf-8\r\n");
             clientOutputStream.writeBytes("Content-Length: " + data.length + "\r\n");
             clientOutputStream.writeBytes("\r\n");
         } catch (IOException e) {

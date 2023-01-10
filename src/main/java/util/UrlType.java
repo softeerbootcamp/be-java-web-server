@@ -9,7 +9,7 @@ import java.util.Optional;
 public enum UrlType {
     QUERY_STRING(".*\\?(.*)"),
     TEMPLATES_FILE(".*\\.(html|ico)$"),
-    STATIC_FILE(".*\\.(css|js)$"),
+    STATIC_FILE(".*\\.(css|js|tff|woff)$"),
     ;
 
 

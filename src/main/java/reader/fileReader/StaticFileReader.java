@@ -20,7 +20,7 @@ public class StaticFileReader implements FileReader{
             bytes = Files.readAllBytes(new File(STATIC_ROUTE + url.getUrl()).toPath());
         } catch (IOException e) {
             e.printStackTrace();
-            logger.error(HttpsErrorMessage.NOT_VALID_URL + " url: {}", url);
+            logger.error(HttpsErrorMessage.NOT_VALID_URL + " url: {}", url.getUrl());
         }
         return bytes;
     }

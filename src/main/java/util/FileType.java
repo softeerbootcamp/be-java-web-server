@@ -3,9 +3,12 @@ package util;
 import java.util.Arrays;
 
 public enum FileType {
-    HTML(".html","html"),
-    CSS(".css","css"),
-    JS(".js","js"),
+    HTML(".html","text/html"),
+    CSS(".css","text/css"),
+    JS(".js","text/js"),
+    FAVICON(".ico","image/x-icon"),
+    WOFF_FONT (".woff","application/font-woff"),
+    TFF_FONT (".tff","application/x-font-ttf"),
     ;
 
     private String extension;
