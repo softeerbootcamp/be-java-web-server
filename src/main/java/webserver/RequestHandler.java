@@ -13,6 +13,7 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import parser.StringParser;
+import service.JoinService;
 
 public class RequestHandler implements Runnable{
 
@@ -21,6 +22,8 @@ public class RequestHandler implements Runnable{
     private Socket connection;
 
     public StringParser stringParser = new StringParser();
+
+    public JoinService joinService = new JoinService();
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -90,10 +93,13 @@ public class RequestHandler implements Runnable{
             if(parserString.equals("css") && directoryString != null){
                 logger.debug("css url : {} " , "src/main/resources/static" + directoryString + "." +parserString);
                 body = Files.readAllBytes(new File("src/main/resources/static" + directoryString + "." +parserString).toPath());
-
-            }if(parserString.equals("js") && directoryString != null){
+            }
+            if(parserString.equals("js") && directoryString != null){
                 logger.debug("js url : {} " , "src/main/resources/static" + directoryString + "." +parserString);
                 body = Files.readAllBytes(new File("src/main/resources/static" + directoryString + "." +parserString).toPath());
+            }
+            if(parserString != null && directoryString == null){
+                joinService.userDataParser(parserString);
             }
 
             response200Header(dos, body.length);
