@@ -1,5 +1,6 @@
 package webserver.httpMock;
 
+import com.github.jknack.handlebars.internal.lang3.ArrayUtils;
 import webserver.httpMock.constants.ContentType;
 import webserver.httpMock.constants.StatusCode;
 
@@ -40,6 +41,10 @@ public class CustomHttpResponse {
 
     public void addToBody(Byte[] datas){
         body.addAll(List.of(datas));
+    }
+
+    public void addToBody(byte[] datas){
+        addToBody(ArrayUtils.toObject(datas));
     }
 
     public List<Byte> getBody(){
