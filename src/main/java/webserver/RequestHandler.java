@@ -33,7 +33,6 @@ public class RequestHandler implements Runnable {
             {
                 SignUpController.enrollNewUser(url);
                 url = SignUpController.redirectToIndex();
-                // html 파일이 아닌 파일들도 정상적으로 처리될 수 있게 구현하기
             }
             String contentType = Files.probeContentType(new File(url).toPath());
 
@@ -45,6 +44,7 @@ public class RequestHandler implements Runnable {
             logger.error(e.getMessage());
         }
     }
+
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
         try {
@@ -61,7 +61,7 @@ public class RequestHandler implements Runnable {
         try {
             dos.write(body, 0, body.length);
             dos.flush();
-        } catch (IOException e) {
+        }catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
@@ -73,6 +73,7 @@ public class RequestHandler implements Runnable {
         String[] splitedFirstLine = firstLine.split(" ");
         return splitedFirstLine[1];
     }
+
 }
 
 class Byte {
