@@ -8,9 +8,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import jdk.jshell.execution.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import parser.StringParser;
 import utils.Utility;
+
 
 /**
  * 해야할 것
@@ -36,20 +39,25 @@ import utils.Utility;
  * hello World 대신에 응답으로 쏴주면 첫번째 요구사항을 만족한다.
  * **/
 
-public class RequestHandler implements Runnable {
+public class RequestHandler implements Runnable{
+
+
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
 
-    public Utility utility = new Utility();
-    Thread thread = new Thread();
+    public StringParser stringParser = new StringParser();
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
     }
 
     public void run() {
-        logger.info("thread : {}", thread.getName());
+
+        //TODO
+
+
+
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
 
@@ -58,23 +66,10 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 
             String brRead = br.readLine();
-            logger.debug("request Line : {}",brRead);
 
-            String urlString = utility.stringSplit(brRead);
-            logger.debug("url: {} ", urlString);
+            String urlString = stringParser.stringSplit(brRead);
 
-            int extensionIdx = 0;
-
-            for (int i = 0; i < urlString.length(); i++) {
-                if(urlString.charAt(i) == '.'){
-                    extensionIdx = i;
-                }
-            }
-
-            String extensionString = urlString.substring(extensionIdx+1);
-
-            logger.debug("exteionsionString : {}",extensionString);
-
+            String extensionString = stringParser.extensionSplit(urlString);
 
             while (!brRead.equals("") && brRead != null) {
                 logger.debug("header : {}", brRead);
@@ -89,9 +84,6 @@ public class RequestHandler implements Runnable {
                 body = Files.readAllBytes(new File("src/main/resources/templates" + urlString).toPath());
             }
             if(extensionString.equals("css")){
-                logger.debug("full url : {}" , "src/main/resources/static" + urlString);
-                logger.debug("css : " + extensionString);
-                logger.debug("urlString : " + urlString);
                 body = Files.readAllBytes(new File("src/main/resources" + urlString).toPath());
 
             }if(extensionString.equals("js")){
