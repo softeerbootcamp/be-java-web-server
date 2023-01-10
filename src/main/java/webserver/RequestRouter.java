@@ -1,14 +1,12 @@
 package webserver;
 
-import com.github.jknack.handlebars.internal.lang3.ArrayUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.StaticFileService;
 import service.UserAccountService;
 import webserver.httpMock.CustomHttpRequest;
 import webserver.httpMock.CustomHttpResponse;
-import webserver.httpMock.constants.ContentType;
-import webserver.httpMock.constants.StatusCode;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -10,10 +10,10 @@ import java.util.List;
 
 public class CustomHttpResponse {
 
-    private OutputStream out;
+    private final OutputStream out;
     private StatusCode statusCode;
     private ContentType contentType;
-    private List<Byte> body;
+    private final List<Byte> body;
 
     public CustomHttpResponse(OutputStream out){
         this.out = out;

@@ -21,7 +21,7 @@ public class StaticFileService implements RequestService {
         return fileService;
     }
 
-    private Map<String, RequestService> routingTable = new HashMap<>() {{
+    private final Map<String, RequestService> routingTable = new HashMap<>() {{
         put(".+", (req, res) -> getFile(req, res));
     }};
 
@@ -39,21 +39,24 @@ public class StaticFileService implements RequestService {
     public void getFile(CustomHttpRequest req, CustomHttpResponse res) {
         String filePath = null;
         try {
-            URL resoucePath = getClass().getClassLoader().getResource("./static");
+            URL resourcePath = getClass().getClassLoader().getResource("./static");
             String fileType = getFileTypeFromUrl(req.getUrl());
             res.setContentType(ContentType.getContentTypeByFileType(fileType));
 
             if (req.getUrl().endsWith("ico") || req.getUrl().endsWith("html")) {
-                resoucePath = getClass().getClassLoader().getResource("./templates");
+                resourcePath = getClass().getClassLoader().getResource("./templates");
             }
 
-            filePath = resoucePath.getPath();
+            filePath = resourcePath.getPath();
             byte[] file = Files.readAllBytes(new File(filePath + req.getUrl()).toPath());
             res.addToBody(ArrayUtils.toObject(file));
             res.setStatusCode(StatusCode.OK);
 
         } catch (IOException e) {
             logger.error("file not found at " + filePath + req.getUrl());
+            RequestService.NOT_FOUND(res);
+        } catch (NullPointerException e){
+            logger.error("Cannot get resourcePath");
             throw new RuntimeException(e);
         }
     }
