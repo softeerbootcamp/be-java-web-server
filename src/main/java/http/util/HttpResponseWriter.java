@@ -45,7 +45,7 @@ public class HttpResponseWriter {
 
     private static void writeBody(DataOutputStream dos, HttpBody body) {
         try {
-            dos.writeBytes("\n\n");
+            dos.writeBytes("\n");
             dos.write(body.data());
             dos.flush();
         } catch (IOException e) {
