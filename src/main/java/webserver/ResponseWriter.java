@@ -9,10 +9,6 @@ import org.slf4j.LoggerFactory;
 public class ResponseWriter {
 	private static final Logger logger = LoggerFactory.getLogger(ResponseWriter.class);
 
-	public void responseWrite(DataOutputStream dos, byte[] body) {
-		response200Header(dos, body.length);
-		responseBody(dos, body);
-	}
 	public void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
 		try {
 			dos.writeBytes("HTTP/1.1 200 OK \r\n");
