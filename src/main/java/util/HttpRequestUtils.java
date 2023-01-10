@@ -8,6 +8,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class HttpRequestUtils {
@@ -36,6 +37,16 @@ public class HttpRequestUtils {
         logger.debug("HTTP Version : {}", version);
 
         return version;
+    }
+
+    public static Map<String, String> parseRequestHeader(List<String> lines) {
+        Map<String, String> requestHeader = new HashMap<>();
+        for (String line : lines) {
+            String[] header = line.split(": ");
+            requestHeader.put(header[0], header[1]);
+        }
+
+        return requestHeader;
     }
 
     public static String getQueryString(String url) {
