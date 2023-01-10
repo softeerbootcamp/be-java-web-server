@@ -2,28 +2,29 @@ package response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reader.fileReader.TemplatesFileReader;
-import request.HttpRequest;
+import util.FileType;
 import util.HttpStatus;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 public class HttpResponse {
     private DataOutputStream clientOutputStream;
     private byte[] data;
 
+    private final FileType fileType;
+
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
-    public HttpResponse(DataOutputStream clientOutputStream,byte[] data) {
+    public HttpResponse(DataOutputStream clientOutputStream, byte[] data, FileType fileType) {
         this.clientOutputStream = clientOutputStream;
         this.data = data;
+        this.fileType = fileType;
     }
 
-    public void makeResponse(HttpRequest httpRequest) {
+    public void makeResponse() {
         HttpStatus responseHttpStatus = selectMethod(this);
-        responseHeader(responseHttpStatus, httpRequest);
+        responseHeader(responseHttpStatus);
         responseBody();
     }
 
@@ -35,12 +36,10 @@ public class HttpResponse {
         }
     }
 
-    private void responseHeader(HttpStatus httpStatus,HttpRequest httpRequest) {
-
+    private void responseHeader(HttpStatus httpStatus) {
         try {
             clientOutputStream.writeBytes("HTTP/1.1 " + httpStatus.getCode() + " " + httpStatus.getMessage() + " \r\n");
-//            clientOutputStream.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            clientOutputStream.writeBytes("Content-Type: " + httpRequest.getHeaderContents().get(9) + ";charset=utf-8\r\n");
+            clientOutputStream.writeBytes("Content-Type: text/" + fileType.getType() + ";charset=utf-8\r\n");
             clientOutputStream.writeBytes("Content-Length: " + data.length + "\r\n");
             clientOutputStream.writeBytes("\r\n");
         } catch (IOException e) {
