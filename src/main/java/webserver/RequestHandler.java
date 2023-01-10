@@ -34,7 +34,7 @@ public class RequestHandler implements Runnable {
             requestReader = RequestReader.selectRequestReaderByMethod(httpRequest.getHttpMethod());
             String url = requestReader.findPathInRequest(httpRequest);
 
-            fileReader = new TemplatesFileReader();
+            fileReader = FileReader.selectFileReader(url);
             byte[] data = fileReader.readFile(url);
 
             DataOutputStream clientOutPutStream = new DataOutputStream(out);

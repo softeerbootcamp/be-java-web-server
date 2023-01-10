@@ -11,6 +11,8 @@ import java.nio.file.Files;
 
 public class TemplatesFileReader implements FileReader {
     private static final Logger logger = LoggerFactory.getLogger(TemplatesFileReader.class);
+    public static final String TEMPLATE_REGEX = ".*\\.(html|ico)$";
+
     private static final String TEMPLATE_ROUTE = "./src/main/resources/templates";
 
     @Override
