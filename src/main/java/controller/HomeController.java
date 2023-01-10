@@ -1,11 +1,13 @@
 package controller;
 
 import model.request.RequestLine;
+import model.response.Response;
 
-public class HomeController {
-    private final RequestLine requestLine;
+public class HomeController implements Controller {
+    private static final String fileParentPath = "src/main/resources/templates";
 
-    public HomeController(RequestLine requestLine) {
-        this.requestLine = requestLine;
+    @Override
+    public Response getResponse(RequestLine requestLine) {
+        return Response.of()
     }
 }
