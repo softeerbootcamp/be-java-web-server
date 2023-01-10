@@ -1,0 +1,33 @@
+package http.common;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+public class HttpHeaders {
+    private final Map<String, String> headers;
+
+    public HttpHeaders() {
+        this.headers = new HashMap<>();
+    }
+
+    public String getValue(String key) {
+        return this.headers.get(key);
+    }
+
+    public void putHeader(String key, String value) {
+        this.headers.put(key, value);
+    }
+
+    public void addHeaders(Map<String, String> headers) {
+        this.headers.putAll(headers);
+    }
+
+    public int size() {
+        return headers.size();
+    }
+
+    public Set<String> keys() {
+        return this.headers.keySet();
+    }
+}
