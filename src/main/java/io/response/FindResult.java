@@ -8,7 +8,6 @@ public class FindResult {
     private Status status;
     private ContentType contentType;
     private byte[] resource;
-
     public FindResult(Status status, ContentType contentType, byte[] resource) {
         this.status = status;
         this.contentType = contentType;
