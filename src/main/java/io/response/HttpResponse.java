@@ -1,6 +1,7 @@
 package io.response;
 
 import enums.ContentType;
+import enums.LogMessage;
 import enums.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,43 +10,51 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class HttpResponse implements Response {
+
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
     private Status status;
     private ContentType contentType;
-    private byte[] messageBody;
+    private byte[] body;
     private DataOutputStream out;
 
-    public HttpResponse(Status status, ContentType contentType, byte[] messageBody, DataOutputStream out) {
-        this.status = status;
-        this.contentType = contentType;
-        this.messageBody = messageBody;
+    public HttpResponse(FindResult findResult, DataOutputStream out) {
+        this.status = findResult.getStatus();
+        this.contentType = findResult.getContentType();
+        this.body = findResult.getResource();
         this.out = out;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public ContentType getContentType() {
-        return contentType;
-    }
-
-    public byte[] getMessageBody() {
-        return messageBody;
     }
 
     @Override
     public void send() {
-        String msg = assembleMessage();
         try {
-            out.writeBytes(msg);
+            assembleMessage();
             out.flush();
         } catch (IOException e) {
-            logger.error("fail to response");
+            logger.error(LogMessage.SERVER_ERROR.getMessage());
         }
     }
 
-    private String assembleMessage() {
-        return null;
+    private void assembleMessage() {
+        response200Header();
+        responseBody();
+    }
+
+    private void response200Header() {
+        try {
+            out.writeBytes("HTTP/1.1 200 OK \r\n");
+            out.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            out.writeBytes("Content-Length: " + body.length + "\r\n");
+            out.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void responseBody() {
+        try {
+            out.write(body, 0, body.length);
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
     }
 }
