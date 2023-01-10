@@ -1,6 +1,5 @@
 package controller;
 
-import filesystem.FileSystem;
 import io.request.HttpRequest;
 import io.request.RequestFactory;
 import io.response.HttpResponse;
@@ -18,18 +17,11 @@ public class FacadeController implements Runnable {
     private final Logger logger = LoggerFactory.getLogger(FacadeController.class);
     private final RequestFactory requestFactory = new RequestFactory();
     private final ResponseFactory responseFactory = new ResponseFactory();
-    private final FileSystem fileSystem = new FileSystem();
 
     private final Map<Domain, Controller> controllers = Map.of(
             Domain.USER, new UserController(),
             Domain.MAIN, new MainController()
     );
-
-    private final Map<Domain, Controller> controllers = Map.of(
-            Domain.USER, new UserController(),
-            Domain.MAIN, new MainController()
-    );
-
     private Socket connection;
 
     public FacadeController(Socket connectionSocket) {
