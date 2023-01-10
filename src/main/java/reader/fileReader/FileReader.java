@@ -7,7 +7,7 @@ public interface FileReader {
         if (url.matches(TemplatesFileReader.TEMPLATE_REGEX)) {
             return new TemplatesFileReader();
         } else {
-            return new StaticFileReader();
+            return null;
         }
     }
 }
