@@ -61,5 +61,10 @@ public class HttpResponse {
         return body;
     }
 
+    public void redirect(String redirectUrl) {
+        this.status = HttpStatus.FOUND;
+        headers.put("Location", redirectUrl);
+    }
+
 
 }
