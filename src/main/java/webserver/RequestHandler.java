@@ -12,7 +12,7 @@ import java.nio.file.Files;
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-    private Socket connection;
+    private final Socket connection;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -46,7 +46,11 @@ public class RequestHandler implements Runnable {
     }
 
     private String searchRequestHandler(String url) {
-        if (url.contains("/user")) {
+        if (url.equals("/")) {
+            return "/index.html";
+        }
+
+        if (url.startsWith("/user")) {
             UserRequestHandler handler = new UserRequestHandler();
             return handler.handle(url);
         }
