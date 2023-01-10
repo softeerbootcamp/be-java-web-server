@@ -35,6 +35,7 @@ public class RequestHandler implements Runnable {
             String url = HttpRequestUtils.getUrl(requestLine);
 
             Handler handler = HandlerMapper.getHandler(url);
+
             String viewName = handler.handle(url);
             String viewPath = ViewResolver.process(viewName);
 

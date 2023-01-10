@@ -2,7 +2,7 @@ package util;
 
 import handler.Handler;
 import handler.UserHandler;
-import handler.ViewHandler;
+import handler.ResourceHandler;
 
 public class HandlerMapper {
 
@@ -11,6 +11,6 @@ public class HandlerMapper {
             return new UserHandler();
         }
 
-        return new ViewHandler();
+        return new ResourceHandler();
     }
 }

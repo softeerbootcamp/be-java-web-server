@@ -1,6 +1,6 @@
 package handler;
 
-public class ViewHandler implements Handler{
+public class ResourceHandler implements Handler{
     @Override
     public String handle(String url) {
         if (url.equals("/")) {
