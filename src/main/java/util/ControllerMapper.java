@@ -17,6 +17,12 @@ public class ControllerMapper {
     }
 
     public static Controller selectController(RequestLine requestLine) {
+        for(Map.Entry<String, Controller> controllerEntry : controllerMap.entrySet()) {
+            if(controllerEntry.getKey().equals(requestLine.getControllerCriteria())) {
+                return controllerEntry.getValue();
+            }
+        }
+
         return new NotFoundController();
     }
 }
