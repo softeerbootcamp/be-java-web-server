@@ -11,12 +11,16 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class StaticFileService implements RequestService {
     private static final StaticFileService fileService = new StaticFileService();
-
+    public static final String[] supportedFileTypes = {
+            "html", "ico", "css", "js", "ttf", "woff", "svg", "eot", "woff2", "png", "jpeg", "gif"
+    };
     public static StaticFileService get() {
         return fileService;
     }
@@ -61,8 +65,13 @@ public class StaticFileService implements RequestService {
         }
     }
 
-    private String getFileTypeFromUrl(String url) {
+    public static String getFileTypeFromUrl(String url) {
         int index = url.lastIndexOf(".");
         return url.substring(index + 1);
+    }
+
+    public static boolean isFileTypeSupported(String url){
+        String type = getFileTypeFromUrl(url);
+        return Arrays.stream(supportedFileTypes).filter(item->item.equals(type)).count() == 1L;
     }
 }

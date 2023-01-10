@@ -1,6 +1,5 @@
-package webserver.httpMock;
+package httpMock;
 
-import com.github.jknack.handlebars.internal.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.RequestHandler;
@@ -37,7 +36,7 @@ public class CustomHttpRequest {
         if (split1.length < 2) {
             return;
         }
-        String[] itemString = StringUtils.stripAll(split1[1].split(","));
+        String[] itemString = Arrays.stream(split1[1].split(",")).map(String::trim).toArray(String[]::new);
         List<String> itemList = new ArrayList<>(List.of(itemString));
         this.requestHeaders.put(itemName, itemList);
     }
