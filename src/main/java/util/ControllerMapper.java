@@ -1,13 +1,22 @@
-package controller;
+package util;
 
+import controller.Controller;
+import controller.HomeController;
+
+import controller.NotFoundController;
 import model.request.RequestLine;
 
-public class ControllerMapper {
-    public static Controller selectController(RequestLine requestLine) {
-        if(requestLine.getControllerCriteria().equals("index.html")) {
-            return new HomeController(requestLine);
-        }
+import java.util.HashMap;
+import java.util.Map;
 
-        return null;
+public class ControllerMapper {
+    private static final Map<String, Controller> controllerMap = new HashMap<>();
+
+    static {
+        controllerMap.put("index.html", new HomeController());
+    }
+
+    public static Controller selectController(RequestLine requestLine) {
+        return new NotFoundController();
     }
 }
