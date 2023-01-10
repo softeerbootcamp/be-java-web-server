@@ -24,5 +24,7 @@ public class QueryParameters {
         return parameters.get(key);
     }
 
-
+    public Map<String, String> getParameters() {
+        return parameters;
+    }
 }

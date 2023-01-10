@@ -1,15 +1,18 @@
 package webserver;
 
+import db.Database;
+import http.HttpRequest;
+import http.QueryParameters;
+import http.RequestLine;
+import http.Uri;
+import model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-
-import db.Database;
-import http.RequestLine;
-import model.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -29,20 +32,12 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
 
-            String line = br.readLine();
-            if(line == null) {
-                return;
-            }
-
-            RequestLine requestLine = RequestLine.from(br.readLine());
-            if(requestLine.getUri().getPath().equals("/user/create")) {
-                User user = new User(
-                        requestLine.getUri().getQuery().getParameter("userId"),
-                        requestLine.getUri().getQuery().getParameter("password"),
-                        requestLine.getUri().getQuery().getParameter("name"),
-                        requestLine.getUri().getQuery().getParameter("email")
-                );
-                Database.addUser(user);
+            HttpRequest httpRequest = HttpRequest.from(br);
+            RequestLine requestLine = httpRequest.getRequestLine();
+            Uri uri = requestLine.getUri();
+            if (uri.getPath().equals("/user/create")) {
+                QueryParameters queryParameters = uri.getQueryParameters();
+                Database.addUser(User.from(queryParameters.getParameters()));
             } else {
                 byte[] body = Files.readAllBytes(new File("src/main/resources/templates" + requestLine.getUri().getPath()).toPath());
                 response200Header(dos, body.length);

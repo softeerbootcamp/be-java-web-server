@@ -26,7 +26,7 @@ public class Uri {
         return path;
     }
 
-    public QueryParameters getQuery() {
+    public QueryParameters getQueryParameters() {
         return queryParameters;
     }
 }

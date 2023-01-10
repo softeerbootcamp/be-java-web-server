@@ -1,7 +1,5 @@
 package http;
 
-import org.checkerframework.checker.units.qual.A;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,7 +21,7 @@ public class HttpRequest {
     public static HttpRequest from(BufferedReader br) throws IOException {
         String line = br.readLine();
         List<String> requests = new ArrayList<>();
-        while(!line.equals("")) {
+        while (!line.equals("")) {
             requests.add(line);
             line = br.readLine();
         }
@@ -31,5 +29,9 @@ public class HttpRequest {
                 RequestLine.from(requests.get(0)),
                 RequestHeader.from(requests.subList(1, requests.size()))
         );
+    }
+
+    public RequestLine getRequestLine() {
+        return requestLine;
     }
 }
