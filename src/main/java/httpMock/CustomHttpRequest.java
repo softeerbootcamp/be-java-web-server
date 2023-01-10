@@ -9,18 +9,17 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class CustomHttpRequest {
-    private static final Logger logger = LoggerFactory.getLogger(CustomHttpRequest.class);
-    private final Map<String, String> requestParams;
-    private final Map<String, List<String>> requestHeaders;
+    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private String httpMethod;
     private String protocolVersion;
     private String url;
+    private final Map<String, String> requestParams;
+    private final Map<String, List<String>> requestHeaders;
 
     public CustomHttpRequest(InputStream inputStream) {
         requestHeaders = new HashMap<>();
         setFirstLineHeaders(inputStream);
         requestParams = setRequestParams();
-        logger.info("url : " + this.url + ", method : " + this.httpMethod + ", params : " + this.requestParams);
     }
 
     public String getUrl() {
@@ -29,10 +28,6 @@ public class CustomHttpRequest {
 
     public Map<String, String> getRequestParams() {
         return requestParams;
-    }
-
-    public String getProtocolVersion() {
-        return protocolVersion;
     }
 
     private void addToRequestHeader(String line) {
@@ -60,6 +55,7 @@ public class CustomHttpRequest {
                 }
             }
         }
+        logger.info("url splited : " + requestParams);
         return requestParams;
     }
 
@@ -74,6 +70,7 @@ public class CustomHttpRequest {
             while (br.ready()) {
                 addToRequestHeader(br.readLine());
             }
+            logger.info("url : " + this.url + ", method : " + this.httpMethod + ", headers : " + this.requestHeaders);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -84,10 +81,6 @@ public class CustomHttpRequest {
         if (result.length != 3) {
             throw new IllegalArgumentException("First Line of Http must have 2 space : " + firstLine);
         }
-        if (result[1].equals("/") || result[1].equals(""))
-            result[1] = "/index.html";
         return result;
     }
-
-
 }

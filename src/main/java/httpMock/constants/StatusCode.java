@@ -1,4 +1,4 @@
-package httpMock.constants;
+package webserver.httpMock.constants;
 
 public enum StatusCode {
     OK(200, "OK"),
@@ -8,7 +8,6 @@ public enum StatusCode {
     RESET_CONTENT(205, "Reset Content"),
     PARTIAL_CONTENT(206, "Partial Content"),
     MULTI_CHOICE(300, "Multiple Choice"),
-    FOUND(302, "Found"),
     BAD_REQUEST(400, "Bad Request"),
     UNAUTHORIZED(401, "Unauthorized"),
     PAYMENT_REQ(402, "Payment Required"),

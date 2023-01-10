@@ -1,36 +1,33 @@
-package httpMock;
+package webserver.httpMock;
 
-import httpMock.constants.StatusCode;
-import httpMock.constants.ContentType;
+import com.github.jknack.handlebars.internal.lang3.ArrayUtils;
+import webserver.httpMock.constants.ContentType;
+import webserver.httpMock.constants.StatusCode;
 
 import java.io.OutputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CustomHttpResponse {
 
     private final OutputStream out;
     private StatusCode statusCode;
-    private String protocolVersion;
-    private final Map<String, String> headers;
-    private byte[] body;
+    private ContentType contentType;
+    private final List<Byte> body;
 
     public CustomHttpResponse(OutputStream out) {
         this.out = out;
-        this.headers = new HashMap<>();
-        body = "".getBytes();
+        this.body = new ArrayList<>();
     }
 
     public void setContentType(ContentType contentType) {
-        headers.put("Content-Type", contentType.getContentType()+";charset=UTF-8");
+        this.contentType = contentType;
     }
 
-    public void addHeader(String key, String value){
-        headers.put(key, value);
+    public ContentType getContentType() {
+        return contentType;
     }
 
-    public Map<String,String> getHeaders(){
-        return this.headers;
-    }
     public OutputStream getOutputStream() {
         return this.out;
     }
@@ -43,24 +40,15 @@ public class CustomHttpResponse {
         return statusCode;
     }
 
-    public void setBody(byte[] datas){
-        body = datas;
+    public void addToBody(Byte[] datas) {
+        body.addAll(List.of(datas));
     }
 
-    public byte[] getBody() {
+    public void addToBody(byte[] datas) {
+        addToBody(ArrayUtils.toObject(datas));
+    }
+
+    public List<Byte> getBody() {
         return body;
     }
-
-    public void setProtocolVersion(String protocolVersion){
-        this.protocolVersion = protocolVersion;
-    }
-
-    public String getProtocolVersion(){
-        return this.protocolVersion;
-    }
-
-    public String toString(){
-        return statusCode.getMessage() + " " + headers.toString();
-    }
-
 }

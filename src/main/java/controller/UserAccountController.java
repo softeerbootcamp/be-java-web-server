@@ -1,39 +1,40 @@
-package controller;
+package service;
 
 import db.Database;
 import model.User;
-import httpMock.CustomHttpRequest;
-import httpMock.CustomHttpResponse;
-import httpMock.constants.ContentType;
-import httpMock.constants.StatusCode;
+import webserver.RequestService;
+import webserver.httpMock.CustomHttpRequest;
+import webserver.httpMock.CustomHttpResponse;
+import webserver.httpMock.constants.ContentType;
+import webserver.httpMock.constants.StatusCode;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserAccountController implements RequestController {
-    static UserAccountController userAccountService;
+public class UserAccountService implements RequestService {
+    static UserAccountService userAccountService;
 
-    private final Map<String, RequestController> routingTable = new HashMap<>() {{
-        put("/user/create", (req, res) -> makeAccount(req, res));
+    private final Map<String, RequestService> routingTable = new HashMap<>() {{
+        put("(/user/create).*", (req, res) -> makeAccount(req, res));
     }};
 
 
-    public static UserAccountController get() {
+    public static UserAccountService get() {
         if (userAccountService == null) {
-            userAccountService = new UserAccountController();
+            userAccountService = new UserAccountService();
         }
         return userAccountService;
     }
 
     @Override
     public void handleRequest(CustomHttpRequest req, CustomHttpResponse res) {
-        for (String path : routingTable.keySet()) {
-            if (req.getUrl().startsWith(path)) {
-                routingTable.get(path).handleRequest(req, res);
+        for (String regex : routingTable.keySet()) {
+            if (req.getUrl().matches(regex)) {
+                routingTable.get(regex).handleRequest(req, res);
                 return;
             }
         }
-        RequestController.NOT_FOUND(res);
+        RequestService.NOT_FOUND(res);
     }
 
     public void makeAccount(CustomHttpRequest req, CustomHttpResponse res) {
@@ -44,8 +45,8 @@ public class UserAccountController implements RequestController {
 
         Database.addUser(new User(userId, password, name, email));
 
-        res.setStatusCode(StatusCode.FOUND);
+        res.setStatusCode(StatusCode.CREATED);
         res.setContentType(ContentType.TEXT_PLAIN);
-        res.addHeader("Location", "/index.html");
+        res.addToBody(("User " + userId + " created").getBytes());
     }
 }
