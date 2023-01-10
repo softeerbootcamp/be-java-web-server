@@ -1,2 +1,4 @@
-package service;public class StaticFileService {
+package db;
+
+public class StaticFileService {
 }

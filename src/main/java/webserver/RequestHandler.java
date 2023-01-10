@@ -9,8 +9,8 @@ import java.net.Socket;
 import com.google.common.primitives.Bytes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.httpMock.CustomHttpRequest;
-import webserver.httpMock.CustomHttpResponse;
+import httpMock.CustomHttpRequest;
+import httpMock.CustomHttpResponse;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);

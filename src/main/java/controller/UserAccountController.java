@@ -1,27 +1,26 @@
-package service;
+package controller;
 
 import db.Database;
 import model.User;
-import webserver.RequestService;
-import webserver.httpMock.CustomHttpRequest;
-import webserver.httpMock.CustomHttpResponse;
-import webserver.httpMock.constants.ContentType;
-import webserver.httpMock.constants.StatusCode;
+import httpMock.CustomHttpRequest;
+import httpMock.CustomHttpResponse;
+import httpMock.constants.ContentType;
+import httpMock.constants.StatusCode;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserAccountService implements RequestService {
-    static UserAccountService userAccountService;
+public class UserAccountController implements RequestController {
+    static UserAccountController userAccountService;
 
-    private final Map<String, RequestService> routingTable = new HashMap<>() {{
-        put("(/user/create).*", (req, res) -> makeAccount(req, res));
+    private final Map<String, RequestController> routingTable = new HashMap<>() {{
+        put("/user/create", (req, res) -> makeAccount(req, res));
     }};
 
 
-    public static UserAccountService get() {
+    public static UserAccountController get() {
         if (userAccountService == null) {
-            userAccountService = new UserAccountService();
+            userAccountService = new UserAccountController();
         }
         return userAccountService;
     }
@@ -34,7 +33,7 @@ public class UserAccountService implements RequestService {
                 return;
             }
         }
-        RequestService.NOT_FOUND(res);
+        RequestController.NOT_FOUND(res);
     }
 
     public void makeAccount(CustomHttpRequest req, CustomHttpResponse res) {
