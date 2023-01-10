@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-import com.google.common.primitives.Bytes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import httpMock.CustomHttpRequest;
@@ -40,7 +39,9 @@ public class RequestHandler implements Runnable {
         try {
             DataOutputStream dos = new DataOutputStream(response.getOutputStream());
             dos.writeBytes(response.getProtocolVersion()+" " + response.getStatusCode().getCode() + " " + response.getStatusCode().getMessage() + "\r\n");
-            dos.writeBytes("Content-Type: " + response.getContentType().getContentType() + "; charset=utf-8\r\n");
+            for(String key : response.getHeaders().values()){
+                dos.writeBytes(key+": "+response.getHeaders().get(key)+"\r\n");
+            }
             dos.writeBytes("Content-Length: " + response.getBody().length + "\r\n");
             dos.writeBytes("\r\n");
             dos.write(response.getBody(), 0, response.getBody().length);
