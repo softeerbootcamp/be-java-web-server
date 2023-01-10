@@ -2,38 +2,39 @@ package request;
 
 import request.methodHandler.*;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 
 public enum HttpMethod {
     GET("GET") {
         @Override
-        public byte[] handle(Request request) throws IOException {
-            HttpMethodHandler httpMethodHandler = new GETHandlerImpl();
-            return httpMethodHandler.handle(request);
+        public void handle(Request request, DataOutputStream dos) throws IOException {
+            HttpMethodHandler httpMethodHandler = new GETHandlerImpl(dos);
+            httpMethodHandler.handle(request);
         }
     },
     POST("POST") {
         @Override
-        public byte[] handle(Request request) throws IOException {
+        public void handle(Request request, DataOutputStream dos) throws IOException {
             System.out.println("POST");
-            HttpMethodHandler httpMethodHandler = new POSTHandlerImpl();
-            return httpMethodHandler.handle(request);
+            HttpMethodHandler httpMethodHandler = new POSTHandlerImpl(dos);
+            httpMethodHandler.handle(request);
         }
     },
     PUT("PUT") {
         @Override
-        public byte[] handle(Request request) throws IOException {
+        public void handle(Request request, DataOutputStream dos) throws IOException {
             System.out.println("PUT");
-            HttpMethodHandler httpMethodHandler = new PUTHandlerImpl();
-            return httpMethodHandler.handle(request);
+            HttpMethodHandler httpMethodHandler = new PUTHandlerImpl(dos);
+            httpMethodHandler.handle(request);
         }
     },
     DELETE("DELETE") {
         @Override
-        public byte[] handle(Request request) throws IOException {
+        public void handle(Request request, DataOutputStream dos) throws IOException {
             System.out.println("DELETE");
-            HttpMethodHandler httpMethodHandler = new DELETEHandlerImpl();
-            return httpMethodHandler.handle(request);
+            HttpMethodHandler httpMethodHandler = new DELETEHandlerImpl(dos);
+            httpMethodHandler.handle(request);
         }
     };
 
@@ -47,5 +48,5 @@ public enum HttpMethod {
         return method;
     }
 
-    public abstract byte[] handle(Request request) throws IOException;
+    public abstract void handle(Request request, DataOutputStream dos) throws IOException;
 }

@@ -5,5 +5,5 @@ import request.Request;
 import java.io.IOException;
 
 public interface HttpMethodHandler {
-    byte[] handle(Request request) throws IOException;
+    void handle(Request request) throws IOException;
 }

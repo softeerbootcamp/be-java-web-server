@@ -2,11 +2,16 @@ package request.methodHandler;
 
 import request.Request;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class PUTHandlerImpl implements HttpMethodHandler {
+    private final DataOutputStream dos;
+
+    public PUTHandlerImpl(DataOutputStream dos) {
+        this.dos = dos;
+    }
     @Override
-    public byte[] handle(Request request) throws IOException {
-        return new byte[0];
+    public void handle(Request request) throws IOException {
     }
 }
