@@ -13,8 +13,7 @@ public class AuthService {
             Database.addUser(new User(userId, password, name, email));
             return userId.getBytes();
         }else{
-            StatusCodes error = StatusCodes.findStatus("INTERNAL_SERVER_ERROR");
-            throw new HttpRequestException(error.getStatusCode(), error.getStatusMsg());
+            throw new HttpRequestException(StatusCodes.INTERNAL_SERVER_ERROR.getStatusCode(), StatusCodes.INTERNAL_SERVER_ERROR.getStatusMsg());
         }
     }
 
