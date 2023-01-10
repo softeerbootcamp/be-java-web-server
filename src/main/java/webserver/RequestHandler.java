@@ -42,13 +42,13 @@ public class RequestHandler implements Runnable {
             //String[] headers = httpHeader.split(" ");
             //String httpMethod = headers[0];
             //String reqURL = headers[1].equals("/")?"/index.html":headers[1];
-            reqURL = createUser(reqURL);
-            reqURL = HttpRequestUtil.getOnlyURL(reqURL);    //url without parameter
+            reqURL = createUser(requestHeaderMessage.getHttpOnlyURL(), requestHeaderMessage.getHttpReqParams());
+            //reqURL = HttpRequestUtil.getOnlyURL(reqURL);    //url without parameter
             String fileExtension = HttpRequestUtil.getFileExtension(reqURL);
             //String httpVersion = headers[2];
             String strBr = "";
             while(!(strBr = br.readLine()).equals("")){
-                System.out.println(strBr);
+                //System.out.println(strBr);
             }
             String fileURL = ABSOLUTE_PATH;
             String contentType = fileExtension.equals("html")?"text/html":fileExtension.equals("css")
@@ -64,8 +64,8 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private String createUser(String reqURL){
-        if (reqURL.contains("create")){
+    private String createUser(String reqOnlyURL, String reqURLParams){
+        if (reqOnlyURL.contains("create")){
             Map<String,String> userInfo = HttpRequestUtil.parseQueryString(reqURL);
             Database.addUser(new User(userInfo.get(USER_ID),userInfo.get(PASSWORD),userInfo.get(NAME),userInfo.get(EMAIL)));
             Stream.of(userInfo.entrySet()).forEach(System.out::println);
@@ -74,9 +74,6 @@ public class RequestHandler implements Runnable {
         return reqURL;
     }
 
-    private void responseHeader(DataOutputStream dos, int lengthOfBodyContent, String contentType){
-
-    }
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
@@ -88,6 +85,7 @@ public class RequestHandler implements Runnable {
         }
     }
 
+    /*
     private void response302Header(DataOutputStream dos, int lengthOfBodyContent, String contentType, String redirectURL) {
         try{
             dos.writeBytes("HTTP/1.1 301\r\n");
@@ -99,6 +97,8 @@ public class RequestHandler implements Runnable {
             logger.error(e.getMessage());
         }
     }
+
+     */
 
     private void responseBody(DataOutputStream dos, byte[] body) {
         try {

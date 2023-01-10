@@ -8,6 +8,19 @@ public class RequestHeaderMessage {
     private String httpReqURL;
     private String httpVersion;
     private String httpOnlyURL;
+
+    public String getHttpOnlyURL() {
+        return httpOnlyURL;
+    }
+
+    public void setHttpOnlyURL(String httpOnlyURL) {
+        this.httpOnlyURL = httpOnlyURL;
+    }
+
+    public String getHttpReqParams() {
+        return httpReqParams;
+    }
+
     private String httpReqParams;
 
     public RequestHeaderMessage(String httpFirstHeader){
@@ -15,8 +28,8 @@ public class RequestHeaderMessage {
         String[] headers = httpFirstHeader.split(" ");
         this.httpReqMethod = headers[0];
         httpReqURL = headers[1].equals("/")?"/index.html":headers[1];
-        httpVersion = headers[2];
         parseHttpReqURL(httpReqURL);
+        httpVersion = headers[2];
     }
 
     private void parseHttpReqURL(String httpReqURL){
