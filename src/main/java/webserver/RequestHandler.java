@@ -10,6 +10,7 @@ import db.Database;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import service.UserService;
 import util.FileFinder;
 import util.HttpParser;
 
@@ -36,17 +37,9 @@ public class RequestHandler implements Runnable {
             String url = httpRequest.getRequestURL();
             HttpResponse httpResponse = null;
             if (url.contains("?")) {
-                int index = url.indexOf("?");
-                String path = url.substring(0, index);
-                String params = url.substring(index + 1);
-                String[] param = params.split("&");
-                Map<String, String> map = new HashMap<>();
-                for (String p : param) {
-                    String[] attributes = p.split("=");
-                    map.put(attributes[0], attributes[1]);
-                }
-                User user = new User(map.get("userId"), map.get("password"), map.get("name"), map.get("email"));
-                Database.addUser(user);
+                Map map = httpParser.parseQueryString(url);
+                UserService userService = new UserService();
+                userService.addUser(map);
                 return;
             } else {
                 String uri = httpRequest.getRequestUri();

@@ -27,6 +27,16 @@ public class HttpParser {
         }
         return parsedHttpMap;
     }
-    public void parseQueryString(String query) {
+    public Map<String, String> parseQueryString(String query) {
+        int index = query.indexOf("?");
+        String path = query.substring(0, index);
+        String params = query.substring(index + 1);
+        String[] param = params.split("&");
+        Map<String, String> map = new HashMap<>();
+        for (String p : param) {
+            String[] attributes = p.split("=");
+            map.put(attributes[0], attributes[1]);
+        }
+        return map;
     }
 }
