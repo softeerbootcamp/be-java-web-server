@@ -27,7 +27,8 @@ public class RequestHandler implements Runnable {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             HttpRequest httpRequest = HttpRequestUtil.parseRequest(in);
             Path path = FileIoUtil.mappingPath(httpRequest.getPath());
-
+            if(Objects.nonNull(httpRequest.getParams()))
+                ManageDB.saveUser(httpRequest.getParams());
             if(Objects.nonNull(path))
                 HttpResponseUtil.response(out, path);
         } catch (IOException e) {
