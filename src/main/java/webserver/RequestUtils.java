@@ -1,6 +1,6 @@
 package webserver;
 
-public class StringParser {
+public class RequestUtils {
 
 	public String pathParse(String line) {
 		String[] str = line.split(" ");
