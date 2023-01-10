@@ -10,11 +10,11 @@ import java.util.*;
 
 public class CustomHttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(CustomHttpRequest.class);
+    private final Map<String, String> requestParams;
+    private final Map<String, List<String>> requestHeaders;
     private String httpMethod;
     private String protocolVersion;
     private String url;
-    private final Map<String, String> requestParams;
-    private final Map<String, List<String>> requestHeaders;
 
     public CustomHttpRequest(InputStream inputStream) {
         requestHeaders = new HashMap<>();
@@ -29,6 +29,10 @@ public class CustomHttpRequest {
 
     public Map<String, String> getRequestParams() {
         return requestParams;
+    }
+
+    public String getProtocolVersion() {
+        return protocolVersion;
     }
 
     private void addToRequestHeader(String line) {
