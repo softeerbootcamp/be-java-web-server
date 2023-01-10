@@ -29,7 +29,7 @@ public enum StatusCodes {
 
     public static StatusCodes findStatus(String msg){
         return Arrays.stream(StatusCodes.values())
-                .filter(status -> status.getStatusCode().equals(msg))
+                .filter(status -> status.getStatusMsg().equals(msg))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("해당 에러가 존재하지 않습니다"));
     }
