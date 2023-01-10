@@ -1,10 +1,7 @@
 package webserver;
 
 import db.Database;
-import http.HttpRequest;
-import http.QueryParameters;
-import http.RequestLine;
-import http.Uri;
+import http.*;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +30,7 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
 
             HttpRequest httpRequest = HttpRequest.from(br);
+            HttpResponse httpResponse = new HttpResponse(dos);
             RequestLine requestLine = httpRequest.getRequestLine();
             Uri uri = requestLine.getUri();
             if (uri.getPath().equals("/user/create")) {
@@ -40,29 +38,9 @@ public class RequestHandler implements Runnable {
                 Database.addUser(User.from(queryParameters.getParameters()));
             } else {
                 byte[] body = Files.readAllBytes(new File("src/main/resources/templates" + requestLine.getUri().getPath()).toPath());
-                response200Header(dos, body.length);
-                responseBody(dos, body);
+                httpResponse.response200Header(body.length);
+                httpResponse.responseBody( body);
             }
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
