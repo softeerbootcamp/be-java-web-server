@@ -25,7 +25,7 @@ public enum HttpMethod {
             throw new IllegalArgumentException("존재하지 않는 메서드입니다.");
         }
     }
-    public boolean hasBody(){
+    public boolean getHasBody() {
         return hasBody;
     }
 }

@@ -1,9 +1,9 @@
 package utils;
 
-import http.HttpRequest;
-import http.HttpRequestBody;
-import http.HttpRequestHeader;
-import http.HttpStartLine;
+import http.request.HttpRequest;
+import http.request.HttpRequestBody;
+import http.request.HttpRequestHeader;
+import http.request.HttpStartLine;
 
 import java.io.BufferedReader;
 import java.io.IOException;
