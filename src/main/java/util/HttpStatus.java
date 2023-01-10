@@ -1,7 +1,12 @@
 package util;
 
+import response.HttpResponse;
+
+import java.util.Arrays;
+
 public enum HttpStatus {
     OK(200, "OK"),
+    NOT_FOUND(404,"NOT_FOUND")
     ;
 
     private int code;
@@ -9,6 +14,14 @@ public enum HttpStatus {
     HttpStatus(int code, String message) {
         this.code=code;
         this.message = message;
+    }
+
+    public static HttpStatus selectMethod(HttpResponse httpResponse) {
+        if(httpResponse.getData().length==0){
+            return NOT_FOUND;
+        }else{
+            return OK;
+        }
     }
 
     public int getCode() {

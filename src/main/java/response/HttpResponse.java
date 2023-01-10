@@ -18,10 +18,16 @@ public class HttpResponse {
     public HttpResponse(DataOutputStream clientOutputStream,byte[] data) {
         this.clientOutputStream = clientOutputStream;
         this.data = data;
-
     }
 
-    public void responseHeader(HttpStatus httpStatus) {
+    public void makeResponse() {
+        HttpStatus httpStatus = HttpStatus.selectMethod(this);
+        responseHeader(httpStatus);
+        responseBody();
+    }
+
+    private void responseHeader(HttpStatus httpStatus) {
+
         try {
             clientOutputStream.writeBytes("HTTP/1.1 " + httpStatus.getCode() + " " + httpStatus.getMessage() + " \r\n");
             clientOutputStream.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
@@ -32,7 +38,7 @@ public class HttpResponse {
         }
     }
 
-    public void responseBody() {
+    private void responseBody() {
         try {
             clientOutputStream.write(data, 0, data.length);
             clientOutputStream.flush();
@@ -40,4 +46,10 @@ public class HttpResponse {
             logger.error(e.getMessage());
         }
     }
+
+    public byte[] getData() {
+        return data;
+    }
+
+
 }
