@@ -3,6 +3,8 @@ package model.response;
 import model.general.Header;
 import model.general.Status;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
 
@@ -23,5 +25,13 @@ public class Response {
 
     public static Response of(StatusLine statusLine, Map<Header, String> headers, byte[] body) {
         return new Response(statusLine, headers, body);
+    }
+
+    public void writeOutputStream(DataOutputStream dataOutputStream) throws IOException {
+        dataOutputStream.writeBytes(statusLine.getHttpVersion() + " " +
+                statusLine.getStatusCode() + " " + statusLine.getReasonPhrase());
+
+        dataOutputStream.write(body, 0, body.length);
+        dataOutputStream.flush();
     }
 }
