@@ -8,10 +8,25 @@ public class StringParser {
         return indexString;
     }
 
+    public String directorySplit(String urlString){
+        int directoryIdx = 0;
+        for (int i = 0; i < urlString.length(); i++) {
+            if(urlString.charAt(i) == '.'){
+                directoryIdx = i;
+            }
+        }
+        return urlString.substring(0,directoryIdx);
+    }
+
     public String extensionSplit(String urlString) {
         int extensionIdx = 0;
-        for (int i = 0; i < urlString.length(); i++) extensionIdx = extensionDotSplit(urlString, i);
-        return urlString.substring(extensionIdx+1);
+        for (int i = 0; i < urlString.length(); i++) {
+            extensionIdx = extensionDotSplit(urlString, i);
+            if(extensionIdx != 0){
+                return urlString.substring(extensionIdx+1);
+            }
+        }
+        return "";
     }
 
     public int extensionDotSplit(String urlString, int idx) {
@@ -21,5 +36,4 @@ public class StringParser {
         }
         return getIdx;
     }
-
 }
