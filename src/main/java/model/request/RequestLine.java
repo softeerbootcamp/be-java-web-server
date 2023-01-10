@@ -25,4 +25,8 @@ public class RequestLine {
     public String getUri() {
         return uri;
     }
+
+    public boolean hasQueryString() {
+        return uri.contains("\\?");
+    }
 }
