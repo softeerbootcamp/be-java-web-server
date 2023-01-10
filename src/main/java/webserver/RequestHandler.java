@@ -1,5 +1,8 @@
 package webserver;
 
+import handler.Handler;
+import handler.UserHandler;
+import handler.ViewHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpRequestUtils;
@@ -32,7 +35,8 @@ public class RequestHandler implements Runnable {
 
             String url = HttpRequestUtils.getUrl(requestLine);
 
-            String viewName = searchRequestHandler(url);
+            Handler handler = getHandler(url);
+            String viewName = handler.handle(url);
             String viewPath = ViewResolver.process(viewName);
 
             byte[] body = Files.readAllBytes(new File(viewPath).toPath());
@@ -45,18 +49,13 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private String searchRequestHandler(String url) {
-        if (url.equals("/")) {
-            return "/index.html";
-        }
-
+    private Handler getHandler(String url) {
         if (url.startsWith("/user")) {
-            UserRequestHandler handler = new UserRequestHandler();
-            return handler.handle(url);
+            return new UserHandler();
         }
 
         // TODO 추후 다른 기능이 추가되면 수정할 예정
-        return url;
+        return new ViewHandler();
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {

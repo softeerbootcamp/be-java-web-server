@@ -1,4 +1,4 @@
-package webserver;
+package handler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,10 +7,11 @@ import util.HttpRequestUtils;
 
 import java.util.Map;
 
-public class UserRequestHandler {
+public class UserHandler implements Handler {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserRequestHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserHandler.class);
 
+    @Override
     public String handle(String url) {
         if (url.contains("/create")) {
             String queryString = HttpRequestUtils.getQueryString(url);
