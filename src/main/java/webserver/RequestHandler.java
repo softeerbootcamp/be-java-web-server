@@ -1,8 +1,10 @@
 package webserver;
 
+import handler.Handler;
 import http.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.HandlerMapper;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -26,7 +28,7 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
 
             HttpRequest httpRequest = new HttpRequest(in);
-            //Handler handler = HandlerMapper.getHandler(httpRequest);
+            Handler handler = HandlerMapper.getHandler(httpRequest);
 
 //            String viewName = handler.handle(url);
 //            String viewPath = ViewResolver.process(viewName);

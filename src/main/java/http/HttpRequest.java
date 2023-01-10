@@ -28,4 +28,8 @@ public class HttpRequest {
 
         return new HttpRequestLine(requestLine);
     }
+
+    public String getUrl() {
+        return this.httpRequestLine.getUrl();
+    }
 }
