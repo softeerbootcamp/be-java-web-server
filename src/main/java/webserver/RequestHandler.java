@@ -2,16 +2,20 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Optional;
 
 import com.sun.net.httpserver.HttpPrincipal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.Controller.AuthController;
 import webserver.Controller.Controller;
+import webserver.domain.StatusCodes;
 import webserver.domain.request.Request;
+import webserver.domain.response.Response;
 import webserver.exception.HttpRequestException;
 import webserver.utils.HttpRequestUtils;
 import webserver.utils.HttpResponseUtil;
+import webserver.utils.StaticControllerUtil;
 
 import static webserver.utils.HttpRequestUtils.parseHttpRequest;
 
@@ -36,13 +40,21 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
 
             Request req = parseHttpRequest(in);
+            Response res = new Response(out);
+
             req.readRequest();  //Print out Http Request Message
-            Controller controller = handlerMapping.getHandler(req.getRequestLine().getResource());
-            try{
-                controller.handle(req.getRequestLine().getResource(), out);
-            }catch(HttpRequestException e){
-                HttpResponseUtil.makeResponse(e.getMessage().getBytes(), out, e.getErrorCode(), e.getErrorMsg());
-            }
+
+            String requestedPath = req.getRequestLine().getResource();
+            StaticControllerUtil.staticFileResolver(requestedPath).ifPresentOrElse(fileAsBytes ->{
+                res.makeResponse(fileAsBytes, StatusCodes.OK.getStatusCode(), StatusCodes.OK.getStatusMsg());
+            },()->{
+                try{
+                    Controller controller = handlerMapping.getHandler(requestedPath);
+                    controller.handle(req.getRequestLine().getResource(), res);
+                }catch (HttpRequestException e){
+                 res.makeResponse(e.getErrorMsg().getBytes(), e.getErrorCode(), e.getErrorMsg());
+                }
+            });
         } catch (IOException e) {
             logger.debug(e.getMessage());
         }
