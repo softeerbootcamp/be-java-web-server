@@ -3,8 +3,11 @@ package webserver;
 import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.Map;
 
+import db.Database;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.FileFinder;
@@ -30,9 +33,25 @@ public class RequestHandler implements Runnable {
             HttpParser httpParser = new HttpParser();
             HttpRequest httpRequest = HttpRequest.newInstance(httpParser.parseHttpRequest(in));
 
-            String uri = httpRequest.getRequestUri();
-            HttpResponse httpResponse = new HttpResponse(FileFinder.findFile(uri), uri);
-
+            String url = httpRequest.getRequestURL();
+            HttpResponse httpResponse = null;
+            if (url.contains("?")) {
+                int index = url.indexOf("?");
+                String path = url.substring(0, index);
+                String params = url.substring(index + 1);
+                String[] param = params.split("&");
+                Map<String, String> map = new HashMap<>();
+                for (String p : param) {
+                    String[] attributes = p.split("=");
+                    map.put(attributes[0], attributes[1]);
+                }
+                User user = new User(map.get("userId"), map.get("password"), map.get("name"), map.get("email"));
+                Database.addUser(user);
+                return;
+            } else {
+                String uri = httpRequest.getRequestUri();
+                httpResponse = new HttpResponse(FileFinder.findFile(uri), uri);
+            }
             response200Header(dos, httpResponse);
             responseBody(dos, httpResponse);
         } catch (IOException e) {
@@ -50,7 +69,12 @@ public class RequestHandler implements Runnable {
 
     private void responseBody(DataOutputStream dos, HttpResponse httpResponse) {
         byte[] body = httpResponse.getBody();
+
         try {
+            if (body == null) {
+                dos.flush();
+                return;
+            }
             dos.write(body, 0, body.length);
             dos.flush();
         } catch (IOException e) {

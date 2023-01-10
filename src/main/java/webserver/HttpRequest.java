@@ -24,4 +24,8 @@ public class HttpRequest {
         }
         return "/static" + value[1];
     }
+    public String getRequestURL() {
+        String[] value = headers.get(REQUEST_LINE).split(" ");
+        return value[1];
+    }
 }

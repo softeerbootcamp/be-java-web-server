@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-
 public class HttpParser {
     private static final String DOMAIN = "http://localhost:8080/";
     public static final String REQUEST_LINE = "Request Line";
@@ -27,5 +26,7 @@ public class HttpParser {
             parsedHttpMap.put(key, value);
         }
         return parsedHttpMap;
+    }
+    public void parseQueryString(String query) {
     }
 }
