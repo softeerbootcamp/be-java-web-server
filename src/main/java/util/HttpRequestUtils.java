@@ -16,6 +16,8 @@ public class HttpRequestUtils {
 
     public static HttpMethod getHttpMethod(String requestLine) {
         String method = requestLine.split(" ")[0];
+        logger.debug("HTTP Method : {}", method);
+
         return Arrays.stream(HttpMethod.values())
                 .filter(httpMethod -> httpMethod.getValue().equals(method))
                 .findAny()
@@ -31,7 +33,7 @@ public class HttpRequestUtils {
 
     public static String getHttpVersion(String requestLine) {
         String version = requestLine.split(" ")[2];
-        logger.debug("Version : {}", version);
+        logger.debug("HTTP Version : {}", version);
 
         return version;
     }
