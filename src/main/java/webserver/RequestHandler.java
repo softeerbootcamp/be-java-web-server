@@ -33,14 +33,12 @@ public class RequestHandler implements Runnable {
             String line = br.readLine();
             logger.debug("> input line : {}", line);
             String url = getUrl(line);
-            logger.debug("> request url : {}", url);
-
             url = checkUrlQueryString(url);
+            logger.debug("> request url : {}", url);
 
             DataOutputStream dos = new DataOutputStream(out);
 
             byte[] body = response200HeaderByExtension(url, dos);
-
             responseBody(dos, body);
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -57,7 +55,9 @@ public class RequestHandler implements Runnable {
             body = Files.readAllBytes(new File(ViewResolver.TEMPLATES_PATH + url).toPath());
             response200Header(dos, body.length, "text/html");
         } else{
-            body = Files.readAllBytes(new File(ViewResolver.STATIC_PATH + url).toPath());
+            int indexOfRelativePath = url.lastIndexOf("/") + 1;
+            String fileName = url.substring(indexOfRelativePath);
+            body = Files.readAllBytes(new File(ViewResolver.STATIC_PATH + substring+"/" + fileName).toPath());
             if (substring.equals("css")) {
                 response200Header(dos, body.length, "text/css");
             } else {
