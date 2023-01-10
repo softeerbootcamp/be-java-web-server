@@ -26,6 +26,10 @@ public class RequestLine {
         return uri;
     }
 
+    public String getHttpVersion() {
+        return httpVersion;
+    }
+
     public boolean hasQueryString() {
         return uri.contains("\\?");
     }
