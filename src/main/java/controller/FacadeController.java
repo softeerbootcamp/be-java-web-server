@@ -1,8 +1,9 @@
 package controller;
 
+import filesystem.FileSystem;
 import io.request.HttpRequest;
 import io.request.RequestFactory;
-import io.response.Response;
+import io.response.HttpResponse;
 import io.response.ResponseFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ public class FacadeController implements Runnable {
     private final Logger logger = LoggerFactory.getLogger(FacadeController.class);
     private final RequestFactory requestFactory = new RequestFactory();
     private final ResponseFactory responseFactory = new ResponseFactory();
+    private final FileSystem fileSystem = new FileSystem();
 
     private final Map<Domain, Controller> controllers = Map.of(
             Domain.USER, new UserController(),
@@ -34,17 +36,15 @@ public class FacadeController implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest request = requestFactory.create(in);
-            Response response = responseFactory.create(out);
-
+            HttpResponse response = responseFactory.create(out);
             delegateRequest(request, response);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void delegateRequest(HttpRequest request, Response response) {
+    private void delegateRequest(HttpRequest request, HttpResponse response) {
         Controller controller = controllers.get(Domain.find(request.getUrl()));
-
         controller.handle(request, response);
     }
 }

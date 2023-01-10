@@ -1,8 +1,8 @@
 package controller;
 
 import io.request.HttpRequest;
-import io.response.Response;
+import io.response.HttpResponse;
 
 public interface Controller {
-    void handle(HttpRequest request, Response response);
+    void handle(HttpRequest request, HttpResponse response);
 }
