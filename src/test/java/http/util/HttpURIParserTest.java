@@ -1,6 +1,5 @@
 package http.util;
 
-import http.common.HttpMethod;
 import http.common.URI;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +21,6 @@ public class HttpURIParserTest {
 
         // then
         assertAll(
-                () -> assertEquals(HttpMethod.GET, parse.getMethod()),
                 () -> assertEquals("/index.html", parse.getPath()),
                 () -> assertEquals(0, parse.getQuerys().size())
         );
@@ -39,7 +37,6 @@ public class HttpURIParserTest {
 
         // then
         assertAll(
-                () -> assertEquals(HttpMethod.GET, parse.getMethod()),
                 () -> assertEquals("/index.html", parse.getPath()),
                 () -> assertEquals(2, parse.getQuerys().size()),
                 () -> assertEquals("sol", parse.getQuerys().get("name")),

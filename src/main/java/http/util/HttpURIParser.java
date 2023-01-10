@@ -1,6 +1,5 @@
 package http.util;
 
-import http.common.HttpMethod;
 import http.common.URI;
 
 import java.util.HashMap;
@@ -10,14 +9,7 @@ public class HttpURIParser {
     private HttpURIParser() {}
 
     public static URI parse(String requestLine) {
-        return new URI(
-                parseMethod(requestLine),
-                parsePath(requestLine),
-                parseQueryString(requestLine));
-    }
-
-    private static HttpMethod parseMethod(String requestLine) {
-        return HttpMethod.valueOf(requestLine.split(" ")[0]);
+        return new URI(parsePath(requestLine), parseQueryString(requestLine));
     }
 
     private static String parsePath(String requestLine) {
