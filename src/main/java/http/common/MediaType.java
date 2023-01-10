@@ -11,7 +11,8 @@ public enum MediaType {
     IMAGE_PNG("image/png", "png"),
     AUDIO_MPEG("audio/mpeg", "mpeg"),
     AUDIO_OGG("audio.ogg", "ogg"),
-    VIDEO_MP4("video/mp4", "mp4");
+    VIDEO_MP4("video/mp4", "mp4"),
+    FAVICON("image/avif,image/webp,image/apng,image/svg+xml", "ico"),;
 
     private final String type;
     private final String extension;
