@@ -38,14 +38,7 @@ public class RequestHandler implements Runnable {
             InputStreamReader reader = new InputStreamReader(in);
             BufferedReader br = new BufferedReader(reader);
             RequestHeaderMessage requestHeaderMessage = new RequestHeaderMessage(br.readLine());
-            //String httpHeader = br.readLine();
-            //String[] headers = httpHeader.split(" ");
-            //String httpMethod = headers[0];
-            //String reqURL = headers[1].equals("/")?"/index.html":headers[1];
             createUser(requestHeaderMessage);
-            //reqURL = HttpRequestUtil.getOnlyURL(reqURL);    //url without parameter
-            //String fileExtension = HttpRequestUtil.getFileExtension(reqURL);
-            //String httpVersion = headers[2];
             String strBr = "";
             while(!(strBr = br.readLine()).equals("")){
                 //System.out.println(strBr);
@@ -86,21 +79,6 @@ public class RequestHandler implements Runnable {
             logger.error(e.getMessage());
         }
     }
-
-    /*
-    private void response302Header(DataOutputStream dos, int lengthOfBodyContent, String contentType, String redirectURL) {
-        try{
-            dos.writeBytes("HTTP/1.1 301\r\n");
-            dos.writeBytes("Location:localhost:8080"+redirectURL+"\r\n");
-            dos.writeBytes("Content-Type: "+contentType+";charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        }catch (IOException e){
-            logger.error(e.getMessage());
-        }
-    }
-
-     */
 
     private void responseBody(DataOutputStream dos, byte[] body) {
         try {
