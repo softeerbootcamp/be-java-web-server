@@ -23,7 +23,7 @@ public class HttpResponseWriter {
 
     private static void writeStatus(DataOutputStream dos, HttpStatus status) {
         try {
-            String statusLine = HTTP_VERSION + " " + status.ordinal() + " " + status.name() + "\r\n";
+            String statusLine = HTTP_VERSION + " " + status.code() + " " + status.name() + "\r\n";
             dos.writeBytes(statusLine);
         } catch (IOException e) {
             // TODO: INTERNAL_SERVER_ERROR 처리하기
