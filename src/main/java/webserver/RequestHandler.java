@@ -4,7 +4,8 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
-import http.HttpRequest;
+import http.request.HttpRequest;
+import service.UserService;
 import utils.FileIoUtils;
 import utils.HttpRequestGenerator;
 import org.slf4j.Logger;
@@ -14,9 +15,11 @@ public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
+    private UserService userService;
 
-    public RequestHandler(Socket connectionSocket) {
+    public RequestHandler(Socket connectionSocket, UserService userService) {
         this.connection = connectionSocket;
+        this.userService = userService;
     }
 
     public void run() {
