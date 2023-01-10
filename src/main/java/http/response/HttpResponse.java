@@ -24,6 +24,14 @@ public class HttpResponse {
         this.headers = headers;
     }
 
+    public void addHeader(String key, String value) {
+        if (this.headers == null) {
+            this.headers = new HttpHeaders();
+        }
+
+        this.headers.setHeader(key, value);
+    }
+
     public void setBody(HttpBody body) {
         this.headers.setHeader("Content-Length", String.valueOf(body.size()));
         this.body = body;
