@@ -27,9 +27,9 @@ public class UserAccountController implements RequestController {
 
     @Override
     public void handleRequest(CustomHttpRequest req, CustomHttpResponse res) {
-        for (String regex : routingTable.keySet()) {
-            if (req.getUrl().matches(regex)) {
-                routingTable.get(regex).handleRequest(req, res);
+        for (String path : routingTable.keySet()) {
+            if (req.getUrl().startsWith(path)) {
+                routingTable.get(path).handleRequest(req, res);
                 return;
             }
         }

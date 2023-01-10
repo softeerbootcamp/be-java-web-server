@@ -20,6 +20,7 @@ public class CustomHttpRequest {
         requestHeaders = new HashMap<>();
         setFirstLineHeaders(inputStream);
         requestParams = setRequestParams();
+        logger.info("url : " + this.url + ", method : " + this.httpMethod + ", params : " + this.requestParams);
     }
 
     public String getUrl() {
@@ -55,7 +56,6 @@ public class CustomHttpRequest {
                 }
             }
         }
-        logger.info("url splited : " + requestParams);
         return requestParams;
     }
 
@@ -70,7 +70,6 @@ public class CustomHttpRequest {
             while (br.ready()) {
                 addToRequestHeader(br.readLine());
             }
-            logger.info("url : " + this.url + ", method : " + this.httpMethod + ", headers : " + this.requestHeaders);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
