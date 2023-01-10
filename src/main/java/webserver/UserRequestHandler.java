@@ -1,11 +1,25 @@
 package webserver;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import util.HttpRequestUtils;
+
+import java.util.Map;
+
 public class UserRequestHandler {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserRequestHandler.class);
 
     public String handle(String url) {
         if (url.contains("/create")) {
+            String[] splited = url.split("\\?");
+            String queryString = splited[1];
+            logger.debug("queryString : {}" , queryString);
+
+            Map<String, String> userInfo = HttpRequestUtils.parseQueryString(queryString);
+
             UserService userService = new UserService();
-            userService.signUp(url);
+            userService.signUp(userInfo);
 
             return "/user/login.html";
         }
