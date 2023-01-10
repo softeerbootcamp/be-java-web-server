@@ -29,7 +29,13 @@ public class Response {
 
     public void writeOutputStream(DataOutputStream dataOutputStream) throws IOException {
         dataOutputStream.writeBytes(statusLine.getHttpVersion() + " " +
-                statusLine.getStatusCode() + " " + statusLine.getReasonPhrase());
+                statusLine.getStatusCode() + " " + statusLine.getReasonPhrase() + System.lineSeparator());
+
+        for (Map.Entry<Header, String> headerEntry : headers.entrySet()) {
+            dataOutputStream.writeBytes(headerEntry.getKey().getHeader() + ": " + headerEntry.getValue() +
+                    System.lineSeparator());
+        }
+        dataOutputStream.writeBytes(System.lineSeparator());
 
         if(hasContent()) {
             dataOutputStream.write(body, 0, body.length);
