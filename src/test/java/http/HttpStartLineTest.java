@@ -16,8 +16,8 @@ class HttpStartLineTest {
         HttpStartLine httpStartLine = HttpStartLine.from(startLine);
 
         assertAll(
-                () -> assertThat(httpStartLine.getMethod().toString()).isEqualTo("GET"),
-                () -> assertThat(httpStartLine.getPath()).isEqualTo("/index.html"),
+                () -> assertThat(httpStartLine.getMethod().toString()).hasToString("GET"),
+                () -> assertThat(httpStartLine.getUri().getPath()).isEqualTo("/index.html"),
                 () -> assertThat(httpStartLine.getHttpVersion()).isEqualTo("HTTP/1.1")
         );
     }

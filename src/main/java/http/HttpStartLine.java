@@ -2,22 +2,22 @@ package http;
 
 public class HttpStartLine {
     private static final String SPACE = " ";
-    private static final String ROOT = "/";
-    private static final String ENTRY_POINT = "/index.html";
 
     private final HttpMethod method;
-    private final String path;
+    private final Uri uri;
     private final String version;
 
     public static HttpStartLine from(String startLine) {
         String[] tokens = startLine.split(SPACE);
         HttpMethod httpMethod = HttpMethod.getHttpMethod(tokens[0]);
-        return new HttpStartLine(httpMethod, tokens[1], tokens[2]);
+        Uri uri = Uri.from(tokens[1]);
+        String version = tokens[2];
+        return new HttpStartLine(httpMethod, uri, version);
     }
 
-    private HttpStartLine(HttpMethod method, String path, String version) {
+    private HttpStartLine(HttpMethod method, Uri uri, String version) {
         this.method = method;
-        this.path = path;
+        this.uri = uri;
         this.version = version;
     }
 
@@ -25,11 +25,8 @@ public class HttpStartLine {
         return method;
     }
 
-    public String getPath() {
-        if (path.equals(ROOT))
-            return ENTRY_POINT;
-
-        return path;
+    public Uri getUri() {
+       return uri;
     }
 
     public String getHttpVersion() {
