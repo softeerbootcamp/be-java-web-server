@@ -37,8 +37,12 @@ public class RequestHandler implements Runnable {
                 email.replace("%40","@");
                 User user = new User(userId,password,name,email);
             }
+            HttpResponse response = new HttpResponse();
+            RequestDispatcher.handle(request,response);
+            System.out.println("status: "+response.getStatus());
             ResponseWriter rw = new ResponseWriter(out);
             rw.write(url);
+            //rw.writeByResponse(request,response);
 
         } catch (IOException e) {
             logger.error(e.getMessage());
