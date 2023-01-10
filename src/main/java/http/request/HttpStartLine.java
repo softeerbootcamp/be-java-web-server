@@ -34,6 +34,6 @@ public class HttpStartLine {
     public String getContentType() {
         if (hasParameter())
             return null;
-        return target.substring(target.lastIndexOf("."));
+        return target.substring(target.lastIndexOf(".") + 1);
     }
 }
