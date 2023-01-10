@@ -19,7 +19,7 @@ public class RequestDispatcher {
         try {
             String url = request.getUrl();
 
-            serveFile(STATIC_DIR + url, response);
+            //serveFile(STATIC_DIR + url, response);
             serveFile(TEMPLATES_DIR + url, response);
 
         } catch (Exception e) {
@@ -30,6 +30,11 @@ public class RequestDispatcher {
         }
     }
 
+    /**
+     * 파싱한 url에 해당하는 파일을 파라미터의 HttpResponse에 헤더와 함께 담음
+     * @param url
+     * @param res
+     */
     private static void serveFile(String url, HttpResponse res) {
         try {
             byte[] body = FileIoUtils.loadFileFromClasspath(url);
@@ -38,7 +43,7 @@ public class RequestDispatcher {
             res.setStatus(HttpStatus.OK);
             res.setContentType(contentType);
             res.addToHeader(CONTENT_LENGTH_HEADER_KEY, String.valueOf(body.length));
-            res.setBody(body);
+            res.setBody(body);//body에는 요청한 파일 내용이 들어감
         } catch (FileNotFoundException e) {
             logger.error("File not found for {}", url);
         } catch (Exception e) {
