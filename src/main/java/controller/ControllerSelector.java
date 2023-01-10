@@ -8,8 +8,8 @@ public class ControllerSelector {
     private RequestLine requestLine;
     private static final int _TOKEN_INDEX = 1;
 
-    public Controller setController(RequestLine requestLine){
-        if(requestLine.getURL().split(".")[_TOKEN_INDEX]=="html"){
+    public static Controller setController(RequestLine requestLine){
+        if(requestLine.getURL().split("\\.")[_TOKEN_INDEX].equals("html")){
             return templateController;
         }
         return null;

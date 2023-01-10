@@ -4,8 +4,11 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
 
+import controller.Controller;
+import controller.ControllerSelector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import request.Request;
 import response.Response;
 import utils.RequestUtils;
 
@@ -25,12 +28,10 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             Response response = new Response(out);
             BufferedReader br = new BufferedReader(new InputStreamReader(in,"UTF-8"));
-            String line = br.readLine();
-//            String path = RequestUtils.getFilePathByRequest(line);
-//            RequestUtils.printRequestLines(line,br);
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
-
-
+            Request request = new Request(br);
+//
+            Controller controller = ControllerSelector.setController(request.getRequestLine());
+            controller.selectedController(request,response);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
