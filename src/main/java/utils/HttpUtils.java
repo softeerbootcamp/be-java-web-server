@@ -7,6 +7,10 @@ import java.util.Map;
 import java.util.Objects;
 
 public class HttpUtils {
+    private static Map<String, String> contentTypeMap =
+            Map.of("text", "plain|html|css", "image", "jpeg|png",
+                        "audio", "mpeg|ogg|*", "video", "mp4", "application" , "octet-stream",
+                            "multipart","mixed");
     public static Map<String, String> parseQuerystring(String queryString) {
         Map<String, String> map = new HashMap<>();
         if ((queryString == null) || (queryString.equals(""))) {
@@ -24,5 +28,13 @@ public class HttpUtils {
             map.put(name, value);
         }
         return map;
+    }
+
+    public static String setContentType(String extension){
+        for (String key : contentTypeMap.keySet()){
+            if (contentTypeMap.get(key).contains(extension))
+                return key + "/" + extension;
+        }
+        throw new IllegalArgumentException("존재하지 않는 확장자명입니다.");
     }
 }
