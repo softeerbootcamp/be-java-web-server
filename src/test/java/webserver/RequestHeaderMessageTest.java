@@ -21,14 +21,6 @@ class RequestHeaderMessageTest {
                 "=%EC%9D%B4%EC%9E%AC%ED%9B%88&email=wogns1602%40naver.com");
     }
 
-
-    @Test
-    void isRedirection() {
-        RequestHeaderMessage requestHeaderMessage = new RequestHeaderMessage(userCreate);
-        requestHeaderMessage.isRedirection();
-        assertThat(requestHeaderMessage.getHttpOnlyURL()).isEqualTo("/index.html");
-    }
-
     @Test
     void getFileExtension() {
         RequestHeaderMessage requestHeaderMessage = new RequestHeaderMessage("GET /index.html HTTP/1.1");
