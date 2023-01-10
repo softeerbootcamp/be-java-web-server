@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class FileSystem {
 
@@ -18,14 +20,22 @@ public class FileSystem {
     private final PathParser pathParser = new PathParser();
 
     public FindResult findResource(String url) {
-        FindResult findResult = new FindResult();
+        FindResult findResult = new FindResult(Status.NOT_FOUND, ContentType.HTML, new byte[0]);
         String resourcePath = pathParser.parse(url);
-        try {
-            byte[] resource = Files.readAllBytes(new File(resourcePath).toPath());
-            findResult.update(Status.OK, ContentType.find(resourcePath), resource);
-        } catch (IOException e) {
-            logger.info("resource not found");
+        if (resourcePath.contains("notfound.html")) {
+            return findResult;
         }
+        byte[] resource = readFile(new File(resourcePath));
+        findResult.update(Status.OK, ContentType.find(resourcePath), resource);
         return findResult;
+    }
+
+    private byte[] readFile(File file) {
+        try {
+            return Files.readAllBytes(file.toPath());
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+        return new byte[0];
     }
 }
