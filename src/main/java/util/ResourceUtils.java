@@ -23,7 +23,7 @@ public class ResourceUtils {
         return Files.readAllBytes(path);
     }
 
-    public static Path search(String filePath) {
+    private static Path search(String filePath) {
         try {
             return Paths.get(Objects.requireNonNull(ResourceUtils.class.getClassLoader().getResource(filePath)).toURI());
         } catch (URISyntaxException | NullPointerException e) {
