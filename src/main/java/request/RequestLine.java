@@ -5,6 +5,7 @@ public class RequestLine {
 
     private String URL;
     private String VERSION;
+    private boolean userRequest;
     private static final int METHOD_TOKEN_INDEX = 0;
     private static final int URL_TOKEN_INDEX = 1;
     private static final int VERSION_TOKEN_INDEX = 2;
@@ -14,8 +15,17 @@ public class RequestLine {
         this.METHOD = filePath[METHOD_TOKEN_INDEX];
         this.URL = filePath[URL_TOKEN_INDEX];
         this.VERSION = filePath[VERSION_TOKEN_INDEX];
+        this.userRequest = isUserRequest(this.URL);
     }
-
+    public boolean getUserRequest(){
+        return userRequest;
+    }
+    private boolean isUserRequest(String url){
+        String[] checker = url.split("\\?");
+        if(checker.length == 1){
+            return false;
+        }else return true;
+    }
     public String getURL() {
         return URL;
     }
