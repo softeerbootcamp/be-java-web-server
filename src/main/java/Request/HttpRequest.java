@@ -2,18 +2,14 @@ package Request;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.*;
-import java.util.HashMap;
 import java.util.Map;
 
 public class HttpRequest {
-    private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
-    private HttpRequestParams httpRequestParams;
-    private HttpRequestHeaders httpRequestHeaders;
-    private HttpRequestStartLine httpRequestStartLine;
+    private final HttpRequestParams httpRequestParams;
+    private final HttpRequestHeaders httpRequestHeaders;
+    private final HttpRequestStartLine httpRequestStartLine;
 
-    public HttpRequest(HttpRequestParams httpRequestParams, HttpRequestHeaders httpRequestHeaders, HttpRequestStartLine httpRequestStartLine) {
+    public HttpRequest(HttpRequestStartLine httpRequestStartLine,HttpRequestParams httpRequestParams, HttpRequestHeaders httpRequestHeaders) {
         this.httpRequestParams = httpRequestParams;
         this.httpRequestHeaders = httpRequestHeaders;
         this.httpRequestStartLine = httpRequestStartLine;
