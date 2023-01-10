@@ -15,15 +15,13 @@ import java.util.List;
 import java.util.Map;
 
 public class FacadeController implements Runnable {
+
+    private static final List<String> staticResourceExtensions = List.of(".html", ".css", ".js", "eot", "svg", "ttf", "woff", "woff2", "png");
     private final Logger logger = LoggerFactory.getLogger(FacadeController.class);
     private final RequestFactory requestFactory = new RequestFactory();
     private final ResponseFactory responseFactory = new ResponseFactory();
-    private final Map<Domain, Controller> controllers = Map.of(
-            Domain.USER, new UserController(),
-            Domain.MAIN, new MainController()
-    );
+    private final Map<Domain, Controller> controllers = Map.of(Domain.USER, new UserController(), Domain.MAIN, new MainController());
     private Socket connection;
-    private static final List<String> staticResourceExtensions = List.of(".html", ".css", ".js", "eot", "svg", "ttf", "woff", "woff2", "png");
 
     public FacadeController(Socket connectionSocket) {
         this.connection = connectionSocket;
