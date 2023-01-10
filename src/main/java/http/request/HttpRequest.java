@@ -1,4 +1,4 @@
-package http;
+package http.request;
 
 public class HttpRequest {
     private final HttpStartLine startLine;
@@ -21,5 +21,16 @@ public class HttpRequest {
 
     public String getRequestTarget(){
         return this.startLine.getTarget();
+    }
+
+    public boolean hasParams() {
+        return this.startLine.hasParameter();}
+
+    public String getVersion() {
+        return this.startLine.getVersion();
+    }
+
+    public String getContentType() {
+        return this.startLine.getContentType();
     }
 }
