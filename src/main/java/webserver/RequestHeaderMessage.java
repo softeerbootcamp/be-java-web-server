@@ -7,22 +7,22 @@ public class RequestHeaderMessage {
     private String httpFirstHeader;
     private String httpReqMethod;
     private String httpReqURL;
+    private String httpReqParams;
     private String httpVersion;
     private String httpOnlyURL;
     private String fileExtension;
+
     public String getHttpOnlyURL() {
         return httpOnlyURL;
-    }
-
-    public void setHttpOnlyURL(String httpOnlyURL) {
-        this.httpOnlyURL = httpOnlyURL;
     }
 
     public String getHttpReqParams() {
         return httpReqParams;
     }
 
-    private String httpReqParams;
+    public String getFileExtension() {
+        return fileExtension;
+    }
 
     public RequestHeaderMessage(String httpFirstHeader){
         this.httpFirstHeader = httpFirstHeader;
@@ -45,7 +45,4 @@ public class RequestHeaderMessage {
         }
     }
 
-    public String getFileExtension() {
-        return fileExtension;
-    }
 }
