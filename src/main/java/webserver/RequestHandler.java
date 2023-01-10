@@ -1,15 +1,14 @@
 package webserver;
 
-import handler.Handler;
+import http.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.HandlerMapper;
-import util.HttpRequestUtils;
 
-import java.io.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -25,25 +24,18 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            String requestLine = br.readLine();
-            if (requestLine == null) {
-                return;
-            }
-            logger.debug("requestLine : {}", requestLine);
 
-            String url = HttpRequestUtils.getUrl(requestLine);
+            HttpRequest httpRequest = new HttpRequest(in);
+            //Handler handler = HandlerMapper.getHandler(httpRequest);
 
-            Handler handler = HandlerMapper.getHandler(url);
-
-            String viewName = handler.handle(url);
-            String viewPath = ViewResolver.process(viewName);
-
-            byte[] body = Files.readAllBytes(new File(viewPath).toPath());
-
-            DataOutputStream dos = new DataOutputStream(out);
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+//            String viewName = handler.handle(url);
+//            String viewPath = ViewResolver.process(viewName);
+//
+//            byte[] body = Files.readAllBytes(new File(viewPath).toPath());
+//
+//            DataOutputStream dos = new DataOutputStream(out);
+//            response200Header(dos, body.length);
+//            responseBody(dos, body);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

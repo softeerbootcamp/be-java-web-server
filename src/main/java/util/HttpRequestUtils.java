@@ -1,10 +1,12 @@
 package util;
 
+import http.HttpMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,12 +14,26 @@ public class HttpRequestUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpRequestUtils.class);
 
-    public static String getUrl(String line) {
-        String[] tokens = line.split(" ");
-        String url = tokens[1];
+    public static HttpMethod getHttpMethod(String requestLine) {
+        String method = requestLine.split(" ")[0];
+        return Arrays.stream(HttpMethod.values())
+                .filter(httpMethod -> httpMethod.getValue().equals(method))
+                .findAny()
+                .orElseThrow();
+    }
+
+    public static String getUrl(String requestLine) {
+        String url = requestLine.split(" ")[1];
         logger.debug("URL : {}", url);
 
         return url;
+    }
+
+    public static String getHttpVersion(String requestLine) {
+        String version = requestLine.split(" ")[2];
+        logger.debug("Version : {}", version);
+
+        return version;
     }
 
     public static String getQueryString(String url) {
