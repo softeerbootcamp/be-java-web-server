@@ -5,10 +5,15 @@ import enums.Status;
 
 public class FindResult {
 
-    private static final String SERVER_ERROR_MSG = "SERVER_ERROR";
-    private Status status = Status.NOT_FOUND;
-    private ContentType contentType = ContentType.HTML;
-    private byte[] resource = SERVER_ERROR_MSG.getBytes();
+    private Status status;
+    private ContentType contentType;
+    private byte[] resource;
+
+    public FindResult(Status status, ContentType contentType, byte[] resource) {
+        this.status = status;
+        this.contentType = contentType;
+        this.resource = resource;
+    }
 
     public void update(Status status, ContentType contentType, byte[] resource) {
         this.status = status;
