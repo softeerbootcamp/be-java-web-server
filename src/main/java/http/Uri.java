@@ -22,7 +22,7 @@ public class Uri {
     }
 
     public boolean isQueryParameterExist() {
-        return queryParameters.isParameterExist();
+        return queryParameters != null;
     }
 
     public String getPath() {
