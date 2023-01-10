@@ -2,11 +2,15 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.HttpRequestUtils;
 
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Map;
+
+import static util.HttpRequestUtils.parseQuerystring;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -66,10 +70,11 @@ public class RequestHandler implements Runnable {
     private String checkUrlQueryString(String url) {
         String[] queryStrings = url.split("\\?");
         if (queryStrings.length != 1) {
-            //userId=dd&password=&name=&email=ddd%40dd
             String queryString = queryStrings[1];
             logger.debug(">> {}", queryString);
-            userService.signUpUser(queryString);
+
+            Map<String, String> requestParams = parseQuerystring(queryString);
+            userService.signUpUser(requestParams);
 
             url = BASE_URL;
         }
