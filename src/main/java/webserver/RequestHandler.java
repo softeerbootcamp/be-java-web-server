@@ -41,7 +41,7 @@ public class RequestHandler implements Runnable {
 			// HttpRequest 파싱
 			HttpRequest httpRequest = HttpRequestUtils.httpRequestParse(in);
 			logger.info(httpRequest.toString());
-
+			// TODO: 아래 부분을 인터페이스를 활용하여 확장성 높이고 코드 중복 없애야함
 			// 정적 데이터 요청일 경우의 처리
 			File file = new File("./webapp" + httpRequest.getUrl().getPath());
 			logger.debug(httpRequest.getUrl().getPath());
