@@ -1,5 +1,6 @@
 package webserver;
 
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -10,24 +11,30 @@ public class WebServer {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
     private static final int DEFAULT_PORT = 8080;
 
-    public static void main(String args[]) throws Exception {
-        int port = 0;
+    public static void main(String args[]) {
+        startWebServer(getPortNumber(args));
+    }
+
+    private static void run(ServerSocket serverSocket) throws IOException {
+        Socket connection;
+        while ((connection = serverSocket.accept()) != null) {
+            Thread thread = new Thread(new FacadeController(connection));
+            thread.start();
+        }
+    }
+
+    private static void startWebServer(Integer port) {
+        try (ServerSocket serverSocket = new ServerSocket(port)) {
+            run(serverSocket);
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private static Integer getPortNumber(String[] args) {
         if (args == null || args.length == 0) {
-            port = DEFAULT_PORT;
-        } else {
-            port = Integer.parseInt(args[0]);
+            return DEFAULT_PORT;
         }
-
-        // 서버소켓을 생성한다. 웹서버는 기본적으로 8080번 포트를 사용한다.
-        try (ServerSocket listenSocket = new ServerSocket(port)) {
-            logger.info("Web Application Server started {} port.", port);
-
-            // 클라이언트가 연결될때까지 대기한다.
-            Socket connection;
-            while ((connection = listenSocket.accept()) != null) {
-                Thread thread = new Thread(new RequestHandler(connection));
-                thread.start();
-            }
-        }
+        return Integer.parseInt(args[0]);
     }
 }
