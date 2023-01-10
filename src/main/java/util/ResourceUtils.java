@@ -12,7 +12,7 @@ public class ResourceUtils {
     private final static String PATH_OF_TEMPLATE = "./templates";
     private final static String PATH_OF_STATIC = "./static";
 
-    public static byte[] loadFileFromClasspath(String filePath) throws IOException {
+    public static byte[] loadFileFromClasspath(String filePath) {
         Path path = search(PATH_OF_TEMPLATE + filePath);
         if (path == null) {
             path = search(PATH_OF_STATIC + filePath);
@@ -20,7 +20,12 @@ public class ResourceUtils {
                 return new byte[0];
             }
         }
-        return Files.readAllBytes(path);
+
+        try {
+            return Files.readAllBytes(path);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static Path search(String filePath) {

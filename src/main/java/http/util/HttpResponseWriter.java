@@ -47,6 +47,7 @@ public class HttpResponseWriter {
         try {
             dos.writeBytes("\n\n");
             dos.write(body.data());
+            dos.flush();
         } catch (IOException e) {
             // TODO: INTERNAL_SERVER_ERROR 처리하기
             throw new RuntimeException("응답 바디 정보가 잘못되었습니다.");
