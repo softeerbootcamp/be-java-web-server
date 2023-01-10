@@ -45,9 +45,12 @@ public class ResourceUtilsTest {
     @DisplayName("loadFileFromClasspath() - 파일이 존재하지 않는 케이스")
     void NoSearchFile() {
         // given
+        String invalidPath = "/no/search/file";
 
         // when
+        byte[] nodata = ResourceUtils.loadFileFromClasspath(invalidPath);
 
         // then
+        assertEquals(0, nodata.length);
     }
 }
