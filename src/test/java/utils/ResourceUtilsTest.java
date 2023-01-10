@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import util.ResourceUtils;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("ResourceUtils Test")
@@ -26,10 +27,18 @@ public class ResourceUtilsTest {
     @DisplayName("loadFileFromClasspath() - static 디렉토리 파일 탐색 성공 케이스")
     void loadStaticFileFromClasspath() {
         // given
+        String pathOfCss = "/css/styles.css";
+        String pathOfJS = "/js/bootstrap.min.js";
 
         // when
+        byte[] css = ResourceUtils.loadFileFromClasspath(pathOfCss);
+        byte[] js = ResourceUtils.loadFileFromClasspath(pathOfJS);
 
         // then
+        assertAll(
+                () -> assertEquals(7065, css.length),
+                () -> assertEquals(31819, js.length)
+        );
     }
 
     @Test
