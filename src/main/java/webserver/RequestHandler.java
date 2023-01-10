@@ -26,6 +26,11 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
 
             String url = getUrl(in);
+            if(url.contains("/user/create"))
+            {
+                SignUpController.enrollNewUser(url);
+                url = SignUpController.redirectToIndex();
+            }
             String contentType = Files.probeContentType(new File(url).toPath());
 
             byte[] bytes = Byte.urlToByte(url);
@@ -60,6 +65,7 @@ public class RequestHandler implements Runnable {
     private String getUrl(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
         String firstLine = br.readLine();
+        System.out.println(firstLine);
         String[] splitedFirstLine = firstLine.split(" ");
         return splitedFirstLine[1];
     }
