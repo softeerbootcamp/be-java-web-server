@@ -15,6 +15,6 @@ public interface RequestController {
     static void NOT_FOUND(CustomHttpResponse res) {
         res.setStatusCode(StatusCode.NOT_FOUND);
         res.setContentType(ContentType.TEXT_PLAIN);
-        res.addToBody("404 not found".getBytes());
+        res.setBody("404 not found".getBytes());
     }
 }
