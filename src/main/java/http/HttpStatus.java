@@ -1,4 +1,4 @@
-package util;
+package http;
 
 public enum HttpStatus {
     OK(200, "OK");

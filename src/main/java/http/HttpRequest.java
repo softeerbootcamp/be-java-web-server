@@ -12,11 +12,14 @@ import java.util.Map;
 
 public class HttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
-    private String url;
+    private HttpRequestLine httpRequestLine;
+    private HttpHeader httpHeader;
+
     public HttpRequest(BufferedReader br) throws IOException {
         String line = br.readLine();
         if(line == null) return;
-        this.url = HttpRequestUtils.getUrl(line);
+        httpHeader = new HttpHeader(HttpHeader.readHeaders(br));
+        String url = HttpRequestUtils.getUrl(line);
         if(url.startsWith("/user/create")) {
             int index = url.indexOf("?");
             String requestPath = url.substring(0, index);
@@ -29,7 +32,7 @@ public class HttpRequest {
         }
     }
 
-    public String getUrl(){
-        return this.url;
+    public HttpUri getUri(){
+        return this.httpRequestLine.getUri();
     }
 }
