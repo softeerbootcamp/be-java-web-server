@@ -54,7 +54,7 @@ public class RequestHandler implements Runnable {
         logger.debug(">>> substring : {}", substring);
 
         byte[] body;
-        if (substring.equals("html")) {
+        if (substring.equals("html") || substring.equals("ico")) {
             body = Files.readAllBytes(new File("src/main/resources/templates/" + url).toPath());
             response200Header(dos, body.length, "text/html");
         } else{
