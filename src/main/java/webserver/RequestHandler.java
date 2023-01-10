@@ -15,6 +15,7 @@ import static util.HttpRequestUtils.parseQuerystring;
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private final UserService userService;
+    private final ViewResolver viewResolver;
 
     private Socket connection;
     private final String BASE_URL = "/index.html";
@@ -22,6 +23,7 @@ public class RequestHandler implements Runnable {
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
         this.userService = new UserService();
+        this.viewResolver = new ViewResolver();
     }
 
     public void run() {
@@ -34,11 +36,13 @@ public class RequestHandler implements Runnable {
             logger.debug("> input line : {}", line);
             String url = getUrl(line);
             url = checkUrlQueryString(url);
-            logger.debug("> request url : {}", url);
 
             DataOutputStream dos = new DataOutputStream(out);
 
-            byte[] body = response200HeaderByExtension(url, dos);
+
+            byte[] body = viewResolver.findFilePath(url);
+
+            response200HeaderByExtension(url, body, dos);
             responseBody(dos, body);
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -46,25 +50,30 @@ public class RequestHandler implements Runnable {
     }
 
     //TODO 리팩토링 필요!! src/main/resources/static/user/js/scripts.js 이렇게 옴.
-    private byte[] response200HeaderByExtension(String url, DataOutputStream dos) throws IOException {
+    private void response200HeaderByExtension(String url, byte[] body, DataOutputStream dos) throws IOException {
         String substring = url.substring(url.lastIndexOf(".")+1);
         logger.debug(">>> substring : {}", substring);
 
-        byte[] body;
         if (substring.equals("html") || substring.equals("ico")) {
-            body = Files.readAllBytes(new File(ViewResolver.TEMPLATES_PATH + url).toPath());
             response200Header(dos, body.length, "text/html");
         } else{
-            int indexOfRelativePath = url.lastIndexOf("/") + 1;
-            String fileName = url.substring(indexOfRelativePath);
-            body = Files.readAllBytes(new File(ViewResolver.STATIC_PATH + substring+"/" + fileName).toPath());
             if (substring.equals("css")) {
                 response200Header(dos, body.length, "text/css");
             } else {
                 response200Header(dos, body.length, "text/javascript");
             }
         }
-        return body;
+    }
+
+    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
+        try {
+            dos.writeBytes("HTTP/1.1 200 OK \r\n");
+            dos.writeBytes("Content-Type: " + contentType+";charset=utf-8\r\n");
+            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
     }
 
     private String checkUrlQueryString(String url) {
@@ -99,17 +108,6 @@ public class RequestHandler implements Runnable {
         while (!line.equals("")) {
             line = br.readLine();
             logger.debug("header : {}", line);
-        }
-    }
-
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: " + contentType+";charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
         }
     }
 
