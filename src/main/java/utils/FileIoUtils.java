@@ -1,7 +1,6 @@
 package utils;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 
 public class FileIoUtils {
@@ -14,7 +13,7 @@ public class FileIoUtils {
             return Files.readAllBytes(new File(STATIC_RESOURCE_PATH + file).toPath());
         }
         catch (Exception e) {
-            return "존재하지 않는 리소스입니다.".getBytes();
+            return StatusCode.NOTFOUND.toString().getBytes();
         }
     }
 }
