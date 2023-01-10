@@ -28,7 +28,7 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = new HttpRequest(new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
 
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = Files.readAllBytes(new File(requestFilePath + httpRequest.getUrl()).toPath());
+            byte[] body = Files.readAllBytes(new File(requestFilePath + httpRequest.getUri()).toPath());
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException e) {

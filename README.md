@@ -10,7 +10,7 @@ Java Web Application Server 2022
 ## 프로젝트 학습 내용
 
 ### 2주차
-  + Day 6
+ + Day 6
     + InputStream > InputStreamReader > BufferedReader로 Http Request Header 가져오기
     ``` java
       try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
@@ -39,3 +39,14 @@ Java Web Application Server 2022
     ``` java
         requestParamsMap.put(requestParam[0], URLDecoder.decode(requestParam[1], StandardCharsets.UTF_8));
     ```
+  
+  + Day 7
+    + Refactoring : http 폴더 생성 후 필요한 클래스 생성
+    + Http Request Header의 구조
+      + GET /index.html HTTP/1.1  -  시작줄(method, uri, version)
+      + Host: localhost:8080        -  헤더
+      + Connection: keep-alive  -  헤더
+      + ....
+    + .trim() 함수: 문자열의 시작과 끝 공백 제거
+    + 
+    
