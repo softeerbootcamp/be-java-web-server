@@ -16,12 +16,14 @@ import java.util.Objects;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private final UserService userService;
 
     private Socket connection;
     private final String BASE_URL = "/index.html";
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
+        this.userService = new UserService();
     }
 
     public void run() {
@@ -74,44 +76,13 @@ public class RequestHandler implements Runnable {
             //userId=dd&password=&name=&email=ddd%40dd
             String queryString = queryStrings[1];
             logger.debug(">> {}", queryString);
-            signUpUser(queryString);
+            userService.signUpUser(queryString);
 
             url = BASE_URL;
         }
         return url;
     }
 
-    /**
-     * 회원가입 로직
-     */
-    private void signUpUser(String queryString) {
-        Map<String, String> requestParams = parseQuerystring(queryString);
-
-        User user = new User(requestParams.get("userId"),
-                requestParams.get("password"),
-                requestParams.get("name"),
-                requestParams.get("email"));
-        Database.addUser(user);
-    }
-
-    public Map<String, String> parseQuerystring(String queryString) {
-        Map<String, String> map = new HashMap<>();
-        if ((queryString == null) || (queryString.equals(""))) {
-            return map;
-        }
-        String[] params = queryString.split("&");
-        for (String param : params) {
-            String[] keyValuePair = param.split("=", 2);
-            String name = URLDecoder.decode(keyValuePair[0], StandardCharsets.UTF_8);
-            if (Objects.equals(name, "")) {
-                continue;
-            }
-            String value = keyValuePair.length > 1 ? URLDecoder.decode(
-                    keyValuePair[1], StandardCharsets.UTF_8) : "";
-            map.put(name, value);
-        }
-        return map;
-    }
 
     private String getUrl(String line) {
         //문자열 분리 후 -> 문자열 배열에 삽입
