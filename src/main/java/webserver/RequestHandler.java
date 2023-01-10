@@ -6,11 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HandlerMapper;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
+import java.nio.file.Files;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -30,14 +28,14 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = new HttpRequest(in);
             Handler handler = HandlerMapper.getHandler(httpRequest);
 
-//            String viewName = handler.handle(url);
-//            String viewPath = ViewResolver.process(viewName);
-//
-//            byte[] body = Files.readAllBytes(new File(viewPath).toPath());
-//
-//            DataOutputStream dos = new DataOutputStream(out);
-//            response200Header(dos, body.length);
-//            responseBody(dos, body);
+            String viewName = handler.handle(httpRequest);
+            String viewPath = ViewResolver.process(viewName);
+
+            byte[] body = Files.readAllBytes(new File(viewPath).toPath());
+
+            DataOutputStream dos = new DataOutputStream(out);
+            response200Header(dos, body.length);
+            responseBody(dos, body);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

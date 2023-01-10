@@ -1,6 +1,8 @@
 package handler;
 
+import http.HttpRequest;
+
 public interface Handler {
 
-    String handle(String url);
+    String handle(HttpRequest request);
 }

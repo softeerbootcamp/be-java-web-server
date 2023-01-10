@@ -1,5 +1,6 @@
 package handler;
 
+import http.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
@@ -12,7 +13,8 @@ public class UserHandler implements Handler {
     private static final Logger logger = LoggerFactory.getLogger(UserHandler.class);
 
     @Override
-    public String handle(String url) {
+    public String handle(HttpRequest request) {
+        String url = request.getUrl();
         if (url.contains("/create")) {
             String queryString = HttpRequestUtils.getQueryString(url);
 
