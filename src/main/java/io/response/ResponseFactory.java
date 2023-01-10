@@ -1,7 +1,9 @@
 package io.response;
 
 import enums.ContentType;
+import enums.LogMessage;
 import enums.Status;
+import io.request.PathResolver;
 import io.request.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,37 +15,25 @@ import java.nio.file.Files;
 
 public class ResponseFactory {
 
-    private static final String ABSOULTE_PATH = "/Users/rentalhub/Desktop/2주차/src/main/resources/templates/index.html";
     private static final Logger logger = LoggerFactory.getLogger(ResponseFactory.class);
 
+    private final PathResolver pathResolver = new PathResolver();
 
     public Response create(Request request, DataOutputStream dos) {
-        Status status = hasResource(request);
-        ContentType contentType = getContentType(request.getUrl());
-        byte[] messageBody = getResource(request);
+        FindResult findResult = findResource(request);
 
-        return new HttpResponse(status, contentType, messageBody, dos);
+        return new HttpResponse(findResult, dos);
     }
 
-    private byte[] getResource(Request request) {
+    private FindResult findResource(Request request) {
+        FindResult findResult = new FindResult();
+        String resourcePath = pathResolver.resolve(request.getUrl());
         try {
-            return Files.readAllBytes(new File(String.format(ABSOULTE_PATH, request.getUrl())).toPath());
+            byte[] resource = Files.readAllBytes(new File(resourcePath).toPath());
+            findResult.update(Status.OK, ContentType.find(resourcePath), resource);
         } catch (IOException e) {
-            logger.error("resource not found");
-            return null;
+            logger.info(LogMessage.RESOURCE_NOT_FOUND.getMessage());
         }
-    }
-
-    private Status hasResource(Request request) {
-        try {
-            Files.readAllBytes(new File(String.format(ABSOULTE_PATH, request.getUrl())).toPath());
-            return Status.OK;
-        } catch (IOException e) {
-            return Status.NOT_FOUND;
-        }
-    }
-
-    private ContentType getContentType(String requestUrl) {
-        return ContentType.find(requestUrl);
+        return findResult;
     }
 }
