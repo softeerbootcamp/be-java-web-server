@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 public class RequestParser{
     public static String REQUEST_LINE = "Request-line";
@@ -32,5 +33,17 @@ public class RequestParser{
         if (firstIndexOfDelim != -1) {
             map.put(line.substring(0, firstIndexOfDelim), line.substring(firstIndexOfDelim + 1).trim());
         }
+    }
+
+    public static Map<String, String> parseGETQueryString(String resource) {
+        Map<String, String> map = new HashMap<>();
+        String[] token = resource.split("\\?");
+        StringTokenizer stringTokenizer = new StringTokenizer(token[1], "&");
+        while(stringTokenizer.hasMoreTokens()) {
+            String[] subToken = stringTokenizer.nextToken().split("=");
+            map.put(subToken[0], subToken[1]);
+        }
+
+        return map;
     }
 }
