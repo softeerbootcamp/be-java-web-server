@@ -1,29 +1,40 @@
 package reader;
 
+import db.Database;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reader.fileReader.FileReader;
 import request.HttpRequest;
-import util.error.HttpsErrorMessage;
+import util.UrlType;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.HashMap;
 
 public class RequestGetReader implements RequestReader{
-    private static final String GET_METHOD_REGEX = "GET (/.*) HTTP/1.1";
+    private final String QUERY_STRING_REGEX = "\\?";
+    private final String QUERY_STRING_DATAS_REGEX = "&";
+    private final String DATA_REGEX = "=";
     private static final Logger logger = LoggerFactory.getLogger(RequestGetReader.class);
 
 
 
     @Override
     public byte[] readData(HttpRequest httpRequest) {
+        if (httpRequest.getUrl().getUrlType().equals(UrlType.QUERY_STRING)) {
+            String queryString = httpRequest.getUrl().getUrl().split(QUERY_STRING_REGEX)[1];
+            String[] datas = queryString.split(QUERY_STRING_DATAS_REGEX);
+
+            HashMap<String, String> hashMap = new HashMap<>();
+
+            for (String data : datas) {
+                String[] mapData = data.split(DATA_REGEX);
+                hashMap.put(mapData[0], mapData[1]);
+            }
+
+        }
         return new byte[0];
+
     }
+
+
 
 
 }
