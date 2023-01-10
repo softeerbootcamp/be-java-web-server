@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.FileFinder;
 import util.HttpParser;
 
 public class RequestHandler implements Runnable {
@@ -26,29 +27,25 @@ public class RequestHandler implements Runnable {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             DataOutputStream dos = new DataOutputStream(out);
             HttpParser httpParser = new HttpParser();
-            Map<String, String> map = httpParser.parseHttpRequest(in);
-
-            String uri = httpParser.findRequestedUri(map);
-            byte[] body = Files.readAllBytes(new File("./src/main/resources/" + uri).toPath());
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+            HttpRequest httpRequest = HttpRequest.newInstance(httpParser.parseHttpRequest(in));
+            String uri = httpRequest.getRequestUri();
+            HttpResponse httpResponse = new HttpResponse(FileFinder.findFile(uri));
+            response200Header(dos, httpResponse);
+            responseBody(dos, httpResponse);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
-
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response200Header(DataOutputStream dos, HttpResponse httpResponse) {
         try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
+            dos.writeBytes(httpResponse.response200Headers());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void responseBody(DataOutputStream dos, byte[] body) {
+    private void responseBody(DataOutputStream dos, HttpResponse httpResponse) {
+        byte[] body = httpResponse.getBody();
         try {
             dos.write(body, 0, body.length);
             dos.flush();

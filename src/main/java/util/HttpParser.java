@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class HttpParser {
     private static final String DOMAIN = "http://localhost:8080/";
-    private static final String REQUEST_LINE = "Request Line";
+    public static final String REQUEST_LINE = "Request Line";
 
     public Map<String, String> parseHttpRequest(InputStream in) throws IOException {
         Map<String, String> parsedHttpMap = new HashMap<>();
@@ -27,16 +27,5 @@ public class HttpParser {
             parsedHttpMap.put(key, value);
         }
         return parsedHttpMap;
-    }
-
-    public String findRequestedUri(Map<String, String> map) {
-        String[] value = map.get(REQUEST_LINE).split(" ");
-        if (value[1].contains(".html") || value[1].contains(".ico")) {
-            return "/templates" + value[1];
-        }
-        if (value[1].contains(".js") || value[1].contains(".css")) {
-            return "/static" + value[1];
-        }
-        return value[1];
     }
 }
