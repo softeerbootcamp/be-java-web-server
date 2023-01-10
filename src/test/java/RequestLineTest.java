@@ -26,10 +26,10 @@ public class RequestLineTest {
 
         //then
         assertThat(requestLine.getMethod()).isEqualTo(Method.GET);
-        assertThat(requestLine.getUri().getQuery().get("userId")).isEqualTo(userId);
-        assertThat(requestLine.getUri().getQuery().get("password")).isEqualTo(password);
-        assertThat(requestLine.getUri().getQuery().get("name")).isEqualTo(name);
-        assertThat(requestLine.getUri().getQuery().get("email")).isEqualTo(email);
+        assertThat(requestLine.getUri().getQuery().getParameter("userId")).isEqualTo(userId);
+        assertThat(requestLine.getUri().getQuery().getParameter("password")).isEqualTo(password);
+        assertThat(requestLine.getUri().getQuery().getParameter("name")).isEqualTo(name);
+        assertThat(requestLine.getUri().getQuery().getParameter("email")).isEqualTo(email);
         assertThat(requestLine.getVersion()).isEqualTo("HTTP/1.1");
 
     }
@@ -43,9 +43,9 @@ public class RequestLineTest {
         RequestLine requestLine = new RequestLine(request);
 
         //then
-//        assertThat(requestLine.getMethod()).isEqualTo(Method.GET);
+        assertThat(requestLine.getMethod()).isEqualTo(Method.GET);
         assertThat(requestLine.getUri().getPath()).isEqualTo("/index.html");
-//        assertThat(requestLine.getVersion()).isEqualTo("HTTP/1.1");
+        assertThat(requestLine.getVersion()).isEqualTo("HTTP/1.1");
 
     }
 }

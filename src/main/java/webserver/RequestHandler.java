@@ -37,10 +37,10 @@ public class RequestHandler implements Runnable {
             RequestLine requestLine = new RequestLine(line);
             if(requestLine.getUri().getPath().equals("/user/create")) {
                 User user = new User(
-                        requestLine.getUri().getQuery().get("userId"),
-                        requestLine.getUri().getQuery().get("password"),
-                        requestLine.getUri().getQuery().get("name"),
-                        requestLine.getUri().getQuery().get("email")
+                        requestLine.getUri().getQuery().getParameter("userId"),
+                        requestLine.getUri().getQuery().getParameter("password"),
+                        requestLine.getUri().getQuery().getParameter("name"),
+                        requestLine.getUri().getQuery().getParameter("email")
                 );
                 Database.addUser(user);
             } else {

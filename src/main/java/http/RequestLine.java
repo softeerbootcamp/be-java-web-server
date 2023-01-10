@@ -9,7 +9,7 @@ public class RequestLine {
     public RequestLine(String requestLine) {
         String[] split = requestLine.split(" ");
         this.method = Method.valueOf(split[0]);
-        this.uri = new Uri(split[1]);
+        this.uri = Uri.from(split[1]);
         this.version = split[2];
     }
 
