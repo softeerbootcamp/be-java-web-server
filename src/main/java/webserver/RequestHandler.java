@@ -7,8 +7,8 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
 
-import static webserver.StaticPath.TEMPLATE_PATH;
-import static webserver.StaticPath.STATIC_PATH;
+import static webserver.Paths.TEMPLATE_PATH;
+import static webserver.Paths.STATIC_PATH;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -29,7 +29,7 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
 
             String url = getUrl(in);
-            if(url.contains("/user/create"))
+            if(url.contains("/create"))
             {
                 SignUpController.enrollNewUser(url);
                 url = SignUpController.redirectToIndex();

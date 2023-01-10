@@ -1,13 +1,10 @@
 package webserver;
 
-import CustomException.AlreadyHasSameIdException;
+import customException.AlreadyHasSameIdException;
 import db.Database;
 import model.User;
 
-import javax.xml.crypto.Data;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class SignUpController {

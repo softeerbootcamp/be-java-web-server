@@ -1,12 +1,12 @@
 package webserver;
 
-public enum StaticPath {
+public enum Paths {
     TEMPLATE_PATH("./src/main/resources/templates"),
-    STATIC_PATH("./src/main/resources/static");
+    STATIC_PATH("./src/main/resources");
 
     private String path;
 
-    StaticPath(String s) {
+    Paths(String s) {
         path = s;
     }
 
