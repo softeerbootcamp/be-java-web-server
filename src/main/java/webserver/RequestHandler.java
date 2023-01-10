@@ -1,10 +1,9 @@
 package webserver;
 
 import handler.Handler;
-import handler.UserHandler;
-import handler.ViewHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.HandlerMapper;
 import util.HttpRequestUtils;
 
 import java.io.*;
@@ -35,7 +34,7 @@ public class RequestHandler implements Runnable {
 
             String url = HttpRequestUtils.getUrl(requestLine);
 
-            Handler handler = getHandler(url);
+            Handler handler = HandlerMapper.getHandler(url);
             String viewName = handler.handle(url);
             String viewPath = ViewResolver.process(viewName);
 
@@ -47,15 +46,6 @@ public class RequestHandler implements Runnable {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
-    }
-
-    private Handler getHandler(String url) {
-        if (url.startsWith("/user")) {
-            return new UserHandler();
-        }
-
-        // TODO 추후 다른 기능이 추가되면 수정할 예정
-        return new ViewHandler();
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
