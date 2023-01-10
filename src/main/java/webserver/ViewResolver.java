@@ -6,11 +6,10 @@ public class ViewResolver {
     private static final String TEMPLATE_RESOURCE_PATH = "src/main/resources/templates";
 
     public static String process(String viewName) {
-        // TODO
-        if (viewName.contains("css") || viewName.contains("js")) {
-            return STATIC_RESOURCE_PATH + viewName;
+        if (viewName.endsWith(".html") || viewName.endsWith("/favicon.ico")) {
+            return TEMPLATE_RESOURCE_PATH + viewName;
         }
 
-        return TEMPLATE_RESOURCE_PATH + viewName;
+        return STATIC_RESOURCE_PATH + viewName;
     }
 }
