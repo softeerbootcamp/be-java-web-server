@@ -2,16 +2,15 @@ package webserver;
 
 import webserver.Controller.AuthController;
 import webserver.Controller.Controller;
-import webserver.Controller.StaticController;
+import webserver.domain.StatusCodes;
+import webserver.exception.HttpRequestException;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static webserver.HandlerMapping.ControllerType.AUTH;
-import static webserver.HandlerMapping.ControllerType.findController;
+import static webserver.HandlerMapping.ControllerType.*;
 
 
 public class HandlerMapping {
@@ -19,20 +18,19 @@ public class HandlerMapping {
     private final Map<ControllerType, Controller> controllerMap = new EnumMap<ControllerType, Controller>(ControllerType.class);
 
     public HandlerMapping() {
-        controllerMap.put(AUTH, new AuthController());
+        controllerMap.put(USER, new AuthController());
     }
 
-    public Controller getHandler(String req) throws IOException {
+    public Controller getHandler(String req) throws HttpRequestException{
 
-        Optional<ControllerType> controller = findController(req);
-        if (controller == null)
-            return new StaticController();
+        ControllerType controller = findController(req);
         return controllerMap.get(controller);
+
     }
 
     public enum ControllerType {
 
-        AUTH("/user/");
+        USER("/user");
 
         private String routeName;
 
@@ -44,10 +42,11 @@ public class HandlerMapping {
             return routeName;
         }
 
-        public static Optional<ControllerType> findController(String path){
+        public static ControllerType findController(String path){
             return Arrays.stream(ControllerType.values())
                     .filter(controller -> path.startsWith(controller.getRouteName()))
-                    .findFirst();
+                    .findFirst()
+                    .orElseThrow(() -> new HttpRequestException(StatusCodes.NOT_FOUND.getStatusCode(), StatusCodes.NOT_FOUND.getStatusMsg()));
         }
 
     }
