@@ -4,6 +4,7 @@ import com.github.jknack.handlebars.internal.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.StaticFileService;
+import service.UserAccountService;
 import webserver.httpMock.CustomHttpRequest;
 import webserver.httpMock.CustomHttpResponse;
 import webserver.httpMock.constants.ContentType;
@@ -17,6 +18,7 @@ public class RequestRouter {
     private static RequestRouter requestRouter;
     private final Map<String, RequestService> requestMap = new HashMap<>() {{
         put("[^\\s]+\\.(html|js|css|ico|ttf|woff|svg|eot|woff2|png)$", StaticFileService.get());
+        put("(/user).*", UserAccountService.get());
     }};
 
     private RequestRouter(){}
@@ -35,13 +37,6 @@ public class RequestRouter {
                 return;
             }
         }
-        logger.info("Do not match any url. url is " + req.getUrl());
-        res.setStatusCode(StatusCode.OK);
-        res.setContentType(ContentType.TEXT_PLAIN);
-        res.addToBody(ArrayUtils.toObject("404 not found".getBytes()));
+        RequestService.NOT_FOUND(res);
     }
-
-
-
-
 }
