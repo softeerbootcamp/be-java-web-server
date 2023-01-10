@@ -9,6 +9,7 @@ import java.util.Map;
 
 public class RequestParser{
     public static String REQUEST_LINE = "Request-line";
+
     public static Map<String, String> parse(InputStream in) {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
         Map<String, String> requestMap = new HashMap<>();
@@ -25,26 +26,11 @@ public class RequestParser{
 
     private static void split(String line, Map<String, String> map) {
         int firstIndexOfDelim = line.indexOf(":");
-        if(firstIndexOfDelim == -1 && line.length() >= 6) {
+        if(firstIndexOfDelim == -1 && line.length() >= 3) {
             map.put(REQUEST_LINE, line);
         }
         if (firstIndexOfDelim != -1) {
             map.put(line.substring(0, firstIndexOfDelim), line.substring(firstIndexOfDelim + 1).trim());
         }
-    }
-
-    public static String getMethod(String requestLine) {
-        String[] token = requestLine.split(" ");
-        return token[0];
-    }
-
-    public static String getResource(String requestLine) {
-        String[] token = requestLine.split(" ");
-        return token[1];
-    }
-
-    public static String getHTTPVersion(String requestLine) {
-        String[] token = requestLine.split(" ");
-        return token[2];
     }
 }
