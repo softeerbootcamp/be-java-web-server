@@ -1,10 +1,10 @@
 package io.request;
 
-public class RequestImpl implements Request {
+public class HttpRequest implements Request {
 
     private String url;
 
-    public RequestImpl(String msg) {
+    public HttpRequest(String msg) {
         url = parseUrl(msg);
     }
 

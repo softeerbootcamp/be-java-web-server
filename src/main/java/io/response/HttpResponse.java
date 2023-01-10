@@ -8,18 +8,18 @@ import org.slf4j.LoggerFactory;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class ResponseImpl implements Response {
-    private static final Logger logger = LoggerFactory.getLogger(ResponseImpl.class);
+public class HttpResponse implements Response {
+    private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
     private Status status;
     private ContentType contentType;
     private byte[] messageBody;
-
     private DataOutputStream out;
 
-    public ResponseImpl(Status status, ContentType contentType, byte[] messageBody, DataOutputStream out) {
+    public HttpResponse(Status status, ContentType contentType, byte[] messageBody, DataOutputStream out) {
         this.status = status;
         this.contentType = contentType;
         this.messageBody = messageBody;
+        this.out = out;
     }
 
     public Status getStatus() {

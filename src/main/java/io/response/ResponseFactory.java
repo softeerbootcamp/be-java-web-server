@@ -22,7 +22,7 @@ public class ResponseFactory {
         ContentType contentType = getContentType(request.getUrl());
         byte[] messageBody = getResource(request);
 
-        return new ResponseImpl(status, contentType, messageBody, dos);
+        return new HttpResponse(status, contentType, messageBody, dos);
     }
 
     private byte[] getResource(Request request) {

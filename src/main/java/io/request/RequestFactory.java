@@ -13,7 +13,7 @@ public class RequestFactory {
     public Request create(InputStream in) throws IOException {
         BufferedReader bufferedReader = getBufferedReader(in);
         String wholeMessage = Descriptor.getWholeMessage(bufferedReader);
-        return new RequestImpl(wholeMessage);
+        return new HttpRequest(wholeMessage);
     }
 
     private BufferedReader getBufferedReader(InputStream in) {
