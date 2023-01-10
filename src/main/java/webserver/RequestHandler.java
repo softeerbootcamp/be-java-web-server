@@ -1,8 +1,8 @@
 package webserver;
 
 import java.io.*;
-import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.net.Socket;
 
 import controller.Controller;
 import util.ControllerMapper;
@@ -36,26 +36,6 @@ public class RequestHandler implements Runnable {
             Response response = controller.getResponse(requestLine);
 
             response.writeOutputStream(dos);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK " + System.lineSeparator());
-            dos.writeBytes("Content-Type: text/html;charset=utf-8" + System.lineSeparator());
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + System.lineSeparator());
-            dos.writeBytes(System.lineSeparator());
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
