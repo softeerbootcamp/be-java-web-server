@@ -1,8 +1,8 @@
-package webserver.httpMock;
+package httpMock;
 
 import com.github.jknack.handlebars.internal.lang3.ArrayUtils;
-import webserver.httpMock.constants.ContentType;
-import webserver.httpMock.constants.StatusCode;
+import httpMock.constants.StatusCode;
+import httpMock.constants.ContentType;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
