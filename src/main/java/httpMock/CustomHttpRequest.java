@@ -84,6 +84,10 @@ public class CustomHttpRequest {
         if (result.length != 3) {
             throw new IllegalArgumentException("First Line of Http must have 2 space : " + firstLine);
         }
+        if (result[1].equals("/") || result[1].equals(""))
+            result[1] = "/index.html";
         return result;
     }
+
+
 }
