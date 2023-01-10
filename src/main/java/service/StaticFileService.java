@@ -1,9 +1,6 @@
 package service;
 
 import com.github.jknack.handlebars.internal.lang3.ArrayUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import webserver.RequestHandler;
 import webserver.RequestService;
 import webserver.httpMock.CustomHttpRequest;
 import webserver.httpMock.CustomHttpResponse;
@@ -14,27 +11,39 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Map;
 
 public class StaticFileService implements RequestService {
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private static final StaticFileService fileService = new StaticFileService();
 
-    public static StaticFileService get(){
+    public static StaticFileService get() {
         return fileService;
     }
+
+    private Map<String, RequestService> routingTable = new HashMap<>() {{
+        put(".+", (req, res) -> getFile(req, res));
+    }};
+
     @Override
     public void handleRequest(CustomHttpRequest req, CustomHttpResponse res) {
-        getFile(req, res);
+        for (String regex : routingTable.keySet()) {
+            if (req.getUrl().matches(regex)) {
+                routingTable.get(regex).handleRequest(req, res);
+                return;
+            }
+        }
+        RequestService.NOT_FOUND(res);
     }
 
-    public void getFile(CustomHttpRequest req, CustomHttpResponse res){
+    public void getFile(CustomHttpRequest req, CustomHttpResponse res) {
         String filePath = null;
         try {
             URL resoucePath = getClass().getClassLoader().getResource("./static");
             String fileType = getFileTypeFromUrl(req.getUrl());
             res.setContentType(ContentType.getContentTypeByFileType(fileType));
 
-            if(req.getUrl().endsWith("ico") || req.getUrl().endsWith("html")){
+            if (req.getUrl().endsWith("ico") || req.getUrl().endsWith("html")) {
                 resoucePath = getClass().getClassLoader().getResource("./templates");
             }
 
@@ -49,8 +58,8 @@ public class StaticFileService implements RequestService {
         }
     }
 
-    private String getFileTypeFromUrl(String url){
+    private String getFileTypeFromUrl(String url) {
         int index = url.lastIndexOf(".");
-        return url.substring(index+1);
+        return url.substring(index + 1);
     }
 }
