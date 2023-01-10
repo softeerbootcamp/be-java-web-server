@@ -8,7 +8,7 @@ public class ResponseGeneratorImpl implements ResponseGenerator {
     public byte[] generate(InputStream in, int port) {
         Request request = Request.of(in);
         System.out.println(port + ": " + request);
-        byte[] body = null;
+        byte[] body = new byte[0];
         try {
             for (HttpMethod method : HttpMethod.values()) {
                 if (request.getMethod().equals(method.getMethod())) {
