@@ -12,9 +12,7 @@ public class UserRequestHandler {
 
     public String handle(String url) {
         if (url.contains("/create")) {
-            String[] splited = url.split("\\?");
-            String queryString = splited[1];
-            logger.debug("queryString : {}" , queryString);
+            String queryString = HttpRequestUtils.getQueryString(url);
 
             Map<String, String> userInfo = HttpRequestUtils.parseQueryString(queryString);
 

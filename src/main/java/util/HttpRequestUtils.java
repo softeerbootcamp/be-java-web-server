@@ -20,6 +20,14 @@ public class HttpRequestUtils {
         return url;
     }
 
+    public static String getQueryString(String url) {
+        String[] splited = url.split("\\?");
+        String queryString = splited[1];
+        logger.debug("queryString : {}" , queryString);
+
+        return queryString;
+    }
+
     public static Map<String, String> parseQueryString(String query) {
         Map<String, String> result = new HashMap<>();
 
