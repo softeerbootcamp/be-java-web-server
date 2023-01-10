@@ -25,7 +25,7 @@ public class Response {
             logger.error(e.getMessage());
         }
     }
-    public void response302Header(int lengthOfBodyContent) {
+    public void response302Header() {
         try {
             dos.writeBytes("HTTP/1.1 302 FOUND \r\n");
             dos.writeBytes("Location: /index.html\r\n");
@@ -47,6 +47,14 @@ public class Response {
     public void responseBody(byte[] body) {
         try {
             dos.write(body, 0, body.length);
+            dos.flush();
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+    public void responseBodyTemp() {
+        try {
+            //dos.write(body, 0, body.length);
             dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
