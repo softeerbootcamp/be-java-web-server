@@ -8,6 +8,7 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map;
 
 import static util.HttpRequestUtils.parseQuerystring;
@@ -42,6 +43,7 @@ public class RequestHandler implements Runnable {
 
             byte[] body = viewResolver.findFilePath(url);
 
+
             response200HeaderByExtension(url, body, dos);
             responseBody(dos, body);
         } catch (IOException e) {
@@ -51,18 +53,19 @@ public class RequestHandler implements Runnable {
 
     //TODO 리팩토링 필요!! src/main/resources/static/user/js/scripts.js 이렇게 옴.
     private void response200HeaderByExtension(String url, byte[] body, DataOutputStream dos) throws IOException {
-        String substring = url.substring(url.lastIndexOf(".")+1);
-        logger.debug(">>> substring : {}", substring);
+        String extension = url.substring(url.lastIndexOf(".")+1);
+        logger.debug(">>> extension : {}", extension);
 
-        if (substring.equals("html") || substring.equals("ico")) {
-            response200Header(dos, body.length, "text/html");
-        } else{
-            if (substring.equals("css")) {
-                response200Header(dos, body.length, "text/css");
-            } else {
-                response200Header(dos, body.length, "text/javascript");
-            }
+        String contentType;
+        if (extension.equals("css")) {
+            contentType = "text/css";
+        } else if (extension.equals("js")) {
+            contentType = "text/javascript";
+        } else {
+            contentType = "text/html";
         }
+        response200Header(dos, body.length, contentType);
+
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
