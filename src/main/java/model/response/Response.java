@@ -34,7 +34,7 @@ public class Response {
         if(hasContent()) {
             dataOutputStream.write(body, 0, body.length);
             dataOutputStream.flush();
-        }g
+        }
     }
 
     private boolean hasContent() {
