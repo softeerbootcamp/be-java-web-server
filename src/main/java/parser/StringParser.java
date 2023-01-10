@@ -19,12 +19,13 @@ public class StringParser {
     }
 
     public String extensionSplit(String urlString) {
-        int extensionIdx = 0;
+        int extensionDotIdx;
+        int extensionDataIdx;
         for (int i = 0; i < urlString.length(); i++) {
-            extensionIdx = extensionDotSplit(urlString, i);
-            if(extensionIdx != 0){
-                return urlString.substring(extensionIdx+1);
-            }
+            extensionDotIdx = extensionDotSplit(urlString, i);
+            extensionDataIdx = extensionDataSplit(urlString, i);
+            if(extensionDotIdx != 0) return urlString.substring(extensionDotIdx+1);
+            if(extensionDataIdx != 0) return urlString.substring(extensionDataIdx+1);
         }
         return "";
     }
@@ -32,6 +33,14 @@ public class StringParser {
     public int extensionDotSplit(String urlString, int idx) {
         int getIdx = 0;
         if(urlString.charAt(idx) == '.'){
+            getIdx = idx;
+        }
+        return getIdx;
+    }
+
+    public int extensionDataSplit(String urlString, int idx) {
+        int getIdx = 0;
+        if(urlString.charAt(idx) == '?'){
             getIdx = idx;
         }
         return getIdx;

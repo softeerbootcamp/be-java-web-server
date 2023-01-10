@@ -16,7 +16,6 @@ import utils.Utility;
 
 public class RequestHandler implements Runnable{
 
-
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
@@ -64,15 +63,18 @@ public class RequestHandler implements Runnable{
 
             String brRead = br.readLine();
 
-            logger.debug("request parameter = {} ",brRead);
-
             String urlString = stringParser.stringSplit(brRead);
 
-            String extensionString = stringParser.extensionSplit(urlString);
+            logger.debug("origin url : {}",urlString);
+
+            String parserString = stringParser.extensionSplit(urlString);
+
+            logger.debug("parserString : {}",parserString);
 
             String directoryString = stringParser.directorySplit(urlString);
 
-            logger.debug("directory = {} ",directoryString);
+            logger.debug("directoryString : {}",directoryString);
+
 
             while (!brRead.equals("") && brRead != null) {
                 brRead = br.readLine();
@@ -82,19 +84,17 @@ public class RequestHandler implements Runnable{
 
             byte[] body = {};
 
-            logger.debug("html : {} " , extensionString);
-
-            if(extensionString.equals("html")){
-                logger.debug("html url : {} " , "src/main/resources" + directoryString + "." +extensionString);
-                body = Files.readAllBytes(new File("src/main/resources/templates" + directoryString + "." +extensionString).toPath());
+            if(parserString.equals("html")){
+                logger.debug("html url : {} " , "src/main/resources/templates" + directoryString + "." +parserString);
+                body = Files.readAllBytes(new File("src/main/resources/templates" + directoryString + "." +parserString).toPath());
             }
-            if(extensionString.equals("css")){
-                logger.debug("css url : {} " , "src/main/resources" + directoryString + "." +extensionString);
-                body = Files.readAllBytes(new File("src/main/resources/templates" + directoryString + "." +extensionString).toPath());
+            if(parserString.equals("css")){
+                logger.debug("css url : {} " , "src/main/resources/static" + directoryString + "." +parserString);
+                body = Files.readAllBytes(new File("src/main/resources/static" + directoryString + "." +parserString).toPath());
 
-            }if(extensionString.equals("js")){
-                logger.debug("js url : {} " , "src/main/resources" + directoryString + "." +extensionString);
-                body = Files.readAllBytes(new File("src/main/resources/templates" + directoryString + "." +extensionString).toPath());
+            }if(parserString.equals("js")){
+                logger.debug("js url : {} " , "src/main/resources/static" + directoryString + "." +parserString);
+                body = Files.readAllBytes(new File("src/main/resources/static" + directoryString + "." +parserString).toPath());
             }
 
             response200Header(dos, body.length);
