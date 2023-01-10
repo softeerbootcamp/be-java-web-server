@@ -14,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpRequestUtil;
 
+import javax.xml.crypto.Data;
+
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private static final String ABSOLUTE_PATH = "/Users/rentalhub/HMG/be-java-web-server/src/main/resources";
@@ -49,6 +51,7 @@ public class RequestHandler implements Runnable {
             fileURL += (fileExtension.equals("html")||fileExtension.equals("ico"))?TEMPLATES:STATIC;
             byte[] body = Files.readAllBytes(new File(fileURL+requestHeaderMessage.getHttpOnlyURL()).toPath());
             // TODO 사용자 요청에 대한 처리는 이 곳까지 구현하면 된다.
+            printMembers();
             DataOutputStream dos = new DataOutputStream(out);
             response200Header(dos, body.length,contentType);
             responseBody(dos, body);
@@ -61,7 +64,7 @@ public class RequestHandler implements Runnable {
         if (requestHeaderMessage.getHttpOnlyURL().contains("create")){
             Map<String,String> userInfo = HttpRequestUtil.parseQueryString(requestHeaderMessage.getHttpReqParams());
             Database.addUser(new User(userInfo.get(USER_ID),userInfo.get(PASSWORD),userInfo.get(NAME),userInfo.get(EMAIL)));
-            Stream.of(userInfo.entrySet()).forEach(System.out::println);
+            //Stream.of(userInfo.entrySet()).forEach(System.out::println);
             requestHeaderMessage.isRedirection();
             return true;
         }
@@ -86,5 +89,9 @@ public class RequestHandler implements Runnable {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private void printMembers(){
+        Stream.of(Database.findAll()).forEach(user-> System.out.println(user));
     }
 }
