@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RequestFactory {
 
@@ -20,20 +22,38 @@ public class RequestFactory {
         Method method = Method.find(chunks[0]);
         String url = chunks[1];
         RequestType requestType = getRequestType(url);
-        QueryString queryString = new QueryString(url);
+        Map<String, String> queryString = getQueryString(url);
 
         return new HttpRequest(method, url, requestType, queryString);
     }
 
+    private Map<String, String> getQueryString(String url) {
+        if (url.contains("?")) {
+            return parseQueryString(url);
+        }
+        return Map.of();
+    }
 
-    public RequestType getRequestType(String url) {
-        if (inStaticResourceList(url)) {
+    private Map<String, String> parseQueryString(String url) {
+        Map<String, String> queryString = new HashMap<>();
+        String parameter = url.split("\\?", 2)[1];
+        String[] split = parameter.split("&");
+        for (String s : split) {
+            String[] split1 = s.split("=");
+            queryString.put(split1[0], split1[1]);
+        }
+        return queryString;
+    }
+
+
+    private RequestType getRequestType(String url) {
+        if (needsForStaticResource(url)) {
             return RequestType.STATIC_RESOURCE_REQUEST;
         }
         return RequestType.OPERATION_REQUEST;
     }
 
-    private boolean inStaticResourceList(String url) {
+    private boolean needsForStaticResource(String url) {
         return staticExtensions.stream().filter(e -> url.contains(e)).findAny().isPresent();
     }
 
