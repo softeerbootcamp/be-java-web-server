@@ -10,25 +10,36 @@ public class HttpResponse {
     private byte[] body;
     private String statusLine;
     private Map<String, String> headers;
+    private static final String HTML = "text/html";
+    private static final String CSS = "text/css";
 
-    public HttpResponse(byte[] body) {
+    public HttpResponse(byte[] body, String uri) {
         this.body = body;
         initStatusLine();
-        initResponse200Headers(body);
+        initResponse200Headers(body, mime(uri));
     }
 
     private void initStatusLine() {
         statusLine = "HTTP/1.1 200 OK ";
     }
-    private void initResponse200Headers(byte[] body) {
+
+    private void initResponse200Headers(byte[] body, String mime) {
         headers = new HashMap<>();
-        headers.put("Content-Type", "text/html;charset=utf-8");
+        headers.put("Content-Type", mime + ";charset=utf-8");
         headers.put("Content-Length", String.valueOf(body.length));
     }
+
+    private String mime(String uri) {
+        if (uri.contains("css")) {
+            return CSS;
+        }
+        return HTML;
+    }
+
     public String response200Headers() {
         StringBuilder header = new StringBuilder();
         for (String key : headers.keySet()) {
-            header.append(key+": "+headers.get(key)+"\r\n");
+            header.append(key + ": " + headers.get(key) + "\r\n");
         }
         header.append("\r\n");
         return statusLine + "\r\n" + header.toString();

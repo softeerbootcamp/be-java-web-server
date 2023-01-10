@@ -29,7 +29,7 @@ public class RequestHandler implements Runnable {
             HttpParser httpParser = new HttpParser();
             HttpRequest httpRequest = HttpRequest.newInstance(httpParser.parseHttpRequest(in));
             String uri = httpRequest.getRequestUri();
-            HttpResponse httpResponse = new HttpResponse(FileFinder.findFile(uri));
+            HttpResponse httpResponse = new HttpResponse(FileFinder.findFile(uri), uri);
             response200Header(dos, httpResponse);
             responseBody(dos, httpResponse);
         } catch (IOException e) {
