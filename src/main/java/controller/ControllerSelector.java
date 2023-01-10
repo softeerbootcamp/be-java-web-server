@@ -12,7 +12,8 @@ public class ControllerSelector {
     private static final int _TOKEN_INDEX = 1;
 
     public static Controller setController(RequestLine requestLine){
-        if(requestLine.getURL().split("\\.")[_TOKEN_INDEX].equals("html")){
+        if(requestLine.getURL().split("\\.")[_TOKEN_INDEX].equals("html")||
+                requestLine.getURL().split("\\.")[_TOKEN_INDEX].equals("ico")){
             return templateController;
         }
         if (requestLine.getUserRequest()){
