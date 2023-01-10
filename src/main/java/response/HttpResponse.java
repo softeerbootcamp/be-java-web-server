@@ -3,6 +3,7 @@ package response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reader.fileReader.TemplatesFileReader;
+import request.HttpRequest;
 import util.HttpStatus;
 
 import java.io.DataOutputStream;
@@ -20,17 +21,26 @@ public class HttpResponse {
         this.data = data;
     }
 
-    public void makeResponse() {
-        HttpStatus httpStatus = HttpStatus.selectMethod(this);
-        responseHeader(httpStatus);
+    public void makeResponse(HttpRequest httpRequest) {
+        HttpStatus responseHttpStatus = selectMethod(this);
+        responseHeader(responseHttpStatus, httpRequest);
         responseBody();
     }
 
-    private void responseHeader(HttpStatus httpStatus) {
+    private HttpStatus selectMethod(HttpResponse httpResponse) {
+        if(httpResponse.getData().length==0){
+            return HttpStatus.NOT_FOUND;
+        }else{
+            return HttpStatus.OK;
+        }
+    }
+
+    private void responseHeader(HttpStatus httpStatus,HttpRequest httpRequest) {
 
         try {
             clientOutputStream.writeBytes("HTTP/1.1 " + httpStatus.getCode() + " " + httpStatus.getMessage() + " \r\n");
-            clientOutputStream.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+//            clientOutputStream.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            clientOutputStream.writeBytes("Content-Type: " + httpRequest.getHeaderContents().get(9) + ";charset=utf-8\r\n");
             clientOutputStream.writeBytes("Content-Length: " + data.length + "\r\n");
             clientOutputStream.writeBytes("\r\n");
         } catch (IOException e) {

@@ -16,13 +16,7 @@ public enum HttpStatus {
         this.message = message;
     }
 
-    public static HttpStatus selectMethod(HttpResponse httpResponse) {
-        if(httpResponse.getData().length==0){
-            return NOT_FOUND;
-        }else{
-            return OK;
-        }
-    }
+
 
     public int getCode() {
         return code;
