@@ -50,10 +50,9 @@ public class RequestHandler implements Runnable {
             String fileExtension = requestHeaderMessage.getFileExtension();
             String contentType = "text/" + (fileExtension.equals("js")?"javascript":fileExtension);
             fileURL += (fileExtension.equals("html")||fileExtension.equals("ico"))?TEMPLATES:STATIC;
-            byte[] body;
+            byte[] body = new byte[0];
             if (!requestHeaderMessage.getHttpOnlyURL().contains("create"))
                 body = Files.readAllBytes(new File(fileURL+requestHeaderMessage.getHttpOnlyURL()).toPath());
-            else body = new byte[]{(byte) 0};
             // TODO 사용자 요청에 대한 처리는 이 곳까지 구현하면 된다.
             printMembers();
             DataOutputStream dos = new DataOutputStream(out);
@@ -100,7 +99,6 @@ public class RequestHandler implements Runnable {
             dos.writeBytes("HTTP/1.1 301 FOUND \r\n");
             dos.writeBytes("Location: "+redirectLink+"\r\n");
             dos.writeBytes("\r\n");
-            System.out.println("Redirection!!!!!!!!!!!!!!!!!!");
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
