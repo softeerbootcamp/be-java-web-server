@@ -5,6 +5,8 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
+import controller.Controller;
+import util.ControllerMapper;
 import model.request.RequestLine;
 
 import org.slf4j.Logger;
@@ -29,7 +31,9 @@ public class RequestHandler implements Runnable {
 
             DataOutputStream dos = new DataOutputStream(out);
             RequestLine requestLine = RequestLine.of(line);
-            byte[] body = Files.readAllBytes(new File("src/main/resources/templates" + requestLine.getUri()).toPath());
+
+            Controller controller = ControllerMapper.selectController(requestLine);
+            byte[] body = Files.readAllBytes(new File(filePath).toPath());
 
             response200Header(dos, body.length);
             responseBody(dos, body);
