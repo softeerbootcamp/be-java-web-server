@@ -7,7 +7,7 @@ public enum ContentType {
     HTML("text/html", List.of("html")),
     CSS("text/css", List.of("css")),
     JS("text/javascript", List.of("js")),
-    PLAIN("plaintext", List.of());
+    PLAIN("plaintext", List.of("*"));
 
     private String type;
     private List<String> extensions;
@@ -21,10 +21,14 @@ public enum ContentType {
         return type;
     }
 
-    public static ContentType find(String extension) {
+    public static ContentType find(String url) {
         return Arrays.stream(ContentType.values())
-                .filter(contentType -> contentType.extensions.contains(extension))
+                .filter(contentType -> contentType.extensions.contains(getExtension(url)))
                 .findFirst()
                 .orElse(PLAIN);
+    }
+
+    private static String getExtension(String url) {
+        return url.split("\\.")[1];
     }
 }
