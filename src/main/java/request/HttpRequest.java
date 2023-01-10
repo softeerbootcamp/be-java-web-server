@@ -1,5 +1,6 @@
 package request;
 
+import reader.RequestReader;
 import util.HttpMethod;
 
 import java.io.BufferedReader;
@@ -14,10 +15,13 @@ public class HttpRequest {
     private final List<String> headerContents;
     private final HttpMethod httpMethod;
 
+    private final String url;
+
 
     public HttpRequest(List<String> headerContents) {
         this.headerContents = headerContents;
         this.httpMethod = HttpMethod.findMethod(this);
+        this.url = RequestReader.findPathInRequest(this);
     }
 
     public static HttpRequest getHttpRequest(InputStream inputStream) throws IOException {
@@ -38,5 +42,9 @@ public class HttpRequest {
 
     public HttpMethod getHttpMethod() {
         return httpMethod;
+    }
+
+    public String getUrl() {
+        return url;
     }
 }
