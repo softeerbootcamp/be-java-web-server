@@ -67,7 +67,6 @@ public class RequestHandler implements Runnable{
             String extensionString = stringParser.extensionSplit(urlString);
 
             while (!brRead.equals("") && brRead != null) {
-                logger.debug("header : {}", brRead);
                 brRead = br.readLine();
             }
 
