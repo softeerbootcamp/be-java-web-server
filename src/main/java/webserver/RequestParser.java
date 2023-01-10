@@ -17,7 +17,7 @@ public class RequestParser {
 
     }
 
-    private static Map<String, String> parseHeader(BufferedReader br) throws IOException {
+    public static Map<String, String> parseHeader(BufferedReader br) throws IOException {
         Map<String, String> headers = new HashMap<>();
         String line;
         line = br.readLine();
