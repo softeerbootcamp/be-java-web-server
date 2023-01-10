@@ -33,4 +33,11 @@ public class User {
     public String toString() {
         return "User [userId=" + userId + ", password=" + password + ", name=" + name + ", email=" + email + "]";
     }
+
+    public void print() {
+        System.out.println("userId : " + userId);
+        System.out.println("password : " + password);
+        System.out.println("name : " + name);
+        System.out.println("email : " + email);
+    }
 }

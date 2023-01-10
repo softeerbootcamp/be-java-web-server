@@ -9,10 +9,10 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import jdk.jshell.execution.Util;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import parser.StringParser;
-import utils.Utility;
 
 public class RequestHandler implements Runnable{
 
@@ -75,7 +75,6 @@ public class RequestHandler implements Runnable{
 
             logger.debug("directoryString : {}",directoryString);
 
-
             while (!brRead.equals("") && brRead != null) {
                 brRead = br.readLine();
             }
@@ -84,15 +83,15 @@ public class RequestHandler implements Runnable{
 
             byte[] body = {};
 
-            if(parserString.equals("html")){
+            if(parserString.equals("html") && directoryString != null){
                 logger.debug("html url : {} " , "src/main/resources/templates" + directoryString + "." +parserString);
                 body = Files.readAllBytes(new File("src/main/resources/templates" + directoryString + "." +parserString).toPath());
             }
-            if(parserString.equals("css")){
+            if(parserString.equals("css") && directoryString != null){
                 logger.debug("css url : {} " , "src/main/resources/static" + directoryString + "." +parserString);
                 body = Files.readAllBytes(new File("src/main/resources/static" + directoryString + "." +parserString).toPath());
 
-            }if(parserString.equals("js")){
+            }if(parserString.equals("js") && directoryString != null){
                 logger.debug("js url : {} " , "src/main/resources/static" + directoryString + "." +parserString);
                 body = Files.readAllBytes(new File("src/main/resources/static" + directoryString + "." +parserString).toPath());
             }
