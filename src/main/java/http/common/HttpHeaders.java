@@ -2,6 +2,7 @@ package http.common;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class HttpHeaders {
     private final Map<String, String> headers;
@@ -24,5 +25,9 @@ public class HttpHeaders {
 
     public int size() {
         return headers.size();
+    }
+
+    public Set<String> keys() {
+        return this.headers.keySet();
     }
 }
