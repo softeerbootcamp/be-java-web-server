@@ -13,7 +13,7 @@ public class User {
         this.email = email;
     }
 
-    public User from(String userId, String password, String name, String email) {
+    public static User from(String userId, String password, String name, String email) {
         return new User(userId, password, name, email);
     }
 
