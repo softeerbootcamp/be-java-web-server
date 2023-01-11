@@ -1,16 +1,23 @@
 package enums;
 
 public enum Status {
-    OK(200),
-    NOT_FOUND(404);
+    OK("200", "OK"),
+    NOT_FOUND("404", "Not found"),
+    REDIRECT("301", "Moved Permanently");
 
-    private Integer code;
+    private String code;
+    private String message;
 
-    Status(Integer code) {
+    Status(String code, String message) {
         this.code = code;
+        this.message = message;
     }
 
-    public Integer getCode() {
+    public String getCode() {
         return code;
+    }
+
+    public String getMessage() {
+        return message;
     }
 }
