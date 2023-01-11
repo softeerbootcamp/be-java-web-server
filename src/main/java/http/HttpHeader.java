@@ -2,11 +2,11 @@ package http;
 
 import java.util.Map;
 
-public class HttpRequestHeader {
+public class HttpHeader {
 
     private final Map<String, String> headers;
 
-    public HttpRequestHeader(Map<String, String> headers) {
+    public HttpHeader(Map<String, String> headers) {
         this.headers = headers;
     }
 }
