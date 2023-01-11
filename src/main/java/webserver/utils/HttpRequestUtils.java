@@ -1,6 +1,5 @@
 package webserver.utils;
 
-import com.github.jknack.handlebars.internal.antlr.misc.Pair;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import webserver.domain.request.Request;
@@ -10,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -19,7 +19,6 @@ public class HttpRequestUtils {
 
         String requestLine = "";
         String header = "";
-        String body = "";
 
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
@@ -37,7 +36,7 @@ public class HttpRequestUtils {
 
         //TODO : body도 readLine으로 받아서 값을 할당할 것
 
-        Request request = Request.of(requestLine, header, body);
+        Request request = Request.of(requestLine, header);
         return request;
     }
 
@@ -86,5 +85,18 @@ public class HttpRequestUtils {
         public String getValue() {
             return value;
         }
+    }
+
+    private static String[] parseRequestLine(String req){
+        return req.split(" ");
+    }
+
+    public static Map<String, String> parseStringToMap(String req){
+        Map<String, String> map = new HashMap<>();
+        Arrays.stream(req.split("\n")).forEach(item->{
+            String[] parsedHeader = parseRequestLine(item);
+            map.put(parsedHeader[0], parsedHeader[1]);
+        });
+        return map;
     }
 }
