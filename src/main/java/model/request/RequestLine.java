@@ -7,13 +7,13 @@ public class RequestLine {
     private final String uri;
     private final String httpVersion;
 
-    public RequestLine(String method, String uri, String httpVersion) {
+    private RequestLine(String method, String uri, String httpVersion) {
         this.method = Method.of(method);
         this.uri = uri;
         this.httpVersion = httpVersion;
     }
 
-    public static RequestLine of(String line) {
+    public static RequestLine from(String line) {
         String[] lineSplit = line.split(" ");
         String method = lineSplit[0];
         String uri = lineSplit[1];
@@ -30,12 +30,7 @@ public class RequestLine {
         return httpVersion;
     }
 
-    public boolean hasQueryString() {
-        return uri.contains("\\?");
-    }
-
     public String getControllerCriteria() {
-        String[] uriSplit = uri.split("/");
-        return uriSplit[1];
+        return uri.split("/")[1];
     }
 }
