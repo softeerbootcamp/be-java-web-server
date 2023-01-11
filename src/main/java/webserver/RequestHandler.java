@@ -30,7 +30,7 @@ public class RequestHandler implements Runnable {
             HttpResponse httpResponse = new HttpResponse();
             Handler handler = HandlerMapper.getHandler(httpRequest);
 
-            String viewName = handler.handle(httpRequest);
+            String viewName = handler.handle(httpRequest, httpResponse);
             String viewPath = ViewResolver.process(viewName);
 
             byte[] body = Files.readAllBytes(new File(viewPath).toPath());

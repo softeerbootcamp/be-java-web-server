@@ -1,10 +1,11 @@
 package handler;
 
 import http.request.HttpRequest;
+import http.response.HttpResponse;
 
 public class ResourceHandler implements Handler{
     @Override
-    public String handle(HttpRequest request) {
+    public String handle(HttpRequest request, HttpResponse response) {
         String url = request.getUrl();
         if (url.equals("/")) {
             return "/index.html";
