@@ -8,7 +8,6 @@ import java.util.stream.Stream;
 
 import model.repository.MemoryUserRepository;
 import model.domain.User;
-import model.repository.UserRepository;
 import model.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
