@@ -6,7 +6,6 @@ import utils.FileIoUtils;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 public class HttpResponse {
     private DataOutputStream dos;
@@ -18,39 +17,26 @@ public class HttpResponse {
 
     public HttpResponse(DataOutputStream dos) {
         this.dos = dos;
-        this.version = "HTTP_1_1";
+        this.version = "HTTP/1.1";
     }
 
     public void setResponse(String path) throws IOException {
         this.contentType = ContentType.from(path);
+        this.httpStatusCode = HttpStatusCode.OK;
         String filePath = contentType.getDirectory() + path;
         logger.info("filePath: {}", filePath);
         byte[] body = FileIoUtils.loadFile(filePath);
+        logger.info("body: {}", body.length);
         response(body);
     }
 
     private void response(byte[] body) throws IOException {
-        dos.writeBytes("HTTP/1.1 " + version + "\r\n");
+        dos.writeBytes(version + httpStatusCode + "\r\n");
         dos.writeBytes("Content-Type: " + contentType.getContentType() + "\r\n");
+        logger.info("Content-정Type: " + contentType.getContentType());
+        dos.writeBytes("\r\n");
         dos.write(body, 0, body.length);
         dos.flush();
     }
-
-    public void setContentType(ContentType contentType) {
-        this.contentType = contentType;
-    }
-
-    public OutputStream getOutputStream() {
-        return new DataOutputStream(dos);
-    }
-
-    public void setStatusCode(HttpStatusCode httpStatusCode) {
-        this.httpStatusCode = httpStatusCode;
-    }
-
-    public HttpStatusCode getStatusCode() {
-        return httpStatusCode;
-    }
-
 
 }
