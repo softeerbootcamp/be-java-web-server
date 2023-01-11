@@ -13,6 +13,7 @@ public class ControllerMapper {
     private static final Map<String, Controller> controllerMap = new HashMap<>();
 
     static {
+        controllerMap.put("/", new HomeController());
         controllerMap.put("index.html", new HomeController());
     }
 
