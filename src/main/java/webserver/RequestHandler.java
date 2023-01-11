@@ -73,7 +73,6 @@ public class RequestHandler implements Runnable{
             boolean check = Utilities.checkData(url);
 
             while (!brRead.equals("") && brRead != null) brRead = br.readLine();
-//            body = Files.readAllBytes(new File("./templates" + url).toPath());
 
             if(!check){
                 String userId = userService.joinUser(urlString[1]);
@@ -82,6 +81,8 @@ public class RequestHandler implements Runnable{
 
             body = FileIoUtils.loadFileFromClasspath("./templates" + url);
             dos = new DataOutputStream(out);
+
+//            response302Header(dos, body.length);
             response200Header(dos, body.length);
             responseBody(dos, body);
 
@@ -89,8 +90,17 @@ public class RequestHandler implements Runnable{
             logger.error(e.getMessage());
         } catch (URISyntaxException e) {
             e.printStackTrace();
-        } catch (NullPointerException e){
+        }
+    }
 
+    private static void response302Header(DataOutputStream dos,int lengthOfBodyContent) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 Found \r\n");
+            dos.writeBytes("Location: /index.html\r\n");
+            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
         }
     }
 
