@@ -43,11 +43,9 @@ public class UserAccountController implements RequestController {
 
         UserService.addUser(new User(userId, password, name, email));
 
-        CustomHttpResponse res = new CustomHttpResponse();
-        res.setStatusCode(StatusCode.FOUND);
-        res.setContentType(ContentType.TEXT_PLAIN);
-        res.addHeader("Location", "/index.html");
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Location", "/index.html");
 
-        return res;
+        return CustomHttpResponse.of(StatusCode.FOUND, ContentType.TEXT_PLAIN, headers, "".getBytes());
     }
 }
