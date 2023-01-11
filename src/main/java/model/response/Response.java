@@ -19,8 +19,12 @@ public class Response {
         this.body = body;
     }
 
-    public static Response of(Status status) {
-        return new Response(StatusLine.of(status), Collections.emptyMap(), null);
+    public static Response from(Status status) {
+        return new Response(StatusLine.from(status), Collections.emptyMap(), null);
+    }
+
+    public static Response of(StatusLine statusLine, Map<Header, String> headers) {
+        return new Response(statusLine, headers, null);
     }
 
     public static Response of(StatusLine statusLine, Map<Header, String> headers, byte[] body) {
@@ -28,15 +32,24 @@ public class Response {
     }
 
     public void writeOutputStream(DataOutputStream dataOutputStream) throws IOException {
-        dataOutputStream.writeBytes(statusLine.getHttpVersion() + " " +
-                statusLine.getStatusCode() + " " + statusLine.getReasonPhrase() + System.lineSeparator());
+        writeStatusLine(dataOutputStream);
+        writeResponseHeader(dataOutputStream);
+        writeResponseBody(dataOutputStream);
+    }
 
+    private void writeStatusLine(DataOutputStream dataOutputStream) throws IOException {
+        dataOutputStream.writeBytes(statusLine.getStatusLine() + System.lineSeparator());
+    }
+
+    private void writeResponseHeader(DataOutputStream dataOutputStream) throws IOException {
         for (Map.Entry<Header, String> headerEntry : headers.entrySet()) {
             dataOutputStream.writeBytes(headerEntry.getKey().getHeader() + ": " + headerEntry.getValue() +
                     System.lineSeparator());
         }
         dataOutputStream.writeBytes(System.lineSeparator());
+    }
 
+    private void writeResponseBody(DataOutputStream dataOutputStream) throws IOException {
         if(hasContent()) {
             dataOutputStream.write(body, 0, body.length);
             dataOutputStream.flush();
