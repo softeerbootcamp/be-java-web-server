@@ -29,7 +29,7 @@ public enum ContentType {
 
     public static ContentType findExtension(String ext){
         return Arrays.stream(ContentType.values())
-                .filter(contentType -> contentType.getType().equals(ext))
+                .filter(contentType -> contentType.getExt().equals(ext))
                 .findFirst()
                 .orElse(TEXT_PLAIN);
     }
