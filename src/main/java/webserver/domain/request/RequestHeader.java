@@ -2,17 +2,18 @@ package webserver.domain.request;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 import static webserver.utils.CommonUtils.readMap;
 
 public class RequestHeader {
 
-    private HashMap<String, String> headerMaps;
+    private Map<String, String> headerMaps;
 
-    private RequestHeader(HashMap<String, String> headerMaps){
+    private RequestHeader(Map<String, String> headerMaps){
         this.headerMaps = headerMaps;
     }
-    private static RequestHeader of(HashMap<String, String> headerMaps){
+    private static RequestHeader of(Map<String, String> headerMaps){
         return new RequestHeader(headerMaps);
     }
 
@@ -21,7 +22,7 @@ public class RequestHeader {
     }
 
     public static RequestHeader from(String req){
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         Arrays.stream(req.split("\n")).forEach(item->{
             String[] parsedHeader = parseRequestLine(item);
             map.put(parsedHeader[0], parsedHeader[1]);

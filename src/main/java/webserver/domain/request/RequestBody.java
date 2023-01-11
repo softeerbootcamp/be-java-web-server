@@ -2,18 +2,18 @@ package webserver.domain.request;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 import static webserver.utils.CommonUtils.readMap;
 
 public class RequestBody {
 
+    private Map<String, String> bodyMaps;
 
-    private HashMap<String, String> bodyMaps;
-
-    private RequestBody(HashMap<String, String> bodyMaps){
+    private RequestBody(Map<String, String> bodyMaps){
         this.bodyMaps = bodyMaps;
     }
-    private static RequestBody of(HashMap<String, String> bodyMaps){
+    private static RequestBody of(Map<String, String> bodyMaps){
         return new RequestBody(bodyMaps);
     }
 
@@ -22,7 +22,7 @@ public class RequestBody {
     }
 
     public static RequestBody from(String req){
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         if(!req.equals("")){
             Arrays.stream(req.split("\n")).forEach(item->{
                 String[] parsedBody = parseRequestBody(item);
