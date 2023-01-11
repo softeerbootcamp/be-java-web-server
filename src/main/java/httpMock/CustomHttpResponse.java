@@ -1,21 +1,19 @@
 package httpMock;
 
-import httpMock.constants.StatusCode;
 import httpMock.constants.ContentType;
+import httpMock.constants.StatusCode;
 
-import java.io.OutputStream;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CustomHttpResponse {
 
-    private final OutputStream out;
     private StatusCode statusCode;
     private String protocolVersion;
     private final Map<String, String> headers;
     private byte[] body;
 
-    public CustomHttpResponse(OutputStream out) {
-        this.out = out;
+    public CustomHttpResponse() {
         this.headers = new HashMap<>();
         body = "".getBytes();
     }
@@ -30,9 +28,6 @@ public class CustomHttpResponse {
 
     public Map<String,String> getHeaders(){
         return this.headers;
-    }
-    public OutputStream getOutputStream() {
-        return this.out;
     }
 
     public void setStatusCode(StatusCode statusCode) {

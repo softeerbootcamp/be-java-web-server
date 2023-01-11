@@ -1,11 +1,11 @@
 package controller;
 
 import db.Database;
-import model.User;
 import httpMock.CustomHttpRequest;
 import httpMock.CustomHttpResponse;
 import httpMock.constants.ContentType;
 import httpMock.constants.StatusCode;
+import model.User;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +14,7 @@ public class UserAccountController implements RequestController {
     static UserAccountController userAccountService;
 
     private final Map<String, RequestController> routingTable = new HashMap<>() {{
-        put("/user/create", (req, res) -> makeAccount(req, res));
+        put("/user/create", (req) -> makeAccount(req));
     }};
 
 
@@ -26,17 +26,16 @@ public class UserAccountController implements RequestController {
     }
 
     @Override
-    public void handleRequest(CustomHttpRequest req, CustomHttpResponse res) {
+    public CustomHttpResponse handleRequest(CustomHttpRequest req) {
         for (String path : routingTable.keySet()) {
             if (req.getUrl().startsWith(path)) {
-                routingTable.get(path).handleRequest(req, res);
-                return;
+                return routingTable.get(path).handleRequest(req);
             }
         }
-        RequestController.NOT_FOUND(res);
+        return RequestController.NOT_FOUND();
     }
 
-    public void makeAccount(CustomHttpRequest req, CustomHttpResponse res) {
+    public CustomHttpResponse makeAccount(CustomHttpRequest req) {
         String userId = req.getRequestParams().get("userId");
         String password = req.getRequestParams().get("password");
         String name = req.getRequestParams().get("name");
@@ -44,8 +43,11 @@ public class UserAccountController implements RequestController {
 
         Database.addUser(new User(userId, password, name, email));
 
+        CustomHttpResponse res = new CustomHttpResponse();
         res.setStatusCode(StatusCode.FOUND);
         res.setContentType(ContentType.TEXT_PLAIN);
         res.addHeader("Location", "/index.html");
+
+        return res;
     }
 }

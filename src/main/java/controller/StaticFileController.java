@@ -8,7 +8,6 @@ import httpMock.constants.StatusCode;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.nio.file.Files;
 import java.util.Arrays;
 
@@ -25,11 +24,12 @@ public class StaticFileController implements RequestController {
     }
 
     @Override
-    public void handleRequest(CustomHttpRequest req, CustomHttpResponse res) {
-        getFile(req, res);
+    public CustomHttpResponse handleRequest(CustomHttpRequest req) {
+        return getFile(req);
     }
 
-    public void getFile(CustomHttpRequest req, CustomHttpResponse res) {
+    public CustomHttpResponse getFile(CustomHttpRequest req) {
+        CustomHttpResponse res = new CustomHttpResponse();
         File file = StaticFileService.getFile(req.getUrl());
         String fileType = StaticFileService.getFileTypeFromUrl(req.getUrl());
         try {
@@ -38,8 +38,9 @@ public class StaticFileController implements RequestController {
             res.setContentType(ContentType.getContentTypeByFileType(fileType));
             res.setBody(data);
         } catch (IOException e) {
-            RequestController.NOT_FOUND(res);
+            res = RequestController.NOT_FOUND();
         }
+        return res;
     }
 
     public static boolean ifFileTypeRequested(String url) {

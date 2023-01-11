@@ -26,21 +26,23 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             CustomHttpRequest req = CustomHttpRequest.from(in);
-            CustomHttpResponse res = new CustomHttpResponse(out);
             RequestRouter requestRouter = RequestRouter.getRequestRouter();
-            requestRouter.doRoute(req, res);
-            response(res);
+
+            CustomHttpResponse res = requestRouter.handleRequest(req);
+
+            res.setProtocolVersion(req.getProtocolVersion());
+            response(res, out);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void response(CustomHttpResponse response) {
+    private void response(CustomHttpResponse response, OutputStream out) {
         try {
-            DataOutputStream dos = new DataOutputStream(response.getOutputStream());
-            dos.writeBytes(response.getProtocolVersion()+" " + response.getStatusCode().getCode() + " " + response.getStatusCode().getMessage() + "\r\n");
-            for(String key : response.getHeaders().keySet()){
-                dos.writeBytes(key+": "+response.getHeaders().get(key)+"\r\n");
+            DataOutputStream dos = new DataOutputStream(out);
+            dos.writeBytes(response.getProtocolVersion() + " " + response.getStatusCode().getCode() + " " + response.getStatusCode().getMessage() + "\r\n");
+            for (String key : response.getHeaders().keySet()) {
+                dos.writeBytes(key + ": " + response.getHeaders().get(key) + "\r\n");
             }
             dos.writeBytes("Content-Length: " + response.getBody().length + "\r\n");
             dos.writeBytes("\r\n");
