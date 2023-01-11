@@ -16,7 +16,6 @@ public enum HttpMethod {
     POST("POST") {
         @Override
         public void handle(Request request, DataOutputStream dos) throws IOException {
-            System.out.println("POST");
             HttpMethodHandler httpMethodHandler = new POSTHandlerImpl(dos);
             httpMethodHandler.handle(request);
         }
@@ -24,7 +23,6 @@ public enum HttpMethod {
     PUT("PUT") {
         @Override
         public void handle(Request request, DataOutputStream dos) throws IOException {
-            System.out.println("PUT");
             HttpMethodHandler httpMethodHandler = new PUTHandlerImpl(dos);
             httpMethodHandler.handle(request);
         }
@@ -32,7 +30,6 @@ public enum HttpMethod {
     DELETE("DELETE") {
         @Override
         public void handle(Request request, DataOutputStream dos) throws IOException {
-            System.out.println("DELETE");
             HttpMethodHandler httpMethodHandler = new DELETEHandlerImpl(dos);
             httpMethodHandler.handle(request);
         }
