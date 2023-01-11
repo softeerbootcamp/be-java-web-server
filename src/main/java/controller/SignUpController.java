@@ -8,9 +8,11 @@ import webserver.ResponseWriter;
 
 import java.io.IOException;
 
-public class SignUpController {
+public class SignUpController implements Controller{
+    private static final String SIGN_UP_PATH_URL = "/user/create";
 
-    public static HttpResponse createUserController(HttpRequest request) throws IOException {
+    @Override
+    public HttpResponse service(HttpRequest request) {
         String userId = request.getQueryByKey("userId");
         String password = request.getQueryByKey("password");
         String name = request.getQueryByKey("name");
@@ -23,5 +25,10 @@ public class SignUpController {
         response.redirect(redirectUrl);
 
         return response;
+    }
+
+    @Override
+    public String getPathUrl() {
+        return this.SIGN_UP_PATH_URL;
     }
 }
