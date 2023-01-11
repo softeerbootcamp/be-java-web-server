@@ -26,7 +26,7 @@ public class HttpResponseUtil {
         }
         return new HttpResponse(null, "404", "Not Found", protocol);
     }
-    public static byte[] generateBody(Path path){
+    public static byte[] generateBody(Path path) throws NullPointerException{
         try {
             byte[] body = Files.readAllBytes(path);
             return body;
