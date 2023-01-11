@@ -25,7 +25,7 @@ public class HttpResponse {
         return body;
     }
 
-    public String getResponseMessage(){
+    public String getResponseMessage() {
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("%s %s \r\n", this.version, this.statusCode));
         sb.append(String.format("Content-Type: %s;charset=utf-8 \r\n", this.contentType));

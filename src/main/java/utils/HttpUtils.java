@@ -9,8 +9,9 @@ import java.util.Objects;
 public class HttpUtils {
     private static Map<String, String> contentTypeMap =
             Map.of("text", "plain|html|css", "image", "jpeg|png",
-                        "audio", "mpeg|ogg|*", "video", "mp4", "application" , "octet-stream",
-                            "multipart","mixed");
+                    "audio", "mpeg|ogg|*", "video", "mp4", "application", "octet-stream",
+                    "multipart", "mixed");
+
     public static Map<String, String> parseQuerystring(String queryString) {
         Map<String, String> map = new HashMap<>();
         if ((queryString == null) || (queryString.equals(""))) {
@@ -30,8 +31,8 @@ public class HttpUtils {
         return map;
     }
 
-    public static String setContentType(String extension){
-        for (String key : contentTypeMap.keySet()){
+    public static String setContentType(String extension) {
+        for (String key : contentTypeMap.keySet()) {
             if (contentTypeMap.get(key).contains(extension))
                 return key + "/" + extension;
         }

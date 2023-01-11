@@ -8,7 +8,7 @@ import service.UserService;
 import java.util.Map;
 
 public class HttpResponseGenerator {
-    public static HttpResponse generateResponse(HttpRequest httpRequest, UserService userService){
+    public static HttpResponse generateResponse(HttpRequest httpRequest, UserService userService) {
         if (checkParams(httpRequest, userService)) {
             return new HttpResponse(httpRequest.getVersion(), StatusCode.SEEOTHER,
                     HttpUtils.setContentType(httpRequest.getContentType()), null);
@@ -17,8 +17,8 @@ public class HttpResponseGenerator {
                 HttpUtils.setContentType(httpRequest.getContentType()), FileIoUtils.loadFile(httpRequest.getRequestTarget()));
     }
 
-    private static boolean checkParams(HttpRequest httpRequest, UserService userService){
-        if (httpRequest.hasParams()){
+    private static boolean checkParams(HttpRequest httpRequest, UserService userService) {
+        if (httpRequest.hasParams()) {
             String target = httpRequest.getRequestTarget();
             String[] params = target.split("\\?");
             Map<String, String> map = HttpUtils.parseQuerystring(params[1]);

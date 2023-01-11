@@ -21,7 +21,9 @@ public class HttpStartLine {
         return target;
     }
 
-    public boolean hasBody() { return method.getHasBody();}
+    public boolean hasBody() {
+        return method.getHasBody();
+    }
 
     public boolean hasParameter() {
         return this.target.contains("?");

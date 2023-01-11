@@ -11,20 +11,21 @@ public class HttpRequest {
         this.requestBody = requestBody;
     }
 
-    public static HttpRequest of(HttpStartLine startLine, HttpRequestHeader requestHeader, HttpRequestBody requestBody){
+    public static HttpRequest of(HttpStartLine startLine, HttpRequestHeader requestHeader, HttpRequestBody requestBody) {
         return new HttpRequest(startLine, requestHeader, requestBody);
     }
 
-    public static HttpRequest ofNoBody(HttpStartLine startLine, HttpRequestHeader requestHeader, HttpRequestBody requestBody){
+    public static HttpRequest ofNoBody(HttpStartLine startLine, HttpRequestHeader requestHeader, HttpRequestBody requestBody) {
         return new HttpRequest(startLine, requestHeader, requestBody);
     }
 
-    public String getRequestTarget(){
+    public String getRequestTarget() {
         return this.startLine.getTarget();
     }
 
     public boolean hasParams() {
-        return this.startLine.hasParameter();}
+        return this.startLine.hasParameter();
+    }
 
     public String getVersion() {
         return this.startLine.getVersion();

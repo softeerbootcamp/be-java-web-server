@@ -20,9 +20,8 @@ public enum StatusCode {
 
     public static StatusCode getStatusCode(String message) {
         try {
-            return valueOf (message.toUpperCase());
-        }
-        catch (IllegalArgumentException e) {
+            return valueOf(message.toUpperCase());
+        } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("존재하지 않는 상태 메세지입니다.");
         }
     }

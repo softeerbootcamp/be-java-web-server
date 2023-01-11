@@ -9,7 +9,7 @@ public class HttpRequestHeader {
         this.headers = headers;
     }
 
-    public static HttpRequestHeader of(Map<String, String> headers){
+    public static HttpRequestHeader of(Map<String, String> headers) {
         return new HttpRequestHeader(headers);
     }
 

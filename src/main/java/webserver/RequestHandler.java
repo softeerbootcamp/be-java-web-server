@@ -40,11 +40,11 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void responseMessage(DataOutputStream dos, String responseMessage){
+    private void responseMessage(DataOutputStream dos, String responseMessage) {
         try {
             dos.writeBytes(responseMessage);
             dos.flush();
-        } catch (IOException e){
+        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }

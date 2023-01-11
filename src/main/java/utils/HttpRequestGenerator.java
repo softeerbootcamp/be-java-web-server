@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class HttpRequestGenerator {
-    public static HttpRequest parseHttpMessage(BufferedReader br) throws IOException {
+    public static HttpRequest generateHttpMessage(BufferedReader br) throws IOException {
         HttpStartLine httpStartLine = parseStartLine(br);
         HttpRequestHeader httpRequestHeader = parseRequestHeader(br);
         if (httpStartLine.hasBody()) {
