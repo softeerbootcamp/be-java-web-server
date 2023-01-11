@@ -22,9 +22,9 @@ public class HttpResponseUtil {
         String protocol = httpRequest.getProtocol();
         if(Objects.nonNull(path)){
             byte[] body = generateBody(path);
-            return new HttpResponse(body, "200", "OK", protocol);
+            return new HttpResponse(body, StatusCode.OK, "text/html", protocol);
         }
-        return new HttpResponse(null, "404", "Not Found", protocol);
+        return new HttpResponse(null, StatusCode.NOT_FOUND, "text/plain", protocol);
     }
     public static byte[] generateBody(Path path) throws NullPointerException{
         try {
