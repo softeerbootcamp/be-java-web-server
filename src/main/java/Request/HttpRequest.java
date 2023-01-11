@@ -18,6 +18,9 @@ public class HttpRequest {
     public String getPath(){
         return httpRequestStartLine.getPath();
     }
+    public String getProtocol(){
+        return httpRequestStartLine.getProtocol();
+    }
 
     public Map<String, String> getParams() {
         return httpRequestParams.getParams();
