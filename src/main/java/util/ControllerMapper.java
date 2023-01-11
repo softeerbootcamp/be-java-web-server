@@ -4,6 +4,7 @@ import controller.Controller;
 import controller.HomeController;
 
 import controller.NotFoundController;
+import controller.UserController;
 import model.request.RequestLine;
 
 import java.util.HashMap;
