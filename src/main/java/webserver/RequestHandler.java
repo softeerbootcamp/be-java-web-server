@@ -28,9 +28,8 @@ public class RequestHandler implements Runnable {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             HttpRequest httpRequest = new HttpRequest(new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
 
-            HttpResponse httpResponse = new HttpResponse();
             Controller controller = ControllerHandler.handleController(httpRequest);
-            controller.makeResponse(httpRequest, httpResponse);
+            HttpResponse httpResponse = controller.makeResponse(httpRequest);
 
             DataOutputStream dos = new DataOutputStream(out);
             httpResponse.send(dos);

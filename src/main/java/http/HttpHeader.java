@@ -30,5 +30,14 @@ public class HttpHeader {
         return headers;
     }
 
+    public String toString(){
+        String headerString = "";
+        for(Map.Entry<String, String> header : headers.entrySet()){
+            headerString += header.getKey() + ": " + header.getValue() + System.lineSeparator();
+        }
+        headerString += System.lineSeparator();
+        return headerString;
+    }
+
 
 }

@@ -1,19 +1,22 @@
 package Controller;
 
+import http.HttpHeader;
 import http.HttpRequest;
 import http.HttpResponse;
+import http.HttpStatus;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpRequestUtils;
 import webserver.RequestHandler;
 
+import java.io.IOException;
 import java.util.Map;
 
 public class UserController implements Controller{
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     @Override
-    public void makeResponse(HttpRequest httpRequest, HttpResponse httpResponse) {
+    public HttpResponse makeResponse(HttpRequest httpRequest) throws IOException {
         // 회원가입일 때
         String uri = httpRequest.getUri();
         // TODO 할 일 enum 으로 구현 가능 할듯
@@ -27,5 +30,8 @@ public class UserController implements Controller{
             User user = new User(params.get("userId"), params.get("password"), params.get("name"), params.get("email"));
             logger.debug("User : {}", user);
         }
+
+        byte[] responseBody = HttpResponse.makeBody(httpRequest);
+        return new HttpResponse(HttpStatus.OK, responseBody);
     }
 }
