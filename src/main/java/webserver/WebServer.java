@@ -32,7 +32,7 @@ public class WebServer {
             //2. 서버 소켓 listenSocket가 accpet를 호출하고 리턴을 해주면 소켓인 connection 객체가 생성됨
             while ((connection = listenSocket.accept()) != null) {
                 Thread thread = new Thread(new RequestHandler(connection));
-                logger.debug("thread name: " + thread.getName());
+                //logger.debug("thread name: " + thread.getName());
                 thread.start();
             }
         }
