@@ -11,7 +11,7 @@ public class StaticResourceFinder {
     private static final String PATH_TEMPLATES = "/templates";
 
 
-    public static Optional<byte[]> makeFileAsByte(String fileUrl) throws IOException {
+    private static Optional<byte[]> makeFileAsByte(String fileUrl) throws IOException {
 
         fileUrl = fileUrl.substring(5);
         File file = new File(fileUrl);
@@ -23,12 +23,12 @@ public class StaticResourceFinder {
 
     }
 
-    public static Optional<byte[]> getStaticFilesPath(String fileName) throws IOException {
+    private static Optional<byte[]> getStaticFilesPath(String fileName) throws IOException {
         String fileUrl = StaticResourceFinder.class.getResource(PATH_STATIC)  + fileName;
         return makeFileAsByte(fileUrl);
     }
 
-    public static Optional<byte[]> getTemplateFilesPath(String fileName) throws IOException {
+    private static Optional<byte[]> getTemplateFilesPath(String fileName) throws IOException {
         String fileUrl = StaticResourceFinder.class.getResource(PATH_TEMPLATES)  + fileName;
         return makeFileAsByte(fileUrl);
     }
@@ -39,4 +39,5 @@ public class StaticResourceFinder {
             fileAsByte = getStaticFilesPath(fileName);
         return fileAsByte;
     }
+
 }
