@@ -1,17 +1,26 @@
 package http;
 
-import util.HttpRequestUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HttpRequestLine {
+
+    private static final Logger logger = LoggerFactory.getLogger(HttpRequestLine.class);
 
     private final HttpMethod method;
     private final String url;
     private final String version;
 
     public HttpRequestLine(String requestLine) {
-        this.method = HttpRequestUtils.getHttpMethod(requestLine);
-        this.url = HttpRequestUtils.getUrl(requestLine);
-        this.version = HttpRequestUtils.getHttpVersion(requestLine);
+        String[] splited = requestLine.split(" ");
+
+        this.method = HttpMethod.valueOf(splited[0]);
+        this.url = splited[1];
+        this.version = splited[2];
+
+        logger.debug("HTTP Method : {}", method);
+        logger.debug("URL : {}", url);
+        logger.debug("HTTP Version : {}", version);
     }
 
     public HttpMethod getMethod() {
