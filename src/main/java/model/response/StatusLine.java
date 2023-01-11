@@ -26,4 +26,9 @@ public class StatusLine {
     public String getReasonPhrase() {
         return status.getReasonPhrase();
     }
+
+    public String getStatusLine() {
+        return String.join(" ",
+                new String[]{httpVersion, String.valueOf(status.getStatusCode()), status.getReasonPhrase()});
+    }
 }
