@@ -22,6 +22,10 @@ public class RequestLine {
         return new RequestLine(method, uri, httpVersion);
     }
 
+    public Method getMethod() {
+        return method;
+    }
+
     public String getUri() {
         return uri;
     }
@@ -31,6 +35,9 @@ public class RequestLine {
     }
 
     public String getControllerCriteria() {
-        return uri.split("/")[1];
+        String[] uriSplit = uri.split("/");
+
+        if(uriSplit.length == 0) return uri;
+        else return uri.split("/")[1];
     }
 }
