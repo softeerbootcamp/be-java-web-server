@@ -32,4 +32,12 @@ public class HttpRequestUtil {
         }
     }
 
+    public static String getRequestAttribute(String reqURL){
+        try{
+            return (reqURL.substring(reqURL.lastIndexOf("/")));
+        } catch (StringIndexOutOfBoundsException e){
+            return "";
+        }
+    }
+
 }
