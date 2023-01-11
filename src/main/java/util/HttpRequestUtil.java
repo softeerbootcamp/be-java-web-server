@@ -26,7 +26,7 @@ public class HttpRequestUtil {
 
     public static String getURLParams(String reqURL) {
         try {
-            return reqURL.substring(reqURL.indexOf("?") + 1);
+            return (reqURL.substring(reqURL.indexOf("?"))).substring(1);
         } catch (StringIndexOutOfBoundsException e) {
             return "";
         }
