@@ -22,7 +22,7 @@ public class HomeController implements Controller {
 
     @Override
     public Response getResponse(RequestLine requestLine) {
-        if(requestLine.getUri().equals("index.html")) return getIndexHtml(requestLine);
+        if(requestLine.getUri().equals("/index.html")) return getIndexHtml(requestLine);
         else return Response.from(Status.NOT_FOUND);
     }
 
