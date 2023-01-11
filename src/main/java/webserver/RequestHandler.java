@@ -2,7 +2,7 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.utils.RequestLineParser;
+import webserver.httpUtils.RequestParser;
 
 import java.io.*;
 import java.net.Socket;
@@ -14,6 +14,14 @@ import static webserver.Paths.STATIC_PATH;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+
+    private Map<String, String> reqLine;
+    private String reqHeader;
+    private String reqBody;
+
+    private Map<String, String> resLine;
+    private String resHeader;
+    private String resBody;
 
     private Socket connection;
 
@@ -29,14 +37,14 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             DataOutputStream dos = new DataOutputStream(out);
 
-            // TODO request line parser 구현하기
-            Map<String, String> requestLine = RequestLineParser.parseRequestLine(in);
-            String reqMethod = requestLine.get(RequestLineParser.METHOD);
-            String reqQuery = requestLine.get(RequestLineParser.QUERY);
-            String reqVersion = requestLine.get(RequestLineParser.VERSION);
+            reqLine = RequestParser.parseRequestLine(in);
+            String reqMethod = reqLine.get(RequestParser.METHOD);
+            String reqQuery = reqLine.get(RequestParser.QUERY);
+            String reqVersion = reqLine.get(RequestParser.VERSION);
 
-            if(reqQuery.contains("/create"))
+            if(reqQuery.contains("/create") && reqMethod.equals("GET"))
             {
+                // GET 방식의 회원가입 처리
                 SignUpController.enrollNewUser(reqQuery);
                 reqQuery = SignUpController.redirectToIndex();
             }

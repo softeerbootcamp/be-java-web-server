@@ -1,4 +1,4 @@
-package webserver.utils;
+package webserver.httpUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RequestLineParser {
+public class RequestParser {
 
     public final static String METHOD = "method";
 
