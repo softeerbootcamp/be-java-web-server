@@ -1,8 +1,9 @@
 package handler;
 
-import http.HttpRequest;
+import http.request.HttpRequest;
+import http.response.HttpResponse;
 
 public interface Handler {
 
-    String handle(HttpRequest request);
+    String handle(HttpRequest request, HttpResponse httpResponse);
 }

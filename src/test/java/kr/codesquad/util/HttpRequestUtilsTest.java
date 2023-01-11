@@ -1,40 +1,26 @@
 package kr.codesquad.util;
 
-import http.HttpMethod;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import util.HttpRequestUtils;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class HttpRequestUtilsTest {
 
-    String requestLine = "GET /index.html HTTP/1.1";
-
     @Test
-    @DisplayName("HTTP request line에서 올바른 HTTP Method를 반환하는지 검증한다.")
-    void getHttpMethod() {
-        HttpMethod result = HttpRequestUtils.getHttpMethod(requestLine);
+    @DisplayName("요청 헤더에서 이름/값을 추출하여 반환하는지 검증한다.")
+    void parseRequestHeader() {
+        List<String> headers = List.of("Host: localhost:8080", "Connection: keep-alive","Accept: text/html");
 
-        assertThat(result).isEqualTo(HttpMethod.GET);
-    }
+        Map<String, String> result = HttpRequestUtils.parseRequestHeader(headers);
 
-    @Test
-    @DisplayName("HTTP request line에서 URL을 추출하여 반환하는지 검증한다.")
-    void getUrl() {
-        String result = HttpRequestUtils.getUrl(requestLine);
-
-        assertThat(result).isEqualTo("/index.html");
-    }
-
-    @Test
-    @DisplayName("HTTP request line에서 HTTP Version을 추출하여 반환하는지 검증한다.")
-    void getHttpVersion() {
-        String result = HttpRequestUtils.getHttpVersion(requestLine);
-
-        assertThat(result).isEqualTo("HTTP/1.1");
+        assertThat(result.get("Host")).isEqualTo("localhost:8080");
+        assertThat(result.get("Connection")).isEqualTo("keep-alive");
+        assertThat(result.get("Accept")).isEqualTo("text/html");
     }
 
     @Test
