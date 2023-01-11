@@ -1,6 +1,5 @@
 package kr.codesquad.util;
 
-import http.HttpMethod;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import util.HttpRequestUtils;
@@ -10,32 +9,6 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class HttpRequestUtilsTest {
-
-    String requestLine = "GET /index.html HTTP/1.1";
-
-    @Test
-    @DisplayName("HTTP request line에서 올바른 HTTP Method를 반환하는지 검증한다.")
-    void getHttpMethod() {
-        HttpMethod result = HttpRequestUtils.getHttpMethod(requestLine);
-
-        assertThat(result).isEqualTo(HttpMethod.GET);
-    }
-
-    @Test
-    @DisplayName("HTTP request line에서 URL을 추출하여 반환하는지 검증한다.")
-    void getUrl() {
-        String result = HttpRequestUtils.getUrl(requestLine);
-
-        assertThat(result).isEqualTo("/index.html");
-    }
-
-    @Test
-    @DisplayName("HTTP request line에서 HTTP Version을 추출하여 반환하는지 검증한다.")
-    void getHttpVersion() {
-        String result = HttpRequestUtils.getHttpVersion(requestLine);
-
-        assertThat(result).isEqualTo("HTTP/1.1");
-    }
 
     @Test
     @DisplayName("URL에서 쿼리 스트링을 추출하여 반환하는지 검증한다.")
