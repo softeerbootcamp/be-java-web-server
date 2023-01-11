@@ -9,18 +9,18 @@ public class HttpRequestLine {
 
     private final HttpMethod method;
     private final String url;
-    private final String version;
+    private final String httpVersion;
 
     public HttpRequestLine(String requestLine) {
         String[] splited = requestLine.split(" ");
 
         this.method = HttpMethod.valueOf(splited[0]);
         this.url = splited[1];
-        this.version = splited[2];
+        this.httpVersion = splited[2];
 
         logger.debug("HTTP Method : {}", method);
         logger.debug("URL : {}", url);
-        logger.debug("HTTP Version : {}", version);
+        logger.debug("HTTP Version : {}", httpVersion);
     }
 
     public HttpMethod getMethod() {
@@ -31,7 +31,7 @@ public class HttpRequestLine {
         return url;
     }
 
-    public String getVersion() {
-        return version;
+    public String getHttpVersion() {
+        return httpVersion;
     }
 }
