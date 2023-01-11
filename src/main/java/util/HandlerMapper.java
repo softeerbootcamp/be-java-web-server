@@ -3,7 +3,7 @@ package util;
 import handler.Handler;
 import handler.UserHandler;
 import handler.ResourceHandler;
-import http.HttpRequest;
+import http.request.HttpRequest;
 
 public class HandlerMapper {
 

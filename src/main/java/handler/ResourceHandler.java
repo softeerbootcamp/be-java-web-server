@@ -1,6 +1,6 @@
 package handler;
 
-import http.HttpRequest;
+import http.request.HttpRequest;
 
 public class ResourceHandler implements Handler{
     @Override

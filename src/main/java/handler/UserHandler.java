@@ -1,6 +1,6 @@
 package handler;
 
-import http.HttpRequest;
+import http.request.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
