@@ -2,6 +2,12 @@ package model.request;
 
 import model.general.Method;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class RequestLine {
     private final Method method;
     private final String uri;
@@ -39,5 +45,11 @@ public class RequestLine {
 
         if(uriSplit.length == 0) return uri;
         else return uri.split("/")[1];
+    }
+
+    public Map<String, String> parseQueryString(RequestLine requestLine) {
+        return Arrays.stream(requestLine.getUri().split("\\?")[1].split("&"))
+                .map(s -> s.split("="))
+                .collect(Collectors.toMap(a -> a[0], a -> a[1]));
     }
 }
