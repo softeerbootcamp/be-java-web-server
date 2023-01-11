@@ -75,7 +75,6 @@ public class HttpResponse {
 
     private void assembleHeader() throws IOException {
         out.writeBytes(getHeaderString());
-        System.out.println(getHeaderString());
     }
 
     private String getHeaderString() {
