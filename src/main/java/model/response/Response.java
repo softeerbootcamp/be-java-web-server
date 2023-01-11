@@ -28,8 +28,7 @@ public class Response {
     }
 
     public void writeOutputStream(DataOutputStream dataOutputStream) throws IOException {
-        dataOutputStream.writeBytes(statusLine.getHttpVersion() + " " +
-                statusLine.getStatusCode() + " " + statusLine.getReasonPhrase() + System.lineSeparator());
+        writeStatusLine(dataOutputStream);
 
         for (Map.Entry<Header, String> headerEntry : headers.entrySet()) {
             dataOutputStream.writeBytes(headerEntry.getKey().getHeader() + ": " + headerEntry.getValue() +
@@ -41,6 +40,11 @@ public class Response {
             dataOutputStream.write(body, 0, body.length);
             dataOutputStream.flush();
         }
+    }
+
+    private void writeStatusLine(DataOutputStream dataOutputStream) throws IOException {
+        dataOutputStream.writeBytes(statusLine.getHttpVersion() + " " +
+                statusLine.getStatusCode() + " " + statusLine.getReasonPhrase() + System.lineSeparator());
     }
 
     private boolean hasContent() {
