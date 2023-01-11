@@ -1,13 +1,12 @@
 package webserver;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class ViewResolver {
-    private static final Logger logger = LoggerFactory.getLogger(ViewResolver.class);
 
     private static final String STATIC_PATH = "src/main/resources/static/";
     private static final String TEMPLATES_PATH = "src/main/resources/templates/";
