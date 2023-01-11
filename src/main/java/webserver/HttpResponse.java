@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class HttpResponse {
 
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
     private HttpStatus status;
     private ContentType contentType;
