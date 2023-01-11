@@ -8,5 +8,5 @@ import java.io.OutputStream;
 
 public interface Controller {
 
-    void handle(String request, Response res) throws HttpRequestException;
+    void handle(String path, String queryStr, Response res) throws HttpRequestException;
 }
