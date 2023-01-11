@@ -40,7 +40,6 @@ public class WebServer {
 
 				// 스레드 만드는 오버헤드 매우 큼, 스레드 풀 미리 만들어놓고 요청시마다 스레드를 가져옴
 				Thread thread = new Thread(new RequestHandler(connection));
-				System.out.println(thread.getId() + " 스레드 생성");
 				thread.start(); // 스레드 객체가 만들어지고 run이 실행됨, 스레드는 start() 메서드로만 생성됨
 			}
 		}
