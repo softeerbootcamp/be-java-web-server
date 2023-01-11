@@ -1,0 +1,68 @@
+name: "PR Merge on time v2"
+
+on:
+  schedule:
+#    - cron: '0 13,19 * * *'
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  merge:
+    name: "Auto Merge on time"
+    runs-on: "ubuntu-latest"
+    
+    steps:
+      - name: "Merge pull request"
+        uses: "actions/github-script@v3"
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const query = `query($owner:String!, $name:String!) {
+              repository(owner: $owner, name: $name) {
+                pullRequests(last: 100, states: OPEN) {
+                  edges {
+                    node {
+                      number
+                      headRefName
+                      baseRefName
+                      author {
+                        login
+                      }
+                      repository {
+                        name
+                      }
+                      mergeable
+                    }
+                  }
+                }
+              }
+            }`
+            
+            const variables = {
+              owner: context.repo.owner,
+              name: context.repo.repo,
+            }
+            
+            const {repository:{pullRequests:{edges: list}}} = await github.graphql(query, variables)
+            for( let {node} of list) { 
+             if(node.baseRefName === "main") continue;
+              try { 
+                 if(node.mergeable === "CONFLICTING") {
+                   await github.pulls.update({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      pull_number: node.number,
+                      state: "closed"
+                    })
+                 } else {
+                   await github.pulls.merge({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      pull_number: node.number,
+                      merge_method: "squash"
+                   })
+                 }
+               } catch (e) {
+                 console.log("error", e);
+               }
+            }
