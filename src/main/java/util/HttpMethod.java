@@ -11,7 +11,7 @@ public enum HttpMethod {
     ;
 
     public static HttpMethod findMethod(HttpRequest httpRequest) {
-        String headerFirstLine = httpRequest.getHeaderContents().get(0);
+        String headerFirstLine = httpRequest.getHeaderContents().get(HttpRequest.REQUEST_LINE);
         return HttpMethod.getMethod(headerFirstLine.split(" ")[0]);
     }
     private String method;

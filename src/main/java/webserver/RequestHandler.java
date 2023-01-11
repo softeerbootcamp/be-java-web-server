@@ -2,16 +2,14 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.file.Files;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reader.RequestReader;
 import reader.fileReader.FileReader;
-import reader.fileReader.TemplatesFileReader;
 import request.HttpRequest;
 import response.HttpResponse;
-import util.HttpStatus;
+import util.FileType;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -30,20 +28,28 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest httpRequest = HttpRequest.getHttpRequest(in);
-
             requestReader = RequestReader.selectRequestReaderByMethod(httpRequest.getHttpMethod());
-            String url = requestReader.findPathInRequest(httpRequest);
 
-            fileReader = new TemplatesFileReader();
-            byte[] data = fileReader.readFile(url);
+            byte[] data = makeData(httpRequest);
 
             DataOutputStream clientOutPutStream = new DataOutputStream(out);
-            HttpResponse httpResponse = new HttpResponse(clientOutPutStream,data);
-            httpResponse.responseHeader(HttpStatus.OK);
-            httpResponse.responseBody();
+            HttpResponse httpResponse = new HttpResponse(clientOutPutStream,data, FileType.getFileType(httpRequest.getUrl()));
+            httpResponse.makeResponse();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private byte[] makeData(HttpRequest httpRequest) {
+        byte[] data=null;
+        fileReader = FileReader.selectFileReader(httpRequest.getUrl());
+        if(fileReader!=null){
+            //index.html과 같은 파일을 읽는 경우
+            data = fileReader.readFile(httpRequest.getUrl());
+        }else{
+            data = requestReader.readData(httpRequest);
+        }
+        return data;
     }
 }
 

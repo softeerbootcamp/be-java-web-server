@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import request.HttpRequest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -22,10 +23,10 @@ class HttpMethodTest {
     @Test
     @DisplayName("client요청(HttpRequest)로 HttpMethod 찾기")
     void findMethod() {
-        final String requestHeaderFirstLine = "GET /index.html HTTP/1.1";
-        List<String> requestHeaders = new ArrayList<>();
-        requestHeaders.add(requestHeaderFirstLine);
-        HttpRequest httpRequest = new HttpRequest(requestHeaders);
+        final String requestHeader = "GET /index.html HTTP/1.1";
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put(HttpRequest.REQUEST_LINE, requestHeader);
+        HttpRequest httpRequest = new HttpRequest(hashMap);
         assertThat(HttpMethod.findMethod(httpRequest)).isEqualTo(HttpMethod.GET);
     }
     @Test

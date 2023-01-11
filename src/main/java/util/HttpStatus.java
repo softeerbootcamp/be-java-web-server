@@ -1,7 +1,12 @@
 package util;
 
+import response.HttpResponse;
+
+import java.util.Arrays;
+
 public enum HttpStatus {
     OK(200, "OK"),
+    NOT_FOUND(404,"NOT_FOUND")
     ;
 
     private int code;
@@ -10,6 +15,8 @@ public enum HttpStatus {
         this.code=code;
         this.message = message;
     }
+
+
 
     public int getCode() {
         return code;
