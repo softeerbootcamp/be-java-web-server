@@ -1,32 +1,32 @@
 package webserver.domain.request;
 
+import java.util.Map;
+
+import static webserver.utils.CommonUtils.readMap;
+import static webserver.utils.HttpRequestUtils.parseStringToMap;
+
 public class Request {
 
-    private RequestHeader requestHeader;
-    private RequestBody requestBody;
+    private Map<String, String> header;
     private RequestLine requestLine;
 
-    public Request(RequestLine requestLine, RequestHeader requestHeader, RequestBody requestBody){
+    private Request(RequestLine requestLine, Map<String, String> header){
         this.requestLine = requestLine;
-        this.requestHeader = requestHeader;
-        this.requestBody = requestBody;
+        this.header = header;
     }
-    public static Request of(String reqLine, String header, String body) {
-        return new Request(RequestLine.from(reqLine), RequestHeader.from(header),RequestBody.from(body));
+    public static Request of(String reqLine, String header) {
+        return new Request(RequestLine.from(reqLine), parseStringToMap(header));
+
     }
 
     public void readRequest(){
         requestLine.readReqLine();
-        requestHeader.readHeader();
-        requestBody.readBody();
+        readMap(header);
     }
 
-    public RequestBody getRequestBody(){
-        return requestBody;
-    }
+    public Map<String, String> getRequestHeader() {
+        return header;
 
-    public RequestHeader getRequestHeader() {
-        return requestHeader;
     }
 
     public RequestLine getRequestLine() {

@@ -46,7 +46,7 @@ public class HandlerMapping {
             return Arrays.stream(ControllerType.values())
                     .filter(controller -> path.startsWith(controller.getRouteName()))
                     .findFirst()
-                    .orElseThrow(() -> new HttpRequestException(StatusCodes.NOT_FOUND.getStatusCode(), StatusCodes.NOT_FOUND.getStatusMsg()));
+                    .orElseThrow(() -> new HttpRequestException(StatusCodes.NOT_FOUND));
         }
 
     }

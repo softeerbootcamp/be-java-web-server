@@ -7,12 +7,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.Controller.AuthController;
 import webserver.Controller.Controller;
+import webserver.domain.ContentType;
 import webserver.domain.StatusCodes;
 import webserver.domain.request.Request;
 import webserver.domain.response.Response;
 import webserver.exception.HttpRequestException;
+import webserver.utils.CommonUtils;
 import webserver.utils.StaticResourceFinder;
-
 import static webserver.utils.HttpRequestUtils.parseHttpRequest;
 
 public class RequestHandler implements Runnable {
@@ -42,13 +43,19 @@ public class RequestHandler implements Runnable {
 
             String requestedPath = req.getRequestLine().getResource();
             StaticResourceFinder.staticFileResolver(requestedPath).ifPresentOrElse(fileAsBytes ->{
-                res.makeResponse(fileAsBytes, StatusCodes.OK.getStatusCode(), StatusCodes.OK.getStatusMsg());
+                res.setBody(fileAsBytes);
+                res.setContentType(StaticResourceFinder.getExtension(requestedPath));
+                res.setStatusCode(StatusCodes.OK);
+                res.writeResponse();
             },()->{
                 try{
                     Controller controller = handlerMapping.getHandler(requestedPath);
-                    controller.handle(req.getRequestLine().getResource(), res);
+                    String [] parsedPath = CommonUtils.parseRequestLine(requestedPath);
+                    controller.handle(parsedPath[0], parsedPath[1], res);
+                    res.writeResponse();
                 }catch (HttpRequestException e){
-                 res.makeResponse(e.getErrorMsg().getBytes(), e.getErrorCode(), e.getErrorMsg());
+                    res.setStatusCode(e.getErrorCode());
+                    res.writeResponse();
                 }
             });
         } catch (IOException e) {

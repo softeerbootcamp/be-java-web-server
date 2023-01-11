@@ -3,44 +3,61 @@ package webserver.domain.response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.RequestHandler;
+import webserver.domain.ContentType;
 import webserver.domain.StatusCodes;
-import webserver.domain.request.RequestLine;
-import webserver.exception.HttpRequestException;
-
+import webserver.utils.HttpResponseUtil;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Response {
 
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private OutputStream out;
+    private StatusCodes status;
+    private ContentType contentType;
+    private Map<String, String> headerMaps = new HashMap<>();
+    private byte[] body;
+    private HttpResponseUtil httpResponseUtil;
 
     public Response(OutputStream out){
-        this.out = out;
+        httpResponseUtil = new HttpResponseUtil(this, out);
     }
 
     //Make Http response header for every error
-    public void responseHeader(DataOutputStream dos, String errorCode, String errorMsg, int lengthOfBodyContent) throws IOException {
-        String responseLine = "HTTP/1.1 " + errorCode + " " + errorMsg + " \r\n";
-        dos.writeBytes(responseLine);
-        dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-        dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-        dos.writeBytes("\r\n");
+    public void setContentType(ContentType code){
+        headerMaps.put("Content-Type" , code.getType());
     }
 
-    public void responseBody(DataOutputStream dos,byte[] body) throws IOException {
-        dos.write(body, 0, body.length);
-        dos.flush();
+    public void setRedirection(String redirectUri){
+        headerMaps.put("Location", redirectUri);
     }
 
-    public void makeResponse(byte[] body, String statusCode, String msg)  {
-        DataOutputStream dos = new DataOutputStream(out);
-        try {
-            responseHeader(dos, statusCode, msg, body.length);
-            responseBody(dos, body);
-        } catch (IOException e) {
-            logger.debug(e.getMessage());
-        }
+    public void setBody(byte[] body){
+        this.body= body;
+        headerMaps.put("Content-Length", String.valueOf(body.length));
     }
+
+
+    public byte[] getBody() {
+        return body;
+    }
+
+    public Map<String, String> getHeader() {
+        return headerMaps;
+    }
+
+    public void setStatusCode(StatusCodes statusCode) {
+        this.status = statusCode;
+    }
+
+    public StatusCodes getStatusCode(){
+        return this.status;
+    }
+
+    public void writeResponse(){
+        httpResponseUtil.makeResponse();
+    }
+
+
 }
