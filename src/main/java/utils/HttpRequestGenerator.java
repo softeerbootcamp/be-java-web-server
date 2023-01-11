@@ -17,7 +17,7 @@ public class HttpRequestGenerator {
             HttpRequestBody httpRequestBody = parseRequestBody(br);
             return HttpRequest.of(httpStartLine, httpRequestHeader, httpRequestBody);
         }
-        return HttpRequest.ofNoBody(httpStartLine, httpRequestHeader, null);
+        return HttpRequest.ofNoBody(httpStartLine, httpRequestHeader);
     }
 
     private static HttpStartLine parseStartLine(BufferedReader br) throws IOException {

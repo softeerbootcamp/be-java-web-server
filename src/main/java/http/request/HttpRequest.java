@@ -15,8 +15,8 @@ public class HttpRequest {
         return new HttpRequest(startLine, requestHeader, requestBody);
     }
 
-    public static HttpRequest ofNoBody(HttpStartLine startLine, HttpRequestHeader requestHeader, HttpRequestBody requestBody) {
-        return new HttpRequest(startLine, requestHeader, requestBody);
+    public static HttpRequest ofNoBody(HttpStartLine startLine, HttpRequestHeader requestHeader) {
+        return new HttpRequest(startLine, requestHeader, null);
     }
 
     public String getRequestTarget() {
