@@ -22,6 +22,11 @@ public class HomeController implements Controller {
 
     @Override
     public Response getResponse(RequestLine requestLine) {
+        if(requestLine.getUri().equals("index.html")) return getIndexHtml(requestLine);
+        else return Response.from(Status.NOT_FOUND);
+    }
+
+    private Response getIndexHtml(RequestLine requestLine) {
         Map<Header, String> headers = new HashMap<>();
         headers.put(Header.of("Content-Type"), "text/html;charset=utf-8");
 
@@ -34,6 +39,6 @@ public class HomeController implements Controller {
 
         headers.put(Header.of("Content-Length"), Integer.toString(body.length));
 
-        return Response.of(StatusLine.of(Status.OK), headers, body);
+        return Response.of(StatusLine.from(Status.OK), headers, body);
     }
 }
