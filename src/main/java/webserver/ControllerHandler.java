@@ -1,2 +1,5 @@
-package webserver;public interface ControllerHandler {
+package webserver;
+
+public interface ControllerHandler {
+    public HttpResponse handle();
 }
