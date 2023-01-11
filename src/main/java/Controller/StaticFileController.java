@@ -6,7 +6,7 @@ import http.HttpStatus;
 
 import java.io.IOException;
 
-public class IndexController implements Controller{
+public class StaticFileController implements Controller{
 
     @Override
     public HttpResponse makeResponse(HttpRequest httpRequest) throws IOException {
