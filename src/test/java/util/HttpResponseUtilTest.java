@@ -14,11 +14,9 @@ public class HttpResponseUtilTest {
         try {
             Path path = new File("./src/main/resources/static/css/styles.css").toPath();
             byte[] body = HttpResponseUtil.generateBody(path);
-            System.out.println(new String(body));
-            body = HttpResponseUtil.generateBody(null);
+            logger.debug(body.toString());
         }catch (NullPointerException e){
             logger.error(e.toString());
         }
-
     }
 }
