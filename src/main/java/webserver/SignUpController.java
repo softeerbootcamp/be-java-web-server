@@ -20,7 +20,7 @@ public class SignUpController {
         if(null != Database.findUserById(UserInfo.get(USER_ID)))
         // 이미 데이터베이스에 같은 이름의 아이디가 있는 경우
         {
-            throw new AlreadyHasSameIdException("이미 같은 아이디의 유저가 있습니다.");
+            //throw new AlreadyHasSameIdException("이미 같은 아이디의 유저가 있습니다.");
         }
         // TODO 특수문자가 정상적으로 디비에 들어가도록 처리하기
         User newUser = new User(UserInfo.get(USER_ID), UserInfo.get(USER_PassWord), UserInfo.get(USER_Name), UserInfo.get(USER_Email));
