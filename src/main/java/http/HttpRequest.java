@@ -23,10 +23,16 @@ public class HttpRequest {
         return this.httpRequestLine.getHttpUri().getUri();
     }
 
-    public boolean wantStaticFile(){ return httpRequestLine.getHttpUri().isStaticFileUri(); }
+    public boolean wantStatic() {
+        return httpRequestLine.getHttpUri().isStaticUri();
+    }
 
-    public String getContentType(){
-        logger.debug("Accept 분리 : {}", httpHeader.getAccept());
+    public boolean wantDynamic() {
+        return httpRequestLine.getHttpUri().isDynamicUri();
+    }
+
+    public String getContentType() {
+        //logger.debug("Accept : {}", httpHeader.getAccept());
         return httpHeader.getAccept().split(",")[0];
     }
 

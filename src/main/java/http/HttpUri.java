@@ -2,7 +2,6 @@ package http;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.HttpRequestUtils;
 
 public class HttpUri {
     private static final Logger logger = LoggerFactory.getLogger(HttpUri.class);
@@ -17,8 +16,11 @@ public class HttpUri {
     }
 
     // uri에 . 이 있으면 정적 파일을 주면 되지 않을까?
-    public boolean isStaticFileUri(){
+    public boolean isStaticUri() {
         return uri.contains(".");
     }
 
+    public boolean isDynamicUri() {
+        return uri.contains("?");
+    }
 }

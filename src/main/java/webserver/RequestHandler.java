@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -25,17 +24,20 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
+            // HttpRequest 클래스에 입력을 받는다.
             HttpRequest httpRequest = new HttpRequest(new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
 
+            // HttpRequest 클래스의 URI를 보고 어떤 컨트롤러가 필요한지 골라준다.
             Controller controller = ControllerHandler.handleController(httpRequest);
+
+            // 골라준 컨트롤러로 응답을 만들어 준다.
             HttpResponse httpResponse = controller.makeResponse(httpRequest);
 
-            DataOutputStream dos = new DataOutputStream(out);
-            httpResponse.send(dos);
+            // 만들어준 응답을 출력
+            httpResponse.send(new DataOutputStream(out));
 
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            logger.error("ERROR :  {}", e.getMessage());
         }
     }
 }
