@@ -15,6 +15,7 @@ public class ControllerMapper {
     static {
         controllerMap.put("/", new HomeController());
         controllerMap.put("index.html", new HomeController());
+        controllerMap.put("user", new UserController());
     }
 
     public static Controller selectController(RequestLine requestLine) {
