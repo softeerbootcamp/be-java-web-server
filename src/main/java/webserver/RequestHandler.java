@@ -30,7 +30,7 @@ public class RequestHandler implements Runnable {
             String line = br.readLine();
 
             DataOutputStream dos = new DataOutputStream(out);
-            RequestLine requestLine = RequestLine.of(line);
+            RequestLine requestLine = RequestLine.from(line);
 
             Controller controller = ControllerMapper.selectController(requestLine);
             Response response = controller.getResponse(requestLine);
