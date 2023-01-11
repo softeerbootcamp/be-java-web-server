@@ -44,6 +44,7 @@ public class HttpResponse {
         startLine.put(ResponseStartLine.STATUS, findResult.getStatus().getCode());
         startLine.put(ResponseStartLine.MESSAGE, findResult.getStatus().getMessage());
         attributes.put(ResponseAttribute.CONTENT_TYPE, findResult.getContentType().getType());
+        attributes.put(ResponseAttribute.CONTENT_LENGTH, Integer.toString(findResult.getResource().length));
         this.body = findResult.getResource();
     }
 

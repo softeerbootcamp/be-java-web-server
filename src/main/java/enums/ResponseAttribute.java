@@ -1,7 +1,8 @@
 package enums;
 
 public enum ResponseAttribute {
-    CONTENT_TYPE("content-type"),
+    CONTENT_TYPE("Content-type"),
+    CONTENT_LENGTH("Content-Length"),
     LOCATION("Location");
 
     private String attribute;
