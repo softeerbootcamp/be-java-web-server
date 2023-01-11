@@ -36,35 +36,11 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
             dos.writeBytes(httpResponse.toString());
             logger.debug("response: \n"+httpResponse.toString());
-            responseBody(dos, httpResponse.getBody());
+            HttpResponseUtil.responseBody(dos, httpResponse.getBody());
 
-//            if(Objects.nonNull(path))
-//                HttpResponseUtil.response(out, path);
         } catch (IOException e) {
             logger.error(e.getMessage());
         } catch (NullPointerException e){
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        if(Objects.isNull(body))
-            throw new NullPointerException();
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
