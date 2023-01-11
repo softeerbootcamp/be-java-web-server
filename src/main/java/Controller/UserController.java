@@ -18,6 +18,7 @@ public class UserController implements Controller{
         String uri = httpRequest.getUri();
         // TODO 할 일 enum 으로 구현 가능 할듯
         if (uri.startsWith("/user/create")) {
+            // TODO split으로 변경 후 메소드 분리
             int index = uri.indexOf("?");
             String requestPath = uri.substring(0, index);
             String queryString = uri.substring(index + 1);
