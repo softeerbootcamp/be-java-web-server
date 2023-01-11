@@ -2,16 +2,7 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
-
-import db.Database;
-import jdk.jshell.execution.Util;
-import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import parser.StringParser;
@@ -68,7 +59,6 @@ public class RequestHandler implements Runnable{
 
             String brRead = br.readLine();
 
-
             String[] urlString = stringParser.stringSplit(brRead);
 
             String url = urlString[1];
@@ -96,7 +86,6 @@ public class RequestHandler implements Runnable{
             DataOutputStream dos = new DataOutputStream(out);
 
             byte[] body = {};
-
             body = Files.readAllBytes(new File("src/main/resources/templates" + url).toPath());
 
 
