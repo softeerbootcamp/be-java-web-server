@@ -3,11 +3,12 @@ package model.repository;
 import model.domain.User;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public interface UserRepository {
-    void addUser(User user);
+    User addUser(User user);
 
-    User findUserById(String userId);
+    Optional<User> findUserById(String userId);
 
     Collection<User> findAll();
 }
