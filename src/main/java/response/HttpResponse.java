@@ -23,12 +23,12 @@ public class HttpResponse {
     }
 
     public void makeResponse() {
-        HttpStatus responseHttpStatus = selectMethod(this);
+        HttpStatus responseHttpStatus = selectHttpStatus(this);
         responseHeader(responseHttpStatus);
         responseBody();
     }
 
-    private HttpStatus selectMethod(HttpResponse httpResponse) {
+    private HttpStatus selectHttpStatus(HttpResponse httpResponse) {
         if(httpResponse.getData().length==0){
             return HttpStatus.NOT_FOUND;
         }else{
