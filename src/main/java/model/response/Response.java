@@ -23,6 +23,10 @@ public class Response {
         return new Response(StatusLine.from(status), Collections.emptyMap(), null);
     }
 
+    public static Response of(StatusLine statusLine, Map<Header, String> headers) {
+        return new Response(statusLine, headers, null);
+    }
+
     public static Response of(StatusLine statusLine, Map<Header, String> headers, byte[] body) {
         return new Response(statusLine, headers, body);
     }
