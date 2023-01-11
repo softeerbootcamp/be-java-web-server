@@ -1,15 +1,15 @@
 package webserver;
 
+import httpMock.CustomHttpRequest;
+import httpMock.CustomHttpResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import httpMock.CustomHttpRequest;
-import httpMock.CustomHttpResponse;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -25,7 +25,7 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            CustomHttpRequest req = new CustomHttpRequest(in);
+            CustomHttpRequest req = CustomHttpRequest.from(in);
             CustomHttpResponse res = new CustomHttpResponse(out);
             RequestRouter requestRouter = RequestRouter.getRequestRouter();
             requestRouter.doRoute(req, res);
