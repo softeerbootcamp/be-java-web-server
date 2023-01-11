@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 
 import db.Database;
 import jdk.jshell.execution.Util;
@@ -67,23 +68,26 @@ public class RequestHandler implements Runnable{
 
             String brRead = br.readLine();
 
-            String urlString = stringParser.stringSplit(brRead);
 
-            logger.debug("origin url : {}",urlString);
+            String[] urlString = stringParser.stringSplit(brRead);
 
-            String[] dataParse = stringParser.dataParsing(urlString);
+            String url = urlString[1];
+            for (String i : urlString) {
+                logger.debug("urlString : {}", i);
+            }
 
-            String userId = joinService.joinUser(dataParse);
+            String userId = joinService.joinUser(urlString[1]);
 
-            logger.debug("Insert User Data : {}", Database.findUserById(userId));
 
-            String parserString = stringParser.extensionSplit(urlString);
+//            logger.debug("Insert User Data : {}", Database.findUserById(userId));
 
-            logger.debug("parserString : {}",parserString);
-
-            String directoryString = stringParser.directorySplit(urlString);
-
-            logger.debug("directoryString : {}",directoryString);
+//            String parserString = stringParser.extensionSplit(urlString);
+//
+//            logger.debug("parserString : {}",parserString);
+//
+//            String directoryString = stringParser.directorySplit(urlString);
+//
+//            logger.debug("directoryString : {}",directoryString);
 
             while (!brRead.equals("") && brRead != null) {
                 brRead = br.readLine();
@@ -93,18 +97,21 @@ public class RequestHandler implements Runnable{
 
             byte[] body = {};
 
-            if(parserString.equals("html") && directoryString != null){
-                logger.debug("html url : {} " , "src/main/resources/templates" + directoryString + "." +parserString);
-                body = Files.readAllBytes(new File("src/main/resources/templates" + directoryString + "." +parserString).toPath());
-            }
-            if(parserString.equals("css") && directoryString != null){
-                logger.debug("css url : {} " , "src/main/resources/static" + directoryString + "." +parserString);
-                body = Files.readAllBytes(new File("src/main/resources/static" + directoryString + "." +parserString).toPath());
-            }
-            if(parserString.equals("js") && directoryString != null){
-                logger.debug("js url : {} " , "src/main/resources/static" + directoryString + "." +parserString);
-                body = Files.readAllBytes(new File("src/main/resources/static" + directoryString + "." +parserString).toPath());
-            }
+            body = Files.readAllBytes(new File("src/main/resources/templates" + url).toPath());
+
+
+//            if(parserString.equals("html") && directoryString != null){
+//                logger.debug("html url : {} " , "src/main/resources/templates" + directoryString + "." +parserString);
+//                body = Files.readAllBytes(new File("src/main/resources/templates" + directoryString + "." +parserString).toPath());
+//            }
+//            if(parserString.equals("css") && directoryString != null){
+//                logger.debug("css url : {} " , "src/main/resources/static" + directoryString + "." +parserString);
+//                body = Files.readAllBytes(new File("src/main/resources/static" + directoryString + "." +parserString).toPath());
+//            }
+//            if(parserString.equals("js") && directoryString != null){
+//                logger.debug("js url : {} " , "src/main/resources/static" + directoryString + "." +parserString);
+//                body = Files.readAllBytes(new File("src/main/resources/static" + directoryString + "." +parserString).toPath());
+//            }
 
             response200Header(dos, body.length);
             responseBody(dos, body);
