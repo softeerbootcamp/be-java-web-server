@@ -1,5 +1,7 @@
 package request;
 
+import file.FilePostfix;
+
 import java.io.InputStream;
 import java.util.Map;
 
@@ -22,6 +24,17 @@ public class Request {
     public String getResource() {
         String[] tokens = requestHeader.get(RequestParser.REQUEST_LINE).split(" ");
         return tokens[1];
+    }
+
+    public String getResourceFileContentType() {
+        int index = requestHeader.get(RequestParser.REQUEST_LINE).indexOf(".");
+        String postfix = requestHeader.get(RequestParser.REQUEST_LINE).substring(index+1);
+        for(FilePostfix filePostfix : FilePostfix.values()) {
+            if(postfix.equals(filePostfix.getPostfix())) {
+                return filePostfix.getContentType();
+            }
+        }
+        return FilePostfix.NO_MATCH.getContentType();
     }
 
     @Override
