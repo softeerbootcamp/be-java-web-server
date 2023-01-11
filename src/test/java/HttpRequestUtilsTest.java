@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class HttpRequestUtilsTest {
     @Test
     public void getUrl(){
-        String url = HttpRequestUtils.getUrl("GET /index.html HTTP/1.1");
+        String url = HttpRequestUtils.getRequestLine("GET /index.html HTTP/1.1").getHttpUri().getUri();
         assertThat(url).isEqualTo("/index.html");
     }
 
