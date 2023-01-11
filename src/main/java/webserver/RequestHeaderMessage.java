@@ -39,14 +39,4 @@ public class RequestHeaderMessage {
         this.fileExtension = Files.getFileExtension(httpOnlyURL);
     }
 
-    /*
-    public void isRedirection(){
-        if (httpOnlyURL.contains("create")){
-            this.httpOnlyURL = "/index.html";
-            this.fileExtension = Files.getFileExtension(httpOnlyURL);
-        }
-    }
-
-     */
-
 }

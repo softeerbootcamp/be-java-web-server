@@ -19,7 +19,7 @@ import javax.xml.crypto.Data;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private static final String ABSOLUTE_PATH = "/Users/rentalhub/HMG/be-java-web-server/src/main/resources";
+    private static final String RELATIVE_PATH = "./src/main/resources";
     private static final String TEMPLATES = "/templates";
     private static final String STATIC = "/static";
     private static final String USER_ID = "userId";
@@ -46,7 +46,7 @@ public class RequestHandler implements Runnable {
             while(!(strBr = br.readLine()).equals("")){
                 //System.out.println(strBr);
             }
-            String fileURL = ABSOLUTE_PATH;
+            String fileURL = RELATIVE_PATH;
             String fileExtension = requestHeaderMessage.getFileExtension();
             String contentType = "text/" + (fileExtension.equals("js")?"javascript":fileExtension);
             fileURL += (fileExtension.equals("html")||fileExtension.equals("ico"))?TEMPLATES:STATIC;
@@ -54,9 +54,8 @@ public class RequestHandler implements Runnable {
             if (!requestHeaderMessage.getHttpOnlyURL().contains("create"))
                 body = Files.readAllBytes(new File(fileURL+requestHeaderMessage.getHttpOnlyURL()).toPath());
             // TODO 사용자 요청에 대한 처리는 이 곳까지 구현하면 된다.
-            printMembers();
+            logMembers();
             DataOutputStream dos = new DataOutputStream(out);
-            //response200Header(dos, body.length,contentType);
             responseHeader(dos,body.length,contentType, requestHeaderMessage.getHttpOnlyURL());
             responseBody(dos, body);
         } catch (IOException e) {
@@ -66,8 +65,6 @@ public class RequestHandler implements Runnable {
 
     private void responseHeader(DataOutputStream dos, int lengthOfBodyContent, String contentType, String onlyURL){
         String redirectLink = Redirect.getRedirectLink(onlyURL);
-        System.out.println("only URL:"+onlyURL);
-        System.out.println("Redirect Link: "+redirectLink);
         if (redirectLink.equals(""))
             response200Header(dos,lengthOfBodyContent,contentType);
         else response301Header(dos, redirectLink);
@@ -113,7 +110,7 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void printMembers(){
-        Stream.of(Database.findAll()).forEach(user-> System.out.println(user));
+    private void logMembers(){
+        Stream.of(Database.findAll()).forEach(user->logger.info(user.toString()));
     }
 }
