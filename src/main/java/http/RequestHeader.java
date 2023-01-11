@@ -15,7 +15,11 @@ public class RequestHeader {
 
     public static RequestHeader from(List<String> requestHeader) {
         return requestHeader.stream()
-                .map(header -> header.split(" "))
+                .map(header -> header.split(": "))
                 .collect(collectingAndThen(toMap(header -> header[0], header -> header[1]), RequestHeader::new));
+    }
+
+    public String getHeader(String key) {
+        return headers.get(key);
     }
 }
