@@ -68,7 +68,7 @@ public class RequestHandler implements Runnable {
 
     private void response302Header(DataOutputStream dos) {
         try {
-            dos.writeBytes("HTTP/1.1 301 FOUND \r\n");
+            dos.writeBytes("HTTP/1.1 302 FOUND \r\n");
             dos.writeBytes("Location: /index.html\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
