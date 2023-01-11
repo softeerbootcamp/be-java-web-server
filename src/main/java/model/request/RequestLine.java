@@ -25,4 +25,17 @@ public class RequestLine {
     public String getUri() {
         return uri;
     }
+
+    public String getHttpVersion() {
+        return httpVersion;
+    }
+
+    public boolean hasQueryString() {
+        return uri.contains("\\?");
+    }
+
+    public String getControllerCriteria() {
+        String[] uriSplit = uri.split("/");
+        return uriSplit[1];
+    }
 }

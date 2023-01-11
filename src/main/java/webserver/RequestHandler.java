@@ -1,10 +1,12 @@
 package webserver;
 
 import java.io.*;
-import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
+import java.net.Socket;
 
+import controller.Controller;
+import util.ControllerMapper;
+import model.response.Response;
 import model.request.RequestLine;
 
 import org.slf4j.Logger;
@@ -29,30 +31,11 @@ public class RequestHandler implements Runnable {
 
             DataOutputStream dos = new DataOutputStream(out);
             RequestLine requestLine = RequestLine.of(line);
-            byte[] body = Files.readAllBytes(new File("src/main/resources/templates" + requestLine.getUri()).toPath());
 
-            response200Header(dos, body.length);
-            responseBody(dos, body);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
+            Controller controller = ControllerMapper.selectController(requestLine);
+            Response response = controller.getResponse(requestLine);
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK " + System.lineSeparator());
-            dos.writeBytes("Content-Type: text/html;charset=utf-8" + System.lineSeparator());
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + System.lineSeparator());
-            dos.writeBytes(System.lineSeparator());
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
+            response.writeOutputStream(dos);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
