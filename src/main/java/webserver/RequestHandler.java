@@ -1,18 +1,19 @@
 package webserver;
 
+import handler.Handler;
+import http.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.HttpRequestUtils;
+import util.HandlerMapper;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-    private Socket connection;
+    private final Socket connection;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -23,16 +24,11 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            String requestLine = br.readLine();
-            if (requestLine == null) {
-                return;
-            }
-            logger.debug("requestLine : {}", requestLine);
 
-            String url = HttpRequestUtils.getUrl(requestLine);
+            HttpRequest httpRequest = new HttpRequest(in);
+            Handler handler = HandlerMapper.getHandler(httpRequest);
 
-            String viewName = searchRequestHandler(url);
+            String viewName = handler.handle(httpRequest);
             String viewPath = ViewResolver.process(viewName);
 
             byte[] body = Files.readAllBytes(new File(viewPath).toPath());
@@ -43,16 +39,6 @@ public class RequestHandler implements Runnable {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
-    }
-
-    private String searchRequestHandler(String url) {
-        if (url.contains("/user")) {
-            UserRequestHandler handler = new UserRequestHandler();
-            return handler.handle(url);
-        }
-
-        // TODO 추후 다른 기능이 추가되면 수정할 예정
-        return url;
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {

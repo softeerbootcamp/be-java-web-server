@@ -1,10 +1,9 @@
-package webserver;
+package service;
 
 import db.Database;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.HttpRequestUtils;
 
 import java.util.Map;
 
@@ -12,13 +11,7 @@ public class UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    public void signUp(String url) {
-        String[] splited = url.split("\\?");
-        String queryString = splited[1];
-        logger.debug("queryString : {}" , queryString);
-
-        Map<String, String> userInfo = HttpRequestUtils.parseQueryString(queryString);
-
+    public void signUp(Map<String, String> userInfo) {
         User user = createUser(userInfo);
         logger.debug("user : {}", user);
 

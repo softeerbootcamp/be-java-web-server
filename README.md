@@ -11,7 +11,7 @@ Java Web Application Server 2022
 
 ## 프로젝트 진행 상황
 - [x] step1 구현
-- [ ] step2 구현
+- [x] step2 구현
 - [ ] step3 구현
 
 ## 학습한 내용
