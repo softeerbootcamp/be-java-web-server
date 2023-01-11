@@ -52,8 +52,4 @@ public class RequestHandler implements Runnable {
             logger.error(e.getMessage());
         }
     }
-
-
-
-
 }
