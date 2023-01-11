@@ -22,8 +22,25 @@ public class HomeController implements Controller {
 
     @Override
     public Response getResponse(RequestLine requestLine) {
-        if(requestLine.getUri().equals("/index.html")) return getIndexHtml(requestLine);
+        if(requestLine.getUri().equals("/")) return getIndexHtmlWhenInputNothing(requestLine);
+        else if(requestLine.getUri().equals("/index.html")) return getIndexHtml(requestLine);
         else return Response.from(Status.NOT_FOUND);
+    }
+
+    private Response getIndexHtmlWhenInputNothing(RequestLine requestLine) {
+        Map<Header, String> headers = new HashMap<>();
+        headers.put(Header.of("Content-Type"), "text/html;charset=utf-8");
+
+        byte[] body = {};
+        try {
+            body = Files.readAllBytes(new File(fileParentPath + requestLine.getUri() + "index.html").toPath());
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+
+        headers.put(Header.of("Content-Length"), Integer.toString(body.length));
+
+        return Response.of(StatusLine.from(Status.OK), headers, body);
     }
 
     private Response getIndexHtml(RequestLine requestLine) {
