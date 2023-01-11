@@ -3,9 +3,7 @@ package utils;
 public enum StatusCode {
     OK(200, "OK"),
     CREATED(201, "Created"),
-    MOVEDPERMANENTLY(301, "Moved Permanently"),
-    SEEOTHER(302, "See Other"),
-    BADREQUEST(400, "Bad Request"),
+    FOUND(302, "FOUND"),
     UNAUTHORIZED(401, "Unauthorized"),
     FORBIDDEN(403, "Forbidden"),
     NOTFOUND(404, "Not Found");
@@ -16,6 +14,14 @@ public enum StatusCode {
     StatusCode(int statusCode, String statusMessage) {
         this.statusCode = statusCode;
         this.statusMessage = statusMessage;
+    }
+
+    public int getStatusCode() {
+        return statusCode;
+    }
+
+    public String getStatusMessage() {
+        return statusMessage;
     }
 
     public static StatusCode getStatusCode(String message) {
