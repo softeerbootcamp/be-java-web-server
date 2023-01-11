@@ -17,6 +17,7 @@ import java.util.Map;
 
 import static webserver.utils.CommonUtils.checkParameters;
 
+
 public class AuthController implements Controller {
 
     private Response res;
@@ -48,6 +49,7 @@ public class AuthController implements Controller {
         }
     }
 
+
     public enum Enum{
         CREATE("/user/create");
 
@@ -61,6 +63,7 @@ public class AuthController implements Controller {
                     .filter(each-> req.startsWith(each.getPath()))
                     .findFirst()
                     .orElseThrow(() -> new HttpRequestException(StatusCodes.NOT_FOUND));
+
         }
         public String getPath(){
             return path;

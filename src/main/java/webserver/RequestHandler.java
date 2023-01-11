@@ -14,7 +14,6 @@ import webserver.domain.response.Response;
 import webserver.exception.HttpRequestException;
 import webserver.utils.CommonUtils;
 import webserver.utils.StaticResourceFinder;
-
 import static webserver.utils.HttpRequestUtils.parseHttpRequest;
 
 public class RequestHandler implements Runnable {

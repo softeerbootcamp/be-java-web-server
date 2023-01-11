@@ -16,6 +16,7 @@ public class Request {
     }
     public static Request of(String reqLine, String header) {
         return new Request(RequestLine.from(reqLine), parseStringToMap(header));
+
     }
 
     public void readRequest(){
@@ -25,6 +26,7 @@ public class Request {
 
     public Map<String, String> getRequestHeader() {
         return header;
+
     }
 
     public RequestLine getRequestLine() {

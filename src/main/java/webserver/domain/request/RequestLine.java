@@ -27,7 +27,6 @@ public class RequestLine {
         System.out.println(method + resource + version);
     }
 
-
     public String getResource(){
         return resource;
     }

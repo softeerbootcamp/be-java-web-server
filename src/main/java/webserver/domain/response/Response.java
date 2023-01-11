@@ -6,7 +6,6 @@ import webserver.RequestHandler;
 import webserver.domain.ContentType;
 import webserver.domain.StatusCodes;
 import webserver.utils.HttpResponseUtil;
-
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;

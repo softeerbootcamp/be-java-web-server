@@ -14,6 +14,7 @@ public class CommonUtils {
     public static String[] parseRequestLine(String requestedPath){
         return requestedPath.split("\\?");
     }
+    
     public static Map<String, String> parseQueryStrings(String queryStr){
         Map<String, String> datas = HttpRequestUtils.parseQueryString(queryStr);
         return datas;
@@ -26,4 +27,5 @@ public class CommonUtils {
         }
         return true;
     }
+    
 }
