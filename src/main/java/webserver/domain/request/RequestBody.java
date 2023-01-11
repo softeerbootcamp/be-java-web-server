@@ -10,14 +10,14 @@ public class RequestBody {
 
     private HashMap<String, String> bodyMaps;
 
-    public RequestBody(HashMap<String, String> bodyMaps){
+    private RequestBody(HashMap<String, String> bodyMaps){
         this.bodyMaps = bodyMaps;
     }
-    public static RequestBody of(HashMap<String, String> bodyMaps){
+    private static RequestBody of(HashMap<String, String> bodyMaps){
         return new RequestBody(bodyMaps);
     }
 
-    public static String[] parseRequestBody(String req){
+    private static String[] parseRequestBody(String req){
         return req.split(" ");
     }
 

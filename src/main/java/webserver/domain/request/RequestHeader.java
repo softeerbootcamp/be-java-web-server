@@ -9,14 +9,14 @@ public class RequestHeader {
 
     private HashMap<String, String> headerMaps;
 
-    public RequestHeader(HashMap<String, String> headerMaps){
+    private RequestHeader(HashMap<String, String> headerMaps){
         this.headerMaps = headerMaps;
     }
-    public static RequestHeader of(HashMap<String, String> headerMaps){
+    private static RequestHeader of(HashMap<String, String> headerMaps){
         return new RequestHeader(headerMaps);
     }
 
-    public static String[] parseRequestLine(String req){
+    private static String[] parseRequestLine(String req){
         return req.split(" ");
     }
 

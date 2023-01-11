@@ -6,16 +6,16 @@ public class RequestLine {
     private String resource;
     private String version;
 
-    public RequestLine(String method, String resource, String version){
+    private RequestLine(String method, String resource, String version){
         this.method = method;
         this.resource = resource;
         this.version = version;
     }
-    public static RequestLine of(String method, String resource, String version){
+    private static RequestLine of(String method, String resource, String version){
         return new RequestLine(method, resource, version);
     }
 
-    public static String[] parseRequestLine(String req){
+    private static String[] parseRequestLine(String req){
         return req.split(" ");
     }
 

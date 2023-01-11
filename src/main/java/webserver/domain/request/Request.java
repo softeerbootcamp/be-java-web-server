@@ -6,7 +6,7 @@ public class Request {
     private RequestBody requestBody;
     private RequestLine requestLine;
 
-    public Request(RequestLine requestLine, RequestHeader requestHeader, RequestBody requestBody){
+    private Request(RequestLine requestLine, RequestHeader requestHeader, RequestBody requestBody){
         this.requestLine = requestLine;
         this.requestHeader = requestHeader;
         this.requestBody = requestBody;
