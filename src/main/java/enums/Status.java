@@ -2,8 +2,9 @@ package enums;
 
 public enum Status {
     OK("200", "OK"),
-    NOT_FOUND("404", "Not found"),
-    REDIRECT("301", "Moved Permanently");
+    CREATED("201", "Created"),
+    REDIRECT("301", "Moved Permanently"),
+    NOT_FOUND("404", "Not found");
 
     private String code;
     private String message;
