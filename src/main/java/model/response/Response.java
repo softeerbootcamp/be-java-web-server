@@ -20,7 +20,7 @@ public class Response {
     }
 
     public static Response from(Status status) {
-        return new Response(StatusLine.of(status), Collections.emptyMap(), null);
+        return new Response(StatusLine.from(status), Collections.emptyMap(), null);
     }
 
     public static Response of(StatusLine statusLine, Map<Header, String> headers, byte[] body) {
