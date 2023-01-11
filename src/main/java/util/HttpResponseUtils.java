@@ -17,7 +17,6 @@ public class HttpResponseUtils {
     private static final String staticFilePath = "/static";
 
     public static String makeFilePath(String contentType) {
-        String filePath = "";
         if(contentType.equals("text/html")){
             return basePath + htmlFilePath;
         }
