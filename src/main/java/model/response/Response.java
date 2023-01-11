@@ -30,11 +30,7 @@ public class Response {
     public void writeOutputStream(DataOutputStream dataOutputStream) throws IOException {
         writeStatusLine(dataOutputStream);
         writeResponseHeader(dataOutputStream);
-        g
-        if(hasContent()) {
-            dataOutputStream.write(body, 0, body.length);
-            dataOutputStream.flush();
-        }
+        writeResponseBody(dataOutputStream);
     }
 
     private void writeStatusLine(DataOutputStream dataOutputStream) throws IOException {
@@ -48,6 +44,13 @@ public class Response {
                     System.lineSeparator());
         }
         dataOutputStream.writeBytes(System.lineSeparator());
+    }
+
+    private void writeResponseBody(DataOutputStream dataOutputStream) throws IOException {
+        if(hasContent()) {
+            dataOutputStream.write(body, 0, body.length);
+            dataOutputStream.flush();
+        }
     }
 
     private boolean hasContent() {
