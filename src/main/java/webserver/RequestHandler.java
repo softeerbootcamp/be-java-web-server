@@ -2,10 +2,12 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.utils.RequestLineParser;
 
 import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
+import java.util.Map;
 
 import static webserver.Paths.TEMPLATE_PATH;
 import static webserver.Paths.STATIC_PATH;
@@ -25,18 +27,22 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             DataOutputStream dos = new DataOutputStream(out);
 
-            String url = getUrl(in);
-            if(url.contains("/create"))
-            {
-                SignUpController.enrollNewUser(url);
-                url = SignUpController.redirectToIndex();
-            }
-            String contentType = Files.probeContentType(new File(url).toPath());
+            // TODO request line parser 구현하기
+            Map<String, String> requestLine = RequestLineParser.parseRequestLine(in);
+            String reqMethod = requestLine.get(RequestLineParser.METHOD);
+            String reqQuery = requestLine.get(RequestLineParser.QUERY);
+            String reqVersion = requestLine.get(RequestLineParser.VERSION);
 
-            byte[] bytes = Byte.urlToByte(url);
+            if(reqQuery.contains("/create"))
+            {
+                SignUpController.enrollNewUser(reqQuery);
+                reqQuery = SignUpController.redirectToIndex();
+            }
+            String contentType = Files.probeContentType(new File(reqQuery).toPath());
+
+            byte[] bytes = Byte.urlToByte(reqQuery);
 
             response200Header(dos, bytes.length, contentType);
             responseBody(dos, bytes);
@@ -64,14 +70,6 @@ public class RequestHandler implements Runnable {
         }catch (IOException e) {
             logger.error(e.getMessage());
         }
-    }
-
-    private String getUrl(InputStream in) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-        String firstLine = br.readLine();
-        System.out.println(firstLine);
-        String[] splitedFirstLine = firstLine.split(" ");
-        return splitedFirstLine[1];
     }
 
 }
