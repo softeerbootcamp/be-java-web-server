@@ -2,6 +2,7 @@ package handler;
 
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import http.response.HttpStatusCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
@@ -23,6 +24,8 @@ public class UserHandler implements Handler {
 
             UserService userService = new UserService();
             userService.signUp(userInfo);
+
+            response.setHttpStatusLine(request, HttpStatusCode.OK);
 
             return "/user/login.html";
         }
