@@ -1,5 +1,6 @@
 package webserver;
 
+import customException.AlreadyHasSameIdException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.httpUtils.RequestParser;
@@ -7,11 +8,8 @@ import webserver.httpUtils.Response;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.file.Files;
 import java.util.Map;
 
-import static webserver.Paths.TEMPLATE_PATH;
-import static webserver.Paths.STATIC_PATH;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -50,6 +48,12 @@ public class RequestHandler implements Runnable {
             res.sendResponse(out, reqQuery);
         } catch (IOException e) {
             logger.error(e.getMessage());
+        } catch (AlreadyHasSameIdException e)
+        {
+            logger.error(e.getMessage());
+            // alert
+
+            // redirect to form.html
         }
     }
 }

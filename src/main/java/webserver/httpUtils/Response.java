@@ -9,8 +9,7 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
-import static webserver.Paths.STATIC_PATH;
-import static webserver.Paths.TEMPLATE_PATH;
+import webserver.Paths;
 
 public class Response {
     private Logger logger;
@@ -112,8 +111,8 @@ public class Response {
 class Byte {
     public static byte[] urlToByte(String url) throws IOException {
         if (url.contains("html") || url.contains("favicon"))
-            return Files.readAllBytes(new File(TEMPLATE_PATH.getPath() + url).toPath());
+            return Files.readAllBytes(new File(Paths.TEMPLATE_PATH + url).toPath());
         else
-            return Files.readAllBytes(new File(STATIC_PATH.getPath() + url).toPath());
+            return Files.readAllBytes(new File(Paths.STATIC_PATH + url).toPath());
     }
 }
