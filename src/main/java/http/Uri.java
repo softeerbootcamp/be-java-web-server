@@ -33,6 +33,10 @@ public class Uri {
                 .anyMatch(resourceType -> path.endsWith(resourceType.getExtension()));
     }
 
+    public ResourceType parseResourceType() {
+        return ResourceType.findResourceType(path);
+    }
+
     public String getPath() {
         return path;
     }

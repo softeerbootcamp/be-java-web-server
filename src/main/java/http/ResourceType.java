@@ -27,9 +27,9 @@ public enum ResourceType {
         this.path = path;
     }
 
-    public static ResourceType findResourceType(final Uri uri) {
+    public static ResourceType findResourceType(String path) {
         return Stream.of(values())
-                .filter(resourceType -> uri.getPath().endsWith(resourceType.getExtension()))
+                .filter(resourceType -> path.endsWith(resourceType.getExtension()))
                 .findFirst()
                 .orElse(null);
     }
