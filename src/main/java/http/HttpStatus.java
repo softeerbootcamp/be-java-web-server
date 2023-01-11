@@ -9,4 +9,8 @@ public enum HttpStatus {
         this.statusCode = statusCode;
         this.status = status;
     }
+
+    public String toString(){
+        return statusCode + " " + status;
+    }
 }

@@ -3,6 +3,8 @@ package Controller;
 import http.HttpRequest;
 import http.HttpResponse;
 
+import java.io.IOException;
+
 public interface Controller {
-    void makeResponse(HttpRequest httpRequest, HttpResponse httpResponse);
+    HttpResponse makeResponse(HttpRequest httpRequest) throws IOException;
 }

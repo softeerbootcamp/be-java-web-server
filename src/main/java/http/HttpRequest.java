@@ -16,11 +16,24 @@ public class HttpRequest {
         String line = br.readLine();
         if (line == null) return;
         this.httpRequestLine = HttpRequestUtils.getRequestLine(line);
-
-        this.httpHeader = new HttpHeader(HttpHeader.readHeaders(br));
+        this.httpHeader = HttpRequestUtils.getHeaders(br);
     }
 
     public String getUri() {
         return this.httpRequestLine.getHttpUri().getUri();
     }
+
+    public boolean wantStatic() {
+        return httpRequestLine.getHttpUri().isStaticUri();
+    }
+
+    public boolean wantDynamic() {
+        return httpRequestLine.getHttpUri().isDynamicUri();
+    }
+
+    public String getContentType() {
+        //logger.debug("Accept : {}", httpHeader.getAccept());
+        return httpHeader.getAccept().split(",")[0];
+    }
+
 }

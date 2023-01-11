@@ -9,11 +9,9 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private static final String requestFilePath = "./src/main/resources/templates/";
 
     private Socket connection;
 
@@ -26,38 +24,20 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
+            // HttpRequest 클래스에 입력을 받는다.
             HttpRequest httpRequest = new HttpRequest(new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
-            DataOutputStream dos = new DataOutputStream(out);
-            HttpResponse httpResponse = new HttpResponse();
+
+            // HttpRequest 클래스의 URI를 보고 어떤 컨트롤러가 필요한지 골라준다.
             Controller controller = ControllerHandler.handleController(httpRequest);
-            controller.makeResponse(httpRequest, httpResponse);
 
-            byte[] body = Files.readAllBytes(new File(requestFilePath + httpRequest.getUri()).toPath());
-            response200Header(dos, body.length);
-            responseBody(dos, body);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
+            // 골라준 컨트롤러로 응답을 만들어 준다.
+            HttpResponse httpResponse = controller.makeResponse(httpRequest);
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
+            // 만들어준 응답을 출력
+            httpResponse.send(new DataOutputStream(out));
 
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            logger.error("ERROR :  {}", e.getMessage());
         }
     }
 }
