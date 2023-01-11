@@ -2,11 +2,14 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import parser.StringParser;
 import service.JoinService;
+import util.FileIoUtils;
+import util.Utilities;
 
 public class RequestHandler implements Runnable{
 
@@ -57,57 +60,49 @@ public class RequestHandler implements Runnable{
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 
+            DataOutputStream dos;
+
+            byte[] body = {};
+
             String brRead = br.readLine();
 
             String[] urlString = stringParser.stringSplit(brRead);
 
             String url = urlString[1];
-            for (String i : urlString) {
-                logger.debug("urlString : {}", i);
+
+            boolean check = Utilities.checkData(url);
+
+            while (!brRead.equals("") && brRead != null) brRead = br.readLine();
+//            body = Files.readAllBytes(new File("./templates" + url).toPath());
+
+            if(!check){
+
+                String userId = joinService.joinUser(urlString[1]);
+
+                logger.debug("userId : {}",userId);
+
+                body = FileIoUtils.loadFileFromClasspath("./templates" + url);
+                dos = new DataOutputStream(out);
+                response200Header(dos, body.length);
+                responseBody(dos, body);
+
             }
 
-            String userId = joinService.joinUser(urlString[1]);
+            if(check){
+                logger.debug("url-check(true) : {}", url);
 
-            logger.debug("userId : {}",userId);
-
-
-//            logger.debug("Insert User Data : {}", Database.findUserById(userId));
-
-//            String parserString = stringParser.extensionSplit(urlString);
-//
-//            logger.debug("parserString : {}",parserString);
-//
-//            String directoryString = stringParser.directorySplit(urlString);
-//
-//            logger.debug("directoryString : {}",directoryString);
-
-            while (!brRead.equals("") && brRead != null) {
-                brRead = br.readLine();
+                body = FileIoUtils.loadFileFromClasspath("./templates" + url);
+                dos = new DataOutputStream(out);
+                response200Header(dos, body.length);
+                responseBody(dos, body);
             }
 
-            DataOutputStream dos = new DataOutputStream(out);
-
-            byte[] body = {};
-            body = Files.readAllBytes(new File("src/main/resources/templates" + url).toPath());
-
-
-//            if(parserString.equals("html") && directoryString != null){
-//                logger.debug("html url : {} " , "src/main/resources/templates" + directoryString + "." +parserString);
-//                body = Files.readAllBytes(new File("src/main/resources/templates" + directoryString + "." +parserString).toPath());
-//            }
-//            if(parserString.equals("css") && directoryString != null){
-//                logger.debug("css url : {} " , "src/main/resources/static" + directoryString + "." +parserString);
-//                body = Files.readAllBytes(new File("src/main/resources/static" + directoryString + "." +parserString).toPath());
-//            }
-//            if(parserString.equals("js") && directoryString != null){
-//                logger.debug("js url : {} " , "src/main/resources/static" + directoryString + "." +parserString);
-//                body = Files.readAllBytes(new File("src/main/resources/static" + directoryString + "." +parserString).toPath());
-//            }
-
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+//            response200Header(dos, body.length);
+//            responseBody(dos, body);
         } catch (IOException e) {
             logger.error(e.getMessage());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         }
     }
 
