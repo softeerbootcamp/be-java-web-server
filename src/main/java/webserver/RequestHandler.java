@@ -37,7 +37,7 @@ public class RequestHandler implements Runnable {
             HttpRequest request = RequestParser.parseInputStreamToHttpRequest(in);
             String url = request.getUrl();
             HttpResponse response = new HttpResponse();
-            //TODO 요청 url에 따라 컨트롤러 다르게 타게 하는 것 일반화하기 - 프론트 컨트롤러 패턴 적용해보기
+            //단순 html 파일 반환이 요청이 아닐 때
             if(!url.endsWith("html")) {
                 try{
                     Controller controller = this.frontController.getControllerByUrl(url);
@@ -46,11 +46,10 @@ public class RequestHandler implements Runnable {
                     logger.debug("해당되는 컨트롤러가 없습니다");
                 }
             }
-            //단순히 index.html로 리다이렉트 하는 것이 아니라 응답을 만들어야 하면
-            if(response.getStatus()!=HttpStatus.FOUND) RequestDispatcher.handle(request,response);
+            // 즉 그냥 단순 html 파일 반환이 요청일 때
+            if(response.getStatus()==null) RequestDispatcher.handle(request,response);
             ResponseWriter rw = new ResponseWriter(out);
             rw.write(request,response);
-
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
