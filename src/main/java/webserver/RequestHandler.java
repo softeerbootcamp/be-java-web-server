@@ -34,9 +34,10 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String line = br.readLine();
             logger.debug("> input line : {}", line);
-            String url = getUrl(line);
-            url = checkUrlQueryString(url);
+            String url = extractUrl(line);
+            checkUrlQueryString(url);
 
+            //응답 메시지 출력 준비
             DataOutputStream dos = new DataOutputStream(out);
 
             if (url.contains("?")) {
@@ -44,7 +45,7 @@ public class RequestHandler implements Runnable {
             } else {
                 Path path = viewResolver.findFilePath(url);
                 String contentType = Files.probeContentType(path);
-                byte[] body = viewResolver.findFileBytes(path);
+                byte[] body = viewResolver.findActualFile(path);
                 response200Header(dos, body.length, contentType);
                 responseBody(dos, body);
             }
@@ -75,7 +76,7 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private String checkUrlQueryString(String url) {
+    private void checkUrlQueryString(String url) {
         String[] queryStrings = url.split("\\?");
         if (queryStrings.length != 1) {
             String queryString = queryStrings[1];
@@ -83,11 +84,10 @@ public class RequestHandler implements Runnable {
             Map<String, String> requestParams = parseQuerystring(queryString);
             userService.signUpUser(requestParams);
         }
-        return url;
     }
 
 
-    private String getUrl(String line) {
+    private String extractUrl(String line) {
         //문자열 분리 후 -> 문자열 배열에 삽입
         String[] tokens = line.split(" ");
         String url = tokens[1];

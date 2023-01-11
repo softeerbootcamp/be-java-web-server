@@ -3,7 +3,6 @@ package webserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 
@@ -13,7 +12,7 @@ public class ViewResolver {
     private static final String STATIC_PATH = "src/main/resources/static/";
     private static final String TEMPLATES_PATH = "src/main/resources/templates/";
 
-    public byte[] findFileBytes(Path path) throws IOException {
+    public byte[] findActualFile(Path path) throws IOException {
         try {
             return Files.readAllBytes(path);
         } catch (IOException e) {
