@@ -10,7 +10,7 @@ public class HttpParser {
     private static final String DOMAIN = "http://localhost:8080/";
     public static final String REQUEST_LINE = "Request Line";
 
-    public Map<String, String> parseHttpRequest(InputStream in) throws IOException {
+    public static Map<String, String> parseHttpRequest(InputStream in) throws IOException {
         Map<String, String> parsedHttpMap = new HashMap<>();
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
         String nextLine = br.readLine();
@@ -27,7 +27,7 @@ public class HttpParser {
         }
         return parsedHttpMap;
     }
-    public Map<String, String> parseQueryString(String query) {
+    public static Map<String, String> parseQueryString(String query) {
         int index = query.indexOf("?");
         String path = query.substring(0, index);
         String params = query.substring(index + 1);
