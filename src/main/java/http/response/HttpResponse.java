@@ -15,4 +15,8 @@ public class HttpResponse {
     public void setHttpStatusLine(HttpRequest request, HttpStatusCode statusCode) {
         this.httpStatusLine = new HttpStatusLine(request.getHttpVersion(), statusCode);
     }
+
+    public void addHttpHeader(String name, String value) {
+
+    }
 }

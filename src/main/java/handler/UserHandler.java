@@ -26,11 +26,14 @@ public class UserHandler implements Handler {
             userService.signUp(userInfo);
 
             response.setHttpStatusLine(request, HttpStatusCode.OK);
+            response.addHttpHeader("Content-type", request.getHttpHeader("Accept"));
 
             return "/user/login.html";
         }
 
         // TODO 추후 다른 기능이 추가되면 수정할 예정
+        response.setHttpStatusLine(request, HttpStatusCode.OK);
+        response.addHttpHeader("Content-type", request.getHttpHeader("Accept"));
         return url;
     }
 }

@@ -56,4 +56,8 @@ public class HttpRequest {
     public String getHttpVersion() {
         return this.httpRequestLine.getHttpVersion();
     }
+
+    public String getHttpHeader(String name) {
+        return httpHeader.getHeader(name);
+    }
 }
