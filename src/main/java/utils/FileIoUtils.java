@@ -4,8 +4,8 @@ import java.io.File;
 import java.nio.file.Files;
 
 public class FileIoUtils {
-    private static final String STATIC_RESOURCE_PATH = "src/main/resources/static";
-    private static final String TEMPLATE_RESOURCE_PATH = "src/main/resources/templates";
+    private static final String STATIC_RESOURCE_PATH = FileIoUtils.class.getClassLoader().getResource("./static").getPath();
+    private static final String TEMPLATE_RESOURCE_PATH = FileIoUtils.class.getClassLoader().getResource("./template").getPath();
 
     public static byte[] loadFile(String file) {
         try {
