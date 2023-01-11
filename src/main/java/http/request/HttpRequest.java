@@ -1,5 +1,7 @@
 package http.request;
 
+import java.util.Map;
+
 public class HttpRequest {
     private final HttpStartLine startLine;
     private final HttpRequestHeader requestHeader;
@@ -19,19 +21,15 @@ public class HttpRequest {
         return new HttpRequest(startLine, requestHeader, null);
     }
 
-    public String getRequestTarget() {
-        return this.startLine.getTarget();
-    }
-
-    public boolean hasParams() {
-        return this.startLine.hasParameter();
+    public URI getUri() {
+        return this.startLine.getUri();
     }
 
     public String getVersion() {
         return this.startLine.getVersion();
     }
 
-    public String getContentType() {
-        return this.startLine.getContentType();
+    public Map<String, String> getQuerys() {
+        return this.getUri().getQuerys();
     }
 }
