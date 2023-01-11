@@ -1,6 +1,6 @@
 package controller;
 
-import http.repsonse.HttpResponse;
+import http.response.HttpResponse;
 import http.request.HttpRequest;
 import service.UserService;
 

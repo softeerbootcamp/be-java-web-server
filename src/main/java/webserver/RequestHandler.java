@@ -4,7 +4,7 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
-import http.repsonse.HttpResponse;
+import http.response.HttpResponse;
 import http.request.HttpRequest;
 import service.UserService;
 import utils.HttpRequestGenerator;

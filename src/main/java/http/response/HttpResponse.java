@@ -1,4 +1,4 @@
-package http.repsonse;
+package http.response;
 
 import utils.StatusCode;
 

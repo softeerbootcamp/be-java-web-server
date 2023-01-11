@@ -1,6 +1,6 @@
 package utils;
 
-import http.repsonse.HttpResponse;
+import http.response.HttpResponse;
 import http.request.HttpRequest;
 import model.User;
 import service.UserService;

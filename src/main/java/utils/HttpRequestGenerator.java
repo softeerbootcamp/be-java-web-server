@@ -27,7 +27,7 @@ public class HttpRequestGenerator {
     }
 
     private static HttpRequestHeader parseRequestHeader(BufferedReader br) throws IOException {
-        HttpRequestHeader httpRequestHeader = HttpRequestHeader.of(new HashMap<>());
+        HttpRequestHeader httpRequestHeader = HttpRequestHeader.from(new HashMap<>());
         while (true) {
             String line = br.readLine();
             if (line.equals("")) break;
@@ -44,6 +44,6 @@ public class HttpRequestGenerator {
             if (line == null) break;
             sb.append(line);
         }
-        return HttpRequestBody.of(sb.toString());
+        return HttpRequestBody.from(sb.toString());
     }
 }
