@@ -14,8 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpRequestUtil;
 import util.Redirect;
-import view.InputView;
-import view.OutputView;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -36,21 +34,17 @@ public class RequestHandler implements Runnable {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            // TODO 사용자 요청에 대한 처리는 이 곳부터 구현하면 된다.
             InputStreamReader reader = new InputStreamReader(in);
             BufferedReader br = new BufferedReader(reader);
             RequestHeaderMessage requestHeaderMessage = new RequestHeaderMessage(br.readLine());
 
             String httpOnlyURL = requestHeaderMessage.getHttpOnlyURL();
-            String requestAttribute = "";
-            if (httpOnlyURL.contains("user")){    // /user/? 명령이 올 때 ?에 따른 명령 처리
+            if (httpOnlyURL.contains("user")){
                 userCommand(requestHeaderMessage);
             }
 
             String strBr = "";
-            while(!(strBr = br.readLine()).equals("")){
-                //System.out.println(strBr);
-            }
+            while(!(strBr = br.readLine()).equals("")){}
             String fileURL = RELATIVE_PATH;
             String fileExtension = requestHeaderMessage.getFileExtension();
             String contentType = "text/" + (fileExtension.equals("js")?"javascript":fileExtension);
@@ -58,8 +52,6 @@ public class RequestHandler implements Runnable {
             byte[] body = new byte[0];
             if (!requestHeaderMessage.getHttpOnlyURL().contains("create"))
                 body = Files.readAllBytes(new File(fileURL+requestHeaderMessage.getHttpOnlyURL()).toPath());
-            // TODO 사용자 요청에 대한 처리는 이 곳까지 구현하면 된다.
-            //logMembers();
             DataOutputStream dos = new DataOutputStream(out);
             responseHeader(dos,body.length,contentType, requestHeaderMessage.getHttpOnlyURL());
             responseBody(dos, body);
@@ -113,10 +105,4 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    /*
-    private void logMembers(){
-
-    }
-
-     */
 }
