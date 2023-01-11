@@ -26,6 +26,8 @@ public class HttpResponse {
         this.status = status;
         this.body = body;
         this.contentType = contentType;
+
+        // Status에 따른 Header 생성
         if(status.equals(HttpStatus.OK)) makeResponse200Header();
     }
     private void makeResponse200Header(){
