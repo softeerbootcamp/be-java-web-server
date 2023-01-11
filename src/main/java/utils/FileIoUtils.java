@@ -11,7 +11,6 @@ public class FileIoUtils {
     private static final String STATIC_RESOURCE_PATH = FileIoUtils.class.getClassLoader().getResource("./static").getPath();
     private static final String TEMPLATE_RESOURCE_PATH = FileIoUtils.class.getClassLoader().getResource("./templates").getPath();
     private static final Set<String> TEMPLATE_EXTENSIONS = Set.of("html", "ico");
-    private static final Logger logger = LoggerFactory.getLogger(FileIoUtils.class);
 
     public static byte[] loadFile(String file) {
         try {
@@ -20,6 +19,7 @@ public class FileIoUtils {
                 return Files.readAllBytes(new File(TEMPLATE_RESOURCE_PATH + file).toPath());
             return Files.readAllBytes(new File(STATIC_RESOURCE_PATH + file).toPath());
         } catch (Exception e) {
+            //TODO 예외처리
             return StatusCode.NOTFOUND.toString().getBytes();
         }
     }

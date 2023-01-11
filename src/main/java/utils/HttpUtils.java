@@ -8,9 +8,9 @@ import java.util.Objects;
 
 public class HttpUtils {
     private static Map<String, String> contentTypeMap =
-            Map.of("text", "plain|html|css", "image", "jpeg|png",
+            Map.of("text", "plain|html|css|js", "image", "jpeg|png|ico",
                     "audio", "mpeg|ogg|*", "video", "mp4", "application", "octet-stream",
-                    "multipart", "mixed");
+                    "multipart", "mixed", "font", "ttf|woff");
 
     public static Map<String, String> parseQuerystring(String queryString) {
         Map<String, String> map = new HashMap<>();

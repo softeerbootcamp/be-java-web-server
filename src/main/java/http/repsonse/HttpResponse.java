@@ -30,7 +30,7 @@ public class HttpResponse {
         sb.append(String.format("%s %s \r\n", this.version, this.statusCode));
         sb.append(String.format("Content-Type: %s;charset=utf-8 \r\n", this.contentType));
         sb.append(String.format("Content-Length: %d \r\n", getContentLength()));
-        if (this.statusCode == StatusCode.SEEOTHER)
+        if (this.statusCode == StatusCode.FOUND)
             sb.append("Location : /index.html \r\n");
         sb.append("\r\n");
         return sb.toString();

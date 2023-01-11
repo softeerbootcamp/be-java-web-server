@@ -10,8 +10,7 @@ import java.util.Map;
 public class HttpResponseGenerator {
     public static HttpResponse generateResponse(HttpRequest httpRequest, UserService userService) {
         if (checkParams(httpRequest, userService)) {
-            return new HttpResponse(httpRequest.getVersion(), StatusCode.SEEOTHER,
-                    HttpUtils.setContentType(httpRequest.getContentType()), null);
+            return new HttpResponse(httpRequest.getVersion(), StatusCode.FOUND, null, null);
         }
         return new HttpResponse(httpRequest.getVersion(), StatusCode.OK,
                 HttpUtils.setContentType(httpRequest.getContentType()), FileIoUtils.loadFile(httpRequest.getRequestTarget()));
@@ -23,7 +22,6 @@ public class HttpResponseGenerator {
             String[] params = target.split("\\?");
             Map<String, String> map = HttpUtils.parseQuerystring(params[1]);
             User user = new User(map.get("userId"), map.get("password"), map.get("name"), map.get("email"));
-            System.out.println("user = " + user);
             userService.join(user);
             return true;
         }
