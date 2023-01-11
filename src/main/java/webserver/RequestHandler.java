@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpRequestUtil;
 import util.Redirect;
+import view.RequestHeaderMessage;
+import view.Response;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -45,15 +47,13 @@ public class RequestHandler implements Runnable {
             String strBr = "";
             while(!(strBr = br.readLine()).equals("")){}
             String fileURL = RELATIVE_PATH;
-            String fileExtension = requestHeaderMessage.getFileExtension();
-            String contentType = "text/" + (fileExtension.equals("js")?"javascript":fileExtension);
-            fileURL += (fileExtension.equals("html")||fileExtension.equals("ico"))?TEMPLATES:STATIC;
+            fileURL += (requestHeaderMessage.getFileExtension().equals("html")||requestHeaderMessage.getFileExtension().equals("ico"))?TEMPLATES:STATIC;
             byte[] body = new byte[0];
             if (!requestHeaderMessage.getHttpOnlyURL().contains("create"))
                 body = Files.readAllBytes(new File(fileURL+requestHeaderMessage.getHttpOnlyURL()).toPath());
             DataOutputStream dos = new DataOutputStream(out);
-            responseHeader(dos,body.length,contentType, requestHeaderMessage.getHttpOnlyURL());
-            responseBody(dos, body);
+            Response response = new Response();
+            response.response(dos,body,requestHeaderMessage);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -67,41 +67,5 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void responseHeader(DataOutputStream dos, int lengthOfBodyContent, String contentType, String onlyURL){
-        String redirectLink = Redirect.getRedirectLink(onlyURL);
-        if (redirectLink.equals(""))
-            response200Header(dos,lengthOfBodyContent,contentType);
-        else response302Header(dos, redirectLink);
-    }
-
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: "+contentType+";charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response302Header(DataOutputStream dos, String redirectLink) {
-        try {
-            dos.writeBytes("HTTP/1.1 302 FOUND \r\n");
-            dos.writeBytes("Location: "+redirectLink+"\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
 
 }

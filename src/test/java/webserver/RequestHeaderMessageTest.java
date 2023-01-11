@@ -1,10 +1,10 @@
 package webserver;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import view.RequestHeaderMessage;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+
 class RequestHeaderMessageTest {
 
     final String userCreate = "GET /user/create?userId=asdf&password=ljh1929&name=%EC%9D%B4%EC%9E%AC%ED%9B%88&email=wogns1602%40naver.com HTTP/1.1";

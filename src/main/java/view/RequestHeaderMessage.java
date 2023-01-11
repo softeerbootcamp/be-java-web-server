@@ -1,4 +1,4 @@
-package webserver;
+package view;
 
 import com.google.common.io.Files;
 import util.HttpRequestUtil;
@@ -12,6 +12,7 @@ public class RequestHeaderMessage {
     private String httpOnlyURL;
     private String fileExtension;
     private String requestAttribute;
+    private String contentType;
     public String getHttpOnlyURL() {
         return httpOnlyURL;
     }
@@ -25,6 +26,8 @@ public class RequestHeaderMessage {
     }
 
     public String getRequestAttribute() {return requestAttribute;}
+
+    public String getContentType() {return contentType;}
 
     public RequestHeaderMessage(String httpFirstHeader){
         this.httpFirstHeader = httpFirstHeader;
@@ -40,6 +43,7 @@ public class RequestHeaderMessage {
         this.httpReqParams = HttpRequestUtil.getURLParams(httpReqURL);
         this.fileExtension = Files.getFileExtension(httpOnlyURL);
         this.requestAttribute = HttpRequestUtil.getRequestAttribute(httpOnlyURL);
+        this.contentType = "text/" + (fileExtension.equals("js")?"javascript":fileExtension);
     }
 
 }
