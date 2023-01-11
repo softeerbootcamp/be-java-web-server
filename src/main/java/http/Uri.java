@@ -37,4 +37,8 @@ public class Uri {
         return path;
     }
 
+    public boolean isEndsWith(String path) {
+        return this.path.endsWith(path);
+    }
+
 }
