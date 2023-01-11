@@ -1,5 +1,6 @@
 package http;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -21,5 +22,13 @@ public class RequestHeader {
 
     public String getHeader(String key) {
         return headers.get(key);
+    }
+
+    public String getContentType() {
+        return Arrays.stream(
+                headers.get("Accept")
+                        .split(","))
+                .findFirst()
+                .orElseThrow();
     }
 }

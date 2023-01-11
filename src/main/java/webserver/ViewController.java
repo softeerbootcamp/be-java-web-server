@@ -15,7 +15,7 @@ public class ViewController implements Controller {
         RequestHeader requestHeader = httpRequest.getRequestHeader();
         Uri uri = requestLine.getUri();
         ResourceType resourceType = uri.parseResourceType();
-        String contentType = Arrays.stream(requestHeader.getHeader("Accept").split(",")).findFirst().orElseThrow();
+        String contentType = requestHeader.getContentType();
         byte[] body = Files.readAllBytes(new File("src/main/resources" + resourceType.getPath() + uri.getPath()).toPath());
         httpResponse.response200Header(contentType, body.length);
         httpResponse.responseBody(body);
