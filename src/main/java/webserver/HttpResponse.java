@@ -33,10 +33,6 @@ public class HttpResponse {
         if (uri.contains("css")) {
             return CSS;
         }
-        /*
-        if (uri.contains("js")){
-            return "text/javascript";
-        }*/
         return HTML;
     }
 
