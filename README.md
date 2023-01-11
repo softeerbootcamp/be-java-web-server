@@ -33,3 +33,19 @@ Java Web Application Server 2022
 - 객체 분리(HttpStatus, HttpMethod 등을 enum 분리)
 - HttpStatus, HttpMethod에 대한 이해
 - ContentType에 대한 이해
+
+## Step3(기능 및 요구사항)
+- HTTP Response 에 대해 학습한다.
+- MIME 타입에 대해 이해하고 이를 적용할 수 있다.
+- 지금까지 구현한 소스 코드는 stylesheet 파일을 지원하지 못하고 있다. Stylesheet 파일을 지원하도록 구현하도록 한다.
+
+## Step3(학습내용)
+- git stash, cherry-pick에 대한 학습
+- stash는 임시 저장 공간, cherry-pick은 임의의 커밋을 현재 head로 가져올 수 있다.
+- 회원가입 이후 처리는 302 redirect를 사용할 수 있다. (301은 사용 x)
+- 여러가지를 객체로 만들 수 있다.(HttpRequest, HttpResponse, URI, RequestLine 등)
+- 테스트코드, BDD(given when then)
+- 로거를 잘 사용하여 기록을 남기자
+- 너가 중복코드가 있다면 그건 너가 잘못한거다
+- 주석은 최소화하자 너가 추석이 필요하다면 그건 가독성이 떨어지는 코드를 짠거다
+
