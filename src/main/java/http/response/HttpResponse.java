@@ -1,4 +1,4 @@
-package http;
+package http.response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,8 +32,8 @@ public class HttpResponse {
 
     private void response(byte[] body) throws IOException {
         dos.writeBytes(version + httpStatusCode + "\r\n");
-        dos.writeBytes("Content-Type: " + contentType.getContentType() + "\r\n");
-        logger.info("Content-정Type: " + contentType.getContentType());
+        dos.writeBytes("Content-Type: " + contentType.getContentType() + body.length + "\r\n");
+        logger.info("Content-Type: " + contentType.getContentType());
         dos.writeBytes("\r\n");
         dos.write(body, 0, body.length);
         dos.flush();
