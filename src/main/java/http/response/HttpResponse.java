@@ -50,7 +50,7 @@ public class HttpResponse {
     }
 
     public void redirect(String path) {
-        this.status = HttpStatus.SEE_OTHER;
+        this.status = HttpStatus.FOUND;
         this.headers.addHeader("Location", path);
     }
 }
