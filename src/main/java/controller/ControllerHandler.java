@@ -12,13 +12,16 @@ public class ControllerHandler{
 
     static {
         controllers.add(new UserController());
-        controllers.add(new ViewController());
     }
     public static Controller findController(HttpRequest httpRequest) {
         RequestLine requestLine = httpRequest.getRequestLine();
         if(requestLine.getUri().isEndWithResourceType()) {
-            return controllers.get(1);
+            return new ViewController();
         }
-        return controllers.get(0);
+        return controllers
+                .stream()
+                .filter(controller -> controller.isMatch(httpRequest))
+                .findFirst()
+                .orElseThrow();
     }
 }

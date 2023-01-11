@@ -19,4 +19,9 @@ public class ViewController implements Controller {
         httpResponse.response200Header(contentType, body.length);
         httpResponse.responseBody(body);
     }
+
+    @Override
+    public boolean isMatch(HttpRequest httpRequest) {
+        return true;
+    }
 }

@@ -33,6 +33,11 @@ public class Uri {
                 .anyMatch(resourceType -> path.endsWith(resourceType.getExtension()));
     }
 
+    public String getDetachControllerPath() {
+        String[] split = path.split("/");
+        return split[1];
+    }
+
     public ResourceType parseResourceType() {
         return ResourceType.findResourceType(path);
     }
