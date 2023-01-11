@@ -7,6 +7,30 @@ Java Web Application Server 2022
 이 프로젝트는 우아한 테크코스 박재성님의 허가를 받아 https://github.com/woowacourse/jwp-was 
 를 참고하여 작성되었습니다.
 
+### model
+데이터를 관리하는 model 패키지입니다. domain, repository, service 로 구성됩니다.
+
+#### domain
+웹서비스와 관련된 객체들이 있는 패키지입니다. 현재는 User의 회원가입만을 처리하기 때문에 User 클래스만 있습니다.
+
+#### repository
+도메인 객체들을 저장 및 관리하는 패키지입니다. 현재 도메인인 User를 관리하는 UserRepository가 있습니다.  
+현재는 memory에 데이터를 저장하지만, 추후에는 DB 연동 등으로 구현 방법이 바뀔 수 있기 때문에 UserRepository를 인터페이스로 하고 이를 구현하는 MemoryUserRepository 클래스를 생성하였습니다.
+
+#### service
+도메인 별 비즈니스 로직을 처리하는 패키지입니다. 레포지토리를 활용하여 도메인 객체의 저장, 조회 등의 기능을 합니다.
+
+### view
+http 메시지를 관리하는 패키지입니다. Http Request Message를 파싱하여 각 정보를 저장하는 RequestHeaderMessage와 request에 대한 response를
+ 담당하는 Response 클래스로 구성됩니다.
+
+### webserver
+프로그램의 전체 흐름을 관리하는 일종의 controller 역할을 하는 패키지입니다. 소켓을 통해 http request 메시지를 전달받으며 view를 활용하여 메시지를 필요한 
+데이터로 가공합니다. 이후 해당 데이터를 model을 통해 적절한 조작을 하고, 가공된 결과 데이터를 Response view를 활용하여 클라이언트로 전달합니다.
+
+### util
+메시지 파싱, 리다이렉션 링크 등 필요한 정보를 가공하는데 도움이 되는 클래스 및 메소드를 모아놓은 패키지입니다.
+
 ## HTTP
 HyperText Transfer Protocol.
 인터넷에서 데이터를 주고받을 수 있도록 하는 프로토콜. Application Layer 에 해당한다. HTTP는 클라이언트-서버 관계에서 다음과 같이 동작한다.
