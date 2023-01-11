@@ -5,23 +5,26 @@ import java.net.Socket;
 import java.nio.file.Files;
 import java.util.Map;
 
+import controller.Controller;
+import controller.Controller;
+import controller.FrontController;
 import controller.SignUpController;
 import db.Database;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.HttpRequestUtils;
-import utils.Utilites;
 
 import javax.xml.crypto.dom.DOMCryptoContext;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-
+    private FrontController frontController;
     private Socket connection;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
+        this.frontController = new FrontController();
     }
 
     public void run() { //즉 이미 클라이언트와 연결이 된 상태에서 돌아가는 메서드임
@@ -34,8 +37,15 @@ public class RequestHandler implements Runnable {
             HttpRequest request = RequestParser.parseInputStreamToHttpRequest(in);
             String url = request.getUrl();
             HttpResponse response = new HttpResponse();
-            //TODO 요청 url에 따라 컨트롤러 다르게 타게 하는 것 일반화하기
-            if(url.startsWith("/user/create")) response = SignUpController.createUserController(request);
+            //TODO 요청 url에 따라 컨트롤러 다르게 타게 하는 것 일반화하기 - 프론트 컨트롤러 패턴 적용해보기
+            if(!url.endsWith("html")) {
+                try{
+                    Controller controller = this.frontController.getControllerByUrl(url);
+                    response = controller.service(request);
+                }catch (NullPointerException e){
+                    logger.debug("해당되는 컨트롤러가 없습니다");
+                }
+            }
             //단순히 index.html로 리다이렉트 하는 것이 아니라 응답을 만들어야 하면
             if(response.getStatus()!=HttpStatus.FOUND) RequestDispatcher.handle(request,response);
             ResponseWriter rw = new ResponseWriter(out);
