@@ -1,5 +1,6 @@
+package controller;
+
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import webserver.ViewResolver;
@@ -9,16 +10,10 @@ import java.nio.file.Path;
 
 public class ViewResolverTest {
 
-    private ViewResolver viewResolver;
-
-    @BeforeEach
-    public void setUp() {
-        viewResolver = new ViewResolver();
-    }
-
     @Test
     @DisplayName("templates 디렉토리 내 resolving (index.html)")
-    public void resolveTemplatesPath() throws IOException {
+    void resolveTemplatesPath() throws IOException {
+        ViewResolver viewResolver = new ViewResolver();
         Path filePath = viewResolver.findFilePath("index.html");
 
         Assertions.assertThat(filePath.toString())
@@ -27,7 +22,8 @@ public class ViewResolverTest {
 
     @Test
     @DisplayName("static 디렉토리 내 resolving (css)")
-    public void resolveStaticPath() throws IOException {
+    void resolveStaticPath() throws IOException {
+        ViewResolver viewResolver = new ViewResolver();
         Path filePath = viewResolver.findFilePath("css/styles.css");
 
         Assertions.assertThat(filePath.toString())
