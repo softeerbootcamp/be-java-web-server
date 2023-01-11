@@ -1,6 +1,5 @@
 package filesystem;
 
-import controller.FacadeController;
 import enums.ContentType;
 import enums.Status;
 import io.request.PathParser;
@@ -14,7 +13,7 @@ import java.nio.file.Files;
 
 public class FileSystem {
 
-    private final Logger logger = LoggerFactory.getLogger(FacadeController.class);
+    private final Logger logger = LoggerFactory.getLogger(FileSystem.class);
     private final PathParser pathParser = new PathParser();
 
     public FindResult findResource(String url) {
