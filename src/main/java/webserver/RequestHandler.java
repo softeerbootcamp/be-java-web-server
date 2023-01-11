@@ -2,6 +2,7 @@ package webserver;
 
 import handler.Handler;
 import http.HttpRequest;
+import http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HandlerMapper;
@@ -26,6 +27,7 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
 
             HttpRequest httpRequest = new HttpRequest(in);
+            HttpResponse httpResponse = new HttpResponse();
             Handler handler = HandlerMapper.getHandler(httpRequest);
 
             String viewName = handler.handle(httpRequest);
