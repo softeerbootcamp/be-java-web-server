@@ -34,8 +34,7 @@ public class Response {
     }
 
     private void writeStatusLine(DataOutputStream dataOutputStream) throws IOException {
-        dataOutputStream.writeBytes(statusLine.getHttpVersion() + " " +
-                statusLine.getStatusCode() + " " + statusLine.getReasonPhrase() + System.lineSeparator());
+        dataOutputStream.writeBytes(statusLine.getStatusLine() + System.lineSeparator());
     }
 
     private void writeResponseHeader(DataOutputStream dataOutputStream) throws IOException {
