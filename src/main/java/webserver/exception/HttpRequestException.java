@@ -1,22 +1,18 @@
 package webserver.exception;
 
+import webserver.domain.StatusCodes;
+
 public class HttpRequestException extends RuntimeException{
 
-    private static String msg;
-    private static String errorCode;
+    private static StatusCodes statusCode;
 
-    public HttpRequestException(String msg, String errorCode) {
-        super(msg);
-        this.msg = msg;
-        this.errorCode = errorCode;
+    public HttpRequestException(StatusCodes statusCode) {
+        super(statusCode.getStatusMsg());
+        this.statusCode = statusCode;
     }
 
-    public String getErrorCode(){
-        return errorCode;
-    }
-
-    public String getErrorMsg(){
-        return msg;
+    public StatusCodes getErrorCode(){
+        return statusCode;
     }
 
 }
