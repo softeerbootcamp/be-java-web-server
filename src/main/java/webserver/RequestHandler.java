@@ -13,6 +13,9 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpRequestUtil;
+import util.Redirect;
+
+import javax.xml.crypto.Data;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -37,45 +40,49 @@ public class RequestHandler implements Runnable {
             // TODO 사용자 요청에 대한 처리는 이 곳부터 구현하면 된다.
             InputStreamReader reader = new InputStreamReader(in);
             BufferedReader br = new BufferedReader(reader);
-            String httpHeader = br.readLine();
-            String[] headers = httpHeader.split(" ");
-            String httpMethod = headers[0];
-            String reqURL = headers[1].equals("/")?"/index.html":headers[1];
-            reqURL = createUser(reqURL);
-            reqURL = HttpRequestUtil.getOnlyURL(reqURL);    //url without parameter
-            String fileExtension = HttpRequestUtil.getFileExtension(reqURL);
-            String httpVersion = headers[2];
+            RequestHeaderMessage requestHeaderMessage = new RequestHeaderMessage(br.readLine());
+            createUser(requestHeaderMessage);
             String strBr = "";
             while(!(strBr = br.readLine()).equals("")){
-                System.out.println(strBr);
+                //System.out.println(strBr);
             }
             String fileURL = ABSOLUTE_PATH;
-            String contentType = fileExtension.equals("html")?"text/html":fileExtension.equals("css")
-                    ?"text/css":"text/javascript";
+            String fileExtension = requestHeaderMessage.getFileExtension();
+            String contentType = "text/" + (fileExtension.equals("js")?"javascript":fileExtension);
             fileURL += (fileExtension.equals("html")||fileExtension.equals("ico"))?TEMPLATES:STATIC;
-            byte[] body = Files.readAllBytes(new File(fileURL+reqURL).toPath());
+            byte[] body = new byte[0];
+            if (!requestHeaderMessage.getHttpOnlyURL().contains("create"))
+                body = Files.readAllBytes(new File(fileURL+requestHeaderMessage.getHttpOnlyURL()).toPath());
             // TODO 사용자 요청에 대한 처리는 이 곳까지 구현하면 된다.
+            printMembers();
             DataOutputStream dos = new DataOutputStream(out);
-            response200Header(dos, body.length,contentType);
+            //response200Header(dos, body.length,contentType);
+            responseHeader(dos,body.length,contentType, requestHeaderMessage.getHttpOnlyURL());
             responseBody(dos, body);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private String createUser(String reqURL){
-        if (reqURL.contains("create")){
-            Map<String,String> userInfo = HttpRequestUtil.parseQueryString(reqURL);
+    private void responseHeader(DataOutputStream dos, int lengthOfBodyContent, String contentType, String onlyURL){
+        String redirectLink = Redirect.getRedirectLink(onlyURL);
+        System.out.println("only URL:"+onlyURL);
+        System.out.println("Redirect Link: "+redirectLink);
+        if (redirectLink.equals(""))
+            response200Header(dos,lengthOfBodyContent,contentType);
+        else response301Header(dos, redirectLink);
+    }
+
+    private boolean createUser(RequestHeaderMessage requestHeaderMessage){
+        if (requestHeaderMessage.getHttpOnlyURL().contains("create")){
+            Map<String,String> userInfo = HttpRequestUtil.parseQueryString(requestHeaderMessage.getHttpReqParams());
             Database.addUser(new User(userInfo.get(USER_ID),userInfo.get(PASSWORD),userInfo.get(NAME),userInfo.get(EMAIL)));
-            Stream.of(userInfo.entrySet()).forEach(System.out::println);
-            reqURL = "/index.html";
+            //requestHeaderMessage.isRedirection();
+            return true;
         }
-        return reqURL;
+        return false;
     }
 
-    private void responseHeader(DataOutputStream dos, int lengthOfBodyContent, String contentType){
-
-    }
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
@@ -87,14 +94,12 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void response302Header(DataOutputStream dos, int lengthOfBodyContent, String contentType, String redirectURL) {
-        try{
-            dos.writeBytes("HTTP/1.1 301\r\n");
-            dos.writeBytes("Location:localhost:8080"+redirectURL+"\r\n");
-            dos.writeBytes("Content-Type: "+contentType+";charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+    private void response301Header(DataOutputStream dos, String redirectLink) {
+        try {
+            dos.writeBytes("HTTP/1.1 301 FOUND \r\n");
+            dos.writeBytes("Location: "+redirectLink+"\r\n");
             dos.writeBytes("\r\n");
-        }catch (IOException e){
+        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
@@ -106,5 +111,9 @@ public class RequestHandler implements Runnable {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private void printMembers(){
+        Stream.of(Database.findAll()).forEach(user-> System.out.println(user));
     }
 }

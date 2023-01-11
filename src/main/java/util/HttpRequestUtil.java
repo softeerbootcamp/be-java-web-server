@@ -2,21 +2,18 @@ package util;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class HttpRequestUtil {
-    public static Map<String,String> parseQueryString(String reqURL){
+    public static Map<String,String> parseQueryString(String reqURLParams){
         Map<String,String> info = new HashMap<>();
         try{
-            String reqInfo = reqURL.split("\\?")[1];
-            String[] infoSet = reqInfo.split("&");
-            for (String str: infoSet){
-                String[] kv = str.split("=");
-                info.put(kv[0],kv[1]);
-            }
-            return info;
+            String[] infoSet = reqURLParams.split("&");
+            info = Stream.of(infoSet).map(s->s.split("=")).collect(Collectors.toMap(a->a[0],a->a[1]));
         }catch (ArrayIndexOutOfBoundsException e){
-            return info;
         }
+        return info;
     }
 
     public static String getOnlyURL(String reqURL){
@@ -27,8 +24,12 @@ public class HttpRequestUtil {
         }
     }
 
-    public static String getFileExtension(String reqURL){
-        return reqURL.substring(reqURL.lastIndexOf('.')+1);
+    public static String getURLParams(String reqURL) {
+        try {
+            return reqURL.substring(reqURL.indexOf("?") + 1);
+        } catch (StringIndexOutOfBoundsException e) {
+            return "";
+        }
     }
 
 }
