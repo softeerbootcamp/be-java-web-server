@@ -35,7 +35,7 @@ public class HttpResponseUtil {
         }
     }
 
-    private static void responseBody(DataOutputStream dos, byte[] body) {
+    public static void responseBody(DataOutputStream dos, byte[] body) {
         try {
             dos.write(body, 0, body.length);
             dos.flush();
