@@ -1,9 +1,6 @@
 package utils;
 
-import http.request.HttpRequest;
-import http.request.HttpRequestBody;
-import http.request.HttpRequestHeader;
-import http.request.HttpStartLine;
+import http.request.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,7 +20,7 @@ public class HttpRequestGenerator {
     private static HttpStartLine parseStartLine(BufferedReader br) throws IOException {
         String line = br.readLine();
         String[] startLine = line.split(" ");
-        return HttpStartLine.of(HttpMethod.getHttpMethod(startLine[0]), startLine[1], startLine[2]);
+        return HttpStartLine.of(HttpMethod.getHttpMethod(startLine[0]), URI.create(startLine[1]), startLine[2]);
     }
 
     private static HttpRequestHeader parseRequestHeader(BufferedReader br) throws IOException {
@@ -32,7 +29,7 @@ public class HttpRequestGenerator {
             String line = br.readLine();
             if (line.equals("")) break;
             String[] datas = line.split(": ");
-            httpRequestHeader.addHeader(datas[0], datas[1]);
+            httpRequestHeader.addHeader(datas[0].trim(), datas[1].trim());
         }
         return httpRequestHeader;
     }
@@ -44,6 +41,6 @@ public class HttpRequestGenerator {
             if (line == null) break;
             sb.append(line);
         }
-        return HttpRequestBody.from(sb.toString());
+        return HttpRequestBody.of(sb.toString());
     }
 }
