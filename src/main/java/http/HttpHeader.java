@@ -20,16 +20,6 @@ public class HttpHeader {
         }
     }
 
-    public static List<String> readHeaders(BufferedReader br) throws IOException {
-        List<String> headers = new ArrayList<>();
-        String header = br.readLine();
-        while(!header.equals("")){
-            headers.add(header);
-            header = br.readLine();
-        }
-        return headers;
-    }
-
     public String toString(){
         String headerString = "";
         for(Map.Entry<String, String> header : headers.entrySet()){
@@ -37,6 +27,10 @@ public class HttpHeader {
         }
         headerString += System.lineSeparator();
         return headerString;
+    }
+
+    public String getAccept(){
+        return headers.get("Accept");
     }
 
 

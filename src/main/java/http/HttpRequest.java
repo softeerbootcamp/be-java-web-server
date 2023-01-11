@@ -16,8 +16,7 @@ public class HttpRequest {
         String line = br.readLine();
         if (line == null) return;
         this.httpRequestLine = HttpRequestUtils.getRequestLine(line);
-
-        this.httpHeader = new HttpHeader(HttpHeader.readHeaders(br));
+        this.httpHeader = HttpRequestUtils.getHeaders(br);
     }
 
     public String getUri() {
@@ -25,4 +24,10 @@ public class HttpRequest {
     }
 
     public boolean wantStaticFile(){ return httpRequestLine.getHttpUri().isStaticFileUri(); }
+
+    public String getContentType(){
+        logger.debug("Accept 분리 : {}", httpHeader.getAccept());
+        return httpHeader.getAccept().split(",")[0];
+    }
+
 }

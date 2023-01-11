@@ -35,13 +35,13 @@ public class UserController implements Controller{
             logger.debug("User : {}", user);
 
             //TODO 임시 코드 - 아마 status 300번대?
-            byte[] responseBody = HttpResponse.makeBody(httpRequest);
-            return new HttpResponse(HttpStatus.OK, responseBody);
+            byte[] responseBody = HttpResponse.makeBody(httpRequest, null);
+            return new HttpResponse(HttpStatus.OK, responseBody, null);
         }
 
-        //TODO 임시 코드 - /user/form.html 같이 요청 하면 이거 줘야됨
-        byte[] responseBody = HttpResponse.makeBody(httpRequest);
-        return new HttpResponse(HttpStatus.OK, responseBody);
+        //TODO 임시 코드 - return 예외처리 해야됨
+        byte[] responseBody = HttpResponse.makeBody(httpRequest, null);
+        return new HttpResponse(HttpStatus.OK, responseBody, null);
 
     }
 }

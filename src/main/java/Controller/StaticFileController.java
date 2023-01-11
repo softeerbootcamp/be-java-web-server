@@ -10,7 +10,9 @@ public class StaticFileController implements Controller{
 
     @Override
     public HttpResponse makeResponse(HttpRequest httpRequest) throws IOException {
-        byte[] responseBody = HttpResponse.makeBody(httpRequest);
-        return new HttpResponse(HttpStatus.OK, responseBody);
+        String contentType = httpRequest.getContentType();
+        String filePath = HttpResponse.makeFilePath(contentType);
+        byte[] responseBody = HttpResponse.makeBody(httpRequest, filePath);
+        return new HttpResponse(HttpStatus.OK, responseBody, contentType);
     }
 }

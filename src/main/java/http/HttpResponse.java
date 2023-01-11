@@ -14,23 +14,36 @@ import java.util.List;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
-    private static final String requestFilePath = "./src/main/resources/templates/";
+    private static final String basePath = "./src/main/resources";
+    private static final String htmlFilePath = "/templates";
+    private static final String staticFilePath = "/static";
 
     private HttpStatus status;
     private HttpHeader header;
     private byte[] body;
 
+    private String contentType;
     private String uri;
 
-    public HttpResponse(HttpStatus status, byte[] body){
+    public HttpResponse(HttpStatus status, byte[] body, String contentType){
         this.status = status;
         this.body = body;
+        this.contentType = contentType;
         if(status.equals(HttpStatus.OK)) makeResponse200Header();
+    }
+
+    public static String makeFilePath(String contentType) {
+        String filePath = "";
+        if(contentType.equals("text/html")){
+            return basePath + htmlFilePath;
+        }
+        return basePath + staticFilePath;
     }
 
     private void makeResponse200Header(){
         List<String> headerLines = new ArrayList<>();
-        headerLines.add("Content-Type: text/html;charset=utf-8" + System.lineSeparator());
+        logger.debug("contentType: {}", contentType);
+        headerLines.add("Content-Type: " + contentType + ";charset=utf-8" + System.lineSeparator());
         headerLines.add("Content-Length: " + body.length + System.lineSeparator());
         this.header = new HttpHeader(headerLines);
     }
@@ -40,8 +53,9 @@ public class HttpResponse {
         return new HttpHeader(new ArrayList<>());
     }
 
-    public static byte[] makeBody(HttpRequest httpRequest) throws IOException {
-        return Files.readAllBytes(new File(requestFilePath + httpRequest.getUri()).toPath());
+    public static byte[] makeBody(HttpRequest httpRequest, String filePath) throws IOException {
+        logger.debug("filePath get : {}", filePath + httpRequest.getUri());
+        return Files.readAllBytes(new File(filePath + httpRequest.getUri()).toPath());
     }
 
     public void send(DataOutputStream dos) throws IOException {
