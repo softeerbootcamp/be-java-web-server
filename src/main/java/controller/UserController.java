@@ -19,9 +19,10 @@ import java.util.Map;
 
 public class UserController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-    private final UserService userService;
 
-    private static final String fileParentPath = "src/main/resources/templates/user";
+    private static final String fileParentPath = "src/main/resources/templates";
+
+    private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -53,7 +54,7 @@ public class UserController implements Controller {
 
         byte[] body = {};
         try {
-            body = Files.readAllBytes(new File(fileParentPath + requestLine.getUri() + "form.html").toPath());
+            body = Files.readAllBytes(new File(fileParentPath + requestLine.getUri()).toPath());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
