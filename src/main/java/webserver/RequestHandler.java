@@ -3,11 +3,11 @@ package webserver;
 import java.io.*;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import parser.StringParser;
-import service.JoinService;
+import service.UserService;
 import util.FileIoUtils;
 import util.Utilities;
 
@@ -19,7 +19,7 @@ public class RequestHandler implements Runnable{
 
     public StringParser stringParser = new StringParser();
 
-    public JoinService joinService = new JoinService();
+    public UserService userService = new UserService();
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -76,33 +76,21 @@ public class RequestHandler implements Runnable{
 //            body = Files.readAllBytes(new File("./templates" + url).toPath());
 
             if(!check){
-
-                String userId = joinService.joinUser(urlString[1]);
-
+                String userId = userService.joinUser(urlString[1]);
                 logger.debug("userId : {}",userId);
-
-                body = FileIoUtils.loadFileFromClasspath("./templates" + url);
-                dos = new DataOutputStream(out);
-                response200Header(dos, body.length);
-                responseBody(dos, body);
-
             }
 
-            if(check){
-                logger.debug("url-check(true) : {}", url);
+            body = FileIoUtils.loadFileFromClasspath("./templates" + url);
+            dos = new DataOutputStream(out);
+            response200Header(dos, body.length);
+            responseBody(dos, body);
 
-                body = FileIoUtils.loadFileFromClasspath("./templates" + url);
-                dos = new DataOutputStream(out);
-                response200Header(dos, body.length);
-                responseBody(dos, body);
-            }
-
-//            response200Header(dos, body.length);
-//            responseBody(dos, body);
         } catch (IOException e) {
             logger.error(e.getMessage());
         } catch (URISyntaxException e) {
             e.printStackTrace();
+        } catch (NullPointerException e){
+
         }
     }
 
