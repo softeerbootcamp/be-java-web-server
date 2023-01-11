@@ -1,6 +1,6 @@
 package controller;
 
-import db.Database;
+import db.UserService;
 import httpMock.CustomHttpRequest;
 import httpMock.CustomHttpResponse;
 import httpMock.constants.ContentType;
@@ -41,7 +41,7 @@ public class UserAccountController implements RequestController {
         String name = req.getRequestParams().get("name");
         String email = req.getRequestParams().get("email");
 
-        Database.addUser(new User(userId, password, name, email));
+        UserService.addUser(new User(userId, password, name, email));
 
         CustomHttpResponse res = new CustomHttpResponse();
         res.setStatusCode(StatusCode.FOUND);
