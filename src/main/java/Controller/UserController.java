@@ -17,9 +17,13 @@ public class UserController implements Controller{
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     @Override
     public HttpResponse makeResponse(HttpRequest httpRequest) throws IOException {
-        // 회원가입일 때
+        // Uri  받아옵시다
         String uri = httpRequest.getUri();
+
+        // 회원가입일 때
         // TODO 할 일 enum 으로 구현 가능 할듯
+
+        // TODO 회원가입에 관한 처리 REFACTORING 예정
         if (uri.startsWith("/user/create")) {
             // TODO split으로 변경 후 메소드 분리
             int index = uri.indexOf("?");
