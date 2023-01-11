@@ -2,13 +2,13 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 
+import Request.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.HttpRequest;
-import util.HttpRequestParser;
+import util.*;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -25,15 +25,12 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
-
-            HttpRequest httpRequest = new HttpRequest(in);
-            Path path = HttpRequestParser.mappingPath(httpRequest.getPath());
-
-            byte[] body = Files.readAllBytes(path);
-            DataOutputStream dos = new DataOutputStream(out);
-            response200Header(dos, body.length);
-            responseBody(dos, body);
-            logger.debug("---------complete : "+path);
+            HttpRequest httpRequest = HttpRequestUtil.parseRequest(in);
+            Path path = FileIoUtil.mappingPath(httpRequest.getPath());
+            if(Objects.nonNull(httpRequest.getParams()))
+                ManageDB.saveUser(httpRequest.getParams());
+            if(Objects.nonNull(path))
+                HttpResponseUtil.response(out, path);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

@@ -14,13 +14,16 @@ public class HttpRequest {
     private String path;
     private String protocol;
     private String method;
+    public HttpRequest(String path, String protocol, String  method, Map<String, String> headers){
+        this.path = path;
+        this.method = method;
+        this.protocol = protocol;
+        this.headers = headers;
+    }
     public HttpRequest(InputStream inputStream){
-        BufferedReader br = null;
-        String line = null;
         try {
-            br = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-
-            line = br.readLine();
+            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+            String line = br.readLine();
             logger.debug("request : "+line);
             String[] temp = line.split(" ");
             method = temp[0];
