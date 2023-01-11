@@ -18,14 +18,12 @@ public class FileSystem {
     private final PathParser pathParser = new PathParser();
 
     public FindResult findResource(String url) {
-        FindResult findResult = new FindResult(Status.NOT_FOUND, ContentType.HTML, new byte[0]);
         String resourcePath = pathParser.parse(url);
-        if (resourcePath.contains("notfound.html")) {
-            return findResult;
-        }
         byte[] resource = readFile(new File(resourcePath));
-        findResult.update(Status.OK, ContentType.find(resourcePath), resource);
-        return findResult;
+        if (resourcePath.endsWith("notfound.html")) {
+            return new FindResult(Status.NOT_FOUND, ContentType.HTML, resource);
+        }
+        return new FindResult(Status.OK, ContentType.find(resourcePath), resource);
     }
 
     private byte[] readFile(File file) {
