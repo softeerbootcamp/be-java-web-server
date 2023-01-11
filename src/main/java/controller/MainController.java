@@ -14,7 +14,7 @@ public class MainController implements Controller {
 
     @Override
     public void handle(HttpRequest request, HttpResponse response) {
-        logger.info("main controller called");
+        logger.debug("main controller called");
         FindResult findResult = fileSystem.findResource(request.getUrl());
         response.update(findResult);
         response.send();

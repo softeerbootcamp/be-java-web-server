@@ -16,7 +16,7 @@ public class UserController implements Controller {
 
     @Override
     public void handle(HttpRequest request, HttpResponse response) {
-        logger.info("user controller called");
+        logger.debug("user controller called");
         handleRequest(request, response);
     }
 
