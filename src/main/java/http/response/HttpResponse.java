@@ -1,18 +1,21 @@
-package http.repsonse;
+package http.response;
 
+import http.HttpHeader;
+import http.request.HttpRequest;
 import utils.StatusCode;
 
-public class HttpResponse {
-    private final String version;
-    private final StatusCode statusCode;
-    private final String contentType;
-    private final byte[] body;
+import java.util.HashMap;
 
-    public HttpResponse(String version, StatusCode statusCode, String contentType, byte[] body) {
-        this.version = version;
-        this.statusCode = statusCode;
-        this.contentType = contentType;
-        this.body = body;
+public class HttpResponse {
+    private String version;
+    private StatusCode statusCode;
+    private HttpHeader headers;
+    private HttpResponseBody body;
+
+    public HttpResponse() {
+        this.headers = HttpHeader.from(new HashMap<>());
+        this.statusCode = StatusCode.OK;
+        this.body = HttpResponseBody.createBody(null);
     }
 
     public int getContentLength() {
@@ -22,15 +25,19 @@ public class HttpResponse {
     }
 
     public byte[] getBody() {
-        return body;
+        return body.getBody();
     }
 
-    public String getResponseMessage(){
+    public void setBody(byte[] body) {
+        this.body.setBody(body);
+    }
+
+    public String getResponseMessage() {
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("%s %s \r\n", this.version, this.statusCode));
         sb.append(String.format("Content-Type: %s;charset=utf-8 \r\n", this.contentType));
         sb.append(String.format("Content-Length: %d \r\n", getContentLength()));
-        if (this.statusCode == StatusCode.SEEOTHER)
+        if (this.statusCode == StatusCode.FOUND)
             sb.append("Location : /index.html \r\n");
         sb.append("\r\n");
         return sb.toString();

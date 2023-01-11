@@ -1,40 +1,38 @@
 package utils;
 
-import http.request.HttpRequest;
-import http.request.HttpRequestBody;
-import http.request.HttpRequestHeader;
-import http.request.HttpStartLine;
+import http.HttpHeader;
+import http.request.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 
 public class HttpRequestGenerator {
-    public static HttpRequest parseHttpMessage(BufferedReader br) throws IOException {
+    public static HttpRequest generateHttpMessage(BufferedReader br) throws IOException {
         HttpStartLine httpStartLine = parseStartLine(br);
-        HttpRequestHeader httpRequestHeader = parseRequestHeader(br);
+        HttpHeader httpHeader = parseRequestHeader(br);
         if (httpStartLine.hasBody()) {
             HttpRequestBody httpRequestBody = parseRequestBody(br);
-            return HttpRequest.of(httpStartLine, httpRequestHeader, httpRequestBody);
+            return HttpRequest.of(httpStartLine, httpHeader, httpRequestBody);
         }
-        return HttpRequest.ofNoBody(httpStartLine, httpRequestHeader, null);
+        return HttpRequest.ofNoBody(httpStartLine, httpHeader);
     }
 
     private static HttpStartLine parseStartLine(BufferedReader br) throws IOException {
         String line = br.readLine();
         String[] startLine = line.split(" ");
-        return HttpStartLine.of(HttpMethod.getHttpMethod(startLine[0]), startLine[1], startLine[2]);
+        return HttpStartLine.of(HttpMethod.getHttpMethod(startLine[0]), URI.create(startLine[1]), startLine[2]);
     }
 
-    private static HttpRequestHeader parseRequestHeader(BufferedReader br) throws IOException {
-        HttpRequestHeader httpRequestHeader = HttpRequestHeader.of(new HashMap<>());
+    private static HttpHeader parseRequestHeader(BufferedReader br) throws IOException {
+        HttpHeader httpHeader = HttpHeader.from(new HashMap<>());
         while (true) {
             String line = br.readLine();
             if (line.equals("")) break;
             String[] datas = line.split(": ");
-            httpRequestHeader.addHeader(datas[0], datas[1]);
+            httpHeader.addHeader(datas[0].trim(), datas[1].trim());
         }
-        return httpRequestHeader;
+        return httpHeader;
     }
 
     private static HttpRequestBody parseRequestBody(BufferedReader br) throws IOException {

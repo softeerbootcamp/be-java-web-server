@@ -4,7 +4,7 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
-import http.repsonse.HttpResponse;
+import http.response.HttpResponse;
 import http.request.HttpRequest;
 import service.UserService;
 import utils.HttpRequestGenerator;
@@ -29,13 +29,21 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            HttpRequest httpRequest = HttpRequestGenerator.parseHttpMessage(br);
-            HttpResponse httpResponse = HttpResponseGenerator.generateResponse(httpRequest, userService);
+            HttpRequest httpRequest = HttpRequestGenerator.generateHttpMessage(br);
+            HttpResponse httpResponse = new HttpResponse();
+            Dispatcher.dispatch(httpRequest, httpResponse);
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = httpResponse.getBody();
-            dos.writeBytes(httpResponse.getResponseMessage());
-            responseBody(dos, body);
+            responseMessage(dos, httpResponse.getResponseMessage());
+            responseBody(dos, httpResponse.getBody());
         } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void responseMessage(DataOutputStream dos, String responseMessage) {
+        try {
+            dos.writeBytes(responseMessage);
+        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
