@@ -19,7 +19,7 @@ public class Response {
         this.body = body;
     }
 
-    public static Response of(Status status) {
+    public static Response from(Status status) {
         return new Response(StatusLine.of(status), Collections.emptyMap(), null);
     }
 
