@@ -24,8 +24,9 @@ public class RequestParser {
 
         Map<String, String> parsedRequestLine = new HashMap<String, String>();
         String tokens[] = requestLine.split(" ");
+        for(String tok : tokens) System.out.println(tok);
         parsedRequestLine.put(METHOD, tokens[0]);
-        parsedRequestLine.put(QUERY, tokens[1]);
+        parsedRequestLine.put(QUERY, tokens[1].equals("/") ? "/index.html" : tokens[1]);
         parsedRequestLine.put(VERSION, tokens[2]);
         return parsedRequestLine;
     }
