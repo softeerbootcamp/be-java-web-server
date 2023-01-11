@@ -14,4 +14,8 @@ public class HttpRequestStartLine {
     public String getPath() {
         return path;
     }
+
+    public String getProtocol() {
+        return protocol;
+    }
 }
