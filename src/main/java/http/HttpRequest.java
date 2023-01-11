@@ -23,4 +23,6 @@ public class HttpRequest {
     public String getUri() {
         return this.httpRequestLine.getHttpUri().getUri();
     }
+
+    public boolean wantStaticFile(){ return httpRequestLine.getHttpUri().isStaticFileUri(); }
 }
