@@ -1,6 +1,7 @@
 package db;
 
 import com.google.common.collect.Maps;
+import exception.DuplicateUserIdException;
 import model.User;
 
 import java.util.Collection;
@@ -10,6 +11,10 @@ public class Database {
     private static Map<String, User> users = Maps.newHashMap();
 
     public static void addUser(User user) {
+
+        if (users.containsKey(user.getUserId())) {
+            throw new DuplicateUserIdException();
+        }
         users.put(user.getUserId(), user);
     }
 
