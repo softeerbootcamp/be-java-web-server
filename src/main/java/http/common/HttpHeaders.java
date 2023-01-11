@@ -15,12 +15,12 @@ public class HttpHeaders {
         return this.headers.get(key);
     }
 
-    public void putHeader(String key, String value) {
+    public void addHeader(String key, String value) {
         this.headers.put(key, value);
     }
 
-    public void addHeaders(Map<String, String> headers) {
-        this.headers.putAll(headers);
+    public void addHeaders(HttpHeaders headers) {
+        this.headers.putAll(headers.headers);
     }
 
     public int size() {
