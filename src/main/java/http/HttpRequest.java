@@ -1,6 +1,7 @@
 package http;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -32,8 +33,16 @@ public class HttpRequest {
         return startLine;
     }
 
+    public HttpMethod getMethod() {
+        return startLine.getMethod();
+    }
+
+    public Uri getUri() {
+        return startLine.getUri();
+    }
+
     public Map<String, String> getHeaders() {
-        return headers;
+        return Collections.unmodifiableMap(headers);
     }
 
 }
