@@ -11,5 +11,7 @@ public class UserController implements Controller{
         Uri uri = requestLine.getUri();
         QueryParameters queryParameters = uri.getQueryParameters();
         Database.addUser(User.from(queryParameters.getParameters()));
+        httpResponse.response302Header("/index.html");
+        httpResponse.emptyBody();
     }
 }
