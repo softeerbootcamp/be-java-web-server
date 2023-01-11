@@ -44,6 +44,7 @@ public class HttpResponse {
         startLine.put(ResponseStartLine.STATUS, findResult.getStatus().getCode());
         startLine.put(ResponseStartLine.MESSAGE, findResult.getStatus().getMessage());
         attributes.put(ResponseAttribute.CONTENT_TYPE, findResult.getContentType().getType());
+        attributes.put(ResponseAttribute.CONTENT_LENGTH, Integer.toString(findResult.getResource().length));
         this.body = findResult.getResource();
     }
 
@@ -75,7 +76,6 @@ public class HttpResponse {
 
     private void assembleHeader() throws IOException {
         out.writeBytes(getHeaderString());
-        System.out.println(getHeaderString());
     }
 
     private String getHeaderString() {
@@ -84,7 +84,7 @@ public class HttpResponse {
         for (Map.Entry<ResponseAttribute, String> entry : entries) {
             string += entry.getKey().getAttribute() + ": " + entry.getValue() + "\n\r";
         }
-        return string;
+        return string + "\n\r";
     }
 
     private void assembleBody() throws IOException {

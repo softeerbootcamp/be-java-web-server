@@ -14,7 +14,7 @@ public enum Domain {
 
     public static Domain find(String url) {
         return Arrays.stream(Domain.values())
-                .filter(domain -> url.contains(domain.name))
+                .filter(domain -> url.startsWith(domain.name))
                 .findFirst()
                 .orElse(MAIN);
     }

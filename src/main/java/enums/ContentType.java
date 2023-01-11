@@ -1,18 +1,21 @@
 package enums;
 
 import java.util.Arrays;
-import java.util.List;
 
 public enum ContentType {
-    HTML("text/html;charset=utf-8", List.of("html")),
-    CSS("text/css;charset=utf-8", List.of("css")),
-    JS("text/javascript;charset=utf-8", List.of("js")),
-    PLAIN("plaintext;charset=utf-8", List.of("*"));
+    HTML("text/html;charset=utf-8", ".html"),
+    CSS("text/css;charset=utf-8", ".css"),
+    JS("text/javascript;charset=utf-8", ".js"),
+    PLAIN("plaintext;charset=utf-8", "*"),
+    TTF("text/plain", ".ttf"),
+    OTF("text/plain", ".otf"),
+    WOFF("text/plain", ".woff"),
+    WOFF2("text/plain", ".woff2");
 
     private String type;
-    private List<String> extensions;
+    private String extensions;
 
-    ContentType(String type, List<String> extensions) {
+    ContentType(String type, String extensions) {
         this.type = type;
         this.extensions = extensions;
     }
@@ -23,12 +26,8 @@ public enum ContentType {
 
     public static ContentType find(String url) {
         return Arrays.stream(ContentType.values())
-                .filter(contentType -> contentType.extensions.contains(getExtension(url)))
+                .filter(c -> url.endsWith(c.extensions))
                 .findFirst()
                 .orElse(PLAIN);
-    }
-
-    private static String getExtension(String url) {
-        return url.split("\\.")[1];
     }
 }

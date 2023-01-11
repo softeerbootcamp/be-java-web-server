@@ -6,12 +6,12 @@ import model.User;
 
 public class UserService {
     public void signIn(UserInfoDTO userInfo) {
-        User newUser = new User(
-                userInfo.getUserId(),
-                userInfo.getPassword(),
-                userInfo.getName(),
-                userInfo.getEmail()
-        );
-        Database.addUser(newUser);
+        User findUser = Database.findUserById(userInfo.getUserId());
+
+        if (findUser != null) {
+            return;
+        }
+
+        Database.addUser(User.of(userInfo));
     }
 }
