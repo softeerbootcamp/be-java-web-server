@@ -14,9 +14,6 @@ import java.util.List;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
-    private static final String basePath = "./src/main/resources";
-    private static final String htmlFilePath = "/templates";
-    private static final String staticFilePath = "/static";
 
     private HttpStatus status;
     private HttpHeader header;
@@ -31,31 +28,12 @@ public class HttpResponse {
         this.contentType = contentType;
         if(status.equals(HttpStatus.OK)) makeResponse200Header();
     }
-
-    public static String makeFilePath(String contentType) {
-        String filePath = "";
-        if(contentType.equals("text/html")){
-            return basePath + htmlFilePath;
-        }
-        return basePath + staticFilePath;
-    }
-
     private void makeResponse200Header(){
         List<String> headerLines = new ArrayList<>();
         logger.debug("contentType: {}", contentType);
         headerLines.add("Content-Type: " + contentType + ";charset=utf-8" + System.lineSeparator());
         headerLines.add("Content-Length: " + body.length + System.lineSeparator());
         this.header = new HttpHeader(headerLines);
-    }
-
-    public static HttpHeader addHeader() {
-        //TODO refactor
-        return new HttpHeader(new ArrayList<>());
-    }
-
-    public static byte[] makeBody(HttpRequest httpRequest, String filePath) throws IOException {
-        logger.debug("filePath get : {}", filePath + httpRequest.getUri());
-        return Files.readAllBytes(new File(filePath + httpRequest.getUri()).toPath());
     }
 
     public void send(DataOutputStream dos) throws IOException {

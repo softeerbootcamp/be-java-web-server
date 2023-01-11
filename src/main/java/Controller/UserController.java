@@ -8,6 +8,7 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpRequestUtils;
+import util.HttpResponseUtils;
 import webserver.RequestHandler;
 
 import java.io.IOException;
@@ -35,12 +36,12 @@ public class UserController implements Controller{
             logger.debug("User : {}", user);
 
             //TODO 임시 코드 - 아마 status 300번대?
-            byte[] responseBody = HttpResponse.makeBody(httpRequest, null);
+            byte[] responseBody = HttpResponseUtils.makeBody(httpRequest, null);
             return new HttpResponse(HttpStatus.OK, responseBody, null);
         }
 
         //TODO 임시 코드 - return 예외처리 해야됨
-        byte[] responseBody = HttpResponse.makeBody(httpRequest, null);
+        byte[] responseBody = HttpResponseUtils.makeBody(httpRequest, null);
         return new HttpResponse(HttpStatus.OK, responseBody, null);
 
     }
