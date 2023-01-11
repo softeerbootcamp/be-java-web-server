@@ -18,7 +18,6 @@ public class FacadeController implements Runnable {
     private final Logger logger = LoggerFactory.getLogger(FacadeController.class);
     private final RequestFactory requestFactory = new RequestFactory();
     private final ResponseFactory responseFactory = new ResponseFactory();
-
     private final Map<Domain, Controller> controllers = Map.of(
             Domain.USER, new UserController(),
             Domain.MAIN, new MainController()
@@ -48,14 +47,17 @@ public class FacadeController implements Runnable {
     }
 
     private Controller findController(String url) {
-        if (requestStaticResource(url)) {
+        if (isStaticResourceRequest(url)) {
             return controllers.get(Domain.MAIN);
         }
 
         return controllers.get(Domain.find(url));
     }
 
-    private boolean requestStaticResource(String url) {
-        return staticResourceExtensions.stream().filter(extension -> url.endsWith(extension)).findAny().isPresent();
+    private boolean isStaticResourceRequest(String url) {
+        return staticResourceExtensions.stream()
+                .filter(extension -> url.endsWith(extension))
+                .findAny()
+                .isPresent();
     }
 }
