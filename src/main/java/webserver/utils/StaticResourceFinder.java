@@ -1,5 +1,8 @@
 package webserver.utils;
 
+import webserver.domain.ContentType;
+import webserver.domain.StatusCodes;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -38,6 +41,12 @@ public class StaticResourceFinder {
         if(fileAsByte.isEmpty())
             fileAsByte = getStaticFilesPath(fileName);
         return fileAsByte;
+    }
+
+    public static ContentType getExtension(String fileName){
+        String[] extStrArr = fileName.split("\\.");
+        String extStr = extStrArr[extStrArr.length-1];
+        return ContentType.findExtension(extStr);
     }
 
 }
