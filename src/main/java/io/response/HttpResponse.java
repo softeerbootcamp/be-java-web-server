@@ -83,7 +83,7 @@ public class HttpResponse {
         for (Map.Entry<ResponseAttribute, String> entry : entries) {
             string += entry.getKey().getAttribute() + ": " + entry.getValue() + "\n\r";
         }
-        return string;
+        return string + "\n\r";
     }
 
     private void assembleBody() throws IOException {
