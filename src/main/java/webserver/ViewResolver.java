@@ -5,14 +5,13 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.*;
 
 public class ViewResolver {
     private static final Logger logger = LoggerFactory.getLogger(ViewResolver.class);
 
-    static final String STATIC_PATH = "src/main/resources/static/";
-    static final String TEMPLATES_PATH = "src/main/resources/templates/";
+    private static final String STATIC_PATH = "src/main/resources/static/";
+    private static final String TEMPLATES_PATH = "src/main/resources/templates/";
 
     public byte[] findFileBytes(Path path) throws IOException {
         try {
@@ -22,12 +21,13 @@ public class ViewResolver {
         }
     }
 
-    public Path findFilePath(String url) {
+    public Path findFilePath(String url) throws IOException {
         try {
-            Files.readAllBytes(new File(ViewResolver.STATIC_PATH + url).toPath());
-            return new File(ViewResolver.STATIC_PATH + url).toPath();
+            Path path = Paths.get(STATIC_PATH + url);
+            return path.toRealPath(LinkOption.NOFOLLOW_LINKS);
         } catch (IOException e) {
-            return new File(ViewResolver.TEMPLATES_PATH + url).toPath();
+            Path path = Paths.get(TEMPLATES_PATH + url);
+            return path.toRealPath(LinkOption.NOFOLLOW_LINKS);
         }
     }
 }

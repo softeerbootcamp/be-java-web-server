@@ -38,11 +38,11 @@ public class RequestHandler implements Runnable {
             url = checkUrlQueryString(url);
 
             DataOutputStream dos = new DataOutputStream(out);
-            Path path = viewResolver.findFilePath(url);
 
-            if (url.contains("create")) {
+            if (url.contains("?")) {
                 response302Header(dos);
             } else {
+                Path path = viewResolver.findFilePath(url);
                 String contentType = Files.probeContentType(path);
                 byte[] body = viewResolver.findFileBytes(path);
                 response200Header(dos, body.length, contentType);
