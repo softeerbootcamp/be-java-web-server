@@ -8,9 +8,9 @@ import httpMock.constants.StatusCode;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.HashMap;
 
 import static db.StaticFileService.getFileTypeFromUrl;
 
@@ -25,20 +25,19 @@ public class StaticFileController implements RequestController {
     }
 
     @Override
-    public void handleRequest(CustomHttpRequest req, CustomHttpResponse res) {
-        getFile(req, res);
+    public CustomHttpResponse handleRequest(CustomHttpRequest req) {
+        return getFile(req);
     }
 
-    public void getFile(CustomHttpRequest req, CustomHttpResponse res) {
+    public CustomHttpResponse getFile(CustomHttpRequest req) {
         File file = StaticFileService.getFile(req.getUrl());
         String fileType = StaticFileService.getFileTypeFromUrl(req.getUrl());
+        ContentType contentType = ContentType.getContentTypeByFileType(fileType);
         try {
             byte[] data = Files.readAllBytes(file.toPath());
-            res.setStatusCode(StatusCode.OK);
-            res.setContentType(ContentType.getContentTypeByFileType(fileType));
-            res.setBody(data);
+            return CustomHttpResponse.of(StatusCode.OK, contentType, new HashMap<>(), data);
         } catch (IOException e) {
-            RequestController.NOT_FOUND(res);
+            return RequestController.NOT_FOUND();
         }
     }
 

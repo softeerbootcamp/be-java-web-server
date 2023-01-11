@@ -13,6 +13,12 @@ public enum ContentType {
     private final String contentType;
     private final List<String> fileTypes;
 
+
+    ContentType(String contentType, List<String> fileType) {
+        this.contentType = contentType;
+        this.fileTypes = fileType;
+    }
+
     public static ContentType getContentTypeByFileType(String fileType) {
         for (ContentType content : ContentType.values()) {
             if (content.fileTypes.contains(fileType))
@@ -21,10 +27,6 @@ public enum ContentType {
         return TEXT_PLAIN;
     }
 
-    ContentType(String contentType, List<String> fileType) {
-        this.contentType = contentType;
-        this.fileTypes = fileType;
-    }
 
     public String getContentType() {
         return contentType;

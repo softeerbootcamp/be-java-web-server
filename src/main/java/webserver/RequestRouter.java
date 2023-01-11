@@ -2,12 +2,12 @@ package webserver;
 
 
 import controller.RequestController;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import controller.StaticFileController;
 import controller.UserAccountController;
 import httpMock.CustomHttpRequest;
 import httpMock.CustomHttpResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,22 +28,18 @@ public class RequestRouter {
         return requestRouter;
     }
 
-    public void doRoute(CustomHttpRequest req, CustomHttpResponse res) {
-        res.setProtocolVersion(req.getProtocolVersion());
-
-        if(StaticFileController.ifFileTypeRequested(req.getUrl())) {
-            StaticFileController.get().handleRequest(req, res);
-            return;
+    public CustomHttpResponse handleRequest(CustomHttpRequest req) {
+        if (StaticFileController.ifFileTypeRequested(req.getUrl())) {
+            return StaticFileController.get().handleRequest(req);
         }
 
         for (String keys : requestMap.keySet()) {
             if (req.getUrl().startsWith(keys)) {
-                requestMap.get(keys).handleRequest(req, res);
                 logger.info(keys + " matches " + req.getUrl());
-                return;
+                return requestMap.get(keys).handleRequest(req);
             }
         }
 
-        RequestController.NOT_FOUND(res);
+        return RequestController.NOT_FOUND();
     }
 }

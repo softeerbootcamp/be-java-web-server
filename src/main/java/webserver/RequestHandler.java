@@ -1,15 +1,15 @@
 package webserver;
 
+import httpMock.CustomHttpRequest;
+import httpMock.CustomHttpResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import httpMock.CustomHttpRequest;
-import httpMock.CustomHttpResponse;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -25,22 +25,23 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            CustomHttpRequest req = new CustomHttpRequest(in);
-            CustomHttpResponse res = new CustomHttpResponse(out);
+            CustomHttpRequest req = CustomHttpRequest.from(in);
             RequestRouter requestRouter = RequestRouter.getRequestRouter();
-            requestRouter.doRoute(req, res);
-            response(res);
+
+            CustomHttpResponse res = requestRouter.handleRequest(req);
+
+            response(req.getProtocolVersion(), res, out);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void response(CustomHttpResponse response) {
+    private void response(String protocolVersion, CustomHttpResponse response, OutputStream out) {
         try {
-            DataOutputStream dos = new DataOutputStream(response.getOutputStream());
-            dos.writeBytes(response.getProtocolVersion()+" " + response.getStatusCode().getCode() + " " + response.getStatusCode().getMessage() + "\r\n");
-            for(String key : response.getHeaders().keySet()){
-                dos.writeBytes(key+": "+response.getHeaders().get(key)+"\r\n");
+            DataOutputStream dos = new DataOutputStream(out);
+            dos.writeBytes(protocolVersion + " " + response.getStatusCode().getCode() + " " + response.getStatusCode().getMessage() + "\r\n");
+            for (String key : response.getHeaders().keySet()) {
+                dos.writeBytes(key + ": " + response.getHeaders().get(key) + "\r\n");
             }
             dos.writeBytes("Content-Length: " + response.getBody().length + "\r\n");
             dos.writeBytes("\r\n");
