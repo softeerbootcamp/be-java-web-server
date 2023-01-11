@@ -72,6 +72,7 @@ public class RequestHandler implements Runnable {
         if (requestHeaderMessage.getRequestAttribute().equals("/create")){
             Map<String,String> userInfo = HttpRequestUtil.parseQueryString(requestHeaderMessage.getHttpReqParams());
             userService.join(new User(userInfo.get(USER_ID),userInfo.get(PASSWORD),userInfo.get(NAME),userInfo.get(EMAIL)));
+            Stream.of(userService.findUsers()).forEach(user->logger.debug(user.toString()));
         }
     }
 
@@ -114,7 +115,7 @@ public class RequestHandler implements Runnable {
 
     /*
     private void logMembers(){
-        Stream.of(userRepository.findAll()).forEach(user->logger.info(user.toString()));
+
     }
 
      */
