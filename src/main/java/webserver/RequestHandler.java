@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import db.Database;
 import jdk.jshell.execution.Util;
 import model.User;
 import org.slf4j.Logger;
@@ -70,6 +71,15 @@ public class RequestHandler implements Runnable{
 
             logger.debug("origin url : {}",urlString);
 
+            String[] dataParse = stringParser.dataParsing(urlString);
+
+            try{
+                String userId = joinService.joinUser(dataParse);
+                logger.debug("Insert User Data : {}", Database.findUserById(userId));
+            } catch (ArrayIndexOutOfBoundsException e){
+
+            }
+
             String parserString = stringParser.extensionSplit(urlString);
 
             logger.debug("parserString : {}",parserString);
@@ -97,9 +107,6 @@ public class RequestHandler implements Runnable{
             if(parserString.equals("js") && directoryString != null){
                 logger.debug("js url : {} " , "src/main/resources/static" + directoryString + "." +parserString);
                 body = Files.readAllBytes(new File("src/main/resources/static" + directoryString + "." +parserString).toPath());
-            }
-            if(parserString != null && directoryString == null){
-                joinService.userDataParser(parserString);
             }
 
             response200Header(dos, body.length);
