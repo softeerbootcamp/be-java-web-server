@@ -52,4 +52,8 @@ public class HttpRequest {
     public String getUrl() {
         return this.httpRequestLine.getUrl();
     }
+
+    public String getHttpVersion() {
+        return this.httpRequestLine.getHttpVersion();
+    }
 }
