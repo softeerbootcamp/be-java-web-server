@@ -5,7 +5,7 @@ import webserver.HttpResponse;
 
 public interface Controller {
 
-    HttpResponse service(HttpRequest request);
+    void service(HttpRequest request,HttpResponse response);
 
     String getPathUrl();
 }

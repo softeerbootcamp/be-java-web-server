@@ -12,7 +12,7 @@ public class SignUpController implements Controller{
     private static final String SIGN_UP_PATH_URL = "/user/create";
 
     @Override
-    public HttpResponse service(HttpRequest request) {
+    public void service(HttpRequest request,HttpResponse response) {
         String userId = request.getQueryByKey("userId");
         String password = request.getQueryByKey("password");
         String name = request.getQueryByKey("name");
@@ -20,11 +20,8 @@ public class SignUpController implements Controller{
         email.replace("%40","@");
         User user = User.of(userId,password,name,email);
         Database.addUser(user);
-        HttpResponse response = new HttpResponse();
         String redirectUrl = "/index.html";
         response.redirect(redirectUrl);
-
-        return response;
     }
 
     @Override
