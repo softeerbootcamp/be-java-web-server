@@ -19,7 +19,7 @@ public class RequestDispatcher {
         try {
             String url = request.getUrl();
 
-            //serveFile(STATIC_DIR + url, response);
+            serveFile(STATIC_DIR + url, response);
             serveFile(TEMPLATES_DIR + url, response);
 
         } catch (Exception e) {
