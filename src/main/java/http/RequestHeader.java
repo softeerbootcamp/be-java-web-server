@@ -1,5 +1,6 @@
 package http;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,19 @@ public class RequestHeader {
 
     public static RequestHeader from(List<String> requestHeader) {
         return requestHeader.stream()
-                .map(header -> header.split(" "))
+                .map(header -> header.split(": "))
                 .collect(collectingAndThen(toMap(header -> header[0], header -> header[1]), RequestHeader::new));
+    }
+
+    public String getHeader(String key) {
+        return headers.get(key);
+    }
+
+    public String getContentType() {
+        return Arrays.stream(
+                headers.get("Accept")
+                        .split(","))
+                .findFirst()
+                .orElseThrow();
     }
 }

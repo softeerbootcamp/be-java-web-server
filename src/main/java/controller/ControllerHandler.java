@@ -1,4 +1,4 @@
-package webserver;
+package controller;
 
 import http.HttpRequest;
 import http.RequestLine;
@@ -12,13 +12,16 @@ public class ControllerHandler{
 
     static {
         controllers.add(new UserController());
-        controllers.add(new ViewController());
     }
     public static Controller findController(HttpRequest httpRequest) {
         RequestLine requestLine = httpRequest.getRequestLine();
-        if(requestLine.getUri().isQueryParameterExist()) {
-            return controllers.get(0);
+        if(requestLine.getUri().isEndWithResourceType()) {
+            return new ViewController();
         }
-        return controllers.get(1);
+        return controllers
+                .stream()
+                .filter(controller -> controller.isMatch(httpRequest))
+                .findFirst()
+                .orElseThrow();
     }
 }

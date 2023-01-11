@@ -34,4 +34,8 @@ public class HttpRequest {
     public RequestLine getRequestLine() {
         return requestLine;
     }
+
+    public RequestHeader getRequestHeader() {
+        return requestHeader;
+    }
 }
