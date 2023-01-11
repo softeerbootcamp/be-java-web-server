@@ -9,4 +9,9 @@ public class HttpStatusLine {
         this.httpVersion = httpVersion;
         this.statusCode = statusCode;
     }
+
+    @Override
+    public String toString() {
+        return String.join(" ", httpVersion, String.valueOf(statusCode.getStatusCode()), statusCode.getMessage());
+    }
 }
