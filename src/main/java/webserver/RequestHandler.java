@@ -68,6 +68,8 @@ public class RequestHandler implements Runnable{
 
             String userId = joinService.joinUser(urlString[1]);
 
+            logger.debug("userId : {}",userId);
+
 
 //            logger.debug("Insert User Data : {}", Database.findUserById(userId));
 
