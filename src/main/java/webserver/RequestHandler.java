@@ -4,7 +4,6 @@ import java.io.*;
 import java.net.Socket;
 import java.util.HashMap;
 
-import db.UserDb;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reader.RequestReader;

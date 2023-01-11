@@ -1,9 +1,8 @@
 package service;
 
-import db.UserDb;
+import db.Database;
+import db.UserDatabase;
 import model.User;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +10,6 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 class UserServiceAndDBTest {
     final String[] userValue = {"test", "1234", "testName", "test@naver.com"};
@@ -19,6 +17,7 @@ class UserServiceAndDBTest {
     final String[] userKey = {"userId", "password", "name", "email"};
 
     Service service = new UserService();
+    Database userDataBase = new UserDatabase();
 
 
 
@@ -29,7 +28,7 @@ class UserServiceAndDBTest {
         //given
         saveUser(userValue);
         //when
-        User user = UserDb.findUserById(userValue[0]);
+        User user = userDataBase.findObjectById(userValue[0]);
         //then
         assertThat(user.getUserId()).isEqualTo(userValue[0]);
         assertThat(user.getPassword()).isEqualTo(userValue[1]);
@@ -53,8 +52,9 @@ class UserServiceAndDBTest {
         saveUser(userValue);
         saveUser(userValue2);
         //when
-        Collection<User> allUsers = UserDb.findAll();
+        Collection<Object> all = userDataBase.findAll();
+
         //then
-        assertThat(allUsers.size()).isEqualTo(2);
+        assertThat(all.size()).isEqualTo(2);
     }
 }

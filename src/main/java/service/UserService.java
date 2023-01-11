@@ -1,6 +1,7 @@
 package service;
 
-import db.UserDb;
+import db.Database;
+import db.UserDatabase;
 import model.User;
 
 import java.util.HashMap;
@@ -8,11 +9,12 @@ import java.util.HashMap;
 public class UserService implements Service {
 
     private final String[] userKey = {"userId", "password", "name", "email"};
+    Database database = new UserDatabase();
 
 
     @Override
-    public void saveData(HashMap<String, String> data) {
-        User user = new User(data.get(userKey[0]), data.get(userKey[1]), data.get(userKey[2]), data.get(userKey[3]));
-        UserDb.addUser(user);
+    public <T> void saveData(HashMap<T, T> data) {
+        User user = new User((String) data.get(userKey[0]), (String) data.get(userKey[1]), (String) data.get(userKey[2]), (String) data.get(userKey[3]));
+        database.addData(user);
     }
 }

@@ -4,5 +4,5 @@ import java.util.HashMap;
 
 public interface Service {
 
-    void saveData(HashMap<String, String> data);
+    <T> void saveData(HashMap<T, T> data);
 }
