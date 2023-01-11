@@ -73,12 +73,9 @@ public class RequestHandler implements Runnable{
 
             String[] dataParse = stringParser.dataParsing(urlString);
 
-            try{
-                String userId = joinService.joinUser(dataParse);
-                logger.debug("Insert User Data : {}", Database.findUserById(userId));
-            } catch (ArrayIndexOutOfBoundsException e){
+            String userId = joinService.joinUser(dataParse);
 
-            }
+            logger.debug("Insert User Data : {}", Database.findUserById(userId));
 
             String parserString = stringParser.extensionSplit(urlString);
 
