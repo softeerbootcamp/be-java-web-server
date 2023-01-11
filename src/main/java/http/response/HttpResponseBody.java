@@ -7,7 +7,11 @@ public class HttpResponseBody {
         this.body = body;
     }
 
-    public HttpResponseBody createBody(byte[] body) {
+    public void setBody(byte[] body) {
+        this.body = body;
+    }
+
+    public static HttpResponseBody createBody(byte[] body) {
         return new HttpResponseBody(body);
     }
 

@@ -1,16 +1,16 @@
-package http.request;
+package http;
 
 import java.util.Map;
 
-public class HttpRequestHeader {
+public class HttpHeader {
     private final Map<String, String> headers;
 
-    private HttpRequestHeader(Map<String, String> headers) {
+    private HttpHeader(Map<String, String> headers) {
         this.headers = headers;
     }
 
-    public static HttpRequestHeader from(Map<String, String> headers) {
-        return new HttpRequestHeader(headers);
+    public static HttpHeader from(Map<String, String> headers) {
+        return new HttpHeader(headers);
     }
 
     public void addHeader(String header, String value) {

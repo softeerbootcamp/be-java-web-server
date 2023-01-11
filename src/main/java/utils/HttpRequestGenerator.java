@@ -1,5 +1,6 @@
 package utils;
 
+import http.HttpHeader;
 import http.request.*;
 
 import java.io.BufferedReader;
@@ -9,12 +10,12 @@ import java.util.HashMap;
 public class HttpRequestGenerator {
     public static HttpRequest generateHttpMessage(BufferedReader br) throws IOException {
         HttpStartLine httpStartLine = parseStartLine(br);
-        HttpRequestHeader httpRequestHeader = parseRequestHeader(br);
+        HttpHeader httpHeader = parseRequestHeader(br);
         if (httpStartLine.hasBody()) {
             HttpRequestBody httpRequestBody = parseRequestBody(br);
-            return HttpRequest.of(httpStartLine, httpRequestHeader, httpRequestBody);
+            return HttpRequest.of(httpStartLine, httpHeader, httpRequestBody);
         }
-        return HttpRequest.ofNoBody(httpStartLine, httpRequestHeader);
+        return HttpRequest.ofNoBody(httpStartLine, httpHeader);
     }
 
     private static HttpStartLine parseStartLine(BufferedReader br) throws IOException {
@@ -23,15 +24,15 @@ public class HttpRequestGenerator {
         return HttpStartLine.of(HttpMethod.getHttpMethod(startLine[0]), URI.create(startLine[1]), startLine[2]);
     }
 
-    private static HttpRequestHeader parseRequestHeader(BufferedReader br) throws IOException {
-        HttpRequestHeader httpRequestHeader = HttpRequestHeader.from(new HashMap<>());
+    private static HttpHeader parseRequestHeader(BufferedReader br) throws IOException {
+        HttpHeader httpHeader = HttpHeader.from(new HashMap<>());
         while (true) {
             String line = br.readLine();
             if (line.equals("")) break;
             String[] datas = line.split(": ");
-            httpRequestHeader.addHeader(datas[0].trim(), datas[1].trim());
+            httpHeader.addHeader(datas[0].trim(), datas[1].trim());
         }
-        return httpRequestHeader;
+        return httpHeader;
     }
 
     private static HttpRequestBody parseRequestBody(BufferedReader br) throws IOException {

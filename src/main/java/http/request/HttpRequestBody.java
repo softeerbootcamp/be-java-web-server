@@ -7,7 +7,7 @@ public class HttpRequestBody {
         this.content = content;
     }
 
-    public static HttpRequestBody from(String content) {
+    public static HttpRequestBody of(String content) {
         return new HttpRequestBody(content);
     }
 }

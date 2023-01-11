@@ -1,18 +1,21 @@
 package http.response;
 
+import http.HttpHeader;
+import http.request.HttpRequest;
 import utils.StatusCode;
 
-public class HttpResponse {
-    private final String version;
-    private final StatusCode statusCode;
-    private final String contentType;
-    private final byte[] body;
+import java.util.HashMap;
 
-    public HttpResponse(String version, StatusCode statusCode, String contentType, byte[] body) {
-        this.version = version;
-        this.statusCode = statusCode;
-        this.contentType = contentType;
-        this.body = body;
+public class HttpResponse {
+    private String version;
+    private StatusCode statusCode;
+    private HttpHeader headers;
+    private HttpResponseBody body;
+
+    public HttpResponse() {
+        this.headers = HttpHeader.from(new HashMap<>());
+        this.statusCode = StatusCode.OK;
+        this.body = HttpResponseBody.createBody(null);
     }
 
     public int getContentLength() {
@@ -22,7 +25,11 @@ public class HttpResponse {
     }
 
     public byte[] getBody() {
-        return body;
+        return body.getBody();
+    }
+
+    public void setBody(byte[] body) {
+        this.body.setBody(body);
     }
 
     public String getResponseMessage() {

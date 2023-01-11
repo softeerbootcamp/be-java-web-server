@@ -8,6 +8,6 @@ import service.UserService;
 import java.util.Map;
 
 public class HttpResponseGenerator {
-    public static HttpResponse generateResponse(HttpRequest httpRequest, UserService userService) {
+    public static HttpResponse generateResponse {
     }
 }

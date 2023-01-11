@@ -30,11 +30,11 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             HttpRequest httpRequest = HttpRequestGenerator.generateHttpMessage(br);
-            HttpResponse httpResponse = HttpResponseGenerator.generateResponse(httpRequest, userService);
+            HttpResponse httpResponse = new HttpResponse();
+            Dispatcher.dispatch(httpRequest, httpResponse);
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = httpResponse.getBody();
             responseMessage(dos, httpResponse.getResponseMessage());
-            responseBody(dos, body);
+            responseBody(dos, httpResponse.getBody());
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
