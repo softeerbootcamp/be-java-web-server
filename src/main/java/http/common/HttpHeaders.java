@@ -19,8 +19,8 @@ public class HttpHeaders {
         this.headers.put(key, value);
     }
 
-    public void addHeaders(Map<String, String> headers) {
-        this.headers.putAll(headers);
+    public void addHeaders(HttpHeaders headers) {
+        this.headers.putAll(headers.headers);
     }
 
     public int size() {
