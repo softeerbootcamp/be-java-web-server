@@ -16,9 +16,9 @@ public class ControllerHandler{
     }
     public static Controller findController(HttpRequest httpRequest) {
         RequestLine requestLine = httpRequest.getRequestLine();
-        if(requestLine.getUri().isQueryParameterExist()) {
-            return controllers.get(0);
+        if(requestLine.getUri().isEndWithResourceType()) {
+            return controllers.get(1);
         }
-        return controllers.get(1);
+        return controllers.get(0);
     }
 }

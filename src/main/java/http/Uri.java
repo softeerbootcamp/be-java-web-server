@@ -1,5 +1,8 @@
 package http;
 
+import java.util.Arrays;
+import java.util.stream.Stream;
+
 public class Uri {
 
     private final String path;
@@ -23,6 +26,11 @@ public class Uri {
 
     public boolean isQueryParameterExist() {
         return queryParameters != null;
+    }
+
+    public boolean isEndWithResourceType() {
+        return Arrays.stream(ResourceType.values())
+                .anyMatch(resourceType -> path.endsWith(resourceType.getExtension()));
     }
 
     public String getPath() {
