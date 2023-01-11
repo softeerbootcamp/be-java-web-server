@@ -24,7 +24,8 @@ public class HomeController implements Controller {
     public Response getResponse(RequestLine requestLine) {
         if(requestLine.getUri().equals("/")) return getIndexHtmlWhenInputNothing(requestLine);
         else if(requestLine.getUri().equals("/index.html")) return getIndexHtml(requestLine);
-        else return Response.from(Status.NOT_FOUND);
+
+        return Response.from(Status.NOT_FOUND);
     }
 
     private Response getIndexHtmlWhenInputNothing(RequestLine requestLine) {
