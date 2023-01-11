@@ -1,7 +1,6 @@
 package Request;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.BufferedReader;
 import java.util.Map;
 
 public class HttpRequest {
@@ -14,14 +13,18 @@ public class HttpRequest {
         this.httpRequestHeaders = httpRequestHeaders;
         this.httpRequestStartLine = httpRequestStartLine;
     }
-
+    public static HttpRequest createReqeust(BufferedReader br){
+        HttpRequestStartLine httpRequestStartLine = HttpRequestStartLine.from(br);
+        HttpRequestParams httpRequestParams = HttpRequestParams.from(httpRequestStartLine.getPath());
+        HttpRequestHeaders httpRequestHeaders = HttpRequestHeaders.from(br);
+        return new HttpRequest(httpRequestStartLine, httpRequestParams, httpRequestHeaders);
+    }
     public String getPath(){
         return httpRequestStartLine.getPath();
     }
     public String getProtocol(){
         return httpRequestStartLine.getProtocol();
     }
-
     public Map<String, String> getParams() {
         return httpRequestParams.getParams();
     }
