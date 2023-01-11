@@ -1,12 +1,14 @@
 package webserver;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
-import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static webserver.Paths.TEMPLATE_PATH;
+import static webserver.Paths.STATIC_PATH;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -27,21 +29,22 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
 
             String url = getUrl(in);
+            if(url.contains("/create"))
+            {
+                SignUpController.enrollNewUser(url);
+                url = SignUpController.redirectToIndex();
+            }
             String contentType = Files.probeContentType(new File(url).toPath());
 
-            byte[] bytes;
-            // templates 폴더 안에 있는 것들과 static 폴더 안에 있는 것 구분
-            if(url.contains("html") || url.contains("favicon"))
-                bytes = Files.readAllBytes(new File("./src/main/resources/templates" + url).toPath());
-            else
-                bytes = Files.readAllBytes(new File("./src/main/resources/static"+ url).toPath());
+            byte[] bytes = Byte.urlToByte(url);
 
             response200Header(dos, bytes.length, contentType);
             responseBody(dos, bytes);
-        }catch (IOException e) {
+        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
+
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
         try {
@@ -66,7 +69,18 @@ public class RequestHandler implements Runnable {
     private String getUrl(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
         String firstLine = br.readLine();
+        System.out.println(firstLine);
         String[] splitedFirstLine = firstLine.split(" ");
         return splitedFirstLine[1];
+    }
+
+}
+
+class Byte {
+    static byte[] urlToByte(String url) throws IOException {
+        if (url.contains("html") || url.contains("favicon"))
+            return Files.readAllBytes(new File(TEMPLATE_PATH.getPath() + url).toPath());
+        else
+            return Files.readAllBytes(new File(STATIC_PATH.getPath() + url).toPath());
     }
 }
