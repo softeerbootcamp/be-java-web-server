@@ -1,33 +1,58 @@
-import http.Method;
-import http.RequestHeader;
-import http.RequestLine;
+import http.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.StringReader;
+import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class HttpRequestTest {
-    @DisplayName("쿼리문이 없는 요청을 받아 인스턴스로 저장")
+    @DisplayName("쿼리 파라미터가 없는 경우")
     @Test
-    void 쿼리문_존재X_Test() {
-        //given
-        List<String> request = new ArrayList<>();
-        request.add("GET /index.html HTTP/1.1");
-        request.add("Host: localhost:8080");
-        request.add("Connection: keep-alive");
-        request.add("Accept: */*");
+    public void 쿼리_파라미터가_없는_경우() throws Exception {
+        String input = "GET / HTTP/1.1\n" +
+                "Host: www.example.com\n" +
+                "Accept: text/html\n" +
+                "\n";
+        BufferedReader br = new BufferedReader(new StringReader(input));
+        HttpRequest request = HttpRequest.from(br);
 
+        RequestLine requestLine = request.getRequestLine();
+        Uri uri = requestLine.getUri();
+        assertEquals(Method.GET, requestLine.getMethod());
+        assertEquals("/", uri.getPath());
+        assertEquals("HTTP/1.1", requestLine.getVersion());
 
-        //when
-        RequestLine requestLine = RequestLine.from(request.get(0));
-        RequestHeader requestHeader = RequestHeader.from(request.subList(1, request.size()));
-
-        //then
-        assertThat(requestLine).isNotNull();
-        assertThat(requestHeader).isNotNull();
-
+        RequestHeader requestHeader = request.getRequestHeader();
+        assertEquals("www.example.com", requestHeader.getHeader("Host"));
+        assertEquals("text/html", requestHeader.getHeader("Accept"));
     }
+
+    @DisplayName("쿼리 파라미터가 있는 경우")
+    @Test
+    public void 쿼리_파라미터가_있는_경우() throws Exception {
+        String input = "GET /search?q=test&sort=asc HTTP/1.1\n" +
+                "Host: www.example.com\n" +
+                "Accept: application/json\n" +
+                "\n";
+        BufferedReader br = new BufferedReader(new StringReader(input));
+        HttpRequest request = HttpRequest.from(br);
+
+        RequestLine requestLine = request.getRequestLine();
+        Uri uri = requestLine.getUri();
+        assertEquals(Method.GET, requestLine.getMethod());
+        assertEquals("/search", uri.getPath());
+        assertEquals("HTTP/1.1", requestLine.getVersion());
+
+        Map<String, String> queryParams = uri.getQueryParameters().getParameters();
+        assertEquals("test", queryParams.get("q"));
+        assertEquals("asc", queryParams.get("sort"));
+
+        RequestHeader requestHeader = request.getRequestHeader();
+        assertEquals("www.example.com", requestHeader.getHeader("Host"));
+        assertEquals("application/json", requestHeader.getHeader("Accept"));
+    }
+
 }
