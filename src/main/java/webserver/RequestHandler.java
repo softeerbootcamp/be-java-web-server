@@ -2,20 +2,17 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.http.HttpRequest;
 import java.nio.file.Files;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import db.Database;
-import model.User;
+import model.repository.MemoryUserRepository;
+import model.domain.User;
+import model.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpRequestUtil;
 import util.Redirect;
-
-import javax.xml.crypto.Data;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -27,7 +24,7 @@ public class RequestHandler implements Runnable {
     private static final String NAME = "name";
     private static final String EMAIL = "email";
     private Socket connection;
-
+    UserRepository userRepository = new MemoryUserRepository();
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
     }
@@ -73,8 +70,7 @@ public class RequestHandler implements Runnable {
     private boolean createUser(RequestHeaderMessage requestHeaderMessage){
         if (requestHeaderMessage.getHttpOnlyURL().contains("create")){
             Map<String,String> userInfo = HttpRequestUtil.parseQueryString(requestHeaderMessage.getHttpReqParams());
-            Database.addUser(new User(userInfo.get(USER_ID),userInfo.get(PASSWORD),userInfo.get(NAME),userInfo.get(EMAIL)));
-            //requestHeaderMessage.isRedirection();
+            userRepository.addUser(new User(userInfo.get(USER_ID),userInfo.get(PASSWORD),userInfo.get(NAME),userInfo.get(EMAIL)));
             return true;
         }
         return false;
@@ -111,6 +107,6 @@ public class RequestHandler implements Runnable {
     }
 
     private void logMembers(){
-        Stream.of(Database.findAll()).forEach(user->logger.info(user.toString()));
+        Stream.of(userRepository.findAll()).forEach(user->logger.info(user.toString()));
     }
 }
