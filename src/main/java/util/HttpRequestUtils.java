@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,10 +18,7 @@ public class HttpRequestUtils {
         String method = requestLine.split(" ")[0];
         logger.debug("HTTP Method : {}", method);
 
-        return Arrays.stream(HttpMethod.values())
-                .filter(httpMethod -> httpMethod.getValue().equals(method))
-                .findAny()
-                .orElseThrow();
+        return HttpMethod.valueOf(method);
     }
 
     public static String getUrl(String requestLine) {
