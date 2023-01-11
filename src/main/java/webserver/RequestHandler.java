@@ -1,17 +1,22 @@
 package webserver;
 
+import customException.AlreadyHasSameIdException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.httpUtils.RequestParser;
+import webserver.httpUtils.Response;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.file.Files;
+import java.util.Map;
 
-import static webserver.Paths.TEMPLATE_PATH;
-import static webserver.Paths.STATIC_PATH;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+
+    private Map<String, String> reqLine;
+    private String reqHeader;
+    private String reqBody;
 
     private Socket connection;
 
@@ -25,62 +30,30 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
-            DataOutputStream dos = new DataOutputStream(out);
 
-            String url = getUrl(in);
-            if(url.contains("/create"))
+            reqLine = RequestParser.parseRequestLine(in);
+            String reqMethod = reqLine.get(RequestParser.METHOD);
+            String reqQuery = reqLine.get(RequestParser.QUERY);
+            String reqVersion = reqLine.get(RequestParser.VERSION);
+
+            Response res = new Response(logger);
+            if(reqQuery.contains("/create") && reqMethod.equals("GET"))
             {
-                SignUpController.enrollNewUser(url);
-                url = SignUpController.redirectToIndex();
+                // GET 방식의 회원가입 처리
+                SignUpController.enrollNewUser(reqQuery);
             }
-            String contentType = Files.probeContentType(new File(url).toPath());
+            // reqLine을 통해 어떤 resLine을 만들지 추론
+            res.probeResLine(reqMethod, reqQuery, reqVersion);
 
-            byte[] bytes = Byte.urlToByte(url);
-
-            response200Header(dos, bytes.length, contentType);
-            responseBody(dos, bytes);
+            res.sendResponse(out, reqQuery);
         } catch (IOException e) {
             logger.error(e.getMessage());
-        }
-    }
-
-
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: " + contentType + ";charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
+        } catch (AlreadyHasSameIdException e)
+        {
             logger.error(e.getMessage());
+            // alert
+
+            // redirect to form.html
         }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        }catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private String getUrl(InputStream in) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-        String firstLine = br.readLine();
-        System.out.println(firstLine);
-        String[] splitedFirstLine = firstLine.split(" ");
-        return splitedFirstLine[1];
-    }
-
-}
-
-class Byte {
-    static byte[] urlToByte(String url) throws IOException {
-        if (url.contains("html") || url.contains("favicon"))
-            return Files.readAllBytes(new File(TEMPLATE_PATH.getPath() + url).toPath());
-        else
-            return Files.readAllBytes(new File(STATIC_PATH.getPath() + url).toPath());
     }
 }

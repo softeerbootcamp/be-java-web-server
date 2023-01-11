@@ -46,10 +46,4 @@ public class SignUpController {
         }
         return userInfo;
     }
-
-
-    public static String redirectToIndex()
-    {
-        return new String("/user/afterEnroll.html");
-    }
 }

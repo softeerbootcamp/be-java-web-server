@@ -1,17 +1,7 @@
 package webserver;
 
-public enum Paths {
-    TEMPLATE_PATH("./src/main/resources/templates"),
-    STATIC_PATH("./src/main/resources/static");
+public class Paths {
+    public static final String TEMPLATE_PATH = "./src/main/resources/templates";
 
-    private String path;
-
-    Paths(String s) {
-        path = s;
-    }
-
-    public String getPath()
-    {
-        return path;
-    }
+    public static final String STATIC_PATH = "./src/main/resources/static";
 }
