@@ -5,16 +5,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import com.google.common.primitives.Bytes;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.httpMock.CustomHttpRequest;
-import webserver.httpMock.CustomHttpResponse;
+import httpMock.CustomHttpRequest;
+import httpMock.CustomHttpResponse;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-    private Socket connection;
+    private final Socket connection;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -35,17 +35,18 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void response(CustomHttpResponse response){
+    private void response(CustomHttpResponse response) {
         try {
             DataOutputStream dos = new DataOutputStream(response.getOutputStream());
-            dos.writeBytes("HTTP/1.1 "+ response.getStatusCode().getCode() + " " +  response.getStatusCode().getMessage()+ "\r\n");
-            dos.writeBytes("Content-Type: "+ response.getContentType().getContentType()+"; charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + response.getBody().size() + "\r\n");
+            dos.writeBytes(response.getProtocolVersion()+" " + response.getStatusCode().getCode() + " " + response.getStatusCode().getMessage() + "\r\n");
+            for(String key : response.getHeaders().keySet()){
+                dos.writeBytes(key+": "+response.getHeaders().get(key)+"\r\n");
+            }
+            dos.writeBytes("Content-Length: " + response.getBody().length + "\r\n");
             dos.writeBytes("\r\n");
-            dos.write(Bytes.toArray(response.getBody()), 0, response.getBody().size());
+            dos.write(response.getBody(), 0, response.getBody().length);
             dos.flush();
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             logger.error("While writing response " + e.getMessage());
         }
     }
