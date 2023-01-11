@@ -11,7 +11,7 @@ import java.util.List;
 public class ResourceController implements Controller {
     private final List<String> paths;
     public ResourceController() {
-        this.paths = Arrays.asList(".html", ".ico", ".css", ".js", "woff", "ttf");
+        this.paths = Arrays.asList(".html", ".ico", ".css", ".js", "woff", "ttf", "png");
     }
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
