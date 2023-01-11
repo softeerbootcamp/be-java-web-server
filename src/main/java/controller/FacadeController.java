@@ -23,7 +23,7 @@ public class FacadeController implements Runnable {
             Domain.MAIN, new MainController()
     );
     private Socket connection;
-    private static final List<String> staticResourceExtensions = List.of(".html", ".css", ".js");
+    private static final List<String> staticResourceExtensions = List.of(".html", ".css", ".js", "eot", "svg", "ttf", "woff", "woff2", "png");
 
     public FacadeController(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -55,9 +55,6 @@ public class FacadeController implements Runnable {
     }
 
     private boolean isStaticResourceRequest(String url) {
-        return staticResourceExtensions.stream()
-                .filter(extension -> url.endsWith(extension))
-                .findAny()
-                .isPresent();
+        return staticResourceExtensions.stream().anyMatch(url::endsWith);
     }
 }
