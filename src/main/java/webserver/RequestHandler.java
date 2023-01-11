@@ -2,19 +2,14 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
+import java.net.URISyntaxException;
 
-import db.Database;
-import jdk.jshell.execution.Util;
-import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import parser.StringParser;
-import service.JoinService;
+import service.UserService;
+import util.FileIoUtils;
+import util.Utilities;
 
 public class RequestHandler implements Runnable{
 
@@ -24,7 +19,7 @@ public class RequestHandler implements Runnable{
 
     public StringParser stringParser = new StringParser();
 
-    public JoinService joinService = new JoinService();
+    public UserService userService = new UserService();
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -65,49 +60,45 @@ public class RequestHandler implements Runnable{
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 
-            String brRead = br.readLine();
-
-            String urlString = stringParser.stringSplit(brRead);
-
-            logger.debug("origin url : {}",urlString);
-
-            String[] dataParse = stringParser.dataParsing(urlString);
-
-            String userId = joinService.joinUser(dataParse);
-
-            logger.debug("Insert User Data : {}", Database.findUserById(userId));
-
-            String parserString = stringParser.extensionSplit(urlString);
-
-            logger.debug("parserString : {}",parserString);
-
-            String directoryString = stringParser.directorySplit(urlString);
-
-            logger.debug("directoryString : {}",directoryString);
-
-            while (!brRead.equals("") && brRead != null) {
-                brRead = br.readLine();
-            }
-
-            DataOutputStream dos = new DataOutputStream(out);
+            DataOutputStream dos;
 
             byte[] body = {};
 
-            if(parserString.equals("html") && directoryString != null){
-                logger.debug("html url : {} " , "src/main/resources/templates" + directoryString + "." +parserString);
-                body = Files.readAllBytes(new File("src/main/resources/templates" + directoryString + "." +parserString).toPath());
-            }
-            if(parserString.equals("css") && directoryString != null){
-                logger.debug("css url : {} " , "src/main/resources/static" + directoryString + "." +parserString);
-                body = Files.readAllBytes(new File("src/main/resources/static" + directoryString + "." +parserString).toPath());
-            }
-            if(parserString.equals("js") && directoryString != null){
-                logger.debug("js url : {} " , "src/main/resources/static" + directoryString + "." +parserString);
-                body = Files.readAllBytes(new File("src/main/resources/static" + directoryString + "." +parserString).toPath());
+            String brRead = br.readLine();
+
+            String[] urlString = stringParser.stringSplit(brRead);
+
+            String url = urlString[1];
+
+            boolean check = Utilities.checkData(url);
+
+            while (!brRead.equals("") && brRead != null) brRead = br.readLine();
+
+            if(!check){
+                String userId = userService.joinUser(urlString[1]);
+                logger.debug("userId : {}",userId);
             }
 
+            body = FileIoUtils.loadFileFromClasspath("./templates" + url);
+            dos = new DataOutputStream(out);
+
+//            response302Header(dos, body.length);
             response200Header(dos, body.length);
             responseBody(dos, body);
+
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void response302Header(DataOutputStream dos,int lengthOfBodyContent) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 Found \r\n");
+            dos.writeBytes("Location: /index.html\r\n");
+            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

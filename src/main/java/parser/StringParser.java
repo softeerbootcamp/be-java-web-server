@@ -1,23 +1,27 @@
 package parser;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class StringParser {
 
-    public String[] dataParsing(String line) {
-        String[] parse = line.split("=|\\?|&");
-        return parse;
+    public static Map<String,String> dataParsing(String line) {
+        Map<String, String> map = new HashMap<>();
+        String[] userInfo = line.split("\\?|&");
+
+        for (int i=1; i<userInfo.length; i++) {
+            String[] userValues = userInfo[i].split("=");
+            try{
+                map.put(userValues[0],userValues[1]);
+            } catch (ArrayIndexOutOfBoundsException e){
+                map.put(userValues[0],"");
+            }
+        }
+        return map;
     }
 
-    public String stringSplit(String line) {
-        try{
-            String[] token = line.split(" ");
-            String indexString = token[1];
-            return indexString;
-        } catch (IndexOutOfBoundsException e){
-
-        } catch (NullPointerException e) {
-
-        }
-        return "";
+    public String[] stringSplit(String line) {
+        return line.split(" ");
     }
 
     public String directorySplit(String urlString){
