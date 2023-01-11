@@ -34,6 +34,7 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = HttpRequest.newInstance(HttpParser.parseHttpRequest(in));
             ControllerHandler controllerHandler = ControllerHandlerFactory.getHandler(httpRequest);
             HttpResponse httpResponse = controllerHandler.handle();
+
             response200Header(dos, httpResponse);
             responseBody(dos, httpResponse);
         } catch (IOException e) {
