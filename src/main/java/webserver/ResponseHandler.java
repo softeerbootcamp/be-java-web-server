@@ -10,6 +10,9 @@ import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import static webserver.HttpStatusCode.*;
+import static webserver.HttpStatusCode.FOUND;
+
 public class ResponseHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(ResponseHandler.class);
@@ -43,7 +46,7 @@ public class ResponseHandler {
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
         try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
+            dos.writeBytes("HTTP/1.1 " + OK);
             dos.writeBytes("Content-Type: " + contentType+";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
@@ -54,7 +57,7 @@ public class ResponseHandler {
 
     private void response302Header(DataOutputStream dos) {
         try {
-            dos.writeBytes("HTTP/1.1 302 FOUND \r\n");
+            dos.writeBytes("HTTP/1.1 " + FOUND);
             dos.writeBytes("Location: /index.html\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {

@@ -11,6 +11,7 @@ import webserver.UserService;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UserServiceTest {
@@ -30,7 +31,8 @@ public class UserServiceTest {
 
         //then
         User userById = Database.findUserById("testId");
-        Assertions.assertThat(userById.getName()).isEqualTo("tester");
+        assertThat(userById.getName()).isEqualTo("tester");
+        assertThat(userById.getEmail()).isEqualTo("test@test.com");
     }
 
     @Test
