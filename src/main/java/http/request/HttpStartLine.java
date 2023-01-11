@@ -1,4 +1,4 @@
-package http;
+package http.request;
 
 import utils.HttpMethod;
 
@@ -21,5 +21,19 @@ public class HttpStartLine {
         return target;
     }
 
-    public boolean hasBody() { return method.hasBody();}
+    public boolean hasBody() { return method.getHasBody();}
+
+    public boolean hasParameter() {
+        return this.target.contains("?");
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public String getContentType() {
+        if (hasParameter())
+            return null;
+        return target.substring(target.lastIndexOf(".") + 1);
+    }
 }

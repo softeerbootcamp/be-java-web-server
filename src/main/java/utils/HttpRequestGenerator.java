@@ -1,9 +1,9 @@
 package utils;
 
-import http.HttpRequest;
-import http.HttpRequestBody;
-import http.HttpRequestHeader;
-import http.HttpStartLine;
+import http.request.HttpRequest;
+import http.request.HttpRequestBody;
+import http.request.HttpRequestHeader;
+import http.request.HttpStartLine;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,9 +15,9 @@ public class HttpRequestGenerator {
         HttpRequestHeader httpRequestHeader = parseRequestHeader(br);
         if (httpStartLine.hasBody()) {
             HttpRequestBody httpRequestBody = parseRequestBody(br);
-            return new HttpRequest(httpStartLine, httpRequestHeader, httpRequestBody);
+            return HttpRequest.of(httpStartLine, httpRequestHeader, httpRequestBody);
         }
-        return new HttpRequest(httpStartLine, httpRequestHeader, null);
+        return HttpRequest.ofNoBody(httpStartLine, httpRequestHeader, null);
     }
 
     private static HttpStartLine parseStartLine(BufferedReader br) throws IOException {
