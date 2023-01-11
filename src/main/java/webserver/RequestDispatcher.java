@@ -18,10 +18,9 @@ public class RequestDispatcher {
     public static void handle(HttpRequest request, HttpResponse response) {
         try {
             String url = request.getUrl();
-
-            //serveFile(STATIC_DIR + url, response);
-            serveFile(TEMPLATES_DIR + url, response);
-
+            boolean isTemplate = url.endsWith("html") ||url.endsWith("ico");
+            if(!isTemplate) serveFile(STATIC_DIR + url, response);
+            else if (isTemplate) serveFile(TEMPLATES_DIR + url, response);
         } catch (Exception e) {
             logger.error("Error is occurred while processing request", e);
         }

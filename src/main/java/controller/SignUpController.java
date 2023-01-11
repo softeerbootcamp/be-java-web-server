@@ -8,20 +8,24 @@ import webserver.ResponseWriter;
 
 import java.io.IOException;
 
-public class SignUpController {
+public class SignUpController implements Controller{
+    private static final String SIGN_UP_PATH_URL = "/user/create";
 
-    public static HttpResponse createUserController(HttpRequest request) throws IOException {
+    @Override
+    public void service(HttpRequest request,HttpResponse response) {
         String userId = request.getQueryByKey("userId");
         String password = request.getQueryByKey("password");
         String name = request.getQueryByKey("name");
         String email = request.getQueryByKey("email");//1234%40khu.ac.kr
         email.replace("%40","@");
-        User user = new User(userId,password,name,email);
+        User user = User.of(userId,password,name,email);
         Database.addUser(user);
-        HttpResponse response = new HttpResponse();
         String redirectUrl = "/index.html";
         response.redirect(redirectUrl);
+    }
 
-        return response;
+    @Override
+    public String getPathUrl() {
+        return this.SIGN_UP_PATH_URL;
     }
 }

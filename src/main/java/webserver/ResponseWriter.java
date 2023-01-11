@@ -29,9 +29,9 @@ public class ResponseWriter {
     }
 
     private void writeHeader(HttpResponse response) throws IOException {
-        dos.writeBytes(String.format("%s %d %s%s", HTTP_VERSION, response.getStatus().getCode(), response.getStatus(), LINE_DELIMITER));
-        writeContentType(response);
-        response.getHeaderKeys()
+        dos.writeBytes(String.format("%s %d %s%s", HTTP_VERSION, response.getStatus().getCode(), response.getStatus(), LINE_DELIMITER)); //status line
+        writeContentType(response);//contentType
+        response.getHeaderKeys() // 그 외 헤더 부분 쓰기
                 .forEach(k -> writeHeaderLine(k, response.getHeaderByKey(k)));
     }
 
@@ -53,8 +53,8 @@ public class ResponseWriter {
     private void writeBody(HttpResponse response) throws IOException {
         if (response.getBody() != null) {
             //write( byte[] b, int off, int len ) : b[off] 부터 len 개의 바이트를 출력 스트림으로 보냅니다.
-            dos.write(response.getBody(), 0, response.getBody().length);
-            dos.flush();
+            dos.write(response.getBody(), 0, response.getBody().length); ////현재 버퍼에 저장되어 있는 내용들을 클라이언트에 보냄
+            dos.flush(); // 이제 강제로 버퍼를 비움
         }
     }
 
