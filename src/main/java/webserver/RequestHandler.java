@@ -41,7 +41,7 @@ public class RequestHandler implements Runnable {
             if(!url.endsWith("html")) {
                 try{
                     Controller controller = this.frontController.getControllerByUrl(url);
-                    response = controller.service(request);
+                    controller.service(request,response);
                 }catch (NullPointerException e){
                     logger.debug("해당되는 컨트롤러가 없습니다");
                 }
