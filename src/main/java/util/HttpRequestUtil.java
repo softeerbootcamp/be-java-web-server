@@ -26,8 +26,16 @@ public class HttpRequestUtil {
 
     public static String getURLParams(String reqURL) {
         try {
-            return reqURL.substring(reqURL.indexOf("?") + 1);
+            return (reqURL.substring(reqURL.indexOf("?"))).substring(1);
         } catch (StringIndexOutOfBoundsException e) {
+            return "";
+        }
+    }
+
+    public static String getRequestAttribute(String reqURL){
+        try{
+            return (reqURL.substring(reqURL.lastIndexOf("/")));
+        } catch (StringIndexOutOfBoundsException e){
             return "";
         }
     }
