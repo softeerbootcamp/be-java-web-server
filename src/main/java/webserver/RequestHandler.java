@@ -3,6 +3,8 @@ package webserver;
 import java.io.*;
 import java.net.Socket;
 
+import http.exception.HttpException;
+import http.exception.HttpExceptionHandler;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.util.HttpRequestParser;
@@ -29,12 +31,19 @@ public class RequestHandler implements Runnable {
             HttpRequest request = HttpRequestParser.parse(in);
             HttpResponse response = new HttpResponse();
 
-            Dispatcher.handle(request, response);
-
+            handle(request, response);
             HttpResponseWriter.write(out, response);
+
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
 
+    private void handle(HttpRequest request, HttpResponse response) {
+        try {
+            Dispatcher.handle(request, response);
+        } catch (HttpException e) {
+            HttpExceptionHandler.handle(request, response, e);
+        }
     }
 }

@@ -3,21 +3,17 @@ package webserver;
 import controller.Controller;
 import controller.SignUpController;
 import http.common.HttpBody;
-import http.common.HttpStatus;
 import http.common.MediaType;
 import http.common.URI;
+import http.exception.NotFoundException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import util.ResourceUtils;
 
 import java.util.Map;
 import java.util.Objects;
 
 public class Dispatcher {
-    private static final Logger logger = LoggerFactory.getLogger(Dispatcher.class);
-
     private final static Map<String, Controller> controllers;
 
     static {
@@ -36,8 +32,7 @@ public class Dispatcher {
         }
 
         if (response.getBody().size() == 0) {
-            response.setStatus(HttpStatus.NOT_FOUND);
-            logger.error("{} file not found", request.getUri().getPath());
+            throw new NotFoundException("페이지를 찾을 수 없습니다.");
         }
     }
 
