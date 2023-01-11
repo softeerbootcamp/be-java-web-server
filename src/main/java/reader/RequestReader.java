@@ -8,6 +8,8 @@ import request.HttpRequest;
 import util.error.HttpsErrorMessage;
 
 import java.net.ProtocolException;
+import java.util.HashMap;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,7 +29,7 @@ public interface RequestReader {
     }
 
 
-    byte[] readData(HttpRequest httpRequest);
+    HashMap<String, String> readData(HttpRequest httpRequest);
 
 
     static RequestReader selectRequestReaderByMethod(HttpMethod httpMethod) throws ProtocolException {

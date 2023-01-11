@@ -2,13 +2,17 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.HashMap;
 
+import db.UserDb;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reader.RequestReader;
 import reader.fileReader.FileReader;
 import request.HttpRequest;
 import response.HttpResponse;
+import service.Service;
+import service.UserService;
 import util.FileType;
 
 public class RequestHandler implements Runnable {
@@ -17,6 +21,8 @@ public class RequestHandler implements Runnable {
     private Socket connection;
     private RequestReader requestReader;
     private FileReader fileReader;
+
+    private Service service;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -30,24 +36,27 @@ public class RequestHandler implements Runnable {
             HttpRequest httpRequest = HttpRequest.getHttpRequest(in);
             requestReader = RequestReader.selectRequestReaderByMethod(httpRequest.getHttpMethod());
 
-            byte[] data = makeData(httpRequest);
+            byte[] data = manageData(httpRequest);
 
             DataOutputStream clientOutPutStream = new DataOutputStream(out);
             HttpResponse httpResponse = new HttpResponse(clientOutPutStream,data, FileType.getFileType(httpRequest.getUrl()));
             httpResponse.makeResponse();
+
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private byte[] makeData(HttpRequest httpRequest) {
+    private byte[] manageData(HttpRequest httpRequest) {
         byte[] data=null;
         fileReader = FileReader.selectFileReader(httpRequest.getUrl());
         if(fileReader!=null){
             //index.html과 같은 파일을 읽는 경우
             data = fileReader.readFile(httpRequest.getUrl());
         }else{
-            data = requestReader.readData(httpRequest);
+            HashMap<String, String> dataMap = requestReader.readData(httpRequest);
+            service = new UserService();
+            service.saveData(dataMap);
         }
         return data;
     }
