@@ -22,9 +22,15 @@ public class HttpRequestUtils {
         logger.debug("Request Line: {}", firstLine);
         String[] splited = firstLine.split(" ");
         String method = splited[0];
-        HttpUri uri = new HttpUri(splited[1]);
+        HttpUri uri = new HttpUri(checkUriNothing(splited[1]));
         String version = splited[2];
         return new HttpRequestLine(method, uri, version);
+    }
+
+    private static String checkUriNothing(String uri) {
+        // http://localhost:8080/ input 들어올 경우 uri는 "/"
+        if(uri.equals("/")) return "/index.html";
+        return uri;
     }
 
     public static HttpHeader readHeaders(BufferedReader br) throws IOException {

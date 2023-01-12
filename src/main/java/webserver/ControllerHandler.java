@@ -19,7 +19,6 @@ public class ControllerHandler {
         // 정적 파일만 원한다면? ex) index.html, /user/form.html
         if (httpRequest.wantStatic()) return new StaticFileController();
 
-
         //TODO 아무것도 없으면 나중에 예외처리
         return null;
     }

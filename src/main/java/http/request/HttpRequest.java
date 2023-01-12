@@ -40,4 +40,5 @@ public class HttpRequest {
     public String getHttpVersion() {
         return httpRequestLine.getHttpVersion();
     }
+
 }

@@ -24,4 +24,5 @@ public class HttpUri {
     public boolean isDynamicUri() {
         return uri.contains("?");
     }
+
 }
