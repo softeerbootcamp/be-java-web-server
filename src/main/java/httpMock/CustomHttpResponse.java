@@ -3,10 +3,12 @@ package httpMock;
 import httpMock.constants.ContentType;
 import httpMock.constants.StatusCode;
 
+import java.util.Collections;
 import java.util.Map;
 
 public class CustomHttpResponse {
     public static final byte[] EMPTY_BODY = "".getBytes();
+    public static final Map<String, String> EMPTY_HEADER = Collections.EMPTY_MAP;
     private final StatusCode statusCode;
     private final Map<String, String> headers;
     private final byte[] body;

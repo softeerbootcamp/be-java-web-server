@@ -1,13 +1,13 @@
 package webserver;
 
-import controller.RequestController;
-import service.StaticFileService;
+import httpMock.CustomHttpErrorFactory;
 import httpMock.CustomHttpRequest;
 import httpMock.CustomHttpResponse;
 import httpMock.constants.ContentType;
 import httpMock.constants.StatusCode;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import service.StaticFileService;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -128,7 +128,7 @@ class RequestRouterTest {
         CustomHttpResponse res = requestRouter.handleRequest(req);
 
         //then
-        assertEquals(RequestController.NOT_FOUND().toString(), res.toString());
+        assertEquals(CustomHttpErrorFactory.NOT_FOUND().toString(), res.toString());
     }
 
 }
