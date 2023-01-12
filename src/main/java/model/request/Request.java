@@ -40,7 +40,7 @@ public class Request {
         Map<Header, String> headers = new HashMap<>();
         String header = br.readLine();
 
-        while(!System.lineSeparator().equals(header)) {
+        while(!"".equals(header)) {
             logger.debug("Header: {}", header);
             String[] headerSplit = header.split(": ");
             headers.put(Header.from(headerSplit[0]), headerSplit[1]);
