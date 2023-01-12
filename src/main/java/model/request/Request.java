@@ -49,4 +49,16 @@ public class Request {
 
         return headers;
     }
+
+    public RequestLine getRequestLine() {
+        return requestLine;
+    }
+
+    public Map<Header, String> getHeaders() {
+        return headers;
+    }
+
+    public byte[] getBody() {
+        return body;
+    }
 }
