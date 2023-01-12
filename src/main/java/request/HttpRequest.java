@@ -46,9 +46,11 @@ public class HttpRequest {
 
     public String getPath() {
         if (requestLine.isTemplatesResource()) {
+            System.out.println("templates requestLine : " + requestLine.getPath());
             return String.format("./templates%s", requestLine.getPath());
         }
         if (requestLine.isStaticResource()) {
+            System.out.println("static requestLine : " + requestLine.getPath());
             return String.format("./static%s", requestLine.getPath());
         }
         return requestLine.getPath();

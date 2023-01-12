@@ -3,9 +3,12 @@ package response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.Header;
+import request.HttpRequest;
+import util.FileIoUtils;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 public class HttpResponse {
     private static final String lineSeparator = System.getProperty("line.separator");
@@ -34,7 +37,6 @@ public class HttpResponse {
             dos.writeBytes(statusLine.getValue());
             dos.writeBytes(lineSeparator);
             dos.writeBytes(header.toValue());
-            dos.writeBytes(lineSeparator);
             dos.writeBytes(lineSeparator);
             dos.write(body, 0, body.length);
             dos.flush();

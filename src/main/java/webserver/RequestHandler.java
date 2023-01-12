@@ -1,8 +1,6 @@
 package webserver;
 
 import java.io.*;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.util.HashMap;
@@ -13,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import request.Header;
 import request.HttpRequest;
 import response.HttpResponse;
-import service.UserService;
 import servlet.Servlet;
 import servlet.UserCreate;
 import util.FileIoUtils;
@@ -23,15 +20,14 @@ public class RequestHandler implements Runnable{
 
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-    private Socket connection;
-
+    private final Socket connection;
     private final Map<String, Class<? extends Servlet>> controller;
 
+
     public RequestHandler(Socket connectionSocket) {
-        this.connection = connectionSocket;
         this.controller = new HashMap<>();
+        this.connection = connectionSocket;
         controller.put("/user/create", UserCreate.class);
-        logger.debug(controller.get("/user/create").getName());
     }
 
     public void run() {
@@ -40,10 +36,8 @@ public class RequestHandler implements Runnable{
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest httpRequest = generateHttpRequest(in);
-
             HttpResponse httpResponse = controlRequestAndResponse(httpRequest);
             respondToHttpRequest(out, httpResponse);
-
         } catch (IOException e) {
             logger.error(e.getMessage());
         } catch (URISyntaxException e) {
@@ -74,6 +68,7 @@ public class RequestHandler implements Runnable{
             } else {
                 headerFields.put("Content-Type", "text/plain");
             }
+
             logger.debug("Content-Type : {}", headerFields.get("Content-Type"));
             headerFields.put("Content-Length", String.valueOf(body.length));
             Header header = new Header(headerFields);
@@ -82,22 +77,10 @@ public class RequestHandler implements Runnable{
 
         if (httpRequest.isForDynamicContent()) {
             String path = httpRequest.getPath();
-//            Class<? extends Servlet> servletClass = controller.get(path);
-            //Servlet servlet = servletClass.newInstance();
             Class<? extends Servlet> servletClass = controller.get(path);
-//                servlet = servletClass.getConstructor(String.class);
-            try {
-                Class<?> ServletClass = Class.forName("servlet.Servlet");
-                Constructor<?> constructor = ServletClass.getConstructor(String.class);
-                Servlet servlet = (Servlet) constructor.newInstance(path);
-                servlet.service(httpRequest);
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            }
+            Servlet servlet = servletClass.newInstance();
+            servlet.service(httpRequest);
+
             Map<String, String > headerFields = new HashMap<>();
             headerFields.put("Location", "/index.html");
             Header header = new Header(headerFields);
