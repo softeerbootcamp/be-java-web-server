@@ -29,7 +29,7 @@ public class UserController implements Controller {
     public HttpResponse UserQueryString(DataOutputStream dataOutputStream, HttpRequest httpRequest) throws IOException {
         requestReader = new RequestGetReader();
 
-        HashMap<String, String> userMap = requestReader.readQueryParameter(httpRequest);
+        HashMap<String, String> userMap = requestReader.readData(httpRequest);
         User user = (User) userService.createModel(userMap);
         userDatabase.addData(user);
 
