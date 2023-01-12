@@ -24,7 +24,6 @@ public class UserController extends AbstractController {
 		logger.info(user + " 회원가입했습니다.");
 		// refactoring
 		File file = new File("./webapp/index.html");
-		logger.info(new String(Files.readAllBytes(file.toPath())));
 		httpResponse.setHttpResponse(HttpStatus.FOUND,
 			new String(Files.readAllBytes(file.toPath())), ContentType.HTML,
 			"/index.html");
