@@ -8,8 +8,8 @@ public class PathParser {
     private static final String TEMPLATE_PATH = "src/main/resources/templates%s";
     private static final String STATIC_PATH = "src/main/resources/static%s";
     private static final String DOMAIN = "/";
-    private static final String NOT_FOUND_HTML = "notfound.html";
     private static final String INDEX_HTML = "index.html";
+    public static final String NOT_FOUND_HTML = "notfound.html";
 
     private static final Map<List<String>, String> mappingInfo = Map.of(
             List.of("/"), TEMPLATE_PATH + INDEX_HTML,
