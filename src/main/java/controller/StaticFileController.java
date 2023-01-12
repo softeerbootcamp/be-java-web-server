@@ -13,11 +13,11 @@ public class StaticFileController implements RequestController{
         try {
             byte[] body = FileIoUtils.loadFile(httpRequest.getUri().getPath());
             httpResponse.setBody(body);
-            httpResponse.setContentType(ContentType.getContentType(httpRequest.getExtension()));
+            httpResponse.setContentType(ContentType.getContentType(FileIoUtils.getExtension(httpRequest.getUri().getPath())));
             httpResponse.setStatusCode(StatusCode.OK);
         }
         catch (IllegalArgumentException e) {
-            if (httpRequest.getExtension().equals("/")) {
+            if (FileIoUtils.getExtension(httpRequest.getUri().getPath()).equals("/")) {
                 httpResponse.redirect();
                 return;
             }

@@ -21,7 +21,7 @@ public class FileIoUtils {
         }
     }
 
-    private static String getExtension(String file){
+    public static String getExtension(String file){
         return file.substring(file.lastIndexOf(".") + 1);
     }
 }
