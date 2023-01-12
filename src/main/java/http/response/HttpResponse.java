@@ -40,7 +40,7 @@ public class HttpResponse {
     public void setBody(String viewPath) throws IOException {
         byte[] body = new byte[0];
         File file = new File(viewPath);
-        if (file.exists()) {
+        if (file.exists() && file.isFile()) {
             body = Files.readAllBytes(file.toPath());
         }
 

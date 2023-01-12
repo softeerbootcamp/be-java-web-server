@@ -2,6 +2,7 @@ package Controller;
 
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import http.response.HttpStatusCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
@@ -16,20 +17,23 @@ public class UserController implements Controller {
     @Override
     public String process(HttpRequest request, HttpResponse response) {
         String url = request.getUrl();
-        if (url.contains("/create")) {
-            String queryString = HttpRequestUtils.getQueryString(url);
+        String path = url.split("/user")[1];
+
+        if (path.startsWith("/create")) {
+            String queryString = HttpRequestUtils.getQueryString(path);
 
             Map<String, String> userInfo = HttpRequestUtils.parseQueryString(queryString);
 
             UserService userService = new UserService();
             userService.signUp(userInfo);
 
-            response.ok(request);
+            response.setHttpStatusLine(request, HttpStatusCode.FOUND);
+            response.addHttpHeader("Location", "/user/login.html");
 
-            return "/user/login.html";
+            return "";
         }
 
-        // TODO 추후 다른 기능이 추가되면 수정할 예정
+        // TODO 추후 다른 기능이 추가되면 수정
         response.ok(request);
         return url;
     }
