@@ -1,4 +1,4 @@
-package webserver;
+package webserver.domain;
 
 import enums.HttpMethod;
 import enums.HttpStatus;
@@ -18,23 +18,13 @@ public class RequestLine {
         return httpMethod;
     }
 
-    public void setHttpMethod(HttpMethod httpMethod) {
-        this.httpMethod = httpMethod;
-    }
 
     public String getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
 
     public String getHttpVersion() {
         return httpVersion;
-    }
-
-    public void setHttpVersion(String httpVersion) {
-        this.httpVersion = httpVersion;
     }
 }
