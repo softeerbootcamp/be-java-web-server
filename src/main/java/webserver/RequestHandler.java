@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.util.HashMap;
 
 import controller.Controller;
+import controller.ErrorController;
 import controller.FileController;
 import controller.UserController;
 import db.Database;
@@ -42,7 +43,7 @@ public class RequestHandler implements Runnable {
 
             DataOutputStream clientOutPutStream = new DataOutputStream(out);
 
-            controller = Controller.FactoryController(httpRequest);
+            controller = Controller.FactoryController(httpRequest.getUrl());
 
             HttpResponse httpResponse;
             UrlType urlType = UrlType.getUrlType(httpRequest.getUrl().getUrl());
@@ -54,6 +55,8 @@ public class RequestHandler implements Runnable {
                 }
             } else if (controller instanceof UserController) {
                 httpResponse = ((UserController) controller).UserQueryString(clientOutPutStream, httpRequest);
+            } else if (controller instanceof ErrorController) {
+                httpResponse = ((ErrorController) controller).getErrorResponse(clientOutPutStream);
             }
 
 

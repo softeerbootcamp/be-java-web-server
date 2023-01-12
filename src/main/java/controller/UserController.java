@@ -20,7 +20,7 @@ import java.util.HashMap;
 
 public class UserController implements Controller {
 
-    private final static String RE_DIRECT_URL = "/index.html";
+    protected static String REGEX = ".*\\/user.*";
     private Database userDatabase = new UserDatabase();
     private Service userService = new UserService();
 

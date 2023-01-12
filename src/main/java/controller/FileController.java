@@ -21,14 +21,15 @@ public class FileController  implements  Controller{
 
     FileReader fileReader;
 
-    public HttpResponse TemplateController(DataOutputStream dataOutputStream, HttpRequest httpRequest) {
+    public HttpResponse TemplateController(DataOutputStream dataOutputStream, HttpRequest httpRequest) throws IOException {
         fileReader = new TemplatesFileReader();
         byte[] data = new byte[0];
         try {
             data = fileReader.readFile(httpRequest.getUrl());
         } catch (IOException e) {
             logger.error(HttpsErrorMessage.NOT_FOUND_FILE);
-            return new HttpResponse(new Data(dataOutputStream, data), FileType.getFileType(httpRequest.getUrl()), HttpStatus.NOT_FOUND);
+            e.printStackTrace();
+            return ErrorController.getErrorResponse(dataOutputStream);
         }
         return new HttpResponse(new Data(dataOutputStream, data), FileType.getFileType(httpRequest.getUrl()), HttpStatus.OK);
     }

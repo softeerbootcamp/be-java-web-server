@@ -19,12 +19,11 @@ public enum UrlType {
         this.regex = regex;
     }
 
-    public static UrlType getUrlType(String url) {
-        Optional<UrlType> urlType = Arrays.stream(values())
+    public static UrlType getUrlType(String url){
+        return Arrays.stream(values())
                 .filter(value -> url.matches(value.regex))
-                .findAny();
-
-        return urlType.get();
+                .findAny()
+                .orElse(null);
     }
 
 }
