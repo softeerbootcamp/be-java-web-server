@@ -6,7 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 public class HttpResponse {
 
@@ -35,7 +37,13 @@ public class HttpResponse {
         httpHeader.addHeader(name, value);
     }
 
-    public void setBody(byte[] body) {
+    public void setBody(String viewPath) throws IOException {
+        byte[] body = new byte[0];
+        File file = new File(viewPath);
+        if (file.exists()) {
+            body = Files.readAllBytes(file.toPath());
+        }
+
         this.body = body;
         addHttpHeader("Content-Length", String.valueOf(body.length));
     }

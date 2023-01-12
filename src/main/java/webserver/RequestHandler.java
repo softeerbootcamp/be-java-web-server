@@ -10,7 +10,6 @@ import view.ViewResolver;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.file.Files;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -40,8 +39,7 @@ public class RequestHandler implements Runnable {
     }
 
     private void render(OutputStream out, HttpResponse httpResponse, String viewPath) throws IOException {
-        byte[] body = Files.readAllBytes(new File(viewPath).toPath());
-        httpResponse.setBody(body);
+        httpResponse.setBody(viewPath);
 
         DataOutputStream dos = new DataOutputStream(out);
         httpResponse.response(dos);
