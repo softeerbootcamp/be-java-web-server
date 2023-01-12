@@ -25,13 +25,13 @@ public class AuthController implements Controller {
     }
 
     @Override
-    public void chain(String path, Map<String, String> queryString, Response res) {
+    public void chain(String path, Map<String, String> queryString, Response res) throws HttpRequestException{
         response = res;
         try{
             switch (RouterPath.find(path)){
                 case CREATE:
-                    Map<String, String> queryStrs = ArgumentResolver.checkParameters(queryString, List.of("userId", "password", "name", "email"));
-                    userCreate(queryStrs);
+                    ArgumentResolver.checkParameters(queryString, List.of("userId", "password", "name", "email"));
+                    userCreate(queryString);
             }
         }catch (HttpRequestException e){
             response.error(e.getErrorCode());
