@@ -44,8 +44,7 @@ public class RequestHandler implements Runnable {
                 userCommand(requestHeaderMessage);
             }
 
-            String strBr = "";
-            while(!(strBr = br.readLine()).equals("")){}
+            while(!(br.readLine()).equals("")){}
             String fileURL = RELATIVE_PATH;
             fileURL += (requestHeaderMessage.getFileExtension().equals("html")||requestHeaderMessage.getFileExtension().equals("ico"))?TEMPLATES:STATIC;
             byte[] body = new byte[0];
