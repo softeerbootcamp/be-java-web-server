@@ -50,12 +50,12 @@ public class HttpResponse {
 
     public void response(DataOutputStream dos) {
         try {
+            logger.debug("httpStatusLine : {}", httpStatusLine);
+            logger.debug("httpHeader : {}", httpHeader);
+
             dos.writeBytes(httpStatusLine + "\r\n");
             dos.writeBytes(httpHeader + "");
             dos.writeBytes("\r\n");
-
-            logger.debug("httpStatusLine : {}", httpStatusLine);
-            logger.debug("httpHeader : {}", httpHeader);
 
             dos.write(body, 0, body.length);
             dos.flush();
