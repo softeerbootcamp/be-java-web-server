@@ -1,5 +1,6 @@
 package Controller;
 
+import db.Database;
 import http.HttpRequest;
 import http.HttpResponse;
 import http.HttpStatus;
@@ -40,6 +41,9 @@ public class UserController implements Controller {
                     params.get("email"));
 
             logger.debug("User : {}", user);
+
+            // 데이터베이스에 입력
+            Database.addUser(user);
 
             // 302 응답이라 location만 필요하기 때문에 body랑 contentType는 없음!
             return new HttpResponse(HttpStatus.FOUND, null, null);
