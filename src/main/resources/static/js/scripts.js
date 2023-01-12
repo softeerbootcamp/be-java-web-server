@@ -1,3 +1,11 @@
+function signUpByEnter(event){
+  let key = event.key || event.keyCode;
+  if (key === 'Enter' || key === 13){
+    emptyChk();
+  }
+}
+
+document.question.addEventListener('keyup', event => signUpByEnter(event));
 function emptyChk(){
   var signUpForm = document.question;
   var userId = signUpForm.userId.value;
