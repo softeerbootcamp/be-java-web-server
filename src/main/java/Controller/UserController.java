@@ -41,10 +41,8 @@ public class UserController implements Controller {
 
             logger.debug("User : {}", user);
 
-            //TODO 임시 코드 - 회원가입을 성공했다고 회원가입 정보를 응답으로 보내줌
-            String successSignUP = "Sign Up Success !" + System.lineSeparator() + user;
-            byte[] responseBody = successSignUP.getBytes();
-            return new HttpResponse(HttpStatus.OK, responseBody, null);
+            // 302 응답이라 location만 필요하기 때문에 body랑 contentType는 없음!
+            return new HttpResponse(HttpStatus.FOUND, null, null);
         }
 
         //TODO 임시 코드 - return 예외처리 해야됨
