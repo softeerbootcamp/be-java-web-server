@@ -1,5 +1,8 @@
 package util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -8,24 +11,26 @@ import java.nio.file.Paths;
 import java.util.Objects;
 
 public class ResourceUtils {
+    private static final Logger logger = LoggerFactory.getLogger(ResourceUtils.class);
 
-    private final static String PATH_OF_TEMPLATE = "./templates";
-    private final static String PATH_OF_STATIC = "./static";
+    private static final String PATH_OF_TEMPLATE = "./templates";
+    private static final String PATH_OF_STATIC = "./static";
 
     public static byte[] loadFileFromClasspath(String filePath) {
-        Path path = search(PATH_OF_TEMPLATE + filePath);
-        if (path == null) {
-            path = search(PATH_OF_STATIC + filePath);
-            if (path == null) {
-                return new byte[0];
-            }
-        }
-
         try {
-            return Files.readAllBytes(path);
+            Path path = search(PATH_OF_TEMPLATE + filePath);
+            if (Objects.nonNull(path)) {
+                return Files.readAllBytes(path);
+            }
+
+            path = search(PATH_OF_STATIC + filePath);
+            if (Objects.nonNull(path)) {
+                return Files.readAllBytes(path);
+            }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            logger.debug("[IOException - ResourceUtils] - path : {}", filePath);
         }
+        return new byte[0];
     }
 
     private static Path search(String filePath) {
