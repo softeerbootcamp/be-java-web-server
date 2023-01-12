@@ -1,26 +1,25 @@
 package webserver.domain.request;
 
+import static webserver.utils.CommonUtils.parseStringToList;
+
 public class RequestLine {
 
     private String method;
-    private String resource;
+    private URI resource;
     private final String version = "HTTP/1.1";
 
-    private RequestLine(String method, String resource){
+    private RequestLine(String method, URI resource){
         this.method = method;
         this.resource = resource;
     }
-    private static RequestLine of(String method, String resource){
+    private static RequestLine of(String method, URI resource){
         return new RequestLine(method, resource);
     }
 
-    private static String[] parseRequestLine(String req){
-        return req.split(" ");
-    }
-
     public static RequestLine from(String req){
-        String [] parsedReqLine = parseRequestLine(req);
-        return of(parsedReqLine[0], parsedReqLine[1]);
+        String [] parsedReqLine = parseStringToList(req, " ");
+        URI resourceURI = URI.from(parsedReqLine[1]);
+        return of(parsedReqLine[0], resourceURI);
     }
 
     public void readReqLine(){
@@ -28,7 +27,7 @@ public class RequestLine {
     }
 
 
-    public String getResource(){
+    public URI getResource(){
         return resource;
     }
 
