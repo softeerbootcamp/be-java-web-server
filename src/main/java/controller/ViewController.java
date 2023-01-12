@@ -31,7 +31,7 @@ public class ViewController implements Controller {
     public Response getResponse(Request request) {
         if(Objects.nonNull(request.getRequestLine().getContentType())) return getStaticFileResponse(request);
 
-        return Response.from(Status.NOT_FOUND);
+        return Response.of(request, Status.NOT_FOUND);
     }
 
     private Response getStaticFileResponse(Request request) {

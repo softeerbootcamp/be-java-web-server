@@ -28,7 +28,7 @@ public class UserController implements Controller {
     public Response getResponse(Request request) {
         if(request.getRequestLine().getUri().startsWith("/user/create")) return createUserResponse(request);
 
-        return Response.from(Status.NOT_FOUND);
+        return Response.of(request, Status.NOT_FOUND);
     }
 
     private Response createUserResponse(Request request) {
