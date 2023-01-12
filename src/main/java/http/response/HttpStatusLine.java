@@ -26,7 +26,8 @@ public class HttpStatusLine {
                 + SPACE
                 + httpStatusCode.getCode()
                 + SPACE
-                + httpStatusCode.getMessage();
+                + httpStatusCode.getMessage()
+                + System.lineSeparator();
     }
 
 }
