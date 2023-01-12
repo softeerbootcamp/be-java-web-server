@@ -101,7 +101,23 @@ Java Web Application Server 2022
       ```
       HTTP/1.1 404 NOT FOUND
       ```
+      
+      + Java Unit Test 작성
+        + given/when/then 패턴으로 깔끔하게
+          + 어떤 데이터가 준비되었을 때 어떤 함수를 실행하면 어떤 결과가 나와야 한다.
+        ```java
+        @Test
+        @DisplayName("테스트 이름")
+        void test() {
+            // given
+            final String str = "test string"
 
+            // when
+            final String result = 테스트할클래스.method(str);
 
+            // then
+            assertThat(result).isEqualTo("예상되는 결과");
+        }  
+        ```
     
     
