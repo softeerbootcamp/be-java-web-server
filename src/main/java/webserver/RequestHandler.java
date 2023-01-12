@@ -30,21 +30,22 @@ public class RequestHandler implements Runnable {
 
             CustomHttpResponse res = requestRouter.handleRequest(req);
 
-            response(req.getProtocolVersion(), res, out);
+            sendResponse(res, out, req.getProtocolVersion());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void response(String protocolVersion, CustomHttpResponse response, OutputStream out) {
+    private void sendResponse(CustomHttpResponse response, OutputStream out, String protocolVersion) {
         try {
             DataOutputStream dos = new DataOutputStream(out);
-            dos.writeBytes(protocolVersion + " " + response.getStatusCode().getCode() + " " + response.getStatusCode().getMessage() + "\r\n");
+            dos.writeBytes( response.getStatusLine(protocolVersion) + "\r\n");
             for (String key : response.getHeaders().keySet()) {
                 dos.writeBytes(key + ": " + response.getHeaders().get(key) + "\r\n");
             }
             dos.writeBytes("Content-Length: " + response.getBody().length + "\r\n");
             dos.writeBytes("\r\n");
+
             dos.write(response.getBody(), 0, response.getBody().length);
             dos.flush();
         } catch (IOException e) {

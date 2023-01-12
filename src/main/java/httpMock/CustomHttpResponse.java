@@ -26,8 +26,8 @@ public class CustomHttpResponse {
         return this.headers;
     }
 
-    public StatusCode getStatusCode() {
-        return statusCode;
+    public String getStatusLine(String protocol){
+        return protocol + " " + statusCode.getCode() + " " + statusCode.getMessage();
     }
 
     public byte[] getBody() {
