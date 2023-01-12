@@ -53,7 +53,7 @@ WebServer -> RequestHandler -> RequestRouter -> someController -> someService
 - controller: RequestController를 implement하고 있다.
   - StaticFileController: StaticFileService를 이용해 파일을 받아서 response를 만든다.
   - UserAccountController: DB로 부터 데이터를 받아오거나 DB에 정보해 response를 만든다.
-- db: 직접적으로 데이터를 받아서 동작을 수행하고 결과를 리턴하는 Service 클래스들
+- service: 직접적으로 데이터를 받아서 동작을 수행하고 결과를 리턴하는 Service 클래스들
   - UserService: 유저 데이터를 다루는 유저 서비스 객체
   - StaticFileService: 정적파일들을 다루는 서비스객체
 - httpMock: http req, res를 나타내는 개체들이 있는 패키지

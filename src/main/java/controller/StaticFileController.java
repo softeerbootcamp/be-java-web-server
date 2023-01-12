@@ -1,6 +1,6 @@
 package controller;
 
-import db.StaticFileService;
+import service.StaticFileService;
 import httpMock.CustomHttpRequest;
 import httpMock.CustomHttpResponse;
 import httpMock.constants.ContentType;
@@ -12,7 +12,7 @@ import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import static db.StaticFileService.getFileTypeFromUrl;
+import static service.StaticFileService.getFileTypeFromUrl;
 
 public class StaticFileController implements RequestController {
     private static final StaticFileController fileController = new StaticFileController();

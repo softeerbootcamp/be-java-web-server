@@ -1,6 +1,6 @@
 package controller;
 
-import db.UserService;
+import service.UserService;
 import httpMock.CustomHttpRequest;
 import httpMock.CustomHttpResponse;
 import httpMock.constants.ContentType;
