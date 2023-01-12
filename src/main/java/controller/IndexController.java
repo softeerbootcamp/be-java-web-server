@@ -32,7 +32,7 @@ public class IndexController implements Controller {
     }
 
     public void doGet(HttpResponse httpResponse) throws IOException {
-        String path = "/index.html";
+        String path = INDEX_PATH;
         ContentType contentType = ContentType.from(path);
         String filePath = contentType.getDirectory() + path;
         byte[] body = loadFile(filePath);
