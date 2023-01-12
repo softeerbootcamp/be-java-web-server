@@ -15,8 +15,32 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class ControllerFactoryTest {
+
     @Test
-    public void testHandle() throws IOException {
+    public void testUserCreateHandle() throws IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        HttpResponse response = new HttpResponse(outputStream);
+        String input = "GET /user/create HTTP/1.1\r\n" +
+                "Host: localhost:8080\r\n" +
+                "User-Agent: curl/7.68.0\r\n" +
+                "Accept: */*\r\n" +
+                "\r\n";
+
+        ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));
+        HttpRequest request = HttpRequest.from(in);
+
+        ControllerFactory.handle(request, response);
+        Map<String, String> headers = response.getHeaders();
+
+        assertAll(
+                () -> assertThat("302").isEqualTo(response.getStatusCode()),
+                () -> assertThat(headers.containsKey("Location")).isTrue(),
+                () -> assertThat(headers.get("Location")).isEqualTo("/index.html")
+
+        );
+    }
+    @Test
+    public void testResourceHandle() throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         HttpResponse response = new HttpResponse(outputStream);
         String input = "GET /index.html HTTP/1.1\r\n" +
