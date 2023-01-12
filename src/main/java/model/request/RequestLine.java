@@ -1,5 +1,6 @@
 package model.request;
 
+import model.general.ContentType;
 import model.general.Method;
 
 import java.util.Arrays;
@@ -49,5 +50,14 @@ public class RequestLine {
         return Arrays.stream(uri.split("\\?")[1].split("&"))
                 .map(s -> s.split("="))
                 .collect(Collectors.toMap(a -> a[0], a -> a[1]));
+    }
+
+    public ContentType getContentType() {
+        String mainUri = getControllerCriteria();
+        if(mainUri.equals("/")) mainUri = "index.html";
+
+        String[] extension = mainUri.split("\\.");
+
+        return ContentType.from("." + extension[1]);
     }
 }
