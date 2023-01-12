@@ -21,8 +21,12 @@ public class HttpRequestUtil {
         String[] pieces = query.split(AND);
         for (String param : pieces) {
             String[] temp = param.split(EQUAL);
-            params.put(URLDecoder.decode(temp[0]), URLDecoder.decode(temp[1]));
-            logger.debug("param: " + URLDecoder.decode(temp[0]) + ' ' + URLDecoder.decode(temp[1]));
+            try {
+                params.put(URLDecoder.decode(temp[0], "UTF-8"), URLDecoder.decode(temp[1], "UTF-8"));
+                logger.debug("param: " + URLDecoder.decode(temp[0], "UTF-8") + ' ' + URLDecoder.decode(temp[1], "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
         }
         return params;
     }
