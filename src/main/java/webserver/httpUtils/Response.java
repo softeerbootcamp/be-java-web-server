@@ -68,7 +68,7 @@ public class Response {
     {
         try {
             dos.writeBytes(resLine.get(VERSION) + " " +resLine.get(CODE)+" "+resLine.get(TEXT)+"\r\n");
-            dos.writeBytes("Location: /index.html\r\n");
+            dos.writeBytes("Location: " + Paths.HOME_PATH + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
