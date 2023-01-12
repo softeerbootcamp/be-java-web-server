@@ -26,12 +26,9 @@ public class Response {
                               int lengthOfBodyContent, String redirectUrl) {
         try {
             ResponseStatusLine responseStatusLine = new ResponseStatusLine(controllerTypeEnum);
+            ResponseHeader responseHeader = new ResponseHeader(contentTypeEnum,redirectUrl,lengthOfBodyContent);
             dos.writeBytes(responseStatusLine.getResponseStatusLine() + NEW_LINE);
-            dos.writeBytes(HeaderReferenceEnum.CONTENT_TYPE.getValueWithSpace() + contentTypeEnum.getValue() + ";charset=utf-8\r\n");
-            dos.writeBytes(HeaderReferenceEnum.CONTENT_LENGTH.getValueWithSpace() + lengthOfBodyContent + NEW_LINE);
-            if (responseStatusLine.getStatusCodeWithMessage().contains("302")) {
-                dos.writeBytes(HeaderReferenceEnum.LOCATION.getValueWithSpace() + redirectUrl + NEW_LINE);
-            }
+            dos.writeBytes(responseHeader.getHeaderLine()+NEW_LINE);
             dos.writeBytes(NEW_LINE);
         } catch (IOException e) {
             logger.error(e.getMessage());

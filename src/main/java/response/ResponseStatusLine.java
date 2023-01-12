@@ -9,6 +9,7 @@ import static enums.ControllerTypeEnum.*;
 public class ResponseStatusLine {
     private String protocol;
     private String statusCodeWithMessage;
+    private static final String NEW_LINE = "\r\n";
 
     public ResponseStatusLine(ControllerTypeEnum controllerTypeEnum) {
         this.protocol = HttpVersionTypeEnum.HTTP1_1.getValue();
@@ -27,8 +28,9 @@ public class ResponseStatusLine {
                     StatusCodeWithMessageEnum.CODE_302.getKey() + " " + StatusCodeWithMessageEnum.CODE_302.getValue();
         }
     }
-    public String getResponseStatusLine(){
-        return protocol+" "+statusCodeWithMessage;
+
+    public String getResponseStatusLine() {
+        return protocol + " " + statusCodeWithMessage;
     }
 
     public String getStatusCodeWithMessage() {
