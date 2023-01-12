@@ -4,14 +4,15 @@ import model.User;
 
 import java.util.Collection;
 import java.util.Objects;
+import java.util.function.Supplier;
 
-public interface Database {
-     <T> void addData(T objects);
+public interface Database<T> {
+    T findObjectById(String Id);
+     void addData(T objects);
 
 
-    <T>  T findObjectById(Object Id);
 
 
-    <T> Collection<T> findAll();
+    Collection<T> findAll();
 
 }
