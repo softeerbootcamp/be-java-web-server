@@ -3,7 +3,7 @@ package webserver;
 import Controller.Controller;
 import Controller.StaticFileController;
 import Controller.UserController;
-import http.HttpRequest;
+import http.request.HttpRequest;
 
 public class ControllerHandler {
     public static Controller handleController(HttpRequest httpRequest) {

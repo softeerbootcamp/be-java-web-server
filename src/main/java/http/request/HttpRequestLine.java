@@ -1,4 +1,6 @@
-package http;
+package http.request;
+
+import http.HttpUri;
 
 public class HttpRequestLine {
     private String method;

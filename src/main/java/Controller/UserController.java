@@ -1,10 +1,10 @@
 package Controller;
 
 import db.Database;
-import http.HttpRequest;
-import http.HttpResponse;
+import http.request.HttpRequest;
+import http.response.HttpResponse;
 import http.HttpStatus;
-import http.HttpStatusLine;
+import http.response.HttpStatusLine;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

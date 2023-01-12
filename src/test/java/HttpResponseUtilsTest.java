@@ -1,7 +1,5 @@
-import http.HttpRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import util.HttpRequestUtils;
 import util.HttpResponseUtils;
 
 import java.io.File;

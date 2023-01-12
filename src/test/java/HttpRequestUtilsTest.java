@@ -1,16 +1,9 @@
-import http.HttpHeader;
-import http.HttpRequestLine;
+import http.request.HttpRequestLine;
 import http.HttpUri;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import util.HttpRequestUtils;
-import util.HttpResponseUtils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
