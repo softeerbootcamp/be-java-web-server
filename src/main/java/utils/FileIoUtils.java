@@ -14,8 +14,8 @@ public final class FileIoUtils {
         try {
             Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI());
             return Files.readAllBytes(path);
-        } catch (URISyntaxException e) {
-            throw new IllegalArgumentException(String.format("%s: URI로 변환불가.", filePath));
+        } catch (NullPointerException | URISyntaxException e) {
+            return "".getBytes();
         }
     }
 
