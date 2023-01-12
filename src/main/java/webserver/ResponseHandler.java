@@ -28,14 +28,14 @@ public class ResponseHandler {
     public void response(Request request) {
         try (OutputStream out = connection.getOutputStream()) {
             DataOutputStream dos = new DataOutputStream(out);
-            String url = request.getUrl();
-            if (url.contains("create?")) {
+
+            if (request.getRequestParams().size() != 0) {
                 response302Header(dos);
                 return;
             }
 
             try {
-                Path path = viewResolver.findFilePath(url);
+                Path path = viewResolver.findFilePath(request.getUrl());
                 String contentType = Files.probeContentType(path);
                 byte[] body = viewResolver.findActualFile(path);
 
