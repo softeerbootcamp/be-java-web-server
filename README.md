@@ -70,5 +70,12 @@ Java Web Application Server 2022
       ```java
          split(Pattern.quote("?"));
       ```
+  + Day 9
+    + MIME Type
+      + 인코딩(Encoding): text 파일로 변환
+      + 디코딩(Decoding): text 파일을 바이너리 파일로 변환
+      + Type : text, image, audio, video, application
+      + subType : .avi, .bin, .css, .csv, .ico 등등..
+      + Type/subType -> text/html, text/css ..
     
     
