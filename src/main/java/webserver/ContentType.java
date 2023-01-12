@@ -31,4 +31,11 @@ public enum ContentType {
     public String getHeaderValue() {
         return headerValue;
     }
+
+    public String getExtension(){return extension;}
+
+    boolean isTemplateDir(){
+        if(this.getExtension() == "html" ||this.getExtension() == "ico") return true;
+        return false;
+    }
 }
