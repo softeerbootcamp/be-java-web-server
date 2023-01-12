@@ -1,5 +1,6 @@
 package controller;
 
+import model.general.ContentType;
 import model.general.Header;
 import model.general.Status;
 import model.request.Request;
@@ -18,7 +19,8 @@ import java.util.Map;
 public class ViewController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(ViewController.class);
 
-    private static final String fileParentPath = "./src/main/resources/templates";
+    private static final String templatePath = "./src/main/resources/templates";
+    private static final String staticPath = "./src/main/resources/templates";
 
     @Override
     public Response getResponse(Request request) {
@@ -29,34 +31,36 @@ public class ViewController implements Controller {
     }
 
     private Response getIndexHtmlWhenInputNothing(Request request) {
-        Map<Header, String> headers = new HashMap<>();
-        headers.put(Header.from("Content-Type"), "text/html;charset=utf-8");
-
         byte[] body = {};
         try {
-            body = Files.readAllBytes(new File(fileParentPath + request.getRequestLine().getUri() + "index.html").toPath());
+            body = Files.readAllBytes(new File(templatePath + request.getRequestLine().getUri() + "index.html").toPath());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
 
-        headers.put(Header.from("Content-Length"), Integer.toString(body.length));
+        Map<Header, String> headers = response200Header(request.getRequestLine().getContentType(), body.length);
 
         return Response.of(StatusLine.from(Status.OK), headers, body);
     }
 
     private Response getIndexHtml(Request request) {
-        Map<Header, String> headers = new HashMap<>();
-        headers.put(Header.from("Content-Type"), "text/html;charset=utf-8");
-
         byte[] body = {};
         try {
-            body = Files.readAllBytes(new File(fileParentPath + request.getRequestLine().getUri()).toPath());
+            body = Files.readAllBytes(new File(templatePath + request.getRequestLine().getUri()).toPath());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
 
-        headers.put(Header.from("Content-Length"), Integer.toString(body.length));
+        Map<Header, String> headers = response200Header(request.getRequestLine().getContentType(), body.length);
 
         return Response.of(StatusLine.from(Status.OK), headers, body);
+    }
+
+    private Map<Header, String> response200Header(ContentType contentType, int messageBodyLength) {
+        Map<Header, String> headers = new HashMap<>();
+        headers.put(Header.from("Content-Type"), contentType.getContentTypeValue() + ";charset=utf-8");
+        headers.put(Header.from("Content-Length"), Integer.toString(messageBodyLength));
+
+        return headers;
     }
 }
