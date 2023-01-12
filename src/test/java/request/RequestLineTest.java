@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class RequestLineTest {
     @Test
     @DisplayName("RequestLine 생성 Test")
-    void RequestLine_생성_Test() {
+    void from() {
         String line = "GET /index.html HTTP/1.1";
 
         RequestLine requestLine = RequestLine.from(line);
@@ -18,7 +18,7 @@ public class RequestLineTest {
     }
 
     @Test
-    @DisplayName("RequestLine에서 Controller 매핑하기 위한 데이터 파싱 Test")
+    @DisplayName("Controller 매핑 데이터를 얻기 위한 RequestLine 파싱 Test")
     void getControllerCriteria() {
         String line = "GET /user/create?" +
                 "userId=javajigi&password=password" +
