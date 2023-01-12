@@ -18,7 +18,7 @@ public class RequestLine {
     private final String httpVersion;
 
     private RequestLine(String method, String uri, String httpVersion) {
-        this.method = Method.of(method);
+        this.method = Method.from(method);
         this.uri = uri;
         this.httpVersion = httpVersion;
     }
