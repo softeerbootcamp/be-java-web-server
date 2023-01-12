@@ -17,6 +17,6 @@ public class FileIoUtilTest {
         Path result = FileIoUtil.mappingPath("/css/styles.css");
         Path path = new File("./src/main/resources/static/css/styles.css").toPath();
         //logger.debug("result: "+path.toString());
-        assertThat(result.equals(path));
+        assertThat(result).isEqualTo(path);
     }
 }
