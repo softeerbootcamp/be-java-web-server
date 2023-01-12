@@ -9,6 +9,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
+import java.util.Map;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
@@ -69,6 +70,13 @@ public class HttpResponse {
         dos.flush();
     }
 
+    public String getStatusCode() {
+        return statusLine.getHttpStatusCode().getCode();
+    }
+
+    public Map<String, String> getHeaders(){
+        return headers.getHeaders();
+    }
     public void setStatusCode(HttpStatusCode statusCode) {
         statusLine.setHttpStatusCode(statusCode);
     }
