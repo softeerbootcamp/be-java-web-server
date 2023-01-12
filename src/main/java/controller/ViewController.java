@@ -15,10 +15,10 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HomeController implements Controller {
-    private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+public class ViewController implements Controller {
+    private static final Logger logger = LoggerFactory.getLogger(ViewController.class);
 
-    private static final String fileParentPath = "src/main/resources/templates";
+    private static final String fileParentPath = "./src/main/resources/templates";
 
     @Override
     public Response getResponse(RequestLine requestLine) {
