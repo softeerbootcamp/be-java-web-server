@@ -17,7 +17,11 @@ public class HttpHeader {
         headers.put(header, value);
     }
 
-    public String getValue(String header) {
-        return headers.get(header);
+    public String getMessage() {
+        StringBuilder sb = new StringBuilder();
+        for (String header : headers.keySet()){
+            sb.append(String.format("%s: %s \r\n", header, headers.get(header)));
+        }
+        return sb.toString();
     }
 }
