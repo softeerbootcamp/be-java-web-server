@@ -12,17 +12,16 @@ import java.nio.file.Files;
 public class FileSystem {
 
     private static final Logger logger = LoggerFactory.getLogger(FileSystem.class);
-    private final PathParser pathParser = new PathParser();
 
-    public FindResult findResource(String url) {
-        String resourcePath = pathParser.parse(url);
+    public static FindResult findResource(String url) {
+        String resourcePath = PathParser.parse(url);
         byte[] resource = readFile(new File(resourcePath));
 
         FindResult findResult = new FindResult(resourcePath, resource);
         return findResult;
     }
 
-    private byte[] readFile(File file) {
+    private static byte[] readFile(File file) {
         try {
             return Files.readAllBytes(file.toPath());
         } catch (IOException e) {
