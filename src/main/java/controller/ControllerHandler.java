@@ -22,6 +22,6 @@ public class ControllerHandler{
                 .stream()
                 .filter(controller -> controller.isMatch(httpRequest))
                 .findFirst()
-                .orElseThrow();
+                .orElseThrow(() -> new ControllerNotFoundException("컨트롤러를 찾을 수 없습니다."));
     }
 }
