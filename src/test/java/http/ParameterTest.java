@@ -19,7 +19,7 @@ class ParameterTest {
                 () -> assertThat(parameter.getParameter("password")).isEqualTo("password"),
                 () -> assertThat(parameter.getParameter("name")).isEqualTo("박재성"),
                 () -> assertThat(parameter.getParameter("email")).isEqualTo("javajigi@slipp.net"),
-                () -> assertThat(parameter.hasParameter()).isEqualTo(true)
+                () -> assertThat(parameter.hasParameter()).isTrue()
         );
     }
 
@@ -29,7 +29,7 @@ class ParameterTest {
         Parameter parameter = Parameter.createEmptyParam();
         assertAll(
                 () -> assertThat(parameter.getParameters()).isEqualTo(Collections.emptyMap()),
-                () -> assertThat(parameter.hasParameter()).isEqualTo(false)
+                () -> assertThat(parameter.hasParameter()).isFalse()
         );
     }
 
