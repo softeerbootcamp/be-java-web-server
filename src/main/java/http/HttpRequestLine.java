@@ -14,4 +14,8 @@ public class HttpRequestLine {
     public HttpUri getHttpUri() {
         return this.uri;
     }
+
+    public String getHttpVersion() {
+        return version;
+    }
 }

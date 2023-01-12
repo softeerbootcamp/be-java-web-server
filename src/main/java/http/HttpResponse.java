@@ -10,22 +10,21 @@ import java.util.List;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
-
-    private HttpStatus status;
+    private final HttpStatusLine statusLine;
     private HttpHeader header;
     private byte[] body;
 
     private String contentType;
-    private String uri;
 
-    public HttpResponse(HttpStatus status, byte[] body, String contentType) {
-        this.status = status;
+
+    public HttpResponse(HttpStatusLine statusLine, byte[] body, String contentType) {
+        this.statusLine = statusLine;
         this.body = body;
         this.contentType = contentType;
 
         // Status에 따른 Header 생성
-        if (status.equals(HttpStatus.OK)) makeResponse200Header();
-        if (status.equals(HttpStatus.FOUND)) makeResponse302Header();
+        if (statusLine.checkStatus(HttpStatus.OK)) makeResponse200Header();
+        if (statusLine.checkStatus(HttpStatus.FOUND)) makeResponse302Header();
     }
 
     private void makeResponse200Header() {
@@ -50,7 +49,7 @@ public class HttpResponse {
 
     private void responseHeader(DataOutputStream dos) {
         try {
-            dos.writeBytes("HTTP/1.1 " + status.toString() + System.lineSeparator());
+            dos.writeBytes(statusLine.toStringForResponse());
             dos.writeBytes(header.toString());
         } catch (IOException e) {
             logger.error(e.getMessage());

@@ -36,4 +36,7 @@ public class HttpRequest {
         return httpHeader.getAccept().split(",")[0];
     }
 
+    public String getHttpVersion() {
+        return httpRequestLine.getHttpVersion();
+    }
 }
