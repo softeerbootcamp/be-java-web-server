@@ -16,7 +16,7 @@ public class HttpHeaders {
         this.headers = headers;
     }
 
-    public static HttpHeaders of(String[] lines) {
+    public static HttpHeaders from(String[] lines) {
         return new HttpHeaders(Arrays.stream(Arrays.copyOfRange(lines, 1, lines.length))
                 .map(line -> line.split(COLON))
                 .collect(Collectors.toMap(pair -> pair[0], pair -> pair[1])
