@@ -5,7 +5,7 @@ import io.request.startLine.Protocol;
 
 public class RequestStartLine {
     private Protocol protocol = Protocol.HTTP_1_1;
-    private Status status = Status.BAD_REQUEST;
+    private Status status = Status.NOT_FOUND;
 
     public void setStatus(Status status) {
         this.status = status;
