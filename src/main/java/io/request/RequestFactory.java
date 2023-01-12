@@ -1,60 +1,39 @@
 package io.request;
 
-import enums.Method;
+import io.request.startLine.StartLine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class RequestFactory {
-
-    private static final List<String> staticExtensions = List.of("css", "fonts", "images", "js", "html");
+    private final Logger logger = LoggerFactory.getLogger(RequestFactory.class);
 
     public HttpRequest create(InputStream in) throws IOException {
         BufferedReader bufferedReader = getBufferedReader(in);
-        String startLine = bufferedReader.readLine();
-        String[] chunks = startLine.split(" ");
-        Method method = Method.find(chunks[0]);
-        String url = chunks[1];
-        RequestType requestType = getRequestType(url);
-        Map<String, String> queryString = getQueryString(url);
 
-        return new HttpRequest(method, url, requestType, queryString);
+        StartLine startLine = new StartLine(bufferedReader.readLine());
+        Header header = new Header(getRemainMessages(bufferedReader));
+        RequestParameter requestParameter = new RequestParameter(startLine);
+
+        return new HttpRequest(startLine, header, requestParameter);
     }
 
-    private Map<String, String> getQueryString(String url) {
-        if (url.contains("?")) {
-            return parseQueryString(url);
+    private String getRemainMessages(BufferedReader bufferedReader) {
+        String msg = "";
+        String line;
+        try {
+            while (!(line = bufferedReader.readLine()).isEmpty()) {
+                msg += line + "\n\r";
+            }
+        } catch (IOException e) {
+            logger.error(e.getMessage());
         }
-        return Map.of();
-    }
-
-    private Map<String, String> parseQueryString(String url) {
-        Map<String, String> queryString = new HashMap<>();
-        String parameter = url.split("\\?", 2)[1];
-        String[] split = parameter.split("&");
-        for (String s : split) {
-            String[] split1 = s.split("=");
-            queryString.put(split1[0], split1[1]);
-        }
-        return queryString;
-    }
-
-
-    private RequestType getRequestType(String url) {
-        if (needsForStaticResource(url)) {
-            return RequestType.STATIC_RESOURCE_REQUEST;
-        }
-        return RequestType.OPERATION_REQUEST;
-    }
-
-    private boolean needsForStaticResource(String url) {
-        return staticExtensions.stream().filter(e -> url.contains(e)).findAny().isPresent();
+        return msg;
     }
 
     private BufferedReader getBufferedReader(InputStream in) {
