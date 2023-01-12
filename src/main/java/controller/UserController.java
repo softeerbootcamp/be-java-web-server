@@ -21,7 +21,7 @@ public class UserController implements Controller {
     }
 
     private void handleRequest(HttpRequest request, HttpResponse response) {
-        UserInfoDTO userInfo = new UserInfoDTO(request.getAllQuery());
+        UserInfoDTO userInfo = UserInfoDTO.of(request.getParameters("userId", "password", "name", "email"));
         userService.signIn(userInfo);
         response.redirect(pathParser.getIndexPageUrl());
     }

@@ -8,11 +8,15 @@ public class UserInfoDTO {
     private String name;
     private String email;
 
-    public UserInfoDTO(Map<String, String> args) {
+    private UserInfoDTO(Map<String, String> args) {
         this.userId = args.get("userId");
         this.password = args.get("password");
         this.name = args.get("ame");
         this.email = args.get("email");
+    }
+
+    public static UserInfoDTO of(Map<String, String> parameters) {
+        return new UserInfoDTO(parameters);
     }
 
     public String getUserId() {
