@@ -59,6 +59,8 @@ public class RequestLine {
     public ContentType getContentType() {
         String[] uriSplit = getUriWithoutQueryString().split("\\.");
 
+        if(uriSplit.length == 1) return null;
+
         return ContentType.from("." + uriSplit[uriSplit.length - 1]);
     }
 
