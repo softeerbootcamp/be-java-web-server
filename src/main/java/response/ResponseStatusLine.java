@@ -1,6 +1,7 @@
 package response;
 
 import enums.ControllerTypeEnum;
+import enums.HttpVersionTypeEnum;
 import enums.StatusCodeWithMessageEnum;
 
 import static enums.ControllerTypeEnum.*;
@@ -10,7 +11,7 @@ public class ResponseStatusLine {
     private String statusCodeWithMessage;
 
     public ResponseStatusLine(ControllerTypeEnum controllerTypeEnum) {
-        this.protocol = "HTTP/1.1";
+        this.protocol = HttpVersionTypeEnum.HTTP1_1.getValue();
         this.statusCodeWithMessage =
                 StatusCodeWithMessageEnum.CODE_404.getKey() + " " + StatusCodeWithMessageEnum.CODE_404.getValue();
         if (controllerTypeEnum == STATIC) {
@@ -30,5 +31,7 @@ public class ResponseStatusLine {
         return protocol+" "+statusCodeWithMessage;
     }
 
-
+    public String getStatusCodeWithMessage() {
+        return statusCodeWithMessage;
+    }
 }

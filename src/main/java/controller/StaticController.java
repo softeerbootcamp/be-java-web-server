@@ -1,5 +1,7 @@
 package controller;
 
+import enums.ContentTypeEnum;
+import enums.ControllerTypeEnum;
 import request.Request;
 import response.Response;
 
@@ -11,11 +13,11 @@ public class StaticController implements Controller{
 
     @Override
     public void selectedController(Request request, Response response) throws IOException {
-        String requestURL =  request.getRequestLine().getURL();
+        String url =  request.getRequestLine().getURL();
 
         System.out.println("firstLine : "+ request.getRequestLine().getURL());
-        byte[] body = Files.readAllBytes(new File("./src/main/resources/static"+requestURL).toPath());
-        response.responseCssHeader(body.length);
+        byte[] body = Files.readAllBytes(new File("./src/main/resources/static"+url).toPath());
+        response.responseMaker(ControllerTypeEnum.STATIC, ContentTypeEnum.CSS,body.length,url);
         response.responseBody(body);
     }
 }

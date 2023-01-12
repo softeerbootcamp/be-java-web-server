@@ -1,6 +1,8 @@
 package controller;
 
 import db.Database;
+import enums.ContentTypeEnum;
+import enums.ControllerTypeEnum;
 import model.User;
 import request.Request;
 import response.Response;
@@ -20,14 +22,14 @@ public class UserController implements Controller {
     @Override
     public void selectedController(Request request, Response response) throws IOException {
         System.out.println("firstLine : " + request.getRequestLine().getURL());
-        String requestURL = request.getRequestLine().getURL();
-        List<String> userInfos = parseUrlToGetUserInfo(requestURL);
+        String url = request.getRequestLine().getURL();
+        List<String> userInfos = parseUrlToGetUserInfo(url);
         User user = new User(userInfos.get(USERID_INDEX), userInfos.get(USERPWD_INDEX),
                 userInfos.get(USERNAME_INDEX), userInfos.get(USEREMAIL_INDEX));
 
         Database.addUser(user);
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + "/index.html").toPath());
-        response.response302Header();
+        response.responseMaker(ControllerTypeEnum.USER, ContentTypeEnum.HTML,body.length,"/index.html");
         response.responseBodyTemp();
     }
 

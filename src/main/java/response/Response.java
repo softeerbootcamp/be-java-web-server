@@ -1,5 +1,6 @@
 package response;
 
+import enums.ContentTypeEnum;
 import enums.ControllerTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,12 +17,16 @@ public class Response {
         this.dos = new DataOutputStream(outputStream);
 
     }
-    public void responseMaker(ControllerTypeEnum controllerTypeEnum,int lengthOfBodyContent){
+    public void responseMaker(ControllerTypeEnum controllerTypeEnum, ContentTypeEnum contentTypeEnum,
+                              int lengthOfBodyContent,String redirectUrl){
         try {
             ResponseStatusLine responseStatusLine = new ResponseStatusLine(controllerTypeEnum);
             dos.writeBytes(responseStatusLine.getResponseStatusLine()+" \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: "+contentTypeEnum.getValue()+";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            if(responseStatusLine.getStatusCodeWithMessage().contains("302")){
+                dos.writeBytes("Location : "+redirectUrl+"\r\n");
+            }
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
