@@ -1,8 +1,8 @@
 package controller;
 
-import model.request.RequestLine;
+import model.request.Request;
 import model.response.Response;
 
 public interface Controller {
-    Response getResponse(RequestLine requestLine);
+    Response getResponse(Request request);
 }
