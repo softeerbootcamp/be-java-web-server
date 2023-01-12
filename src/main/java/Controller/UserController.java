@@ -33,7 +33,7 @@ public class UserController implements Controller {
             return "";
         }
 
-        // TODO 추후 다른 기능이 추가되면 수정
+        // TODO 잘못된 URL이 들어올 경우 404 NOT_FOUND 응답
         response.ok(request);
         return url;
     }
