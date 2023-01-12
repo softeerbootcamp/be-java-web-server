@@ -1,7 +1,9 @@
 package http.response;
 
 public enum HttpStatusCode {
-    OK(200, "OK");
+    OK(200, "OK"),
+    FOUND(302, "Found"),
+    NOT_FOUND(404, "NOT_FOUND");
 
     private final int statusCode;
     private final String message;
