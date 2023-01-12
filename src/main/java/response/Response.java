@@ -1,5 +1,6 @@
 package response;
 
+import enums.ControllerTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.RequestHandler;
@@ -15,7 +16,17 @@ public class Response {
         this.dos = new DataOutputStream(outputStream);
 
     }
-
+    public void responseMaker(ControllerTypeEnum controllerTypeEnum,int lengthOfBodyContent){
+        try {
+            ResponseStatusLine responseStatusLine = new ResponseStatusLine(controllerTypeEnum);
+            dos.writeBytes(responseStatusLine.getResponseStatusLine()+" \r\n");
+            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
     public void response200Header(int lengthOfBodyContent) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");

@@ -26,6 +26,9 @@ public class ResponseStatusLine {
                     StatusCodeWithMessageEnum.CODE_302.getKey() + " " + StatusCodeWithMessageEnum.CODE_302.getValue();
         }
     }
+    public String getResponseStatusLine(){
+        return protocol+" "+statusCodeWithMessage;
+    }
 
 
 }
