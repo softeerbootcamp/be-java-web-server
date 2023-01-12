@@ -38,7 +38,7 @@ public class HttpRequest {
         }
         logger.debug("requestLine : {}", requestLine);
 
-        return new HttpRequestLine(requestLine);
+        return HttpRequestLine.from(requestLine);
     }
 
     private static HttpHeader getHttpRequestHeader(BufferedReader br) throws IOException {
