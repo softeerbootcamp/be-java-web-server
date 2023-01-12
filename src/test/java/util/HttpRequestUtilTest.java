@@ -46,9 +46,11 @@ class HttpRequestUtilTest {
     }
 
     @Test
-    void getRequestAttribute() {
+    void getRequestAttributeTest() {
         String onlyURL = "/user/create";
         String reqAttribute = "/create";
         assertThat(HttpRequestUtil.getRequestAttribute(onlyURL)).isEqualTo(reqAttribute);
     }
+
+
 }
