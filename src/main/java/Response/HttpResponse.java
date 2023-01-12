@@ -57,6 +57,10 @@ public class HttpResponse {
         return body;
     }
 
+    public void setHeaders(Map<String, String> headers) {
+        this.headers = headers;
+    }
+
     public String getHeaders() {
         return this.protocol + " " + this.status.toString() + " \r\n" + this.headers.entrySet().stream().map(e -> e.getKey() + ": " + e.getValue())
                 .collect(Collectors.joining(" \r\n")) + "\r\n";
