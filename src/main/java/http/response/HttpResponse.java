@@ -16,13 +16,23 @@ public class HttpResponse {
     private final HttpHeader httpHeader = new HttpHeader();
     private byte[] body;
 
+    public void ok(HttpRequest request) {
+        setHttpStatusLine(request, HttpStatusCode.OK);
+        addHttpHeader("Content-Type", request.getHttpHeader("Accept"));
+    }
+
     public void setHttpStatusLine(HttpRequest request, HttpStatusCode statusCode) {
         this.httpStatusLine = new HttpStatusLine(request.getHttpVersion(), statusCode);
     }
 
-    public void addHttpHeader(String name, String value) {
-        logger.debug("HttpResponse.addHttpHeader(): value= {}", value);
-        this.httpHeader.addHeader(name, value.split(",")[0]);
+    public void addHttpHeader(String name, String values) {
+        String value = values.split(",")[0];
+        if (name.equals("Content-Type") && value.contains("text")) {
+            value += "; charset=UTF-8";
+        }
+        logger.debug("HttpResponse.addHttpHeader(): value = {}", value);
+
+        httpHeader.addHeader(name, value);
     }
 
     public void setBody(byte[] body) {

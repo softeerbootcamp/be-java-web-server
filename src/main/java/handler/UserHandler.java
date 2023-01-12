@@ -2,7 +2,6 @@ package handler;
 
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import http.response.HttpStatusCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
@@ -25,15 +24,13 @@ public class UserHandler implements Handler {
             UserService userService = new UserService();
             userService.signUp(userInfo);
 
-            response.setHttpStatusLine(request, HttpStatusCode.OK);
-            response.addHttpHeader("Content-type", request.getHttpHeader("Accept"));
+            response.ok(request);
 
             return "/user/login.html";
         }
 
         // TODO 추후 다른 기능이 추가되면 수정할 예정
-        response.setHttpStatusLine(request, HttpStatusCode.OK);
-        response.addHttpHeader("Content-type", request.getHttpHeader("Accept"));
+        response.ok(request);
         return url;
     }
 }
