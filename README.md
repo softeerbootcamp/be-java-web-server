@@ -95,5 +95,13 @@ Java Web Application Server 2022
         + Object를 비교할 때는 메모리 주소 비교 
       + equals() 사용
       + Objects.equals(a, b) 도 가능 (null check가 되어 있음)
+
+    + Http Response 의 Status Line
+      + HTTP version + Status code + Status text 로 구성
+      ```
+      HTTP/1.1 404 NOT FOUND
+      ```
+
+
     
     
