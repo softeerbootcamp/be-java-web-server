@@ -6,6 +6,8 @@ import utils.ContentType;
 import utils.FileIoUtils;
 import utils.StatusCode;
 
+import java.nio.charset.StandardCharsets;
+
 public class StaticFileController implements RequestController{
     public final static String PATH = "/";
     @Override
