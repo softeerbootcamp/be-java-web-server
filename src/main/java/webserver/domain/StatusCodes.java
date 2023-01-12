@@ -6,6 +6,7 @@ public enum StatusCodes {
 
     OK("200", "OK"),
     SEE_OTHER("302", "SEE_OTHER"),
+    BAD_REQUEST("400", "BAD_REQUEST"),
     NOT_FOUND("404", "NOT_FOUND"),
     FORBIDDEN("403", "FORBIDDEN"),
     INTERNAL_SERVER_ERROR("500", "INTERNAL_SERVER_ERROR"),
