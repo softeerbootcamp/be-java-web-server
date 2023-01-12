@@ -19,6 +19,7 @@ public enum Header {
     AUTHORIZATION("Authorization"),
     SEC_CH_UA("sec-ch-ua"),
     SEC_CH_UA_MOBILE("sec-ch-ua-mobile"),
+    SEC_CH_UA_PLATFORM("sec-ch-ua-platform"),
     SERVER("Server"),
     ACCESS_CONTROL_ALLOW_ORIGIN("Access-Control-Allow-Origin"),
     ALLOW("Allow"),
