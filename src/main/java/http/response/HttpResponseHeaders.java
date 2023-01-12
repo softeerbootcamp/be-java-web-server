@@ -1,52 +1,34 @@
 package http.response;
 
-public class HttpResponseHeaders {
-    ContentType contentType;
-    private final int contentLength;
-    private String location;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-    private HttpResponseHeaders(ContentType contentType, int contentLength, String Location) {
-        this.contentType = contentType;
-        this.contentLength = contentLength;
-        this.location = Location;
+public class HttpResponseHeaders {
+
+    private final Map<String, String> headers;
+
+    private HttpResponseHeaders(Map<String, String> headers) {
+        this.headers = headers;
     }
 
-    public static HttpResponseHeaders createHeaders(ContentType contentType, int contentLength, String location) {
-        return new HttpResponseHeaders(contentType, contentLength, location);
+    public void addHeader(String key, String value) {
+        headers.put(key, value);
+    }
+
+    public String getValue(String key) {
+        return headers.get(key);
     }
 
     public static HttpResponseHeaders createDefaultHeaders() {
-        return new HttpResponseHeaders(null, 0, null);
-    }
-
-    public ContentType getContentType() {
-        return contentType;
-    }
-
-    public int getContentLength() {
-        return contentLength;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setContentType(ContentType contentType) {
-
-    }
-
-    public void setContentLength(int contentLength) {
-
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
+        return new HttpResponseHeaders(new HashMap<>());
     }
 
     @Override
     public String toString() {
-        return "Content-Type: " + contentType + System.lineSeparator()
-                + "Content-Length: " + contentLength;
+        return headers.keySet()
+                .stream()
+                .map(header -> header + ": " + getValue(header) + System.lineSeparator())
+                .collect(Collectors.joining());
     }
-
 }
