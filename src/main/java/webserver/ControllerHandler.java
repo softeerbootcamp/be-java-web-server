@@ -1,8 +1,8 @@
 package webserver;
 
-import Controller.Controller;
-import Controller.StaticFileController;
-import Controller.UserController;
+import controller.Controller;
+import controller.StaticFileController;
+import controller.UserController;
 import http.request.HttpRequest;
 
 public class ControllerHandler {
