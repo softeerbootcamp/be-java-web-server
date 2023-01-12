@@ -1,6 +1,6 @@
 package http;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class HttpHeader {
@@ -8,7 +8,7 @@ public class HttpHeader {
     private final Map<String, String> headers;
 
     public HttpHeader() {
-        this.headers = new HashMap<>();
+        this.headers = new LinkedHashMap<>();
     }
 
     public HttpHeader(Map<String, String> headers) {

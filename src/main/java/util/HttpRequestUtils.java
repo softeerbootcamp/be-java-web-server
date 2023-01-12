@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +14,7 @@ public class HttpRequestUtils {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequestUtils.class);
 
     public static Map<String, String> parseRequestHeader(List<String> lines) {
-        Map<String, String> requestHeader = new HashMap<>();
+        Map<String, String> requestHeader = new LinkedHashMap<>();
         for (String line : lines) {
             String[] header = line.split(": ");
             requestHeader.put(header[0], header[1]);
@@ -32,7 +32,7 @@ public class HttpRequestUtils {
     }
 
     public static Map<String, String> parseQueryString(String query) {
-        Map<String, String> result = new HashMap<>();
+        Map<String, String> result = new LinkedHashMap<>();
 
         for (String parameter : query.split("&")) {
             String[] info = parameter.split("=");
