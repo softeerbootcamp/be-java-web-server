@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.net.URLDecoder;
 
 public class RequestParser {
 
@@ -24,11 +25,6 @@ public class RequestParser {
         Request req = new Request();
         req.setReqLine(parseRequestLine(currentLine)); currentLine = br.readLine();
         req.setReqHeader(getHeaderKeyValues(currentLine, br));
-
-        System.out.println(req.getReqLine());
-        System.out.println(req.getReqHeader());
-
-
         //req.setReqBody(getBody(currentLine, br)); ?? 이거 넣으면 왜 안댐?
 
         return req;
@@ -40,7 +36,9 @@ public class RequestParser {
 
         String tokens[] = currentLine.split(" ");
         parsedRequestLine.put(Request.REQLINE_METHOD, tokens[0]);
-        parsedRequestLine.put(Request.REQLINE_QUERY, tokens[1].equals("/") ? Paths.HOME_PATH : tokens[1]);
+        parsedRequestLine.put(Request.REQLINE_QUERY, tokens[1].equals("/") ?
+                Paths.HOME_PATH :
+                URLDecoder.decode(tokens[1]));
         parsedRequestLine.put(Request.REQLINE_VERSION, tokens[2]);
 
         return parsedRequestLine;
