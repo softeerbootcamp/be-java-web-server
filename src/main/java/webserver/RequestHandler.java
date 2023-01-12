@@ -6,7 +6,6 @@ import java.nio.charset.StandardCharsets;
 
 import http.response.HttpResponse;
 import http.request.HttpRequest;
-import service.UserService;
 import utils.HttpRequestGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,10 +27,10 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             HttpRequest httpRequest = HttpRequestGenerator.generateHttpMessage(br);
             HttpResponse httpResponse = new HttpResponse(httpRequest.getVersion());
-            Dispatcher.dispatch(httpRequest, httpResponse);
+            HttpResponse response = Dispatcher.dispatch(httpRequest, httpResponse);
             DataOutputStream dos = new DataOutputStream(out);
-            responseHeaderMessage(dos, httpResponse.getHeaderMessage());
-            responseBody(dos, httpResponse.getBody());
+            responseHeaderMessage(dos, response.getHeaderMessage());
+            responseBody(dos, response.getBody());
         } catch (Exception e) {
             logger.error(e.getMessage());
         }

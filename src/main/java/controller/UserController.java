@@ -18,7 +18,7 @@ public class UserController implements Controller {
     }
 
     @Override
-    public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
+    public HttpResponse service(HttpRequest httpRequest, HttpResponse httpResponse) {
         Map<String, String> querys = httpRequest.getQuerys();
         User user = new User(
                 querys.get("userId"),
@@ -28,5 +28,6 @@ public class UserController implements Controller {
         );
         userService.join(user);
         httpResponse.redirect();
+        return httpResponse;
     }
 }

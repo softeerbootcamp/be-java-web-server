@@ -19,12 +19,12 @@ public class Dispatcher {
         );
     }
 
-    public static void dispatch(HttpRequest request, HttpResponse response) {
+    public static HttpResponse dispatch(HttpRequest request, HttpResponse response) {
 
         Controller controller = controllers.get(request.getUri().getPath());
         if (controller == null) {
             controller = controllers.get(StaticFileController.PATH);
         }
-        controller.service(request, response);
+        return controller.service(request, response);
     }
 }
