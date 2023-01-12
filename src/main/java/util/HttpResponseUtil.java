@@ -27,10 +27,10 @@ public class HttpResponseUtil {
         }
     }
 
-    public static Map<String, String> generateHeaders(HttpRequest httpRequest, StatusCode statusCode, int length) {
+    public static Map<String, String> generateHeaders(String requestPath, StatusCode statusCode, int length) {
         ContentType contentType = ContentType.PLAIN;
         if (statusCode.equals(StatusCode.OK)) {
-            String ex = FileIoUtil.findExtension(httpRequest.getPath());
+            String ex = FileIoUtil.findExtension(requestPath);
             contentType = ContentType.valueOf(ex.toUpperCase());
         }
 

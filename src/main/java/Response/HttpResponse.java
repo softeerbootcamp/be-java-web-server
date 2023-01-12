@@ -28,16 +28,14 @@ public class HttpResponse {
         this.headers = headers;
     }
 
-    public static HttpResponse createHttpResponse(HttpRequest httpRequest, StatusCode statusCode) {
-        Path path = FileIoUtil.mappingDirectoryPath(httpRequest.getPath());
+    public static HttpResponse createHttpResponse(String requestPath, StatusCode statusCode, String requestProtocol) {
+        Path path = FileIoUtil.mappingDirectoryPath(requestPath);
         byte[] body = EMPTYBYTE;
         if (Objects.nonNull(path) && path.toFile().exists())
             body = HttpResponseUtil.generateBody(path);
 
-        String protocol = httpRequest.getProtocol();
-
-        Map<String, String> headers = HttpResponseUtil.generateHeaders(httpRequest, statusCode, body.length);
-        return new HttpResponse(body, statusCode, protocol, headers);
+        Map<String, String> headers = HttpResponseUtil.generateHeaders(requestPath, statusCode, body.length);
+        return new HttpResponse(body, statusCode, requestProtocol, headers);
     }
 
     public void putHeaders(String type, String value) {
