@@ -17,7 +17,7 @@ public class FileIoUtils {
                 return Files.readAllBytes(new File(TEMPLATE_RESOURCE_PATH + file).toPath());
             return Files.readAllBytes(new File(STATIC_RESOURCE_PATH + file).toPath());
         } catch (Exception e) {
-            throw new IllegalArgumentException("해당하는 확장자가 존재하지 않습니다.");
+            throw new IllegalArgumentException("해당하는 파일이 존재하지 않습니다.");
         }
     }
 
