@@ -26,6 +26,11 @@ public class HttpRequest {
     public URI getUri() {
         return this.startLine.getUri();
     }
+    public String getExtension() {
+        String path = getUri().getPath();
+        int dotIdx = path.lastIndexOf(".");
+        return path.substring(dotIdx + 1);
+    }
 
     public String getVersion() {
         return this.startLine.getVersion();
