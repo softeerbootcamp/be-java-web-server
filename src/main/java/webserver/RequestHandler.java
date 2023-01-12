@@ -14,9 +14,7 @@ import java.util.Map;
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-    private Map<String, String> reqLine;
-    private String reqHeader;
-    private String reqBody;
+    private Request req;
 
     private Socket connection;
 
@@ -31,14 +29,16 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
 
-            reqLine = RequestParser.parseRequestLine(in);
-            String reqMethod = reqLine.get(RequestParser.METHOD);
-            String reqQuery = reqLine.get(RequestParser.QUERY);
-            String reqVersion = reqLine.get(RequestParser.VERSION);
+            //req = RequestParser.parseRequestFromInputStream(in);
+//            reqLine = RequestParser.parseRequestLine(in);
+//            String reqMethod = reqLine.get(RequestParser.METHOD);
+//            String reqQuery = reqLine.get(RequestParser.QUERY);
+//            String reqVersion = reqLine.get(RequestParser.VERSION);
 
             Response res = new Response(logger);
             if(reqQuery.contains("/create") && reqMethod.equals("GET"))
             {
+                logger.debug(reqQuery);
                 // GET 방식의 회원가입 처리
                 SignUpController.enrollNewUser(reqQuery);
             }
