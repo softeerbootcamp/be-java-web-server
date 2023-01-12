@@ -43,4 +43,28 @@ public class HttpURIParserTest {
                 () -> assertEquals("26", parse.getQuerys().get("age"))
         );
     }
+
+    @Test
+    @DisplayName("parse() - 쿼리스트링이 /index? 와 같은 케이스")
+    void testParseInvalidCase1() {
+
+    }
+
+    @Test
+    @DisplayName("parse() - 쿼리스트링이 /index?name= 와 같은 케이스")
+    void testParseInvalidCase2() {
+
+    }
+
+    @Test
+    @DisplayName("parse() - 쿼리스트링이 /index?name=&age= 와 같은 케이스")
+    void testParseInvalidCase3() {
+
+    }
+
+    @Test
+    @DisplayName("parse() - 쿼리스트링이 /index?name&age 와 같은 케이스")
+    void testParseInvalidCase4() {
+
+    }
 }
