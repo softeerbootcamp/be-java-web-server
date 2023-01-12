@@ -29,13 +29,13 @@ public class RequestHandler implements Runnable {
     private static final String EMAIL = "email";
     private HttpStatus httpStatus;
     private Socket connection;
+    Map<String,String> headerKV= new HashMap<>();
     UserService userService = new UserService(new MemoryUserRepository());
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
     }
 
     public void run() {
-        Map<String,String> headerKV= new HashMap<>();
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
@@ -44,7 +44,7 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(reader);
             RequestHeaderMessage requestHeaderMessage = new RequestHeaderMessage(br.readLine());
             if (requestHeaderMessage.getHttpOnlyURL().contains("user")){
-                userCommand(requestHeaderMessage,headerKV);
+                userCommand(requestHeaderMessage);
             }
             while(!(br.readLine()).equals("")){}
             byte[] body = getBodyFile(requestHeaderMessage);
@@ -69,20 +69,19 @@ public class RequestHandler implements Runnable {
         return new byte[0];
     }
 
-    private void userCommand(RequestHeaderMessage requestHeaderMessage, Map<String,String> headerKV) {
+    private void userCommand(RequestHeaderMessage requestHeaderMessage) {
         if (requestHeaderMessage.getRequestAttribute().equals("/create")){
             try{
                 userCreate(requestHeaderMessage);
-                setLocation(headerKV,Redirect.getRedirectLink(requestHeaderMessage.getHttpOnlyURL()));
+                setLocation(Redirect.getRedirectLink(requestHeaderMessage.getHttpOnlyURL()));
             } catch (IllegalStateException e){
-                //Todo: 중복아이디 alert 후 /user/form.html로 리다이렉션
-                setLocation(headerKV,"/user/form.html");
+                setLocation("/user/form.html");
                 logger.debug(e.getMessage());
             }
         }
     }
 
-    private void setLocation(Map<String,String> headerKV, String redirectLink){
+    private void setLocation(String redirectLink){
         if (!redirectLink.equals("")){
             httpStatus = HttpStatus.Redirection;
             headerKV.put("Location",redirectLink);
