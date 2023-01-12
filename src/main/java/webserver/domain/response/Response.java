@@ -1,14 +1,9 @@
 package webserver.domain.response;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import webserver.RequestHandler;
 import webserver.domain.ContentType;
 import webserver.domain.StatusCodes;
-import webserver.utils.HttpResponseUtil;
+import webserver.utils.HttpResponseUtils;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,29 +11,13 @@ import java.util.Map;
 public class Response {
 
     private StatusCodes status;
-    private ContentType contentType;
     private Map<String, String> headerMaps = new HashMap<>();
     private byte[] body;
-    private HttpResponseUtil httpResponseUtil;
+    private HttpResponseUtils httpResponseUtils;
 
     public Response(OutputStream out){
-        httpResponseUtil = new HttpResponseUtil(this, out);
+        httpResponseUtils = new HttpResponseUtils(this, out);
     }
-
-    //Make Http response header for every error
-    public void setContentType(ContentType code){
-        headerMaps.put("Content-Type" , code.getType());
-    }
-
-    public void setRedirection(String redirectUri){
-        headerMaps.put("Location", redirectUri);
-    }
-
-    public void setBody(byte[] body){
-        this.body= body;
-        headerMaps.put("Content-Length", String.valueOf(body.length));
-    }
-
 
     public byte[] getBody() {
         return body;
@@ -48,17 +27,31 @@ public class Response {
         return headerMaps;
     }
 
-    public void setStatusCode(StatusCodes statusCode) {
-        this.status = statusCode;
-    }
-
     public StatusCodes getStatusCode(){
         return this.status;
     }
 
     public void writeResponse(){
-        httpResponseUtil.makeResponse();
+        httpResponseUtils.makeResponse();
     }
 
 
+    public void redirect(StatusCodes statusCode, byte[] bodyAsByte, ContentType contentType, String redirectUri) {
+        status = statusCode;
+        body = bodyAsByte;
+        headerMaps.put("Content-Type" , contentType.getType());
+        headerMaps.put("Content-Length", String.valueOf(body.length));
+        headerMaps.put("Location", redirectUri);
+    }
+
+    public void ok(StatusCodes statusCode, byte[] bodyAsByte, ContentType contentType) {
+        status = statusCode;
+        body = bodyAsByte;
+        headerMaps.put("Content-Type" , contentType.getType());
+        headerMaps.put("Content-Length", String.valueOf(body.length));
+    }
+
+    public void error(StatusCodes statusCode) {
+        status = statusCode;
+    }
 }
