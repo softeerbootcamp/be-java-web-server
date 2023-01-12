@@ -38,7 +38,21 @@ public class HttpResponse {
         send();
     }
 
-    public void send() throws IOException {
+    public void do404() throws IOException {
+        setStatusCode(HttpStatusCode.NOT_FOUND);
+        dos.writeBytes(statusLine.toString());
+        dos.flush();
+    }
+
+    public String getStatusCode() {
+        return statusLine.getHttpStatusCode().getCode();
+    }
+
+    public Map<String, String> getHeaders() {
+        return headers.getHeaders();
+    }
+
+    private void send() throws IOException {
         dos.writeBytes(statusLine.toString());
         dos.writeBytes(headers.toString());
         dos.writeBytes(System.lineSeparator());
@@ -55,33 +69,20 @@ public class HttpResponse {
         dos.flush();
     }
 
-    public void set200Headers(ContentType contentType, int contentLength) {
+    private void set200Headers(ContentType contentType, int contentLength) {
         headers.addHeader("Content-Type", contentType.getContentType());
         headers.addHeader("Content-Length", String.valueOf(contentLength));
     }
 
-    public void set302Headers(String location) {
+    private void set302Headers(String location) {
         headers.addHeader("Location", location);
     }
 
-    public void do404() throws IOException {
-        setStatusCode(HttpStatusCode.NOT_FOUND);
-        dos.writeBytes(statusLine.toString());
-        dos.flush();
-    }
-
-    public String getStatusCode() {
-        return statusLine.getHttpStatusCode().getCode();
-    }
-
-    public Map<String, String> getHeaders(){
-        return headers.getHeaders();
-    }
-    public void setStatusCode(HttpStatusCode statusCode) {
+    private void setStatusCode(HttpStatusCode statusCode) {
         statusLine.setHttpStatusCode(statusCode);
     }
 
-    public void setResponseBody(byte[] body) {
+    private void setResponseBody(byte[] body) {
         responseBody.setBody(body);
     }
 
