@@ -16,8 +16,8 @@ class UserServiceAndDBTest {
     final String[] userValue2 = {"test2", "1234", "test2Name", "tes2t@naver.com"};
     final String[] userKey = {"userId", "password", "name", "email"};
 
-    Service service = new UserService();
     Database userDataBase = new UserDatabase();
+    Service userService = new UserService();
 
 
 
@@ -28,7 +28,7 @@ class UserServiceAndDBTest {
         //given
         saveUser(userValue);
         //when
-        User user = userDataBase.findObjectById(userValue[0]);
+        User user = (User) userDataBase.findObjectById(userValue[0]);
         //then
         assertThat(user.getUserId()).isEqualTo(userValue[0]);
         assertThat(user.getPassword()).isEqualTo(userValue[1]);
@@ -41,8 +41,9 @@ class UserServiceAndDBTest {
         for (int i = 0; i < userKey.length; i++) {
             userMap.put(userKey[i],userValue[i]);
         }
+        User user = (User) userService.createModel(userMap);
         //when
-        service.saveData(userMap);
+        userDataBase.addData(user);
     }
 
     @Test

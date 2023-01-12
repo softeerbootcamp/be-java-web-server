@@ -4,6 +4,9 @@ import java.io.*;
 import java.net.Socket;
 import java.util.HashMap;
 
+import db.Database;
+import db.UserDatabase;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reader.RequestReader;
@@ -20,6 +23,8 @@ public class RequestHandler implements Runnable {
     private Socket connection;
     private RequestReader requestReader;
     private FileReader fileReader;
+
+    private Database database;
 
     private Service service;
 
@@ -54,8 +59,11 @@ public class RequestHandler implements Runnable {
             data = fileReader.readFile(httpRequest.getUrl());
         }else{
             HashMap<String, String> dataMap = requestReader.readData(httpRequest);
+            database = new UserDatabase();
             service = new UserService();
-            service.saveData(dataMap);
+            Object model = service.createModel(dataMap);
+            database.addData(model);
+            System.out.println("database = " + database.findAll());
         }
         return data;
     }
