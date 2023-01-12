@@ -28,11 +28,15 @@ public class FrontController extends BaseController {
      */
     @Override
     public void service(HttpRequest request, HttpResponse response) {
-        String url = request.getUrl();
-        //일단 디폴트 컨트롤러
-        Controller controller = new ReturnFileController();
-        //만약 파일 요청이 아니라면
-        if(!url.contains(".")) controller = getControllerByUrl(url);
-        controller.service(request,response);
+        try{
+            String url = request.getUrl();
+            //일단 디폴트 컨트롤러
+            Controller controller = new ReturnFileController();
+            //만약 파일 요청이 아니라면
+            if(!url.contains(".")) controller = getControllerByUrl(url);
+            controller.service(request,response);
+        }catch(NullPointerException e){
+            System.out.println("요청에 해당되는 컨트롤러가 없습니다. ");
+        }
     }
 }
