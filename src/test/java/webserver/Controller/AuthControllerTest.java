@@ -1,21 +1,12 @@
 package webserver.Controller;
-
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.*;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import webserver.ArgumentResolver;
 import webserver.Service.AuthService;
 import webserver.domain.ContentType;
 import webserver.domain.StatusCodes;
 import webserver.domain.response.Response;
 import webserver.exception.HttpRequestException;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.net.http.HttpResponse;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.mockito.Mockito.*;
