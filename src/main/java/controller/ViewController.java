@@ -29,12 +29,12 @@ public class ViewController implements Controller {
 
     @Override
     public Response getResponse(Request request) {
-        if(Objects.nonNull(request.getRequestLine().getContentType())) return getStaticFile(request);
+        if(Objects.nonNull(request.getRequestLine().getContentType())) return getStaticFileResponse(request);
 
         return Response.from(Status.NOT_FOUND);
     }
 
-    private Response getStaticFile(Request request) {
+    private Response getStaticFileResponse(Request request) {
         RequestLine requestLine = request.getRequestLine();
 
         byte[] body = {};
