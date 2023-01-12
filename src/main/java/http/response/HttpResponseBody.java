@@ -8,11 +8,7 @@ public class HttpResponseBody {
     }
 
     public static HttpResponseBody createDefaultBody() {
-        return new HttpResponseBody(null);
-    }
-
-    public static HttpResponseBody createBody(byte[] body) {
-        return new HttpResponseBody(body);
+        return new HttpResponseBody("".getBytes());
     }
 
     public void setBody(byte[] body) {

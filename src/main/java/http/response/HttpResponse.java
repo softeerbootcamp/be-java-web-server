@@ -30,7 +30,7 @@ public class HttpResponse {
 
     public void sendRedirect(String location) throws IOException {
         setStatusCode(HttpStatusCode.FOUND);
-        set300Headers(location);
+        set302Headers(location);
         send();
     }
 
@@ -38,13 +38,13 @@ public class HttpResponse {
         dos.writeBytes(statusLine.toString());
         dos.writeBytes(headers.toString());
         dos.writeBytes(System.lineSeparator());
+        logger.debug("status line: " + statusLine);
+        logger.debug("headers: " + headers);
         byte[] body = responseBody.getBody();
-        if(null == body){
+        if(body.length == 0){
             dos.flush();
             return;
         }
-        logger.debug("status line: " + statusLine);
-        logger.debug("headers: " + headers);
         dos.write(body, 0, body.length);
         dos.flush();
     }
@@ -54,8 +54,15 @@ public class HttpResponse {
         headers.addHeader("Content-Length", String.valueOf(contentLength));
     }
 
-    public void set300Headers(String location) {
+    public void set302Headers(String location) {
         headers.addHeader("Location", location);
+    }
+
+    public void do404() throws IOException {
+        setStatusCode(HttpStatusCode.NOT_FOUND);
+        dos.writeBytes(statusLine.toString());
+        dos.flush();
+        logger.info("404 status line: " + statusLine.getHttpStatusCode().getMessage());
     }
 
     public void setStatusCode(HttpStatusCode statusCode) {
