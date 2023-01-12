@@ -2,12 +2,8 @@ package webserver.domain;
 
 import util.FileFinder;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-import static util.HttpParser.REQUEST_LINE;
 
 public class HttpResponse {
 
