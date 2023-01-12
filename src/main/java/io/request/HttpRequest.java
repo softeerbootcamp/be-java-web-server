@@ -1,33 +1,32 @@
 package io.request;
 
-import enums.Method;
+import io.request.startLine.StartLine;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class HttpRequest {
 
-    private Method method;
-    private String url;
-    private Map<String, String> queryString;
-    private RequestType requestType;
+    private StartLine startLine;
+    private Header header;
 
+    private RequestParameter requestParameter;
 
-    public HttpRequest(Method method, String url, RequestType requestType, Map<String, String> queryString) {
-        this.method = method;
-        this.url = url;
-        this.requestType = requestType;
-        this.queryString = queryString;
+    public HttpRequest(StartLine startLine, Header header, RequestParameter requestParameter) {
+        this.startLine = startLine;
+        this.header = header;
+        this.requestParameter = requestParameter;
     }
 
     public String getUrl() {
-        return url;
+        return startLine.getUrl();
     }
 
-    public Boolean isStaticResourceRequest() {
-        return requestType == RequestType.STATIC_RESOURCE_REQUEST;
-    }
-
-    public Map<String, String> getAllQuery() {
-        return Map.copyOf(queryString);
+    public Map<String, String> getParameters(String... args) {
+        Map<String, String> results = new HashMap<>();
+        for (String arg : args) {
+            results.put(arg, requestParameter.getParameter(arg));
+        }
+        return results;
     }
 }
