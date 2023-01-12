@@ -11,7 +11,7 @@ public class UserInfoDTO {
     private UserInfoDTO(Map<String, String> args) {
         this.userId = args.get("userId");
         this.password = args.get("password");
-        this.name = args.get("ame");
+        this.name = args.get("name");
         this.email = args.get("email");
     }
 
