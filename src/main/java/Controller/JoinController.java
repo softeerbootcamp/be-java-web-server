@@ -18,9 +18,9 @@ public class JoinController extends Controller{
     public void response() {
         super.response();
         ManageDB.saveUser(this.httpRequest);
-        HttpResponse httpResponseE = HttpResponse.createHttpResponse(this.httpRequest, StatusCode.FOUND);
-        httpResponseE.putHeaders("Location", "/index.html");
-        httpResponseE.putHeaders("Content-Length", "0");
-        HttpResponseUtil.outResponse(dos, httpResponseE);
+        HttpResponse httpResponse = HttpResponse.createHttpResponse(this.httpRequest, StatusCode.FOUND);
+        httpResponse.putHeaders("Location", "/index.html");
+        httpResponse.putHeaders("Content-Length", "0");
+        HttpResponseUtil.outResponse(dos, httpResponse);
     }
 }
