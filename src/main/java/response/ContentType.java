@@ -1,11 +1,16 @@
-package webserver;
+package response;
 
 import java.util.Arrays;
 
 public enum ContentType {
 	HTML("html", "text/html"),
 	CSS("css", "text/css"),
-	JS("js", "text/js");
+	JS("js", "text/javascript"),
+	JPEG("jpeg", "image/jpeg"),
+	PNG("png", "image/png"),
+	FAVICON("ico", "image/ico"),
+	TTF("ttf", "font/ttf"),
+	WOFF("woff", "font/woff");
 
 	private final String extension;
 
@@ -20,7 +25,7 @@ public enum ContentType {
 		return Arrays.stream(ContentType.values())
 			.filter(e -> e.extension.equals(extension))
 			.findFirst()
-			.orElseThrow(() -> new RuntimeException("일치하는 ContentType이 없습니다."));
+			.orElseThrow(() -> new RuntimeException(extension + "과 일치하는 ContentType이 없습니다."));
 	}
 
 	public String getContentType() {
