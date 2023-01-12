@@ -15,7 +15,7 @@ public class HttpStartLine {
         this.version = version;
     }
 
-    public static HttpStartLine from(String startLine) {
+    public static HttpStartLine from(String startLine) throws ArrayIndexOutOfBoundsException {
         String[] tokens = startLine.split(SPACE);
         HttpMethod httpMethod = HttpMethod.getHttpMethod(tokens[0]);
         Uri uri = Uri.from(tokens[1]);
