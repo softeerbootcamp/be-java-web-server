@@ -1,14 +1,21 @@
 package webserver;
 
 import java.io.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import request.Header;
 import request.HttpRequest;
 import response.HttpResponse;
 import service.UserService;
+import servlet.Servlet;
+import servlet.UserCreate;
 import util.FileIoUtils;
 
 
@@ -18,70 +25,32 @@ public class RequestHandler implements Runnable{
 
     private Socket connection;
 
-    public UserService userService = new UserService();
+    private final Map<String, Class<? extends Servlet>> controller;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
+        this.controller = new HashMap<>();
+        controller.put("/user/create", UserCreate.class);
+        logger.debug(controller.get("/user/create").getName());
     }
 
     public void run() {
-
-        /*TODO ( step1 )
-        *  해야할 것
-         * 1. 브라우저에서 서버로부터 데이터를 받아들이는 부분을 구현해야 함
-         * ex.
-         * InputStream: 브라우저에서 서버쪽으로 들어오는 모든 데이터가 담겨있음
-         * OutStream : 서버에서 클라이언트쪽으로 응답을 보낼 , 응답을 보내는 데이터를 싣어줌
-         * InputStream -> BufferedReader 로 변환하는 api 필요
-         * BufferedReader : 클라이언트에서 요청하는 데이터를 Line by Line으로 읽어들임
-         * ex. BufferedReader br = new BufferedReader(new InputStream(inputStream객체,"UTF-8"));
-         * 2. request 를 읽어들이는 방법
-         * (= null) 로 마지막인지 테스트하는 것이 아닌, (= !line.equals("")) 로 비교한다.
-         * 3. sout 보단 로거 활용해서 출력 확인
-         * logger 를 활용하면 어느 쓰레드에서 로그를 찍는지도 볼 수 있다.
-         * [ 문제 해결 방법 ]
-         * 첫 번째 라인에 해당하는 line 객체 부분에서
-         * index.html 를 출력한 다음에
-         * 서버에서 이 디렉토리 밑에 있는 index.html 파일을 읽어서
-         * hello World 대신에 응답으로 쏴주면 첫번째 요구사항을 만족한다.
-         */
-
-        /* TODO (step2)
-        *   HTTP GET 프로토콜을 이해한다.
-        *   HTTP GET에서 parameter를 전달하고 처리하는 방법을 학습한다.
-        *   HTTP 클라이언트에서 전달받은 값을 서버에서 처리하는 방법을 학습한다.
-        * */
-
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-
-//            String[] urlString = stringParser.stringSplit(brRead);
-//            String url = urlString[1];
-//            boolean check = Utilities.checkData(url);
-//            while (!brRead.equals("") && brRead != null) brRead = br.readLine();
-//            if(!check){
-//                String userId = userService.joinUser(urlString[1]);
-//                logger.debug("userId : {}",userId);
-//            }
-//            body = FileIoUtils.loadFileFromClasspath("./templates" + url);
-//            BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-//            HttpRequest httpRequest = HttpRequest.of(br);
-//            String path = httpRequest.getPath();
-//
-//            DataOutputStream dos = new DataOutputStream(out);
-//            byte[] body = FileIoUtils.loadFileFromClasspath(path);
-//            response200Header(dos, body.length);
-
             HttpRequest httpRequest = generateHttpRequest(in);
+
             HttpResponse httpResponse = controlRequestAndResponse(httpRequest);
             respondToHttpRequest(out, httpResponse);
-//            responseBody(dos, body);
 
         } catch (IOException e) {
             logger.error(e.getMessage());
         } catch (URISyntaxException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
     }
@@ -91,11 +60,50 @@ public class RequestHandler implements Runnable{
         return HttpRequest.of(br);
     }
 
+    private HttpResponse controlRequestAndResponse(HttpRequest httpRequest) throws IOException, URISyntaxException, InstantiationException, IllegalAccessException {
+        if (httpRequest.isForStaticContent()) {
+            String path = httpRequest.getPath();
+            byte[] body = FileIoUtils.loadFileFromClasspath(path);
+            Map<String, String > headerFields = new HashMap<>();
+            if (path.endsWith(".html")) {
+                headerFields.put("Content-Type", "text/html;charset=utf-8");
+            } else if (path.endsWith(".css")) {
+                headerFields.put("Content-Type", "text/css");
+            } else if (path.endsWith(".js")) {
+                headerFields.put("Content-Type", "application/javascript");
+            } else {
+                headerFields.put("Content-Type", "text/plain");
+            }
+            logger.debug("Content-Type : {}", headerFields.get("Content-Type"));
+            headerFields.put("Content-Length", String.valueOf(body.length));
+            Header header = new Header(headerFields);
+            return HttpResponse.of("200", header, body);
+        }
 
-    private HttpResponse controlRequestAndResponse(HttpRequest httpRequest) throws IOException, URISyntaxException {
-        String path = httpRequest.getPath();
-        byte[] body = FileIoUtils.loadFileFromClasspath(path);
-        return HttpResponse.of("200", body);
+        if (httpRequest.isForDynamicContent()) {
+            String path = httpRequest.getPath();
+//            Class<? extends Servlet> servletClass = controller.get(path);
+            //Servlet servlet = servletClass.newInstance();
+            Class<? extends Servlet> servletClass = controller.get(path);
+//                servlet = servletClass.getConstructor(String.class);
+            try {
+                Class<?> ServletClass = Class.forName("servlet.Servlet");
+                Constructor<?> constructor = ServletClass.getConstructor(String.class);
+                Servlet servlet = (Servlet) constructor.newInstance(path);
+                servlet.service(httpRequest);
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+            Map<String, String > headerFields = new HashMap<>();
+            headerFields.put("Location", "/index.html");
+            Header header = new Header(headerFields);
+            return HttpResponse.of("302", header);
+        }
+        throw new AssertionError("HttpRequest는 정적 혹은 동적 컨텐츠 요청만 가능합니다.");
     }
 
     private void respondToHttpRequest(OutputStream out, HttpResponse httpResponse) {
@@ -103,24 +111,4 @@ public class RequestHandler implements Runnable{
         httpResponse.respond(dos);
     }
 
-//    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-//        try {
-//            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-//            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-//            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-//            dos.writeBytes("\r\n");
-//        } catch (IOException e) {
-//            logger.error(e.getMessage());
-//        }
-//    }
-
-//    private void responseBody(DataOutputStream dos, byte[] body) {
-//        try {
-//            dos.write(body, 0, body.length);
-//            logger.debug("dos : {}");
-//            dos.flush();
-//        } catch (IOException e) {
-//            logger.error(e.getMessage());
-//        }
-//    }
 }

@@ -15,10 +15,12 @@ public class HttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
     private final RequestLine requestLine;
     private final String header;
+    private final String body;
 
     public HttpRequest(RequestLine requestLine, String header) {
         this.requestLine = requestLine;
         this.header = header;
+        this.body = "";
     }
 
     public static HttpRequest of(BufferedReader br) throws IOException {
@@ -42,13 +44,6 @@ public class HttpRequest {
         return new HttpRequest(requestLine, header.toString());
     }
 
-    public String getResourcePath() {
-        if (requestLine.isTemplatesResource()) {
-            return String.format("./templates%s", requestLine.getPath());
-        }
-        return String.format("./static%s", requestLine.getPath());
-    }
-
     public String getPath() {
         if (requestLine.isTemplatesResource()) {
             return String.format("./templates%s", requestLine.getPath());
@@ -57,5 +52,29 @@ public class HttpRequest {
             return String.format("./static%s", requestLine.getPath());
         }
         return requestLine.getPath();
+    }
+
+    public Map<String, String> getParameters() {
+        return requestLine.getParameters();
+    }
+
+    public boolean isGet() {
+        return requestLine.getMethod() == Method.GET;
+    }
+
+    public boolean isPost() {
+        return requestLine.getMethod() == Method.POST;
+    }
+
+    public boolean isForStaticContent() {
+        return requestLine.isTemplatesResource() || requestLine.isStaticResource();
+    }
+
+    public boolean isForDynamicContent() {
+        return !isForStaticContent();
+    }
+
+    public String getBody() {
+        return body;
     }
 }
