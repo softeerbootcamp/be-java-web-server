@@ -1,6 +1,6 @@
 package Utility;
 
-public class Utility {
+public class UserValidation {
 
     public static boolean isNull(Object target){
         return target == null;

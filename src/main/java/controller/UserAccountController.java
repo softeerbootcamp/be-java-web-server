@@ -1,6 +1,6 @@
 package controller;
 
-import Utility.Utility;
+import Utility.UserValidation;
 import httpMock.CustomHttpErrorFactory;
 import httpMock.CustomHttpRequest;
 import httpMock.CustomHttpResponse;
@@ -46,10 +46,10 @@ public class UserAccountController implements RequestController {
         if (UserService.findUserById(userId) != null)
             return CustomHttpErrorFactory.BAD_REQUEST("userID duplicated");
 
-        if (!Utility.isEmailValid(email))
+        if (!UserValidation.isEmailValid(email))
             return CustomHttpErrorFactory.BAD_REQUEST("email type invalid");
 
-        if (!Utility.isPasswordValid(password))
+        if (!UserValidation.isPasswordValid(password))
             return CustomHttpErrorFactory.BAD_REQUEST("password type invalid");
 
         UserService.addUser(new User(userId, password, name, email));
