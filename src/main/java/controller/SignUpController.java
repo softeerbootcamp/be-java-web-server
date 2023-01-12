@@ -8,11 +8,11 @@ import webserver.ResponseWriter;
 
 import java.io.IOException;
 
-public class SignUpController implements Controller{
+public class SignUpController extends BaseController{
     private static final String SIGN_UP_PATH_URL = "/user/create";
-
+    // service는 BaseController에서 더 건들이지 않아도 되므로 오버라이딩 하지 않음
     @Override
-    public void service(HttpRequest request,HttpResponse response) {
+    public void doGet(HttpRequest request, HttpResponse response) {
         String userId = request.getQueryByKey("userId");
         String password = request.getQueryByKey("password");
         String name = request.getQueryByKey("name");
@@ -24,7 +24,6 @@ public class SignUpController implements Controller{
         response.redirect(redirectUrl);
     }
 
-    @Override
     public String getPathUrl() {
         return this.SIGN_UP_PATH_URL;
     }
