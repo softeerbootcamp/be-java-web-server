@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -31,8 +30,6 @@ public class HttpRequestUtils {
             header += line;
             line = br.readLine();
         }
-        System.out.println(requestLine);
-        System.out.println(header);
 
         //TODO : body도 readLine으로 받아서 값을 할당할 것
 
@@ -87,16 +84,4 @@ public class HttpRequestUtils {
         }
     }
 
-    private static String[] parseRequestLine(String req){
-        return req.split(" ");
-    }
-
-    public static Map<String, String> parseStringToMap(String req){
-        Map<String, String> map = new HashMap<>();
-        Arrays.stream(req.split("\n")).forEach(item->{
-            String[] parsedHeader = parseRequestLine(item);
-            map.put(parsedHeader[0], parsedHeader[1]);
-        });
-        return map;
-    }
 }

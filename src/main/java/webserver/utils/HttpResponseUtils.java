@@ -9,31 +9,26 @@ import webserver.domain.response.Response;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Map;
 
-public class HttpResponseUtil {
+import static webserver.utils.CommonUtils.mapToStringSplitWithNewLine;
+
+public class HttpResponseUtils {
 
     private Response response;
     private DataOutputStream dos;
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-    public HttpResponseUtil(Response response, OutputStream out){
+    public HttpResponseUtils(Response response, OutputStream out){
         this.response = response;
         this.dos = new DataOutputStream(out);
     }
-    public String responseHeaderMaker() {
-        String bodyContent = "";
-        for(String key : response.getHeader().keySet()){
-            bodyContent += key + ": " + response.getHeader().get(key) + "\r\n";
-        }
-        return bodyContent;
-    }
+
     public void writeRequestLine(StatusCodes code) throws IOException {
         dos.writeBytes("HTTP/1.1 " + code.getStatusCode() + " " + code.getStatusMsg() + " \r\n");
     }
 
     public void writeHeader() throws IOException {
-        dos.writeBytes(responseHeaderMaker());
+        dos.writeBytes(mapToStringSplitWithNewLine(response.getHeader()));
         dos.writeBytes("\r\n");
     }
 
