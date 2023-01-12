@@ -5,18 +5,18 @@ import enums.Status;
 
 public class FindResult {
 
-    private Status status;
+    private Status status = Status.OK;
     private ContentType contentType;
     private byte[] resource;
-    public FindResult(Status status, ContentType contentType, byte[] resource) {
-        this.status = status;
-        this.contentType = contentType;
+
+    public FindResult(String resourcePath, byte[] resource) {
         this.resource = resource;
-    }
-    public void update(Status status, ContentType contentType, byte[] resource) {
-        this.status = status;
-        this.contentType = contentType;
-        this.resource = resource;
+        this.contentType = ContentType.find(resourcePath);
+
+        if (resource.length == 0) {
+            contentType = ContentType.HTML;
+            status = Status.NOT_FOUND;
+        }
     }
 
     public Status getStatus() {
