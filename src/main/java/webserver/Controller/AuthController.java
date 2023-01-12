@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static webserver.ArgumentResolver.checkParameters;
+
 public class AuthController implements Controller {
 
     private Response response;
@@ -19,7 +21,7 @@ public class AuthController implements Controller {
         this.authService = new AuthService();
     }
 
-    private void userCreate(Map<String, String> queryStrs) throws HttpRequestException{
+    public void userCreate(Map<String, String> queryStrs) throws HttpRequestException{
         byte[] result = authService.join(queryStrs.get("userId"), queryStrs.get("password"), queryStrs.get("name"), queryStrs.get("email"));
         response.redirect(StatusCodes.SEE_OTHER, result, ContentType.TEXT_HTML, "http://localhost:8080/index.html");
     }
@@ -30,7 +32,7 @@ public class AuthController implements Controller {
         try{
             switch (RouterPath.find(path)){
                 case CREATE:
-                    ArgumentResolver.checkParameters(queryString, List.of("userId", "password", "name", "email"));
+                    checkParameters(queryString, List.of("userId", "password", "name", "email"));
                     userCreate(queryString);
             }
         }catch (HttpRequestException e){

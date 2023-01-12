@@ -12,9 +12,8 @@ public class AuthService {
         if(user == null){
             Database.addUser(new User(userId, password, name, email));
             return userId.getBytes();
-        }else{
-            throw new HttpRequestException(StatusCodes.INTERNAL_SERVER_ERROR);
         }
+        throw new HttpRequestException(StatusCodes.INTERNAL_SERVER_ERROR);
     }
 
 }

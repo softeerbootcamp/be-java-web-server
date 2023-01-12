@@ -1,5 +1,6 @@
 package webserver;
 
+import model.User;
 import webserver.Controller.AuthController;
 import webserver.Controller.Controller;
 import webserver.Controller.StaticController;
@@ -19,7 +20,6 @@ import static webserver.HandlerMapping.ControllerType.*;
 public class HandlerMapping {
 
     private final Map<ControllerType, Controller> controllerMap = new EnumMap<ControllerType, Controller>(ControllerType.class);
-
     public HandlerMapping() {
         controllerMap.put(USER, new AuthController());
         controllerMap.put(STATIC, new StaticController());
