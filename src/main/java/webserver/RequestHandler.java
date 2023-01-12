@@ -71,8 +71,14 @@ public class RequestHandler implements Runnable {
 
     private void userCommand(RequestHeaderMessage requestHeaderMessage, Map<String,String> headerKV) {
         if (requestHeaderMessage.getRequestAttribute().equals("/create")){
-            userCreate(requestHeaderMessage);
-            setLocation(headerKV,Redirect.getRedirectLink(requestHeaderMessage.getHttpOnlyURL()));
+            try{
+                userCreate(requestHeaderMessage);
+                setLocation(headerKV,Redirect.getRedirectLink(requestHeaderMessage.getHttpOnlyURL()));
+            } catch (IllegalStateException e){
+                //Todo: 중복아이디 alert 후 /user/form.html로 리다이렉션
+                setLocation(headerKV,"/user/form.html");
+                logger.debug(e.getMessage());
+            }
         }
     }
 
