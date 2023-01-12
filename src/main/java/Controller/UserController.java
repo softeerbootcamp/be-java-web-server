@@ -1,4 +1,4 @@
-package handler;
+package Controller;
 
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -9,12 +9,12 @@ import util.HttpRequestUtils;
 
 import java.util.Map;
 
-public class UserHandler implements Handler {
+public class UserController implements Controller {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Override
-    public String handle(HttpRequest request, HttpResponse response) {
+    public String process(HttpRequest request, HttpResponse response) {
         String url = request.getUrl();
         if (url.contains("/create")) {
             String queryString = HttpRequestUtils.getQueryString(url);

@@ -1,11 +1,11 @@
-package handler;
+package Controller;
 
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 
-public class ResourceHandler implements Handler{
+public class ResourceController implements Controller {
     @Override
-    public String handle(HttpRequest request, HttpResponse response) {
+    public String process(HttpRequest request, HttpResponse response) {
         response.ok(request);
 
         String url = request.getUrl();

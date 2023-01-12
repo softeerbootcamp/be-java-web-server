@@ -1,11 +1,11 @@
 package webserver;
 
-import handler.Handler;
+import Controller.Controller;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.HandlerMapper;
+import util.ControllerMapper;
 import view.ViewResolver;
 
 import java.io.*;
@@ -29,9 +29,9 @@ public class RequestHandler implements Runnable {
 
             HttpRequest httpRequest = HttpRequest.from(in);
             HttpResponse httpResponse = new HttpResponse();
-            Handler handler = HandlerMapper.getHandler(httpRequest);
+            Controller controller = ControllerMapper.getController(httpRequest);
 
-            String viewName = handler.handle(httpRequest, httpResponse);
+            String viewName = controller.process(httpRequest, httpResponse);
             String viewPath = ViewResolver.process(viewName);
 
             render(out, httpResponse, viewPath);
