@@ -7,8 +7,8 @@ import request.HttpRequest;
 import util.Url;
 import util.UrlType;
 
+import java.io.IOException;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class RequestGetReader implements RequestReader, FileReader {
     private final String QUERY_STRING_REGEX = "\\?";
@@ -36,14 +36,10 @@ public class RequestGetReader implements RequestReader, FileReader {
 
 
     @Override
-    public byte[] readFile(Url url) {
+    public byte[] readFile(Url url) throws IOException {
         byte[] indexData = null;
-        try {
-            FileReader fileReader = FileReader.selectFileReader(url);
-            indexData = fileReader.readFile(url);
-        } catch (NullPointerException e) {
-            logger.info("{} : 해당 요청은 읽은 파일이 없습니다. 데이터 처리과정으로 넘어갑니다.",url.getUrl());
-        }
+        FileReader fileReader = FileReader.selectFileReader(url);
+        indexData = fileReader.readFile(url);
         return indexData;
     }
 }
