@@ -26,9 +26,9 @@ public class Response {
                               int lengthOfBodyContent, String redirectUrl) {
         try {
             ResponseStatusLine responseStatusLine = new ResponseStatusLine(controllerTypeEnum);
-            ResponseHeader responseHeader = new ResponseHeader(contentTypeEnum,redirectUrl,lengthOfBodyContent);
+            ResponseHeader responseHeader = new ResponseHeader(contentTypeEnum, redirectUrl, lengthOfBodyContent);
             dos.writeBytes(responseStatusLine.getResponseStatusLine() + NEW_LINE);
-            dos.writeBytes(responseHeader.getHeaderLine()+NEW_LINE);
+            dos.writeBytes(responseHeader.getHeaderLine() + NEW_LINE);
             dos.writeBytes(NEW_LINE);
         } catch (IOException e) {
             logger.error(e.getMessage());
