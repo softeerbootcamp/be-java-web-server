@@ -41,7 +41,7 @@ public class SignUpControllerTest {
         HttpStatus status = response.getStatus();
         assertAll(
                 () -> assertEquals("/user/login.html", redirect),
-                () -> assertEquals(HttpStatus.SEE_OTHER, status)
+                () -> assertEquals(HttpStatus.FOUND, status)
         );
     }
 }
