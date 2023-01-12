@@ -31,6 +31,10 @@ public class HttpResponse {
         statusLine = "HTTP/1.1 200 OK \r\n";
         return statusLine + processHeaders();
     }
+    public String create404Message() {
+        statusLine = "HTTP/1.1 404 Not Found \r\n";
+        return statusLine;
+    }
 
     public void addHeader(String key, String value) {
         headers.put(key, value);
@@ -76,6 +80,9 @@ public class HttpResponse {
     }
 
     public String forward(String uri) {
+        if (!FileFinder.isFind(uri)) {
+            return create404Message();
+        }
         this.body = FileFinder.findFile(uri);
         addHeader("Content-Type", mime(uri) + ";charset=utf-8");
         return createForwardMessage();
