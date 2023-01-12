@@ -2,46 +2,41 @@ package view;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.HttpStatus;
 import util.Redirect;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Response {
     private static final Logger logger = LoggerFactory.getLogger(Response.class);
-    public void response(DataOutputStream dos, byte[] body, RequestHeaderMessage requestHeaderMessage){
-        responseHeader(dos,body.length,requestHeaderMessage.getContentType(), requestHeaderMessage.getHttpOnlyURL());
-        responseBody(dos, body);
+    DataOutputStream dos;
+
+    public Response(DataOutputStream dos){
+        this.dos = dos;
     }
-    private void responseHeader(DataOutputStream dos, int lengthOfBodyContent, String contentType, String onlyURL){
-        String redirectLink = Redirect.getRedirectLink(onlyURL);
-        if (redirectLink.equals(""))
-            response200Header(dos,lengthOfBodyContent,contentType);
-        else response302Header(dos, redirectLink);
+    public void response(byte[] body, RequestHeaderMessage requestHeaderMessage, HttpStatus httpStatus, Map<String,String> header){
+        responseHeader(requestHeaderMessage,body,httpStatus,header);
+        responseBody(body);
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
+    private void responseHeader(RequestHeaderMessage requestHeaderMessage, byte[] body, HttpStatus httpStatus, Map<String,String> header){
         try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: "+contentType+";charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("HTTP/1.1 " + httpStatus.toString() + "\r\n");
+            dos.writeBytes("Content-Type: "+requestHeaderMessage.getContentType()+";charset=utf-8\r\n");
+            dos.writeBytes("Content-Length: " + body.length + "\r\n");
+            for (Map.Entry<String,String> entry: header.entrySet()){
+                dos.writeBytes(entry.getKey()+": "+entry.getValue());
+            }
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void response302Header(DataOutputStream dos, String redirectLink) {
-        try {
-            dos.writeBytes("HTTP/1.1 302 FOUND \r\n");
-            dos.writeBytes("Location: "+redirectLink+"\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
+    private void responseBody(byte[] body) {
         try {
             dos.write(body, 0, body.length);
             dos.flush();

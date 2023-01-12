@@ -3,6 +3,7 @@ package webserver;
 import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -12,6 +13,7 @@ import model.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpRequestUtil;
+import util.HttpStatus;
 import util.Redirect;
 import view.RequestHeaderMessage;
 import view.Response;
@@ -25,6 +27,7 @@ public class RequestHandler implements Runnable {
     private static final String PASSWORD = "password";
     private static final String NAME = "name";
     private static final String EMAIL = "email";
+    private HttpStatus httpStatus;
     private Socket connection;
     UserService userService = new UserService(new MemoryUserRepository());
     public RequestHandler(Socket connectionSocket) {
@@ -32,34 +35,51 @@ public class RequestHandler implements Runnable {
     }
 
     public void run() {
+        Map<String,String> headerKV= new HashMap<>();
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
+            httpStatus = HttpStatus.Success;
             InputStreamReader reader = new InputStreamReader(in);
             BufferedReader br = new BufferedReader(reader);
             RequestHeaderMessage requestHeaderMessage = new RequestHeaderMessage(br.readLine());
-
             if (requestHeaderMessage.getHttpOnlyURL().contains("user")){
-                userCommand(requestHeaderMessage);
+                userCommand(requestHeaderMessage,headerKV);
             }
-
             while(!(br.readLine()).equals("")){}
-            String fileURL = RELATIVE_PATH;
-            fileURL += requestHeaderMessage.getFileExtension().equals("html")?TEMPLATES:STATIC;
-            byte[] body = new byte[0];
-            if (!requestHeaderMessage.getHttpOnlyURL().contains("create"))
-                body = Files.readAllBytes(new File(fileURL+requestHeaderMessage.getHttpOnlyURL()).toPath());
-            DataOutputStream dos = new DataOutputStream(out);
-            Response response = new Response();
-            response.response(dos,body,requestHeaderMessage);
+            byte[] body = getBodyFile(requestHeaderMessage);
+            Response response = new Response(new DataOutputStream(out));
+            response.response(body,requestHeaderMessage, httpStatus, headerKV);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void userCommand(RequestHeaderMessage requestHeaderMessage) {
+    private byte[] getBodyFile(RequestHeaderMessage requestHeaderMessage){
+        String fileURL = RELATIVE_PATH+ (requestHeaderMessage.getFileExtension().equals("html")?TEMPLATES:STATIC);
+        logger.debug(fileURL+requestHeaderMessage.getHttpOnlyURL());
+        if (requestHeaderMessage.getRequestAttribute().contains(".")) {  //파일을 요청 (.html, .js, .css etc..)
+            try {
+                httpStatus = HttpStatus.Success;
+                return Files.readAllBytes(new File(fileURL+requestHeaderMessage.getHttpOnlyURL()).toPath());
+            } catch (IOException e){
+                logger.debug(e.getMessage());
+            }
+        }
+        return new byte[0];
+    }
+
+    private void userCommand(RequestHeaderMessage requestHeaderMessage, Map<String,String> headerKV) {
         if (requestHeaderMessage.getRequestAttribute().equals("/create")){
             userCreate(requestHeaderMessage);
+            setLocation(headerKV,Redirect.getRedirectLink(requestHeaderMessage.getHttpOnlyURL()));
+        }
+    }
+
+    private void setLocation(Map<String,String> headerKV, String redirectLink){
+        if (!redirectLink.equals("")){
+            httpStatus = HttpStatus.Redirection;
+            headerKV.put("Location",redirectLink);
         }
     }
 
