@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static model.general.ContentType.HTML;
 import static model.general.ContentType.ICO;
@@ -28,29 +29,12 @@ public class ViewController implements Controller {
 
     @Override
     public Response getResponse(Request request) {
-        if(request.getRequestLine().getUri().equals("/")) return getIndexHtmlWhenInputNothing(request);
-        else if(request.getRequestLine().getUri().equals("/index.html")) return getIndexHtml(request);
+        if(Objects.nonNull(request.getRequestLine().getContentType())) return getStaticFile(request);
 
         return Response.from(Status.NOT_FOUND);
     }
 
-    private Response getIndexHtmlWhenInputNothing(Request request) {
-        RequestLine requestLine = request.getRequestLine();
-
-        byte[] body = {};
-        try {
-            body = Files.readAllBytes(new File(generatePath(requestLine.getContentType()) +
-                    requestLine.getUri() + "index.html").toPath());
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-
-        Map<Header, String> headers = response200Header(requestLine.getContentType(), body.length);
-
-        return Response.of(StatusLine.from(Status.OK), headers, body);
-    }
-
-    private Response getIndexHtml(Request request) {
+    private Response getStaticFile(Request request) {
         RequestLine requestLine = request.getRequestLine();
 
         byte[] body = {};
