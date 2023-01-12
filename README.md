@@ -91,6 +91,11 @@ html 문서의 head에서 meta태그 안에 다음과 같은 정보를 주면 �
 
   브라우저가 요청했던 uri가 일시적으로 변경된 경우
 
+![img.png](ReadmeImg/302동작과정.png)
+302 Found 메시지가 어떤 과정을 거쳐 전달되는지 도식화
+[출처](https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=netmaniascom&logNo=80138330596)
+
+
 ### 확장자를 마임타입(content type)으로 쉽게 변환하는 법
 
 - Files 클래스의 probeContentType() 메서드
