@@ -1,13 +1,11 @@
 package controller;
 
-import Utility.UserValidation;
-import httpMock.CustomHttpErrorFactory;
+import service.UserService;
 import httpMock.CustomHttpRequest;
 import httpMock.CustomHttpResponse;
 import httpMock.constants.ContentType;
 import httpMock.constants.StatusCode;
 import model.User;
-import service.UserService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +32,7 @@ public class UserAccountController implements RequestController {
                 return routingTable.get(path).handleRequest(req);
             }
         }
-        return CustomHttpErrorFactory.NOT_FOUND();
+        return RequestController.NOT_FOUND();
     }
 
     public CustomHttpResponse makeAccount(CustomHttpRequest req) {
@@ -42,15 +40,6 @@ public class UserAccountController implements RequestController {
         String password = req.getRequestParams().get("password");
         String name = req.getRequestParams().get("name");
         String email = req.getRequestParams().get("email");
-
-        if (UserService.findUserById(userId) != null)
-            return CustomHttpErrorFactory.BAD_REQUEST("userID duplicated");
-
-        if (!UserValidation.isEmailValid(email))
-            return CustomHttpErrorFactory.BAD_REQUEST("email type invalid");
-
-        if (!UserValidation.isPasswordValid(password))
-            return CustomHttpErrorFactory.BAD_REQUEST("password type invalid");
 
         UserService.addUser(new User(userId, password, name, email));
 

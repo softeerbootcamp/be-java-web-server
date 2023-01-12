@@ -1,7 +1,7 @@
 package webserver;
 
 import controller.RequestController;
-import db.StaticFileService;
+import service.StaticFileService;
 import httpMock.CustomHttpRequest;
 import httpMock.CustomHttpResponse;
 import httpMock.constants.ContentType;
