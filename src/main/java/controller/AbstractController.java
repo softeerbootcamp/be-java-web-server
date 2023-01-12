@@ -14,7 +14,7 @@ public class AbstractController implements Controller {
 	public void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
 		if (httpRequest.getMethod().equals(HttpMethod.GET)) {
 			doGet(httpRequest, httpResponse);
-
+			return;
 		}
 		doPost(httpRequest, httpResponse);
 	}
