@@ -23,4 +23,14 @@ class ControllerHandlerFactoryTest {
         ControllerHandler controllerHandler = ControllerHandlerFactory.getHandler(HttpRequest.newInstance(headers));
         Assertions.assertThat(controllerHandler).isInstanceOf(QueryStringHandler.class);
     }
+    @Test
+    void 스태틱_핸들러반환_테스트() {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Request Line", "GET /index.html HTTP/1.1");
+        headers.put("HOST", "www.test01.com");
+
+
+        ControllerHandler controllerHandler = ControllerHandlerFactory.getHandler(HttpRequest.newInstance(headers));
+        Assertions.assertThat(controllerHandler).isInstanceOf(StaticHandler.class);
+    }
 }
