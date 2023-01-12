@@ -1,9 +1,9 @@
 package controller;
 
-import io.request.HttpRequest;
-import io.request.RequestFactory;
-import io.response.HttpResponse;
-import io.response.ResponseFactory;
+import http.request.HttpRequest;
+import http.request.RequestFactory;
+import http.response.HttpResponse;
+import http.response.ResponseFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

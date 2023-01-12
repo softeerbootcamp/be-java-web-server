@@ -1,13 +1,14 @@
-package io.request.startLine;
+package http.request;
 
 import enums.Method;
+import http.common.Protocol;
 
-public class StartLine {
+public class RequestStartLine {
     private Method method;
     private String url;
     private Protocol protocol;
 
-    public StartLine(String startLine) {
+    public RequestStartLine(String startLine) {
         String[] chunks = startLine.split(" ");
         this.method = Method.find(chunks[0]);
         this.url = chunks[1];

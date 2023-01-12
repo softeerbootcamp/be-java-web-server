@@ -1,13 +1,13 @@
 package controller;
 
 import dto.UserInfoDTO;
-import io.request.HttpRequest;
-import io.response.HttpResponse;
+import http.request.HttpRequest;
+import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
 
-import static io.request.PathParser.DOMAIN;
+import static filesystem.PathParser.DOMAIN;
 
 public class UserController implements Controller {
 

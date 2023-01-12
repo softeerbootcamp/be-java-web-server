@@ -1,9 +1,9 @@
 package controller;
 
 import filesystem.FileSystem;
-import io.request.HttpRequest;
-import io.response.FindResult;
-import io.response.HttpResponse;
+import http.request.HttpRequest;
+import filesystem.FindResult;
+import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

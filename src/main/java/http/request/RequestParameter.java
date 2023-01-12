@@ -1,6 +1,4 @@
-package io.request;
-
-import io.request.startLine.StartLine;
+package http.request;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +6,7 @@ import java.util.Map;
 public class RequestParameter {
     private Map<String, String> requestParameters;
 
-    public RequestParameter(StartLine startLine) {
+    public RequestParameter(RequestStartLine startLine) {
         this.requestParameters = parseQueryString(startLine.getUrl());
     }
 

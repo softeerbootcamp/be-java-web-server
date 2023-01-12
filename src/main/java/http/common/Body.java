@@ -1,4 +1,4 @@
-package io.response;
+package http.common;
 
 public class Body {
 

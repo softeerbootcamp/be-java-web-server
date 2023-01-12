@@ -1,20 +1,21 @@
-package io.response;
+package http.response;
 
 import enums.Status;
-import io.request.Header;
-import io.response.startline.RequestStartLine;
+import filesystem.FindResult;
+import http.common.Body;
+import http.request.Header;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import static io.response.ResponseAttribute.*;
+import static http.response.enums.ResponseAttribute.*;
 
 public class HttpResponse {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
-    private RequestStartLine startLine = new RequestStartLine();
+    private ResponseStartLine startLine = new ResponseStartLine();
     private Header header = new Header();
     private Body body = new Body();
     private DataOutputStream out;

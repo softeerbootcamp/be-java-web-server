@@ -1,4 +1,4 @@
-package io.request;
+package filesystem;
 
 import java.util.List;
 import java.util.Map;
@@ -10,6 +10,9 @@ public class PathParser {
     private static final String INDEX_HTML = "index.html";
     public static final String DOMAIN = "/";
     public static final String NOT_FOUND_HTML = "notfound.html";
+
+    private PathParser() {
+    }
 
     private static final Map<List<String>, String> mappingInfo = Map.of(
             List.of("/"), TEMPLATE_PATH + INDEX_HTML,

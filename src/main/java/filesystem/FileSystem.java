@@ -1,7 +1,5 @@
 package filesystem;
 
-import io.request.PathParser;
-import io.response.FindResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +10,9 @@ import java.nio.file.Files;
 public class FileSystem {
 
     private static final Logger logger = LoggerFactory.getLogger(FileSystem.class);
+
+    private FileSystem() {
+    }
 
     public static FindResult findResource(String url) {
         String resourcePath = PathParser.parse(url);

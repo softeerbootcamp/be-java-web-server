@@ -1,9 +1,9 @@
-package io.response.startline;
+package http.response;
 
 import enums.Status;
-import io.request.startLine.Protocol;
+import http.common.Protocol;
 
-public class RequestStartLine {
+public class ResponseStartLine {
     private Protocol protocol = Protocol.HTTP_1_1;
     private Status status = Status.NOT_FOUND;
 

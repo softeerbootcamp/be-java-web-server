@@ -1,6 +1,6 @@
-package io.request;
+package http.request;
 
-import io.response.ResponseAttribute;
+import http.response.enums.ResponseAttribute;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,6 +1,5 @@
-package io.request;
+package http.request;
 
-import io.request.startLine.StartLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +15,7 @@ public class RequestFactory {
     public HttpRequest create(InputStream in) throws IOException {
         BufferedReader bufferedReader = getBufferedReader(in);
 
-        StartLine startLine = new StartLine(bufferedReader.readLine());
+        RequestStartLine startLine = new RequestStartLine(bufferedReader.readLine());
         Header header = new Header(getRemainMessages(bufferedReader));
         RequestParameter requestParameter = new RequestParameter(startLine);
 
