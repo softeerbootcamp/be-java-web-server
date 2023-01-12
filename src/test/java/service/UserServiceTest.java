@@ -1,11 +1,12 @@
 package service;
 
 import dto.UserInfoDTO;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class UserServiceTest {
 
@@ -19,7 +20,7 @@ class UserServiceTest {
         // when
         String userId = userService.signIn(userInfoDTO);
         // then
-        Assertions.assertThat(userInfoDTO.getUserId()).isEqualTo(userId);
+        assertThat(userInfoDTO.getUserId()).isEqualTo(userId);
     }
 
     @Test
@@ -33,7 +34,7 @@ class UserServiceTest {
         userService.signIn(userInfoDTO1);
         String userId = userService.signIn(userInfoDTO2);
         // then
-        Assertions.assertThat(userId).isNull();
+        assertThat(userId).isNull();
     }
 
     private UserInfoDTO getUserInfoDTO(Integer postFix) {
