@@ -25,7 +25,7 @@ public class ResourceController implements Controller {
     }
 
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
-        httpResponse.setResponse(httpRequest.getUri().getPath());
+        httpResponse.forward(httpRequest.getUri().getPath());
     }
 
 }

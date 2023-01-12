@@ -35,6 +35,6 @@ public class UserCreateController implements Controller {
         Map<String, String> queryParams = uri.getParameters();
         UserService.create(queryParams);
 
-        httpResponse.setResponse("/index.html");
+        httpResponse.forward("/index.html");
     }
 }

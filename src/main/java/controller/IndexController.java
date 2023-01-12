@@ -29,7 +29,7 @@ public class IndexController implements Controller {
     }
 
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
-        httpResponse.setResponse(INDEX_PATH);
+        httpResponse.forward(INDEX_PATH);
     }
 
 }

@@ -20,7 +20,7 @@ public class HttpResponse {
         this.version = "HTTP/1.1";
     }
 
-    public void setResponse(String path) throws IOException {
+    public void forward(String path) throws IOException {
         this.contentType = ContentType.from(path);
         this.httpStatusCode = HttpStatusCode.OK;
         String filePath = contentType.getDirectory() + path;
