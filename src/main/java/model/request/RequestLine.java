@@ -3,11 +3,16 @@ package model.request;
 import model.general.ContentType;
 import model.general.Method;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class RequestLine {
+    private static final Logger logger = LoggerFactory.getLogger(RequestLine.class);
+
     private final Method method;
     private final String uri;
     private final String httpVersion;
@@ -20,8 +25,10 @@ public class RequestLine {
 
     public static RequestLine from(String line) {
         String[] lineSplit = line.split(" ");
+
         String method = lineSplit[0];
         String uri = lineSplit[1];
+        if(uri.equals("/")) uri = "/index.html";
         String httpVersion = lineSplit[2];
 
         return new RequestLine(method, uri, httpVersion);
@@ -40,10 +47,7 @@ public class RequestLine {
     }
 
     public String getControllerCriteria() {
-        String[] uriSplit = uri.split("/");
-
-        if(uriSplit.length == 0) return uri;
-        else return uri.split("/")[1];
+        return uri.split("/")[1];
     }
 
     public Map<String, String> parseQueryString() {
@@ -53,11 +57,12 @@ public class RequestLine {
     }
 
     public ContentType getContentType() {
-        String mainUri = getControllerCriteria();
-        if(mainUri.equals("/")) mainUri = "index.html";
+        String[] uriSplit = getUriWithoutQueryString().split("\\.");
 
-        String[] extension = mainUri.split("\\.");
+        return ContentType.from("." + uriSplit[uriSplit.length - 1]);
+    }
 
-        return ContentType.from("." + extension[1]);
+    private String getUriWithoutQueryString() {
+        return uri.split("\\?")[0];
     }
 }
