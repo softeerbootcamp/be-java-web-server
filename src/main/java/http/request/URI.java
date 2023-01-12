@@ -15,6 +15,14 @@ public class URI {
         this.querys = querys;
     }
 
+    @Override
+    public String toString() {
+        return "URI{" +
+                "path='" + path + '\'' +
+                ", querys=" + querys +
+                '}';
+    }
+
     public static URI create(String target){
         return new URI(parsePath(target), parseQueryString(target));
     }
