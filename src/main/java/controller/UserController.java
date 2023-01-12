@@ -27,5 +27,6 @@ public class UserController implements RequestController {
                 URLDecoder.decode(querys.get("email"), StandardCharsets.UTF_8)
         );
         userService.join(user);
+        httpResponse.redirect();
     }
 }

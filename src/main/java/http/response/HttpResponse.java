@@ -1,7 +1,7 @@
 package http.response;
 
 import http.HttpHeader;
-import http.request.HttpRequest;
+import utils.ContentType;
 import utils.StatusCode;
 
 import java.util.HashMap;
@@ -12,34 +12,40 @@ public class HttpResponse {
     private HttpHeader headers;
     private HttpResponseBody body;
 
-    public HttpResponse() {
+    public HttpResponse(String version) {
+        this.version = version;
         this.headers = HttpHeader.from(new HashMap<>());
         this.statusCode = StatusCode.OK;
-        this.body = HttpResponseBody.createBody(null);
-    }
-
-    public int getContentLength() {
-        if (body == null)
-            return 0;
-        return body.length;
+        this.body = HttpResponseBody.createBody(new byte[0]);
     }
 
     public byte[] getBody() {
         return body.getBody();
     }
 
+    public void setStatusCode(StatusCode statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    public void setContentType(ContentType contentType) {
+        this.headers.addHeader("Content-Type", contentType.getType());
+    }
+
     public void setBody(byte[] body) {
+        this.headers.addHeader("Content-Length", String.valueOf(body.length));
         this.body.setBody(body);
     }
 
-    public String getResponseMessage() {
+    public String getHeaderMessage() {
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("%s %s \r\n", this.version, this.statusCode));
-        sb.append(String.format("Content-Type: %s;charset=utf-8 \r\n", this.contentType));
-        sb.append(String.format("Content-Length: %d \r\n", getContentLength()));
-        if (this.statusCode == StatusCode.FOUND)
-            sb.append("Location : /index.html \r\n");
+        sb.append(headers.getMessage());
         sb.append("\r\n");
         return sb.toString();
+    }
+
+    public void redirect() {
+        this.statusCode = StatusCode.FOUND;
+        headers.addHeader("Location", "/index.html");
     }
 }
