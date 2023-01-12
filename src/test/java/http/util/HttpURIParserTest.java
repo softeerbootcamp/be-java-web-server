@@ -47,24 +47,68 @@ public class HttpURIParserTest {
     @Test
     @DisplayName("parse() - 쿼리스트링이 /index? 와 같은 케이스")
     void testParseInvalidCase1() {
+        // given
+        String requestLine = "GET /index? HTTP/1.1";
 
+        // when
+        URI parse = HttpURIParser.parse(requestLine);
+
+        // then
+        assertAll(
+                () -> assertEquals("/index", parse.getPath()),
+                () -> assertEquals(0, parse.getQuerys().size())
+        );
     }
 
     @Test
     @DisplayName("parse() - 쿼리스트링이 /index?name= 와 같은 케이스")
     void testParseInvalidCase2() {
+        // given
+        String requestLine = "GET /index?name= HTTP/1.1";
 
+        // when
+        URI parse = HttpURIParser.parse(requestLine);
+
+        // then
+        assertAll(
+                () -> assertEquals("/index", parse.getPath()),
+                () -> assertEquals(1, parse.getQuerys().size()),
+                () -> assertEquals("", parse.getQuerys().get("name"))
+        );
     }
 
     @Test
     @DisplayName("parse() - 쿼리스트링이 /index?name=&age= 와 같은 케이스")
     void testParseInvalidCase3() {
+        // given
+        String requestLine = "GET /index?name= HTTP/1.1";
 
+        // when
+        URI parse = HttpURIParser.parse(requestLine);
+
+        // then
+        assertAll(
+                () -> assertEquals("/index", parse.getPath()),
+                () -> assertEquals(1, parse.getQuerys().size()),
+                () -> assertEquals("", parse.getQuerys().get("name"))
+        );
     }
 
     @Test
     @DisplayName("parse() - 쿼리스트링이 /index?name&age 와 같은 케이스")
     void testParseInvalidCase4() {
+        // given
+        String requestLine = "GET /index?name&age HTTP/1.1";
 
+        // when
+        URI parse = HttpURIParser.parse(requestLine);
+
+        // then
+        assertAll(
+                () -> assertEquals("/index", parse.getPath()),
+                () -> assertEquals(2, parse.getQuerys().size()),
+                () -> assertEquals("", parse.getQuerys().get("name")),
+                () -> assertEquals("", parse.getQuerys().get("age"))
+        );
     }
 }
