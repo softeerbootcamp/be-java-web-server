@@ -47,26 +47,4 @@ public class RequestHandler implements Runnable {
             logger.error(e.getMessage());
         }
     }
-    private void response200Header(DataOutputStream dos, HttpResponse httpResponse) {
-        try {
-            dos.writeBytes(httpResponse.response200Headers());
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, HttpResponse httpResponse) {
-        byte[] body = httpResponse.getBody();
-
-        try {
-            if (body == null) {
-                dos.flush();
-                return;
-            }
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
 }
