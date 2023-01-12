@@ -26,4 +26,20 @@ public abstract class Controller {
         HttpResponseUtil.outResponse(this.dos, this.httpResponse);
     }
 
+    public static Controller matchController(DataOutputStream dos, HttpRequest httpRequest) {
+        String requestPath = httpRequest.getPath();
+        Path path = FileIoUtil.mappingDirectoryPath(requestPath);
+
+        if (Objects.nonNull(FileIoUtil.checkCreateUser(requestPath))) {
+            return new JoinController(httpRequest, dos);
+        }
+        try {
+            if (path.toFile().exists()) {
+                return new FileController(httpRequest, dos);
+            }
+        } catch (NullPointerException e) {
+            return new NonController(httpRequest, dos);
+        }
+        return new NonController(httpRequest, dos);
+    }
 }
