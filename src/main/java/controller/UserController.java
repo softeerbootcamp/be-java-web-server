@@ -1,20 +1,16 @@
 package controller;
 
 import db.Database;
+import http.HttpStatus;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import http.HttpStatus;
 import http.response.HttpStatusLine;
-import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.SignUpService;
-import util.HttpRequestUtils;
 import util.HttpResponseUtils;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.regex.Pattern;
 
 public class UserController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -25,7 +21,7 @@ public class UserController implements Controller {
         String uri = httpRequest.getUri();
 
         // TODO 할 일 enum 으로 구현 가능 할듯
-        
+
         // 회원가입일 때
         if (isSignUpService(uri)) {
             // user 정보 받아서 데이터베이스에 입력
