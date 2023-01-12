@@ -1,9 +1,11 @@
 package controller;
 
-import webserver.HttpRequest;
-import webserver.HttpResponse;
+import java.io.IOException;
+
+import request.HttpRequest;
+import response.HttpResponse;
 
 public interface Controller {
 
-	public HttpResponse service(HttpRequest httpRequest);
+	public HttpResponse service(HttpRequest httpRequest) throws IOException;
 }
