@@ -9,7 +9,6 @@ import java.io.IOException;
 
 public class Response {
     private static final Logger logger = LoggerFactory.getLogger(Response.class);
-
     public void response(DataOutputStream dos, byte[] body, RequestHeaderMessage requestHeaderMessage){
         responseHeader(dos,body.length,requestHeaderMessage.getContentType(), requestHeaderMessage.getHttpOnlyURL());
         responseBody(dos, body);

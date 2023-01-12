@@ -39,14 +39,13 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(reader);
             RequestHeaderMessage requestHeaderMessage = new RequestHeaderMessage(br.readLine());
 
-            String httpOnlyURL = requestHeaderMessage.getHttpOnlyURL();
-            if (httpOnlyURL.contains("user")){
+            if (requestHeaderMessage.getHttpOnlyURL().contains("user")){
                 userCommand(requestHeaderMessage);
             }
 
             while(!(br.readLine()).equals("")){}
             String fileURL = RELATIVE_PATH;
-            fileURL += (requestHeaderMessage.getFileExtension().equals("html")||requestHeaderMessage.getFileExtension().equals("ico"))?TEMPLATES:STATIC;
+            fileURL += requestHeaderMessage.getFileExtension().equals("html")?TEMPLATES:STATIC;
             byte[] body = new byte[0];
             if (!requestHeaderMessage.getHttpOnlyURL().contains("create"))
                 body = Files.readAllBytes(new File(fileURL+requestHeaderMessage.getHttpOnlyURL()).toPath());
