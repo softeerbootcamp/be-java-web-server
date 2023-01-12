@@ -30,7 +30,7 @@ public class UserController implements Controller {
         Database.addUser(user);
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + "/index.html").toPath());
         response.responseMaker(ControllerTypeEnum.USER, ContentTypeEnum.HTML,body.length,"/index.html");
-        response.responseBodyTemp();
+        response.responseBody(body);
     }
 
     public List<String> parseUrlToGetUserInfo(String requestURL) {
