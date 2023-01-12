@@ -2,8 +2,8 @@ package webserver.domain.request;
 
 import java.util.Map;
 
+import static webserver.utils.CommonUtils.parseStringToMap;
 import static webserver.utils.CommonUtils.readMap;
-import static webserver.utils.HttpRequestUtils.parseStringToMap;
 
 public class Request {
 
@@ -15,7 +15,7 @@ public class Request {
         this.header = header;
     }
     public static Request of(String reqLine, String header) {
-        return new Request(RequestLine.from(reqLine), parseStringToMap(header));
+        return new Request(RequestLine.from(reqLine), parseStringToMap(header,"\n"));
     }
 
     public void readRequest(){
