@@ -4,31 +4,30 @@ import java.util.Map;
 
 // TODO: method를 enum으로 리팩토링할 예정
 public class HttpRequest {
-	private Url url;
-	private String method;
+
+	private HttpRequestLine httpRequestLine;
 
 	private Map<String, String> headers;
 
-	private HttpRequest(Url url, String method, Map<String, String> headers) {
-		this.url = url;
-		this.method = method;
+	private HttpRequest(HttpRequestLine httpRequestLine, Map<String, String> headers) {
+		this.httpRequestLine = httpRequestLine;
 		this.headers = headers;
 	}
 
-	public String getMethod() {
-		return method;
+	public HttpMethod getMethod() {
+		return httpRequestLine.getHttpMethod();
 	}
 
 	public Url getUrl() {
-		return url;
+		return httpRequestLine.getRequestUrl();
 	}
 
-	public static HttpRequest of(Url url, String method, Map<String, String> headers) {
-		return new HttpRequest(url, method, headers);
+	public static HttpRequest of(HttpRequestLine httpRequestLine, Map<String, String> headers) {
+		return new HttpRequest(httpRequestLine, headers);
 	}
 
 	public boolean urlStartsWith(String path) {
-		return url.startsWith(path);
+		return httpRequestLine.startsWith(path);
 	}
 
 	public Map<String, String> getHeaders() {
@@ -37,6 +36,6 @@ public class HttpRequest {
 
 	@Override
 	public String toString() {
-		return "url : " + url + " method : " + method + " headers " + headers;
+		return "url : " + " method : " + " headers " + headers;
 	}
 }
