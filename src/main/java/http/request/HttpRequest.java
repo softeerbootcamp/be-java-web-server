@@ -1,21 +1,18 @@
 package http.request;
 
+import http.HttpHeaders;
 import http.Uri;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class HttpRequest {
 
     private static final String ENTER = "\n";
-    private static final String COLON = ": ";
 
     private final HttpStartLine startLine;
-    private final Map<String, String> headers;
+    private final HttpHeaders headers;
 
-    private HttpRequest(HttpStartLine startLine, Map<String, String> headers) {
+    private HttpRequest(HttpStartLine startLine, HttpHeaders headers) {
         this.startLine = startLine;
         this.headers = headers;
     }
@@ -24,11 +21,7 @@ public class HttpRequest {
         String[] lines = input.split(ENTER);
         String startLine = lines[0];
 
-        return new HttpRequest(HttpStartLine.from(startLine),
-                Arrays.stream(Arrays.copyOfRange(lines, 1, lines.length))
-                        .map(line -> line.split(COLON))
-                        .collect(Collectors.toMap(pair -> pair[0], pair -> pair[1])
-                        ));
+        return new HttpRequest(HttpStartLine.from(startLine), HttpHeaders.of(lines));
     }
 
     public HttpStartLine getStartLine() {
@@ -44,7 +37,7 @@ public class HttpRequest {
     }
 
     public Map<String, String> getHeaders() {
-        return Collections.unmodifiableMap(headers);
+        return headers.getHeaders();
     }
 
 }
