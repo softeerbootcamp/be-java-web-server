@@ -22,9 +22,9 @@ public class RequestHandler implements Runnable {
     private FrontController frontController;
     private Socket connection;
 
-    public RequestHandler(Socket connectionSocket) {
+    public RequestHandler(Socket connectionSocket,FrontController frontController) {
         this.connection = connectionSocket;
-        this.frontController = new FrontController();
+        this.frontController = frontController;
     }
 
     public void run() { //즉 이미 클라이언트와 연결이 된 상태에서 돌아가는 메서드임
@@ -37,7 +37,6 @@ public class RequestHandler implements Runnable {
             HttpRequest request = RequestParser.parseInputStreamToHttpRequest(in);
             HttpResponse response = new HttpResponse();
             //TODO 프론트 컨트롤러는 의존성 주입 받도록 수정
-            FrontController frontController= new FrontController();
             frontController.service(request,response);
             ResponseWriter rw = new ResponseWriter(out);
             rw.write(request,response);
