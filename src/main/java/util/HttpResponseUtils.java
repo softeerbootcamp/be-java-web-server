@@ -1,8 +1,5 @@
 package util;
 
-import http.HttpRequest;
-import http.HttpResponse;
-import http.HttpUri;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +15,7 @@ public class HttpResponseUtils {
     private static final String staticFilePath = "/static";
 
     public static String makeFilePath(String contentType) {
-        if(contentType.equals("text/html")){
+        if (contentType.equals("text/html")) {
             return basePath + htmlFilePath;
         }
         return basePath + staticFilePath;

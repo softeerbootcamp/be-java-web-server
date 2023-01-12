@@ -7,7 +7,7 @@ import util.HttpResponseUtils;
 
 import java.io.IOException;
 
-public class StaticFileController implements Controller{
+public class StaticFileController implements Controller {
 
     @Override
     public HttpResponse makeResponse(HttpRequest httpRequest) throws IOException {

@@ -1,6 +1,5 @@
 package Controller;
 
-import http.HttpHeader;
 import http.HttpRequest;
 import http.HttpResponse;
 import http.HttpStatus;
@@ -9,16 +8,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpRequestUtils;
 import util.HttpResponseUtils;
-import webserver.RequestHandler;
 
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class UserController implements Controller{
+public class UserController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
     @Override
     public HttpResponse makeResponse(HttpRequest httpRequest) throws IOException {
         // Uri  받아옵시다
@@ -55,7 +52,7 @@ public class UserController implements Controller{
         return new HttpResponse(HttpStatus.OK, responseBody, null);
     }
 
-    public String getQueryStringInUri(String uri){
+    public String getQueryStringInUri(String uri) {
         return uri.split(Pattern.quote("?"))[1];
     }
 }

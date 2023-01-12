@@ -17,8 +17,6 @@ public class HttpResponseUtilsTest {
     @Test
     @DisplayName("contentType을 입력 받고 알맞는 file path 반환")
     public void makeFilePath() {
-
-
         String path = HttpResponseUtils.makeFilePath("text/html");
         assertThat(path).isEqualTo(basePath + htmlFilePath);
         path = HttpResponseUtils.makeFilePath("text/css");

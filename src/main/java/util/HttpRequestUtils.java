@@ -30,7 +30,7 @@ public class HttpRequestUtils {
     public static HttpHeader getHeaders(BufferedReader br) throws IOException {
         List<String> headers = new ArrayList<>();
         String header = br.readLine();
-        while(!header.equals("")){
+        while (!header.equals("")) {
             headers.add(header);
             header = br.readLine();
         }
@@ -40,7 +40,7 @@ public class HttpRequestUtils {
     public static Map<String, String> parseQueryString(String queryString) {
         Map<String, String> requestParamsMap = new HashMap<>();
         String[] userInputs = queryString.split("&");
-        for(String userInput : userInputs){
+        for (String userInput : userInputs) {
             String[] requestParam = userInput.split("=");
             requestParamsMap.put(requestParam[0], URLDecoder.decode(requestParam[1], StandardCharsets.UTF_8));
         }

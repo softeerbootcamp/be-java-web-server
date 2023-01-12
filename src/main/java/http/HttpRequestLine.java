@@ -5,7 +5,7 @@ public class HttpRequestLine {
     private HttpUri uri;
     private String version;
 
-    public HttpRequestLine(String method, HttpUri uri, String version){
+    public HttpRequestLine(String method, HttpUri uri, String version) {
         this.method = method;
         this.uri = uri;
         this.version = version;
