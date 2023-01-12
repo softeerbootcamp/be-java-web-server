@@ -1,8 +1,5 @@
 package webserver.controller;
 
-import webserver.controller.ControllerHandler;
-import webserver.controller.QueryStringHandler;
-import webserver.controller.StaticHandler;
 import webserver.domain.HttpRequest;
 
 public class ControllerHandlerFactory {
