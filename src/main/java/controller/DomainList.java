@@ -2,18 +2,18 @@ package controller;
 
 import java.util.Arrays;
 
-public enum Domain {
+public enum DomainList {
     USER("/user"),
     MAIN("/");
 
     private String name;
 
-    Domain(String name) {
+    DomainList(String name) {
         this.name = name;
     }
 
-    public static Domain find(String url) {
-        return Arrays.stream(Domain.values())
+    public static DomainList find(String url) {
+        return Arrays.stream(DomainList.values())
                 .filter(domain -> url.startsWith(domain.name))
                 .findFirst()
                 .orElse(MAIN);

@@ -20,7 +20,7 @@ public class FacadeController implements Runnable {
     private final Logger logger = LoggerFactory.getLogger(FacadeController.class);
     private final RequestFactory requestFactory = new RequestFactory();
     private final ResponseFactory responseFactory = new ResponseFactory();
-    private final Map<Domain, Controller> controllers = Map.of(Domain.USER, new UserController(), Domain.MAIN, new MainController());
+    private final Map<DomainList, Controller> controllers = Map.of(DomainList.USER, new UserController(), DomainList.MAIN, new MainController());
     private Socket connection;
 
     public FacadeController(Socket connectionSocket) {
@@ -46,9 +46,9 @@ public class FacadeController implements Runnable {
 
     private Controller findController(String url) {
         if (isStaticResourceRequest(url)) {
-            return controllers.get(Domain.MAIN);
+            return controllers.get(DomainList.MAIN);
         }
-        return controllers.get(Domain.find(url));
+        return controllers.get(DomainList.find(url));
     }
 
     private boolean isStaticResourceRequest(String url) {
