@@ -9,7 +9,6 @@ import util.HttpParser;
 import webserver.controller.ControllerHandler;
 import webserver.controller.ControllerHandlerFactory;
 import webserver.domain.HttpRequest;
-import webserver.domain.HttpResponse;
 import webserver.domain.HttpResponseMessage;
 
 public class RequestHandler implements Runnable {

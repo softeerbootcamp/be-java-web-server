@@ -1,7 +1,6 @@
 package webserver.domain;
 
 import enums.HttpMethod;
-import enums.HttpStatus;
 
 public class RequestLine {
     private HttpMethod httpMethod;

@@ -14,24 +14,22 @@ public class HttpResponse {
     private static final String CSS = "text/css";
     private static final String JS = "text/javascript";
 
-    public HttpResponse() {
-    }
-
     public String sendRedirect(String url) {
         addHeader("Location", url);
         return createRedirectMessage();
     }
 
-    public String createRedirectMessage() {
+    private String createRedirectMessage() {
         statusLine = "HTTP/1.1 302 Found \r\n";
         return statusLine + processHeaders();
     }
 
-    public String createForwardMessage() {
+    private String createForwardMessage() {
         statusLine = "HTTP/1.1 200 OK \r\n";
         return statusLine + processHeaders();
     }
-    public String create404Message() {
+
+    private String create404Message() {
         statusLine = "HTTP/1.1 404 Not Found \r\n";
         return statusLine;
     }
@@ -57,15 +55,6 @@ public class HttpResponse {
         }
         header.append("\r\n");
         return header.toString();
-    }
-
-    public String response200Headers() {
-        StringBuilder header = new StringBuilder();
-        for (String key : headers.keySet()) {
-            header.append(key + ": " + headers.get(key) + "\r\n");
-        }
-        header.append("\r\n");
-        return statusLine + header.toString();
     }
 
     public byte[] getBody() {
