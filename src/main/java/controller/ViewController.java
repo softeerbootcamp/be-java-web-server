@@ -2,7 +2,7 @@ package controller;
 
 import model.general.Header;
 import model.general.Status;
-import model.request.RequestLine;
+import model.request.Request;
 import model.response.Response;
 import model.response.StatusLine;
 
@@ -21,41 +21,41 @@ public class ViewController implements Controller {
     private static final String fileParentPath = "./src/main/resources/templates";
 
     @Override
-    public Response getResponse(RequestLine requestLine) {
-        if(requestLine.getUri().equals("/")) return getIndexHtmlWhenInputNothing(requestLine);
-        else if(requestLine.getUri().equals("/index.html")) return getIndexHtml(requestLine);
+    public Response getResponse(Request request) {
+        if(request.getRequestLine().getUri().equals("/")) return getIndexHtmlWhenInputNothing(request);
+        else if(request.getRequestLine().getUri().equals("/index.html")) return getIndexHtml(request);
 
         return Response.from(Status.NOT_FOUND);
     }
 
-    private Response getIndexHtmlWhenInputNothing(RequestLine requestLine) {
+    private Response getIndexHtmlWhenInputNothing(Request request) {
         Map<Header, String> headers = new HashMap<>();
-        headers.put(Header.of("Content-Type"), "text/html;charset=utf-8");
+        headers.put(Header.from("Content-Type"), "text/html;charset=utf-8");
 
         byte[] body = {};
         try {
-            body = Files.readAllBytes(new File(fileParentPath + requestLine.getUri() + "index.html").toPath());
+            body = Files.readAllBytes(new File(fileParentPath + request.getRequestLine().getUri() + "index.html").toPath());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
 
-        headers.put(Header.of("Content-Length"), Integer.toString(body.length));
+        headers.put(Header.from("Content-Length"), Integer.toString(body.length));
 
         return Response.of(StatusLine.from(Status.OK), headers, body);
     }
 
-    private Response getIndexHtml(RequestLine requestLine) {
+    private Response getIndexHtml(Request request) {
         Map<Header, String> headers = new HashMap<>();
-        headers.put(Header.of("Content-Type"), "text/html;charset=utf-8");
+        headers.put(Header.from("Content-Type"), "text/html;charset=utf-8");
 
         byte[] body = {};
         try {
-            body = Files.readAllBytes(new File(fileParentPath + requestLine.getUri()).toPath());
+            body = Files.readAllBytes(new File(fileParentPath + request.getRequestLine().getUri()).toPath());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
 
-        headers.put(Header.of("Content-Length"), Integer.toString(body.length));
+        headers.put(Header.from("Content-Length"), Integer.toString(body.length));
 
         return Response.of(StatusLine.from(Status.OK), headers, body);
     }
