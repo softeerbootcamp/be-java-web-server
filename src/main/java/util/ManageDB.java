@@ -14,7 +14,7 @@ public class ManageDB {
         Map<String, String> params = httpRequest.getParams();
         User user = new User(params.get("userId"), params.get("password"), params.get("name"), params.get("email"));
         Database.addUser(user);
-        logger.debug("save user: "+user.toString());
+        logger.debug(String.format("\nsave user: %s\n", user.toString()));
     }
     public static User findUserById(String userId){
         return Database.findUserById(userId);
