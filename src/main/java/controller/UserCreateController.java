@@ -2,7 +2,7 @@ package controller;
 
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import http.request.Uri;
+import http.Uri;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
@@ -32,7 +32,7 @@ public class UserCreateController implements Controller {
     @Override
     public boolean isUri(HttpRequest httpRequest) {
         Uri uri = httpRequest.getUri();
-        return paths.stream().anyMatch(uri::isEndsWith);
+        return paths.stream().anyMatch(uri::isStartsWith);
     }
 
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {

@@ -1,4 +1,4 @@
-package http.request;
+package http;
 
 import java.util.Map;
 
@@ -41,6 +41,10 @@ public class Uri {
 
     public boolean isEndsWith(String path) {
         return this.path.endsWith(path);
+    }
+
+    public boolean isStartsWith(String path) {
+        return this.path.startsWith(path);
     }
 
 }

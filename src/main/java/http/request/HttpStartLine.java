@@ -1,5 +1,7 @@
 package http.request;
 
+import http.Uri;
+
 public class HttpStartLine {
     private static final String SPACE = " ";
 

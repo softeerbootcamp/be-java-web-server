@@ -1,9 +1,9 @@
 package controller;
 
 import http.request.HttpRequest;
-import http.response.ContentType;
+import http.ContentType;
 import http.response.HttpResponse;
-import http.request.Uri;
+import http.Uri;
 
 import java.io.IOException;
 import java.util.Collections;

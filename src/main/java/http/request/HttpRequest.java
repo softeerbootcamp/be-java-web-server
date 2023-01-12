@@ -1,5 +1,7 @@
 package http.request;
 
+import http.Uri;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;

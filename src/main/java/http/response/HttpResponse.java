@@ -1,5 +1,7 @@
 package http.response;
 
+import http.ContentType;
+import http.HttpHeaders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,13 +12,13 @@ public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
     private final DataOutputStream dos;
     private final HttpStatusLine statusLine;
-    private final HttpResponseHeaders headers;
+    private final HttpHeaders headers;
     private final HttpResponseBody responseBody;
 
     public HttpResponse(DataOutputStream dos) {
         this.dos = dos;
         this.statusLine = HttpStatusLine.createDefaultStatusLine();
-        this.headers = HttpResponseHeaders.createDefaultHeaders();
+        this.headers = HttpHeaders.createDefaultHeaders();
         this.responseBody = HttpResponseBody.createDefaultBody();
     }
 

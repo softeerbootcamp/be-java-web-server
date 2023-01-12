@@ -1,9 +1,9 @@
 package controller;
 
 import http.request.HttpRequest;
-import http.response.ContentType;
+import http.ContentType;
 import http.response.HttpResponse;
-import http.request.Uri;
+import http.Uri;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

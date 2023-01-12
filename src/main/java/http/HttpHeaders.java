@@ -1,19 +1,19 @@
-package http.response;
+package http;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class HttpResponseHeaders {
+public class HttpHeaders {
 
     private final Map<String, String> headers;
 
-    private HttpResponseHeaders(Map<String, String> headers) {
+    private HttpHeaders(Map<String, String> headers) {
         this.headers = headers;
     }
 
-    public static HttpResponseHeaders createDefaultHeaders() {
-        return new HttpResponseHeaders(new HashMap<>());
+    public static HttpHeaders createDefaultHeaders() {
+        return new HttpHeaders(new HashMap<>());
     }
 
     public void addHeader(String key, String value) {
