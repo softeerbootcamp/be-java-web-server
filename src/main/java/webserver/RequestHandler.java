@@ -10,7 +10,6 @@ import service.UserService;
 import utils.HttpRequestGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.HttpResponseGenerator;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -30,17 +29,17 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             HttpRequest httpRequest = HttpRequestGenerator.generateHttpMessage(br);
-            HttpResponse httpResponse = new HttpResponse();
+            HttpResponse httpResponse = new HttpResponse(httpRequest.getVersion());
             Dispatcher.dispatch(httpRequest, httpResponse);
             DataOutputStream dos = new DataOutputStream(out);
-            responseMessage(dos, httpResponse.getResponseMessage());
+            responseHeaderMessage(dos, httpResponse.getHeaderMessage());
             responseBody(dos, httpResponse.getBody());
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void responseMessage(DataOutputStream dos, String responseMessage) {
+    private void responseHeaderMessage(DataOutputStream dos, String responseMessage) {
         try {
             dos.writeBytes(responseMessage);
         } catch (IOException e) {

@@ -10,9 +10,10 @@ import service.UserServiceImpl;
 
 import java.util.Map;
 
+import static controller.StaticFileController.STATIC_FILE_CONTROLLER;
+
 public class Dispatcher {
     private final static Map<String, RequestController> controllers;
-    private final static String STATIC_FILE_CONTROLLER = "StaticFileController";
 
     static {
         controllers = Map.of(
