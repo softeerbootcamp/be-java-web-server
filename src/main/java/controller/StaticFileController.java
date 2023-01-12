@@ -7,7 +7,7 @@ import utils.FileIoUtils;
 import utils.StatusCode;
 
 public class StaticFileController implements RequestController{
-    public final static String STATIC_FILE_CONTROLLER = "StaticFileController";
+    public final static String PATH = "/";
     @Override
     public void handleRequest(HttpRequest httpRequest, HttpResponse httpResponse) {
         try {

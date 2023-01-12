@@ -3,22 +3,19 @@ package webserver;
 import controller.RequestController;
 import controller.StaticFileController;
 import controller.UserController;
-import db.MemoryDatabase;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import service.UserServiceImpl;
 
 import java.util.Map;
-
-import static controller.StaticFileController.STATIC_FILE_CONTROLLER;
 
 public class Dispatcher {
     private final static Map<String, RequestController> controllers;
 
     static {
+        AppConfig appConfig = new AppConfig();
         controllers = Map.of(
-                UserController.PATH, new UserController(new UserServiceImpl(new MemoryDatabase())),
-                STATIC_FILE_CONTROLLER, new StaticFileController()
+                UserController.PATH, new UserController(appConfig.userService()),
+                StaticFileController.PATH, new StaticFileController()
         );
     }
 
@@ -26,7 +23,7 @@ public class Dispatcher {
 
         RequestController controller = controllers.get(request.getUri().getPath());
         if (controller == null) {
-            controller = controllers.get(STATIC_FILE_CONTROLLER);
+            controller = controllers.get(StaticFileController.PATH);
         }
         controller.handleRequest(request, response);
     }
