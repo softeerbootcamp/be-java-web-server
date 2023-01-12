@@ -70,6 +70,8 @@ Java Web Application Server 2022
       ```java
          split(Pattern.quote("?"));
       ```
+      
+--------
   + Day 9
     + MIME Type
       + 인코딩(Encoding): text 파일로 변환
@@ -77,6 +79,7 @@ Java Web Application Server 2022
       + Type : text, image, audio, video, application
       + subType : .avi, .bin, .css, .csv, .ico 등등..
       + Type/subType -> text/html, text/css ..
+      
     + HTTP 302 FOUND response
       + 회원 가입 성공 시 
       기존의 성공 메세지와 회원 가입 정보를 byte화해서 body로 넘겨주던 로직을

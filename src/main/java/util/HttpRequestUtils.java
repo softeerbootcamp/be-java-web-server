@@ -42,8 +42,17 @@ public class HttpRequestUtils {
         String[] userInputs = queryString.split("&");
         for (String userInput : userInputs) {
             String[] requestParam = userInput.split("=");
-            requestParamsMap.put(requestParam[0], URLDecoder.decode(requestParam[1], StandardCharsets.UTF_8));
+            String requestParamValue = takeValueRequestParam(requestParam);
+            requestParamsMap.put(requestParam[0], requestParamValue);
         }
         return requestParamsMap;
     }
+
+    public static String takeValueRequestParam(String[] requestParam){
+        // 정보가 알맞게 들어왔는지, 빈칸은 아닌지 확인
+        if(requestParam.length != 2) return null;
+        return URLDecoder.decode(requestParam[1], StandardCharsets.UTF_8);
+    }
+
+
 }
