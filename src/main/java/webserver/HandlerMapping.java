@@ -2,7 +2,10 @@ package webserver;
 
 import webserver.Controller.AuthController;
 import webserver.Controller.Controller;
+import webserver.Controller.StaticController;
 import webserver.domain.StatusCodes;
+import webserver.domain.request.Request;
+import webserver.domain.response.Response;
 import webserver.exception.HttpRequestException;
 
 import java.util.Arrays;
@@ -19,18 +22,23 @@ public class HandlerMapping {
 
     public HandlerMapping() {
         controllerMap.put(USER, new AuthController());
+        controllerMap.put(STATIC, new StaticController());
     }
 
-    public Controller getHandler(String req) throws HttpRequestException{
-
-        ControllerType controller = findController(req);
+    public Controller getHandler(Request req) throws HttpRequestException{
+        String path = req.getRequestLine().getResource().getPath();
+        ControllerType controller = findController(path);
         return controllerMap.get(controller);
+    }
 
+    public Controller getStaticHandler(){
+        return controllerMap.get(STATIC);
     }
 
     public enum ControllerType {
 
-        USER("/user");
+        USER("/user"),
+        STATIC("/");
 
         private String routeName;
 
@@ -42,7 +50,7 @@ public class HandlerMapping {
             return routeName;
         }
 
-        public static ControllerType findController(String path){
+        public static ControllerType findController(String path){  //find controller that contains the path of given path variable
             return Arrays.stream(ControllerType.values())
                     .filter(controller -> path.startsWith(controller.getRouteName()))
                     .findFirst()
