@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Arrays;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
@@ -15,8 +17,8 @@ public class HttpResponse {
     private final HttpHeaders headers;
     private final HttpResponseBody responseBody;
 
-    public HttpResponse(DataOutputStream dos) {
-        this.dos = dos;
+    public HttpResponse(OutputStream out) {
+        this.dos = new DataOutputStream(out);
         this.statusLine = HttpStatusLine.createDefaultStatusLine();
         this.headers = HttpHeaders.createDefaultHeaders();
         this.responseBody = HttpResponseBody.createDefaultBody();
@@ -39,8 +41,10 @@ public class HttpResponse {
         dos.writeBytes(statusLine.toString());
         dos.writeBytes(headers.toString());
         dos.writeBytes(System.lineSeparator());
-        logger.debug("status line: " + statusLine);
-        logger.debug("headers: " + headers);
+
+        Arrays.asList(String.format("status line: %s", statusLine),
+                String.format("headers: %s", headers)).forEach(logger::debug);
+
         byte[] body = responseBody.getBody();
         if (body.length == 0) {
             dos.flush();
@@ -63,7 +67,6 @@ public class HttpResponse {
         setStatusCode(HttpStatusCode.NOT_FOUND);
         dos.writeBytes(statusLine.toString());
         dos.flush();
-        logger.info("404 status line: " + statusLine.getHttpStatusCode().getMessage());
     }
 
     public void setStatusCode(HttpStatusCode statusCode) {
