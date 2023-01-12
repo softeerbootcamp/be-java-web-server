@@ -16,4 +16,17 @@ public class RequestLineTest {
 
         assertThat(requestLine).isInstanceOf(RequestLine.class);
     }
+
+    @Test
+    @DisplayName("RequestLine에서 Controller 매핑하기 위한 데이터 파싱 Test")
+    void getControllerCriteria() {
+        String line = "GET /user/create?" +
+                "userId=javajigi&password=password" +
+                "&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net HTTP/1.1";
+
+        RequestLine requestLine = RequestLine.from(line);
+        String criteria = requestLine.getControllerCriteria();
+
+        assertThat(criteria).isEqualTo("user");
+    }
 }
