@@ -48,6 +48,8 @@ public class URI {
     }
 
     private static String parsePath(String target){
+        if (target.equals("/"))
+            return "/index.html";
         if (!target.contains("?"))
             return target.trim();
         return target.split("\\?")[0].trim();

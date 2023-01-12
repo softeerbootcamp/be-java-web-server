@@ -17,10 +17,6 @@ public class StaticFileController implements RequestController{
             httpResponse.setStatusCode(StatusCode.OK);
         }
         catch (IllegalArgumentException e) {
-            if (FileIoUtils.getExtension(httpRequest.getUri().getPath()).equals("/")) {
-                httpResponse.redirect();
-                return;
-            }
             httpResponse.setStatusCode(StatusCode.NOTFOUND);
         }
     }
