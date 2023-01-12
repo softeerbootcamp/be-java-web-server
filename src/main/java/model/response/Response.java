@@ -57,6 +57,6 @@ public class Response {
     }
 
     private boolean hasContent() {
-        return headers.containsKey(Header.of("Content-Length"));
+        return headers.containsKey(Header.from("Content-Length"));
     }
 }
