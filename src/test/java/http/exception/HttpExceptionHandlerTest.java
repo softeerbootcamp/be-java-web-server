@@ -39,4 +39,28 @@ public class HttpExceptionHandlerTest {
                 () -> assertEquals(bodyData.length, response.getBody().size())
         );
     }
+
+    @Test
+    @DisplayName("handle - defaultExceptionHandler 예외 처리 테스트")
+    void testDefaultExceptionHandler() {
+        // given
+        HttpRequest request = new HttpRequest(
+                HttpMethod.GET,
+                new URI("/index", Map.of()),
+                new HttpHeaders()
+        );
+        HttpResponse response = new HttpResponse();
+        String message = "서버에서 에러가 발생하였습니다.";
+        InternalServerErrorException exception = new InternalServerErrorException(message);
+
+        // when
+        HttpExceptionHandler.handle(request, response, exception);
+
+        // then
+        assertAll(
+                () -> assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatus()),
+                () -> assertEquals(MediaType.TEXT_PLAIN.name(), response.getHeaders().getValue("Content-Type")),
+                () -> assertEquals(message.getBytes().length, response.getBody().size())
+        );
+    }
 }
