@@ -11,12 +11,12 @@ public class HttpResponseBody {
         return new HttpResponseBody("".getBytes());
     }
 
-    public void setBody(byte[] body) {
-        this.body = body;
-    }
-
     public byte[] getBody() {
         return body;
+    }
+
+    public void setBody(byte[] body) {
+        this.body = body;
     }
 
 }

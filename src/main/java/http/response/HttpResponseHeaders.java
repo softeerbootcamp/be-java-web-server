@@ -12,16 +12,16 @@ public class HttpResponseHeaders {
         this.headers = headers;
     }
 
+    public static HttpResponseHeaders createDefaultHeaders() {
+        return new HttpResponseHeaders(new HashMap<>());
+    }
+
     public void addHeader(String key, String value) {
         headers.put(key, value);
     }
 
     public String getValue(String key) {
         return headers.get(key);
-    }
-
-    public static HttpResponseHeaders createDefaultHeaders() {
-        return new HttpResponseHeaders(new HashMap<>());
     }
 
     @Override

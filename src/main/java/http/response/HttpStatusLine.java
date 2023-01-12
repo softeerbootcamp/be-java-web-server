@@ -4,7 +4,7 @@ public class HttpStatusLine {
 
     private static final String SPACE = " ";
 
-    private String httpVersion;
+    private final String httpVersion;
     private HttpStatusCode httpStatusCode;
 
     public HttpStatusLine(String httpVersion, HttpStatusCode httpStatusCode) {
@@ -16,12 +16,12 @@ public class HttpStatusLine {
         return new HttpStatusLine("HTTP/1.1", HttpStatusCode.OK);
     }
 
-    public void setHttpStatusCode(HttpStatusCode httpStatusCode) {
-        this.httpStatusCode = httpStatusCode;
-    }
-
     public HttpStatusCode getHttpStatusCode() {
         return httpStatusCode;
+    }
+
+    public void setHttpStatusCode(HttpStatusCode httpStatusCode) {
+        this.httpStatusCode = httpStatusCode;
     }
 
     @Override

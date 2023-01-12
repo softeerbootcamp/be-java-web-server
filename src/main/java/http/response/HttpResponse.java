@@ -7,12 +7,11 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class HttpResponse {
+    private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
     private final DataOutputStream dos;
     private final HttpStatusLine statusLine;
     private final HttpResponseHeaders headers;
     private final HttpResponseBody responseBody;
-
-    private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
     public HttpResponse(DataOutputStream dos) {
         this.dos = dos;
@@ -22,10 +21,10 @@ public class HttpResponse {
     }
 
     public void forward(ContentType contentType, byte[] body) throws IOException {
-       setStatusCode(HttpStatusCode.OK);
-       set200Headers(contentType, body.length);
-       setResponseBody(body);
-       send();
+        setStatusCode(HttpStatusCode.OK);
+        set200Headers(contentType, body.length);
+        setResponseBody(body);
+        send();
     }
 
     public void sendRedirect(String location) throws IOException {
@@ -41,7 +40,7 @@ public class HttpResponse {
         logger.debug("status line: " + statusLine);
         logger.debug("headers: " + headers);
         byte[] body = responseBody.getBody();
-        if(body.length == 0){
+        if (body.length == 0) {
             dos.flush();
             return;
         }
