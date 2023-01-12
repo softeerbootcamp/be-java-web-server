@@ -28,10 +28,10 @@ public class HttpRequest {
     public static HttpRequest from(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
-        return new HttpRequest(getHttpRequestLine(br), getHttpRequestHeader(br));
+        return new HttpRequest(readHttpRequestLine(br), readHttpRequestHeader(br));
     }
 
-    private static HttpRequestLine getHttpRequestLine(BufferedReader br) throws IOException {
+    private static HttpRequestLine readHttpRequestLine(BufferedReader br) throws IOException {
         String requestLine = br.readLine();
         if (requestLine == null) {
             return null;
@@ -41,7 +41,7 @@ public class HttpRequest {
         return HttpRequestLine.from(requestLine);
     }
 
-    private static HttpHeader getHttpRequestHeader(BufferedReader br) throws IOException {
+    private static HttpHeader readHttpRequestHeader(BufferedReader br) throws IOException {
         List<String> lines = new ArrayList<>();
         String line;
         while(!(line = br.readLine()).equals("")) {
