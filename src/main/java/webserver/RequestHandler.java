@@ -34,13 +34,17 @@ public class RequestHandler implements Runnable {
             String viewName = handler.handle(httpRequest, httpResponse);
             String viewPath = ViewResolver.process(viewName);
 
-            byte[] body = Files.readAllBytes(new File(viewPath).toPath());
-            httpResponse.setBody(body);
-
-            DataOutputStream dos = new DataOutputStream(out);
-            httpResponse.response(dos);
+            render(out, httpResponse, viewPath);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private void render(OutputStream out, HttpResponse httpResponse, String viewPath) throws IOException {
+        byte[] body = Files.readAllBytes(new File(viewPath).toPath());
+        httpResponse.setBody(body);
+
+        DataOutputStream dos = new DataOutputStream(out);
+        httpResponse.response(dos);
     }
 }
