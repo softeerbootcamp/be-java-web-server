@@ -14,4 +14,8 @@ public class Request {
         this.headers = headers;
         this.body = body;
     }
+
+    public static Request of(RequestLine requestLine, Map<Header, String> headers) {
+        return new Request(requestLine, headers, null);
+    }
 }
