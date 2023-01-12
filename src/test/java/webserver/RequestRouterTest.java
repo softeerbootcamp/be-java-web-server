@@ -61,7 +61,6 @@ class RequestRouterTest {
                 Files.readAllBytes(Path.of(StaticFileService.getFile("/index.html").getPath()))
         );
 
-
         //when
         CustomHttpResponse res = requestRouter.handleRequest(req);
 
@@ -83,12 +82,11 @@ class RequestRouterTest {
                 new HashMap<>() {{
                     put("Location", "/index.html");
                 }},
-                null
+                CustomHttpResponse.EMPTY_BODY
         );
 
         //when
         CustomHttpResponse response = requestRouter.handleRequest(req);
-
 
         //then
         assertEquals(response.getHeaders().get("Location"), "/index.html");
@@ -108,12 +106,11 @@ class RequestRouterTest {
                 StatusCode.NOT_FOUND,
                 ContentType.TEXT_PLAIN,
                 new HashMap<>(),
-                null
+                CustomHttpResponse.EMPTY_BODY
         );
 
         //when
         CustomHttpResponse response = requestRouter.handleRequest(req);
-
 
         //then
         assertEquals(expected.toString(), response.toString());
