@@ -30,7 +30,10 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             Request request = makeRequest(br.readLine());
-            userService.signUpUser(request);
+
+            if (request.getRequestParams().size() != 0) {
+                userService.signUpUser(request);
+            }
 
             ResponseHandler responseHandler = new ResponseHandler(connection);
             responseHandler.response(request);
