@@ -4,24 +4,18 @@ import request.Request;
 import request.methodHandler.RequestUrlEnum.GETRequestUrlEnum;
 
 import java.io.DataOutputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 public class GETHandlerImpl implements HttpMethodHandler {
-    private final DataOutputStream dos;
-
-    public GETHandlerImpl(DataOutputStream dos) {
-        this.dos = dos;
-    }
-
     @Override
-    public void handle(Request request) {
+    public byte[] handle(Request request) {
         for(GETRequestUrlEnum requestUrlEnum : GETRequestUrlEnum.values()) {
             if(this.contains(requestUrlEnum.getSupportingUrl(requestUrlEnum), request.getResource())) {
-                requestUrlEnum.handle(request, dos);
-                return;
+                return requestUrlEnum.handle(request);
             }
         }
-        //404 exception
+        return null;
     }
 
     boolean contains(List<String> list, String resource) {
