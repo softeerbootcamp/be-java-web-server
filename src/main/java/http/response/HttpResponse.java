@@ -38,9 +38,11 @@ public class HttpResponse {
         send();
     }
 
-    public void do404() throws IOException {
+    public void do404(byte[] body) throws IOException {
         setStatusCode(HttpStatusCode.NOT_FOUND);
         dos.writeBytes(statusLine.toString());
+        dos.writeBytes(System.lineSeparator());
+        dos.write(body, 0, body.length);
         dos.flush();
     }
 

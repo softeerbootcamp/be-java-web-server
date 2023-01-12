@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
@@ -17,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 public class ControllerFactoryTest {
 
     @Test
-    public void testUserCreateHandle() throws IOException {
+    public void testUserCreateHandle() throws IOException, URISyntaxException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         HttpResponse response = new HttpResponse(outputStream);
         String input = "GET /user/create HTTP/1.1\r\n" +
@@ -40,7 +41,7 @@ public class ControllerFactoryTest {
         );
     }
     @Test
-    public void testResourceHandle() throws IOException {
+    public void testResourceHandle() throws IOException, URISyntaxException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         HttpResponse response = new HttpResponse(outputStream);
         String input = "GET /index.html HTTP/1.1\r\n" +
@@ -63,7 +64,7 @@ public class ControllerFactoryTest {
     }
 
     @Test
-    public void testNotFoundController() throws IOException {
+    public void testNotFoundController() throws IOException, URISyntaxException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         HttpResponse response = new HttpResponse(outputStream);
         String input = "GET /user/love HTTP/1.1\r\n" +
@@ -81,7 +82,7 @@ public class ControllerFactoryTest {
     }
 
     @Test
-    public void testNotFoundFile() throws IOException {
+    public void testNotFoundFile() throws IOException, URISyntaxException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         HttpResponse response = new HttpResponse(outputStream);
         String input = "GET /nothing.html HTTP/1.1\r\n" +

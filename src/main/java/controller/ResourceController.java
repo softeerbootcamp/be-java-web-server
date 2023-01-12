@@ -8,9 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 
+import static utils.FileIoUtils.load404ErrorFile;
 import static utils.FileIoUtils.loadFile;
 
 public class ResourceController implements Controller {
@@ -22,7 +24,7 @@ public class ResourceController implements Controller {
         this.paths = Arrays.asList(".html", ".ico", ".css", ".js", "woff", "ttf", "png");
     }
     @Override
-    public void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+    public void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         doGet(httpRequest, httpResponse);
     }
 
@@ -32,7 +34,7 @@ public class ResourceController implements Controller {
         return paths.stream().anyMatch(uri::isEndsWith);
     }
 
-    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         String path = httpRequest.getUri().getPath();
         ContentType contentType = ContentType.from(path);
         String filePath = contentType.getDirectory() + path;
@@ -40,7 +42,8 @@ public class ResourceController implements Controller {
         byte[] body = loadFile(filePath);
 
         if(body.length == 0){
-            httpResponse.do404();
+            byte[] errorBody = load404ErrorFile();
+            httpResponse.do404(errorBody);
             return;
         }
 
