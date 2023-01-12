@@ -5,6 +5,11 @@ import java.util.Map;
 
 public class StringParser {
 
+    public static String urlParsing(String requestLine) {
+        String[] tokens = requestLine.split(" ");
+        return String.format("./templates%s", tokens[1]);
+    }
+
     public static Map<String,String> dataParsing(String line) {
         Map<String, String> map = new HashMap<>();
         String[] userInfo = line.split("\\?|&");

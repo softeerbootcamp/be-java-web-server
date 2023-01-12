@@ -6,10 +6,10 @@ import java.net.URISyntaxException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import parser.StringParser;
+import request.HttpRequest;
+import response.HttpResponse;
 import service.UserService;
 import util.FileIoUtils;
-import util.Utilities;
 
 
 public class RequestHandler implements Runnable{
@@ -17,8 +17,6 @@ public class RequestHandler implements Runnable{
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
-
-    public StringParser stringParser = new StringParser();
 
     public UserService userService = new UserService();
 
@@ -58,34 +56,28 @@ public class RequestHandler implements Runnable{
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
-            BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 
-            DataOutputStream dos;
+//            String[] urlString = stringParser.stringSplit(brRead);
+//            String url = urlString[1];
+//            boolean check = Utilities.checkData(url);
+//            while (!brRead.equals("") && brRead != null) brRead = br.readLine();
+//            if(!check){
+//                String userId = userService.joinUser(urlString[1]);
+//                logger.debug("userId : {}",userId);
+//            }
+//            body = FileIoUtils.loadFileFromClasspath("./templates" + url);
+//            BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+//            HttpRequest httpRequest = HttpRequest.of(br);
+//            String path = httpRequest.getPath();
+//
+//            DataOutputStream dos = new DataOutputStream(out);
+//            byte[] body = FileIoUtils.loadFileFromClasspath(path);
+//            response200Header(dos, body.length);
 
-            byte[] body = {};
-
-            String brRead = br.readLine();
-
-            String[] urlString = stringParser.stringSplit(brRead);
-
-            String url = urlString[1];
-
-            boolean check = Utilities.checkData(url);
-
-            while (!brRead.equals("") && brRead != null) brRead = br.readLine();
-
-            if(!check){
-                String userId = userService.joinUser(urlString[1]);
-                logger.debug("userId : {}",userId);
-            }
-
-            body = FileIoUtils.loadFileFromClasspath("./templates" + url);
-            dos = new DataOutputStream(out);
-
-//            response302Header(dos, body.length);
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+            HttpRequest httpRequest = generateHttpRequest(in);
+            HttpResponse httpResponse = controlRequestAndResponse(httpRequest);
+            respondToHttpRequest(out, httpResponse);
+//            responseBody(dos, body);
 
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -94,35 +86,41 @@ public class RequestHandler implements Runnable{
         }
     }
 
-    private static void response302Header(DataOutputStream dos,int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 302 Found \r\n");
-            dos.writeBytes("Location: /index.html\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    private HttpRequest generateHttpRequest(InputStream in) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+        return HttpRequest.of(br);
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+
+    private HttpResponse controlRequestAndResponse(HttpRequest httpRequest) throws IOException, URISyntaxException {
+        String path = httpRequest.getPath();
+        byte[] body = FileIoUtils.loadFileFromClasspath(path);
+        return HttpResponse.of("200", body);
     }
 
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            logger.debug("dos : {}");
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+    private void respondToHttpRequest(OutputStream out, HttpResponse httpResponse) {
+        DataOutputStream dos = new DataOutputStream(out);
+        httpResponse.respond(dos);
     }
+
+//    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+//        try {
+//            dos.writeBytes("HTTP/1.1 200 OK \r\n");
+//            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+//            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+//            dos.writeBytes("\r\n");
+//        } catch (IOException e) {
+//            logger.error(e.getMessage());
+//        }
+//    }
+
+//    private void responseBody(DataOutputStream dos, byte[] body) {
+//        try {
+//            dos.write(body, 0, body.length);
+//            logger.debug("dos : {}");
+//            dos.flush();
+//        } catch (IOException e) {
+//            logger.error(e.getMessage());
+//        }
+//    }
 }
