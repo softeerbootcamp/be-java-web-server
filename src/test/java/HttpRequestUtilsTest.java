@@ -11,9 +11,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class HttpRequestUtilsTest {
     String sampleRequestLine = "GET /index.html HTTP/1.1";
     @Test
-    @DisplayName("RequestLine을 잘 쪼개서 RequestLine 생성자 인자로 잘 넣어 주는지")
-    public void getRequestLine(){
-        HttpRequestLine httpRequestLine = HttpRequestUtils.getRequestLine(sampleRequestLine);
+    @DisplayName("RequestLine 입력받기 테스트")
+    public void readRequestLineTest(){
+        HttpRequestLine httpRequestLine = HttpRequestUtils.readRequestLine(sampleRequestLine);
 
         assertThat(httpRequestLine).usingRecursiveComparison().
                 isEqualTo(new HttpRequestLine("GET", new HttpUri("/index.html"), "HTTP/1.1"));
@@ -25,8 +25,8 @@ public class HttpRequestUtilsTest {
             "email=jhchoi57%40gmail.com";
 
     @Test
-    @DisplayName("입력받은 queryString을 파싱해서 map에 잘 넣는지")
-    public void parseQueryString(){
+    @DisplayName("queryString 파싱 테스트")
+    public void parseQueryStringTest(){
         Map<String, String> requestParamsMap = HttpRequestUtils.parseQueryString(queryString);
         assertThat(requestParamsMap.get("userId")).isEqualTo("jhchoi57");
         assertThat(requestParamsMap.get("password")).isEqualTo("12349865");

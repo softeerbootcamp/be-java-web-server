@@ -16,8 +16,8 @@ public class HttpRequest {
     public HttpRequest(BufferedReader br) throws IOException {
         String line = br.readLine();
         if (line == null) return;
-        this.httpRequestLine = HttpRequestUtils.getRequestLine(line);
-        this.httpHeader = HttpRequestUtils.getHeaders(br);
+        this.httpRequestLine = HttpRequestUtils.readRequestLine(line);
+        this.httpHeader = HttpRequestUtils.readHeaders(br);
     }
 
     public String getUri() {

@@ -18,7 +18,7 @@ import java.util.Map;
 public class HttpRequestUtils {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequestUtils.class);
 
-    public static HttpRequestLine getRequestLine(String firstLine) {
+    public static HttpRequestLine readRequestLine(String firstLine) {
         logger.debug("Request Line: {}", firstLine);
         String[] splited = firstLine.split(" ");
         String method = splited[0];
@@ -27,7 +27,7 @@ public class HttpRequestUtils {
         return new HttpRequestLine(method, uri, version);
     }
 
-    public static HttpHeader getHeaders(BufferedReader br) throws IOException {
+    public static HttpHeader readHeaders(BufferedReader br) throws IOException {
         List<String> headers = new ArrayList<>();
         String header = br.readLine();
         while (!header.equals("")) {
