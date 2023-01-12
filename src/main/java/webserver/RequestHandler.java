@@ -28,7 +28,7 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String line = br.readLine();
-            logger.debug("> input line : {}", line);
+            logger.debug("> request line : {}", line);
             String url = extractUrl(line);
             checkUrlQueryString(url);
 
@@ -50,7 +50,7 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private String extractUrl(String line) {
+    public String extractUrl(String line) {
         //문자열 분리 후 -> 문자열 배열에 삽입
         String[] tokens = line.split(" ");
         String url = tokens[1];

@@ -28,7 +28,7 @@ public class ResponseHandler {
         try (OutputStream out = connection.getOutputStream()) {
             DataOutputStream dos = new DataOutputStream(out);
 
-            if (url.contains("?")) {
+            if (url.contains("create?")) {
                 response302Header(dos);
                 return;
             }
