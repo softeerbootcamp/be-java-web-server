@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class HttpRequestTest {
 
@@ -38,5 +38,16 @@ public class HttpRequestTest {
         assertEquals("curl/7.68.0", headers.get("User-Agent"));
         assertTrue(headers.containsKey("Accept"));
         assertEquals("*/*", headers.get("Accept"));
+
+        assertAll(
+                () -> assertThat(startLine.getMethod()).isEqualTo(HttpMethod.GET),
+                () -> assertThat(startLine.getUri().getPath()).isEqualTo(uri.getPath()),
+                () -> assertThat(headers.containsKey("Host")).isTrue(),
+                () -> assertThat(headers.get("Host")).isEqualTo("localhost:8080"),
+                () -> assertThat(headers.containsKey("User-Agent")).isTrue(),
+                () -> assertThat(headers.get("User-Agent")).isEqualTo("curl/7.68.0"),
+                () -> assertThat(headers.containsKey("Accept")).isTrue(),
+                () -> assertThat(headers.get("Accept")).isEqualTo("*/*")
+        );
     }
 }
