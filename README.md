@@ -77,5 +77,13 @@ Java Web Application Server 2022
       + Type : text, image, audio, video, application
       + subType : .avi, .bin, .css, .csv, .ico 등등..
       + Type/subType -> text/html, text/css ..
+    + HTTP 302 FOUND response
+      + 회원 가입 성공 시 
+      기존의 성공 메세지와 회원 가입 정보를 byte화해서 body로 넘겨주던 로직을
+      302 FOUND로 넘겨주었다
+      + 302 Header
+        + HTTP/1.1 302 FOUND
+        + location: /index.html
+        + location은 응답코드 301, 302 리다이렉션 상태에서 위치를 지정해준다
     
     
