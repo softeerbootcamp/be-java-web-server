@@ -9,19 +9,19 @@ import java.util.HashMap;
 
 public class HttpRequestGenerator {
     public static HttpRequest generateHttpMessage(BufferedReader br) throws IOException {
-        HttpStartLine httpStartLine = parseStartLine(br);
+        HttpRequestLine httpRequestLine = parseStartLine(br);
         HttpHeader httpHeader = parseRequestHeader(br);
-        if (httpStartLine.hasBody()) {
+        if (httpRequestLine.hasBody()) {
             HttpRequestBody httpRequestBody = parseRequestBody(br);
-            return HttpRequest.of(httpStartLine, httpHeader, httpRequestBody);
+            return HttpRequest.of(httpRequestLine, httpHeader, httpRequestBody);
         }
-        return HttpRequest.ofNoBody(httpStartLine, httpHeader);
+        return HttpRequest.ofNoBody(httpRequestLine, httpHeader);
     }
 
-    private static HttpStartLine parseStartLine(BufferedReader br) throws IOException {
+    private static HttpRequestLine parseStartLine(BufferedReader br) throws IOException {
         String line = br.readLine();
         String[] startLine = line.split(" ");
-        return HttpStartLine.of(HttpMethod.getHttpMethod(startLine[0]), URI.create(startLine[1]), startLine[2]);
+        return HttpRequestLine.of(HttpMethod.getHttpMethod(startLine[0]), URI.create(startLine[1]), startLine[2]);
     }
 
     private static HttpHeader parseRequestHeader(BufferedReader br) throws IOException {

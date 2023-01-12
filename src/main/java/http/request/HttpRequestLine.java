@@ -3,19 +3,19 @@ package http.request;
 import utils.HttpMethod;
 
 
-public class HttpStartLine {
+public class HttpRequestLine {
     private final HttpMethod method;
     private final URI uri;
     private final String version;
 
-    private HttpStartLine(HttpMethod method, URI uri, String version) {
+    private HttpRequestLine(HttpMethod method, URI uri, String version) {
         this.method = method;
         this.uri = uri;
         this.version = version;
     }
 
-    public static HttpStartLine of(HttpMethod method, URI uri, String version) {
-        return new HttpStartLine(method, uri, version);
+    public static HttpRequestLine of(HttpMethod method, URI uri, String version) {
+        return new HttpRequestLine(method, uri, version);
     }
 
     public boolean hasBody() {

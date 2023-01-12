@@ -5,21 +5,21 @@ import http.HttpHeader;
 import java.util.Map;
 
 public class HttpRequest {
-    private final HttpStartLine startLine;
+    private final HttpRequestLine startLine;
     private final HttpHeader requestHeader;
     private final HttpRequestBody requestBody;
 
-    private HttpRequest(HttpStartLine startLine, HttpHeader requestHeader, HttpRequestBody requestBody) {
+    private HttpRequest(HttpRequestLine startLine, HttpHeader requestHeader, HttpRequestBody requestBody) {
         this.startLine = startLine;
         this.requestHeader = requestHeader;
         this.requestBody = requestBody;
     }
 
-    public static HttpRequest of(HttpStartLine startLine, HttpHeader requestHeader, HttpRequestBody requestBody) {
+    public static HttpRequest of(HttpRequestLine startLine, HttpHeader requestHeader, HttpRequestBody requestBody) {
         return new HttpRequest(startLine, requestHeader, requestBody);
     }
 
-    public static HttpRequest ofNoBody(HttpStartLine startLine, HttpHeader requestHeader) {
+    public static HttpRequest ofNoBody(HttpRequestLine startLine, HttpHeader requestHeader) {
         return new HttpRequest(startLine, requestHeader, null);
     }
 
