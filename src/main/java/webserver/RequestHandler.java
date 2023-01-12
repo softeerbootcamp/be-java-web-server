@@ -4,30 +4,30 @@ import java.io.*;
 import java.net.Socket;
 import java.util.HashMap;
 
+import controller.Controller;
+import controller.FileController;
+import controller.UserController;
 import db.Database;
 import db.UserDatabase;
-import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reader.RequestGetReader;
 import reader.RequestReader;
-import reader.fileReader.FileReader;
 import request.HttpRequest;
 import response.HttpResponse;
 import service.Service;
 import service.UserService;
 import util.FileType;
+import util.UrlType;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
-    private RequestReader requestReader;
-    private FileReader fileReader;
 
-    private Database database;
+    private Controller controller;
 
-    private Service service;
+
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -39,33 +39,28 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest httpRequest = HttpRequest.getHttpRequest(in);
-            requestReader = RequestReader.selectRequestReaderByMethod(httpRequest.getHttpMethod());
-
-            byte[] data = manageData(httpRequest);
 
             DataOutputStream clientOutPutStream = new DataOutputStream(out);
-            HttpResponse httpResponse = new HttpResponse(clientOutPutStream,data, FileType.getFileType(httpRequest.getUrl()));
-            httpResponse.makeResponse();
+
+            controller = Controller.FactoryController(httpRequest);
+
+            HttpResponse httpResponse;
+            UrlType urlType = UrlType.getUrlType(httpRequest.getUrl().getUrl());
+            if (controller instanceof FileController) {
+                if (urlType.equals(UrlType.TEMPLATES_FILE)) {
+                    httpResponse=((FileController) controller).TemplateController(clientOutPutStream, httpRequest);
+                } else if (urlType.equals(UrlType.STATIC_FILE)) {
+                    httpResponse=((FileController) controller).StaticController(clientOutPutStream, httpRequest);
+                }
+            } else if (controller instanceof UserController) {
+                httpResponse = ((UserController) controller).UserQueryString(clientOutPutStream, httpRequest);
+            }
+
+
 
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
-    }
-
-    private byte[] manageData(HttpRequest httpRequest) {
-        byte[] data=null;
-
-        if (requestReader instanceof RequestGetReader) {
-            data=((RequestGetReader) requestReader).readFile(httpRequest.getUrl());
-
-            HashMap<String, String> dataMap = requestReader.readData(httpRequest);
-            database = new UserDatabase();
-            service = new UserService();
-            Object model = service.createModel(dataMap);
-            database.addData(model);
-            System.out.println("database = " + database.findAll());
-        }
-        return data;
     }
 }
 
