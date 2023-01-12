@@ -9,7 +9,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-public class UserController implements RequestController {
+public class UserController implements Controller {
     private final UserService userService;
     public static final String PATH = "/user/create";
 
@@ -18,7 +18,7 @@ public class UserController implements RequestController {
     }
 
     @Override
-    public void handleRequest(HttpRequest httpRequest, HttpResponse httpResponse) {
+    public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
         Map<String, String> querys = httpRequest.getQuerys();
         User user = new User(
                 querys.get("userId"),

@@ -6,12 +6,10 @@ import utils.ContentType;
 import utils.FileIoUtils;
 import utils.StatusCode;
 
-import java.nio.charset.StandardCharsets;
-
-public class StaticFileController implements RequestController{
+public class StaticFileController implements Controller {
     public final static String PATH = "/";
     @Override
-    public void handleRequest(HttpRequest httpRequest, HttpResponse httpResponse) {
+    public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
         try {
             byte[] body = FileIoUtils.loadFile(httpRequest.getUri().getPath());
             httpResponse.setBody(body);
