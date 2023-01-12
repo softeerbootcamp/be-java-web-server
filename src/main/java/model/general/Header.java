@@ -30,7 +30,7 @@ public enum Header {
         this.header = header;
     }
 
-    public static Header of(String header) {
+    public static Header from(String header) {
         return Arrays.stream(values())
                 .filter(h -> h.header.equals(header))
                 .findFirst()
