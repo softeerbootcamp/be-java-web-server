@@ -1,5 +1,6 @@
 package webserver;
 
+import model.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,10 +25,10 @@ public class ResponseHandler {
         this.viewResolver = new ViewResolver();
     }
 
-    public void response(String url) {
+    public void response(Request request) {
         try (OutputStream out = connection.getOutputStream()) {
             DataOutputStream dos = new DataOutputStream(out);
-
+            String url = request.getUrl();
             if (url.contains("create?")) {
                 response302Header(dos);
                 return;

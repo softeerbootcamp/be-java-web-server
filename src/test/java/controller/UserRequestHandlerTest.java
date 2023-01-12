@@ -12,7 +12,7 @@ public class UserRequestHandlerTest {
 
     @Test
     @DisplayName("입력된 request line에서 url 추출하는 메서드")
-    void extractUrl() throws Exception {
+    void extractUrl() {
         //given
         RequestHandler requestHandler = new RequestHandler(new Socket());
         String reqLine = "GET /index.html HTTP/1.1";
@@ -27,7 +27,7 @@ public class UserRequestHandlerTest {
 
     @Test
     @DisplayName("입력된 request line이 없을 경우 extractUrl 메서드가 index를 반환하는지 여부 체크")
-    void extractUrl_noUrl() throws Exception {
+    void extractUrl_noUrl() {
         //given
         RequestHandler requestHandler = new RequestHandler(new Socket());
         String reqLine = "GET / HTTP/1.1";
@@ -38,4 +38,5 @@ public class UserRequestHandlerTest {
         assertThat(url).isEqualTo("/index.html");
 
     }
+
 }
