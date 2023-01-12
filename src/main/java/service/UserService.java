@@ -5,13 +5,15 @@ import dto.UserInfoDTO;
 import model.User;
 
 public class UserService {
-    public void signIn(UserInfoDTO userInfo) {
+    public String signIn(UserInfoDTO userInfo) {
         User findUser = Database.findUserById(userInfo.getUserId());
 
         if (findUser != null) {
-            return;
+            return null;
         }
+        User user = User.of(userInfo);
+        Database.addUser(user);
 
-        Database.addUser(User.of(userInfo));
+        return user.getUserId();
     }
 }
