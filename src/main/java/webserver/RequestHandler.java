@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import controller.Controller;
 import controller.RequestMappingHandler;
 import request.HttpRequest;
 import request.HttpRequestUtils;
@@ -28,8 +29,11 @@ public class RequestHandler implements Runnable {
 		try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
 			//DataOutputStream dos = new DataOutputStream(out);
 			// HttpRequest HttpResponse
+
 			HttpRequest httpRequest = HttpRequestUtils.httpRequestParse(in);
-			HttpResponse httpResponse = RequestMappingHandler.findController(httpRequest).service(httpRequest);
+			Controller controller = RequestMappingHandler.findController(httpRequest);
+			HttpResponse httpResponse = new HttpResponse();
+			controller.service(httpRequest, httpResponse);
 			logger.debug(httpRequest.getUrl().getPath());
 			// 전송
 			out.write(httpResponse.toString().getBytes(StandardCharsets.UTF_8));

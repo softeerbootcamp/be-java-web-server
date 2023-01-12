@@ -11,21 +11,21 @@ import webserver.HttpStatus;
 public class AbstractController implements Controller {
 
 	@Override
-	public HttpResponse service(HttpRequest httpRequest) throws IOException {
+	public void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
 		if (httpRequest.getMethod().equals(HttpMethod.GET)) {
-			return doGet(httpRequest);
+			doGet(httpRequest, httpResponse);
+
 		}
-		return doPost(httpRequest);
+		doPost(httpRequest, httpResponse);
 	}
 
-	public HttpResponse doGet(HttpRequest httpRequest) throws IOException {
+	public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
 
-		//File file = new File("./webapp" + httpRequest.getUrl().getPath());
-		return new HttpResponse(HttpStatus.OK, "500 error", ContentType.HTML); // 500내려주기
+		httpResponse.setHttpResponse(HttpStatus.OK, "500 error", ContentType.HTML); // 500내려주기
 	}
 
-	public HttpResponse doPost(HttpRequest httpRequest) {
-		return new HttpResponse(HttpStatus.OK, "500 error", ContentType.HTML); // 500내려주기 // 500내려주기
+	public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+		httpResponse.setHttpResponse(HttpStatus.OK, "500 error", ContentType.HTML); // 500내려주기 // 500내려주기
 	}
 
 }

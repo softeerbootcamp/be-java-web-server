@@ -18,7 +18,7 @@ import webserver.Url;
 public class UserController extends AbstractController {
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-	public HttpResponse doGet(HttpRequest httpRequest) throws IOException {
+	public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
 		Url url = httpRequest.getUrl();
 		User user = User.of(url.getQuery("userId"), url.getQuery("password"), url.getQuery("name"),
 			url.getQuery("email"));
@@ -26,7 +26,7 @@ public class UserController extends AbstractController {
 
 		Database.addUser(user);
 		File file = new File("./webapp" + httpRequest.getUrl().getPath());
-		return new HttpResponse(HttpStatus.OK, new String(Files.readAllBytes(file.toPath())), ContentType.HTML,
+		httpResponse.setHttpResponse(HttpStatus.OK, new String(Files.readAllBytes(file.toPath())), ContentType.HTML,
 			"/index.html");
 	}
 
