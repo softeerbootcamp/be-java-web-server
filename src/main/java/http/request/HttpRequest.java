@@ -20,14 +20,18 @@ public class HttpRequest {
     private final HttpRequestLine httpRequestLine;
     private final HttpHeader httpHeader;
 
-    public HttpRequest(InputStream in) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(in));
-
-        this.httpRequestLine = getHttpRequestLine(br);
-        this.httpHeader = getHttpRequestHeader(br);
+    private HttpRequest(HttpRequestLine httpRequestLine, HttpHeader httpHeader) {
+        this.httpRequestLine = httpRequestLine;
+        this.httpHeader = httpHeader;
     }
 
-    private HttpRequestLine getHttpRequestLine(BufferedReader br) throws IOException {
+    public static HttpRequest from(InputStream in) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+
+        return new HttpRequest(getHttpRequestLine(br), getHttpRequestHeader(br));
+    }
+
+    private static HttpRequestLine getHttpRequestLine(BufferedReader br) throws IOException {
         String requestLine = br.readLine();
         if (requestLine == null) {
             return null;
@@ -37,7 +41,7 @@ public class HttpRequest {
         return new HttpRequestLine(requestLine);
     }
 
-    private HttpHeader getHttpRequestHeader(BufferedReader br) throws IOException {
+    private static HttpHeader getHttpRequestHeader(BufferedReader br) throws IOException {
         List<String> lines = new ArrayList<>();
         String line;
         while(!(line = br.readLine()).equals("")) {
