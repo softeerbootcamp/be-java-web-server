@@ -51,7 +51,7 @@ public class UserController implements Controller{
         }
 
         //TODO 임시 코드 - return 예외처리 해야됨
-        byte[] responseBody = HttpResponseUtils.makeBody(httpRequest, null);
+        byte[] responseBody = HttpResponseUtils.makeBody(httpRequest.getUri(), null);
         return new HttpResponse(HttpStatus.OK, responseBody, null);
     }
 

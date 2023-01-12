@@ -4,6 +4,7 @@ import http.HttpUri;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import util.HttpRequestUtils;
+import util.HttpResponseUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,21 +20,17 @@ public class HttpRequestUtilsTest {
     @Test
     @DisplayName("RequestLine을 잘 쪼개서 RequestLine 생성자 인자로 잘 넣어 주는지")
     public void getRequestLine(){
-        String[] splited = sampleRequestLine.split(" ");
-        String method = splited[0];
-        HttpUri uri = new HttpUri(splited[1]);
-        String version = splited[2];
+        HttpRequestLine httpRequestLine = HttpRequestUtils.getRequestLine(sampleRequestLine);
 
-        assertThat(method).isEqualTo("GET");
-        assertThat(uri).usingRecursiveComparison().isEqualTo(new HttpUri("/index.html"));
-        assertThat(version).isEqualTo("HTTP/1.1");
+        assertThat(httpRequestLine).usingRecursiveComparison().
+                isEqualTo(new HttpRequestLine("GET", new HttpUri("/index.html"), "HTTP/1.1"));
     }
 
     String queryString = "userId=jhchoi57&" +
             "password=12349865&" +
             "name=%EC%B5%9C%EC%A3%BC%ED%98%95&" +
             "email=jhchoi57%40gmail.com";
-    
+
     @Test
     @DisplayName("입력받은 queryString을 파싱해서 map에 잘 넣는지")
     public void parseQueryString(){

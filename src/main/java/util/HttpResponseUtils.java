@@ -2,6 +2,7 @@ package util;
 
 import http.HttpRequest;
 import http.HttpResponse;
+import http.HttpUri;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,9 +24,9 @@ public class HttpResponseUtils {
         return basePath + staticFilePath;
     }
 
-    public static byte[] makeBody(HttpRequest httpRequest, String filePath) throws IOException {
-        logger.debug("filePath get : {}", filePath + httpRequest.getUri());
-        return Files.readAllBytes(new File(filePath + httpRequest.getUri()).toPath());
+    public static byte[] makeBody(String httpUri, String filePath) throws IOException {
+        logger.debug("filePath get : {}", filePath + httpUri);
+        return Files.readAllBytes(new File(filePath + httpUri).toPath());
     }
 
 }
