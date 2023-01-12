@@ -48,7 +48,6 @@ public class FacadeController implements Runnable {
         if (isStaticResourceRequest(url)) {
             return controllers.get(Domain.MAIN);
         }
-
         return controllers.get(Domain.find(url));
     }
 

@@ -4,7 +4,7 @@ public enum Status {
     OK("200", "OK"),
     CREATED("201", "Created"),
     REDIRECT("301", "Moved Permanently"),
-    NOT_FOUND("404", "Not found");
+    NOT_FOUND("404", "Not Found");
 
     private String code;
     private String message;
