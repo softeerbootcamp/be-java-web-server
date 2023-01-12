@@ -6,6 +6,7 @@ import controller.NotFoundController;
 import controller.UserController;
 import db.Database;
 import model.request.Request;
+import model.request.RequestLine;
 import service.UserService;
 
 import java.util.HashMap;
@@ -20,14 +21,20 @@ public class ControllerMapper {
     }
 
     public static Controller selectController(Request request) {
-        if(Objects.nonNull(request.getRequestLine().getContentType())) return new ViewController();
+        RequestLine requestLine = request.getRequestLine();
+
+        if(Objects.nonNull(requestLine.getContentType())) return new ViewController();
 
         for(Map.Entry<String, Controller> controllerEntry : controllerMap.entrySet()) {
-            if(controllerEntry.getKey().equals(request.getRequestLine().getControllerCriteria())) {
+            if(isExistController(controllerEntry.getKey(), requestLine.getControllerCriteria())) {
                 return controllerEntry.getValue();
             }
         }
 
         return new NotFoundController();
+    }
+
+    private static boolean isExistController(String controller, String controllerCriteria) {
+        return controller.equals(controllerCriteria);
     }
 }
