@@ -20,6 +20,10 @@ public class HttpStatusLine {
         this.httpStatusCode = httpStatusCode;
     }
 
+    public HttpStatusCode getHttpStatusCode() {
+        return httpStatusCode;
+    }
+
     @Override
     public String toString() {
         return httpVersion
