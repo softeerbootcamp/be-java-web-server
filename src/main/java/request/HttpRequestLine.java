@@ -1,6 +1,9 @@
-package webserver;
+package request;
 
 import com.github.jknack.handlebars.internal.lang3.StringUtils;
+
+import webserver.HttpMethod;
+import webserver.Url;
 
 public class HttpRequestLine {
 	private static final int REQUEST_URL_INDEX = 1;

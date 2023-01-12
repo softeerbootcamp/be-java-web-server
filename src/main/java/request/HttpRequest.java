@@ -1,6 +1,9 @@
-package webserver;
+package request;
 
 import java.util.Map;
+
+import webserver.HttpMethod;
+import webserver.Url;
 
 // TODO: method를 enum으로 리팩토링할 예정
 public class HttpRequest {
