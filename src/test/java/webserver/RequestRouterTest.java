@@ -1,13 +1,13 @@
 package webserver;
 
-import httpMock.CustomHttpErrorFactory;
+import controller.RequestController;
+import db.StaticFileService;
 import httpMock.CustomHttpRequest;
 import httpMock.CustomHttpResponse;
 import httpMock.constants.ContentType;
 import httpMock.constants.StatusCode;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import service.StaticFileService;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -61,6 +61,7 @@ class RequestRouterTest {
                 Files.readAllBytes(Path.of(StaticFileService.getFile("/index.html").getPath()))
         );
 
+
         //when
         CustomHttpResponse res = requestRouter.handleRequest(req);
 
@@ -82,11 +83,12 @@ class RequestRouterTest {
                 new HashMap<>() {{
                     put("Location", "/index.html");
                 }},
-                CustomHttpResponse.EMPTY_BODY
+                null
         );
 
         //when
         CustomHttpResponse response = requestRouter.handleRequest(req);
+
 
         //then
         assertEquals(response.getHeaders().get("Location"), "/index.html");
@@ -106,11 +108,12 @@ class RequestRouterTest {
                 StatusCode.NOT_FOUND,
                 ContentType.TEXT_PLAIN,
                 new HashMap<>(),
-                CustomHttpResponse.EMPTY_BODY
+                null
         );
 
         //when
         CustomHttpResponse response = requestRouter.handleRequest(req);
+
 
         //then
         assertEquals(expected.toString(), response.toString());
@@ -128,7 +131,7 @@ class RequestRouterTest {
         CustomHttpResponse res = requestRouter.handleRequest(req);
 
         //then
-        assertEquals(CustomHttpErrorFactory.NOT_FOUND().toString(), res.toString());
+        assertEquals(RequestController.NOT_FOUND().toString(), res.toString());
     }
 
 }
