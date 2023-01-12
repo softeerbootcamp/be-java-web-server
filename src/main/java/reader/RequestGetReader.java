@@ -2,13 +2,15 @@ package reader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reader.fileReader.FileReader;
 import request.HttpRequest;
+import util.Url;
 import util.UrlType;
 
 import java.util.HashMap;
 import java.util.Objects;
 
-public class RequestGetReader implements RequestReader{
+public class RequestGetReader implements RequestReader, FileReader {
     private final String QUERY_STRING_REGEX = "\\?";
     private final String QUERY_STRING_DATAS_REGEX = "&";
     private final String DATA_REGEX = "=";
@@ -33,6 +35,15 @@ public class RequestGetReader implements RequestReader{
     }
 
 
-
-
+    @Override
+    public byte[] readFile(Url url) {
+        byte[] indexData = null;
+        try {
+            FileReader fileReader = FileReader.selectFileReader(url);
+            indexData = fileReader.readFile(url);
+        } catch (NullPointerException e) {
+            logger.info("{} : 해당 요청은 읽은 파일이 없습니다. 데이터 처리과정으로 넘어갑니다.",url.getUrl());
+        }
+        return indexData;
+    }
 }

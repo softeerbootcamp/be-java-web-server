@@ -40,4 +40,5 @@ public interface RequestReader {
             throw new ProtocolException(HttpsErrorMessage.NOT_VALID_HTTP_FORMAT);
         }
     }
+
 }

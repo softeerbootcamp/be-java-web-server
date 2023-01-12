@@ -9,6 +9,7 @@ import db.UserDatabase;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reader.RequestGetReader;
 import reader.RequestReader;
 import reader.fileReader.FileReader;
 import request.HttpRequest;
@@ -53,11 +54,10 @@ public class RequestHandler implements Runnable {
 
     private byte[] manageData(HttpRequest httpRequest) {
         byte[] data=null;
-        fileReader = FileReader.selectFileReader(httpRequest.getUrl());
-        if(fileReader!=null){
-            //index.html과 같은 파일을 읽는 경우
-            data = fileReader.readFile(httpRequest.getUrl());
-        }else{
+
+        if (requestReader instanceof RequestGetReader) {
+            data=((RequestGetReader) requestReader).readFile(httpRequest.getUrl());
+
             HashMap<String, String> dataMap = requestReader.readData(httpRequest);
             database = new UserDatabase();
             service = new UserService();
