@@ -4,6 +4,7 @@ import model.domain.User;
 import model.general.Header;
 import model.general.Status;
 import model.request.Request;
+import model.request.RequestLine;
 import model.response.Response;
 import model.response.StatusLine;
 import service.UserService;
@@ -31,14 +32,16 @@ public class UserController implements Controller {
     }
 
     private Response createUserResponse(Request request) {
-        Map<String, String> userInfo = request.getRequestLine().parseQueryString();
+        RequestLine requestLine = request.getRequestLine();
+
+        Map<String, String> userInfo = requestLine.parseQueryString();
         User user = User.of(userInfo.get("userId"), userInfo.get("password"),
                 userInfo.get("name"), userInfo.get("email"));
         userService.signUp(user);
 
         Map<Header, String> headers = response302Header();
 
-        return Response.of(StatusLine.from(Status.FOUND), headers);
+        return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.FOUND), headers);
     }
 
     private Map<Header, String> response302Header() {

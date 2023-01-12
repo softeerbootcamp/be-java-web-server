@@ -47,7 +47,7 @@ public class ViewController implements Controller {
 
         Map<Header, String> headers = response200Header(requestLine.getContentType(), body.length);
 
-        return Response.of(StatusLine.from(Status.OK), headers, body);
+        return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.OK), headers, body);
     }
 
     private Map<Header, String> response200Header(ContentType contentType, int messageBodyLength) {
