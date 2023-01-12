@@ -1,12 +1,15 @@
 package controller;
 
 import http.request.HttpRequest;
+import http.response.ContentType;
 import http.response.HttpResponse;
 import http.request.Uri;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+
+import static utils.FileIoUtils.loadFile;
 
 public class IndexController implements Controller {
 
@@ -19,7 +22,7 @@ public class IndexController implements Controller {
     }
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
-        doGet(httpRequest, httpResponse);
+        doGet(httpResponse);
     }
 
     @Override
@@ -28,8 +31,13 @@ public class IndexController implements Controller {
         return paths.stream().anyMatch(uri::isEndsWith);
     }
 
-    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
-        httpResponse.forward(INDEX_PATH);
+    public void doGet(HttpResponse httpResponse) throws IOException {
+        String path = "/index.html";
+        ContentType contentType = ContentType.from(path);
+        String filePath = contentType.getDirectory() + path;
+        byte[] body = loadFile(filePath);
+
+        httpResponse.forward(contentType, body);
     }
 
 }
