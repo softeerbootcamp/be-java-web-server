@@ -1,9 +1,13 @@
 package enums;
 
 public enum ContentTypeEnum {
-    HTML,
-    CSS,
-    PLAIN,
-    JAVASCRIPT,
-
+    HTML("text/html"),
+    CSS("text/css"),
+    PLAIN("text/plain"),
+    JAVASCRIPT("text/javascript"),
+    ;
+    private final String value;
+    ContentTypeEnum(String value) {
+        this.value = value;
+    }
 }
