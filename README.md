@@ -89,4 +89,11 @@ Java Web Application Server 2022
         + location: /index.html
         + location은 응답코드 301, 302 리다이렉션 상태에서 위치를 지정해준다
     
+    + Java 객체 비교
+      + ==, != 연산자
+        + Primitive type를 비교할 때는 value값을 비교
+        + Object를 비교할 때는 메모리 주소 비교 
+      + equals() 사용
+      + Objects.equals(a, b) 도 가능 (null check가 되어 있음)
+    
     
