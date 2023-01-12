@@ -43,7 +43,7 @@ public class UserAccountController implements RequestController {
         String name = req.getRequestParams().get("name");
         String email = req.getRequestParams().get("email");
 
-        if (UserService.findUserById(userId) == null)
+        if (UserService.findUserById(userId) != null)
             return CustomHttpErrorFactory.BAD_REQUEST("userID duplicated");
 
         if (!Utility.isEmailValid(email))
