@@ -11,8 +11,12 @@ public class HttpHeader {
         this.headers = new LinkedHashMap<>();
     }
 
-    public HttpHeader(Map<String, String> headers) {
+    private HttpHeader(Map<String, String> headers) {
         this.headers = headers;
+    }
+
+    public static HttpHeader from(Map<String, String> headers) {
+        return new HttpHeader(headers);
     }
 
     public String getHeader(String name) {

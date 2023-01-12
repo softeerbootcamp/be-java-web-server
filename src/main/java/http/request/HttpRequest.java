@@ -50,7 +50,7 @@ public class HttpRequest {
         }
         Map<String, String> requestHeader = HttpRequestUtils.parseRequestHeader(lines);
 
-        return new HttpHeader(requestHeader);
+        return HttpHeader.from(requestHeader);
     }
 
     public String getUrl() {
