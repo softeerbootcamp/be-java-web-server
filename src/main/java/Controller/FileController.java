@@ -7,7 +7,7 @@ import util.StatusCode;
 
 import java.io.DataOutputStream;
 
-public class FileController extends Controller{
+public class FileController extends Controller {
     public FileController(HttpRequest httpRequest, DataOutputStream dos) {
         super(httpRequest, dos);
     }

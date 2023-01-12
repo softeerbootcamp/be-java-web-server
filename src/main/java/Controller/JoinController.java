@@ -8,7 +8,7 @@ import util.StatusCode;
 
 import java.io.DataOutputStream;
 
-public class JoinController extends Controller{
+public class JoinController extends Controller {
 
     public JoinController(HttpRequest httpRequest, DataOutputStream dos) {
         super(httpRequest, dos);

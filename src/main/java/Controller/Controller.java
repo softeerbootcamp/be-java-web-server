@@ -13,7 +13,7 @@ public abstract class Controller {
         this.dos = dos;
     }
 
-    public void response(){
+    public void response() {
 
     }
 }

@@ -8,23 +8,27 @@ public class HttpRequest {
     private final HttpRequestHeaders httpRequestHeaders;
     private final HttpRequestStartLine httpRequestStartLine;
 
-    public HttpRequest(HttpRequestStartLine httpRequestStartLine,HttpRequestParams httpRequestParams, HttpRequestHeaders httpRequestHeaders) {
+    public HttpRequest(HttpRequestStartLine httpRequestStartLine, HttpRequestParams httpRequestParams, HttpRequestHeaders httpRequestHeaders) {
         this.httpRequestParams = httpRequestParams;
         this.httpRequestHeaders = httpRequestHeaders;
         this.httpRequestStartLine = httpRequestStartLine;
     }
-    public static HttpRequest createReqeust(BufferedReader br){
+
+    public static HttpRequest createReqeust(BufferedReader br) {
         HttpRequestStartLine httpRequestStartLine = HttpRequestStartLine.from(br);
         HttpRequestParams httpRequestParams = HttpRequestParams.from(httpRequestStartLine.getPath());
         HttpRequestHeaders httpRequestHeaders = HttpRequestHeaders.from(br);
         return new HttpRequest(httpRequestStartLine, httpRequestParams, httpRequestHeaders);
     }
-    public String getPath(){
+
+    public String getPath() {
         return httpRequestStartLine.getPath();
     }
-    public String getProtocol(){
+
+    public String getProtocol() {
         return httpRequestStartLine.getProtocol();
     }
+
     public Map<String, String> getParams() {
         return httpRequestParams.getParams();
     }

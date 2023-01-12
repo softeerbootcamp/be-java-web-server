@@ -14,20 +14,22 @@ public class FileIoUtil {
 
     private static final String QUESTION = "?";
 
-    public static String checkCreateUser(String path){
+    public static String checkCreateUser(String path) {
         if (path.startsWith("/user/create")) {
             int idx = path.indexOf(QUESTION);
             return path.substring(idx + 1);
         }
         return null;
     }
+
     public static Path mappingPath(String path) {
         String ex = findExtension(path);
-        if(templateTypes.contains(ex)) return new File(TEMPLATE_DIR+path).toPath();
-        if(staticTypes.contains(ex)) return new File(STATIC_DIR+path).toPath();
+        if (templateTypes.contains(ex)) return new File(TEMPLATE_DIR + path).toPath();
+        if (staticTypes.contains(ex)) return new File(STATIC_DIR + path).toPath();
         return null;
     }
-    public static String findExtension(String path){
+
+    public static String findExtension(String path) {
         String[] temp = path.split("\\.");
         String extension = temp[temp.length - 1];
         return extension;

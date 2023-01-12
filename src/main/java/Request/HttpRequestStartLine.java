@@ -18,6 +18,7 @@ public class HttpRequestStartLine {
         this.protocol = protocol;
         this.method = method;
     }
+
     public static HttpRequestStartLine from(BufferedReader br) {
         String line = null;
         try {
@@ -29,6 +30,7 @@ public class HttpRequestStartLine {
         String[] temp = line.split(BLANK);
         return new HttpRequestStartLine(temp[0], temp[1], temp[2]);
     }
+
     public String getPath() {
         return path;
     }

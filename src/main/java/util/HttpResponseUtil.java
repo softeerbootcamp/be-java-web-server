@@ -14,7 +14,7 @@ public class HttpResponseUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpResponseUtil.class);
 
-    public static byte[] generateBody(Path path) throws NullPointerException{
+    public static byte[] generateBody(Path path) throws NullPointerException {
         try {
             byte[] body = Files.readAllBytes(path);
             return body;
@@ -22,16 +22,17 @@ public class HttpResponseUtil {
             throw new RuntimeException(e);
         }
     }
-    public static void outResponse(DataOutputStream dos, HttpResponse httpResponse){
+
+    public static void outResponse(DataOutputStream dos, HttpResponse httpResponse) {
         try {
             dos.writeBytes(httpResponse.getHeaders());
-            logger.debug("headers:\n"+httpResponse.getHeaders());
+            logger.debug("headers:\n" + httpResponse.getHeaders());
             dos.writeBytes("\r\n");
             dos.write(httpResponse.getBody(), 0, httpResponse.getBody().length);
             dos.flush();
         } catch (IOException e) {
             throw new RuntimeException(e);
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             logger.error(e.getMessage());
         }
     }

@@ -2,6 +2,7 @@ package util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -16,7 +17,7 @@ public class HttpRequestUtil {
     private static final String AND = "&";
 
 
-    public static Map<String,String> extractParams(String query){
+    public static Map<String, String> extractParams(String query) {
         Map<String, String> params = new LinkedHashMap<>();
         String[] pieces = query.split(AND);
         for (String param : pieces) {
@@ -30,7 +31,8 @@ public class HttpRequestUtil {
         }
         return params;
     }
-    public static Map<String,String> extractHeaders(BufferedReader br) throws IOException {
+
+    public static Map<String, String> extractHeaders(BufferedReader br) throws IOException {
         Map<String, String> headers = new HashMap<>();
         String line = br.readLine();
         while (Objects.nonNull(line) && !line.equals("")) {
