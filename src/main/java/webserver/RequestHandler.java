@@ -8,6 +8,7 @@ import webserver.Controller.Controller;
 import webserver.domain.StatusCodes;
 import webserver.domain.request.Request;
 import webserver.domain.response.Response;
+import webserver.utils.HttpResponseUtils;
 
 import static webserver.utils.HttpRequestUtils.parseHttpRequest;
 
@@ -28,7 +29,7 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
 
             Request req = parseHttpRequest(in);
-            Response res = new Response(out);
+            Response res = new Response();
 
             req.readRequest();  //Print out Http Request Message
 
@@ -38,7 +39,9 @@ public class RequestHandler implements Runnable {
             if(res.getStatusCode() == StatusCodes.NOT_FOUND){  // request is not precessed by all the controllers
                 handlerMapping.getStaticHandler().handle(req, res);  //get static controller to handle this request
             }
-            res.writeResponse();  //write http response and send it back to client side
+
+            HttpResponseUtils responseWriter = new HttpResponseUtils(res, out);
+            responseWriter.makeResponse();  //write http response and send it back to client side
 
         } catch (IOException e) {
             logger.debug(e.getMessage());

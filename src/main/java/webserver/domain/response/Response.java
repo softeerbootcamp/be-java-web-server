@@ -13,12 +13,6 @@ public class Response {
     private StatusCodes status;
     private Map<String, String> headerMaps = new HashMap<>();
     private byte[] body;
-    private HttpResponseUtils httpResponseUtils;
-
-    public Response(OutputStream out){
-        httpResponseUtils = new HttpResponseUtils(this, out);
-    }
-
     public byte[] getBody() {
         return body;
     }
@@ -29,10 +23,6 @@ public class Response {
 
     public StatusCodes getStatusCode(){
         return this.status;
-    }
-
-    public void writeResponse(){
-        httpResponseUtils.makeResponse();
     }
 
 

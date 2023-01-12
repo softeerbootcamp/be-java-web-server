@@ -16,7 +16,7 @@ public class HttpResponseUtils {
 
     private Response response;
     private DataOutputStream dos;
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(HttpResponseUtils.class);
 
     public HttpResponseUtils(Response response, OutputStream out){
         this.response = response;
