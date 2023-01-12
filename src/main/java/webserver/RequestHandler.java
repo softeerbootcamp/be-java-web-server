@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import controller.Controller;
 import controller.UserController;
 
 public class RequestHandler implements Runnable {
@@ -41,18 +42,23 @@ public class RequestHandler implements Runnable {
 			// HttpRequest 파싱
 			HttpRequest httpRequest = HttpRequestUtils.httpRequestParse(in);
 			logger.info(httpRequest.toString());
+
 			// TODO: 아래 부분을 인터페이스를 활용하여 확장성 높이고 코드 중복 없애야함, response 또한 새로 클래스 만들어서 적용할 예정
 			// 정적 데이터 요청일 경우의 처리
 			File file = new File("./webapp" + httpRequest.getUrl().getPath());
 			logger.debug(httpRequest.getUrl().getPath());
 
+			Controller controller = RequestMappingHandler.findController(httpRequest);
+			HttpResponse httpResponse = controller.service(httpRequest);
+
+			// TODO file controller 만들어야함
 			if (file.isFile()) {
 				byte[] body = Files.readAllBytes(file.toPath());
 				responseWriter.responseWrite(dos, body);
 			}
 
 			if (httpRequest.urlStartsWith("/create")) {
-				responseWriter.responseWrite(dos, userController.doPost(httpRequest).getBytes("UTF-8"));
+				responseWriter.responseWrite(dos, httpResponse.toString().getBytes("UTF-8"));
 			}
 
 		} catch (IOException e) {
