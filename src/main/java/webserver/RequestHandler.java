@@ -32,16 +32,16 @@ public class RequestHandler implements Runnable {
             String viewName = controller.process(httpRequest, httpResponse);
             String viewPath = ViewResolver.process(viewName);
 
-            render(out, httpResponse, viewPath);
+            sendResponse(out, httpResponse, viewPath);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void render(OutputStream out, HttpResponse httpResponse, String viewPath) throws IOException {
+    private void sendResponse(OutputStream out, HttpResponse httpResponse, String viewPath) throws IOException {
         httpResponse.setBody(viewPath);
 
         DataOutputStream dos = new DataOutputStream(out);
-        httpResponse.response(dos);
+        httpResponse.send(dos);
     }
 }

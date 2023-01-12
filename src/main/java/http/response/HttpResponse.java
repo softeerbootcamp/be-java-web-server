@@ -48,7 +48,7 @@ public class HttpResponse {
         addHttpHeader("Content-Length", String.valueOf(body.length));
     }
 
-    public void response(DataOutputStream dos) {
+    public void send(DataOutputStream dos) {
         try {
             logger.debug("httpStatusLine : {}", httpStatusLine);
             logger.debug("httpHeader : {}", httpHeader);
