@@ -25,21 +25,7 @@ public class HttpRequestUtils {
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 			String line = br.readLine();
-
-			// 메서드 설정
-			String method = line.substring(0, line.indexOf(' '));
-			line = line.substring(line.indexOf(' ') + 1);
-			line = line.split(" ")[0];
-			// url 설정
-			String path = line;
-			int index = line.indexOf('?');
-			String queryString = "";
-			if (index != -1) {
-				path = line.substring(0, index);
-				queryString = line.substring(index + 1);
-			}
-			Url url = Url.of(path, parseQueryString(queryString));
-
+			HttpRequestLine httpRequestLine = HttpRequestLine.parse(line);
 			line = br.readLine();
 			Map<String, String> headers = new HashMap<>();
 			while (!line.equals("")) {
@@ -48,7 +34,7 @@ public class HttpRequestUtils {
 
 			}
 
-			return HttpRequest.of(url, method, headers);
+			return HttpRequest.of(httpRequestLine, headers);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
