@@ -57,7 +57,7 @@ public class RequestHandler implements Runnable {
         logger.debug("> request line : {}", line);
         String url = extractUrl(line);
         Request request = new Request(url);
-        request.checkUrlQueryString(url);
+        request.checkUrlQueryString();
 
         return request;
     }

@@ -20,7 +20,7 @@ public class Request {
         return url;
     }
 
-    public void checkUrlQueryString(String url) {
+    public void checkUrlQueryString() {
         String[] queryStrings = url.split("\\?");
         if (queryStrings.length != 1) {
             String queryString = queryStrings[1];
