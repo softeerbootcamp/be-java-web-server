@@ -25,20 +25,26 @@ public class UserController implements Controller {
 
     @Override
     public Response getResponse(Request request) {
-        if(request.getRequestLine().getUri().startsWith("/user/create")) return createUser(request);
+        if(request.getRequestLine().getUri().startsWith("/user/create")) return createUserResponse(request);
 
         return Response.from(Status.NOT_FOUND);
     }
 
-    private Response createUser(Request request) {
+    private Response createUserResponse(Request request) {
         Map<String, String> userInfo = request.getRequestLine().parseQueryString();
         User user = User.of(userInfo.get("userId"), userInfo.get("password"),
                 userInfo.get("name"), userInfo.get("email"));
         userService.signUp(user);
 
+        Map<Header, String> headers = response302Header();
+
+        return Response.of(StatusLine.from(Status.FOUND), headers);
+    }
+
+    private Map<Header, String> response302Header() {
         Map<Header, String> headers = new HashMap<>();
         headers.put(Header.from("Location"), "/index.html");
 
-        return Response.of(StatusLine.from(Status.FOUND), headers);
+        return headers;
     }
 }
