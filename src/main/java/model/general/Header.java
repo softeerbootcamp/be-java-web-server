@@ -17,6 +17,7 @@ public enum Header {
     ORIGIN("Origin"),
     IF_MODIFIED_SINCE("If-Modified-Since"),
     AUTHORIZATION("Authorization"),
+    SEC_CH_UA("sec-ch-ua"),
     SERVER("Server"),
     ACCESS_CONTROL_ALLOW_ORIGIN("Access-Control-Allow-Origin"),
     ALLOW("Allow"),
