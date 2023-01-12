@@ -1,4 +1,4 @@
-package enums;
+package io.response;
 
 public enum ResponseAttribute {
     CONTENT_TYPE("Content-type"),

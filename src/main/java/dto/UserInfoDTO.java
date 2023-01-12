@@ -8,11 +8,11 @@ public class UserInfoDTO {
     private String name;
     private String email;
 
-    public UserInfoDTO(Map<String, String> queryString) {
-        this.userId = queryString.get("userId");
-        this.password = queryString.get("password");
-        this.name = queryString.get("name");
-        this.email = queryString.get("email");
+    public UserInfoDTO(Map<String, String> args) {
+        this.userId = args.get("userId");
+        this.password = args.get("password");
+        this.name = args.get("ame");
+        this.email = args.get("email");
     }
 
     public String getUserId() {
