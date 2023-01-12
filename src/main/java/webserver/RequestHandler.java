@@ -14,7 +14,6 @@ import java.net.Socket;
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-    public static final String CRLF = "\r\n";
     private final Socket connection;
 
     public RequestHandler(Socket connectionSocket) {
@@ -40,13 +39,12 @@ public class RequestHandler implements Runnable {
     private void sendResponse(CustomHttpResponse response, OutputStream out, String protocolVersion) {
         try {
             DataOutputStream dos = new DataOutputStream(out);
-            dos.writeBytes( response.getStatusLine(protocolVersion) + CRLF);
-            dos.writeBytes(response.getContentTypeLine() + CRLF);
+            dos.writeBytes( response.getStatusLine(protocolVersion) + "\r\n");
             for (String key : response.getHeaders().keySet()) {
-                dos.writeBytes(key + ": " + response.getHeaders().get(key) + CRLF);
+                dos.writeBytes(key + ": " + response.getHeaders().get(key) + "\r\n");
             }
-            dos.writeBytes("Content-Length: " + response.getBody().length + CRLF);
-            dos.writeBytes(CRLF);
+            dos.writeBytes("Content-Length: " + response.getBody().length + "\r\n");
+            dos.writeBytes("\r\n");
 
             dos.write(response.getBody(), 0, response.getBody().length);
             dos.flush();
