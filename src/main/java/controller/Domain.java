@@ -2,20 +2,24 @@ package controller;
 
 import java.util.Arrays;
 
-public enum DomainList {
+public enum Domain {
     USER("/user"),
     MAIN("/");
 
     private String name;
 
-    DomainList(String name) {
+    Domain(String name) {
         this.name = name;
     }
 
-    public static DomainList find(String url) {
-        return Arrays.stream(DomainList.values())
+    public static Domain find(String url) {
+        return Arrays.stream(Domain.values())
                 .filter(domain -> url.startsWith(domain.name))
                 .findFirst()
                 .orElse(MAIN);
+    }
+
+    public String getName() {
+        return name;
     }
 }
