@@ -63,4 +63,8 @@ public class HttpResponse {
             logger.error(e.getMessage());
         }
     }
+
+    public HttpStatusCode getStatusCode() {
+        return httpStatusLine.getStatusCode();
+    }
 }
