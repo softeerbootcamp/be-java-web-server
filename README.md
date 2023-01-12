@@ -13,6 +13,8 @@ Java Web Application Server 2022
 .
 ├── main
 │   ├── java
+│   │   ├── Utility
+│   │   │   └── UserValidation.java
 │   │   ├── controller
 │   │   │   ├── RequestController.java
 │   │   │   ├── StaticFileController.java
@@ -49,7 +51,7 @@ WebServer -> RequestHandler -> RequestRouter -> someController -> someService
 4. Controller : 라우터에게 받은 req를 분해하고 service들에게 명령을 내린다. 이후 결과를 조직해 Res객체를 생성
 5. Service : 컨트롤러로 부터 정보를 받아 작업을 하고, 결과를 돌려준다.
 
-
+- utiltiy: 간단한 validation 체크 코드들이 들어가 있는 곳입니다.
 - controller: RequestController를 implement하고 있다.
   - StaticFileController: StaticFileService를 이용해 파일을 받아서 response를 만든다.
   - UserAccountController: DB로 부터 데이터를 받아오거나 DB에 정보해 response를 만든다.
