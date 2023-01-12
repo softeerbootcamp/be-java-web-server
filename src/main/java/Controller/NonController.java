@@ -4,8 +4,6 @@ import Request.HttpRequest;
 import Response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.FileIoUtil;
-import util.HttpResponseUtil;
 import util.StatusCode;
 
 import java.io.DataOutputStream;
@@ -20,25 +18,23 @@ public class NonController extends Controller {
 
 
     @Override
-    public void response() {
-        super.response();
+    public HttpResponse createResponse() {
         if (this.httpRequest.getPath().equals("/")) {
-            this.httpResponse = responseRoot();
+            return responseRoot();
         }
-        this.httpResponse = response404();
-        HttpResponseUtil.outResponse(dos, httpResponse);
+        return response404();
     }
 
     public HttpResponse response404() {
-        HttpResponse httpResponse = HttpResponse.createHttpResponse(httpRequest, StatusCode.NOT_FOUND);
+        logger.debug("[response404]");
+        HttpResponse httpResponse = HttpResponse.createHttpResponse(httpRequest.getPath(), StatusCode.NOT_FOUND, httpRequest.getProtocol());
         return httpResponse;
     }
 
     public HttpResponse responseRoot() {
-        HttpResponse httpResponse = HttpResponse.createHttpResponse(httpRequest, StatusCode.OK);
-        httpResponse.setBody(FileIoUtil.mappingDirectoryPath("/index.html"));
-        httpResponse.setHeaders(HttpResponseUtil.generateHeaders(httpRequest, StatusCode.OK, httpResponse.getBody().length));
-        return httpResponse;
+        logger.debug("[responseRoot]");
+        HttpResponse httpResponse1 = HttpResponse.createHttpResponse("/index.html", StatusCode.OK, httpRequest.getProtocol());
+        return httpResponse1;
     }
 
 }

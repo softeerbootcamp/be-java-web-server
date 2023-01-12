@@ -4,7 +4,6 @@ import Request.HttpRequest;
 import Response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.HttpResponseUtil;
 import util.StatusCode;
 
 import java.io.DataOutputStream;
@@ -18,9 +17,7 @@ public class FileController extends Controller {
     }
 
     @Override
-    public void response() {
-        super.response();
-        this.httpResponse = HttpResponse.createHttpResponse(this.httpRequest, StatusCode.OK);
-        HttpResponseUtil.outResponse(this.dos, this.httpResponse);
+    public HttpResponse createResponse() {
+        return HttpResponse.createHttpResponse(httpRequest.getPath(), StatusCode.OK, httpRequest.getProtocol());
     }
 }
