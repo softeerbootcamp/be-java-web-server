@@ -1,12 +1,11 @@
 package util;
 
 import controller.Controller;
-import controller.HomeController;
-
+import controller.ViewController;
 import controller.NotFoundController;
 import controller.UserController;
 import db.Database;
-import model.request.RequestLine;
+import model.request.Request;
 import service.UserService;
 
 import java.util.HashMap;
@@ -16,14 +15,14 @@ public class ControllerMapper {
     private static final Map<String, Controller> controllerMap = new HashMap<>();
 
     static {
-        controllerMap.put("/", new HomeController());
-        controllerMap.put("index.html", new HomeController());
+        controllerMap.put("/", new ViewController());
+        controllerMap.put("index.html", new ViewController());
         controllerMap.put("user", new UserController(new UserService(new Database())));
     }
 
-    public static Controller selectController(RequestLine requestLine) {
+    public static Controller selectController(Request request) {
         for(Map.Entry<String, Controller> controllerEntry : controllerMap.entrySet()) {
-            if(controllerEntry.getKey().equals(requestLine.getControllerCriteria())) {
+            if(controllerEntry.getKey().equals(request.getRequestLine().getControllerCriteria())) {
                 return controllerEntry.getValue();
             }
         }
