@@ -23,7 +23,7 @@ public abstract class Controller {
 
     public void response() {
         this.httpResponse = createResponse();
-        HttpResponseUtil.outResponse(this.dos, this.httpResponse);
+        HttpResponseUtil.sendResponse(this.dos, this.httpResponse);
     }
 
     public static Controller matchController(DataOutputStream dos, HttpRequest httpRequest) {

@@ -40,7 +40,7 @@ public class HttpResponseUtil {
         return headers;
     }
 
-    public static void outResponse(DataOutputStream dos, HttpResponse httpResponse) {
+    public static void sendResponse(DataOutputStream dos, HttpResponse httpResponse) {
         try {
             dos.writeBytes(httpResponse.getHeaders());
             logger.debug("headers:\n" + httpResponse.getHeaders());
