@@ -18,12 +18,11 @@ public class FileIoUtil {
     private static Set<String> templateTypes = new HashSet<>(Arrays.asList("html", "ico"));
     private static Set<String> staticTypes = new HashSet<>(Arrays.asList("css", "js", "eot", "svg", "ttf", "woff", "woff2", "png"));
     private static final String DOT = "\\.";
-    private static final String QUESTION = "?";
-    private static final String SLASH = "/";
+    private static final String URL_PARAM_DELIMITER = "?";
 
     public static String checkCreateUser(String path) {
         if (path.startsWith("/user/create")) {
-            int idx = path.indexOf(QUESTION);
+            int idx = path.indexOf(URL_PARAM_DELIMITER);
             return path.substring(idx + 1);
         }
         return null;
