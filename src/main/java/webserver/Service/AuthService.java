@@ -13,7 +13,7 @@ public class AuthService {
             Database.addUser(new User(userId, password, name, email));
             return userId.getBytes();
         }
-        throw new HttpRequestException(StatusCodes.INTERNAL_SERVER_ERROR);
+        throw new HttpRequestException(StatusCodes.BAD_REQUEST, "<script>alert('사용자가 이미 존재합니다'); history.go(-1);</script>");
     }
 
 }
