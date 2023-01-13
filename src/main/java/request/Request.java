@@ -1,23 +1,24 @@
 package request;
 
+import javax.sound.sampled.Line;
 import java.io.BufferedReader;
 import java.io.IOException;
 
 public class Request {
 
 
-    private static RequestLine requestLine;
+    private RequestLine requestLine;
     //public String getRequestLine;
 
     public Request(BufferedReader bufferedReader) throws IOException {
         setRequestLine(bufferedReader.readLine());
     }
 
-    public static void setRequestLine(String line) {
-        Request.requestLine = new RequestLine(line);
+    public void setRequestLine(String line) {
+        this.requestLine = new RequestLine(line);
     }
 
-    public static RequestLine getRequestLine() {
-        return requestLine;
+    public RequestLine getRequestLine() {
+        return this.requestLine;
     }
 }

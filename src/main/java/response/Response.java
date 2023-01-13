@@ -1,5 +1,8 @@
 package response;
 
+import enums.ContentTypeEnum;
+import enums.ControllerTypeEnum;
+import enums.HeaderReferenceEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.RequestHandler;
@@ -10,40 +13,30 @@ import java.io.OutputStream;
 
 public class Response {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final String NEW_LINE = "\r\n";
+
     private DataOutputStream dos;
-    public Response(OutputStream outputStream){
+
+    public Response(OutputStream outputStream) {
         this.dos = new DataOutputStream(outputStream);
 
     }
-    public void response200Header(int lengthOfBodyContent) {
+
+    public void responseMaker(ControllerTypeEnum controllerTypeEnum, ContentTypeEnum contentTypeEnum,
+                              int lengthOfBodyContent, String redirectUrl) {
         try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
+            ResponseStatusLine responseStatusLine = new ResponseStatusLine(controllerTypeEnum);
+            ResponseHeader responseHeader = new ResponseHeader(contentTypeEnum, lengthOfBodyContent);
+            dos.writeBytes(responseStatusLine.getResponseStatusLine() + NEW_LINE);
+            responseHeader.addHeaderIfRedirect(redirectUrl,responseStatusLine.getStatusCodeWithMessage());
+            dos.writeBytes(responseHeader.getHeaderLine() + NEW_LINE);
+            dos.writeBytes(NEW_LINE);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
-    public void response302Header(int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 302 FOUND \r\n");
-            dos.writeBytes("Location: /index.html\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-    public void responseCssHeader(int lengthOfBodyContent){
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/css;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
+
+
     public void responseBody(byte[] body) {
         try {
             dos.write(body, 0, body.length);
