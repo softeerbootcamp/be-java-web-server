@@ -6,7 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 public class HttpResponse {
 
@@ -16,33 +18,53 @@ public class HttpResponse {
     private final HttpHeader httpHeader = new HttpHeader();
     private byte[] body;
 
+    public void ok(HttpRequest request) {
+        setHttpStatusLine(request, HttpStatusCode.OK);
+        addHttpHeader("Content-Type", request.getHttpHeader("Accept"));
+    }
+
     public void setHttpStatusLine(HttpRequest request, HttpStatusCode statusCode) {
-        this.httpStatusLine = new HttpStatusLine(request.getHttpVersion(), statusCode);
+        this.httpStatusLine = HttpStatusLine.of(request.getHttpVersion(), statusCode);
     }
 
-    public void addHttpHeader(String name, String value) {
-        logger.debug("HttpResponse.addHttpHeader(): value= {}", value);
-        this.httpHeader.addHeader(name, value.split(",")[0]);
+    public void addHttpHeader(String name, String values) {
+        String value = values.split(",")[0];
+        if (name.equals("Content-Type") && value.contains("text")) {
+            value += "; charset=UTF-8";
+        }
+        logger.debug("HttpResponse.addHttpHeader(): value = {}", value);
+
+        httpHeader.addHeader(name, value);
     }
 
-    public void setBody(byte[] body) {
+    public void setBody(String viewPath) throws IOException {
+        byte[] body = new byte[0];
+        File file = new File(viewPath);
+        if (file.exists() && file.isFile()) {
+            body = Files.readAllBytes(file.toPath());
+        }
+
         this.body = body;
         addHttpHeader("Content-Length", String.valueOf(body.length));
     }
 
-    public void response(DataOutputStream dos) {
+    public void send(DataOutputStream dos) {
         try {
+            logger.debug("httpStatusLine : {}", httpStatusLine);
+            logger.debug("httpHeader : {}", httpHeader);
+
             dos.writeBytes(httpStatusLine + "\r\n");
             dos.writeBytes(httpHeader + "");
             dos.writeBytes("\r\n");
-
-            logger.debug("httpStatusLine : {}", httpStatusLine);
-            logger.debug("httpHeader : {}", httpHeader);
 
             dos.write(body, 0, body.length);
             dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    public HttpStatusCode getStatusCode() {
+        return httpStatusLine.getStatusCode();
     }
 }

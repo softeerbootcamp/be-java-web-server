@@ -20,24 +20,28 @@ public class HttpRequest {
     private final HttpRequestLine httpRequestLine;
     private final HttpHeader httpHeader;
 
-    public HttpRequest(InputStream in) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(in));
-
-        this.httpRequestLine = getHttpRequestLine(br);
-        this.httpHeader = getHttpRequestHeader(br);
+    private HttpRequest(HttpRequestLine httpRequestLine, HttpHeader httpHeader) {
+        this.httpRequestLine = httpRequestLine;
+        this.httpHeader = httpHeader;
     }
 
-    private HttpRequestLine getHttpRequestLine(BufferedReader br) throws IOException {
+    public static HttpRequest from(InputStream in) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+
+        return new HttpRequest(readHttpRequestLine(br), readHttpRequestHeader(br));
+    }
+
+    private static HttpRequestLine readHttpRequestLine(BufferedReader br) throws IOException {
         String requestLine = br.readLine();
         if (requestLine == null) {
             return null;
         }
         logger.debug("requestLine : {}", requestLine);
 
-        return new HttpRequestLine(requestLine);
+        return HttpRequestLine.from(requestLine);
     }
 
-    private HttpHeader getHttpRequestHeader(BufferedReader br) throws IOException {
+    private static HttpHeader readHttpRequestHeader(BufferedReader br) throws IOException {
         List<String> lines = new ArrayList<>();
         String line;
         while(!(line = br.readLine()).equals("")) {
@@ -46,7 +50,7 @@ public class HttpRequest {
         }
         Map<String, String> requestHeader = HttpRequestUtils.parseRequestHeader(lines);
 
-        return new HttpHeader(requestHeader);
+        return HttpHeader.from(requestHeader);
     }
 
     public String getUrl() {
