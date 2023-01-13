@@ -23,6 +23,12 @@ public class HttpResponse {
         addHttpHeader("Content-Type", request.getHttpHeader("Accept"));
     }
 
+    public void redirect(HttpRequest request, String redirectUrl) {
+        setHttpStatusLine(request, HttpStatusCode.FOUND);
+        addHttpHeader("Location", redirectUrl);
+        setEmptyBody();
+    }
+
     public void setHttpStatusLine(HttpRequest request, HttpStatusCode statusCode) {
         this.httpStatusLine = HttpStatusLine.of(request.getHttpVersion(), statusCode);
     }

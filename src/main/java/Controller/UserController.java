@@ -2,9 +2,6 @@ package Controller;
 
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import http.response.HttpStatusCode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import service.UserService;
 import util.HttpRequestUtils;
 
@@ -13,7 +10,6 @@ import java.util.Map;
 public class UserController implements Controller {
 
     public static final String PREFIX = "/user";
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Override
     public String process(HttpRequest request, HttpResponse response) {
@@ -28,9 +24,7 @@ public class UserController implements Controller {
             UserService userService = new UserService();
             userService.signUp(userInfo);
 
-            response.setHttpStatusLine(request, HttpStatusCode.FOUND);
-            response.addHttpHeader("Location", "/user/login.html");
-            response.setEmptyBody();
+            response.redirect(request, "/user/login.html");
 
             return "";
         }
