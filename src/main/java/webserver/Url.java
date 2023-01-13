@@ -2,6 +2,8 @@ package webserver;
 
 import java.util.Map;
 
+import request.HttpRequestUtils;
+
 public class Url {
 	private String path;
 	private Map<String, String> queries;
@@ -19,9 +21,15 @@ public class Url {
 		}
 	}
 
+	public static Url of(String url) {
+		int index = url.indexOf('?');
+		String queryString = "";
+		if (index != -1) {
+			queryString = url.substring(index + 1);
+			url = url.substring(0, index);
+		}
 
-	public static Url of(String path, Map<String, String> queries) {
-		return new Url(path, queries);
+		return new Url(url, HttpRequestUtils.parseQueryString(queryString));
 	}
 
 	public boolean startsWith(String path) {
@@ -31,9 +39,14 @@ public class Url {
 	public String getPath() {
 		return path;
 	}
+
 	@Override
 	public String toString() {
-		return "path: " + path + "queries: " + queries;
+		if (queries.size() > 0) {
+			path += '?';
+			queries.forEach((key, value) -> path += (key + '=' + value));
+		}
+		return path;
 	}
 
 }
