@@ -7,10 +7,8 @@ import static util.HttpRequestUtils.parseQuerystring;
 
 public class Request {
 
-
     private final String url;
     private final Map<String, String> requestParams = new HashMap<>();
-
 
     public Request(String url) {
         this.url = url;

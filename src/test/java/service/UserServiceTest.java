@@ -4,7 +4,6 @@ import db.Database;
 import exception.DuplicateUserIdException;
 import model.Request;
 import model.User;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
