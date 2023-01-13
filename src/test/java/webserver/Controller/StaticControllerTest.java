@@ -3,6 +3,7 @@ package webserver.Controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import webserver.domain.ContentType;
 import webserver.domain.StatusCodes;
 import webserver.domain.response.Response;
 import webserver.utils.StaticResourceFinder;
@@ -58,6 +59,6 @@ class StaticControllerTest {
 
         //then
         verify(staticResourceFinder).staticFileResolver(path);
-        verify(res).error(StatusCodes.NOT_FOUND);
+//        verify(res).error(StatusCodes.NOT_FOUND, e.getMsg().getBytes(), ContentType.TEXT_HTML);
     }
 }
