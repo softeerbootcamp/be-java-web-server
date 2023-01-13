@@ -2,6 +2,8 @@ package webserver.utils;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import webserver.domain.request.Request;
 
 import java.io.BufferedReader;
@@ -14,6 +16,7 @@ import java.util.stream.Collectors;
 
 public class HttpRequestUtils {
 
+    private static final Logger logger = LoggerFactory.getLogger(HttpResponseUtils.class);
     public static Request parseHttpRequest(InputStream in) throws IOException {
 
         String requestLine = "";
@@ -23,17 +26,17 @@ public class HttpRequestUtils {
 
         //Store Http Request Request Line into HashMap
         requestLine = br.readLine();
+        logger.info(requestLine);  //print out http request line
 
-        String line = br.readLine();
         //Store Http Request header into HashMap
+        String line = br.readLine();
         while(!line.equals("")){
-            header += line;
+            header += line + '\n';
+            logger.info(line);  //print out http header
             line = br.readLine();
         }
 
-        //TODO : body도 readLine으로 받아서 값을 할당할 것
-
-        Request request = Request.of(requestLine, header);
+        Request request = Request.of(requestLine, header);  //make a Request instance using static factory method
         return request;
     }
 
