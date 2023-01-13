@@ -39,7 +39,7 @@ public class RequestHandler implements Runnable {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            httpStatus = HttpStatus.Success;
+            httpStatus = HttpStatus.ClientError;
             InputStreamReader reader = new InputStreamReader(in);
             BufferedReader br = new BufferedReader(reader);
             RequestHeaderMessage requestHeaderMessage = new RequestHeaderMessage(br.readLine());
