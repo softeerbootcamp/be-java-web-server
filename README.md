@@ -12,13 +12,18 @@ Java Web Application Server 2022
 https://drive.google.com/file/d/1Z-KNZgC6X3H5bxXtWifqP7BtFPTPyL_M/view?usp=share_link
 
 # 디렉토리 구조
+
 <img width="401" alt="스크린샷 2023-01-13 오전 10 50 15" src="https://user-images.githubusercontent.com/80745404/212218564-944d1f8b-34ee-4cad-a424-5a71fa5ee0c9.png">
 
 # Flow
+
 1. 서버 시작
 2. 요청 발생 시 HttpRequest, HttpResponse 객체 생성
+
 - 이때 HttpRequset는 요청받은 request를 바탕으로 생성하고, HttpResponse는 초기화만 진행
+
 3. ControllerFactory에서 어느 Controller를 사용할지 판단
+
 - 각 컨트롤러마다 자신이 해야하는 일의 path 리스트가 들어있고, 그 리스트의 items와 요청한 경로를 비교하여 매칭판단
 - 매칭된 컨트롤러가 없을 시 httpResponse.do404() 호출
     - do404() : 404 Error Page
@@ -27,13 +32,14 @@ https://drive.google.com/file/d/1Z-KNZgC6X3H5bxXtWifqP7BtFPTPyL_M/view?usp=share
 
 4. 매칭된 Controller의 service() 호출
 5. HttpMethod에 따라 각 역할을 하는 함수 호출 ex) doGet()
+
 - Resource 파일일 경우 파일을 load 하고 httpResponse.forward()를 통해 전달 후 Response 작성
     - 파일이 존재하지 않을 경우 httpResponse.do404() 호출
 - 특정 기능 요청시 ex) /user/create
     - 회원 정보를 db에 저장하는 회원가입 로직 수행후 httpResponse.sendRedirect()를 통해 Response 작성
 
+# 공부내용
 
-# 공부내용 
 ## 서블릿이란?
 
 - Dynamic Web Page를 만들 대 사용되는 자바 기반의 웹 어플리케이션 프로그래밍 기술
@@ -147,6 +153,7 @@ class test {
     fetch와 merge를 연달아 진행한다.
 
 ## Collection.singletonList()
+
 - 전달 인자로 들어온 객체만 포함하는 불변의 리스트를 반환하는 메서드
 - Arrays.asList()를 사용하는 경우
     - 리스트 요소의 속성이 변경되어야 할 때
@@ -158,15 +165,19 @@ class test {
     - 속도 측면에서 가변인자 -> 배열변환의 과정이 없기 때문에 빠르고, 메모리 측면에서 효율적
 
 ## Logging
+
 ### 로깅을 하는 이유
+
 로깅 : 시스템이 동작할 때 시스템의 상태 및 동작 정보를 시간 경과에 따라 기록하는 것을 의미함.  
 로깅을 통해 개발 과정 혹은 개발 후에 발생할 수 있는 예상치 못한 애플리케이션의 문제를 진단할 수 있고,  
 다양한 정보를 수집할 수 있다. 하지만 로깅을 하는 단계에서 적절한 수준의 로그 기록 기준을 잡지 못하면  
 방대한 양의 로그 파일이 생성되거나 의미 없는 로그가 쌓이는 경우가 발생할 수 있다.
 
 ### 로그 레벨
+
 Logback은 5단계의 로그 레벨을 가진다.  
 심각도 수준은 Error > Warn > Info > Debug > Trace 이다.
+
 - ⛔️ `Error` : 예상치 못한 심각한 문제가 발생하는 경우, 즉시 조취를 취해야 할 수준의 레벨
 - ⚠ ️`Warn` : 로직 상 유효성 확인, 예상 가능한 문제로 인한 얘외 처리, 당장 서비스 운영에는 영향이 없지만 주의해야할 부분
 - ✅ `Info` : 운영에 참고할만한 사항, 중요한 비즈니스 프로세스가 완료됨
@@ -177,3 +188,68 @@ Logback은 5단계의 로그 레벨을 가진다.
 `Debug` 이하로 설정하고 로깅을 하지 않는 편이 좋다.
 
 > `Debug`, `Trace` 레벨의 로깅은 개발 단계에서만 사용하고 배포 단계에서 사용하지 말자.
+
+
+## Thread
+### Process란?
+프로세스란 단순히 실행중인 프로그램이라고 할 수 있다.  
+사용자가 작성한 프로그램이 운영체제에 의해 메모리 공간을 할당받아 실행 중인 것을 말함.  
+프로그램에 사용되는 데이터와 메모리 등의 자원 그리고 스레드로 구성됨.
+
+### Thread란?
+프로세스 내에서 실제로 작업을 수행하는 주체.  
+모든 프로세스에는 최소 1개 이상의 스레드가 존재하여 작업을 수행.
+두개 이상의 스레드를 가지는 프로세스를 멀티스레드 프로세스라고 말함.
+
+### Thread의 생성과 실행
+자바에서 스레드를 생성하는 방법에는 두 가지 방법이 있다.
+1. Runnable 인터페이스를 구현 (implements)
+2. Thread 클래스 상속 (extends)
+
+두 방법 모두 스레드를 통해 작업하고 싶은 내용을 run() 메서드에 작성하면 된다.
+
+```java
+class ThreadWithClass extends Thread {
+    public void run() {
+        for (int i = 0; i < 5; i++) {
+            System.out.println(getName()); 
+            try {
+                Thread.sleep(1);          
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+class ThreadWithRunnable implements Runnable {
+    public void run() {
+        for (int i = 0; i < 5; i++) {
+            System.out.println(Thread.currentThread().getName()); 
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+public class Thread01 {
+    public static void main(String[] args) {
+        ThreadWithClass thread1 = new ThreadWithClass();       
+        Thread thread2 = new Thread(new ThreadWithRunnable()); 
+        
+        thread1.start(); 
+        thread2.start(); 
+    }
+}
+```
+<img width="274" alt="스크린샷 2023-01-13 오후 12 28 12" src="https://user-images.githubusercontent.com/80745404/212230509-a7619ac3-8e73-4833-9afd-a17304974c4d.png">
+
+### 스레드의 우선순위
+자바에서 각 스레드는 우선순위에 관한 자신만의 필드가 있다.  
+이러한 우선순위에 따라 특정 스레드가 더 많은 시간 동안 작업을 할 수 있도록 설정할 수 있다.  
+getPriority(), setPriority() 메서드를 통해 스레드의 우선순위를 반환하거나 변경할 수 있다.  
+스레드의 우선순위가 가질 수 있는 범위는 1 ~ 10 까지이며, 숫자가 높을수록 우선순위가 높아진다.  
+스레드의 우선순위는 해당 스레드를 생성한 스레드의 우선순위를 상속받게 된다.
