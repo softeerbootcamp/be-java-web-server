@@ -4,34 +4,35 @@ import request.methodHandler.*;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 public enum HttpMethod {
     GET("GET") {
         @Override
-        public void handle(Request request, DataOutputStream dos) throws IOException {
-            HttpMethodHandler httpMethodHandler = new GETHandlerImpl(dos);
-            httpMethodHandler.handle(request);
+        public byte[] handle(Request request) throws IOException {
+            HttpMethodHandler httpMethodHandler = new GETHandlerImpl();
+            return httpMethodHandler.handle(request);
         }
     },
     POST("POST") {
         @Override
-        public void handle(Request request, DataOutputStream dos) throws IOException {
-            HttpMethodHandler httpMethodHandler = new POSTHandlerImpl(dos);
-            httpMethodHandler.handle(request);
+        public byte[] handle(Request request) throws IOException {
+            HttpMethodHandler httpMethodHandler = new POSTHandlerImpl();
+            return httpMethodHandler.handle(request);
         }
     },
     PUT("PUT") {
         @Override
-        public void handle(Request request, DataOutputStream dos) throws IOException {
-            HttpMethodHandler httpMethodHandler = new PUTHandlerImpl(dos);
-            httpMethodHandler.handle(request);
+        public byte[] handle(Request request) throws IOException {
+            HttpMethodHandler httpMethodHandler = new PUTHandlerImpl();
+            return httpMethodHandler.handle(request);
         }
     },
     DELETE("DELETE") {
         @Override
-        public void handle(Request request, DataOutputStream dos) throws IOException {
-            HttpMethodHandler httpMethodHandler = new DELETEHandlerImpl(dos);
-            httpMethodHandler.handle(request);
+        public byte[] handle(Request request) throws IOException {
+            HttpMethodHandler httpMethodHandler = new DELETEHandlerImpl();
+            return httpMethodHandler.handle(request);
         }
     };
 
@@ -45,5 +46,5 @@ public enum HttpMethod {
         return method;
     }
 
-    public abstract void handle(Request request, DataOutputStream dos) throws IOException;
+    public abstract byte[] handle(Request request) throws IOException;
 }
