@@ -1,12 +1,13 @@
 package controller;
 
-import http.HttpRequest;
-import http.HttpResponse;
+import http.request.HttpRequest;
+import http.response.HttpResponse;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 public interface Controller {
-    void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException;
+    void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException;
 
     boolean isUri(HttpRequest httpRequest);
 

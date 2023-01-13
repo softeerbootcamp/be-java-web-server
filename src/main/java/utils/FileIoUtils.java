@@ -8,15 +8,24 @@ import java.nio.file.Paths;
 
 public final class FileIoUtils {
 
-    private FileIoUtils() {}
+    private static final String ERROR_PATH = "./templates/error404.html";
+
+    private FileIoUtils() {
+    }
 
     public static byte[] loadFile(String filePath) throws IOException {
         try {
             Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI());
             return Files.readAllBytes(path);
-        } catch (URISyntaxException e) {
-            throw new IllegalArgumentException(String.format("%s: URI로 변환불가.", filePath));
+        } catch (NullPointerException | URISyntaxException e) {
+            return "".getBytes();
         }
+    }
+
+    public static byte[] load404ErrorFile() throws IOException, URISyntaxException {
+        Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(ERROR_PATH).toURI());
+        return Files.readAllBytes(path);
+
     }
 
 }

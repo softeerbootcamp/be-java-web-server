@@ -1,8 +1,10 @@
 package controller;
 
-import http.HttpRequest;
-import http.HttpResponse;
+import http.request.HttpRequest;
+import http.response.HttpResponse;
 import http.Uri;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import service.UserService;
 
 import java.io.IOException;
@@ -11,6 +13,9 @@ import java.util.List;
 import java.util.Map;
 
 public class UserCreateController implements Controller {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserCreateController.class);
+
     private final List<String> paths;
 
     public UserCreateController() {
@@ -27,7 +32,7 @@ public class UserCreateController implements Controller {
     @Override
     public boolean isUri(HttpRequest httpRequest) {
         Uri uri = httpRequest.getUri();
-        return paths.stream().anyMatch(uri::isEndsWith);
+        return paths.stream().anyMatch(uri::isStartsWith);
     }
 
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
@@ -35,6 +40,7 @@ public class UserCreateController implements Controller {
         Map<String, String> queryParams = uri.getParameters();
         UserService.create(queryParams);
 
-        httpResponse.setResponse("/index.html");
+        httpResponse.sendRedirect("/index.html");
     }
+
 }

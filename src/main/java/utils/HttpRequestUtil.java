@@ -7,7 +7,8 @@ import java.util.Map;
 
 public final class HttpRequestUtil {
 
-    private HttpRequestUtil() {}
+    private HttpRequestUtil() {
+    }
 
     public static Map<String, String> parseQuerystring(String queryString) {
         Map<String, String> map = new HashMap<>();
