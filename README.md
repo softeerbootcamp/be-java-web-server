@@ -150,6 +150,9 @@
   - new Instance () : 동적 객체 생성시 사용됨
     - 기본 생성자를 호출해 객체를 생성하기 때문에 반드시 클래스에 기본 생성자가 존재해야함
     - 만약 매개변수가 있는 생성자를 호출하고 싶다면 리플랙션으로 Constructor 객체를 얻어 new Instance 진행
+    
+  > new Instance() = Deprecated <br>
+  > -> getDeclaredConstructor().newInstance() 로 수정
 
   - getDeclaredConstructors(), getDeclaredFields(), getDeclaredMethods() : 클래스 생성자, 필드정보, 메소드 정보를 알고 싶을 때 사용한다
 
