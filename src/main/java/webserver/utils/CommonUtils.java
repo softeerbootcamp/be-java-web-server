@@ -1,5 +1,8 @@
 package webserver.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -7,9 +10,11 @@ import java.util.Map;
 
 public class CommonUtils {
 
+    private static final Logger logger = LoggerFactory.getLogger(HttpResponseUtils.class);
+
     public static void readMap(Map<String, String> map){
         for (String key: map.keySet()){
-            System.out.println(key+ " = " + map.get(key));
+            logger.info(key+ " = " + map.get(key));
         }
     }
 
@@ -20,7 +25,7 @@ public class CommonUtils {
     public static Map<String, String> parseStringToMap(String req, String delimenter){
         Map<String, String> map = new HashMap<>();
         Arrays.stream(req.split(delimenter)).forEach(item->{
-            String[] parsedHeader = parseStringToList(item, "\\?");
+            String[] parsedHeader = parseStringToList(item, ":");
             map.put(parsedHeader[0], parsedHeader[1]);
         });
         return map;
