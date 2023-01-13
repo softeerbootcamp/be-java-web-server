@@ -3,8 +3,6 @@ package request.methodHandler;
 import request.Request;
 import request.methodHandler.RequestUrlEnum.GETRequestUrlEnum;
 
-import java.io.DataOutputStream;
-import java.io.OutputStream;
 import java.util.List;
 
 public class GETHandlerImpl implements HttpMethodHandler {

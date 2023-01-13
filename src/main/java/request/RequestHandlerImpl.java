@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import webserver.ClientRequestThread;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 public class RequestHandlerImpl implements RequestHandler {
     private final Logger logger = LoggerFactory.getLogger(ClientRequestThread.class);
@@ -22,6 +21,6 @@ public class RequestHandlerImpl implements RequestHandler {
             e.printStackTrace();
         }
 
-        return null; //no method from HttpMethod matches
+        return null;
     }
 }

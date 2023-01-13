@@ -11,7 +11,6 @@ public class HttpResponse {
 
     private HttpResponse(OutputStream outputStream) {
         this.outputStream = new DataOutputStream(outputStream);
-
     }
 
     public static void Http200Response(Request request, OutputStream outputStream, HttpResponseBody responseBody) throws IOException {
