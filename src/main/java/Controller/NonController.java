@@ -37,7 +37,7 @@ public class NonController extends Controller {
 
     public HttpResponse responseRoot() {
         logger.debug("[responseRoot]");
-        HttpResponse httpResponse1 = HttpResponse.createHttpResponse("/index.html", StatusCode.OK, httpRequest.getProtocol());
-        return httpResponse1;
+        HttpResponse httpResponse = HttpResponse.createHttpResponse("/index.html", StatusCode.OK, httpRequest.getProtocol());
+        return httpResponse;
     }
 }
