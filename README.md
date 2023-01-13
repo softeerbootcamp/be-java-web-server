@@ -1,8 +1,125 @@
 # java-was-2022
+
 Java Web Application Server 2022
 
+## 프로젝트 정보
 
-## 프로젝트 정보 
-
-이 프로젝트는 우아한 테크코스 박재성님의 허가를 받아 https://github.com/woowacourse/jwp-was 
+이 프로젝트는 우아한 테크코스 박재성님의 허가를 받아 https://github.com/woowacourse/jwp-was
 를 참고하여 작성되었습니다.
+
+## 데모 영상
+
+https://drive.google.com/file/d/1Z-KNZgC6X3H5bxXtWifqP7BtFPTPyL_M/view?usp=share_link
+
+# 공부내용 
+## 서블릿이란?
+
+- Dynamic Web Page를 만들 대 사용되는 자바 기반의 웹 어플리케이션 프로그래밍 기술
+- 웹 요청과 응답의 흐름을 간단한 메서드 호출만으로 체계적으로 다룰 수 있게 해주는 기술
+
+## 서블릿의 특징
+
+- Client의 Request에 대해 동적으로 작동하는 웹 애플리케이션 컴포넌트
+- HTML을 사용하여 Response
+- JAVA의 스레드를 이용하여 동작
+- MVC 패턴에서의 컨트롤러로 이용됨
+- HTTP 프로토콜 서비스를 지원하는 javax.servlet.HttpServlet 클래스를 상속받음
+- UDP보다 속도가 느림
+- HTML 변경 시 Servlet을 재 컴파일해야 하는 단점이 있다.
+
+## 클라이언트의 요청으로부터 시작되는 웹서버의 처리 순서
+
+1. 클라이언트가 웹 브라우저에서 서비스 요청. 이때, HTTP 프로토콜 기반으로 요청정보가 만들어져 웹 서버에 전달
+2. 웹 서버는 클라이언트로부터 전달받은 요청정보의 URI를 살펴보고, 서블릿이라면 서블릿 컨테이너에 처리를 넘김
+3. 서블릿 컨테이너는 요청받은 서블릿 클래스 파일을 찾아서 실행
+4. 실행할 때 첫 순서는 최초의 요청인지 파악. 최초의 요청이라면 메모리에 로딩 후 객체를 생성하고 init() 메소드 호출
+5. init() 메소드 실행이 끝난 다음에는 최초의 요청이든지 그렇지 않든지 서블릿 실행 요청이 들어올 때마다 실행되는 작업으로,
+   서블릿 컨테이너는 HttpServletRequest 와 HttpServletResponse 객체 생성
+6. service() 메소드 호출. 이때, 앞에서 생성한 HttpServletRequest 와 HttpServletResponse 객체는 클라이언트에게 보내는 응답정보를 처리할 목적으로 생성
+7. service() 매소드 완료시 클라이언트에게 응답을 보내고 서버에서 실행되는 프로그램은 완료됨. 이때 두 객체 모두 소멸
+
+## Request HTTP 메시지
+
+1. StartLine
+
+- HTTP Method : GET, POST, PUT, DELETE 등
+- Request Target
+- HTTP Version
+
+2. Header
+
+- Host : 요청하려는 서버 호스트 이름과 포트번호
+- User-agent : 클라이언트 프로그램 정보 (이 정보를 통해 서버는 클라이언트 프로그램에 맞는 최적의 데이터 전송 가능)
+- Referer : 현재 페이지에 요청한 이전 페이지의 uri 정보
+- Accept : 클라이언트가 처리 가능한 미디어 타입 종류 나열
+- If-Modified-Since : 여기에 쓰여진 시간 이후로 변경된 리소스 취득, 페이지 수정 시 최신 페이지로 교체
+- Authorization : 인증 토큰을 서버로 보낼 때 쓰이는 Header
+- Origin : 서버로 Post 요청을 보낼 때 요청이 어느 주소에 시작되었는지 나타내는 값. 이 값으로 요청을 보낸 주소와 받는 주소가 다르면 CORS 에러 발생
+- Cookie : 쿠키 값이 key-value 로 표현됨
+
+3. Body
+
+## 테스트코드 (assertThat 관련)
+
+### isEqualTo
+
+결과가 기대하는 값과 일치하는지 확인
+
+```java
+class test {
+    @Test
+    void checkNumEqual() {
+        int num = 1;
+        assertThat(num).isEqualTo(1);
+    }
+}
+```
+
+### assertThatThrownBy
+
+Exception이 발생하는 케이스를 테스트 할 때 사용
+
+```java
+class test {
+    @Test
+    void charAt_범위_밖() throws Exception {
+        // given
+        String input = "abc";
+
+        // when, then
+        assertThatThrownBy(() -> input.charAt(input.length()))
+                .isInstanceOf(StringIndexOutOfBoundsException.class)
+                .hasMessageContaining("String index out of range")
+                .hasMessageContaining(String.valueOf(input.length()));
+    }
+}
+```
+
+- Params : exception이 발생하는 메서드를 람다식으로 입력
+- Chaining
+    - isInstanceOf : 예상되는 exception을 .class 형태로 입력
+    - hasMessageContaining : exception 메시지에 입력되는 문자열이 포함되는지 확인
+
+## Exception
+
+- ArrayIndexOutOfBoundException
+    - 배열의 크기보다 크거나 음수 인덱스에 대한 요청이 있을시 발생하는 런타임 에러
+- NullPointerException
+    - null 값을 가지는 객체를 참조하려고 사용할 시 발생하는 런타임 에러
+
+## Git
+
+### 원격 저장소에서 업데이트 받아오기
+
+- Alice가 로컬 저장소의 main 브랜치를 업데이트 하려한다.
+- 며칠 전 Bob이 원본 원격 저장소 alice/project에 커밋을 추가했다.
+- 원본 저장소 alice/project에 추가된 3개의 커밋을 로컬 저장소로 가져와 업데이트하고자 한다.
+
+#### fetch
+
+    fetch를 실행하면 원격 저장소의 내용을 로컬 저장소로 가져오며, 임시로 FETCH_HEAD 라는 이름의 브랜치를 만든다.
+    merge로 가져온 내용을 main 브랜치에 merge 한다. 만약 충돌 발생 시 직접 파일을 수정해야한다.
+
+#### pull
+
+    fetch와 merge를 연달아 진행한다.
