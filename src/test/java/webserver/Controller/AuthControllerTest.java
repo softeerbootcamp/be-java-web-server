@@ -36,7 +36,7 @@ class AuthControllerTest {
         byte[] joinResult = "testResult".getBytes();
 
         // when
-        authController.userCreate(queryStrs);
+        authController.userCreate(queryStrs, response);
         when(authService.join("testUser", "testPass", "testName", "test@email.com")).thenReturn(joinResult);
 
         //then
@@ -60,7 +60,7 @@ class AuthControllerTest {
         authController.chain(path, queryStrs, res);
 
         //then
-        verify(authController, times(1)).userCreate(queryStrs);
+        verify(authController, times(1)).userCreate(queryStrs, res);
     }
 
 
