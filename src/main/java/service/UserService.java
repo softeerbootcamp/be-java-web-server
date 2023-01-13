@@ -1,4 +1,4 @@
-package db;
+package service;
 
 import com.google.common.collect.Maps;
 

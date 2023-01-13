@@ -1,10 +1,11 @@
 package controller;
 
-import db.StaticFileService;
+import httpMock.CustomHttpErrorFactory;
 import httpMock.CustomHttpRequest;
 import httpMock.CustomHttpResponse;
 import httpMock.constants.ContentType;
 import httpMock.constants.StatusCode;
+import service.StaticFileService;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +13,7 @@ import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import static db.StaticFileService.getFileTypeFromUrl;
+import static service.StaticFileService.getFileTypeFromUrl;
 
 public class StaticFileController implements RequestController {
     private static final StaticFileController fileController = new StaticFileController();
@@ -37,7 +38,7 @@ public class StaticFileController implements RequestController {
             byte[] data = Files.readAllBytes(file.toPath());
             return CustomHttpResponse.of(StatusCode.OK, contentType, new HashMap<>(), data);
         } catch (IOException e) {
-            return RequestController.NOT_FOUND();
+            return CustomHttpErrorFactory.NOT_FOUND();
         }
     }
 

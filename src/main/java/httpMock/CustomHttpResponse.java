@@ -3,11 +3,14 @@ package httpMock;
 import httpMock.constants.ContentType;
 import httpMock.constants.StatusCode;
 
+import java.util.Collections;
 import java.util.Map;
 
 public class CustomHttpResponse {
     public static final byte[] EMPTY_BODY = "".getBytes();
+    public static final Map<String, String> EMPTY_HEADER = Collections.EMPTY_MAP;
     private final StatusCode statusCode;
+    private final ContentType contentType;
     private final Map<String, String> headers;
     private final byte[] body;
 
@@ -15,7 +18,7 @@ public class CustomHttpResponse {
         this.statusCode = statusCode;
         this.headers = headers;
         this.body = body;
-        headers.put("Content-Type", contentType.getContentType());
+        this.contentType = contentType;
     }
 
     public static CustomHttpResponse of(StatusCode statusCode, ContentType contentType, Map<String, String> headers, byte[] body) {
@@ -26,8 +29,12 @@ public class CustomHttpResponse {
         return this.headers;
     }
 
-    public StatusCode getStatusCode() {
-        return statusCode;
+    public String getContentTypeLine(){
+        return "Content-Type: " + contentType.getContentType();
+    }
+
+    public String getStatusLine(String protocol){
+        return protocol + " " + statusCode.getCode() + " " + statusCode.getMessage();
     }
 
     public byte[] getBody() {

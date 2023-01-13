@@ -14,6 +14,7 @@ import java.net.Socket;
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
+    public static final String CRLF = "\r\n";
     private final Socket connection;
 
     public RequestHandler(Socket connectionSocket) {
@@ -30,21 +31,23 @@ public class RequestHandler implements Runnable {
 
             CustomHttpResponse res = requestRouter.handleRequest(req);
 
-            response(req.getProtocolVersion(), res, out);
+            sendResponse(res, out, req.getProtocolVersion());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void response(String protocolVersion, CustomHttpResponse response, OutputStream out) {
+    private void sendResponse(CustomHttpResponse response, OutputStream out, String protocolVersion) {
         try {
             DataOutputStream dos = new DataOutputStream(out);
-            dos.writeBytes(protocolVersion + " " + response.getStatusCode().getCode() + " " + response.getStatusCode().getMessage() + "\r\n");
+            dos.writeBytes( response.getStatusLine(protocolVersion) + CRLF);
+            dos.writeBytes(response.getContentTypeLine() + CRLF);
             for (String key : response.getHeaders().keySet()) {
-                dos.writeBytes(key + ": " + response.getHeaders().get(key) + "\r\n");
+                dos.writeBytes(key + ": " + response.getHeaders().get(key) + CRLF);
             }
-            dos.writeBytes("Content-Length: " + response.getBody().length + "\r\n");
-            dos.writeBytes("\r\n");
+            dos.writeBytes("Content-Length: " + response.getBody().length + CRLF);
+            dos.writeBytes(CRLF);
+
             dos.write(response.getBody(), 0, response.getBody().length);
             dos.flush();
         } catch (IOException e) {
