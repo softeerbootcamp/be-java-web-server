@@ -10,7 +10,7 @@ public class PathUtils {
         if (path.endsWith(ContentType.CSS.getExtensionValue())) {
             return ContentType.CSS.getMimeData();
         }
-        if (path.endsWith(ContentType.CSS.getExtensionValue())) {
+        if (path.endsWith(ContentType.JS.getExtensionValue())) {
             return ContentType.JS.getMimeData();
         }
         return "text/plain";

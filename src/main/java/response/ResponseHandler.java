@@ -26,7 +26,7 @@ public class ResponseHandler {
             IllegalAccessException,
             NoSuchMethodException,
             InvocationTargetException {
-        
+
         if (httpRequest.isForStaticContent()) {
             String path = httpRequest.getPath();
             byte[] body = FileIoUtils.loadFileFromClasspath(path);
