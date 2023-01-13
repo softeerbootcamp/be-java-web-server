@@ -37,14 +37,19 @@ public class HttpResponse {
         httpHeader.addHeader(name, value);
     }
 
+    public void setEmptyBody() {
+        this.body = new byte[0];
+    }
+
     public void setBody(String viewPath) throws IOException {
-        byte[] body = new byte[0];
         File file = new File(viewPath);
         if (file.exists() && file.isFile()) {
-            body = Files.readAllBytes(file.toPath());
+            this.body = Files.readAllBytes(file.toPath());
         }
 
-        this.body = body;
+        if (this.body == null) {
+            throw new IllegalArgumentException();
+        }
         addHttpHeader("Content-Length", String.valueOf(body.length));
     }
 
