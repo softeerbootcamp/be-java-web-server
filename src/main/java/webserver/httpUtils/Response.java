@@ -68,7 +68,7 @@ public class Response {
     {
         try {
             dos.writeBytes(resLine.get(VERSION) + " " +resLine.get(CODE)+" "+resLine.get(TEXT)+"\r\n");
-            dos.writeBytes("Location: /index.html\r\n");
+            dos.writeBytes("Location: " + Paths.HOME_PATH + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -87,11 +87,11 @@ public class Response {
         }
     }
 
-    public void probeResLine(String reqMethod, String reqQuery, String reqVersion)
+    public void probeResLine(Map<String, String> reqLine)
     {
-        resLine.put(VERSION, reqVersion);
+        resLine.put(VERSION, reqLine.get(Request.REQLINE_VERSION));
 
-        if(isSignUp(reqQuery))
+        if(isSignUp(reqLine.get(Request.REQLINE_QUERY)))
         {
             resLine.put(CODE, "302");
             resLine.put(TEXT, "FOUND");

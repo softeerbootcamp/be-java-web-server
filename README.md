@@ -16,7 +16,7 @@ hyperText인 html을 전송하기 위한 통신규약
 - stateless
 - tcp와 udp를 사용하며, 80번 포트
 ### HTTP 동작방식
-![img.png](img.png)
+![img.png](ReadmeImg/img.png)
 1. 사용자가 브라우저에 URL을 입력한다.
 2. 브라우저가 request 메시지를 보낸다(http request)
 3. 서버는 메시지를 바탕으로 정해진 일을 수행한다.
@@ -27,7 +27,7 @@ hyperText인 html을 전송하기 위한 통신규약
 
 ### HTTP Request
 HTTP Request Message = Request Line + Request Header + Request Body
-![img_1.png](img_1.png)
+![img_1.png](ReadmeImg/img_1.png)
 - Request Line
 
   요청 메소드 + 요청 URI + HTTP 프로토콜 버전으로 이루어져 있음.
@@ -42,7 +42,7 @@ HTTP Request Message = Request Line + Request Header + Request Body
 
 ### HTTP Response
 HTTP Response Message = Status Line + Response Header + Response Body
-![img_2.png](img_2.png)
+![img_2.png](ReadmeImg/img_2.png)
 - Status Line
   - HTTP 버전
   - Status code: 응답 상태를 나타내는 코드. [HTTP Status Code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
@@ -62,11 +62,11 @@ HTTP Response Message = Status Line + Response Header + Response Body
 웹 백엔드 개발 시, 프론트엔드에서 사용하는 경로의 루트가 벡엔드에서 사용하는 루트와 다름에 주의하자.
 - IDE에서 보이는 경로
  
-![img_3.png](img_3.png)
+![img_3.png](ReadmeImg/img_3.png)
 
 - 프론트엔드에서 보이는 경로
 
-![img_4.png](img_4.png)
+![img_4.png](ReadmeImg/img_4.png)
 
 [사진 출처](https://myblog.opendocs.co.kr/archives/436) 현 프로젝트의 구조와 다릅니다. 참고용으로만 보시길 바랍니다.
 
@@ -75,7 +75,7 @@ HTTP Response Message = Status Line + Response Header + Response Body
 ### html에서 자동 redirect
 html 문서의 head에서 meta태그 안에 다음과 같은 정보를 주면 해당 파일이 브라우저에 띄워진 후, 명시된 곳으로 redirect된다.
 
-![img_5.png](img_5.png)
+![img_5.png](ReadmeImg/img_5.png)
 
 
 ### HTTP code 30x을 사용한 redirect
@@ -90,6 +90,11 @@ html 문서의 head에서 meta태그 안에 다음과 같은 정보를 주면 �
 - 302 Found
 
   브라우저가 요청했던 uri가 일시적으로 변경된 경우
+
+![img.png](ReadmeImg/302동작과정.png)
+302 Found 메시지가 어떤 과정을 거쳐 전달되는지 도식화
+[출처](https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=netmaniascom&logNo=80138330596)
+
 
 ### 확장자를 마임타입(content type)으로 쉽게 변환하는 법
 
