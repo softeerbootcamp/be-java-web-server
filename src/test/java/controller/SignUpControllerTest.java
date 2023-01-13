@@ -46,7 +46,7 @@ public class SignUpControllerTest {
     }
 
     @Test
-    @DisplayName("excute() - 지원하지 않는 메서드(POST) 테스트")
+    @DisplayName("execute() - 지원하지 않는 메서드(POST) 테스트")
     void signUpToNotAllowMethod() {
         // given
         SignUpController controller = new SignUpController();
