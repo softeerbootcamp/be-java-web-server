@@ -7,13 +7,13 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
+import controller.ServletController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.Header;
 import request.HttpRequest;
 import response.HttpResponse;
 import servlet.Servlet;
-import servlet.UserCreate;
 import util.FileIoUtils;
 import util.PathUtils;
 
@@ -23,13 +23,13 @@ public class RequestHandler implements Runnable{
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private final Socket connection;
-    private final Map<String, Class<? extends Servlet>> controller;
+
+    private ServletController controller;
 
 
     public RequestHandler(Socket connectionSocket) {
-        this.controller = new HashMap<>();
         this.connection = connectionSocket;
-        controller.put("/user/create", UserCreate.class);
+        controller = new ServletController();
     }
 
     public void run() {
@@ -86,10 +86,10 @@ public class RequestHandler implements Runnable{
 
         if (httpRequest.isQueryContent()) {
             String path = httpRequest.getPath();
-            logger.debug("httpRequest path : {}",path);
-            Class<? extends Servlet> servletClass = controller.get(path);
-            logger.debug("servlet name : {}",servletClass.getName());
-            Servlet servlet = servletClass.getDeclaredConstructor().newInstance();
+            Class<? extends Servlet> servletClass = controller.getServlet(path);
+
+            logger.debug("servlet name : {}", servletClass.getName());
+            Servlet servlet = controller.newInstance(servletClass);
             servlet.service(httpRequest);
 
             Map<String, String > headerFields = new HashMap<>();
