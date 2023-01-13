@@ -1,13 +1,11 @@
 # java-was-2022
 Java Web Application Server 2022
-
-
 ## 프로젝트 정보 
-
 이 프로젝트는 우아한 테크코스 박재성님의 허가를 받아 https://github.com/woowacourse/jwp-was 
 를 참고하여 작성되었습니다.
 
-## Step 1 - index.html 응답
+## 프로젝트 수행 과정
+### Step 1 - index.html 응답
 최초의 상태는 localhost:8080으로 접속 시에 "Hello World"를 출력해준다. 이는 구현되어 있는 responseBody 메서드에 해당 문구를 byte[]로 변환하여 응답해주기 때문이다.
 
 응답으로 index.html을 넘겨주는 방식으로 개선하기 위해서는 
@@ -23,7 +21,7 @@ index.html에 대한 HTTP Request 메시지의 첫 라인은 **GET /index.html H
 
 하여 해결 가능하다.
 
-## Step 2 - GET으로 회원가입
+### Step 2 - GET으로 회원가입
 현재 회원가입은 http://localhost:8080/user/create?userId=aa&password=bb&name=cc&email=dd@dd 의 예처럼 쿼리스트링으로 전송된다. 실제 웹 서버에서는 이보다 훨씬 더 많은 종류의 요청 메시지를 처리해야 하지만, 현재 요구사항대로 GET요청으로 들어오는 회원가입을 처리하는 것에 집중하였다. 요구조건을 만족하기 위해 필요한 과정은 아래와 같다.
 1. url에 쿼리스트링 존재 여부를 판단하여 쿼리스트링만을 추출
 2. 추출된 쿼리스트링을 각 파라미터 별로 파싱
