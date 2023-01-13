@@ -2,7 +2,7 @@ package util;
 
 import Controller.Controller;
 import Controller.UserController;
-import Controller.ResourceController;
+import Controller.StaticResourceController;
 import http.request.HttpRequest;
 
 import java.util.LinkedHashMap;
@@ -26,7 +26,7 @@ public class ControllerMapper {
         }
 
         if (url.equals("/") || url.contains(".")) {
-            return new ResourceController();
+            return new StaticResourceController();
         }
 
         throw new IllegalArgumentException();
