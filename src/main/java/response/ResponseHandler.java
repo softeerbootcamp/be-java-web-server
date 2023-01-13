@@ -17,6 +17,9 @@ import java.util.Map;
 
 public class ResponseHandler {
 
+    /*TODO
+    *   Exception 을 이렇게 주렁주렁 작성하는 것이 맞는지
+    * */
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
     public static HttpResponse controlRequestAndResponse(HttpRequest httpRequest)
@@ -53,6 +56,7 @@ public class ResponseHandler {
             Header header = new Header(headerFields);
             return HttpResponse.of("302", header);
         }
+
         throw new AssertionError("HttpRequest는 정적 혹은 동적 컨텐츠 요청만 가능합니다.");
     }
 

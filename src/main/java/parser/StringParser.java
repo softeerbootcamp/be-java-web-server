@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StringParser {
+    /* TODO
+    *   Exception을 로직 중 하나로 사용하는게 맞는것인가
+    * */
     public static Map<String,String> dataParsing(String line) {
         Map<String, String> map = new HashMap<>();
         String[] userInfo = line.split("\\?|&");

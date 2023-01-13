@@ -9,6 +9,11 @@ import java.util.Map;
 
 public class ServletController {
 
+    /*
+    *  TODO :
+    *   정적 팩토리 메서드에서 멤버 변수를 controller static 으로 구현하는게 어색한데, 왜일까..?
+    * */
+
     private static Map<String, Class<? extends Servlet>> controller = new HashMap<>();
     private final Class<? extends Servlet> servlet;
 
