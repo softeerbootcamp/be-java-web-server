@@ -24,8 +24,6 @@ public class URI {
         Map<String, String> queryStr = new HashMap<>();
         if(parsedPath.length > 1)
             queryStr = parseQueryString(parsedPath[1]);
-        System.out.println(parsedPath[0]);
-
         return of(queryStr, parsedPath[0]);
     }
 
@@ -36,4 +34,6 @@ public class URI {
     public String getPath() {
         return path;
     }
+
+
 }
