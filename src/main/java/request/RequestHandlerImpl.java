@@ -2,6 +2,7 @@ package request;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import request.enums.HttpMethod;
 import webserver.ClientRequestThread;
 
 import java.io.IOException;

@@ -1,5 +1,6 @@
-package request;
+package request.enums;
 
+import request.Request;
 import request.methodHandler.*;
 
 import java.io.DataOutputStream;

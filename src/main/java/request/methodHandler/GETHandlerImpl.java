@@ -1,7 +1,7 @@
 package request.methodHandler;
 
 import request.Request;
-import request.methodHandler.RequestUrlEnum.GETRequestUrlEnum;
+import request.enums.GETRequestUrlEnum;
 
 import java.util.List;
 

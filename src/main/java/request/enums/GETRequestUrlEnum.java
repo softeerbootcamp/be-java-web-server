@@ -1,4 +1,4 @@
-package request.methodHandler.RequestUrlEnum;
+package request.enums;
 
 import model.User;
 import org.slf4j.Logger;
