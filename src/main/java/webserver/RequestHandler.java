@@ -14,6 +14,7 @@ import response.HttpResponse;
 import servlet.Servlet;
 import servlet.UserCreate;
 import util.FileIoUtils;
+import util.PathUtils;
 
 
 public class RequestHandler implements Runnable{
@@ -61,15 +62,9 @@ public class RequestHandler implements Runnable{
             byte[] body = FileIoUtils.loadFileFromClasspath(path);
             Map<String, String > headerFields = new HashMap<>();
 
-            if (path.endsWith(".html")) {
-                headerFields.put("Content-Type", "text/html;charset=utf-8");
-            } else if (path.endsWith(".css")) {
-                headerFields.put("Content-Type", "text/css");
-            } else if (path.endsWith(".js")) {
-                headerFields.put("Content-Type", "application/javascript");
-            } else {
-                headerFields.put("Content-Type", "text/plain");
-            }
+            String mData = PathUtils.pathEndCheck(path);
+
+            headerFields.put("Content-Type", mData);
 
             logger.debug("Content-Type : {}", headerFields.get("Content-Type"));
             headerFields.put("Content-Length", String.valueOf(body.length));
