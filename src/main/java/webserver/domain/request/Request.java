@@ -18,11 +18,6 @@ public class Request {
         return new Request(RequestLine.from(reqLine), parseStringToMap(header,"\n"));
     }
 
-    public void readRequest(){
-        requestLine.readReqLine();
-        readMap(header);
-    }
-
     public Map<String, String> getRequestHeader() {
         return header;
     }
