@@ -47,17 +47,25 @@ public class RequestHandler implements Runnable {
 
             HttpResponse httpResponse;
             UrlType urlType = UrlType.getUrlType(httpRequest.getUrl().getUrl());
-            if (controller instanceof FileController) {
-                if (urlType.equals(UrlType.TEMPLATES_FILE)) {
-                    httpResponse=((FileController) controller).TemplateController(clientOutPutStream, httpRequest);
-                } else if (urlType.equals(UrlType.STATIC_FILE)) {
-                    httpResponse=((FileController) controller).StaticController(clientOutPutStream, httpRequest);
+            try {
+                if (controller instanceof FileController) {
+                    if (urlType.equals(UrlType.TEMPLATES_FILE)) {
+                        httpResponse = ((FileController) controller).TemplateController(clientOutPutStream, httpRequest);
+                    } else if (urlType.equals(UrlType.STATIC_FILE)) {
+                        httpResponse = ((FileController) controller).StaticController(clientOutPutStream, httpRequest);
+                    }
+                } else if (controller instanceof UserController) {
+                    httpResponse = ((UserController) controller).UserQueryString(clientOutPutStream, httpRequest);
                 }
-            } else if (controller instanceof UserController) {
-                httpResponse = ((UserController) controller).UserQueryString(clientOutPutStream, httpRequest);
-            } else if (controller instanceof ErrorController) {
+                else{
+                    httpResponse = ((ErrorController) controller).getErrorResponse(clientOutPutStream);
+                }
+            } catch (Exception e) {
+                controller = new ErrorController();
+                logger.error("해당 url에 맞는 controller 가 없습니다. url: {}", httpRequest.getUrl().getUrl());
                 httpResponse = ((ErrorController) controller).getErrorResponse(clientOutPutStream);
             }
+
 
 
 
@@ -66,4 +74,5 @@ public class RequestHandler implements Runnable {
         }
     }
 }
+
 
