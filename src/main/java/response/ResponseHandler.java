@@ -27,8 +27,6 @@ public class ResponseHandler {
             NoSuchMethodException,
             InvocationTargetException {
 
-        ServletController controller = new ServletController();
-
         if (httpRequest.isForStaticContent()) {
             String path = httpRequest.getPath();
             byte[] body = FileIoUtils.loadFileFromClasspath(path);
@@ -45,8 +43,8 @@ public class ResponseHandler {
 
         if (httpRequest.isQueryContent()) {
             String path = httpRequest.getPath();
-            Class<? extends Servlet> servletClass = controller.getServlet(path);
-            Servlet servlet = controller.newInstance(servletClass);
+            ServletController servletController = ServletController.of(path);
+            Servlet servlet = servletController.newInstance();
             servlet.service(httpRequest);
 
             Map<String, String > headerFields = new HashMap<>();

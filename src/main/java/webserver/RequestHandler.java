@@ -37,18 +37,8 @@ public class RequestHandler implements Runnable{
             HttpRequest httpRequest = generateHttpRequest(in);
             HttpResponse httpResponse = ResponseHandler.controlRequestAndResponse(httpRequest);
             respondToHttpRequest(out, httpResponse);
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             logger.error(e.getMessage());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
         }
     }
 
@@ -57,11 +47,8 @@ public class RequestHandler implements Runnable{
         return HttpRequest.of(br);
     }
 
-
-
     private void respondToHttpRequest(OutputStream out, HttpResponse httpResponse) {
         DataOutputStream dos = new DataOutputStream(out);
         httpResponse.respond(dos);
     }
-
 }
