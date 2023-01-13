@@ -37,12 +37,12 @@ public class ViewController implements Controller {
     private Response getStaticFileResponse(Request request) {
         RequestLine requestLine = request.getRequestLine();
 
-        byte[] body = {};
+        byte[] body;
         try {
             body = Files.readAllBytes(new File(generatePath(requestLine.getContentType()) +
                     requestLine.getUri()).toPath());
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            return Response.of(request, Status.NOT_FOUND);
         }
 
         Map<Header, String> headers = response200Header(requestLine.getContentType(), body.length);
