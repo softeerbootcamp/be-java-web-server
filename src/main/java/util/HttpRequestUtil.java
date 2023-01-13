@@ -32,9 +32,9 @@ public class HttpRequestUtil {
         }
     }
 
-    public static String getRequestAttribute(String reqURL){
+    public static String getRequestAttribute(String onlyURL){
         try{
-            return (reqURL.substring(reqURL.lastIndexOf("/")));
+            return (onlyURL.substring(onlyURL.lastIndexOf("/")));
         } catch (StringIndexOutOfBoundsException e){
             return "";
         }

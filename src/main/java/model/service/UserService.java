@@ -14,7 +14,11 @@ public class UserService {
     }
 
     public String join(User user){
-        ValidateDuplicate(user);
+        try {
+            ValidateDuplicate(user);
+        } catch (IllegalStateException e){
+            throw e;
+        }
         userRepository.addUser(user);
         return user.getUserId();
     }
