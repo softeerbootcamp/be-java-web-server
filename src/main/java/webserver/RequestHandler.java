@@ -2,23 +2,12 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.HashMap;
 
-import controller.Controller;
-import controller.ErrorController;
-import controller.FileController;
-import controller.UserController;
-import db.Database;
-import db.UserDatabase;
+import controller.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reader.RequestGetReader;
-import reader.RequestReader;
 import request.HttpRequest;
 import response.HttpResponse;
-import service.Service;
-import service.UserService;
-import util.FileType;
 import util.UrlType;
 
 public class RequestHandler implements Runnable {
@@ -43,8 +32,17 @@ public class RequestHandler implements Runnable {
 
             DataOutputStream clientOutPutStream = new DataOutputStream(out);
 
-            controller = Controller.FactoryController(httpRequest.getUrl());
+//TODO ControllerHandler 구현 진행중 ( 아래의 코드를 삭제후 주석코드로 리팩토링 진행중)
+//            ControllerHandlerImp controller1 = ControllerHandlerImp.findController(httpRequest.getUrl());
+//            try{
+//                controller1.handle(httpRequest.getUrl(), clientOutPutStream, httpRequest);
+//            } catch (Exception e) {
+//                controller = new ErrorController();
+//                logger.error("해당 url에 맞는 controller 가 없습니다. url: {}", httpRequest.getUrl().getUrl());
+//                ((ErrorController) controller).getErrorResponse(clientOutPutStream);
+//            }
 
+            controller = Controller.FactoryController(httpRequest.getUrl());
             HttpResponse httpResponse;
             UrlType urlType = UrlType.getUrlType(httpRequest.getUrl().getUrl());
             try {
@@ -67,12 +65,12 @@ public class RequestHandler implements Runnable {
             }
 
 
-
-
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
+
+
 }
 
 
