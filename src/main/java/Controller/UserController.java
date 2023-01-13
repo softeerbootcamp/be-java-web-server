@@ -30,6 +30,7 @@ public class UserController implements Controller {
 
             response.setHttpStatusLine(request, HttpStatusCode.FOUND);
             response.addHttpHeader("Location", "/user/login.html");
+            response.setEmptyBody();
 
             return "";
         }
