@@ -22,7 +22,7 @@ public class HttpURIParserTest {
         // then
         assertAll(
                 () -> assertEquals("/index.html", parse.getPath()),
-                () -> assertEquals(0, parse.getQuerys().size())
+                () -> assertEquals(0, parse.getQueries().size())
         );
     }
 
@@ -38,9 +38,9 @@ public class HttpURIParserTest {
         // then
         assertAll(
                 () -> assertEquals("/index.html", parse.getPath()),
-                () -> assertEquals(2, parse.getQuerys().size()),
-                () -> assertEquals("sol", parse.getQuerys().get("name")),
-                () -> assertEquals("26", parse.getQuerys().get("age"))
+                () -> assertEquals(2, parse.getQueries().size()),
+                () -> assertEquals("sol", parse.getQueries().get("name")),
+                () -> assertEquals("26", parse.getQueries().get("age"))
         );
     }
 
@@ -56,7 +56,7 @@ public class HttpURIParserTest {
         // then
         assertAll(
                 () -> assertEquals("/index", parse.getPath()),
-                () -> assertEquals(0, parse.getQuerys().size())
+                () -> assertEquals(0, parse.getQueries().size())
         );
     }
 
@@ -72,8 +72,8 @@ public class HttpURIParserTest {
         // then
         assertAll(
                 () -> assertEquals("/index", parse.getPath()),
-                () -> assertEquals(1, parse.getQuerys().size()),
-                () -> assertEquals("", parse.getQuerys().get("name"))
+                () -> assertEquals(1, parse.getQueries().size()),
+                () -> assertEquals("", parse.getQueries().get("name"))
         );
     }
 
@@ -89,8 +89,8 @@ public class HttpURIParserTest {
         // then
         assertAll(
                 () -> assertEquals("/index", parse.getPath()),
-                () -> assertEquals(1, parse.getQuerys().size()),
-                () -> assertEquals("", parse.getQuerys().get("name"))
+                () -> assertEquals(1, parse.getQueries().size()),
+                () -> assertEquals("", parse.getQueries().get("name"))
         );
     }
 
@@ -106,9 +106,9 @@ public class HttpURIParserTest {
         // then
         assertAll(
                 () -> assertEquals("/index", parse.getPath()),
-                () -> assertEquals(2, parse.getQuerys().size()),
-                () -> assertEquals("", parse.getQuerys().get("name")),
-                () -> assertEquals("", parse.getQuerys().get("age"))
+                () -> assertEquals(2, parse.getQueries().size()),
+                () -> assertEquals("", parse.getQueries().get("name")),
+                () -> assertEquals("", parse.getQueries().get("age"))
         );
     }
 }
