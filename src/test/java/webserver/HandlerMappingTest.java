@@ -2,7 +2,7 @@ package webserver;
 
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
-import webserver.HandlerMapping.ControllerType;
+import webserver.Controller.Controller;
 import webserver.domain.request.Request;
 import webserver.domain.response.Response;
 import webserver.exception.HttpRequestException;
@@ -12,8 +12,6 @@ import static org.mockito.Mockito.mock;
 public class HandlerMappingTest {
 
     HandlerMapping handlerMapping;
-
-    Request req;
 
     @BeforeEach
     void testSetUp() {
@@ -25,29 +23,23 @@ public class HandlerMappingTest {
     public void getHandlerTest_callValidController() throws HttpRequestException {
         //given
         String path = "/user/create";
+        Response res = mock(Response.class);
+        Request req = mock(Request.class);
         //when
-        ControllerType controllerType = ControllerType.findController(path);
+        Controller controllerType = handlerMapping.getHandler(req, res);
         //then
-        Assertions.assertEquals(controllerType, ControllerType.USER);
-    }
-
-    @Test
-    @DisplayName("스태틱 컨트롤러를 호출했을 때")
-    public void getHandlerTest_callStaticController() throws HttpRequestException {
-        //given
-        String path = "/other/create";
-        //when
-        ControllerType controllerType = ControllerType.findController(path);
-        //then
-        Assertions.assertEquals(controllerType, ControllerType.STATIC);
+        Assertions.assertEquals(HandlerMapping.controllerMap.get("/user"), controllerType);
     }
 
     @Test
     @DisplayName("존재하지 않은 컨트롤러를 호출했을 때")
     public void getHandlerTest_inValidController() throws HttpRequestException {
         //given
-        String path = "lorem";
+        String path = "/lorem";
+        Response res = mock(Response.class);
+        Request req = mock(Request.class);
+
         //then
-        Assertions.assertThrows(HttpRequestException.class, () -> ControllerType.findController(path));
+        Assertions.assertThrows(HttpRequestException.class, () -> handlerMapping.getHandler(req, res));
     }
 }
