@@ -22,7 +22,7 @@ public enum FileType {
     public static FileType getFileType(Url url) {
         return Arrays.stream(values())
                 .filter(value -> url.getUrl().contains(value.extension))
-                .findAny().get();
+                .findAny().orElse(null);
     }
 
     public String getExtension() {

@@ -5,58 +5,58 @@ import org.slf4j.LoggerFactory;
 import util.FileType;
 import util.HttpStatus;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class HttpResponse {
-    private DataOutputStream clientOutputStream;
-    private byte[] data;
+    private final Data data;
 
     private final FileType fileType;
 
+    private final HttpStatus httpStatus;
+
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
-    public HttpResponse(DataOutputStream clientOutputStream, byte[] data, FileType fileType) {
-        this.clientOutputStream = clientOutputStream;
+    public HttpResponse(Data data,FileType fileType,HttpStatus httpStatus) {
         this.data = data;
         this.fileType = fileType;
+        this.httpStatus = httpStatus;
+        makeResponse();
     }
 
-    public void makeResponse() {
-        HttpStatus responseHttpStatus = selectHttpStatus(this);
-        responseHeader(responseHttpStatus);
+    private void makeResponse() {
+        responseHeader(httpStatus);
         responseBody();
+
     }
 
-    private HttpStatus selectHttpStatus(HttpResponse httpResponse) {
-        if(httpResponse.getData().length==0){
-            return HttpStatus.NOT_FOUND;
-        }else{
-            return HttpStatus.OK;
-        }
-    }
+
 
     private void responseHeader(HttpStatus httpStatus) {
         try {
-            clientOutputStream.writeBytes("HTTP/1.1 " + httpStatus.getCode() + " " + httpStatus.getMessage() + " \r\n");
-            clientOutputStream.writeBytes("Content-Type: "+fileType.getType() + ";charset=utf-8\r\n");
-            clientOutputStream.writeBytes("Content-Length: " + data.length + "\r\n");
-            clientOutputStream.writeBytes("\r\n");
+            data.getClientOutputStream().writeBytes("HTTP/1.1 " + httpStatus.getCode() + " " + httpStatus.getMessage() + " \r\n");
+            data.getClientOutputStream().writeBytes("Content-Type: "+fileType.getType() + ";charset=utf-8\r\n");
+            data.getClientOutputStream().writeBytes("Content-Length: " + data.getData().length + "\r\n");
+            data.getClientOutputStream().writeBytes("Location: " + "/index.html" + " \r\n");
+            data.getClientOutputStream().writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
+
+
+
+
 
     private void responseBody() {
         try {
-            clientOutputStream.write(data, 0, data.length);
-            clientOutputStream.flush();
+            data.getClientOutputStream().write(data.getData(), 0, data.getData().length);
+            data.getClientOutputStream().flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    public byte[] getData() {
+    public Data getData() {
         return data;
     }
 

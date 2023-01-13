@@ -1,8 +1,11 @@
 package service;
 
+import model.User;
+
 import java.util.HashMap;
 
-public interface Service {
+public interface Service<T> {
 
-    <T> void saveData(HashMap<T, T> data);
+     T createModel(HashMap<String,String> e);
+
 }

@@ -4,24 +4,31 @@ import java.io.*;
 import java.net.Socket;
 import java.util.HashMap;
 
+import controller.Controller;
+import controller.ErrorController;
+import controller.FileController;
+import controller.UserController;
+import db.Database;
+import db.UserDatabase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reader.RequestGetReader;
 import reader.RequestReader;
-import reader.fileReader.FileReader;
 import request.HttpRequest;
 import response.HttpResponse;
 import service.Service;
 import service.UserService;
 import util.FileType;
+import util.UrlType;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
-    private RequestReader requestReader;
-    private FileReader fileReader;
 
-    private Service service;
+    private Controller controller;
+
+
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -33,31 +40,30 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest httpRequest = HttpRequest.getHttpRequest(in);
-            requestReader = RequestReader.selectRequestReaderByMethod(httpRequest.getHttpMethod());
-
-            byte[] data = manageData(httpRequest);
 
             DataOutputStream clientOutPutStream = new DataOutputStream(out);
-            HttpResponse httpResponse = new HttpResponse(clientOutPutStream,data, FileType.getFileType(httpRequest.getUrl()));
-            httpResponse.makeResponse();
+
+            controller = Controller.FactoryController(httpRequest.getUrl());
+
+            HttpResponse httpResponse;
+            UrlType urlType = UrlType.getUrlType(httpRequest.getUrl().getUrl());
+            if (controller instanceof FileController) {
+                if (urlType.equals(UrlType.TEMPLATES_FILE)) {
+                    httpResponse=((FileController) controller).TemplateController(clientOutPutStream, httpRequest);
+                } else if (urlType.equals(UrlType.STATIC_FILE)) {
+                    httpResponse=((FileController) controller).StaticController(clientOutPutStream, httpRequest);
+                }
+            } else if (controller instanceof UserController) {
+                httpResponse = ((UserController) controller).UserQueryString(clientOutPutStream, httpRequest);
+            } else if (controller instanceof ErrorController) {
+                httpResponse = ((ErrorController) controller).getErrorResponse(clientOutPutStream);
+            }
+
+
 
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
-    }
-
-    private byte[] manageData(HttpRequest httpRequest) {
-        byte[] data=null;
-        fileReader = FileReader.selectFileReader(httpRequest.getUrl());
-        if(fileReader!=null){
-            //index.html과 같은 파일을 읽는 경우
-            data = fileReader.readFile(httpRequest.getUrl());
-        }else{
-            HashMap<String, String> dataMap = requestReader.readData(httpRequest);
-            service = new UserService();
-            service.saveData(dataMap);
-        }
-        return data;
     }
 }
 

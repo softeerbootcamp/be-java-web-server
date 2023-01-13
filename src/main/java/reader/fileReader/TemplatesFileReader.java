@@ -16,14 +16,11 @@ public class TemplatesFileReader implements FileReader {
     private static final String TEMPLATE_ROUTE = "./src/main/resources/templates";
 
     @Override
-    public byte[] readFile(Url url) {
+    public byte[] readFile(Url url) throws IOException {
         byte[] bytes = null;
-        try {
-            bytes = Files.readAllBytes(new File(TEMPLATE_ROUTE + url.getUrl()).toPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-            logger.error(HttpsErrorMessage.NOT_VALID_URL + " url: {}", url);
-        }
+
+        bytes = Files.readAllBytes(new File(TEMPLATE_ROUTE + url.getUrl()).toPath());
+
         return bytes;
 
     }

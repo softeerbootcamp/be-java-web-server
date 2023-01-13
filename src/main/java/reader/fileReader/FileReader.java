@@ -3,8 +3,10 @@ package reader.fileReader;
 import util.Url;
 import util.UrlType;
 
+import java.io.IOException;
+
 public interface FileReader {
-    byte[] readFile(Url url);
+    byte[] readFile(Url url) throws IOException;
 
     static FileReader selectFileReader(Url url) {
         UrlType urlType = url.getUrlType();
