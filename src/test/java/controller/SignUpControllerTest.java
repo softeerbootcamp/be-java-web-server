@@ -10,12 +10,21 @@ import http.response.HttpResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.DataOutputStream;
+import java.io.OutputStream;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("SignupController Test")
 public class SignUpControllerTest {
+
+    private final DataOutputStream mockDos = new DataOutputStream(new OutputStream() {
+        @Override
+        public void write(int b) {
+
+        }
+    });
 
     @Test
     @DisplayName("execute() - 회원가입 성공 후 리다이렉트 테스트")
@@ -31,7 +40,7 @@ public class SignUpControllerTest {
                 HttpMethod.GET,
                 new URI("/user/create", user),
                 new HttpHeaders());
-        HttpResponse response = new HttpResponse();
+        HttpResponse response = new HttpResponse(mockDos);
 
         // when
         controller.execute(request, response);
@@ -59,7 +68,7 @@ public class SignUpControllerTest {
                 HttpMethod.POST,
                 new URI("/user/create", user),
                 new HttpHeaders());
-        HttpResponse response = new HttpResponse();
+        HttpResponse response = new HttpResponse(mockDos);
 
         // when
         MethodNotAllowException exception = assertThrows(

@@ -7,12 +7,21 @@ import http.response.HttpResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.DataOutputStream;
+import java.io.OutputStream;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("StaticResourceController Test")
 public class StaticResourceControllerTest {
+
+    private final DataOutputStream mockDos = new DataOutputStream(new OutputStream() {
+        @Override
+        public void write(int b) {
+
+        }
+    });
 
     @Test
     @DisplayName("execute() - 정상 리드 테스트")
@@ -24,7 +33,7 @@ public class StaticResourceControllerTest {
                 new URI("/index.html", Map.of()),
                 new HttpHeaders()
         );
-        HttpResponse response = new HttpResponse();
+        HttpResponse response = new HttpResponse(mockDos);
 
         // when
         controller.execute(request, response);
@@ -49,7 +58,7 @@ public class StaticResourceControllerTest {
                 new URI("/index.html", Map.of()),
                 new HttpHeaders()
         );
-        HttpResponse response = new HttpResponse();
+        HttpResponse response = new HttpResponse(mockDos);
 
         // when
         MethodNotAllowException exception = assertThrows(
