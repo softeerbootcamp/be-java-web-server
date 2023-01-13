@@ -18,4 +18,8 @@ public enum Domain {
                 .findFirst()
                 .orElse(MAIN);
     }
+
+    public String getName() {
+        return name;
+    }
 }

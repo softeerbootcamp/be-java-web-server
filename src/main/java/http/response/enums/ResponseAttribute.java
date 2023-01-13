@@ -1,4 +1,4 @@
-package enums;
+package http.response.enums;
 
 public enum ResponseAttribute {
     CONTENT_TYPE("Content-type"),

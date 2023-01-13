@@ -1,18 +1,18 @@
 package controller;
 
 import dto.UserInfoDTO;
-import io.request.HttpRequest;
-import io.request.PathParser;
-import io.response.HttpResponse;
+import http.request.HttpRequest;
+import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
+
+import static filesystem.PathParser.DOMAIN;
 
 public class UserController implements Controller {
 
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService = new UserService();
-    private final PathParser pathParser = new PathParser();
 
     @Override
     public void handle(HttpRequest request, HttpResponse response) {
@@ -21,8 +21,8 @@ public class UserController implements Controller {
     }
 
     private void handleRequest(HttpRequest request, HttpResponse response) {
-        UserInfoDTO userInfo = new UserInfoDTO(request.getAllQuery());
+        UserInfoDTO userInfo = UserInfoDTO.of(request.getParameters("userId", "password", "name", "email"));
         userService.signIn(userInfo);
-        response.redirect(pathParser.getIndexPageUrl());
+        response.redirect(DOMAIN);
     }
 }

@@ -1,9 +1,9 @@
 package controller;
 
-import io.request.HttpRequest;
-import io.request.RequestFactory;
-import io.response.HttpResponse;
-import io.response.ResponseFactory;
+import http.request.HttpRequest;
+import http.request.RequestFactory;
+import http.response.HttpResponse;
+import http.response.ResponseFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,15 +15,13 @@ import java.util.List;
 import java.util.Map;
 
 public class FacadeController implements Runnable {
+
+    private static final List<String> staticResourceExtensions = List.of(".html", ".css", ".js", "eot", "svg", "ttf", "woff", "woff2", "png");
     private final Logger logger = LoggerFactory.getLogger(FacadeController.class);
     private final RequestFactory requestFactory = new RequestFactory();
     private final ResponseFactory responseFactory = new ResponseFactory();
-    private final Map<Domain, Controller> controllers = Map.of(
-            Domain.USER, new UserController(),
-            Domain.MAIN, new MainController()
-    );
+    private final Map<Domain, Controller> controllers = Map.of(Domain.USER, new UserController(), Domain.MAIN, new MainController());
     private Socket connection;
-    private static final List<String> staticResourceExtensions = List.of(".html", ".css", ".js", "eot", "svg", "ttf", "woff", "woff2", "png");
 
     public FacadeController(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -50,7 +48,6 @@ public class FacadeController implements Runnable {
         if (isStaticResourceRequest(url)) {
             return controllers.get(Domain.MAIN);
         }
-
         return controllers.get(Domain.find(url));
     }
 
