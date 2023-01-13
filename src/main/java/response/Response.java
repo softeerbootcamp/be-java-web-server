@@ -26,14 +26,16 @@ public class Response {
                               int lengthOfBodyContent, String redirectUrl) {
         try {
             ResponseStatusLine responseStatusLine = new ResponseStatusLine(controllerTypeEnum);
-            ResponseHeader responseHeader = new ResponseHeader(contentTypeEnum, redirectUrl, lengthOfBodyContent);
+            ResponseHeader responseHeader = new ResponseHeader(contentTypeEnum, lengthOfBodyContent);
             dos.writeBytes(responseStatusLine.getResponseStatusLine() + NEW_LINE);
+            responseHeader.addHeaderIfRedirect(redirectUrl,responseStatusLine.getStatusCodeWithMessage());
             dos.writeBytes(responseHeader.getHeaderLine() + NEW_LINE);
             dos.writeBytes(NEW_LINE);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
+
 
     public void responseBody(byte[] body) {
         try {
