@@ -25,7 +25,7 @@ public class ControllerMapper {
             }
         }
 
-        if (url.equals("/") || url.contains(".")) {
+        if (url.equals("/") || StaticResourceController.isSupported(url)) {
             return new StaticResourceController();
         }
 
