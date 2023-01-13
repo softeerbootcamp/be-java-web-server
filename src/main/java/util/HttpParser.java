@@ -15,7 +15,7 @@ public class HttpParser {
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
         String nextLine = br.readLine();
         parsedHttpMap.put(REQUEST_LINE, nextLine);
-        while (!nextLine.equals("")) {
+        while (!nextLine.equals("") && nextLine != null) {
             nextLine = br.readLine();
             if (!nextLine.contains(": ")) {
                 continue;

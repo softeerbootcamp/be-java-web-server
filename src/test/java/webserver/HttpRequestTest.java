@@ -1,14 +1,12 @@
 package webserver;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import webserver.domain.HttpRequest;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class HttpRequestTest {
     @Test

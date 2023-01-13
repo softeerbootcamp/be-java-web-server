@@ -55,7 +55,7 @@ Java Web Application Server 2022
   - multipart/form-data : <form> 태그를 사용해 브라우저에서 서버로 데이터 전송하는 경우
   - application/json : json format으로 데이터 전송 하는 경우
 
-### 01/11 WES
+### 01/11 WED
 - HTTP request header
   - Origin 헤더 : 브라우저의 경로를 포합하지 않고 서버 이름(스키마, 호스트, 포트)만 포함되어 있음.
   - Referer 헤더 : 클라이언트(브라우저)가 서버에 요청하는 페이지(자원)이 무엇인지를 나타냄.
@@ -79,3 +79,17 @@ Java Web Application Server 2022
   - Given : 테스트를 준비하는 과정, 테스트에 사용하는 변수, 입력 값 정의 
   - When : 실제로 테스트를 하는 부분
   - Then : 테스트를 검증하는 부분 (ex. assertThat().isEqual() 등)
+
+### 01/12 THU
+- 서블릿
+  - 서블릿은 오직한번만 실행되고 요청이 올때마다 생성되었다 사라진다. 
+    - -> JVM이 주는 부하도, 클래스를 메모리에 로딩하는 부하도 적다.
+  - main() 메소드가 존재하지 않는다.
+  - 서블릿의 실행주체는 컨테이너이다.
+  - 컨테이너는 요청이 들어오면 HttpServletRequest/HttpServletResponse 두 객체를 생성한다.
+  - URL 분석을 통해 어떤 서블릿의 요청인지 알아낸다.
+  - 해당 서블릿 객체를 생성해서 HttpServletRequest/HttpServletResponse 를 인자로 넘긴다.
+  - 컨테이너는 service() 메소드를 호출하고, doGet(), doPOST() 호출할 지 결정한다.
+  - 인자로 받은 HttpServletResponse 객체에 페이지 생성한 것을 전달해 준다.
+  - 스레드 작업이 끝나면 HttpServletResponse 객체를 HTTP response로 전환하고 브라우저로 반환.
+  - HttpServletResponse 객체가 소멸된다.
