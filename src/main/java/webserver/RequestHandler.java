@@ -1,13 +1,14 @@
 package webserver;
 
+import model.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.Socket;
-import java.util.Map;
-
-import static util.HttpRequestUtils.parseQuerystring;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -15,6 +16,7 @@ public class RequestHandler implements Runnable {
 
     private final Socket connection;
     private final UserService userService;
+
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -27,30 +29,21 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            String line = br.readLine();
-            logger.debug("> input line : {}", line);
-            String url = extractUrl(line);
-            checkUrlQueryString(url);
+            Request request = makeRequest(br.readLine());
+
+            if (request.getRequestParams().size() != 0) {
+                userService.signUpUser(request);
+            }
 
             ResponseHandler responseHandler = new ResponseHandler(connection);
-            responseHandler.response(url);
+            responseHandler.response(request);
 
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void checkUrlQueryString(String url) {
-        String[] queryStrings = url.split("\\?");
-        if (queryStrings.length != 1) {
-            String queryString = queryStrings[1];
-
-            Map<String, String> requestParams = parseQuerystring(queryString);
-            userService.signUpUser(requestParams);
-        }
-    }
-
-    private String extractUrl(String line) {
+    public String extractUrl(String line) {
         //문자열 분리 후 -> 문자열 배열에 삽입
         String[] tokens = line.split(" ");
         String url = tokens[1];
@@ -58,5 +51,14 @@ public class RequestHandler implements Runnable {
             url = BASE_URL;
         }
         return url;
+    }
+
+    public Request makeRequest(String line) {
+        logger.debug("> request line : {}", line);
+        String url = extractUrl(line);
+        Request request = new Request(url);
+        request.checkUrlQueryString();
+
+        return request;
     }
 }

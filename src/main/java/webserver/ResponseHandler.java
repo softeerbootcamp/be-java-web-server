@@ -1,5 +1,6 @@
 package webserver;
 
+import model.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,17 +25,17 @@ public class ResponseHandler {
         this.viewResolver = new ViewResolver();
     }
 
-    public void response(String url) {
+    public void response(Request request) {
         try (OutputStream out = connection.getOutputStream()) {
             DataOutputStream dos = new DataOutputStream(out);
 
-            if (url.contains("?")) {
+            if (request.getRequestParams().size() != 0) {
                 response302Header(dos);
                 return;
             }
 
             try {
-                Path path = viewResolver.findFilePath(url);
+                Path path = viewResolver.findFilePath(request.getUrl());
                 String contentType = Files.probeContentType(path);
                 byte[] body = viewResolver.findActualFile(path);
 
