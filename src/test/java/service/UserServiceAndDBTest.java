@@ -16,7 +16,7 @@ class UserServiceAndDBTest {
     final String[] userValue2 = {"test2", "1234", "test2Name", "tes2t@naver.com"};
     final String[] userKey = {"userId", "password", "name", "email"};
 
-    Database userDataBase = new UserDatabase();
+    Database<User> userDataBase = new UserDatabase();
     Service userService = new UserService();
 
 
@@ -53,9 +53,7 @@ class UserServiceAndDBTest {
         saveUser(userValue);
         saveUser(userValue2);
         //when
-        Collection<Object> all = userDataBase.findAll();
-
-        //then
+        Collection<User> all = userDataBase.findAll();
         assertThat(all.size()).isEqualTo(2);
     }
 }
