@@ -6,7 +6,9 @@ public enum ContentType {
     JS("js", "text/javascript"),
     JPEG("jpeg", "image/jpeg"),
     PNG("png", "image/png"),
-    FAVICON("ico", "image/webp");
+    FAVICON("ico", "image/ico"),
+    TTF("ttf", "font/ttf"),
+    WOFF("woff", "font/woff");
 
     private final String extension;
     private final String type;
@@ -16,8 +18,8 @@ public enum ContentType {
         this.type = type;
     }
 
-    public String getExtension() {
-        return extension;
+    public String getType() {
+        return this.type;
     }
 
     public static ContentType getContentType(String type) {

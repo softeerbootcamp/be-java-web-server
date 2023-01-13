@@ -1,31 +1,46 @@
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import utils.FileIoUtils;
-import utils.StatusCode;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
+
 
 class FileIoUtilsTest {
 
     @Test
+    @DisplayName("존재하는 파일 로딩하기")
     void testLoadFile_validFile() {
-        // Arrange
-        String file = "index.html";
+        // given
+        String file = "/index.html";
 
-        // Act
+        // when
         byte[] result = FileIoUtils.loadFile(file);
 
-        // Assert
-        Assertions.assertThat(result).isNotNull();
+        // then
+        assertThat(result).isNotNull();
     }
 
     @Test
+    @DisplayName("존하지 않은 파일 로딩하기")
     void testLoadFile_invalidFile() {
-        // Arrange
-        String file = "not_existing_file.html";
+        // given
+        String file = "/not_existing_file.html";
 
-        // Act
-        byte[] result = FileIoUtils.loadFile(file);
+        // when, then
+        assertThrows(IllegalArgumentException.class, () -> FileIoUtils.loadFile(file));
+    }
 
-        // Assert
-        Assertions.assertThat(result).isEqualTo(StatusCode.NOTFOUND.toString().getBytes());
+    @Test
+    @DisplayName("Extension 받아오기")
+    void test_Extension() {
+        //given
+        String file = "hello/index.html";
+
+        //when
+        String extension = FileIoUtils.getExtension(file);
+
+        //then
+        assertThat(extension).isEqualTo("html");
     }
 }

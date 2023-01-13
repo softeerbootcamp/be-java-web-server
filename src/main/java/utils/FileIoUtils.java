@@ -1,7 +1,5 @@
 package utils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -19,12 +17,11 @@ public class FileIoUtils {
                 return Files.readAllBytes(new File(TEMPLATE_RESOURCE_PATH + file).toPath());
             return Files.readAllBytes(new File(STATIC_RESOURCE_PATH + file).toPath());
         } catch (Exception e) {
-            //TODO 예외처리
-            return StatusCode.NOTFOUND.toString().getBytes();
+            throw new IllegalArgumentException("해당하는 파일이 존재하지 않습니다.");
         }
     }
 
-    private static String getExtension(String file){
+    public static String getExtension(String file){
         return file.substring(file.lastIndexOf(".") + 1);
     }
 }

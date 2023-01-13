@@ -10,4 +10,11 @@ public class HttpRequestBody {
     public static HttpRequestBody of(String content) {
         return new HttpRequestBody(content);
     }
+
+    @Override
+    public String toString() {
+        return "HttpRequestBody{" +
+                "content='" + content + '\'' +
+                '}';
+    }
 }

@@ -6,21 +6,17 @@ import java.nio.charset.StandardCharsets;
 
 import http.response.HttpResponse;
 import http.request.HttpRequest;
-import service.UserService;
 import utils.HttpRequestGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.HttpResponseGenerator;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
-    private UserService userService;
 
-    public RequestHandler(Socket connectionSocket, UserService userService) {
+    public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
-        this.userService = userService;
     }
 
     public void run() {
@@ -30,17 +26,17 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             HttpRequest httpRequest = HttpRequestGenerator.generateHttpMessage(br);
-            HttpResponse httpResponse = new HttpResponse();
-            Dispatcher.dispatch(httpRequest, httpResponse);
+            HttpResponse httpResponse = new HttpResponse(httpRequest.getVersion());
+            HttpResponse response = Dispatcher.dispatch(httpRequest, httpResponse);
             DataOutputStream dos = new DataOutputStream(out);
-            responseMessage(dos, httpResponse.getResponseMessage());
-            responseBody(dos, httpResponse.getBody());
+            responseHeaderMessage(dos, response.getHeaderMessage());
+            responseBody(dos, response.getBody());
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void responseMessage(DataOutputStream dos, String responseMessage) {
+    private void responseHeaderMessage(DataOutputStream dos, String responseMessage) {
         try {
             dos.writeBytes(responseMessage);
         } catch (IOException e) {

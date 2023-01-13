@@ -15,6 +15,14 @@ public class URI {
         this.querys = querys;
     }
 
+    @Override
+    public String toString() {
+        return "URI{" +
+                "path='" + path + '\'' +
+                ", querys=" + querys +
+                '}';
+    }
+
     public static URI create(String target){
         return new URI(parsePath(target), parseQueryString(target));
     }
@@ -40,6 +48,8 @@ public class URI {
     }
 
     private static String parsePath(String target){
+        if (target.equals("/"))
+            return "/index.html";
         if (!target.contains("?"))
             return target.trim();
         return target.split("\\?")[0].trim();
