@@ -12,12 +12,13 @@ import java.util.Map;
 
 public class UserController implements Controller {
 
+    public static final String PREFIX = "/user";
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Override
     public String process(HttpRequest request, HttpResponse response) {
         String url = request.getUrl();
-        String path = url.split("/user")[1];
+        String path = url.split(PREFIX)[1];
 
         if (path.startsWith("/create")) {
             String queryString = HttpRequestUtils.getQueryString(path);

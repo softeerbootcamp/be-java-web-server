@@ -6,18 +6,24 @@ import Controller.ResourceController;
 import http.request.HttpRequest;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ControllerMapper {
 
+    private static final List<String> staticFileExtension = List.of(".html", ".css", ".eot", ".svg", ".ttf", ".woff", ".woff2", ".png", ".js", ".ico");
     private static final Map<String, Controller> controllerMap = new LinkedHashMap<>();
 
     static {
-        controllerMap.put("/user", new UserController());
+        controllerMap.put(UserController.PREFIX, new UserController());
     }
 
     public static Controller getController(HttpRequest request) {
         String url = request.getUrl();
+
+        if (url.equals("/") || staticFileExtension.stream().anyMatch(url::endsWith)) {
+            return new ResourceController();
+        }
 
         for (String key : controllerMap.keySet()) {
             if (url.startsWith(key)) {
@@ -25,6 +31,6 @@ public class ControllerMapper {
             }
         }
 
-        return new ResourceController();
+        throw new IllegalArgumentException();
     }
 }
