@@ -4,13 +4,13 @@ import java.util.Arrays;
 
 public enum ContentType {
 
-    TEXT_HTML("text/html", "html"),
-    TEXT_CSS("text/css", "css"),
-    TEXT_JAVASCRIPT("text/javascript", "js"),
-    TEXT_PLAIN("text/plain", "plain"),
-    TEXT_XML("text/xml", "xml"),
-    APPLICATION("Application/json", "json"),
-    APPLICATION_JAVASCRIPT("Applcation/javascript", "js");
+    TEXT_HTML("text/html; charset= utf-8", "html"),
+    TEXT_CSS("text/css; charset= utf-8", "css"),
+    TEXT_JAVASCRIPT("text/javascript; charset= utf-8", "js"),
+    TEXT_PLAIN("text/plain; charset= utf-8", "plain"),
+    TEXT_XML("text/xml; charset= utf-8", "xml"),
+    APPLICATION("Application/json; charset= utf-8", "json"),
+    APPLICATION_JAVASCRIPT("Applcation/javascript; charset= utf-8", "js");
 
     public String type;
     public String ext;
