@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 //implementation 'ch.qos.logback:logback-classic:1.2.3' , logback 라이브러리 사용
 //log4j에 문제가 있었음
+import controller.FrontController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,11 +28,12 @@ public class WebServer {
             //try-with-resource
             logger.info("Web Application Server started {} port.", port);
 
+            FrontController frontController= new FrontController();
             Socket connection;//클라이언트 소켓과의 연결 객체
             //accept()가 호출되면 프로그램은 여기서 실행을 멈추고 클라이언트가 port번으로 연결할 때까지 무한 대기
             //2. 서버 소켓 listenSocket가 accpet를 호출하고 리턴을 해주면 소켓인 connection 객체가 생성됨
             while ((connection = listenSocket.accept()) != null) {
-                Thread thread = new Thread(new RequestHandler(connection));
+                Thread thread = new Thread(new RequestHandler(connection,frontController));
                 //logger.debug("thread name: " + thread.getName());
                 thread.start();
             }

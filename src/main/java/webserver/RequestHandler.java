@@ -22,9 +22,9 @@ public class RequestHandler implements Runnable {
     private FrontController frontController;
     private Socket connection;
 
-    public RequestHandler(Socket connectionSocket) {
+    public RequestHandler(Socket connectionSocket,FrontController frontController) {
         this.connection = connectionSocket;
-        this.frontController = new FrontController();
+        this.frontController = frontController;
     }
 
     public void run() { //즉 이미 클라이언트와 연결이 된 상태에서 돌아가는 메서드임
@@ -35,19 +35,8 @@ public class RequestHandler implements Runnable {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             //브라우저에서 서버로 들어오는 모든 요청은 Inputstream 안에 담겨져 있음, outputstream은 서버에서 브라우저로 보내는 응답
             HttpRequest request = RequestParser.parseInputStreamToHttpRequest(in);
-            String url = request.getUrl();
             HttpResponse response = new HttpResponse();
-            //단순 html 파일 반환이 요청이 아닐 때
-            if(!url.endsWith("html")) {
-                try{
-                    Controller controller = this.frontController.getControllerByUrl(url);
-                    controller.service(request,response);
-                }catch (NullPointerException e){
-                    logger.debug("해당되는 컨트롤러가 없습니다");
-                }
-            }
-            // 즉 그냥 단순 html 파일 반환이 요청일 때
-            if(response.getStatus()==null) RequestDispatcher.handle(request,response);
+            frontController.service(request,response);
             ResponseWriter rw = new ResponseWriter(out);
             rw.write(request,response);
         } catch (IOException e) {

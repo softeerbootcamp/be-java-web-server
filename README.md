@@ -161,6 +161,30 @@ Web Server를 WAS 앞에 두고 필요한 WAS들을 Web Server에 플러그인 �
 
 *** 
 
+## 프론트 컨트롤러 패턴
+![프론트컨트롤러패턴](https://blog.kakaocdn.net/dn/dTXOvh/btrrpnwqY0J/p9QK94V2Tw9ABR7jMqmFCK/img.png)
+1. 프론트 컨트롤러에 요청이 온다.
+2. 프론트 컨트롤러는 각 컨트롤러들을 Map으로 관리한다.<br>
+  (현재 나는 해당 url을 키로, 각 컨트롤러 객체를 value로 가지게 하였다)
+3. 매핑된 컨트롤러를 호출한다.
+4. 매핑된 컨트롤러는 공통이외의 본인의 역할을 수행한다.
+
+## SpringBoot에서의 요청과 응답 흐름 ==> 프론트 컨트롤러 패턴
+![스프링부트패턴](https://hanul-dev.netlify.app/static/c57a97a74910147008da2673a5fdccae/c45c7/dispatcher-servlet-flow.png)
+HandlerMapping : 클라이언트의 Reqeust를 분석하여 매핑된 Controller가 있는지 확인한다.
+HandlerAdapter : 매핑 대상 Controller에게 Request 처리 요청을 보낸다.
+ViewResolver : Controller에서 view를 return 했을 경우, 해당하는 view를 찾아 클라이언트에게 return 한다.
+### 구체화된 흐름도
+![구체화](https://hanul-dev.netlify.app/static/ed5a1831a442b87533d992aa81134a16/7db30/flow.png)
+1. Web Server 로 Request를 보냄
+2. Servlet Container로 전달
+3. Servlet Container 스레드 생성
+4. DispatcherServlet init (서블릿 생성 안되어 있는 경우)
+5. 생성된 스레드에서 DispatcherServlet service() 메서드 호출
+6. HandlerMapping을 통해 매핑되는 컨트롤러 조회
+7. HandlerAdapter를 통해 매핑되는 컨트롤러에 Request 전달
+8. 개발자가 구현한 비지니스 로직(Controller -> Service -> Respository) 동작
+
 ## Web Service Architecture
 ![아키텍처이미지](https://gmlwjd9405.github.io/images/web/web-service-architecture.png)
 1. Web Server는 웹 브라우저 클라이언트로부터 HTTP 요청을 받는다.

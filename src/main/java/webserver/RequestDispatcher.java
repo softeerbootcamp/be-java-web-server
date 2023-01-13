@@ -18,7 +18,8 @@ public class RequestDispatcher {
     public static void handle(HttpRequest request, HttpResponse response) {
         try {
             String url = request.getUrl();
-            boolean isTemplate = url.endsWith("html") ||url.endsWith("ico");
+            ContentType type = extractExtension(url);
+            boolean isTemplate = type.isTemplateDir(); //template 디렉토리 하위인지 확인
             if(!isTemplate) serveFile(STATIC_DIR + url, response);
             else if (isTemplate) serveFile(TEMPLATES_DIR + url, response);
         } catch (Exception e) {
