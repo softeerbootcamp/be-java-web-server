@@ -31,13 +31,10 @@ public class RequestHandler implements Runnable {
             Request req = parseHttpRequest(in);
             Response res = new Response();
 
-            req.readRequest();  //Print out Http Request Message
-
-            Controller controller = handlerMapping.getHandler(req);  //get the controller to handle request
-            controller.handle(req, res);
-
-            if(res.getStatusCode() == StatusCodes.NOT_FOUND){  // request is not precessed by all the controllers
-                handlerMapping.getStaticHandler().handle(req, res);  //get static controller to handle this request
+            handlerMapping.getStaticHandler().handle(req, res);  //get static controller to handle this request
+            if(res.getStatusCode() == StatusCodes.NOT_FOUND){  // request is not precessed by static controller
+                Controller controller = handlerMapping.getHandler(req, res);  //get the controller to handle request
+                controller.handle(req, res);
             }
 
             HttpResponseUtils responseWriter = new HttpResponseUtils(res, out);
