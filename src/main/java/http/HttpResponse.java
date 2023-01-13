@@ -10,17 +10,36 @@ import java.io.IOException;
 public class HttpResponse {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private final String httpVersion;
+
     private final DataOutputStream dos;
 
-    public HttpResponse(DataOutputStream dos) {
+    private HttpResponse(
+            String httpVersion,
+            DataOutputStream dos
+    ) {
+        this.httpVersion = httpVersion;
         this.dos = dos;
     }
 
+    public static HttpResponse of(
+            HttpRequest httpRequest,
+            DataOutputStream dos
+    ) {
+        RequestLine requestLine = httpRequest.getRequestLine();
+        Uri uri = requestLine.getUri();
+        return new HttpResponse(
+                requestLine.getVersion(),
+                dos
+                );
+    }
+
+
     public void response200Header(String contentType, int lengthOfBodyContent) {
         try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: " + contentType + ";charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes(httpVersion + " " + HttpStatus.OK + System.lineSeparator());
+            dos.writeBytes("Content-Type: " + contentType + ";charset=utf-8" + System.lineSeparator());
+            dos.writeBytes("Content-Length: " + lengthOfBodyContent + System.lineSeparator());
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -29,7 +48,7 @@ public class HttpResponse {
 
     public void response302Header(String location) {
         try {
-            dos.writeBytes("HTTP/1.1 302 Found " + System.lineSeparator());
+            dos.writeBytes(httpVersion + " " + HttpStatus.FOUND + System.lineSeparator());
             dos.writeBytes("Location: " + location + System.lineSeparator());
             dos.writeBytes(System.lineSeparator());
         } catch (IOException e) {
@@ -39,7 +58,7 @@ public class HttpResponse {
 
     public void response404Header() {
         try {
-            dos.writeBytes("HTTP/1.1 404 Not Found " + System.lineSeparator());
+            dos.writeBytes(httpVersion + " " + HttpStatus.NOT_FOUND + System.lineSeparator());
             dos.writeBytes(System.lineSeparator());
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -56,7 +75,7 @@ public class HttpResponse {
         }
     }
 
-    public void emptyBody() {
+    public void responseBody() {
         try {
             dos.flush();
         } catch (IOException e) {
