@@ -1,5 +1,7 @@
 package request;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import parser.StringParser;
 
 import java.util.Arrays;
@@ -7,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Uri {
+    private static final Logger logger = LoggerFactory.getLogger(Uri.class);
+
     private final String path;
     private final Map<String, String> parameters;
 
@@ -18,6 +22,8 @@ public class Uri {
     public static Uri of(String uri) {
         String[] uriSources =  uri.split("\\?");
         String path = uriSources[0];
+
+        logger.debug("Input uri path : {}",path);
         Map<String, String> parameters = StringParser.dataParsing(uri);
         return new Uri(path, parameters);
     }
@@ -31,7 +37,6 @@ public class Uri {
     }
 
     public String getPath() {
-        System.out.println("path :   "+path);
         return path;
     }
 

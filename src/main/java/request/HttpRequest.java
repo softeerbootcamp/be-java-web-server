@@ -13,12 +13,12 @@ public class HttpRequest {
     // 개행 문자 구분
 
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
-    private final RequestLine requestLine;
+    private final RequestStartLine requestStartLine;
     private final String header;
     private final String body;
 
-    public HttpRequest(RequestLine requestLine, String header) {
-        this.requestLine = requestLine;
+    public HttpRequest(RequestStartLine requestStartLine, String header) {
+        this.requestStartLine = requestStartLine;
         this.header = header;
         this.body = "";
     }
@@ -26,10 +26,12 @@ public class HttpRequest {
     public static HttpRequest of(BufferedReader br) throws IOException {
         String line = br.readLine();
 
-        RequestLine requestLine = RequestLine.of(line);
-        logger.debug("Request Line{}{}{}", lineSeparator, line, lineSeparator);
+        RequestStartLine requestLine = RequestStartLine.of(line);
+
+        logger.debug("Request Line : {}{}{}", lineSeparator, line, lineSeparator);
 
         StringBuilder header = new StringBuilder();
+
         while (!line.equals("")) {
             line = br.readLine();
             header.append(line);
@@ -45,34 +47,34 @@ public class HttpRequest {
     }
 
     public String getPath() {
-        if (requestLine.isTemplatesResource()) {
-            System.out.println("templates requestLine : " + requestLine.getPath());
-            return String.format("./templates%s", requestLine.getPath());
+        if (requestStartLine.isTemplatesResource()) {
+            logger.debug("templates request : {}" , String.format("./templates%s", requestStartLine.getPath()));
+            return String.format("./templates%s", requestStartLine.getPath());
         }
-        if (requestLine.isStaticResource()) {
-            System.out.println("static requestLine : " + requestLine.getPath());
-            return String.format("./static%s", requestLine.getPath());
+        if (requestStartLine.isStaticResource()) {
+            logger.debug("static request : {}" , String.format("./static%s", requestStartLine.getPath()));
+            return String.format("./static%s", requestStartLine.getPath());
         }
-        return requestLine.getPath();
+        return requestStartLine.getPath();
     }
 
     public Map<String, String> getParameters() {
-        return requestLine.getParameters();
+        return requestStartLine.getParameters();
     }
 
     public boolean isGet() {
-        return requestLine.getMethod() == Method.GET;
+        return requestStartLine.getMethod() == Method.GET;
     }
 
     public boolean isPost() {
-        return requestLine.getMethod() == Method.POST;
+        return requestStartLine.getMethod() == Method.POST;
     }
 
     public boolean isForStaticContent() {
-        return requestLine.isTemplatesResource() || requestLine.isStaticResource();
+        return requestStartLine.isTemplatesResource() || requestStartLine.isStaticResource();
     }
 
-    public boolean isForDynamicContent() {
+    public boolean isQueryContent() {
         return !isForStaticContent();
     }
 

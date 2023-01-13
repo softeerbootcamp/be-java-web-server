@@ -55,10 +55,12 @@ public class RequestHandler implements Runnable{
     }
 
     private HttpResponse controlRequestAndResponse(HttpRequest httpRequest) throws IOException, URISyntaxException, InstantiationException, IllegalAccessException {
+
         if (httpRequest.isForStaticContent()) {
             String path = httpRequest.getPath();
             byte[] body = FileIoUtils.loadFileFromClasspath(path);
             Map<String, String > headerFields = new HashMap<>();
+
             if (path.endsWith(".html")) {
                 headerFields.put("Content-Type", "text/html;charset=utf-8");
             } else if (path.endsWith(".css")) {
@@ -75,9 +77,11 @@ public class RequestHandler implements Runnable{
             return HttpResponse.of("200", header, body);
         }
 
-        if (httpRequest.isForDynamicContent()) {
+        if (httpRequest.isQueryContent()) {
             String path = httpRequest.getPath();
+            logger.debug("httpRequest path : {}",path);
             Class<? extends Servlet> servletClass = controller.get(path);
+            logger.debug("servlet name : {}",servletClass.getName());
             Servlet servlet = servletClass.newInstance();
             servlet.service(httpRequest);
 
