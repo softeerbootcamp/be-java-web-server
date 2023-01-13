@@ -1,11 +1,22 @@
 package request.method.GET;
 
 import request.Request;
+import request.method.GET.handlers.GETHandler;
 import request.method.HttpMethodHandler;
 
 import java.util.List;
 
 public class GETHandlerImpl implements HttpMethodHandler {
+    private static final GETHandlerImpl getHandlerImpl;
+
+    static {
+        getHandlerImpl = new GETHandlerImpl();
+    }
+
+    public static GETHandlerImpl of() {
+        return getHandlerImpl;
+    }
+
     @Override
     public byte[] handle(Request request) {
         for(GETFileRequestEnum fileRequestEnum : GETFileRequestEnum.values()) {
@@ -13,8 +24,9 @@ public class GETHandlerImpl implements HttpMethodHandler {
                 return fileRequestEnum.handle(request);
             }
         }
-        // TODO: factory 같은 걸로 요청 url에 따른 handler 획득 및 처리
-        return null;
+
+        GETHandler handler = GETHandlerFactory.generateHandler(request);
+        return handler.handle(request);
     }
 
     boolean contains(List<String> list, String resource) {
