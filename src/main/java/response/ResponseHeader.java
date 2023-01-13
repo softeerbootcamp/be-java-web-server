@@ -18,8 +18,8 @@ public class ResponseHeader {
 
     public void setHeaderLine(ContentTypeEnum contentTypeEnum, String redirect, int lengthOfBodyContent) {
         headerLine =
-                HeaderReferenceEnum.CONTENT_TYPE.getValueWithSpace() + NEW_LINE +
-                        HeaderReferenceEnum.CONTENT_LENGTH.getValueWithSpace() + NEW_LINE
+                contentTypeEnum.getValue() + NEW_LINE +
+                        lengthOfBodyContent + NEW_LINE
         ;
     }
 
