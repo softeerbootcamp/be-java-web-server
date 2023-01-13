@@ -22,10 +22,6 @@ public class RequestLine {
         return of(parsedReqLine[0], resourceURI);
     }
 
-    public void readReqLine(){
-        System.out.println(method + resource + version);
-    }
-
 
     public URI getResource(){
         return resource;
