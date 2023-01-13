@@ -1,0 +1,61 @@
+package response;
+
+import controller.ServletController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import request.Header;
+import request.HttpRequest;
+import servlet.Servlet;
+import util.FileIoUtils;
+import util.PathUtils;
+
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
+
+public class ResponseHandler {
+
+    private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
+
+    public static HttpResponse controlRequestAndResponse(HttpRequest httpRequest)
+            throws IOException,
+            URISyntaxException,
+            InstantiationException,
+            IllegalAccessException,
+            NoSuchMethodException,
+            InvocationTargetException {
+
+        ServletController controller = new ServletController();
+
+        if (httpRequest.isForStaticContent()) {
+            String path = httpRequest.getPath();
+            byte[] body = FileIoUtils.loadFileFromClasspath(path);
+            Map<String, String > headerFields = new HashMap<>();
+
+            String mData = PathUtils.pathEndCheck(path);
+            headerFields.put("Content-Type", mData);
+
+            logger.debug("Content-Type : {}", headerFields.get("Content-Type"));
+            headerFields.put("Content-Length", String.valueOf(body.length));
+            Header header = new Header(headerFields);
+            return HttpResponse.of("200", header, body);
+        }
+
+        if (httpRequest.isQueryContent()) {
+            String path = httpRequest.getPath();
+            Class<? extends Servlet> servletClass = controller.getServlet(path);
+            Servlet servlet = controller.newInstance(servletClass);
+            servlet.service(httpRequest);
+
+            Map<String, String > headerFields = new HashMap<>();
+
+            headerFields.put("Location", "/index.html");
+            Header header = new Header(headerFields);
+            return HttpResponse.of("302", header);
+        }
+        throw new AssertionError("HttpRequest는 정적 혹은 동적 컨텐츠 요청만 가능합니다.");
+    }
+
+}
