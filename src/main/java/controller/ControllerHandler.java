@@ -28,7 +28,7 @@ public class ControllerHandler{
                 .stream()
                 .filter(controller -> controller.isMatch(httpRequest))
                 .findFirst()
-                .orElseThrow(() -> new ControllerNotFoundException("컨트롤러를 찾을 수 없습니다."));
+                .orElseThrow(() -> new ControllerNotFoundException("Not Found Controller"));
     }
 
     public static void handle(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
@@ -38,6 +38,7 @@ public class ControllerHandler{
         } catch (ControllerNotFoundException |ResourceTypeNotFoundException e) {
             logger.error(e.getMessage());
             httpResponse.response404Header();
+            httpResponse.responseBody(e.getMessage().getBytes());
         }
     }
 }
