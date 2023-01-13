@@ -1,5 +1,6 @@
 package controller;
 
+import service.SignUpService;
 import webserver.HttpRequest;
 import webserver.HttpResponse;
 
@@ -13,7 +14,8 @@ public class FrontController extends BaseController {
     //객체 캐싱
     static{
         controllers = new HashMap<>();
-        SignUpController signUpController = new SignUpController();
+        SignUpService signUpService = new SignUpService();
+        SignUpController signUpController = new SignUpController(signUpService);
         controllers.put(SIGN_UP_PATH_URL,signUpController);
     }
 
