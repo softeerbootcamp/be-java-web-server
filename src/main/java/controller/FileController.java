@@ -24,25 +24,14 @@ public class FileController  implements  Controller{
     public HttpResponse TemplateController(DataOutputStream dataOutputStream, HttpRequest httpRequest) throws IOException {
         fileReader = new TemplatesFileReader();
         byte[] data = new byte[0];
-        try {
-            data = fileReader.readFile(httpRequest.getUrl());
-        } catch (IOException e) {
-            logger.error(HttpsErrorMessage.NOT_FOUND_FILE);
-            e.printStackTrace();
-            return ErrorController.getErrorResponse(dataOutputStream);
-        }
+        data = fileReader.readFile(httpRequest.getUrl());
         return new HttpResponse(new Data(dataOutputStream, data), FileType.getFileType(httpRequest.getUrl()), HttpStatus.OK);
     }
 
-    public HttpResponse StaticController(DataOutputStream dataOutputStream, HttpRequest httpRequest) {
+    public HttpResponse StaticController(DataOutputStream dataOutputStream, HttpRequest httpRequest) throws IOException {
         fileReader = new StaticFileReader();
         byte[] data = new byte[0];
-        try {
-            data = fileReader.readFile(httpRequest.getUrl());
-        } catch (IOException e) {
-            logger.error(HttpsErrorMessage.NOT_FOUND_FILE);
-            return new HttpResponse(new Data(dataOutputStream, data), FileType.getFileType(httpRequest.getUrl()), HttpStatus.NOT_FOUND);
-        }
+        data = fileReader.readFile(httpRequest.getUrl());
         return new HttpResponse(new Data(dataOutputStream, data), FileType.getFileType(httpRequest.getUrl()), HttpStatus.OK);
     }
 
