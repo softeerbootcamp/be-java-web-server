@@ -31,7 +31,7 @@ public enum ResourceType {
         return Stream.of(values())
                 .filter(resourceType -> path.endsWith(resourceType.getExtension()))
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new ResourceTypeNotFoundException("Not Found Resource Type."));
     }
 
     public String getExtension() {
