@@ -1,4 +1,4 @@
-package request.POST;
+package request.method.POST;
 
 import request.Request;
 import request.method.HttpMethodHandler;

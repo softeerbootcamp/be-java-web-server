@@ -1,4 +1,4 @@
-package request.DELETE;
+package request.method.DELETE;
 
 import request.Request;
 import request.method.HttpMethodHandler;

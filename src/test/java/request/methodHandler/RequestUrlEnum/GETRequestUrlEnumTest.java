@@ -3,7 +3,7 @@ package request.methodHandler.RequestUrlEnum;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
-import request.enums.GETRequestUrlEnum;
+import request.method.GET.GETRequestUrlEnum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ public class GETRequestUrlEnumTest {
         list.add(".png");
         list.add(".js");
 
-        Assertions.assertThat(list).isEqualTo(GETRequestUrlEnum.STATIC.getSupportingUrl(GETRequestUrlEnum.STATIC));
+        Assertions.assertThat(list).isEqualTo(GETRequestUrlEnum.STATIC.getSupportingFilePostfix(GETRequestUrlEnum.STATIC));
     }
 
     @Test

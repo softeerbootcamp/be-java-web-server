@@ -1,11 +1,12 @@
-package request.enums;
+package request.method;
 
+import request.method.DELETE.DELETEHandlerImpl;
+import request.method.GET.GETHandlerImpl;
+import request.method.POST.POSTHandlerImpl;
+import request.method.PUT.PUTHandlerImpl;
 import request.Request;
-import request.methodHandler.*;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 public enum HttpMethod {
     GET("GET") {

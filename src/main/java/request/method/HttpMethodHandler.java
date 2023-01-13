@@ -1,4 +1,4 @@
-package request.methodHandler;
+package request.method;
 
 import request.Request;
 
