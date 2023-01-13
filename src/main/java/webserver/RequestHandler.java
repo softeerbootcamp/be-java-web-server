@@ -37,6 +37,7 @@ public class RequestHandler implements Runnable{
             HttpRequest httpRequest = generateHttpRequest(in);
             HttpResponse httpResponse = ResponseHandler.controlRequestAndResponse(httpRequest);
             respondToHttpRequest(out, httpResponse);
+<<<<<<< HEAD
         } catch (IOException | URISyntaxException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             logger.error(e.getMessage());
         }
@@ -51,4 +52,33 @@ public class RequestHandler implements Runnable{
         DataOutputStream dos = new DataOutputStream(out);
         httpResponse.respond(dos);
     }
+=======
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private HttpRequest generateHttpRequest(InputStream in) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+        return HttpRequest.of(br);
+    }
+
+
+
+    private void respondToHttpRequest(OutputStream out, HttpResponse httpResponse) {
+        DataOutputStream dos = new DataOutputStream(out);
+        httpResponse.respond(dos);
+    }
+
+>>>>>>> upstream/tjdwns4537
 }
