@@ -70,5 +70,54 @@ Java Web Application Server 2022
       ```java
          split(Pattern.quote("?"));
       ```
+      
+--------
+  + Day 9
+    + MIME Type
+      + 인코딩(Encoding): text 파일로 변환
+      + 디코딩(Decoding): text 파일을 바이너리 파일로 변환
+      + Type : text, image, audio, video, application
+      + subType : .avi, .bin, .css, .csv, .ico 등등..
+      + Type/subType -> text/html, text/css ..
+      
+    + HTTP 302 FOUND response
+      + 회원 가입 성공 시 
+      기존의 성공 메세지와 회원 가입 정보를 byte화해서 body로 넘겨주던 로직을
+      302 FOUND로 넘겨주었다
+      + 302 Header
+        + HTTP/1.1 302 FOUND
+        + location: /index.html
+        + location은 응답코드 301, 302 리다이렉션 상태에서 위치를 지정해준다
+    
+    + Java 객체 비교
+      + ==, != 연산자
+        + Primitive type를 비교할 때는 value값을 비교
+        + Object를 비교할 때는 메모리 주소 비교 
+      + equals() 사용
+      + Objects.equals(a, b) 도 가능 (null check가 되어 있음)
+
+    + Http Response 의 Status Line
+      + HTTP version + Status code + Status text 로 구성
+      ```
+      HTTP/1.1 404 NOT FOUND
+      ```
+      
+      + Java Unit Test 작성
+        + given/when/then 패턴으로 깔끔하게
+          + 어떤 데이터가 준비되었을 때 어떤 함수를 실행하면 어떤 결과가 나와야 한다.
+        ```java
+        @Test
+        @DisplayName("테스트 이름")
+        void test() {
+            // given
+            final String str = "test string"
+
+            // when
+            final String result = 테스트할클래스.method(str);
+
+            // then
+            assertThat(result).isEqualTo("예상되는 결과");
+        }  
+        ```
     
     

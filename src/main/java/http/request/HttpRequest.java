@@ -1,5 +1,6 @@
-package http;
+package http.request;
 
+import http.HttpHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpRequestUtils;
@@ -15,8 +16,8 @@ public class HttpRequest {
     public HttpRequest(BufferedReader br) throws IOException {
         String line = br.readLine();
         if (line == null) return;
-        this.httpRequestLine = HttpRequestUtils.getRequestLine(line);
-        this.httpHeader = HttpRequestUtils.getHeaders(br);
+        this.httpRequestLine = HttpRequestUtils.readRequestLine(line);
+        this.httpHeader = HttpRequestUtils.readHeaders(br);
     }
 
     public String getUri() {
@@ -34,6 +35,10 @@ public class HttpRequest {
     public String getContentType() {
         //logger.debug("Accept : {}", httpHeader.getAccept());
         return httpHeader.getAccept().split(",")[0];
+    }
+
+    public String getHttpVersion() {
+        return httpRequestLine.getHttpVersion();
     }
 
 }
