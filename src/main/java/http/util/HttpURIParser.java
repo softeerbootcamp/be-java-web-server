@@ -22,18 +22,35 @@ public class HttpURIParser {
     }
 
     private static Map<String, String> parseQueryString(String requestLine) {
-        if (!requestLine.contains("?")) {
+        String queryStrings = parseQueryStrings(requestLine);
+        if (queryStrings.isBlank()) {
             return Map.of();
         }
 
-        Map<String, String> querys = new HashMap<>();
-        String url = requestLine.split(" ")[1];
-        int idxOfStartQueryString = url.indexOf("?") + 1;
-        String[] queryparamsOfString = url.substring(idxOfStartQueryString).split("&");
+        return createQuerys(queryStrings);
+    }
 
-        for (String queryParam: queryparamsOfString) {
-            String[] queryParams = queryParam.split("=");
-            querys.put(queryParams[0], queryParams[1]);
+    private static String parseQueryStrings(String requestLine) {
+        if (!requestLine.contains("?")) {
+            return "";
+        }
+
+        String url = requestLine.split(" ")[1];
+        int idxOfQM = url.indexOf("?") + 1;
+
+        return url.substring(idxOfQM);
+    }
+
+    private static Map<String, String> createQuerys(String queryStrings) {
+        Map<String, String> querys = new HashMap<>();
+
+        for (String queryParam: queryStrings.split("&")) {
+            String[] split = queryParam.split("=");
+            String param = "";
+            if (split.length == 2) {
+                param = split[1];
+            }
+            querys.put(split[0], param);
         }
 
         return querys;
