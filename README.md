@@ -11,7 +11,6 @@ Java Web Application Server 2022
 │  ├── Controller.java
 │  ├── FileController.java
 │  ├── JoinController.java
-│  ├── MappingController.java
 │  └── NonController.java
 ├── Request
 │  ├── HttpRequest.java
