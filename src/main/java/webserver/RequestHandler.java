@@ -31,8 +31,7 @@ public class RequestHandler implements Runnable {
 
             HttpRequest httpRequest = HttpRequest.from(br);
             HttpResponse httpResponse = new HttpResponse(dos);
-            Controller controller = ControllerHandler.findController(httpRequest);
-            controller.doService(httpRequest, httpResponse);
+            ControllerHandler.handle(httpRequest, httpResponse);
         } catch (Exception e) {
             logger.error(e.getMessage());
         }

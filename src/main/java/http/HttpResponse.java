@@ -37,6 +37,15 @@ public class HttpResponse {
         }
     }
 
+    public void response404Header() {
+        try {
+            dos.writeBytes("HTTP/1.1 404 Not Found " + System.lineSeparator());
+            dos.writeBytes(System.lineSeparator());
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
 
     public void responseBody(byte[] body) {
         try {
