@@ -2,6 +2,8 @@ package webserver.utils;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import webserver.domain.request.Request;
 
 import java.io.BufferedReader;
@@ -9,35 +11,32 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class HttpRequestUtils {
 
-    public static Request parseHttpRequest(InputStream in) throws IOException {
+        private static final Logger logger = LoggerFactory.getLogger(HttpResponseUtils.class);
+        public static Request parseHttpRequest(InputStream in) throws IOException {
 
         String requestLine = "";
         String header = "";
-
 
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
         //Store Http Request Request Line into HashMap
         requestLine = br.readLine();
+        logger.info(requestLine);  //print out http request line
 
-        String line = br.readLine();
         //Store Http Request header into HashMap
+        String line = br.readLine();
         while(!line.equals("")){
-            header += line;
+            header += line + '\n';
+            logger.info(line);  //print out http header
             line = br.readLine();
         }
-        System.out.println(requestLine);
-        System.out.println(header);
 
-        //TODO : body도 readLine으로 받아서 값을 할당할 것
-
-        Request request = Request.of(requestLine, header);
+        Request request = Request.of(requestLine, header);  //make a Request instance using static factory method
         return request;
     }
 
@@ -88,17 +87,4 @@ public class HttpRequestUtils {
         }
     }
 
-    private static String[] parseRequestLine(String req){
-        return req.split(" ");
-    }
-
-    public static Map<String, String> parseStringToMap(String req){
-        Map<String, String> map = new HashMap<>();
-        Arrays.stream(req.split("\n")).forEach(item->{
-            String[] parsedHeader = parseRequestLine(item);
-            map.put(parsedHeader[0], parsedHeader[1]);
-        });
-        return map;
-    }
-    
 }

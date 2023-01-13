@@ -2,33 +2,28 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.Controller.AuthController;
 import webserver.Controller.Controller;
-import webserver.domain.ContentType;
 import webserver.domain.StatusCodes;
 import webserver.domain.request.Request;
 import webserver.domain.response.Response;
-import webserver.exception.HttpRequestException;
-import webserver.utils.CommonUtils;
-import webserver.utils.StaticResourceFinder;
+import webserver.utils.HttpResponseUtils;
 import static webserver.utils.HttpRequestUtils.parseHttpRequest;
 
 public class RequestHandler implements Runnable {
+
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private AuthController authController;
     private Socket connection;
     private HandlerMapping handlerMapping;
 
     public RequestHandler(Socket connectionSocket) {
 
         this.connection = connectionSocket;
-        this.authController = new AuthController();
         this.handlerMapping = new HandlerMapping();
 
     }
+
 
 
     public void run() {
@@ -37,9 +32,16 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
 
             Request req = parseHttpRequest(in);
-            Response res = new Response(out);
+            Response res = new Response();
 
-            req.readRequest();  //Print out Http Request Message
+            handlerMapping.getStaticHandler().handle(req, res);  //get static controller to handle this request
+            if(res.getStatusCode() == StatusCodes.NOT_FOUND){  // request is not precessed by static controller
+                Controller controller = handlerMapping.getHandler(req, res);  //get the controller to handle request
+                controller.handle(req, res);
+            }
+
+            HttpResponseUtils responseWriter = new HttpResponseUtils(res, out);
+            responseWriter.makeResponse();  //write http response and send it back to client side
 
             String requestedPath = req.getRequestLine().getResource();
             StaticResourceFinder.staticFileResolver(requestedPath).ifPresentOrElse(fileAsBytes ->{

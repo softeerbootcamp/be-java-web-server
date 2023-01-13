@@ -2,53 +2,32 @@ package webserver;
 
 import webserver.Controller.AuthController;
 import webserver.Controller.Controller;
+import webserver.Controller.StaticController;
 import webserver.domain.StatusCodes;
+import webserver.domain.request.Request;
+import webserver.domain.response.Response;
 import webserver.exception.HttpRequestException;
-
-import java.util.Arrays;
-import java.util.EnumMap;
 import java.util.Map;
-import java.util.Optional;
-
-import static webserver.HandlerMapping.ControllerType.*;
-
 
 public class HandlerMapping {
 
-    private final Map<ControllerType, Controller> controllerMap = new EnumMap<ControllerType, Controller>(ControllerType.class);
+    public static final Map<String, Controller> controllerMap = Map.of("/user", new AuthController());
 
-    public HandlerMapping() {
-        controllerMap.put(USER, new AuthController());
+    //find a proper controller to handle this request
+    public Controller getHandler(Request req, Response res) {
+        String path = req.getRequestLine().getResource().getPath();
+        for(String key : controllerMap.keySet()){
+            if(path.startsWith(key))
+                return controllerMap.get(key);
+        }
+        return new StaticController();
     }
 
-    public Controller getHandler(String req) throws HttpRequestException{
 
-        ControllerType controller = findController(req);
-        return controllerMap.get(controller);
-
+    //return an instance of static controller
+    public Controller getStaticHandler(){
+        return new StaticController();
     }
 
-    public enum ControllerType {
-
-        USER("/user");
-
-        private String routeName;
-
-        private ControllerType(String routeName){
-            this.routeName = routeName;
-        }
-
-        public String getRouteName(){
-            return routeName;
-        }
-
-        public static ControllerType findController(String path){
-            return Arrays.stream(ControllerType.values())
-                    .filter(controller -> path.startsWith(controller.getRouteName()))
-                    .findFirst()
-                    .orElseThrow(() -> new HttpRequestException(StatusCodes.NOT_FOUND));
-        }
-
-    }
 }
 
