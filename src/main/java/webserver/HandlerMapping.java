@@ -9,7 +9,6 @@ import webserver.domain.response.Response;
 import webserver.exception.HttpRequestException;
 import java.util.Map;
 
-
 public class HandlerMapping {
 
     public static final Map<String, Controller> controllerMap = Map.of("/user", new AuthController());

@@ -6,6 +6,7 @@ public class HttpRequestException extends RuntimeException{
 
     private static StatusCodes statusCode;
     private static String msg;
+    
     public HttpRequestException(StatusCodes statusCode) {
         super(statusCode.getStatusMsg());
         this.statusCode = statusCode;
@@ -15,6 +16,7 @@ public class HttpRequestException extends RuntimeException{
         super(statusCode.getStatusMsg());
         this.statusCode = statusCode;
         this.msg = msg;
+
     }
 
     public StatusCodes getErrorCode(){
@@ -22,4 +24,5 @@ public class HttpRequestException extends RuntimeException{
     }
 
     public String getMsg() {return msg;}
+
 }

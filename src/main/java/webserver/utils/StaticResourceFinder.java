@@ -2,7 +2,6 @@ package webserver.utils;
 
 import webserver.domain.ContentType;
 import webserver.domain.StatusCodes;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -39,6 +38,7 @@ public class StaticResourceFinder {
         Optional<byte[]> fileAsByte = getStaticFilesPath(fileName, STATIC_MASK); //search for the requested resource throughout /statics directory
         if(fileAsByte.isEmpty())
             fileAsByte = getStaticFilesPath(fileName, TEMPLATE_MASK); //search for the requested resource throughout /templates directory
+
         return fileAsByte;
     }
 
