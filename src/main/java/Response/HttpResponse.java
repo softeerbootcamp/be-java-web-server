@@ -50,8 +50,8 @@ public class HttpResponse {
         this.headers = headers;
     }
 
-    public void setBody(Path path) {
-        this.body = HttpResponseUtil.generateBody(path);
+    public void setBody(byte[] body) {
+        this.body = body;
     }
 
     public String getHeaders() {
