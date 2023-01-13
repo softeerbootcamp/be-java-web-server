@@ -4,28 +4,64 @@
 
 <br/>
 
- 1) socket 통신의 개념적인 이해
- 2) 쓰레드 사용
- 3) 유지보수 좋은 코드 작성하기
+- 다른 사람 코드를 읽으며 네이밍에 신경쓰기
+
+- 피드백 적용 및 사용하지 않았던 자바의 유용한 기능들 써보기
+  - ClassLoader
+  - Buffer & Stream
+  - Reflection
+
+- STEP2 리팩토링 및 STEP3 기능 구현
+
+<br>
+
+
+ ## 클래스 역할
 
 <br/>
 
- ## 1일차
+- HttpRequest : 클라이언트가 전송한 Http 요청 메시지에 담긴 텍스트 정보들을 하나의 객체로 관리할 수 있도록 설계된 클래스
+  - isQueryContent : query data 가 들어오는 페이지 <br> <br>
+     ex.  html/css/js/favicon 과 같은 static도 템플릿 파일도 아닌 경우
+
+<br>
+
+- RequestStartLine
+  - start line 을 읽어들인다. 그 후 Host, User-Agent...Content-Length,Cookie 까지 읽는다.
+  - " " 기준으로 분리해 method, uri, httpVersion check
+
+<br>
+
+- Uri
+  - TemplateResource / staticResource = static 이나 템플릿 자원인지 확인
+  - getParameter : 입력된 쿼리 데이터를 파싱하여 파라미터로 반환
+  - 그래서 path엔 입력된 경로, parameter 엔 파싱된 데이터가 들어간다.
+
+<br>
+
+- RequestHandler
+  - httpRequest.isForStaticContent() = 쿼리 데이터가 아닌경우
+  - headerFields = 
+     - stylesheet 파일을 지원하도록 path의 확장자에 따라 headerFields에 Content-type과 MIME타입을 넣는다.
+     쿼리 데이터가 아니면 200 코드와 헤더 필드로 헤더를 만듬
+     - 바디와 함께 response 응답
+     - 쿼리 데이터면 302 코드와 index.html 로 리다이렉트
+     - 단, 이때 리플렉션을 통해 서블릿 동작 과정을 구현해 컨트롤러 역할을 하게 하였습니다.
+       - "user/create" 와 UserCreate class 를 controller 에 넣어줍니다.
+       - 쿼리 데이터일때, 컨트롤러에 키값을 servletClass 에 할당해줍니다.
+       - 그러면 servletClass 의 이름을 찍어보면 UserCreate class 를 가리키고 있음을 알 수 있습니다.
+       - 이 클래스를 servley에 새로운 인자로 넣어주고, service 로 request path 실행해주면 서블릿은 서빌릿 클래스 인스턴스가 됩니다.
+       - 이제 그 서블릿을 진행하면 GET/POST 인지 판단 후 User 를 데이터베이스에 넣게 됩니다.
+    
+<br>
+
+- respondToHttpRequest = 응답 메세지 전송
 
 <br/>
 
- ### 클래스 역할
+ ## 학습
 
 <br/>
-
- - RequestHandler : 클라이언트에서 요청이 들어오면 요청한 파일을 다시 클라이언트로 전달해준다.
-
-<br/>
-
- ### 학습
-
-<br/>
-
 
 - 개념 이해
 
@@ -53,7 +89,6 @@
 
 <br/>
 
-<br/>
 
 3. 브라우저 동작 방식<br/>
 
@@ -69,7 +104,7 @@
 
 <br/>
 
-<br/>
+
 
 
 4. MIME 타입이란? <br/>
@@ -80,9 +115,57 @@
 
 <br/>
 
+
+5. of 패턴
+- of 에 데이터를 읽은 후 생성자를 리턴해서 멤버에 값을 할당한다.
+
 <br/>
 
+
+2. InputStreamReader
+
+- InputStream 은 1바이트만 인식해 한글을 읽지 못한다.
+- 그래서 InputStreamReader는 바이트 단위로 읽어 들이는 형식을
+- 문자 단위(char)로 데이터 변환시키는 중개자 역할을 한다.
+
+<br/>
+
+
+3. BufferedReader
+
+- BufferReader 를 통해 입력 데이터가 바로 출력되기 보다는 버퍼를 통해 데이터를 묶어서 한 문장씩 읽어들일 수 있게 한다.
+
+<br/>
+
+
+4. StringBuilder
+
+- String은 변경 불가능한 문자열이다. 그래서 문자열을 더할때마다 문자열을 연결해 새로운 문자열을 만들어내는 많은 비용이 발생한다. 이러한 문제를 스트링 빌더의 append 를 통해 해결 가능하다.
+
+<br/>
+
+5. reflection
+
+- Reflection이란 클래스의 구조를 분석하여 동적 로딩을 가능하게 하는 기능
+  - new Instance () : 동적 객체 생성시 사용됨
+    - 기본 생성자를 호출해 객체를 생성하기 때문에 반드시 클래스에 기본 생성자가 존재해야함
+    - 만약 매개변수가 있는 생성자를 호출하고 싶다면 리플랙션으로 Constructor 객체를 얻어 new Instance 진행
+    
+  > new Instance() = Deprecated <br>
+  > -> getDeclaredConstructor().newInstance() 로 수정
+
+  - getDeclaredConstructors(), getDeclaredFields(), getDeclaredMethods() : 클래스 생성자, 필드정보, 메소드 정보를 알고 싶을 때 사용한다
+
+  - invoke : Method를 동적으로 실행시켜 주는 메소드
+
+<br/>
+
+
 </details>
+
+<br/>
+
+<br/>
 
 - 수업 노트
 
@@ -127,6 +210,10 @@
     - PR을 하면 돌리기 전 작업 내역도 남아 있음
 
 </details>
+
+<br/>
+
+<br/>
 
 - Pull Request 피드백
 
