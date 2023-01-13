@@ -2,8 +2,6 @@ package util;
 
 import webserver.ContentType;
 
-import java.util.Map;
-
 public class PathUtils {
     public static String pathEndCheck(String path) {
         if (path.endsWith(ContentType.HTML.getExtensionValue())) {

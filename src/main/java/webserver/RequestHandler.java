@@ -1,6 +1,7 @@
 package webserver;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.util.HashMap;
@@ -47,6 +48,10 @@ public class RequestHandler implements Runnable{
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
         }
     }
 
@@ -55,7 +60,13 @@ public class RequestHandler implements Runnable{
         return HttpRequest.of(br);
     }
 
-    private HttpResponse controlRequestAndResponse(HttpRequest httpRequest) throws IOException, URISyntaxException, InstantiationException, IllegalAccessException {
+    private HttpResponse controlRequestAndResponse(HttpRequest httpRequest)
+            throws IOException,
+            URISyntaxException,
+            InstantiationException,
+            IllegalAccessException,
+            NoSuchMethodException,
+            InvocationTargetException {
 
         if (httpRequest.isForStaticContent()) {
             String path = httpRequest.getPath();
@@ -67,6 +78,7 @@ public class RequestHandler implements Runnable{
             headerFields.put("Content-Type", mData);
 
             logger.debug("Content-Type : {}", headerFields.get("Content-Type"));
+
             headerFields.put("Content-Length", String.valueOf(body.length));
             Header header = new Header(headerFields);
             return HttpResponse.of("200", header, body);
@@ -77,7 +89,7 @@ public class RequestHandler implements Runnable{
             logger.debug("httpRequest path : {}",path);
             Class<? extends Servlet> servletClass = controller.get(path);
             logger.debug("servlet name : {}",servletClass.getName());
-            Servlet servlet = servletClass.newInstance();
+            Servlet servlet = servletClass.getDeclaredConstructor().newInstance();
             servlet.service(httpRequest);
 
             Map<String, String > headerFields = new HashMap<>();
