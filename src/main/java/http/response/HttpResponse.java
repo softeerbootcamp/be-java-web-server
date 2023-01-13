@@ -69,7 +69,4 @@ public class HttpResponse {
         }
     }
 
-    public HttpStatusCode getStatusCode() {
-        return httpStatusLine.getStatusCode();
-    }
 }
