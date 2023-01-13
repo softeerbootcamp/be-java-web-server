@@ -1,15 +1,11 @@
 package util;
-
 import Controller.Controller;
 import Controller.UserController;
 import Controller.StaticResourceController;
 import http.request.HttpRequest;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 public class ControllerMapper {
-
     private static final Map<String, Controller> controllerMap = new LinkedHashMap<>();
 
     static {
@@ -18,14 +14,13 @@ public class ControllerMapper {
 
     public static Controller getController(HttpRequest request) {
         String url = request.getUrl();
-
         for (String key : controllerMap.keySet()) {
             if (url.startsWith(key)) {
                 return controllerMap.get(key);
             }
         }
 
-        if (url.equals("/") || url.contains(".")) {
+        if (url.equals("/") || StaticResourceController.isSupported(url)) {
             return new StaticResourceController();
         }
 
