@@ -1,18 +1,24 @@
 package webserver.domain.response;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import webserver.RequestHandler;
 import webserver.domain.ContentType;
 import webserver.domain.StatusCodes;
-import webserver.utils.HttpResponseUtils;
+import webserver.utils.StaticResourceFinder;
 
-import java.io.OutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class Response {
 
+    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private StatusCodes status;
     private Map<String, String> headerMaps = new HashMap<>();
     private byte[] body;
+
     public byte[] getBody() {
         return body;
     }
@@ -41,7 +47,23 @@ public class Response {
         headerMaps.put("Content-Length", String.valueOf(body.length));
     }
 
-    public void error(StatusCodes statusCode) {
+    public void error(StatusCodes statusCode, byte[] bodyAsByte, ContentType contentType) {
         status = statusCode;
+        body = bodyAsByte;
+        headerMaps.put("Content-Type" , contentType.getType());
+        headerMaps.put("Content-Length", String.valueOf(body.length));
+    }
+
+    public void notFoundError(StatusCodes statusCode){
+        status = statusCode;
+        try {
+            StaticResourceFinder.staticFileResolver("/error.html").ifPresent(fileAsByte-> {
+                body = fileAsByte;
+                headerMaps.put("Content-Length", String.valueOf(body.length));
+            });
+            headerMaps.put("Content-Type" , ContentType.TEXT_HTML.getType());
+        } catch (IOException e) {
+            logger.debug("Can not implement IO operation");
+        }
     }
 }
