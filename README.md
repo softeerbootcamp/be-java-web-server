@@ -7,9 +7,31 @@ Java Web Application Server 2022
 이 프로젝트는 우아한 테크코스 박재성님의 허가를 받아 https://github.com/woowacourse/jwp-was
 를 참고하여 작성되었습니다.
 
-## 데모 영상
+# 데모 영상
 
 https://drive.google.com/file/d/1Z-KNZgC6X3H5bxXtWifqP7BtFPTPyL_M/view?usp=share_link
+
+# 디렉토리 구조
+<img width="401" alt="스크린샷 2023-01-13 오전 10 50 15" src="https://user-images.githubusercontent.com/80745404/212218564-944d1f8b-34ee-4cad-a424-5a71fa5ee0c9.png">
+
+# Flow
+1. 서버 시작
+2. 요청 발생 시 HttpRequest, HttpResponse 객체 생성
+- 이때 HttpRequset는 요청받은 request를 바탕으로 생성하고, HttpResponse는 초기화만 진행
+3. ControllerFactory에서 어느 Controller를 사용할지 판단
+- 각 컨트롤러마다 자신이 해야하는 일의 path 리스트가 들어있고, 그 리스트의 items와 요청한 경로를 비교하여 매칭판단
+- 매칭된 컨트롤러가 없을 시 httpResponse.do404() 호출
+    - do404() : 404 Error Page
+
+      <img width="200" alt="스크린샷 2023-01-13 오전 2 50 31" src="https://user-images.githubusercontent.com/80745404/212219318-05b4bdbf-28be-401c-8b10-636fbfc085c2.png">
+
+4. 매칭된 Controller의 service() 호출
+5. HttpMethod에 따라 각 역할을 하는 함수 호출 ex) doGet()
+- Resource 파일일 경우 파일을 load 하고 httpResponse.forward()를 통해 전달 후 Response 작성
+    - 파일이 존재하지 않을 경우 httpResponse.do404() 호출
+- 특정 기능 요청시 ex) /user/create
+    - 회원 정보를 db에 저장하는 회원가입 로직 수행후 httpResponse.sendRedirect()를 통해 Response 작성
+
 
 # 공부내용 
 ## 서블릿이란?
