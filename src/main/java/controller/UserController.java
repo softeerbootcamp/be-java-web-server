@@ -3,6 +3,7 @@ package controller;
 import model.domain.User;
 import model.general.Header;
 import model.general.Status;
+import model.request.Request;
 import model.request.RequestLine;
 import model.response.Response;
 import model.response.StatusLine;
@@ -11,16 +12,11 @@ import service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
 public class UserController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-
-    private static final String fileParentPath = "src/main/resources/templates";
 
     private final UserService userService;
 
@@ -29,38 +25,29 @@ public class UserController implements Controller {
     }
 
     @Override
-    public Response getResponse(RequestLine requestLine) {
-        if(requestLine.getUri().startsWith("/user/create")) return createUser(requestLine);
-        else if(requestLine.getUri().equals("/user/form.html")) return getUserFormHtml(requestLine);
+    public Response getResponse(Request request) {
+        if(request.getRequestLine().getUri().startsWith("/user/create")) return createUserResponse(request);
 
-        return Response.from(Status.NOT_FOUND);
+        return Response.of(request, Status.NOT_FOUND);
     }
 
-    private Response createUser(RequestLine requestLine) {
+    private Response createUserResponse(Request request) {
+        RequestLine requestLine = request.getRequestLine();
+
         Map<String, String> userInfo = requestLine.parseQueryString();
-        User user = User.from(userInfo.get("userId"), userInfo.get("password"),
+        User user = User.of(userInfo.get("userId"), userInfo.get("password"),
                 userInfo.get("name"), userInfo.get("email"));
         userService.signUp(user);
 
-        Map<Header, String> headers = new HashMap<>();
-        headers.put(Header.of("Location"), "/index.html");
+        Map<Header, String> headers = response302Header();
 
-        return Response.of(StatusLine.from(Status.FOUND), headers);
+        return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.FOUND), headers);
     }
 
-    private Response getUserFormHtml(RequestLine requestLine) {
+    private Map<Header, String> response302Header() {
         Map<Header, String> headers = new HashMap<>();
-        headers.put(Header.of("Content-Type"), "text/html;charset=utf-8");
+        headers.put(Header.from("Location"), "/index.html");
 
-        byte[] body = {};
-        try {
-            body = Files.readAllBytes(new File(fileParentPath + requestLine.getUri()).toPath());
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-
-        headers.put(Header.of("Content-Length"), Integer.toString(body.length));
-
-        return Response.of(StatusLine.from(Status.OK), headers, body);
+        return headers;
     }
 }

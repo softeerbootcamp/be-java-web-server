@@ -14,7 +14,7 @@ public enum Method {
         this.method = method;
     }
 
-    public static Method of(String method) {
+    public static Method from(String method) {
         return Arrays.stream(values())
                 .filter(m -> m.method.equals(method))
                 .findFirst()

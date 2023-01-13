@@ -11,8 +11,8 @@ public class StatusLine {
         this.status = status;
     }
 
-    public static StatusLine from(Status status) {
-        return new StatusLine("HTTP/1.1", status);
+    public static StatusLine of(String httpVersion, Status status) {
+        return new StatusLine(httpVersion, status);
     }
 
     public String getHttpVersion() {

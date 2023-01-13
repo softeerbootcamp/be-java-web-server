@@ -1,33 +1,40 @@
 package util;
 
 import controller.Controller;
-import controller.HomeController;
-
+import controller.ViewController;
 import controller.NotFoundController;
 import controller.UserController;
 import db.Database;
+import model.request.Request;
 import model.request.RequestLine;
 import service.UserService;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ControllerMapper {
     private static final Map<String, Controller> controllerMap = new HashMap<>();
 
     static {
-        controllerMap.put("/", new HomeController());
-        controllerMap.put("index.html", new HomeController());
         controllerMap.put("user", new UserController(new UserService(new Database())));
     }
 
-    public static Controller selectController(RequestLine requestLine) {
+    public static Controller selectController(Request request) {
+        RequestLine requestLine = request.getRequestLine();
+
+        if(Objects.nonNull(requestLine.getContentType())) return new ViewController();
+
         for(Map.Entry<String, Controller> controllerEntry : controllerMap.entrySet()) {
-            if(controllerEntry.getKey().equals(requestLine.getControllerCriteria())) {
+            if(isExistController(controllerEntry.getKey(), requestLine.getControllerCriteria())) {
                 return controllerEntry.getValue();
             }
         }
 
         return new NotFoundController();
+    }
+
+    private static boolean isExistController(String controller, String controllerCriteria) {
+        return controller.equals(controllerCriteria);
     }
 }

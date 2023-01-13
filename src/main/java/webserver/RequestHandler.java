@@ -1,13 +1,12 @@
 package webserver;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.net.Socket;
 
 import controller.Controller;
-import util.ControllerMapper;
+import model.request.Request;
 import model.response.Response;
-import model.request.RequestLine;
+import util.ControllerMapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,16 +24,12 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
-            BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            String line = br.readLine();
+            Request request = Request.from(in);
+
+            Controller controller = ControllerMapper.selectController(request);
+            Response response = controller.getResponse(request);
 
             DataOutputStream dos = new DataOutputStream(out);
-            RequestLine requestLine = RequestLine.from(line);
-
-            Controller controller = ControllerMapper.selectController(requestLine);
-            Response response = controller.getResponse(requestLine);
-
             response.writeOutputStream(dos);
         } catch (IOException e) {
             logger.error(e.getMessage());
