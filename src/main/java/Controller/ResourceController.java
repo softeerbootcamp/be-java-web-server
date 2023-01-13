@@ -13,7 +13,6 @@ public class ResourceController implements Controller {
             return "/index.html";
         }
 
-        // TODO 잘못된 URL이 들어올 경우 404 NOT_FOUND 응답
         return url;
     }
 }

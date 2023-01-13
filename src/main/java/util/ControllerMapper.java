@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class ControllerMapper {
 
-    private static final List<String> staticFileExtension = List.of(".html", ".css", ".eot", ".svg", ".ttf", ".woff", ".woff2", ".png", ".js", ".ico");
+    private static final List<String> staticFileExtension = List.of(".css", ".eot", ".svg", ".ttf", ".woff", ".woff2", ".png", ".js", ".ico");
     private static final Map<String, Controller> controllerMap = new LinkedHashMap<>();
 
     static {
@@ -21,14 +21,14 @@ public class ControllerMapper {
     public static Controller getController(HttpRequest request) {
         String url = request.getUrl();
 
-        if (url.equals("/") || staticFileExtension.stream().anyMatch(url::endsWith)) {
-            return new ResourceController();
-        }
-
         for (String key : controllerMap.keySet()) {
             if (url.startsWith(key)) {
                 return controllerMap.get(key);
             }
+        }
+
+        if (url.equals("/") || staticFileExtension.stream().anyMatch(url::endsWith)) {
+            return new ResourceController();
         }
 
         throw new IllegalArgumentException();
