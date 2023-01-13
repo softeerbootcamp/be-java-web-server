@@ -4,18 +4,18 @@ import java.util.Map;
 
 public class URI {
     private final String path;
-    private final Map<String, String> querys;
+    private final Map<String, String> queries;
 
-    public URI(String path, Map<String, String> querys) {
+    public URI(String path, Map<String, String> queries) {
         this.path = path;
-        this.querys = querys;
+        this.queries = queries;
     }
 
     public String getPath() {
         return path;
     }
 
-    public Map<String, String> getQuerys() {
-        return querys;
+    public Map<String, String> getQueries() {
+        return queries;
     }
 }
