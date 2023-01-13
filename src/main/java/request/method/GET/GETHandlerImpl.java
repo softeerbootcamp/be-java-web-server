@@ -1,4 +1,4 @@
-package request.GET;
+package request.method.GET;
 
 import request.Request;
 import request.method.HttpMethodHandler;
