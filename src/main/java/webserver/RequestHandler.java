@@ -39,7 +39,7 @@ public class RequestHandler implements Runnable {
     }
 
     private void sendResponse(OutputStream out, HttpResponse httpResponse, String viewPath) throws IOException {
-        httpResponse.setBody(viewPath);
+        httpResponse.makeBodyMessage(viewPath);
 
         DataOutputStream dos = new DataOutputStream(out);
         httpResponse.send(dos);

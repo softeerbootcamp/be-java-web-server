@@ -47,7 +47,7 @@ public class HttpResponse {
         this.body = new byte[0];
     }
 
-    public void setBody(String viewPath) throws IOException {
+    public void makeBodyMessage(String viewPath) throws IOException {
         File file = new File(viewPath);
         if (file.exists() && file.isFile()) {
             this.body = Files.readAllBytes(file.toPath());
