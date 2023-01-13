@@ -10,15 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
 
-public enum GETRequestUrlEnum {
-    /*FORM("/user/create") {
-        @Override
-        public byte[] handle(Request request) {
-            User user = new User(RequestParser.parseGETQueryString(request.getResource()));
-            System.out.println(user);
-            return new byte[0];
-        }
-    },*/
+public enum GETFileRequestEnum {
     TEMPLATE(".html .ico") {
         @Override
         public byte[] handle(Request request) {
@@ -46,9 +38,9 @@ public enum GETRequestUrlEnum {
 
     private static Logger logger = LoggerFactory.getLogger(WebServer .class);
 
-    private String url;
+    private final String url;
 
-    private GETRequestUrlEnum(String url) {
+    private GETFileRequestEnum(String url) {
         this.url = url;
     }
 
@@ -56,7 +48,7 @@ public enum GETRequestUrlEnum {
         return url;
     }
 
-    public List<String> getSupportingFilePostfix(GETRequestUrlEnum urlEnum) {
+    public List<String> getSupportingFilePostfix(GETFileRequestEnum urlEnum) {
         List<String> list = new ArrayList<>();
         StringTokenizer stringTokenizer = new StringTokenizer(urlEnum.getUrl()," ");
         while(stringTokenizer.hasMoreTokens()) {
