@@ -6,12 +6,10 @@ import Controller.ResourceController;
 import http.request.HttpRequest;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ControllerMapper {
 
-    private static final List<String> staticFileExtension = List.of(".css", ".eot", ".svg", ".ttf", ".woff", ".woff2", ".png", ".js", ".ico");
     private static final Map<String, Controller> controllerMap = new LinkedHashMap<>();
 
     static {
@@ -27,7 +25,7 @@ public class ControllerMapper {
             }
         }
 
-        if (url.equals("/") || staticFileExtension.stream().anyMatch(url::endsWith)) {
+        if (url.equals("/") || url.contains(".")) {
             return new ResourceController();
         }
 
