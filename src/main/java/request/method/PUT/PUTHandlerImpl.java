@@ -1,6 +1,7 @@
-package request.methodHandler;
+package request.PUT;
 
 import request.Request;
+import request.method.HttpMethodHandler;
 
 import java.io.IOException;
 

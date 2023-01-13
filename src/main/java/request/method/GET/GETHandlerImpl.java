@@ -1,7 +1,7 @@
-package request.methodHandler;
+package request.GET;
 
 import request.Request;
-import request.enums.GETRequestUrlEnum;
+import request.method.HttpMethodHandler;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ public class GETHandlerImpl implements HttpMethodHandler {
     @Override
     public byte[] handle(Request request) {
         for(GETRequestUrlEnum requestUrlEnum : GETRequestUrlEnum.values()) {
-            if(this.contains(requestUrlEnum.getSupportingUrl(requestUrlEnum), request.getResource())) {
+            if( contains(requestUrlEnum.getSupportingFilePostfix(requestUrlEnum), request.getResource() )) {
                 return requestUrlEnum.handle(request);
             }
         }

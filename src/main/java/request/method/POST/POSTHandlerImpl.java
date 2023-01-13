@@ -1,10 +1,11 @@
-package request.methodHandler;
+package request.POST;
 
 import request.Request;
+import request.method.HttpMethodHandler;
 
 import java.io.IOException;
 
-public class DELETEHandlerImpl implements HttpMethodHandler {
+public class POSTHandlerImpl implements HttpMethodHandler {
     @Override
     public byte[] handle(Request request) throws IOException {
         return null;

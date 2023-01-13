@@ -1,10 +1,8 @@
-package request.enums;
+package request.GET;
 
-import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.Request;
-import request.RequestParser;
 import webserver.WebServer;
 
 import java.io.File;
@@ -13,14 +11,14 @@ import java.nio.file.Files;
 import java.util.*;
 
 public enum GETRequestUrlEnum {
-    FORM("/user/create") {
+    /*FORM("/user/create") {
         @Override
         public byte[] handle(Request request) {
             User user = new User(RequestParser.parseGETQueryString(request.getResource()));
             System.out.println(user);
             return new byte[0];
         }
-    },
+    },*/
     TEMPLATE(".html .ico") {
         @Override
         public byte[] handle(Request request) {
@@ -54,11 +52,11 @@ public enum GETRequestUrlEnum {
         this.url = url;
     }
 
-    private String getUrl() {
+    public String getUrl() {
         return url;
     }
 
-    public List<String> getSupportingUrl(GETRequestUrlEnum urlEnum) {
+    public List<String> getSupportingFilePostfix(GETRequestUrlEnum urlEnum) {
         List<String> list = new ArrayList<>();
         StringTokenizer stringTokenizer = new StringTokenizer(urlEnum.getUrl()," ");
         while(stringTokenizer.hasMoreTokens()) {

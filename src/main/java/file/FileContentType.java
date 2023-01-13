@@ -1,6 +1,6 @@
 package file;
 
-public enum FilePostfix {
+public enum FileContentType {
     HTML("html", "text/html"),
     CSS("css", "text/css"),
     ICO("ico", "image/x-icon"),
@@ -16,7 +16,7 @@ public enum FilePostfix {
 
     private String contentType;
 
-    private FilePostfix(String postfix, String contentType) {
+    private FileContentType(String postfix, String contentType) {
         this.postfix = postfix;
         this.contentType = contentType;
     }
