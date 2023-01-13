@@ -1,8 +1,6 @@
 package controller;
 
-import http.HttpRequest;
-import http.HttpResponse;
-import http.RequestLine;
+import http.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.RequestHandler;
@@ -22,7 +20,8 @@ public class ControllerHandler{
     }
     public static Controller findController(HttpRequest httpRequest) {
         RequestLine requestLine = httpRequest.getRequestLine();
-        if(requestLine.getUri().isEndWithResourceType()) {
+        Uri uri = requestLine.getUri();
+        if(!uri.isQueryParameterExist() && uri.isEndWithResourceType()) {
             return new ViewController();
         }
         return controllers
@@ -36,7 +35,7 @@ public class ControllerHandler{
         try {
             Controller controller = findController(httpRequest);
             controller.doService(httpRequest, httpResponse);
-        } catch (ControllerNotFoundException e) {
+        } catch (ControllerNotFoundException |ResourceTypeNotFoundException e) {
             logger.error(e.getMessage());
             httpResponse.response404Header();
         }

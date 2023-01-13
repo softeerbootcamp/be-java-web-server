@@ -29,8 +29,7 @@ public class Uri {
     }
 
     public boolean isEndWithResourceType() {
-        return Arrays.stream(ResourceType.values())
-                .anyMatch(resourceType -> path.endsWith(resourceType.getExtension()));
+        return parseResourceType() != null;
     }
 
     public String getDetachControllerPath() {

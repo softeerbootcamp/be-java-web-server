@@ -31,7 +31,7 @@ public enum ResourceType {
         return Stream.of(values())
                 .filter(resourceType -> path.endsWith(resourceType.getExtension()))
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new ResourceTypeNotFoundException("지원하지 않는 정적 타입입니다."));
     }
 
     public String getExtension() {
