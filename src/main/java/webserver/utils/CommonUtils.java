@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class CommonUtils {
 
-    private static final Logger logger = LoggerFactory.getLogger(HttpResponseWriter.class);
+    private static final Logger logger = LoggerFactory.getLogger(CommonUtils.class);
 
     public static void readMap(Map<String, String> map){
         for (String key: map.keySet()){
