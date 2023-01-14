@@ -20,7 +20,11 @@ public class HttpResponseUtils {
     public HttpResponseUtils(Response response, OutputStream out){
         this.response = response;
         this.dos = new DataOutputStream(out);
+        response();
+    }
 
+    public static HttpResponseUtils of(Response response, OutputStream out){
+        return new HttpResponseUtils (response, out);
     }
 
     public void writeRequestLine(StatusCodes code) throws IOException {
@@ -47,6 +51,7 @@ public class HttpResponseUtils {
             logger.debug(e.getMessage());
         }
     }
+
 
 
 
