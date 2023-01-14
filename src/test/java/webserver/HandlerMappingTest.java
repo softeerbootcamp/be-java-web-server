@@ -22,10 +22,9 @@ public class HandlerMappingTest {
     public void getHandlerTest_callValidController() throws HttpRequestException {
         //given
         String path = "/user/create";
-        Response res = mock(Response.class);
         Request req = mock(Request.class);
         //when
-        Controller controllerType = handlerMapping.getHandler(req, res);
+        Controller controllerType = handlerMapping.getHandler(req);
         //then
         Assertions.assertEquals(HandlerMapping.controllerMap.get("/user"), controllerType);
     }
@@ -35,10 +34,9 @@ public class HandlerMappingTest {
     public void getHandlerTest_inValidController() throws HttpRequestException {
         //given
         String path = "/lorem";
-        Response res = mock(Response.class);
         Request req = mock(Request.class);
 
         //then
-        Assertions.assertThrows(HttpRequestException.class, () -> handlerMapping.getHandler(req, res));
+        Assertions.assertThrows(HttpRequestException.class, () -> handlerMapping.getHandler(req));
     }
 }

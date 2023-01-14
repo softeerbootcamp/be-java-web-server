@@ -13,7 +13,7 @@ public class HandlerMapping {
     public static final Map<String, Controller> controllerMap = Map.of("/user", new AuthController());
 
     //find a proper controller to handle this request
-    public Controller getHandler(Request req, Response res) {
+    public Controller getHandler(Request req) {
         String path = req.getRequestLine().getResource().getPath();
         for(String key : controllerMap.keySet()){
             if(path.startsWith(key))

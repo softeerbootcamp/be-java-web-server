@@ -36,7 +36,7 @@ public class RequestHandler implements Runnable {
 
             handlerMapping.getStaticHandler().handle(req, res);  //get static controller to handle this request
             if(res.getStatusCode() == StatusCodes.NOT_FOUND){  // request is not precessed by static controller
-                Controller controller = handlerMapping.getHandler(req, res);  //get the controller to handle request
+                Controller controller = handlerMapping.getHandler(req);  //get the controller to handle request
                 controller.handle(req, res);
             }
 
