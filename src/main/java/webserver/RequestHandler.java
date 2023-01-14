@@ -8,7 +8,7 @@ import webserver.Controller.Controller;
 import webserver.domain.StatusCodes;
 import webserver.domain.request.Request;
 import webserver.domain.response.Response;
-import webserver.utils.HttpResponseUtils;
+import webserver.utils.HttpResponseWriter;
 import static webserver.utils.HttpRequestUtils.parseHttpRequest;
 
 public class RequestHandler implements Runnable {
@@ -40,26 +40,9 @@ public class RequestHandler implements Runnable {
                 controller.handle(req, res);
             }
 
-            HttpResponseUtils responseWriter = new HttpResponseUtils(res, out);
-            responseWriter.makeResponse();  //write http response and send it back to client side
+            HttpResponseWriter.of(res, out); //write http response and send it back to client side
 
-            String requestedPath = req.getRequestLine().getResource();
-            StaticResourceFinder.staticFileResolver(requestedPath).ifPresentOrElse(fileAsBytes ->{
-                res.setBody(fileAsBytes);
-                res.setContentType(StaticResourceFinder.getExtension(requestedPath));
-                res.setStatusCode(StatusCodes.OK);
-                res.writeResponse();
-            },()->{
-                try{
-                    Controller controller = handlerMapping.getHandler(requestedPath);
-                    String [] parsedPath = CommonUtils.parseRequestLine(requestedPath);
-                    controller.handle(parsedPath[0], parsedPath[1], res);
-                    res.writeResponse();
-                }catch (HttpRequestException e){
-                    res.setStatusCode(e.getErrorCode());
-                    res.writeResponse();
-                }
-            });
+
         } catch (IOException e) {
             logger.debug(e.getMessage());
         }

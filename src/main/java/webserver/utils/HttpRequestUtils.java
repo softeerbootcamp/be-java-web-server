@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class HttpRequestUtils {
 
-        private static final Logger logger = LoggerFactory.getLogger(HttpResponseUtils.class);
+        private static final Logger logger = LoggerFactory.getLogger(HttpResponseWriter.class);
         public static Request parseHttpRequest(InputStream in) throws IOException {
 
         String requestLine = "";

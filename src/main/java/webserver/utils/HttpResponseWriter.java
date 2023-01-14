@@ -11,20 +11,20 @@ import java.io.OutputStream;
 
 import static webserver.utils.CommonUtils.mapToStringSplitWithNewLine;
 
-public class HttpResponseUtils {
+public class HttpResponseWriter {
 
     private Response response;
     private DataOutputStream dos;
-    private static final Logger logger = LoggerFactory.getLogger(HttpResponseUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(HttpResponseWriter.class);
 
-    public HttpResponseUtils(Response response, OutputStream out){
+    public HttpResponseWriter(Response response, OutputStream out){
         this.response = response;
         this.dos = new DataOutputStream(out);
         response();
     }
 
-    public static HttpResponseUtils of(Response response, OutputStream out){
-        return new HttpResponseUtils (response, out);
+    public static HttpResponseWriter of(Response response, OutputStream out){
+        return new HttpResponseWriter(response, out);
     }
 
     public void writeRequestLine(StatusCodes code) throws IOException {
