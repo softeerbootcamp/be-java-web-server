@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class HttpRequestUtils {
 
-        private static final Logger logger = LoggerFactory.getLogger(HttpResponseWriter.class);
+        private static final Logger logger = LoggerFactory.getLogger(HttpRequestUtils.class);
         public static Request parseHttpRequest(InputStream in) throws IOException {
 
         String requestLine = "";
@@ -36,8 +36,7 @@ public class HttpRequestUtils {
             line = br.readLine();
         }
 
-        Request request = Request.of(requestLine, header);  //make a Request instance using static factory method
-        return request;
+        return Request.of(requestLine, header);  //make a Request instance using static factory method
     }
 
     public static Map<String, String> parseQueryString(String queryString) {
