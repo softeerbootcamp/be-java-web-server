@@ -14,15 +14,18 @@ import java.util.stream.Collectors;
 public class ControllerExecutioner {
 
     public static void executeController(Class<?> clazz, Map<String, String> queryString, Response res, String path){
+
+        //extract all the methods in the class which include specific annotation
         List<Method> methodList = Arrays.stream(clazz.getDeclaredMethods())
                 .filter(method -> method.isAnnotationPresent(ControllerInfo.class))
                 .collect(Collectors.toList());
+
         methodList.forEach(method -> {
             ControllerInfo controllerInfo = method.getAnnotation(ControllerInfo.class);
             if(controllerInfo.path().startsWith(path)){
                 try {
-                    ArgumentResolver.checkParameters(queryString, Arrays.asList(controllerInfo.queryStr()));
-                    method.invoke(clazz.newInstance(), queryString, res);
+                    ArgumentResolver.checkParameters(queryString, Arrays.asList(controllerInfo.queryStr()));  //check the validity of parameters before executing the method
+                    method.invoke(clazz.newInstance(), queryString, res);    //invoke method
                 } catch (InstantiationException | IllegalAccessException e) {
                     throw new HttpRequestException(StatusCodes.INTERNAL_SERVER_ERROR);
                 } catch (InvocationTargetException e) {
