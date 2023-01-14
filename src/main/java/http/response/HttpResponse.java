@@ -64,9 +64,10 @@ public class HttpResponse {
 
     public void send() throws IOException {
         String statusLine = HTTP_VERSION + " " + status.code() + " " + status.name() + "\r\n";
-        String headers = this.headers.toString()  + "\r\n\n";
         dos.writeBytes(statusLine);
+        String headers = this.headers.toString();
         dos.writeBytes(headers);
+        dos.writeBytes("\n");
         dos.write(body.data());
         dos.flush();
     }
