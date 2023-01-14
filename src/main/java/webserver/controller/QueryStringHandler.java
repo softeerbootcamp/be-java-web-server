@@ -2,6 +2,7 @@ package webserver.controller;
 
 import service.UserService;
 import util.HttpParser;
+import was.annotation.GetMapping;
 import webserver.domain.HttpRequest;
 import webserver.domain.HttpResponse;
 import webserver.domain.HttpResponseMessage;
@@ -14,7 +15,7 @@ public class QueryStringHandler implements ControllerHandler {
     public QueryStringHandler(HttpRequest httpRequest) {
         this.httpRequest = httpRequest;
     }
-
+    @GetMapping("/user/create")
     @Override
     public HttpResponseMessage handle() {
         String url = httpRequest.getRequestURL();
