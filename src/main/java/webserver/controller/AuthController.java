@@ -1,14 +1,13 @@
-package webserver.Controller;
+package webserver.controller;
 
-import webserver.ArgumentResolver;
 import webserver.ControllerExecutioner;
-import webserver.ControllerInfo;
+import webserver.annotation.ControllerInfo;
 import webserver.Service.AuthService;
 import webserver.domain.ContentType;
 import webserver.domain.StatusCodes;
 import webserver.domain.response.Response;
 import webserver.exception.HttpRequestException;
-import java.util.Arrays;
+
 import java.util.Map;
 
 public class AuthController implements Controller {

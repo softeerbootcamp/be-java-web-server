@@ -4,7 +4,7 @@ import java.io.*;
 import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.Controller.Controller;
+import webserver.controller.Controller;
 import webserver.domain.StatusCodes;
 import webserver.domain.request.Request;
 import webserver.domain.response.Response;

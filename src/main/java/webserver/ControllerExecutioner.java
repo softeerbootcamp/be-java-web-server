@@ -1,5 +1,6 @@
 package webserver;
 
+import webserver.annotation.ControllerInfo;
 import webserver.domain.StatusCodes;
 import webserver.domain.response.Response;
 import webserver.exception.HttpRequestException;

@@ -1,4 +1,4 @@
-package webserver.Controller;
+package webserver.controller;
 
 import webserver.domain.request.URI;
 import webserver.domain.request.Request;

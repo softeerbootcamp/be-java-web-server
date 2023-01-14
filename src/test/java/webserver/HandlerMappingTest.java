@@ -1,8 +1,7 @@
 package webserver;
 
 import org.junit.jupiter.api.*;
-import org.mockito.Mock;
-import webserver.Controller.Controller;
+import webserver.controller.Controller;
 import webserver.domain.request.Request;
 import webserver.domain.response.Response;
 import webserver.exception.HttpRequestException;

@@ -1,6 +1,5 @@
-package webserver.Controller;
+package webserver.controller;
 
-import webserver.domain.ContentType;
 import webserver.domain.StatusCodes;
 import webserver.domain.response.Response;
 import webserver.utils.StaticResourceFinder;

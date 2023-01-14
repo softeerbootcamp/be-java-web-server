@@ -1,4 +1,4 @@
-package webserver.Controller;
+package webserver.controller;
 import org.junit.jupiter.api.*;
 import webserver.Service.AuthService;
 import webserver.domain.ContentType;

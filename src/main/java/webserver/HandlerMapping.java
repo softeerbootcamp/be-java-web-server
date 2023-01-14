@@ -1,12 +1,11 @@
 package webserver;
 
-import webserver.Controller.AuthController;
-import webserver.Controller.Controller;
-import webserver.Controller.StaticController;
-import webserver.domain.StatusCodes;
+import webserver.controller.AuthController;
+import webserver.controller.Controller;
+import webserver.controller.StaticController;
 import webserver.domain.request.Request;
 import webserver.domain.response.Response;
-import webserver.exception.HttpRequestException;
+
 import java.util.Map;
 
 public class HandlerMapping {

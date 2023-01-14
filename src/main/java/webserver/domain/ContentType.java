@@ -14,6 +14,7 @@ public enum ContentType {
 
     public String type;
     public String ext;
+
     private ContentType(String type, String ext){
         this.type= type;
         this.ext = ext;
