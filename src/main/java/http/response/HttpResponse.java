@@ -77,12 +77,11 @@ public class HttpResponse {
         Arrays.asList(String.format("status line: %s", statusLine),
                 String.format("headers: %s", headers)).forEach(logger::debug);
 
-        byte[] body = responseBody.getBody();
-        if (body.length == 0) {
-            dos.flush();
-            return;
+        if (responseBody.hasBody()) {
+            byte[] body = responseBody.getBody();
+            dos.write(body, 0, body.length);
         }
-        dos.write(body, 0, body.length);
+
         dos.flush();
     }
 
