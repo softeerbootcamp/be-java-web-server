@@ -17,6 +17,8 @@ import static utils.FileIoUtils.loadFile;
 
 public class ResourceController implements Controller {
 
+    public static final int EMPTY_LENGTH = 0;
+
     private static final Logger logger = LoggerFactory.getLogger(ResourceController.class);
 
     private final List<String> paths;
@@ -41,7 +43,7 @@ public class ResourceController implements Controller {
         logger.debug("filePath: {}" + filePath);
         byte[] body = loadFile(filePath);
 
-        if(body.length == 0){
+        if(body.length == EMPTY_LENGTH){
             byte[] errorBody = load404ErrorFile();
             httpResponse.do404(errorBody);
             return;
