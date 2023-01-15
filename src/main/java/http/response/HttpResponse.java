@@ -18,11 +18,25 @@ public class HttpResponse {
     private final HttpHeaders headers;
     private final HttpResponseBody responseBody;
 
-    public HttpResponse(OutputStream out) {
+    private HttpResponse(
+            OutputStream out,
+            HttpStatusLine httpStatusLine,
+            HttpHeaders headers,
+            HttpResponseBody responseBody
+    ) {
         this.dos = new DataOutputStream(out);
-        this.statusLine = HttpStatusLine.createDefaultStatusLine();
-        this.headers = HttpHeaders.createDefaultHeaders();
-        this.responseBody = HttpResponseBody.createDefaultBody();
+        this.statusLine = httpStatusLine;
+        this.headers = headers;
+        this.responseBody = responseBody;
+    }
+
+    public static HttpResponse createDefaultHttpResponse(OutputStream out) {
+        return new HttpResponse(
+                out,
+                HttpStatusLine.createDefaultStatusLine(),
+                HttpHeaders.createDefaultHeaders(),
+                HttpResponseBody.createDefaultBody()
+        );
     }
 
     public void forward(ContentType contentType, byte[] body) throws IOException {
@@ -44,6 +58,7 @@ public class HttpResponse {
         dos.writeBytes(System.lineSeparator());
         dos.write(body, 0, body.length);
         dos.flush();
+        logger.error("Http statusLine: " + statusLine);
     }
 
     public String getStatusCode() {
