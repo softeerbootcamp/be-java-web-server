@@ -18,7 +18,7 @@ public final class FileIoUtils {
             Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI());
             return Files.readAllBytes(path);
         } catch (NullPointerException | URISyntaxException e) {
-            return "".getBytes();
+            return getEmptyBody();
         }
     }
 
@@ -26,6 +26,10 @@ public final class FileIoUtils {
         Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(ERROR_PATH).toURI());
         return Files.readAllBytes(path);
 
+    }
+
+    public static byte[] getEmptyBody() {
+        return "".getBytes();
     }
 
 }

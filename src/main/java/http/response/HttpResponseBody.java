@@ -1,5 +1,7 @@
 package http.response;
 
+import static utils.FileIoUtils.getEmptyBody;
+
 public class HttpResponseBody {
     private byte[] body;
 
@@ -8,7 +10,8 @@ public class HttpResponseBody {
     }
 
     public static HttpResponseBody createDefaultBody() {
-        return new HttpResponseBody("".getBytes());
+        byte[] emptyBody = getEmptyBody();
+        return new HttpResponseBody(emptyBody);
     }
 
     public byte[] getBody() {
