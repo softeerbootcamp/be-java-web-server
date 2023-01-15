@@ -20,7 +20,7 @@ public class ControllerFactoryTest {
     @Test
     public void testUserCreateHandle() throws IOException, URISyntaxException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        HttpResponse response = new HttpResponse(outputStream);
+        HttpResponse response = HttpResponse.createDefaultHttpResponse(outputStream);
         String input = "GET /user/create HTTP/1.1\r\n" +
                 "Host: localhost:8080\r\n" +
                 "User-Agent: curl/7.68.0\r\n" +
@@ -43,7 +43,7 @@ public class ControllerFactoryTest {
     @Test
     public void testResourceHandle() throws IOException, URISyntaxException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        HttpResponse response = new HttpResponse(outputStream);
+        HttpResponse response = HttpResponse.createDefaultHttpResponse(outputStream);
         String input = "GET /index.html HTTP/1.1\r\n" +
                 "Host: localhost:8080\r\n" +
                 "User-Agent: curl/7.68.0\r\n" +
@@ -66,7 +66,7 @@ public class ControllerFactoryTest {
     @Test
     public void testNotFoundController() throws IOException, URISyntaxException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        HttpResponse response = new HttpResponse(outputStream);
+        HttpResponse response = HttpResponse.createDefaultHttpResponse(outputStream);
         String input = "GET /user/love HTTP/1.1\r\n" +
                 "Host: localhost:8080\r\n" +
                 "User-Agent: curl/7.68.0\r\n" +
@@ -84,7 +84,7 @@ public class ControllerFactoryTest {
     @Test
     public void testNotFoundFile() throws IOException, URISyntaxException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        HttpResponse response = new HttpResponse(outputStream);
+        HttpResponse response = HttpResponse.createDefaultHttpResponse(outputStream);
         String input = "GET /nothing.html HTTP/1.1\r\n" +
                 "Host: localhost:8080\r\n" +
                 "User-Agent: curl/7.68.0\r\n" +
