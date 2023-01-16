@@ -2,27 +2,28 @@ package http.common;
 
 public class Body {
 
-    private byte[] body = new byte[0];
+    private byte[] data;
 
-    public Body() {
+    public Body(byte[] data) {
+        this.data = data;
     }
 
     public byte[] getBody() {
-        return body;
+        return data;
     }
 
-    public void setBody(byte[] body) {
-        this.body = body;
+    public void setBody(byte[] data) {
+        this.data = data;
     }
 
     public void clear() {
-        body = new byte[0];
+        data = new byte[0];
     }
 
     @Override
     public String toString() {
         String msg = "";
-        for (byte b : body) {
+        for (byte b : data) {
             msg += (char) b;
         }
         return msg;
