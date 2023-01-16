@@ -20,7 +20,7 @@ public class ErrorController implements Controller{
     private final static String ERROR_ROUTE = "/error.html";
 
 
-    public static HttpResponse getErrorResponse(DataOutputStream dataOutputStream) throws IOException {
+    public  HttpResponse getErrorResponse(DataOutputStream dataOutputStream) throws IOException {
         FileReader fileReader = new TemplatesFileReader();
 
         byte[] data = fileReader.readFile(new Url(ERROR_ROUTE, UrlType.TEMPLATES_FILE));

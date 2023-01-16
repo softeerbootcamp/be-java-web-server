@@ -1,6 +1,8 @@
 package util;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public enum FileType {
     HTML(".html","text/html"),
@@ -23,6 +25,12 @@ public enum FileType {
         return Arrays.stream(values())
                 .filter(value -> url.getUrl().contains(value.extension))
                 .findAny().orElse(null);
+    }
+
+    public static List<String> getAllExtension() {
+        return Arrays.stream(values())
+                .map(value -> value.extension)
+                .collect(Collectors.toList());
     }
 
     public String getExtension() {
