@@ -28,7 +28,7 @@ class AuthControllerTest {
     @BeforeEach
     void testSetUp(){
         authController = new AuthController();
-        String requestLine = "GET /index.html /1.1";
+        String requestLine = "GET /index.html HTTP/1.1";
         String header = "password: testPass\n"+
                         "name: testName\n"+
                         "email : test@email.com";
