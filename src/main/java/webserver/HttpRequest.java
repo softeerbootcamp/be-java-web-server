@@ -9,16 +9,16 @@ public class HttpRequest {
     //private final String host;
     private final Map<String, String> queries;
     private final Map<String, String> headers;
-    //private final String body;
+    private final String body;
 
 
-    public HttpRequest(HttpMethod method, String url, Map<String, String> queries,Map<String, String> headers){
+    public HttpRequest(HttpMethod method, String url, Map<String, String> queries,Map<String, String> headers,String body){
         this.method = method;
         this.url = url;
         //this.host = host;
         this.queries = queries;
         this.headers = headers;
-        //this.body = body;
+        this.body = body;
     }
 
 
@@ -41,8 +41,8 @@ public class HttpRequest {
     public String getUrl() {
         return url;
     }
-//    public String getBody() {
-//        return body;
-//    }
+    public String getBody() {
+        return body;
+    }
 
 }
