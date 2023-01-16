@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class UserController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -72,7 +73,7 @@ public class UserController implements Controller {
     private Map<Header, String> responseLoginSuccessHeader() {
         Map<Header, String> headers = new HashMap<>();
         headers.put(Header.from("Location"), "/index.html");
-        headers.put(Header.from("Set-Cookie"), "sid=" + "123" + "; Path=/");
+        headers.put(Header.from("Set-Cookie"), "sid=" + generateRandomId() + "; Path=/");
 
         return headers;
     }
@@ -82,5 +83,18 @@ public class UserController implements Controller {
         headers.put(Header.from("Location"), " /user/login_failed.html");
 
         return headers;
+    }
+
+    private String generateRandomId() {
+        int leftLimit = 48; // numeral '0'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 19;
+        Random random = new Random();
+
+        return random.ints(leftLimit,rightLimit + 1)
+                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+                .limit(targetStringLength)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
     }
 }
