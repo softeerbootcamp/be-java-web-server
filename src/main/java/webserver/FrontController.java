@@ -24,7 +24,7 @@ public class FrontController {
             Controller controller = ControllerMapper.getController(httpRequest);
 
             String viewName = controller.process(httpRequest, httpResponse);
-            String viewPath = ViewResolver.process(viewName);
+            String viewPath = ViewResolver.resolveViewName(viewName);
 
             sendResponse(out, httpResponse, viewPath);
         } catch (ControllerNotFoundException | UrlNotFoundException | FileNotFoundException e) {
