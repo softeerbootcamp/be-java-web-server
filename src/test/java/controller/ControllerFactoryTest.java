@@ -14,6 +14,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static utils.FileIoUtils.load404ErrorFile;
 
 public class ControllerFactoryTest {
 
@@ -30,7 +31,9 @@ public class ControllerFactoryTest {
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));
         HttpRequest request = HttpRequest.from(in);
 
-        ControllerFactory.handle(request, response);
+        Controller controller = ControllerFactory.findController(request);
+        controller.service(request, response);
+
         Map<String, String> headers = response.getHeaders();
 
         assertAll(
@@ -40,6 +43,7 @@ public class ControllerFactoryTest {
 
         );
     }
+
     @Test
     public void testResourceHandle() throws IOException, URISyntaxException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -53,7 +57,9 @@ public class ControllerFactoryTest {
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));
         HttpRequest request = HttpRequest.from(in);
 
-        ControllerFactory.handle(request, response);
+        Controller controller = ControllerFactory.findController(request);
+        controller.service(request, response);
+
         Map<String, String> headers = response.getHeaders();
 
         assertAll(
@@ -76,8 +82,10 @@ public class ControllerFactoryTest {
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));
         HttpRequest request = HttpRequest.from(in);
 
-        ControllerFactory.handle(request, response);
+        Controller controller = ControllerFactory.findController(request);
+        assertThat(controller).isNull();
 
+        response.do404(load404ErrorFile());
         assertThat(response.getStatusCode()).isEqualTo("404");
     }
 
@@ -94,7 +102,8 @@ public class ControllerFactoryTest {
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));
         HttpRequest request = HttpRequest.from(in);
 
-        ControllerFactory.handle(request, response);
+        Controller controller = ControllerFactory.findController(request);
+        controller.service(request, response);
 
         assertThat(response.getStatusCode()).isEqualTo("404");
     }
