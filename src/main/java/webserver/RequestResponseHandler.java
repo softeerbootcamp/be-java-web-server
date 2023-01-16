@@ -28,7 +28,7 @@ public class RequestResponseHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in,"UTF-8"));
             Request request = new Request(br);
 //
-            Controller controller = ControllerSelector.setController(request.getRequestLine());
+            Controller controller = ControllerSelector.setController(request);
             controller.controllerService(request,response);
         } catch (IOException e) {
             logger.error(e.getMessage());
