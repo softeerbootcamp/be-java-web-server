@@ -1,7 +1,6 @@
 package controller;
 
 import http.request.HttpRequest;
-import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,8 +8,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static utils.FileIoUtils.load404ErrorFile;
 
 
 public class ControllerFactory {
@@ -28,22 +25,14 @@ public class ControllerFactory {
         controllers.add(new UserCreateController());
     }
 
-    public static void handle(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+    public static Controller findController(HttpRequest httpRequest) throws IOException, URISyntaxException {
         Controller controller = controllers
                 .stream()
                 .filter(c -> c.isUri(httpRequest))
                 .findFirst()
                 .orElse(null);
 
-        if(controller == null) {
-            byte[] errorBody = load404ErrorFile();
-            httpResponse.do404(errorBody);
-            return;
-        }
-
-        logger.debug("Controller {}",controller);
-        controller.service(httpRequest, httpResponse);
+        logger.debug("Controller {}", controller);
+        return controller;
     }
-
-
 }

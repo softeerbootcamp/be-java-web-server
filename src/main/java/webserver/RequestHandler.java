@@ -1,5 +1,6 @@
 package webserver;
 
+import controller.Controller;
 import controller.ControllerFactory;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -11,6 +12,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
+
+import static utils.FileIoUtils.load404ErrorFile;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -30,7 +33,15 @@ public class RequestHandler implements Runnable {
 
             HttpResponse httpResponse = HttpResponse.createDefaultHttpResponse(out);
 
-            ControllerFactory.handle(httpRequest, httpResponse);
+            Controller controller = ControllerFactory.findController(httpRequest);
+
+            if(controller == null) {
+                byte[] error = load404ErrorFile();
+                httpResponse.do404(error);
+                return;
+            }
+
+            controller.service(httpRequest, httpResponse);
 
         } catch (IOException | URISyntaxException e) {
             logger.error(e.getMessage());
