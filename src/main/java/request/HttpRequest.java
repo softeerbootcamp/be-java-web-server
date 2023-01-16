@@ -30,6 +30,7 @@ public class HttpRequest {
         StringBuilder header = new StringBuilder();
         while (!line.equals("")) { // Read Header
             line = br.readLine();
+            logger.debug("Input Header : {}",line);
             header.append(line);
             header.append(lineSeparator); // Read Header 후 구분 공백 라인
 
