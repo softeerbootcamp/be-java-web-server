@@ -11,8 +11,6 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-import static webserver.RequestHandler.CRLF;
-
 public class CustomHttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(CustomHttpRequest.class);
     private Map<String, String> requestParams;
@@ -22,43 +20,43 @@ public class CustomHttpRequest {
     private String protocolVersion;
     private String url;
 
-    public static CustomHttpRequest from(InputStream inputStream){
-        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-        BufferedReader br = new BufferedReader(inputStreamReader);
-        try {
-            String firstLine = br.readLine();
-            List<String> headers = new ArrayList<>();
-            List<String> bodies = new ArrayList<>();
-            while (br.ready()) {
-                String nextLine = br.readLine();
-                if(nextLine.equals(CRLF))
-                    break;
-                headers.add(nextLine);
-            }
-            while (br.ready()){
-                String nextLine = br.readLine();
-                if(nextLine.equals(CRLF))
-                    break;
-                bodies.add(nextLine);
-            }
-            return of(firstLine, headers, bodies);
-        }
-        catch (IOException e){
-            logger.error(e.getMessage());
-            throw new RuntimeException();
-        }
-    }
-
-    public static CustomHttpRequest of(String firstLine, List<String> headers, List<String> bodies){
-        return new CustomHttpRequest(firstLine, headers, bodies);
-    }
-
     private CustomHttpRequest(String firstLine, List<String> headers, List<String> bodies) {
         setFirstLineHeaders(firstLine);
         setRequestHeaders(headers);
         setRequestParams(this.url);
         setRequestBody(bodies);
-        logger.info("url : " + this.url + ", method : " + this.httpMethod + ", params : " + this.requestParams);
+        logger.info("url : " + this.url + ", method : " + this.httpMethod + ", urlParams : " + this.requestParams + ", bodyParams : " + this.requestBodies);
+    }
+
+    public static CustomHttpRequest of(String firstLine, List<String> headers, List<String> bodies) {
+        return new CustomHttpRequest(firstLine, headers, bodies);
+    }
+
+    public static CustomHttpRequest from(InputStream inputStream) {
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+        BufferedReader br = new BufferedReader(inputStreamReader);
+        try {
+            String firstLine = br.readLine();
+            List<String> headers = new ArrayList<>();
+
+            while (br.ready()) {
+                String nextLine = br.readLine();
+                if (nextLine.equals(""))
+                    break;
+                headers.add(nextLine);
+                logger.info(nextLine);
+            }
+            StringBuilder sb = new StringBuilder();
+            while (br.ready()) {
+                int next = br.read();
+                sb.append((char) next);
+            }
+            return of(firstLine, headers, List.of(sb.toString().split(System.lineSeparator())));
+        }
+        catch (IOException e){
+            logger.error(e.getMessage());
+            throw new RuntimeException();
+        }
     }
 
     private void setFirstLineHeaders(String firstLine) {
@@ -81,10 +79,12 @@ public class CustomHttpRequest {
     }
 
     //TODO: 아래 body parsing 코드는 queryString 형태로 들어옴을 가정하고 있습니다.
-    private void setRequestBody(List<String> bodyLines){
+    private void setRequestBody(List<String> bodyLines) {
         requestBodies = new HashMap<>();
         List<String> bodyParams = new ArrayList<>();
-        for(String line : bodyLines){
+        for (String line : bodyLines) {
+            line = java.net.URLDecoder.decode(line, StandardCharsets.UTF_8);
+
             bodyParams.addAll(List.of(line.split("&")));
         }
         bodyParams.forEach(this::addToRequestBody);
@@ -117,8 +117,10 @@ public class CustomHttpRequest {
         this.requestHeaders.put(itemName, itemList);
     }
 
-    private void addToRequestBody(String line){
+    private void addToRequestBody(String line) {
         String[] split = line.split("=");
+        if (split.length < 2)
+            return;
         this.requestBodies.put(split[0], split[1]);
     }
 
