@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import static http.response.enums.ResponseAttribute.*;
+import static http.common.HeaderAttribute.*;
 
 public class HttpResponse {
 
