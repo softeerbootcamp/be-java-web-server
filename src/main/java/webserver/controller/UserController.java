@@ -9,19 +9,11 @@ import webserver.domain.HttpResponseMessage;
 
 import java.util.Map;
 
-public class QueryStringHandler implements ControllerHandler {
-    private final HttpRequest httpRequest;
-
-    public QueryStringHandler(HttpRequest httpRequest) {
-        this.httpRequest = httpRequest;
-    }
+public class UserController implements Controller{
     @GetMapping("/user/create")
-    @Override
-    public HttpResponseMessage handle() {
-        String url = httpRequest.getRequestURL();
-        Map map = HttpParser.parseQueryString(url);
+    public HttpResponseMessage create(HttpRequest httpRequest) {
         UserService userService = new UserService();
-        userService.addUser(map);
+        userService.addUser(httpRequest.getBody());
 
         HttpResponse httpResponse = new HttpResponse();
         return new HttpResponseMessage(httpResponse.sendRedirect("/index.html"), httpResponse.getBody());

@@ -1,4 +1,4 @@
-package webserver.controller;
+package webserver.handler;
 
 
 import webserver.domain.HttpRequest;

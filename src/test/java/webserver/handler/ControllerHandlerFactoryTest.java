@@ -1,15 +1,11 @@
-package webserver.controller;
+package webserver.handler;
 
-import enums.HttpMethod;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import webserver.domain.HttpRequest;
-import webserver.domain.RequestLine;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ControllerHandlerFactoryTest {
 

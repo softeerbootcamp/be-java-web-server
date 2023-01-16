@@ -6,10 +6,8 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpParser;
-import was.dispatcher.Dispatcher;
-import webserver.controller.ControllerHandler;
-import webserver.controller.ControllerHandlerFactory;
-import webserver.controller.QueryStringHandler;
+import webserver.handler.ControllerHandler;
+import webserver.handler.ControllerHandlerFactory;
 import webserver.domain.HttpRequest;
 import webserver.domain.HttpResponseMessage;
 
@@ -32,13 +30,7 @@ public class RequestHandler implements Runnable {
 
             HttpRequest httpRequest = HttpRequest.newInstance(HttpParser.parseHttpRequest(in));
             ControllerHandler controllerHandler = ControllerHandlerFactory.getHandler(httpRequest);
-            if (controllerHandler instanceof QueryStringHandler) {
-                Dispatcher dispatcher = new Dispatcher();
-                response(dos, dispatcher.dispatch(controllerHandler, "/user/create"));
-
-            }
-            else
-                response(dos, controllerHandler.handle());
+            response(dos, controllerHandler.handle());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
