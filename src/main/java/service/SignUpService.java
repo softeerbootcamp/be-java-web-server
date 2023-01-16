@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class SignUpService {
 
-    public void signUp(HttpRequest request, HttpResponse response){
+    public void signUp(HttpRequest request){
         String userId = request.getQueryByKey("userId");
         String password = request.getQueryByKey("password");
         String name = request.getQueryByKey("name");
@@ -20,7 +20,7 @@ public class SignUpService {
         saveNewUser(userId,password,name,email);
     }
 
-    public void singUpByPost(HttpRequest request, HttpResponse response) {
+    public void singUpByPost(HttpRequest request) {
         try{
             System.out.println(request.parseBody());
             Map<String,String> formInfo = request.parseBody();

@@ -20,13 +20,13 @@ public class SignUpController extends BaseController{
 
     @Override
     public void doGet(HttpRequest request, HttpResponse response) {
-        signUpService.signUp(request,response);
+        signUpService.signUp(request);
         redirect(REDIRECT_URL,response);
     }
 
     @Override
     public void doPost(HttpRequest request, HttpResponse response) {
-        signUpService.singUpByPost(request,response);
+        signUpService.singUpByPost(request);
         redirect(REDIRECT_URL,response);
     }
 
