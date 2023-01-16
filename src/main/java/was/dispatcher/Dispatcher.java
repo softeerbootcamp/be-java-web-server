@@ -1,6 +1,7 @@
 package was.dispatcher;
 
 import was.annotation.GetMapping;
+import was.annotation.PostMapping;
 import webserver.controller.Controller;
 import webserver.controller.UserController;
 import webserver.handler.ControllerHandler;
@@ -33,14 +34,14 @@ public class Dispatcher implements ControllerHandler{
     public HttpResponseMessage dispatch(HttpRequest httpRequest, Controller controller, String path) {
         Method[] methods = controller.getClass().getDeclaredMethods();
         for (Method method : methods) {
-            Annotation annotation = method.getAnnotation(GetMapping.class);
+            Annotation annotation = method.getAnnotation(PostMapping.class);
             if (annotation == null) {
                 continue;
             }
-            GetMapping getMapping = (GetMapping) annotation;
+            PostMapping postMapping = (PostMapping) annotation;
             Object[] parameter = new Object[1];
             parameter[0] = httpRequest;
-            if (path.equals(getMapping.value())) {
+            if (path.equals(postMapping.value())) {
                 try{
                     return (HttpResponseMessage) method.invoke(controller, parameter);
                 } catch (Exception e) {
