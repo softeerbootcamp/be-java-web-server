@@ -41,7 +41,7 @@ public class HttpRequest {
         String extracted = extractHeaders(br);
         String[] headers = extracted.split(ENTER);
 
-        return HttpRequest.of(HttpStartLine.from(startLine), HttpHeaders.from(headers), br);
+        return of(HttpStartLine.from(startLine), HttpHeaders.from(headers), br);
     }
 
     public static HttpRequest of(
