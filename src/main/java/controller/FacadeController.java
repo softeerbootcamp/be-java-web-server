@@ -41,7 +41,7 @@ public class FacadeController implements Runnable {
 
     private void delegateRequest(HttpRequest request, HttpResponse response) {
         Controller controller = findController(request.getUrl());
-        controller.handle(request, response);
+        controller.service(request, response);
     }
 
     private Controller findController(String url) {

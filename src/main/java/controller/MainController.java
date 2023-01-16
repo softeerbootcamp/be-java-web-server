@@ -12,7 +12,7 @@ public class MainController implements Controller {
     private final Logger logger = LoggerFactory.getLogger(MainController.class);
 
     @Override
-    public void handle(HttpRequest request, HttpResponse response) {
+    public void service(HttpRequest request, HttpResponse response) {
         logger.debug("main controller called");
         FindResult findResult = FileSystem.findResource(request.getUrl());
         response.update(findResult);
