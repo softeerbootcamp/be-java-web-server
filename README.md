@@ -52,7 +52,7 @@ Java Web Application Server 2022
 </details>
 
 <details>
-<summary>쿠키와 세션</summary>
+<summary>쿠키와 세션 + HTTP/1.1, HTTP/2.0</summary>
 <div markdown="1">
 
 * 쿠키는 클라이언트가 매 요청마다 서버로 전송해야 하는 정보를 파일의 형태로 기록한 것
@@ -63,7 +63,10 @@ Java Web Application Server 2022
     * 세션을 이용해 stateless한 http 프로토콜을 stateful한 것처럼 보이게 할 수 있음
     * 주로 쿠키를 세션과 함께 이용
         * 주로 In-memory 기반 DB에 필요한 정보를 포함한 세션을 저장하고, 쿠키에 세션 ID를 담아 매 요청마다 클라이언트에 대한 세션이 존재하는지 확인하는 식으로 stateful한 동작 구조 
-
+* HTTP/1.1은 pipeline, HTTP/2.0은 병렬처리를 지원함
+    * HTTP/1.0은 모든 요소(html, css, js..)가 모여야 렌더링함
+    * pipeline은 모두 모이지 않아도 순차적으로 렌더링하기 때문에 더 효율적
+    * 병렬처리는 렌더링하기 위해 필요한 요소를 동시에 요청할 수 있음
 </div>
 </details>
 
