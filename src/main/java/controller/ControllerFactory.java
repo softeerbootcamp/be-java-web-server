@@ -23,6 +23,7 @@ public class ControllerFactory {
         controllers.add(new IndexController());
         controllers.add(new ResourceController());
         controllers.add(new UserCreateController());
+        controllers.add(new UserLogInController());
     }
 
     public static Controller findController(HttpRequest httpRequest) throws IOException, URISyntaxException {
