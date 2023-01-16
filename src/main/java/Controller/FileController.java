@@ -15,6 +15,7 @@ public class FileController implements Controller {
     private final Logger logger = LoggerFactory.getLogger(FileController.class);
     HttpRequest httpRequest;
     DataOutputStream dos;
+
     public FileController(HttpRequest httpRequest, DataOutputStream dos) {
         logger.debug("select fileController");
         this.httpRequest = httpRequest;
@@ -27,6 +28,6 @@ public class FileController implements Controller {
         HttpResponse httpResponse = new HttpResponse().startLine(new HttpResponseStartLine(StatusCode.OK, httpRequest.getProtocol()))
                 .headers(HttpResponseUtil.generateHeaders(httpRequest.getPath(), StatusCode.OK, body.length))
                 .body(new HttpResponseBody(body));
-        return  httpResponse;
+        return httpResponse;
     }
 }

@@ -9,24 +9,30 @@ public class HttpResponse {
     private HttpResponseStartLine httpResponseStartLine;
     private HttpResponseHeaders httpResponseHeaders;
     public static final String NEWLINE = "\r\n";
-    public HttpResponse(){
+
+    public HttpResponse() {
 
     }
-    public HttpResponse startLine(HttpResponseStartLine httpResponseStartLine){
+
+    public HttpResponse startLine(HttpResponseStartLine httpResponseStartLine) {
         this.httpResponseStartLine = httpResponseStartLine;
         return this;
     }
-    public HttpResponse headers(HttpResponseHeaders httpResponseHeaders){
+
+    public HttpResponse headers(HttpResponseHeaders httpResponseHeaders) {
         this.httpResponseHeaders = httpResponseHeaders;
         return this;
     }
-    public HttpResponse body(HttpResponseBody httpResponseBody){
+
+    public HttpResponse body(HttpResponseBody httpResponseBody) {
         this.httpResponseBody = httpResponseBody;
         return this;
     }
-    public void putHeader(String key, String value){
+
+    public void putHeader(String key, String value) {
         this.httpResponseHeaders.putHeader(key, value);
     }
+
     @Override
     public String toString() {
         return httpResponseStartLine.toString() + httpResponseHeaders.toString();

@@ -17,10 +17,11 @@ public class HttpRequestParams {
         this.params = params;
     }
 
-    public static HttpRequestParams from(String query){
+    public static HttpRequestParams from(String query) {
         Map<String, String> params = HttpRequestUtil.extractParams(query);
         return new HttpRequestParams(params);
     }
+
     public Map<String, String> getParams() {
         return params;
     }

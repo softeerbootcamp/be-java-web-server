@@ -16,9 +16,10 @@ public class HttpResponseHeaders {
         return headers;
     }
 
-    public void putHeader(String key, String value){
+    public void putHeader(String key, String value) {
         this.headers.put(key, value);
     }
+
     @Override
     public String toString() {
         return this.headers.entrySet().stream().map(e -> e.getKey() + ": " + e.getValue())

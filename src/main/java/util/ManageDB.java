@@ -19,12 +19,14 @@ public class ManageDB {
         Database.addUser(user);
         logger.debug(String.format("\nsave user: %s\n", user.toString()));
     }
-    public static boolean alreadyExist(HttpRequest httpRequest){
+
+    public static boolean alreadyExist(HttpRequest httpRequest) {
         String userId = httpRequest.getParams().get("userId");
-        if(Objects.nonNull(findUserById(userId)))
+        if (Objects.nonNull(findUserById(userId)))
             return true;
         return false;
     }
+
     public static User findUserById(String userId) {
         return Database.findUserById(userId);
     }

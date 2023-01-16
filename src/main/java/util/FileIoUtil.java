@@ -24,7 +24,7 @@ public class FileIoUtil {
     public static String readBuffer(BufferedReader br, int length) {
         char[] data = new char[length];
         try {
-            if(br.read(data) == -1){
+            if (br.read(data) == -1) {
                 throw new RuntimeException();
             }
             logger.debug("post query: " + String.valueOf(data));
@@ -33,16 +33,18 @@ public class FileIoUtil {
         }
         return String.valueOf(data);
     }
-    public static String readLine(BufferedReader br){
+
+    public static String readLine(BufferedReader br) {
         String line = null;
         try {
             line = br.readLine();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return  line;
+        return line;
     }
-    public static String splitQuery(String path) throws RuntimeException{
+
+    public static String splitQuery(String path) throws RuntimeException {
         if (path.startsWith("/user/create")) {
             int idx = path.indexOf(URL_PARAM_DELIMITER);
             return path.substring(idx + 1);
