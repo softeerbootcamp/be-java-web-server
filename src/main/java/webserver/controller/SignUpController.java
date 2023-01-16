@@ -1,19 +1,24 @@
-package webserver;
+package webserver.controller;
 
 import customException.AlreadyHasSameIdException;
 import db.Database;
 import model.User;
+import webserver.Paths;
+import webserver.controller.Controller;
+import webserver.httpUtils.Request;
+import webserver.httpUtils.Response;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class SignUpController {
+public class SignUpController implements Controller {
     private static final String USER_ID = "userId";
     private static final String USER_PassWord = "password";
     private static final String USER_Name = "name";
     private static final String USER_Email = "email";
 
-    public static String enrollNewUser(String unparsedInfo)
+    @Override
+    public void exec(Request req, Response res)
     {
         Map<String, String> UserInfo = parseString(unparsedInfo);
 

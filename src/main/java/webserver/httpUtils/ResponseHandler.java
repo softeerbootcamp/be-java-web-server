@@ -16,6 +16,7 @@ public class ResponseHandler {
     private static final Logger logger = LoggerFactory.getLogger(Response.class);
     private Response res;
 
+    public ResponseHandler(){}
     public ResponseHandler(Response res) {
         this.res = res;
     }
