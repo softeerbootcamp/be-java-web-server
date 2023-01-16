@@ -15,30 +15,31 @@ import java.util.stream.Collectors;
 
 public class ControllerInterceptor {
 
-    private static List<Method> extractAllMethods (Class<?> clazz){
+    private static List<Method> extractAllMethods (Class<?> clazz){   //get all the mathods in a specific class
         return Arrays.stream(clazz.getDeclaredMethods())
                 .filter(method -> method.isAnnotationPresent(ControllerInfo.class))
                 .collect(Collectors.toList());
     }
 
-    public static void executeController(Class<?> clazz, Request req, Response res){
+    private static Map<String, String> checkMethodType(Request req, ControllerInfo controllerInfo, RequestMethod requestMethod) {
+        if (requestMethod != controllerInfo.method())
+            throw new HttpRequestException(StatusCodes.METHOD_NOT_ALLOWED);
+        if (requestMethod == RequestMethod.GET)
+            return req.getRequestLine().getResource().getQueryString();
+        return req.getBody();
+    }
 
-        Map<String, String> queryString = req.getRequestLine().getResource().getQueryString();
-        String path = req.getRequestLine().getResource().getPath();
-        RequestMethod requestMethod = req.getRequestLine().getRequestMethod();
-        Map<String, String> reqBody;
-
+    public static void executeController(Class<?> clazz, Request req, Response res) {
         //extract all the methods in the class which include specific annotation
         List<Method> methodList = extractAllMethods(clazz);
 
         methodList.forEach(method -> {
             ControllerInfo controllerInfo = method.getAnnotation(ControllerInfo.class);
-            if(controllerInfo.path().startsWith(path)){
+            if(controllerInfo.path().startsWith(req.getRequestLine().getResource().getPath())){
                 try {
-                    if(controllerInfo.method() != requestMethod)
-                        throw new HttpRequestException(StatusCodes.METHOD_NOT_ALLOWED);
-                    ArgumentResolver.checkParameters(queryString, Arrays.asList(controllerInfo.queryStr()));  //check the validity of parameters before executing the method
-                    method.invoke(clazz.newInstance(), queryString, res);    //invoke method
+                    Map<String, String> contentMap = checkMethodType(req, controllerInfo, req.getRequestLine().getRequestMethod());
+                    ArgumentResolver.checkParameters(contentMap, Arrays.asList(controllerInfo.queryStr()));  //check the validity of parameters before executing the method
+                    method.invoke(clazz.newInstance(), contentMap, res);    //invoke method
                 } catch (InstantiationException | IllegalAccessException e) {
                     throw new HttpRequestException(StatusCodes.INTERNAL_SERVER_ERROR);
                 } catch (InvocationTargetException e) {
@@ -47,4 +48,5 @@ public class ControllerInterceptor {
             }
         });
     }
+
 }
