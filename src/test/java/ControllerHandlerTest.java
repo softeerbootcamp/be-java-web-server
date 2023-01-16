@@ -31,7 +31,7 @@ public class ControllerHandlerTest {
     @DisplayName("UserController Return Test")
     @Test
     public void UserController_Return_Test() throws IOException {
-        String input = "GET /search?q=test&sort=asc HTTP/1.1\n" +
+        String input = "GET /user?q=test&sort=asc HTTP/1.1\n" +
                 "Host: www.example.com\n" +
                 "Accept: */*\n" +
                 "\n";
