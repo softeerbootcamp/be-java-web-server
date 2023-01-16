@@ -84,6 +84,8 @@ public class HttpResponse {
 
     private void responseHeader(DataOutputStream dos) {
         try {
+            logger.debug("send : {}", statusLine.toStringForResponse());
+            logger.debug("send : {}", header.toString());
             dos.writeBytes(statusLine.toStringForResponse());
             dos.writeBytes(header.toString());
         } catch (IOException e) {
