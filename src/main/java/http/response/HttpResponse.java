@@ -18,7 +18,7 @@ public class HttpResponse {
 
     private String contentType;
 
-    public HttpResponse(HttpResponseBuilder httpResponseBuilder){
+    private HttpResponse(HttpResponseBuilder httpResponseBuilder){
         this.statusLine = httpResponseBuilder.httpStatusLine;
         this.body = httpResponseBuilder.body;
         this.contentType = httpResponseBuilder.contentType;

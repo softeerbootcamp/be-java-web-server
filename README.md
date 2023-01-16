@@ -119,5 +119,29 @@ Java Web Application Server 2022
             assertThat(result).isEqualTo("예상되는 결과");
         }  
         ```
-    
-    
+-------------
+  + Day 11
+    + HTTP POST 방식
+      + POST 방식은 데이터 전송을 기반으로 한 요청 메서드
+      + GET 방식은 URL에 데이터를 붙여서 보내지만 POST 방식은 BODY에 데이터를 넣어 보냄
+      + 그래서 POST 방식에는 Content-Type 헤더 필드가 있음
+        + ex) application/x-www-form-urlencoded, text/plain, multipart/form-data
+      + POST Request 예시)
+      ```
+      POST /user/create HTTP/1.1
+      Host: localhost:8080
+      Connection: keep-alive
+      Content-Length: 59
+      Content-Type: application/x-www-form-urlencoded
+      Accept: */*
+      
+      userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net
+      ```
+    + JAVA 생성 패턴 [Builder 패턴]
+      + 많은 Optional한 멤버 변수(파라미터)나 지속성 없는 상태 값들 처리 문제 해결
+      + 구현 방법
+        + 빌더 클래스를 Static Nested Class로 생성 - 관례적으로 클래스 이름 + Builder로 명명
+        + 생성자는 public, 파라미터는 필수 값들
+        + Optional한 값들은 속성마다 메소드로 제공, 리턴 값이 빌더 객체 자신이어야 함
+        + 마지막으로 빌더 클래스 내에 build()메소드를 정의하여 최종 생성된 결과물 리턴, 
+        builder를 통해서만 객체 생성을 하므로 생성 대상이 되는 클래스의 생성자는 private
