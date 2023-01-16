@@ -34,10 +34,10 @@ public class RequestHandler implements Runnable {
             Request req = parseHttpRequest(in);
             Response res = new Response();
 
-            handlerMapping.getStaticHandler().handle(req, res);  //get static controller to handle this request
+            handlerMapping.getStaticHandler().chain(req, res);  //get static controller to handle this request
             if(res.getStatusCode() == StatusCodes.NOT_FOUND){  // request is not precessed by static controller
                 Controller controller = handlerMapping.getHandler(req);  //get the controller to handle request
-                controller.handle(req, res);
+                controller.chain(req, res);
             }
 
             HttpResponseWriter.of(res, out); //write http response and send it back to client side
