@@ -9,7 +9,7 @@ public class GETNoMatchHandler implements GETHandler {
         GET_NO_MATCH_HANDLER = new GETNoMatchHandler();
     }
 
-    public static GETNoMatchHandler of() {
+    public static GETHandler getInstance() {
         return GET_NO_MATCH_HANDLER;
     }
 

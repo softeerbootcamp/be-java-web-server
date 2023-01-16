@@ -11,7 +11,7 @@ public class GETUserRegisterHandler implements GETHandler{
         GET_USER_REGISTER_HANDLER = new GETUserRegisterHandler();
     }
 
-    public static GETUserRegisterHandler of() {
+    public static GETHandler getInstance() {
         return GET_USER_REGISTER_HANDLER;
     }
 
