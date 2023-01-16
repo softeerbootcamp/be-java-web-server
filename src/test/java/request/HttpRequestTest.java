@@ -3,9 +3,7 @@ package request;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -49,5 +47,21 @@ class HttpRequestTest {
         String path = httpRequest.getPath();
 
         assertThat(path).isEqualTo("./static/css/styles.css");
+    }
+
+    @Test
+    void getPath_whenRequestNotResources() {
+        RequestStartLine requestLine = RequestStartLine.of(
+                "POST /user/create?userId=user&password=&name=email= HTTP/1.1");
+        Map<String, String> headerFields = new HashMap<>();
+        headerFields.put("Host", "localhost:8080");
+        headerFields.put("Connection", "keep-alive");
+        headerFields.put("Accept", "*/*");
+        Header header = new Header(headerFields);
+        HttpRequest httpRequest = new HttpRequest(requestLine, header.toString());
+
+        String path = httpRequest.getPath();
+
+        assertThat(path).isEqualTo("/user/create");
     }
 }
