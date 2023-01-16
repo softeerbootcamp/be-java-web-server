@@ -5,6 +5,7 @@ import httpMock.CustomHttpRequest;
 import httpMock.CustomHttpResponse;
 import httpMock.constants.ContentType;
 import httpMock.constants.StatusCode;
+import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import service.StaticFileService;
@@ -30,6 +31,7 @@ class RequestRouterTest {
         //given
         CustomHttpRequest req = CustomHttpRequest.of(
                 "GET /index.html HTTP/1.1",
+                Collections.EMPTY_LIST,
                 Collections.EMPTY_LIST
         );
         CustomHttpResponse expected = CustomHttpResponse.of(
@@ -52,6 +54,7 @@ class RequestRouterTest {
         //given
         CustomHttpRequest req = CustomHttpRequest.of(
                 "GET / HTTP/1.1",
+                Collections.EMPTY_LIST,
                 Collections.EMPTY_LIST
         );
         CustomHttpResponse expected = new CustomHttpResponse(
@@ -73,6 +76,7 @@ class RequestRouterTest {
         //given
         CustomHttpRequest req = CustomHttpRequest.of(
                 "GET /user/create?userId=rohsik2&password=qwevcqvew&name=adfqewfrw&email=rohsik@gmail.com HTTP/1.1",
+                Collections.EMPTY_LIST,
                 Collections.EMPTY_LIST
         );
 
@@ -99,6 +103,7 @@ class RequestRouterTest {
         //given
         CustomHttpRequest req = CustomHttpRequest.of(
                 "GET /asdrqweboq HTTP/1.1",
+                Collections.EMPTY_LIST,
                 Collections.EMPTY_LIST
         );
 
@@ -121,6 +126,7 @@ class RequestRouterTest {
         //given
         CustomHttpRequest req = CustomHttpRequest.of(
                 "GET /hellmynameisrohyunuk.html HTTP/1.1",
+                Collections.EMPTY_LIST,
                 Collections.EMPTY_LIST
         );
 
