@@ -13,7 +13,7 @@ public class ResponseStartLine {
 
     @Override
     public String toString() {
-        return protocol.getValue() + " " + status.getCode() + " " + status.getMessage() + "\n\r";
+        return protocol.getValue() + " " + status.getCode() + " " + status.getMessage() + "\n";
     }
 }
 

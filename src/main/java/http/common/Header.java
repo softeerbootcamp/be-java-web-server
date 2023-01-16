@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class Header {
 
-    private static final String HEADER_SEPARATOR = "\n\r";
+    private static final String HEADER_SEPARATOR = "\n";
     private static final String ATTRIBUTE_SEPARATOR = ":";
     private static final String EMPTY_STRING = "";
     private static final int KEY_INDEX = 0;
