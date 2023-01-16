@@ -32,7 +32,7 @@ public class RequestHandler implements Runnable {
             httpStatus = HttpStatus.ClientError;
             InputStreamReader reader = new InputStreamReader(in);
             BufferedReader br = new BufferedReader(reader);
-            RequestMessage requestMessage = new RequestMessage(new RequestHeaderMessage(br.readLine()), new RequestBodyMessage());
+            String startLine = br.readLine();
             //RequestHeaderMessage requestHeaderMessage = new RequestHeaderMessage(br.readLine());
             String brStr = "";
             boolean bodyExist = false;
@@ -48,7 +48,8 @@ public class RequestHandler implements Runnable {
             }
             br.read(body);
             logger.debug(new String(body));
-            setController(requestMessage.getRequestHeaderMessage(), out);
+            RequestMessage requestMessage = new RequestMessage(new RequestHeaderMessage(startLine), new RequestBodyMessage(body));
+            setController(requestMessage, out);
             logger.debug(controller.toString());
             controller.control();
         } catch (IOException e) {
@@ -56,7 +57,8 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void setController(RequestHeaderMessage requestHeaderMessage, OutputStream out){
+    private void setController(RequestMessage requestMessage, OutputStream out){
+        RequestHeaderMessage requestHeaderMessage = requestMessage.getRequestHeaderMessage();
         if (requestHeaderMessage.getContentType().contains("html")){
             controller = new TemplatesController(requestHeaderMessage, out);
             return;
@@ -66,7 +68,7 @@ public class RequestHandler implements Runnable {
             return;
         }
         if (requestHeaderMessage.getHttpOnlyURL().startsWith("/user")) {
-            controller = new UserController(requestHeaderMessage, out);
+            controller = new UserController(requestMessage, out);
             return;
         }
     }

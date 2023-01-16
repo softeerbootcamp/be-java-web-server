@@ -2,8 +2,8 @@ package view;
 
 public class RequestMessage {
 
-    RequestHeaderMessage requestHeaderMessage;
-    RequestBodyMessage requestBodyMessage;
+    private RequestHeaderMessage requestHeaderMessage;
+    private RequestBodyMessage requestBodyMessage;
 
     public RequestHeaderMessage getRequestHeaderMessage() {
         return requestHeaderMessage;

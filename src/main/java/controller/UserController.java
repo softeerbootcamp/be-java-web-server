@@ -8,7 +8,9 @@ import org.slf4j.LoggerFactory;
 import util.MessageParser;
 import util.HttpStatus;
 import util.Redirect;
+import view.RequestBodyMessage;
 import view.RequestHeaderMessage;
+import view.RequestMessage;
 import view.Response;
 import java.io.DataOutputStream;
 import java.io.OutputStream;
@@ -25,12 +27,16 @@ public class UserController implements Controller{
     private Map<String,String> headerKV= new HashMap<>();
     byte[] body = new byte[0];
     private HttpStatus httpStatus = HttpStatus.ClientError;
+    private RequestMessage requestMessage;
     private RequestHeaderMessage requestHeaderMessage;
+    private RequestBodyMessage requestBodyMessage;
     private UserService userService = new UserService(new MemoryUserRepository());
     private OutputStream out;
     public UserController(){};
-    public UserController(RequestHeaderMessage requestHeaderMessage, OutputStream out){
-        this.requestHeaderMessage = requestHeaderMessage;
+    public UserController(RequestMessage requestMessage, OutputStream out){
+        this.requestMessage = requestMessage;
+        this.requestHeaderMessage = requestMessage.getRequestHeaderMessage();
+        this.requestBodyMessage = requestMessage.getRequestBodyMessage();
         this.out = out;
     }
     @Override
@@ -44,7 +50,7 @@ public class UserController implements Controller{
         if (requestHeaderMessage.getRequestAttribute().equals("/create")){
             try{
                 //userCreateByGet(requestHeaderMessage);
-                userCreateByPost();
+                userCreate();
             } catch (IllegalStateException e){
                 setLocation("/user/form.html");
                 logger.debug(e.getMessage());
@@ -52,14 +58,13 @@ public class UserController implements Controller{
         }
     }
 
-    private void userCreateByGet(RequestHeaderMessage requestHeaderMessage){
-        Map<String,String> userInfo = MessageParser.parseQueryString(requestHeaderMessage.getHttpReqParams());
+    private void userCreate(){
+        Map<String,String> userInfo;
+        if (requestBodyMessage.getQueryString().equals(""))
+            userInfo = MessageParser.parseQueryString(requestHeaderMessage.getHttpReqParams());
+        else userInfo = MessageParser.parseQueryString(requestBodyMessage.getQueryString());
         userService.join(new User(userInfo.get(USER_ID),userInfo.get(PASSWORD),userInfo.get(NAME),userInfo.get(EMAIL)));
         setLocation(Redirect.getRedirectLink(requestHeaderMessage.getHttpOnlyURL()));
-    }
-
-    private void userCreateByPost(){
-
     }
 
     private void setLocation(String redirectLink){

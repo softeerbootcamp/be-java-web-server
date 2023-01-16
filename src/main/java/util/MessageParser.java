@@ -6,10 +6,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MessageParser {
-    public static Map<String,String> parseQueryString(String reqURLParams){
+    public static Map<String,String> parseQueryString(String queryString){
         Map<String,String> info = new HashMap<>();
         try{
-            String[] infoSet = reqURLParams.split("&");
+            String[] infoSet = queryString.split("&");
             info = Stream.of(infoSet).map(s->s.split("=")).collect(Collectors.toMap(a->a[0],a->a[1]));
         }catch (ArrayIndexOutOfBoundsException e){
         }
