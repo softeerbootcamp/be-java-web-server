@@ -36,9 +36,8 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             req = reqParser.parseRequestFromInputStream(in);
             res = new Response();
-            String reqQuery = req.getReqLine().get(Request.QUERY);
 
-            Controller controller = controllerMapper.mapController(req);
+            Controller controller = controllerMapper.getController(req);
             controller.exec(req, res, out);
         } catch (IOException e) {
             logger.error(e.getMessage());

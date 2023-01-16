@@ -29,7 +29,7 @@ public class ControllerMapper {
         return instance;
     }
 
-    public Controller mapController(Request req)
+    public Controller getController(Request req)
     {
         Map<String, String> reqLine = req.getReqLine();
         String query = reqLine.get(Request.QUERY);
