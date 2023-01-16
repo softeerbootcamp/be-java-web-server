@@ -37,7 +37,7 @@ public class FrontController {
     }
 
     private void sendResponse(DataOutputStream dos, HttpResponse httpResponse, String viewPath) throws IOException {
-        httpResponse.makeBodyMessage(viewPath);
+        httpResponse.makeBodyMessageWithFile(viewPath);
 
         httpResponse.send(dos);
     }

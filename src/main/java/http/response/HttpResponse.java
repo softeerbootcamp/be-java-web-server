@@ -60,7 +60,7 @@ public class HttpResponse {
         addHttpHeader("Content-Length", String.valueOf(body.length));
     }
 
-    public void makeBodyMessage(String viewPath) throws IOException {
+    public void makeBodyMessageWithFile(String viewPath) throws IOException {
         File file = new File(viewPath);
         if (file.exists() && file.isFile()) {
             this.body = Files.readAllBytes(file.toPath());
