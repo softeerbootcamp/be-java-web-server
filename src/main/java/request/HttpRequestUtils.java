@@ -27,13 +27,26 @@ public class HttpRequestUtils {
 			HttpRequestLine httpRequestLine = HttpRequestLine.parse(line);
 			line = br.readLine();
 			Map<String, String> headers = new HashMap<>();
+			Map<String, String> body = new HashMap<>();
 			while (!line.equals("")) {
 				headers.put(line.split(": ")[0], line.split(": ")[1]);
 				line = br.readLine();
+				logger.debug(line);
 
 			}
 
-			return HttpRequest.of(httpRequestLine, headers);
+			if (headers.containsKey("Content-Length")) {
+				int contentLength = Integer.parseInt(headers.get("Content-Length"));
+				char[] buffer = new char[contentLength];
+				br.read(buffer, 0, contentLength);
+				String requestBody = new String(buffer);
+				logger.debug(requestBody);
+				String[] tokens = requestBody.split("&");
+				body.putAll(
+					Arrays.stream(tokens).map(t -> t.split("=")).collect(Collectors.toMap(p -> p[0], p -> p[1])));
+			}
+
+			return HttpRequest.of(httpRequestLine, headers, body);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
