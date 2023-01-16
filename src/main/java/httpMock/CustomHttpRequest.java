@@ -134,6 +134,10 @@ public class CustomHttpRequest {
         return protocolVersion;
     }
 
+    public Map<String,String> getRequestBodies(){
+        return requestBodies;
+    }
+
     public HttpMethod getHttpMethod(){
         return httpMethod;
     }
