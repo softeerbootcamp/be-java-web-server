@@ -19,13 +19,13 @@ public class SignUpController implements Controller{
 
     @Override
     public void doPost(HttpRequest request, HttpResponse response) {
-        Map<String, String> queries = request.getQueries();
+        Map<String, String> data = request.getDatas();
 
         User user = new User(
-                queries.get("userId"),
-                queries.get("password"),
-                queries.get("name"),
-                queries.get("email")
+                data.get("userId"),
+                data.get("password"),
+                data.get("name"),
+                data.get("email")
         );
 
         Database.addUser(user);

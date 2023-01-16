@@ -11,8 +11,9 @@ public class HttpRequest {
     private URI uri;
     private HttpHeaders headers;
     // TODO: HttpBody를 사용할 수 있도록 수정하기
-    private Map<String, String> datas;
+    private Map<String, String> data;
 
+    // TODO: 케이스에 따른 생성자 처리 수정하기
     public HttpRequest(
             HttpMethod method,
             URI uri,
@@ -28,13 +29,13 @@ public class HttpRequest {
             HttpMethod method,
             URI uri,
             HttpHeaders headers,
-            Map<String, String> datas
+            Map<String, String> data
     )
     {
         this.method = method;
         this.uri = uri;
         this.headers = headers;
-        this.datas = datas;
+        this.data = data;
     }
 
     public HttpMethod getMethod() {
@@ -58,6 +59,6 @@ public class HttpRequest {
     }
 
     public Map<String, String> getDatas() {
-        return this.datas;
+        return this.data;
     }
 }
