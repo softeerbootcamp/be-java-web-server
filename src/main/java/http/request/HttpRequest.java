@@ -19,16 +19,27 @@ public class HttpRequest {
 
     private final HttpRequestLine httpRequestLine;
     private final HttpHeader httpHeader;
+    private final String body;
 
-    private HttpRequest(HttpRequestLine httpRequestLine, HttpHeader httpHeader) {
+    private HttpRequest(HttpRequestLine httpRequestLine, HttpHeader httpHeader, String body) {
         this.httpRequestLine = httpRequestLine;
         this.httpHeader = httpHeader;
+        this.body = body;
     }
 
     public static HttpRequest from(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
+        HttpRequestLine httpRequestLine = readHttpRequestLine(br);
+        HttpHeader httpHeader = readHttpRequestHeader(br);
 
-        return new HttpRequest(readHttpRequestLine(br), readHttpRequestHeader(br));
+        String body = "";
+        String contentLength = httpHeader.getHeader("Content-Length");
+        if (contentLength != null) {
+            body = readBodyMessage(br, Integer.parseInt(contentLength));
+            logger.debug("body: {}", body);
+        }
+
+        return new HttpRequest(httpRequestLine, httpHeader, body);
     }
 
     private static HttpRequestLine readHttpRequestLine(BufferedReader br) throws IOException {
@@ -45,7 +56,7 @@ public class HttpRequest {
         List<String> lines = new ArrayList<>();
         String line = br.readLine();
         if (line == null) {
-            return null;
+            return new HttpHeader();
         }
         lines.add(line);
 
@@ -56,6 +67,12 @@ public class HttpRequest {
         Map<String, String> requestHeader = HttpRequestUtils.parseRequestHeader(lines);
 
         return HttpHeader.from(requestHeader);
+    }
+
+    private static String readBodyMessage(BufferedReader br, int contentLength) throws IOException {
+        char[] body = new char[contentLength];
+        br.read(body, 0, contentLength);
+        return String.copyValueOf(body);
     }
 
     public String getUrl() {
