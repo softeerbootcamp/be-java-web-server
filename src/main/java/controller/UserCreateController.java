@@ -13,6 +13,8 @@ import java.util.Map;
 
 public class UserCreateController extends AbstractController {
 
+    public static final String REDIRECT_PATH = "/index.html";
+
     private static final Logger logger = LoggerFactory.getLogger(UserCreateController.class);
 
     public UserCreateController() {
@@ -25,7 +27,7 @@ public class UserCreateController extends AbstractController {
         Map<String, String> queryParams = uri.getParameters();
         UserService.create(queryParams);
 
-        httpResponse.sendRedirect("/index.html");
+        httpResponse.sendRedirect(REDIRECT_PATH);
     }
 
     @Override
@@ -34,7 +36,7 @@ public class UserCreateController extends AbstractController {
         logger.debug("query params: " + queryParams);
         UserService.create(queryParams);
 
-        httpResponse.sendRedirect("/index.html");
+        httpResponse.sendRedirect(REDIRECT_PATH);
 
     }
 
