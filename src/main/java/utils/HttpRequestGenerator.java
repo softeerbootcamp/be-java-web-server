@@ -1,18 +1,25 @@
 package utils;
 
 import http.HttpHeader;
-import http.request.*;
+import http.request.HttpRequest;
+import http.request.HttpRequestBody;
+import http.request.HttpRequestLine;
+import http.request.URI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 
 public class HttpRequestGenerator {
+    private static final Logger logger = LoggerFactory.getLogger(HttpRequestGenerator.class);
+
     public static HttpRequest generateHttpMessage(BufferedReader br) throws IOException {
         HttpRequestLine httpRequestLine = parseStartLine(br);
         HttpHeader httpHeader = parseRequestHeader(br);
         if (httpRequestLine.hasBody()) {
-            HttpRequestBody httpRequestBody = parseRequestBody(br);
+            HttpRequestBody httpRequestBody = parseRequestBody(httpHeader.getContentLength(), br);
             return HttpRequest.of(httpRequestLine, httpHeader, httpRequestBody);
         }
         return HttpRequest.ofNoBody(httpRequestLine, httpHeader);
@@ -35,13 +42,12 @@ public class HttpRequestGenerator {
         return httpHeader;
     }
 
-    private static HttpRequestBody parseRequestBody(BufferedReader br) throws IOException {
+    private static HttpRequestBody parseRequestBody(int contentLength, BufferedReader br) throws IOException {
         StringBuilder sb = new StringBuilder();
-        while (true) {
-            String line = br.readLine();
-            if (line == null) break;
-            sb.append(line);
+        while (contentLength != 0) {
+            sb.append((char) br.read());
+            contentLength -= 1;
         }
-        return HttpRequestBody.of(sb.toString());
+        return HttpRequestBody.from(sb.toString());
     }
 }
