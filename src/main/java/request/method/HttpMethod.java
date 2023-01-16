@@ -12,15 +12,14 @@ public enum HttpMethod {
     GET("GET") {
         @Override
         public byte[] handle(Request request) throws IOException {
-            HttpMethodHandler httpMethodHandler = GETHandlerImpl.of();
+            HttpMethodHandler httpMethodHandler = GETHandlerImpl.getInstance();
             return httpMethodHandler.handle(request);
         }
     },
-    // TODO: POST, PUT, DELETE에 대한 캐싱은 나중에 관련 기능이 추가될 때 수행
     POST("POST") {
         @Override
         public byte[] handle(Request request) throws IOException {
-            HttpMethodHandler httpMethodHandler = new POSTHandlerImpl();
+            HttpMethodHandler httpMethodHandler = POSTHandlerImpl.getInstance();
             return httpMethodHandler.handle(request);
         }
     },
