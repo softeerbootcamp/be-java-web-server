@@ -13,19 +13,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class ControllerExecutioner {
+public class ControllerInterceptor {
+
+    private static List<Method> extractAllMethods (Class<?> clazz){
+        return Arrays.stream(clazz.getDeclaredMethods())
+                .filter(method -> method.isAnnotationPresent(ControllerInfo.class))
+                .collect(Collectors.toList());
+    }
 
     public static void executeController(Class<?> clazz, Request req, Response res){
 
         Map<String, String> queryString = req.getRequestLine().getResource().getQueryString();
         String path = req.getRequestLine().getResource().getPath();
         RequestMethod requestMethod = req.getRequestLine().getRequestMethod();
+        Map<String, String> reqBody;
 
         //extract all the methods in the class which include specific annotation
-        List<Method> methodList = Arrays.stream(clazz.getDeclaredMethods())
-                .filter(method -> method.isAnnotationPresent(ControllerInfo.class))
-                .collect(Collectors.toList());
-
+        List<Method> methodList = extractAllMethods(clazz);
 
         methodList.forEach(method -> {
             ControllerInfo controllerInfo = method.getAnnotation(ControllerInfo.class);
