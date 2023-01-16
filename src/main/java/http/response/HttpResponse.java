@@ -36,7 +36,6 @@ public class HttpResponse {
 
     public static class HttpResponseBuilder{
         private HttpStatusLine httpStatusLine;
-        private HttpHeader httpHeader;
         private byte[] body;
         private String contentType;
 

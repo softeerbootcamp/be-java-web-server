@@ -30,10 +30,6 @@ public class HttpRequest {
         return httpRequestLine.getHttpUri().isStaticUri();
     }
 
-    public boolean wantDynamic() {
-        return httpRequestLine.getHttpUri().isDynamicUri();
-    }
-
     public String getContentType() {
         //logger.debug("Accept : {}", httpHeader.getAccept());
         return httpHeader.getAccept().split(",")[0];
