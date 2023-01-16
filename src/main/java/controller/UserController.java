@@ -54,13 +54,14 @@ public class UserController implements Controller {
         boolean isLoginSuccess = userService.logIn(userLoginInfo);
 
         Map<Header, String> headers;
+        RequestLine requestLine = request.getRequestLine();
         if(isLoginSuccess) {
             headers = responseLoginSuccessHeader();
-            return Response.of(StatusLine.of(request.getRequestLine().getHttpVersion(), Status.FOUND), headers);
+            return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.FOUND), headers);
         }
 
         headers = responseLoginFailHeader();
-        return Response.of(StatusLine.of(request.getRequestLine().getHttpVersion(), Status.FOUND), headers);
+        return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.FOUND), headers);
     }
 
     private Map<Header, String> responseCreateUserHeader() {
