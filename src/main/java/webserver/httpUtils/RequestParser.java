@@ -15,22 +15,24 @@ import java.net.URLDecoder;
 
 public class RequestParser {
 
-    private static String currentLine = new String();
+    private String currentLine;
 
-    public static Request parseRequestFromInputStream(InputStream in) throws IOException
+    public RequestParser(){currentLine = new String();}
+
+    public Request parseRequestFromInputStream(InputStream in) throws IOException
     {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         currentLine = br.readLine();
 
         Request req = new Request();
-        req.setReqLine(parseRequestLine(currentLine)); currentLine = br.readLine();
-        req.setReqHeader(getHeaderKeyValues(currentLine, br));
-        //req.setReqBody(getBody(currentLine, br)); ?? 이거 넣으면 왜 안댐?
+        req.setReqLine(parseRequestLine()); currentLine = br.readLine();
+        req.setReqHeader(getHeaderKeyValues(br));
+        // req.setReqBody(getBody(br)); NPE 때문에 안되는 듯?
 
         return req;
     }
 
-    private static Map<String, String> parseRequestLine(String currentLine)
+    private Map<String, String> parseRequestLine()
     {
         Map<String, String> parsedRequestLine = new HashMap<String, String>();
 
@@ -44,7 +46,7 @@ public class RequestParser {
         return parsedRequestLine;
     }
 
-    private static Map<String, String> getHeaderKeyValues(String currentLine, BufferedReader br) throws IOException{
+    private Map<String, String> getHeaderKeyValues(BufferedReader br) throws IOException{
         Map<String, String> ret = new HashMap<String, String>();
 
         while(!currentLine.isBlank())
@@ -57,12 +59,11 @@ public class RequestParser {
         return ret;
     }
 
-    private static List<String> getBody(String currLine, BufferedReader br) throws IOException {
+    private List<String> getBody(BufferedReader br) throws IOException {
         List<String> ret = new ArrayList<String>();
-        while(!currLine.isBlank())
+        while((currentLine=br.readLine()) != null)
         {
-            ret.add(currLine);
-            currLine = br.readLine();
+            ret.add(currentLine);
         }
         return ret;
     }
