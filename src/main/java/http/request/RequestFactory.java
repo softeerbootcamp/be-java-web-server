@@ -1,5 +1,8 @@
 package http.request;
 
+import http.common.Body;
+import http.common.Method;
+import http.response.enums.ResponseAttribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,13 +19,29 @@ public class RequestFactory {
         BufferedReader bufferedReader = getBufferedReader(in);
 
         RequestStartLine startLine = new RequestStartLine(bufferedReader.readLine());
-        Header header = new Header(getRemainMessages(bufferedReader));
-        RequestParameter requestParameter = new RequestParameter(startLine);
+        Header header = new Header(getHeader(bufferedReader));
 
-        return new HttpRequest(startLine, header, requestParameter);
+        if (startLine.getMethod() == Method.GET) {
+            return new HttpRequest(startLine, header, new RequestParameter(startLine));
+        }
+        return getNewPostRequest(startLine, header, bufferedReader);
     }
 
-    private String getRemainMessages(BufferedReader bufferedReader) {
+    private HttpRequest getNewPostRequest(RequestStartLine startLine, Header header, BufferedReader bufferedReader) throws IOException {
+        Integer contentLength = Integer.parseInt(header.getAttribute(ResponseAttribute.CONTENT_LENGTH));
+        Body body = new Body(getBody(contentLength, bufferedReader));
+        return new HttpRequest(startLine, header, new RequestParameter(body));
+    }
+
+    private byte[] getBody(Integer contentLength, BufferedReader bufferedReader) throws IOException {
+        byte[] bytes = new byte[contentLength];
+        for (int i = 0; i < contentLength; i++) {
+            bytes[i] = (byte) bufferedReader.read();
+        }
+        return bytes;
+    }
+
+    private String getHeader(BufferedReader bufferedReader) {
         String msg = "";
         String line;
         try {
