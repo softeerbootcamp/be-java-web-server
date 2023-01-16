@@ -21,21 +21,18 @@ public class HandlerMappingTest {
     @DisplayName("존재하는 컨트롤러를 호출했을 때")
     public void getHandlerTest_callValidController() throws HttpRequestException {
         //given
-        String path = "/user/create";
-        Request req = mock(Request.class);
+        Request req = Request.of("GET /user/create HTTP/1.1", "", "");
         //when
         Controller controllerType = handlerMapping.getHandler(req);
         //then
-        Assertions.assertEquals(HandlerMapping.controllerMap.get("/user"), controllerType);
+        Assertions.assertEquals(controllerType, HandlerMapping.controllerMap.get("/user"));
     }
 
     @Test
     @DisplayName("존재하지 않은 컨트롤러를 호출했을 때")
     public void getHandlerTest_inValidController() throws HttpRequestException {
         //given
-        String path = "/lorem";
-        Request req = mock(Request.class);
-
+        Request req = Request.of("GET /user/create HTTP/1.1", "", "");
         //then
         Assertions.assertThrows(HttpRequestException.class, () -> handlerMapping.getHandler(req));
     }
