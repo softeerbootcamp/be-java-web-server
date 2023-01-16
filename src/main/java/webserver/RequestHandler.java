@@ -27,8 +27,7 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream()) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            Request request = new Request(br.readLine());
+            Request request = new Request(in);
 
             if (request.getRequestParams().size() != 0) {
                 userService.signUpUser(request);
