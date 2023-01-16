@@ -1,5 +1,8 @@
 package util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import webserver.RequestHandler;
 import webserver.domain.HttpRequestMessage;
 
 import java.io.BufferedReader;
@@ -11,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 public class HttpParser {
     public static final String REQUEST_LINE = "Request Line";
-
+    private static final Logger logger = LoggerFactory.getLogger(HttpParser.class);
     public static HttpRequestMessage parseHttpRequest(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
         Map<String, String> header = parseHeader(br);
@@ -23,9 +26,10 @@ public class HttpParser {
         Map<String, String> header = new HashMap<>();
         String nextLine = br.readLine();
         header.put(REQUEST_LINE, nextLine);
+        logger.debug("{}: {}", REQUEST_LINE, nextLine);
         while (nextLine != null && !nextLine.equals("")) {
             nextLine = br.readLine();
-            System.out.println(nextLine);
+            logger.debug("{}",  nextLine);
             if (!nextLine.contains(": ")) {
                 continue;
             }
@@ -45,7 +49,7 @@ public class HttpParser {
             String line = String.valueOf(data);
             body = parseQueryString(URLDecoder.decode(line, "UTF-8"));
             for (String s : body.keySet()) {
-                System.out.println(s + " : "+ body.get(s));
+                logger.debug("{}: {}",  s, body.get(s));
             }
         }
         return body;
