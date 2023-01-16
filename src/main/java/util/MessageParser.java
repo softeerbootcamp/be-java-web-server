@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class HttpRequestUtil {
+public class MessageParser {
     public static Map<String,String> parseQueryString(String reqURLParams){
         Map<String,String> info = new HashMap<>();
         try{

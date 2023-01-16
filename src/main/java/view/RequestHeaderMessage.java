@@ -1,7 +1,7 @@
 package view;
 
 import com.google.common.io.Files;
-import util.HttpRequestUtil;
+import util.MessageParser;
 
 public class RequestHeaderMessage {
     private String httpFirstHeader;
@@ -39,10 +39,10 @@ public class RequestHeaderMessage {
     }
 
     private void parseHttpReqURL(String httpReqURL){
-        this.httpOnlyURL = HttpRequestUtil.getOnlyURL(httpReqURL);
-        this.httpReqParams = HttpRequestUtil.getURLParams(httpReqURL);
+        this.httpOnlyURL = MessageParser.getOnlyURL(httpReqURL);
+        this.httpReqParams = MessageParser.getURLParams(httpReqURL);
         this.fileExtension = Files.getFileExtension(httpOnlyURL);
-        this.requestAttribute = HttpRequestUtil.getRequestAttribute(httpOnlyURL);
+        this.requestAttribute = MessageParser.getRequestAttribute(httpOnlyURL);
         this.contentType = "text/" + (fileExtension.equals("js")?"javascript":fileExtension);
     }
 

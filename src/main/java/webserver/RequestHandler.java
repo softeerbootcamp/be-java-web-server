@@ -48,8 +48,6 @@ public class RequestHandler implements Runnable {
             }
             br.read(body);
             logger.debug(new String(body));
-
-            //System.out.println(br.readLine());
             setController(requestMessage.getRequestHeaderMessage(), out);
             logger.debug(controller.toString());
             controller.control();

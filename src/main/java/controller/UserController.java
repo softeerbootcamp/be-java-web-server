@@ -5,7 +5,7 @@ import model.repository.MemoryUserRepository;
 import model.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.HttpRequestUtil;
+import util.MessageParser;
 import util.HttpStatus;
 import util.Redirect;
 import view.RequestHeaderMessage;
@@ -53,7 +53,7 @@ public class UserController implements Controller{
     }
 
     private void userCreateByGet(RequestHeaderMessage requestHeaderMessage){
-        Map<String,String> userInfo = HttpRequestUtil.parseQueryString(requestHeaderMessage.getHttpReqParams());
+        Map<String,String> userInfo = MessageParser.parseQueryString(requestHeaderMessage.getHttpReqParams());
         userService.join(new User(userInfo.get(USER_ID),userInfo.get(PASSWORD),userInfo.get(NAME),userInfo.get(EMAIL)));
         setLocation(Redirect.getRedirectLink(requestHeaderMessage.getHttpOnlyURL()));
     }
