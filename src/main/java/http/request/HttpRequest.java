@@ -75,12 +75,16 @@ public class HttpRequest {
         return String.copyValueOf(body);
     }
 
+    public HttpMethod getMethod() {
+        return httpRequestLine.getMethod();
+    }
+
     public String getUrl() {
-        return this.httpRequestLine.getUrl();
+        return httpRequestLine.getUrl();
     }
 
     public String getHttpVersion() {
-        return this.httpRequestLine.getHttpVersion();
+        return httpRequestLine.getHttpVersion();
     }
 
     public String getHttpHeader(String name) {

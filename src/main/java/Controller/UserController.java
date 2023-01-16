@@ -1,6 +1,7 @@
 package Controller;
 
 import exception.UrlNotFoundException;
+import http.request.HttpMethod;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import service.UserService;
@@ -17,7 +18,7 @@ public class UserController implements Controller {
         String url = request.getUrl();
         String path = url.split(PREFIX)[1];
 
-        if (path.startsWith("/create")) {
+        if (path.startsWith("/create") && request.getMethod() == HttpMethod.POST) {
             String body = request.getBody();
 
             Map<String, String> userInfo = HttpRequestUtils.parseBodyMessage(body);
