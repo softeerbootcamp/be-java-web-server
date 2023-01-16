@@ -5,6 +5,7 @@ import http.HttpStatus;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.response.HttpStatusLine;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.SignUpService;
@@ -30,12 +31,24 @@ public class UserController implements Controller {
                     .build();
         }
 
+        // 로그인일 때
+        if(isLoginService(uri)){
+            User tryLoginUser = SignUpService.makeUserInfo(httpRequest.getBody());
+
+
+
+        }
+
         //TODO 임시 코드 - return 예외처리 해야됨
         return null;
     }
 
     public boolean isSignUpService(String uri){
-        return uri.startsWith("/user/create");
+        return uri.equals("/user/create");
+    }
+
+    public boolean isLoginService(String uri){
+        return uri.equals("/user/login");
     }
 
 }

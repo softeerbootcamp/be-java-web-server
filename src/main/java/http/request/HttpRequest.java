@@ -31,7 +31,7 @@ public class HttpRequest {
     }
 
     public String getContentType() {
-        //logger.debug("Accept : {}", httpHeader.getAccept());
+        logger.debug("Accept : {}", httpHeader.getAccept());
         return httpHeader.getAccept().split(",")[0];
     }
 

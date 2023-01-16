@@ -21,9 +21,13 @@ public class HttpResponseUtils {
         return basePath + staticFilePath;
     }
 
-    public static byte[] makeBody(String httpUri, String filePath) throws IOException {
+    public static byte[] makeBody(String httpUri, String filePath) {
         logger.debug("filePath get : {}", filePath + httpUri);
-        return Files.readAllBytes(new File(filePath + httpUri).toPath());
+        try {
+            return Files.readAllBytes(new File(filePath + httpUri).toPath());
+        } catch (IOException e) {
+            return " 파일을 찾지 못함 !".getBytes();
+        }
     }
 
 }
