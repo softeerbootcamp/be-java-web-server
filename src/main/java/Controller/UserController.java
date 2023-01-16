@@ -18,14 +18,14 @@ public class UserController implements Controller {
         String path = url.split(PREFIX)[1];
 
         if (path.startsWith("/create")) {
-            String queryString = HttpRequestUtils.getQueryString(path);
+            String body = request.getBody();
 
-            Map<String, String> userInfo = HttpRequestUtils.parseQueryString(queryString);
+            Map<String, String> userInfo = HttpRequestUtils.parseBodyMessage(body);
 
             UserService userService = new UserService();
             userService.signUp(userInfo);
 
-            response.redirect(request, "/user/login.html");
+            response.redirect(request, "/index.html");
 
             return "";
         }

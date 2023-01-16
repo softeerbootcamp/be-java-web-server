@@ -31,7 +31,7 @@ public class HttpRequestUtils {
         return queryString;
     }
 
-    public static Map<String, String> parseQueryString(String query) {
+    public static Map<String, String> parseBodyMessage(String query) {
         Map<String, String> result = new LinkedHashMap<>();
 
         for (String parameter : query.split("&")) {
