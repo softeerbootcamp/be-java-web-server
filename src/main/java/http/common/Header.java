@@ -1,4 +1,4 @@
-package http.request;
+package http.common;
 
 import http.common.HeaderAttribute;
 

@@ -3,7 +3,7 @@ package http.response;
 import enums.Status;
 import filesystem.FindResult;
 import http.common.Body;
-import http.request.Header;
+import http.common.Header;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

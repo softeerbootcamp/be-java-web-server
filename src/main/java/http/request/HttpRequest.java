@@ -1,6 +1,7 @@
 package http.request;
 
 import http.common.Body;
+import http.common.Header;
 import http.common.Method;
 
 import java.util.HashMap;
