@@ -11,6 +11,16 @@ import java.util.Map;
 
 public class QueryStringHandler implements ControllerHandler {
 
+    private static QueryStringHandler queryStringHandler;
+
+    private QueryStringHandler() {
+    }
+    public static QueryStringHandler getInstance() {
+        if (queryStringHandler != null) {
+            return queryStringHandler;
+        }
+        return queryStringHandler = new QueryStringHandler();
+    }
     @Override
     public HttpResponseMessage handle(HttpRequest httpRequest) {
         String url = httpRequest.getRequestURL();

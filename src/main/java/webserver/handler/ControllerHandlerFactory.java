@@ -9,11 +9,11 @@ public class ControllerHandlerFactory {
         String url = httpRequest.getRequestLine().getUrl();
         HttpMethod httpMethod =  httpRequest.getRequestLine().getHttpMethod();
         if (url.contains("?")) {
-            return new QueryStringHandler();
+            return QueryStringHandler.getInstance();
         }
         if (httpMethod == HttpMethod.POST) {
-            return new Dispatcher();
+            return Dispatcher.getInstance();
         }
-        return new StaticHandler();
+        return StaticHandler.getInstance();
     }
 }

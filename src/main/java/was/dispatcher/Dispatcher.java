@@ -10,7 +10,17 @@ import webserver.domain.HttpResponseMessage;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 public class Dispatcher implements ControllerHandler{
+    private static Dispatcher dispatcher;
 
+    private Dispatcher() {
+    }
+
+    public static Dispatcher getInstance() {
+        if (dispatcher != null) {
+            return dispatcher;
+        }
+        return dispatcher = new Dispatcher();
+    }
     @Override
     public HttpResponseMessage handle(HttpRequest httpRequest) {
         Controller controller = new UserController();
