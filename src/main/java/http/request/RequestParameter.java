@@ -6,12 +6,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RequestParameter {
-    private Map<String, String> requestParameters;
+    private Map<String, String> requestParameters = new HashMap<>();
 
-    public RequestParameter(Body body) {
-        this.requestParameters = parseBody(body);
+    public RequestParameter(RequestStartLine startLine, Body body) {
+        Map<String, String> queryStringParams = parseQueryString(startLine.getUrl());
+        Map<String, String> bodyParams = parseBody(body);
+        requestParameters.putAll(queryStringParams);
+        requestParameters.putAll(bodyParams);
     }
 
+    // todo: handling exception
     private Map<String, String> parseBody(Body body) {
         byte[] data = body.getData();
         String msg = "";
@@ -21,11 +25,7 @@ public class RequestParameter {
         return parseQueryString(msg);
     }
 
-    public RequestParameter(RequestStartLine startLine) {
-        this.requestParameters = parseQueryString(startLine.getUrl());
-    }
-
-
+    // todo: handling exception
     private Map<String, String> parseQueryString(String url) {
         Map<String, String> parameters = new HashMap<>();
         if (!url.contains("?")) {
