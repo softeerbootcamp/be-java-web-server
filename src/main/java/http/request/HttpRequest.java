@@ -1,5 +1,6 @@
 package http.request;
 
+import http.common.Body;
 import http.common.Method;
 
 import java.util.HashMap;
@@ -9,13 +10,14 @@ public class HttpRequest {
 
     private RequestStartLine startLine;
     private Header header;
-
+    private Body body;
     private RequestParameter requestParameter;
 
-    public HttpRequest(RequestStartLine startLine, Header header, RequestParameter requestParameter) {
+    public HttpRequest(RequestStartLine startLine, Header header, Body body) {
         this.startLine = startLine;
         this.header = header;
-        this.requestParameter = requestParameter;
+        this.body = body;
+        this.requestParameter = new RequestParameter(startLine, body);
     }
 
     public String getUrl() {
