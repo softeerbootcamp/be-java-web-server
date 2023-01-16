@@ -13,7 +13,8 @@ public enum StatusCode {
     UNAUTHORIZED(401, "Unauthorized"),
     PAYMENT_REQ(402, "Payment Required"),
     FORBIDDEN(403, "Forbidden"),
-    NOT_FOUND(404, "NOT_FOUND");
+    NOT_FOUND(404, "NOT_FOUND"),
+    METHOD_NOT_ALLOWED(405, "Method not allowed");
     private final int statusCode;
     private final String message;
 
