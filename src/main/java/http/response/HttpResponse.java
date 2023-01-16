@@ -1,6 +1,5 @@
 package http.response;
 
-import http.common.HttpBody;
 import http.common.HttpHeaders;
 import http.common.HttpStatus;
 
@@ -12,14 +11,14 @@ public class HttpResponse {
 
     private HttpStatus status;
     private HttpHeaders headers;
-    private HttpBody body;
+    private byte[] body;
 
     private final DataOutputStream dos;
 
     public HttpResponse(DataOutputStream dos) {
         this.status = HttpStatus.OK;
         this.headers = new HttpHeaders();
-        this.body = new HttpBody();
+        this.body = new byte[0];
         this.dos = dos;
     }
 
@@ -40,8 +39,8 @@ public class HttpResponse {
         this.headers.addHeader(key, value);
     }
 
-    public void setBody(HttpBody body) {
-        this.headers.addHeader("Content-Length", String.valueOf(body.size()));
+    public void setBody(byte[] body) {
+        this.headers.addHeader("Content-Length", String.valueOf(body.length));
         this.body = body;
     }
 
@@ -53,7 +52,7 @@ public class HttpResponse {
         return headers;
     }
 
-    public HttpBody getBody() {
+    public byte[] getBody() {
         return body;
     }
 
@@ -68,7 +67,7 @@ public class HttpResponse {
         String headers = this.headers.toString();
         dos.writeBytes(headers);
         dos.writeBytes("\n");
-        dos.write(body.data());
+        dos.write(body);
         dos.flush();
     }
 }

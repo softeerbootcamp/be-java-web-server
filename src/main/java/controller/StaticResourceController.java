@@ -1,6 +1,5 @@
 package controller;
 
-import http.common.HttpBody;
 import http.common.MediaType;
 import http.common.URI;
 import http.exception.MethodNotAllowException;
@@ -14,10 +13,7 @@ public class StaticResourceController implements Controller {
     @Override
     public void doGet(HttpRequest request, HttpResponse response) {
         URI uri = request.getUri();
-        HttpBody body = new HttpBody(
-                ResourceUtils.loadFileFromClasspath(uri.getPath())
-        );
-        response.setBody(body);
+        response.setBody(ResourceUtils.loadFileFromClasspath(uri.getPath()));
 
         int idxOfDot = uri.getPath().lastIndexOf(".");
         String extension = uri.getPath().substring(idxOfDot + 1);
