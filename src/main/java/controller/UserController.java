@@ -61,7 +61,7 @@ public class UserController implements Controller{
             userService.join(new User(userInfo.get(USER_ID),userInfo.get(PASSWORD),userInfo.get(NAME),userInfo.get(EMAIL)));
             setLocation(Redirect.getRedirectLink(requestHeaderMessage.getHttpOnlyURL()));
         } catch (IllegalStateException e){
-            setLocation("/user/form.html");
+            setLocation("/user/form_failed.html");
             logger.debug(e.getMessage());
         }
     }
