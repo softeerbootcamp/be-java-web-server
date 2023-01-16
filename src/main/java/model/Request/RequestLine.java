@@ -17,14 +17,6 @@ public class RequestLine {
         this.version = tokens[2];
     }
 
-    public String getVersion() {
-        return version;
-    }
-
-    public String getMethod() {
-        return method;
-    }
-
     public String getUrl() {
         return url;
     }

@@ -1,8 +1,5 @@
 package model.Request;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,7 +11,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static util.HttpRequestUtils.parseQuerystring;
 
 public class Request {
-    private static final Logger logger = LoggerFactory.getLogger(Request.class);
 
     private final RequestLine requestLine;
     private final Map<String, String> headers;
@@ -24,11 +20,9 @@ public class Request {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, UTF_8));
         String line = br.readLine();
         this.requestLine = new RequestLine(line);
-        logger.debug("> request Method : {}, URL : {}, Version : {}", requestLine.getMethod(), requestLine.getUrl(), requestLine.getVersion());
 
-        //---------header -------//
+        //TODO line 변수를 없앨 수 있는 방법
         this.headers = extractHeaders(br, line);
-        //--------- body ---------//
         this.requestParams = extractBody(br);
     }
 
@@ -51,7 +45,6 @@ public class Request {
             if (line == null) {
                 break;
             }
-            logger.debug("> header : {}", line);
             String[] headerTokens = line.split(": ");
             if (headerTokens.length == 2) {
                 headers.put(headerTokens[0], headerTokens[1]);
@@ -67,7 +60,5 @@ public class Request {
     public String getUrl() {
         return this.requestLine.getUrl();
     }
-
-
 
 }
