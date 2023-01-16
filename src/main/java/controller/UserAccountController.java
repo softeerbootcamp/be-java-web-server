@@ -5,12 +5,14 @@ import httpMock.CustomHttpErrorFactory;
 import httpMock.CustomHttpRequest;
 import httpMock.CustomHttpResponse;
 import httpMock.constants.ContentType;
+import httpMock.constants.HttpMethod;
 import httpMock.constants.StatusCode;
 import model.User;
 import service.UserService;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class UserAccountController implements RequestController {
     static UserAccountController userAccountService;
@@ -38,6 +40,10 @@ public class UserAccountController implements RequestController {
     }
 
     public CustomHttpResponse makeAccount(CustomHttpRequest req) {
+        Set<HttpMethod> allowedMethods = Set.of(HttpMethod.POST);
+        if(!allowedMethods.contains(req.getHttpMethod()))
+            return CustomHttpErrorFactory.METHOD_NOT_ALLOWED();
+
         String userId = req.getRequestParams().get("userId");
         String password = req.getRequestParams().get("password");
         String name = req.getRequestParams().get("name");
