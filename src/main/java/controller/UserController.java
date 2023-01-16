@@ -2,8 +2,10 @@ package controller;
 
 import model.domain.User;
 import model.general.Header;
+import model.general.Method;
 import model.general.Status;
 import model.request.Request;
+import model.request.RequestLine;
 import model.response.Response;
 import model.response.StatusLine;
 import service.UserService;
@@ -25,7 +27,10 @@ public class UserController implements Controller {
 
     @Override
     public Response getResponse(Request request) {
-        if(request.getRequestLine().getUri().startsWith("/user/create")) return createUserResponse(request);
+        RequestLine requestLine = request.getRequestLine();
+
+        if(requestLine.getMethod().equals(Method.from("POST")) &&
+                requestLine.getUri().startsWith("/user/create")) return createUserResponse(request);
 
         return Response.of(request, Status.NOT_FOUND);
     }
