@@ -27,12 +27,13 @@ public class UserController implements Controller {
             // user 정보 받아서 데이터베이스에 입력
             Database.addUser(SignUpService.makeUserInfo(httpRequest.getBody()));
             // 302 응답이라 location만 필요하기 때문에 body랑 contentType는 없음!
-            return new HttpResponse(new HttpStatusLine(HttpStatus.FOUND, httpRequest.getHttpVersion()), null, null);
+            return new HttpResponse.HttpResponseBuilder()
+                    .setHttpStatusLine(new HttpStatusLine(HttpStatus.FOUND, httpRequest.getHttpVersion()))
+                    .build();
         }
 
         //TODO 임시 코드 - return 예외처리 해야됨
-        byte[] responseBody = HttpResponseUtils.makeBody(httpRequest.getUri(), null);
-        return new HttpResponse(new HttpStatusLine(HttpStatus.OK, httpRequest.getHttpVersion()), responseBody, null);
+        return null;
     }
 
     public boolean isSignUpService(String uri){
