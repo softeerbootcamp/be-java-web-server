@@ -18,7 +18,7 @@ public class QueryStringHandler implements ControllerHandler {
     @Override
     public HttpResponseMessage handle() {
         String url = httpRequest.getRequestURL();
-        Map map = HttpParser.parseQueryString(url);
+        Map<String, String> map = HttpParser.parseQueryString(url);
         UserService userService = new UserService();
         userService.addUser(map);
 

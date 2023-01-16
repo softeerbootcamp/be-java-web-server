@@ -14,8 +14,7 @@ class HttpParserTest {
 
     @Test
     void 쿼리스트링_파싱테스트() {
-        HttpParser httpParser = new HttpParser();
-        Map map = httpParser.parseQueryString("create?userId=아이디&password=password&name=박원종&email=wonjong@naver.com");
+        Map map = HttpParser.parseQueryString("create?userId=아이디&password=password&name=박원종&email=wonjong@naver.com");
 
         Map<String, String> expectedMap = new HashMap<>();
         expectedMap.put("userId", "아이디");
