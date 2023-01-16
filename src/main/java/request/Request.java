@@ -18,14 +18,14 @@ public class Request {
 
     private final Map<String, String> requestHeader;
 
-    private final Map<String, String> requestBody;
+    private final String requestBody;
 
     private Request(String method, String resource, String version, List<String> requestHeaderList, String requestBody) {
         this.method = method;
         this.resource = resource;
         this.version = version;
         this.requestHeader = RequestParser.parseHeader(requestHeaderList);
-        this.requestBody = RequestParser.parseBody(requestBody);
+        this.requestBody = requestBody;
     }
 
     public static Request from(InputStream in) throws IOException {
@@ -78,7 +78,7 @@ public class Request {
         return requestHeader;
     }
 
-    public Map<String, String> getRequestBody() {
+    public String getRequestBody() {
         return requestBody;
     }
 

@@ -1,15 +1,15 @@
 package request.method.GET.handlers;
 
-public enum HandlerEnum {
-    FORM("/user/create?", UserRegisterHandler.of()),
-    NO_MATCH("", NoMatchHandler.of())
+public enum GETHandlerEnum {
+    FORM("/user/create?", GETUserRegisterHandler.of()),
+    NO_MATCH("", GETNoMatchHandler.of())
     ;
 
     private String url;
 
     private GETHandler handler;
 
-    private HandlerEnum(String url, GETHandler handler) {
+    private GETHandlerEnum(String url, GETHandler handler) {
         this.url = url;
         this.handler = handler;
     }

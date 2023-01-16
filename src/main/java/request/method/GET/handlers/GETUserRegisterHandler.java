@@ -4,15 +4,15 @@ import model.User;
 import request.Request;
 import request.RequestParser;
 
-public class UserRegisterHandler implements GETHandler{
-    private final static UserRegisterHandler userRegisterHandler;
+public class GETUserRegisterHandler implements GETHandler{
+    private final static GETUserRegisterHandler GET_USER_REGISTER_HANDLER;
 
     static {
-        userRegisterHandler = new UserRegisterHandler();
+        GET_USER_REGISTER_HANDLER = new GETUserRegisterHandler();
     }
 
-    public static UserRegisterHandler of() {
-        return userRegisterHandler;
+    public static GETUserRegisterHandler of() {
+        return GET_USER_REGISTER_HANDLER;
     }
 
     @Override

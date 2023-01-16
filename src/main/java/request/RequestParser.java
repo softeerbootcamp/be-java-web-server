@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 public class RequestParser{
-    public static String REQUEST_LINE = "Request-line";
+    public static String REQUEST_LINE = "Request-Line";
 
     public static String parseMethod(String line) {
         return splitRequestLine(line)[0];
@@ -29,7 +29,7 @@ public class RequestParser{
         return requestHeaderMap;
     }
 
-    public static Map<String, String> parseBody(String requestBody) {
+    /*public static Map<String, String> parseBody(String requestBody) {
         Map<String, String> requestBodyMap = new HashMap<>();
         if(!requestBody.isBlank()) {
             String[] tokens = requestBody.split("&");
@@ -40,7 +40,7 @@ public class RequestParser{
         }
 
         return requestBodyMap;
-    }
+    }*/
 
     private static String[] splitRequestLine(String line) {
         return line.split(" ");
