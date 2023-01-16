@@ -1,5 +1,6 @@
 package util;
 
+import exception.NullValueException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,14 +33,18 @@ public class HttpRequestUtils {
     }
 
     public static Map<String, String> parseBodyMessage(String query) {
-        Map<String, String> result = new LinkedHashMap<>();
+        try {
+            Map<String, String> result = new LinkedHashMap<>();
 
-        for (String parameter : query.split("&")) {
-            String[] info = parameter.split("=");
-            result.put(info[0], decode(info[1]));
+            for (String parameter : query.split("&")) {
+                String[] info = parameter.split("=");
+                result.put(info[0], decode(info[1]));
+            }
+
+            return result;
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new NullValueException("form에서 아무 값도 입력받지 못했습니다.");
         }
-
-        return result;
     }
 
     private static String decode(String value) {

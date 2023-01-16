@@ -1,5 +1,6 @@
 package Controller;
 
+import exception.NullValueException;
 import exception.UrlNotFoundException;
 import exception.UserValidationException;
 import http.request.HttpMethod;
@@ -31,7 +32,7 @@ public class UserController implements Controller {
                 response.redirect(request, "/index.html");
 
                 return "";
-            } catch (UserValidationException e) {
+            } catch (NullValueException | UserValidationException e) {
                 response.redirect(request, "/user/form_failed.html");
                 return "";
             }
