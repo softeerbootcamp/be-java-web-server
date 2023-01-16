@@ -21,17 +21,21 @@ public class Header {
         String[] lines = message.split("\n\r");
         for (String line : lines) {
             String[] chunks = line.split(":");
-            att.put(chunks[0], chunks[1]);
+            att.put(chunks[0].trim(), chunks[1].trim());
         }
         return att;
     }
 
     public void setAttribute(ResponseAttribute key, String value) {
-        attributes.put(key.getAttribute(), value);
+        attributes.put(key.getValue(), value);
     }
 
     public void setAttribute(ResponseAttribute key, Integer value) {
         setAttribute(key, Integer.toString(value));
+    }
+
+    public String getAttribute(ResponseAttribute key) {
+        return attributes.get(key.getValue());
     }
 
     @Override
