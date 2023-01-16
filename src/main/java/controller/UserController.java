@@ -8,6 +8,7 @@ import http.response.HttpStatusLine;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import service.LogInService;
 import service.SignUpService;
 import util.HttpResponseUtils;
 
@@ -24,7 +25,7 @@ public class UserController implements Controller {
         // 회원가입일 때
         if (isSignUpService(uri)) {
             // user 정보 받아서 데이터베이스에 입력
-            Database.addUser(SignUpService.makeUserInfo(httpRequest.getBody()));
+            Database.addUser(SignUpService.makeUserByBody(httpRequest.getBody()));
             // 302 응답이라 location만 필요하기 때문에 body랑 contentType는 없음!
             return new HttpResponse.HttpResponseBuilder()
                     .setHttpStatusLine(new HttpStatusLine(HttpStatus.FOUND, httpRequest.getHttpVersion()))
@@ -33,9 +34,16 @@ public class UserController implements Controller {
 
         // 로그인일 때
         if(isLoginService(uri)){
-            User tryLoginUser = SignUpService.makeUserInfo(httpRequest.getBody());
+            // 성공
+            if(LogInService.isLoginSuccess(httpRequest.getBody())){
+                // index.html로 이동
+                // HTTP 헤더의 쿠키 값을 SID = 세션 ID로 응답
+                // 세션 ID는 적당한 크기의 무작위 숫자 또는 문자열
+                // 서버는 세션 아이디에 해당하는 User 정보에 접근 가능해야 한다.
+            }
 
-
+            // 실패
+            // /user/login_failed.html로 이동
 
         }
 

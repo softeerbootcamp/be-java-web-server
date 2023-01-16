@@ -11,8 +11,8 @@ import java.util.regex.Pattern;
 
 public class SignUpService{
     private static final Logger logger = LoggerFactory.getLogger(SignUpService.class);
-    public static User makeUserInfo(String uri) {
-        Map<String, String> params = HttpRequestUtils.parseQueryString(uri);
+    public static User makeUserByBody(String body) {
+        Map<String, String> params = HttpRequestUtils.parseQueryString(body);
 
         User user = new User(
                 params.get("userId"),
