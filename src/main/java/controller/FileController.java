@@ -10,7 +10,7 @@ import response.HttpResponse;
 import webserver.HttpStatus;
 
 public class FileController extends AbstractController {
-	private final static String RESOURCE_DIR = "/webapp";
+	private final static String RESOURCE_DIR = "./webapp";
 	public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
 		String path = httpRequest.getUrl().getPath();
 		String[] splitList = path.split("\\.");
