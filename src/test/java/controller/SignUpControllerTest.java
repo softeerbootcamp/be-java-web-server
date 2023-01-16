@@ -3,7 +3,7 @@ package controller;
 import http.common.HttpHeaders;
 import http.common.HttpMethod;
 import http.common.HttpStatus;
-import http.common.URI;
+import http.common.URL;
 import http.exception.MethodNotAllowException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -38,7 +38,7 @@ public class SignUpControllerTest {
                 "email", "sol@sol.com");
         HttpRequest request = new HttpRequest(
                 HttpMethod.POST,
-                new URI("/user/create", Map.of()),
+                new URL("/user/create", Map.of()),
                 new HttpHeaders(),
                 user);
         HttpResponse response = new HttpResponse(mockDos);
@@ -67,7 +67,7 @@ public class SignUpControllerTest {
                 "email", "sol@sol.com");
         HttpRequest request = new HttpRequest(
                 HttpMethod.GET,
-                new URI("/user/create", user),
+                new URL("/user/create", user),
                 new HttpHeaders());
         HttpResponse response = new HttpResponse(mockDos);
 

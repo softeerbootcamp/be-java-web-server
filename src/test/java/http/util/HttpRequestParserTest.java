@@ -1,7 +1,7 @@
 package http.util;
 
 import http.common.HttpHeaders;
-import http.common.URI;
+import http.common.URL;
 import http.request.HttpRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,13 +32,13 @@ public class HttpRequestParserTest {
 
         // when
         HttpRequest httpRequest = HttpRequestParser.parse(in);
-        URI uri = httpRequest.getUri();
+        URL url = httpRequest.getUri();
         HttpHeaders headers = httpRequest.getHeaders();
 
         // then
         assertAll(
-                () -> assertEquals("/index.html", uri.getPath()),
-                () -> assertEquals(0, uri.getQueries().size()),
+                () -> assertEquals("/index.html", url.getPath()),
+                () -> assertEquals(0, url.getQueries().size()),
                 () -> assertEquals(5, headers.size()),
                 () -> assertEquals("localhost:8080", headers.getValue("Host")));
     }
@@ -58,15 +58,15 @@ public class HttpRequestParserTest {
 
         // when
         HttpRequest httpRequest = HttpRequestParser.parse(in);
-        URI uri = httpRequest.getUri();
+        URL url = httpRequest.getUri();
         HttpHeaders headers = httpRequest.getHeaders();
 
         // then
         assertAll(
-                () -> assertEquals("/index.html", uri.getPath()),
-                () -> assertEquals(2, uri.getQueries().size()),
-                () -> assertEquals("sol", uri.getQueries().get("name")),
-                () -> assertEquals("26", uri.getQueries().get("age")),
+                () -> assertEquals("/index.html", url.getPath()),
+                () -> assertEquals(2, url.getQueries().size()),
+                () -> assertEquals("sol", url.getQueries().get("name")),
+                () -> assertEquals("26", url.getQueries().get("age")),
                 () -> assertEquals(5, headers.size()),
                 () -> assertEquals("localhost:8080", headers.getValue("Host")));
     }

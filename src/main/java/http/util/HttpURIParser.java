@@ -1,6 +1,6 @@
 package http.util;
 
-import http.common.URI;
+import http.common.URL;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,8 +8,8 @@ import java.util.Map;
 public class HttpURIParser {
     private HttpURIParser() {}
 
-    public static URI parse(String requestLine) {
-        return new URI(parsePath(requestLine), parseQueryString(requestLine));
+    public static URL parse(String requestLine) {
+        return new URL(parsePath(requestLine), parseQueryString(requestLine));
     }
 
     private static String parsePath(String requestLine) {
@@ -42,7 +42,7 @@ public class HttpURIParser {
     }
 
     private static Map<String, String> createQuerys(String queryStrings) {
-        Map<String, String> querys = new HashMap<>();
+        Map<String, String> queries = new HashMap<>();
 
         for (String queryParam: queryStrings.split("&")) {
             String[] split = queryParam.split("=");
@@ -50,9 +50,9 @@ public class HttpURIParser {
             if (split.length == 2) {
                 param = split[1];
             }
-            querys.put(split[0], param);
+            queries.put(split[0], param);
         }
 
-        return querys;
+        return queries;
     }
 }

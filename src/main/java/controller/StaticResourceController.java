@@ -1,7 +1,7 @@
 package controller;
 
 import http.common.MediaType;
-import http.common.URI;
+import http.common.URL;
 import http.exception.MethodNotAllowException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -12,11 +12,11 @@ public class StaticResourceController implements Controller {
 
     @Override
     public void doGet(HttpRequest request, HttpResponse response) {
-        URI uri = request.getUri();
-        response.setBody(ResourceUtils.loadFileFromClasspath(uri.getPath()));
+        URL url = request.getUri();
+        response.setBody(ResourceUtils.loadFileFromClasspath(url.getPath()));
 
-        int idxOfDot = uri.getPath().lastIndexOf(".");
-        String extension = uri.getPath().substring(idxOfDot + 1);
+        int idxOfDot = url.getPath().lastIndexOf(".");
+        String extension = url.getPath().substring(idxOfDot + 1);
         MediaType mediaType = MediaType.fromExtension(extension).orElse(MediaType.TEXT_PLAIN);
 
         response.addHeader("Content-Type", mediaType.getType());

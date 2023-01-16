@@ -1,6 +1,6 @@
 package http.util;
 
-import http.common.URI;
+import http.common.URL;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("HttpURIParser Test")
-public class HttpURIParserTest {
+public class HttpURLParserTest {
 
     @Test
     @DisplayName("parse() - 쿼리스트링이 존재하지 않는 경우")
@@ -17,7 +17,7 @@ public class HttpURIParserTest {
         String requestLine = "GET /index.html HTTP/1.1";
 
         // when
-        URI parse = HttpURIParser.parse(requestLine);
+        URL parse = HttpURIParser.parse(requestLine);
 
         // then
         assertAll(
@@ -33,7 +33,7 @@ public class HttpURIParserTest {
         String requestLine = "GET /index.html?name=sol&age=26 HTTP/1.1";
 
         // when
-        URI parse = HttpURIParser.parse(requestLine);
+        URL parse = HttpURIParser.parse(requestLine);
 
         // then
         assertAll(
@@ -51,7 +51,7 @@ public class HttpURIParserTest {
         String requestLine = "GET /index? HTTP/1.1";
 
         // when
-        URI parse = HttpURIParser.parse(requestLine);
+        URL parse = HttpURIParser.parse(requestLine);
 
         // then
         assertAll(
@@ -67,7 +67,7 @@ public class HttpURIParserTest {
         String requestLine = "GET /index?name= HTTP/1.1";
 
         // when
-        URI parse = HttpURIParser.parse(requestLine);
+        URL parse = HttpURIParser.parse(requestLine);
 
         // then
         assertAll(
@@ -84,7 +84,7 @@ public class HttpURIParserTest {
         String requestLine = "GET /index?name= HTTP/1.1";
 
         // when
-        URI parse = HttpURIParser.parse(requestLine);
+        URL parse = HttpURIParser.parse(requestLine);
 
         // then
         assertAll(
@@ -101,7 +101,7 @@ public class HttpURIParserTest {
         String requestLine = "GET /index?name&age HTTP/1.1";
 
         // when
-        URI parse = HttpURIParser.parse(requestLine);
+        URL parse = HttpURIParser.parse(requestLine);
 
         // then
         assertAll(

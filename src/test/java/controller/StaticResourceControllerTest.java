@@ -30,7 +30,7 @@ public class StaticResourceControllerTest {
         StaticResourceController controller = new StaticResourceController();
         HttpRequest request = new HttpRequest(
                 HttpMethod.GET,
-                new URI("/index.html", Map.of()),
+                new URL("/index.html", Map.of()),
                 new HttpHeaders()
         );
         HttpResponse response = new HttpResponse(mockDos);
@@ -54,7 +54,7 @@ public class StaticResourceControllerTest {
         StaticResourceController controller = new StaticResourceController();
         HttpRequest request = new HttpRequest(
                 HttpMethod.POST,
-                new URI("/index.html", Map.of()),
+                new URL("/index.html", Map.of()),
                 new HttpHeaders()
         );
         HttpResponse response = new HttpResponse(mockDos);

@@ -2,11 +2,11 @@ package http.common;
 
 import java.util.Map;
 
-public class URI {
+public class URL {
     private final String path;
     private final Map<String, String> queries;
 
-    public URI(String path, Map<String, String> queries) {
+    public URL(String path, Map<String, String> queries) {
         this.path = path;
         this.queries = queries;
     }
