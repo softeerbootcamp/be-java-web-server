@@ -1,17 +1,13 @@
 # Java web server
 
- ## 집중했던 부분: 
+## 요구사항:
 
 <br/>
 
-- 다른 사람 코드를 읽으며 네이밍에 신경쓰기
-
-- 피드백 적용 및 사용하지 않았던 자바의 유용한 기능들 써보기
-  - ClassLoader
-  - Buffer & Stream
-  - Reflection
-
-- STEP2 리팩토링 및 STEP3 기능 구현
+- HTTP POST 동작방식 이해하기
+- HTTP redirection 기능을 이해하고 회원가입 후 페이지 이동에 적용한다.
+- 로그인을 GET에서 POST로 수정 후 정상 동작하도록 구현한다.
+- 가입을 완료하면 /index.html 페이지로 이동한다.
 
 <br>
 
