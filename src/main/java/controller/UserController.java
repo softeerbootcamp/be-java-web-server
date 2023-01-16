@@ -71,10 +71,10 @@ public class UserController implements Controller{
     }
 
     private void userLogin(){
-        Map<String,String> userLogin;
-        userLogin = MessageParser.parseQueryString(requestBodyMessage.getQueryString());
+        Map<String,String> loginInfo;
+        loginInfo = MessageParser.parseQueryString(requestBodyMessage.getQueryString());
         try {
-            User user = userService.findOneUser(userLogin.get(USER_ID)).orElseThrow(IllegalStateException::new);
+            User user = userService.login(loginInfo.get(USER_ID), loginInfo.get(PASSWORD));
             setLocation(Redirect.getRedirectLink(requestHeaderMessage.getRequestAttribute()));
         } catch (IllegalStateException e){
             setLocation("/user/login_failed.html");
