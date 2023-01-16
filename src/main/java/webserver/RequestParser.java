@@ -13,22 +13,29 @@ public class RequestParser {
         BufferedReader br = new BufferedReader(new InputStreamReader(in,"UTF-8"));
         RequestStartLine startLine = RequestStartLine.from(br.readLine());
         Map<String,String> headers = parseHeader(br);
-        return new HttpRequest(startLine.getMethod(),startLine.getUrl(),startLine.getQueries(),headers);
+        System.out.println(headers.entrySet());
+        br.readLine();
+        String body=br.readLine();
+        System.out.println("here : parseInputStreamToHttpRequest");
+        System.out.println(body);
+        return new HttpRequest(startLine.getMethod(),startLine.getUrl(),startLine.getQueries(),headers,body);
 
     }
 
-    public static Map<String, String> parseHeader(BufferedReader br) throws IOException {
+    private static Map<String, String> parseHeader(BufferedReader br) throws IOException {
         Map<String, String> headers = new HashMap<>();
         String line;
         line = br.readLine();
-        while (!line.startsWith("")) {
+        while (hasMoreLine(line)) {
             String[] headerTokens = line.split(HEADER_DELIMITER, HEADER_SPLIT_LIMIT);
-            String val= " ";
-            if(headerTokens.length == 2) val = headerTokens[1];
-            headers.put(headerTokens[0],val);
+            headers.put(headerTokens[0], headerTokens[1]);
             line = br.readLine();
         }
         return headers;
+    }
+
+    private static boolean hasMoreLine(String line) {
+        return !(line == null || line.isEmpty());
     }
 
     public static String parseRequestStartLineTarget(InputStream in) throws IOException {
