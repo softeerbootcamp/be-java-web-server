@@ -7,8 +7,12 @@ public class HttpRequestBody {
         this.content = content;
     }
 
-    public static HttpRequestBody of(String content) {
+    public static HttpRequestBody from(String content) {
         return new HttpRequestBody(content);
+    }
+
+    public String getContent() {
+        return content;
     }
 
     @Override

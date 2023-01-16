@@ -29,4 +29,8 @@ public class HttpRequestLine {
     public URI getUri() {
         return uri;
     }
+
+    public HttpMethod getMethod() {
+        return method;
+    }
 }
