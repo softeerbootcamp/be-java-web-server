@@ -2,7 +2,6 @@ package webserver.domain.request;
 
 import java.util.Map;
 import static webserver.utils.CommonUtils.parseStringToMap;
-import static webserver.utils.CommonUtils.readMap;
 
 public class Request {
 
