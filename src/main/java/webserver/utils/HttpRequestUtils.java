@@ -23,6 +23,7 @@ public class HttpRequestUtils {
 
         String requestLine = "";
         String header = "";
+        String body = "";
 
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
@@ -31,19 +32,22 @@ public class HttpRequestUtils {
         logger.info(requestLine);  //print out http request line
 
         //Store Http Request header
-        String headerLine = br.readLine();
-        while(!headerLine.equals("")){
-            header += headerLine + '\n';
-            logger.info(headerLine);  //print out http header
-            headerLine = br.readLine();
+        String tempLine = br.readLine();
+        while(!tempLine.equals("")){
+            header += tempLine + '\n';
+            logger.info(tempLine);  //print out http header
+            tempLine = br.readLine();
         }
 
-        br.readLine(); // to leave out a one-line spacing between http header and body
-
         //Store Http Request body
-        String bodyLine = br.readLine();
+        StringBuilder sb = new StringBuilder();
+        while(br.ready()){
+            int next= br.read();
+            sb.append((char)next);
+        }
+        body  = sb.toString();
 
-        return Request.of(requestLine, headerLine, bodyLine);  //make a Request instance using static factory method
+        return Request.of(requestLine, header, body);  //make a Request instance using static factory method
     }
 
     public static Map<String, String> parseQueryString(String queryString) {
