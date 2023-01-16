@@ -1,23 +1,23 @@
 package http.request;
 
-import http.Parameter;
+import http.Parameters;
 
 import java.util.Map;
 
 public class HttpRequestBody {
-    private final Parameter parameter;
+    private final Parameters parameter;
 
-    private HttpRequestBody(Parameter parameter) {
+    private HttpRequestBody(Parameters parameter) {
         this.parameter = parameter;
     }
 
     public static HttpRequestBody createEmptyRequestBody() {
-        Parameter emptyParam = Parameter.createEmptyParam();
+        Parameters emptyParam = Parameters.createEmptyParam();
         return new HttpRequestBody(emptyParam);
     }
 
     public static HttpRequestBody createRequestBody(String queryString) {
-        Parameter param = Parameter.createParam(queryString);
+        Parameters param = Parameters.createParam(queryString);
         return new HttpRequestBody(param);
     }
 

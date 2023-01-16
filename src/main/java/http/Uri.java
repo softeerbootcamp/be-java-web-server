@@ -9,9 +9,9 @@ public class Uri {
 
 
     private final String path;
-    private final Parameter parameter;
+    private final Parameters parameter;
 
-    private Uri(String path, Parameter parameter) {
+    private Uri(String path, Parameters parameter) {
         this.path = path;
         this.parameter = parameter;
     }
@@ -22,9 +22,9 @@ public class Uri {
             String path = tokens[0];
             String query = tokens[1];
 
-            return new Uri(path, Parameter.createParam(query));
+            return new Uri(path, Parameters.createParam(query));
         }
-        return new Uri(uri, Parameter.createEmptyParam());
+        return new Uri(uri, Parameters.createEmptyParam());
     }
 
     public Map<String, String> getParameters() {
