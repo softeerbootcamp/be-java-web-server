@@ -1,5 +1,9 @@
 package http;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import webserver.RequestHandler;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -13,6 +17,8 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toMap;
 
 public class HttpRequest {
+
+    private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
 
     private final RequestLine requestLine;
     private final RequestHeader requestHeader;
@@ -31,9 +37,11 @@ public class HttpRequest {
     public static HttpRequest from(BufferedReader br) throws IOException {
         String line = br.readLine();
         List<String> requests = new ArrayList<>();
+        logger.debug("Request : {}", line);
         while (!line.equals("")) {
             requests.add(line);
             line = br.readLine();
+            logger.debug("Request : {}", line);
         }
         RequestLine requestLine = RequestLine.from(requests.get(0));
         RequestHeader requestHeader = RequestHeader.from(requests.subList(1, requests.size()));
@@ -42,6 +50,7 @@ public class HttpRequest {
             int contentLength = requestHeader.getContentLength();
             char[] body = new char[contentLength];
             br.read(body, 0, contentLength);
+            logger.debug("Request : {}", String.copyValueOf(body));
             return new HttpRequest(
                     requestLine,
                     requestHeader,
