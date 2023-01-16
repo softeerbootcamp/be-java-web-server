@@ -22,10 +22,21 @@ public class UserController extends AbstractController {
 			url.getQuery("email"));
 		Database.addUser(user);
 		logger.info(user + " 회원가입했습니다.");
-		// refactoring
-		File file = new File("./webapp/index.html");
+		// redirect
 		httpResponse.setHttpResponse(HttpStatus.FOUND,
-			new String(Files.readAllBytes(file.toPath())), ContentType.HTML,
+			"", ContentType.HTML,
+			"/index.html");
+	}
+
+	public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+		User user = User.of(httpRequest.getRequestBody("userId"), httpRequest.getRequestBody("password"), httpRequest.getRequestBody("name"),
+			httpRequest.getRequestBody("email"));
+		Database.addUser(user);
+		logger.info(user + " 회원가입했습니다.");
+		// refactoring
+		// redirect
+		httpResponse.setHttpResponse(HttpStatus.FOUND,
+			"", ContentType.HTML,
 			"/index.html");
 	}
 
