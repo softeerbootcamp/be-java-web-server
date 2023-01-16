@@ -50,6 +50,10 @@ public class UserController implements Controller{
             userCreate();
             return;
         }
+        if (requestHeaderMessage.getRequestAttribute().equals("/login")){
+            userLogin();
+            return;
+        }
     }
 
     private void userCreate(){
@@ -59,9 +63,21 @@ public class UserController implements Controller{
         else userInfo = MessageParser.parseQueryString(requestBodyMessage.getQueryString());
         try{
             userService.join(new User(userInfo.get(USER_ID),userInfo.get(PASSWORD),userInfo.get(NAME),userInfo.get(EMAIL)));
-            setLocation(Redirect.getRedirectLink(requestHeaderMessage.getHttpOnlyURL()));
+            setLocation(Redirect.getRedirectLink(requestHeaderMessage.getRequestAttribute()));
         } catch (IllegalStateException e){
             setLocation("/user/form_failed.html");
+            logger.debug(e.getMessage());
+        }
+    }
+
+    private void userLogin(){
+        Map<String,String> userLogin;
+        userLogin = MessageParser.parseQueryString(requestBodyMessage.getQueryString());
+        try {
+            User user = userService.findOneUser(userLogin.get(USER_ID)).orElseThrow(IllegalStateException::new);
+            setLocation(Redirect.getRedirectLink(requestHeaderMessage.getRequestAttribute()));
+        } catch (IllegalStateException e){
+            setLocation("/user/login_failed.html");
             logger.debug(e.getMessage());
         }
     }
