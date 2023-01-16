@@ -4,15 +4,11 @@ import controller.annotation.ControllerInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.HttpRequest;
-import response.HttpResponse;
 import util.FileType;
-import util.HttpMethod;
 import util.Url;
-import util.UrlType;
 import webserver.RequestHandler;
 
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.NoSuchFileException;
@@ -37,12 +33,7 @@ public class ControllerFinder {
         for (Method method : methods) {
             if (method.isAnnotationPresent(ControllerInfo.class)) {
                 ControllerInfo controllerInfo = method.getAnnotation(ControllerInfo.class);
-                String controllersPath = controllerInfo.path();
-                UrlType controllersUrlType = controllerInfo.u();
-                HttpMethod controllerHttpMethod = controllerInfo.method();
-                if (httpRequest.getUrl().getUrlType().equals(controllersUrlType)
-                        && httpRequest.getUrl().getUrl().contains(controllersPath)
-                        && httpRequest.getHttpMethod().equals(controllerHttpMethod)) {
+                if(isMatchControllerMethodWithRequest(controllerInfo,httpRequest)) {
                     method.invoke(controller,dataOutputStream,httpRequest);
                     logger.debug("호출된 Url: {}",httpRequest.getUrl().getUrl());
                     logger.debug("호출된 Controller: {}",controller.getClass());
@@ -50,6 +41,12 @@ public class ControllerFinder {
                 }
             }
         }
+    }
+
+    private static boolean isMatchControllerMethodWithRequest(ControllerInfo controllerInfo, HttpRequest httpRequest) {
+        return httpRequest.getUrl().getUrlType().equals(controllerInfo.u())
+                && httpRequest.getUrl().getUrl().contains(controllerInfo.path())
+                && httpRequest.getHttpMethod().equals(controllerInfo.method());
     }
 
 
