@@ -44,6 +44,7 @@ public class CustomHttpResponse {
         return body;
     }
 
+    @Override
     public String toString(){
         return statusCode.getMessage() + " " + headers.toString();
     }
