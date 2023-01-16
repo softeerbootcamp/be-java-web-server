@@ -29,10 +29,10 @@ public class HttpParser {
         logger.debug("{}: {}", REQUEST_LINE, nextLine);
         while (nextLine != null && !nextLine.equals("")) {
             nextLine = br.readLine();
-            logger.debug("{}",  nextLine);
             if (!nextLine.contains(": ")) {
                 continue;
             }
+            logger.debug("{}",  nextLine);
             String[] line = nextLine.split(": ");
             String key = line[0];
             String value = line[1];
