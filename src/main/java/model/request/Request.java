@@ -18,9 +18,9 @@ public class Request {
 
     private final RequestLine requestLine;
     private final Map<Header, String> headers;
-    private final byte[] body;
+    private final String body;
 
-    private Request(RequestLine requestLine, Map<Header, String> headers, byte[] body) {
+    private Request(RequestLine requestLine, Map<Header, String> headers, String body) {
         this.requestLine = requestLine;
         this.headers = headers;
         this.body = body;
@@ -57,7 +57,7 @@ public class Request {
         return headers;
     }
 
-    public byte[] getBody() {
+    public String getBody() {
         return body;
     }
 }
