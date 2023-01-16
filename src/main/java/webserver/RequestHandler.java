@@ -1,7 +1,6 @@
 package webserver;
 
 import controller.Controller;
-import controller.ControllerFactory;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
@@ -33,7 +32,7 @@ public class RequestHandler implements Runnable {
 
             HttpResponse httpResponse = HttpResponse.createDefaultHttpResponse(out);
 
-            Controller controller = ControllerFactory.findController(httpRequest);
+            Controller controller = ControllerMapper.findController(httpRequest);
 
             if(controller == null) {
                 byte[] error = load404ErrorFile();

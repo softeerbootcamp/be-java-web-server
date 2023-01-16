@@ -1,5 +1,6 @@
-package controller;
+package webserver;
 
+import controller.*;
 import http.request.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,12 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ControllerFactory {
-    private static final Logger logger = LoggerFactory.getLogger(ControllerFactory.class);
+public class ControllerMapper {
+    private static final Logger logger = LoggerFactory.getLogger(ControllerMapper.class);
 
     private static final List<Controller> controllers;
 
-    private ControllerFactory() {
+    private ControllerMapper() {
     }
 
     static {
