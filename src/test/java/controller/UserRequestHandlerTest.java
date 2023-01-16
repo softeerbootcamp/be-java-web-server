@@ -1,5 +1,6 @@
 package controller;
 
+import model.Request;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import webserver.RequestHandler;
@@ -14,11 +15,11 @@ public class UserRequestHandlerTest {
     @DisplayName("입력된 request line에서 url 추출하는 메서드")
     void extractUrl() {
         //given
-        RequestHandler requestHandler = new RequestHandler(new Socket());
         String reqLine = "GET /index.html HTTP/1.1";
 
         //when
-        String url = requestHandler.extractUrl(reqLine);
+        Request request = new Request(reqLine);
+        String url = request.getUrl();
 
         //then
         assertThat(url).isEqualTo("/index.html");
@@ -29,11 +30,11 @@ public class UserRequestHandlerTest {
     @DisplayName("입력된 request line이 없을 경우 extractUrl 메서드가 index를 반환하는지 여부 체크")
     void extractUrl_noUrl() {
         //given
-        RequestHandler requestHandler = new RequestHandler(new Socket());
         String reqLine = "GET / HTTP/1.1";
 
         //when
-        String url = requestHandler.extractUrl(reqLine);
+        Request request = new Request(reqLine);
+        String url = request.getUrl();
         //then
         assertThat(url).isEqualTo("/index.html");
 

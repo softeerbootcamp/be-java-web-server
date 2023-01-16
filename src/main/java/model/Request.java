@@ -10,8 +10,20 @@ public class Request {
     private final String url;
     private final Map<String, String> requestParams = new HashMap<>();
 
-    public Request(String url) {
-        this.url = url;
+
+    public Request(String line) {
+        this.url = extractUrl(line);
+        this.checkUrlQueryString();
+    }
+
+    private String extractUrl(String line) {
+        //문자열 분리 후 -> 문자열 배열에 삽입
+        String[] tokens = line.split(" ");
+        String url = tokens[1];
+        if (url.equals("/")) {
+            url = "/index.html";
+        }
+        return url;
     }
 
     public String getUrl() {

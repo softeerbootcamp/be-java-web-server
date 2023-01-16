@@ -23,8 +23,8 @@ public class UserServiceTest {
     @DisplayName("유저 저장 (서비스 레벨)")
     void saveUser() {
         //given
-        Request request = new Request("/user/create?userId=aa&password=bb&name=cc&email=dd@dd");
-        request.checkUrlQueryString();
+        String reqLine = "GET /user/create?userId=aa&password=bb&name=cc&email=dd@dd HTTP/1.1";
+        Request request = new Request(reqLine);
         //when
         UserService userService = new UserService();
         userService.signUpUser(request);
@@ -43,8 +43,9 @@ public class UserServiceTest {
         Database.addUser(user);
 
         //when
-        Request request = new Request("/user/create?userId=aa&password=bb&name=cc&email=dd@dd");
-        request.checkUrlQueryString();
+        String reqLine = "GET /user/create?userId=aa&password=bb&name=cc&email=dd@dd HTTP/1.1";
+
+        Request request = new Request(reqLine);
         UserService userService = new UserService();
         //then
         assertThrows(DuplicateUserIdException.class, () -> userService.signUpUser(request));
