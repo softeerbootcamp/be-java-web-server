@@ -4,13 +4,13 @@ import java.util.Arrays;
 
 public enum ContentType {
 
-    TEXT_HTML("text/html; charset= utf-8", "html"),
-    TEXT_CSS("text/css; charset= utf-8", "css"),
-    TEXT_JAVASCRIPT("text/javascript; charset= utf-8", "js"),
-    TEXT_PLAIN("text/plain; charset= utf-8", "plain"),
-    TEXT_XML("text/xml; charset= utf-8", "xml"),
-    APPLICATION("Application/json; charset= utf-8", "json"),
-    APPLICATION_JAVASCRIPT("Applcation/javascript; charset= utf-8", "js");
+    TEXT_HTML("text/html; " + Constants.charsetUTF8, "html"),
+    TEXT_CSS("text/css; " + Constants.charsetUTF8, "css"),
+    TEXT_JAVASCRIPT("text/javascript; " + Constants.charsetUTF8, "js"),
+    TEXT_PLAIN("text/plain; " + Constants.charsetUTF8, "plain"),
+    TEXT_XML("text/xml; " + Constants.charsetUTF8, "xml"),
+    APPLICATION("Application/json; " + Constants.charsetUTF8, "json"),
+    APPLICATION_JAVASCRIPT("Applcation/javascript; " + Constants.charsetUTF8, "js");
 
     public String type;
     public String ext;
@@ -34,6 +34,11 @@ public enum ContentType {
                 .findFirst()
                 .orElse(TEXT_PLAIN);
     }
+
+    private static class Constants { // static member class
+        private static final String charsetUTF8 = "charset= utf-8";
+    }
+
 
 
 }
