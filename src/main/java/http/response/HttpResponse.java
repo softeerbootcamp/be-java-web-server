@@ -12,6 +12,7 @@ import java.util.Map;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
+
     private final DataOutputStream dos;
     private final HttpStatusLine statusLine;
     private final HttpHeaders headers;

@@ -22,7 +22,11 @@ public class HttpRequest {
     private final HttpHeaders httpHeaders;
     private final HttpRequestBody requestBody;
 
-    private HttpRequest(HttpStartLine startLine, HttpHeaders headers, HttpRequestBody requestBody) {
+    private HttpRequest(
+            HttpStartLine startLine,
+            HttpHeaders headers,
+            HttpRequestBody requestBody
+    ) {
         this.startLine = startLine;
         this.httpHeaders = headers;
         this.requestBody = requestBody;
@@ -40,7 +44,11 @@ public class HttpRequest {
         return HttpRequest.of(HttpStartLine.from(startLine), HttpHeaders.from(headers), br);
     }
 
-    public static HttpRequest of(HttpStartLine startLine, HttpHeaders headers, BufferedReader br) throws IOException {
+    public static HttpRequest of(
+            HttpStartLine startLine,
+            HttpHeaders headers,
+            BufferedReader br
+    ) throws IOException {
         HttpMethod httpMethod = startLine.getMethod();
 
         if (httpMethod.equals(HttpMethod.GET)) {
