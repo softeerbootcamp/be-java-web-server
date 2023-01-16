@@ -31,10 +31,10 @@ public class HttpResponse {
         setEmptyBody();
     }
 
-    public void notFound(HttpRequest request, String errorMessage) {
+    public void notFound(HttpRequest request) {
         setHttpStatusLine(request, HttpStatusCode.NOT_FOUND);
         addHttpHeader("Content-Type", request.getHttpHeader("Accept"));
-        setBodyMessage(errorMessage);
+        setBodyMessage("요청하신 URL을 찾을 수 없습니다.");
     }
 
     public void setHttpStatusLine(HttpRequest request, HttpStatusCode statusCode) {
@@ -67,7 +67,7 @@ public class HttpResponse {
         }
 
         if (this.body == null) {
-            throw new FileNotFoundException();
+            throw new FileNotFoundException("해당 경로에 파일이 존재하지 않습니다.");
         }
 
         addHttpHeader("Content-Length", String.valueOf(body.length));

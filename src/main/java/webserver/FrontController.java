@@ -29,7 +29,7 @@ public class FrontController {
         } catch (ControllerNotFoundException | UrlNotFoundException | FileNotFoundException e) {
             logger.error(e.getMessage());
 
-            httpResponse.notFound(httpRequest, e.getMessage());
+            httpResponse.notFound(httpRequest);
             httpResponse.send(dos);
         } catch (IOException e) {
             logger.error(e.getMessage());
