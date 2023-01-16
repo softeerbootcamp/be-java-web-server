@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import request.Request;
 import request.RequestHandler;
 import response.HttpResponse;
-import response.HttpResponseBody;
+import response.Response;
 
 public class ClientRequestThread implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(ClientRequestThread.class);
@@ -32,13 +32,11 @@ public class ClientRequestThread implements Runnable {
             if(in.available() == 0) {
                 return;
             }
+
             this.request = Request.from(in);
-            byte[] body = requestHandler.handleRequest(request, connection.getPort());
-            if(body == null) {
-                HttpResponse.Http404Response(out);
-                return;
-            }
-            HttpResponse.Http200Response(request, out, HttpResponseBody.of(body));
+            Response response = requestHandler.handleRequest(request, connection.getPort());
+
+            HttpResponse.handleHttpResponse(out, request, response);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
