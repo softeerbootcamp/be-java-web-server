@@ -26,19 +26,21 @@ public class HttpRequest {
         this.startLine = startLine;
         this.httpHeaders = headers;
         this.requestBody = requestBody;
+
+        logger.debug(startLine.getMethod().toString());
     }
 
     public static HttpRequest from(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         String startLine = br.readLine();
+        logger.debug(startLine);
         String extracted = extractHeaders(br);
         String[] headers = extracted.split(ENTER);
 
-        return HttpRequest.from(HttpStartLine.from(startLine), HttpHeaders.from(headers), br);
-
+        return HttpRequest.of(HttpStartLine.from(startLine), HttpHeaders.from(headers), br);
     }
 
-    public static HttpRequest from(HttpStartLine startLine, HttpHeaders headers, BufferedReader br) throws IOException {
+    public static HttpRequest of(HttpStartLine startLine, HttpHeaders headers, BufferedReader br) throws IOException {
         HttpMethod httpMethod = startLine.getMethod();
 
         if (httpMethod.equals(HttpMethod.GET)) {
@@ -46,11 +48,11 @@ public class HttpRequest {
             return new HttpRequest(startLine, headers, httpRequestBody);
         }
 
-        String queryString = br.readLine();
+        int contentLength = Integer.parseInt(headers.getValue("Content-Length"));
+        String queryString = readData(br, contentLength);
         HttpRequestBody httpRequestBody = HttpRequestBody.createRequestBody(queryString);
         return new HttpRequest(startLine, headers, httpRequestBody);
     }
-
 
     private static String extractHeaders(BufferedReader br) throws IOException {
         StringBuilder sb = new StringBuilder();
@@ -75,12 +77,22 @@ public class HttpRequest {
         return requestBody;
     }
 
+    public Map<String, String> getParameters() {
+        return requestBody.getParameters();
+    }
+
     public Uri getUri() {
         return startLine.getUri();
     }
 
     public Map<String, String> getHttpHeaders() {
         return httpHeaders.getHeaders();
+    }
+
+    public static String readData(BufferedReader br, int contentLength) throws IOException {
+        char[] body = new char[contentLength];
+        br.read(body, 0, contentLength);
+        return String.copyValueOf(body);
     }
 
 }
