@@ -3,11 +3,11 @@ Java Web Application Server 2022
 
 ## 현재 작업중인 것 (week3 branch)
 ### 기능구현
-1. 로그인을 GET에서 POST로 수정 후 정상 동작하도록 구현한다.[ ]
-2. 가입을 완료하면 /index.html 페이지로 이동한다.[ ]
-3. http://localhost:8080/user/form.html 파일의 form태그 method를 get에서 post로 수정한다.[ ]
+1. 로그인을 GET에서 POST로 수정 후 정상 동작하도록 구현한다.[x]
+2. 가입을 완료하면 /index.html 페이지로 이동한다.[x]
+3. http://localhost:8080/user/form.html 파일의 form태그 method를 get에서 post로 수정한다.[x]
 4. 나머지 회원가입 기능이 정상적으로 동작하도록 구현한다.[ ]
-5. 가입 후 페이지 이동을 위해 HTTP redirection 기능을 구현한다.[ ]
+5. 가입 후 페이지 이동을 위해 HTTP redirection 기능을 구현한다.[x]
 6. todo 처리 [ ]
 
 ## 프로젝트 구조
