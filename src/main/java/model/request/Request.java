@@ -18,9 +18,9 @@ public class Request {
 
     private final RequestLine requestLine;
     private final Map<Header, String> headers;
-    private final String body;
+    private final RequestBody body;
 
-    private Request(RequestLine requestLine, Map<Header, String> headers, String body) {
+    private Request(RequestLine requestLine, Map<Header, String> headers, RequestBody body) {
         this.requestLine = requestLine;
         this.headers = headers;
         this.body = body;
@@ -37,10 +37,10 @@ public class Request {
         if(contentLength == null)
             return new Request(requestLine, headers, null);
 
-        String body = makeRequestBody(br, Integer.parseInt(contentLength));
-        logger.debug("body: {}", body);
+        RequestBody requestBody = RequestBody.of(br, Integer.parseInt(contentLength));
+        logger.debug("body: {}", requestBody);
 
-        return new Request(requestLine, headers, body);
+        return new Request(requestLine, headers, requestBody);
     }
 
     private static Map<Header, String> makeHeaders(BufferedReader br) throws IOException {
@@ -56,12 +56,6 @@ public class Request {
         return headers;
     }
 
-    private static String makeRequestBody(BufferedReader br, int contentLength) throws IOException {
-        char[] body = new char[contentLength];
-        int bodyLength = br.read(body, 0, contentLength);
-        return String.valueOf(body);
-    }
-
     public RequestLine getRequestLine() {
         return requestLine;
     }
@@ -70,7 +64,7 @@ public class Request {
         return headers;
     }
 
-    public String getBody() {
+    public RequestBody getBody() {
         return body;
     }
 }
