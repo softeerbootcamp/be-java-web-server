@@ -1,5 +1,6 @@
 package http.response;
 
+import controller.ConnectionClosedException;
 import enums.Status;
 import filesystem.FindResult;
 import http.common.Body;
@@ -29,7 +30,7 @@ public class HttpResponse {
             writeMessage();
             out.flush();
         } catch (IOException e) {
-            logger.error("server error");
+            throw new ConnectionClosedException(e);
         }
     }
 
@@ -44,7 +45,7 @@ public class HttpResponse {
         try {
             out.writeBytes(startLine.toString());
             out.writeBytes(header.toString());
-            out.write(body.getData(), 0, body.getData().length);
+            out.writeBytes(body.toString());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
