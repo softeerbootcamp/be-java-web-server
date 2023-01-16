@@ -19,6 +19,6 @@ public class UserService {
 
     public boolean logIn(Map<String, String> userLoginInfo) {
         User user = database.findUserById(userLoginInfo.get("userId"));
-        return Objects.nonNull(user);
+        return Objects.nonNull(user) && user.getPassword().equals(userLoginInfo.get("password"));
     }
 }
