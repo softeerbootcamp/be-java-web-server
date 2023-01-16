@@ -13,45 +13,26 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 public class HttpRequest {
-
-    public static final String REQUEST_LINE = "Request Line";
-
-    private final HashMap<String, String> headerContents;
+    private final RequestHeader requestHeader;
+    private final RequestBody requestBody;
     private final HttpMethod httpMethod;
-
     private final Url url;
 
 
-    public HttpRequest(HashMap<String, String> headerContents) {
-        this.headerContents = headerContents;
-        this.httpMethod = HttpMethod.findMethod(this);
-
-        String urlContext = RequestReader.findPathInRequest(this);
+    public HttpRequest(RequestHeader requestHeader, RequestBody requestBody) {
+        this.requestHeader = requestHeader;
+        this.requestBody = requestBody;
+        this.httpMethod = HttpMethod.findMethod(requestHeader);
+        String urlContext = RequestReader.findPathInRequest(requestHeader);
         this.url = new Url(urlContext, UrlType.getUrlType(urlContext));
     }
 
     public static HttpRequest getHttpRequest(InputStream inputStream) throws IOException {
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-        HashMap<String,String > requestHeaders = new HashMap<>();
-
-        requestHeaders.put(REQUEST_LINE, bufferedReader.readLine());
-
-        while (bufferedReader.ready()) {
-            String headerContent = bufferedReader.readLine();
-            if(headerContent.contains(": ")){
-                String[] line = headerContent.split(": ");
-                requestHeaders.put(line[0], line[1]);
-            }
-        }
-        return new HttpRequest(requestHeaders);
+        return new HttpRequest(RequestHeader.makeRequestHeader(bufferedReader), RequestBody.makeRequestBody(bufferedReader));
     }
 
-
-
-    public HashMap<String, String> getHeaderContents() {
-        return headerContents;
-    }
 
     public HttpMethod getHttpMethod() {
         return httpMethod;
@@ -59,5 +40,13 @@ public class HttpRequest {
 
     public Url getUrl() {
         return url;
+    }
+
+    public RequestHeader getRequestHeader() {
+        return requestHeader;
+    }
+
+    public RequestBody getRequestBody() {
+        return requestBody;
     }
 }
