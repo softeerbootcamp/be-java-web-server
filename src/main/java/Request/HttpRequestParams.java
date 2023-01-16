@@ -17,17 +17,7 @@ public class HttpRequestParams {
         this.params = params;
     }
 
-    public static HttpRequestParams from(String path) {
-        Map<String, String> params = null;
-        try {
-            String query = FileIoUtil.splitQuery(path);
-            params = HttpRequestUtil.extractParams(query);
-        }catch (RuntimeException e){
-            params = new HashMap<>();
-        }
-        return new HttpRequestParams(params);
-    }
-    public static HttpRequestParams of(String query){
+    public static HttpRequestParams from(String query){
         Map<String, String> params = HttpRequestUtil.extractParams(query);
         return new HttpRequestParams(params);
     }
