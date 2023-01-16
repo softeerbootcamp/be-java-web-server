@@ -13,7 +13,7 @@ public class GETHandlerImpl implements HttpMethodHandler {
         getHandlerImpl = new GETHandlerImpl();
     }
 
-    public static GETHandlerImpl of() {
+    public static GETHandlerImpl getInstance() {
         return getHandlerImpl;
     }
 
