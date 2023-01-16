@@ -33,20 +33,33 @@ public class Request {
 
         Map<Header, String> headers = makeHeaders(br);
 
-        return new Request(requestLine, headers, null);
+        String contentLength = headers.get(Header.from("Content-Length"));
+        if(contentLength == null)
+            return new Request(requestLine, headers, null);
+
+        String body = makeRequestBody(br, Integer.parseInt(contentLength));
+        logger.debug("body: {}", body);
+
+        return new Request(requestLine, headers, body);
     }
 
     private static Map<Header, String> makeHeaders(BufferedReader br) throws IOException {
         Map<Header, String> headers = new HashMap<>();
         String header = br.readLine();
 
-        while(!"".equals(header)) {
+        while (!"".equals(header)) {
             String[] headerSplit = header.split(": ");
             headers.put(Header.from(headerSplit[0]), headerSplit[1]);
             header = br.readLine();
         }
 
         return headers;
+    }
+
+    private static String makeRequestBody(BufferedReader br, int contentLength) throws IOException {
+        char[] body = new char[contentLength];
+        int bodyLength = br.read(body, 0, contentLength);
+        return String.valueOf(body);
     }
 
     public RequestLine getRequestLine() {
