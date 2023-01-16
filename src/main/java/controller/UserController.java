@@ -31,6 +31,8 @@ public class UserController implements Controller {
 
         if(requestLine.getMethod().equals(Method.from("POST")) &&
                 requestLine.getUri().startsWith("/user/create")) return createUserResponse(request);
+        else if(requestLine.getMethod().equals(Method.from("POST")) &&
+                requestLine.getUri().startsWith("/user/login")) return loginUserResponse(request);
 
         return Response.of(request, Status.NOT_FOUND);
     }
