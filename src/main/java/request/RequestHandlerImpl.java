@@ -8,13 +8,16 @@ import webserver.ClientRequestThread;
 import java.io.IOException;
 
 public class RequestHandlerImpl implements RequestHandler {
-    private final Logger logger = LoggerFactory.getLogger(ClientRequestThread.class);
+    private static final Logger logger = LoggerFactory.getLogger(RequestHandlerImpl.class);
     @Override
     public byte[] handleRequest(Request request, int port) {
         try {
             for (HttpMethod method : HttpMethod.values()) {
                 if (request.getMethod().equals(method.getMethod())) {
                     logger.debug("handle request {} of port {}, request header {}", request.getMethod(), port, request);
+                    logger.debug("{} {} {}", request.getMethod(), request.getResource(), request.getVersion());
+                    logger.debug("headers: {}", request.getRequestHeader());
+                    logger.debug("body: {}", request.getRequestBody());
                     return method.handle(request);
                 }
             }

@@ -32,7 +32,7 @@ public class ClientRequestThread implements Runnable {
             if(in.available() == 0) {
                 return;
             }
-            this.request = Request.of(in);
+            this.request = Request.from(in);
             byte[] body = requestHandler.handleRequest(request, connection.getPort());
             if(body == null) {
                 HttpResponse.Http404Response(out);
