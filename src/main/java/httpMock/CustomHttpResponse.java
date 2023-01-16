@@ -3,6 +3,8 @@ package httpMock;
 import httpMock.constants.ContentType;
 import httpMock.constants.StatusCode;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Map;
 
@@ -12,6 +14,7 @@ public class CustomHttpResponse {
     private final StatusCode statusCode;
     private final ContentType contentType;
     private final Map<String, String> headers;
+    public static final Charset CHARSET = StandardCharsets.UTF_8;
     private final byte[] body;
 
     public CustomHttpResponse(StatusCode statusCode, ContentType contentType, Map<String, String> headers, byte[] body) {
