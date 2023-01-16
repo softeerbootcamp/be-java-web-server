@@ -43,7 +43,12 @@ public class HttpRequest {
 
     private static HttpHeader readHttpRequestHeader(BufferedReader br) throws IOException {
         List<String> lines = new ArrayList<>();
-        String line;
+        String line = br.readLine();
+        if (line == null) {
+            return null;
+        }
+        lines.add(line);
+
         while(!(line = br.readLine()).equals("")) {
             logger.debug("request header : {}", line);
             lines.add(line);

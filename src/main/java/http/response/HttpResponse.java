@@ -79,8 +79,7 @@ public class HttpResponse {
             logger.debug("httpHeader : {}", httpHeader);
 
             dos.writeBytes(httpStatusLine + "\r\n");
-            dos.writeBytes(httpHeader + "");
-            dos.writeBytes("\r\n");
+            dos.writeBytes(httpHeader + "\r\n");
 
             dos.write(body, 0, body.length);
             dos.flush();
