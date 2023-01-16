@@ -1,5 +1,11 @@
 package webserver;
 
+import utils.HttpRequestUtils;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 public class HttpRequest {
@@ -26,6 +32,10 @@ public class HttpRequest {
         return this.method.equals(method);
     }
 
+    public Map<String, String> getHeaders(){
+        return this.headers;
+    }
+
     public String getQueryByKey(String key){
         return queries.get(key);
     }
@@ -43,6 +53,19 @@ public class HttpRequest {
     }
     public String getBody() {
         return body;
+    }
+
+    public Map<String,String> parseBody() throws IOException {
+        //1. body가 없으면 빈 map을 리턴
+        if(body == null) return Collections.EMPTY_MAP;
+        //2. 요청의 contentType이 application/x-www-form-urlencoded이면 폼 내용을 파싱
+        String contentType = headers.get("Content-Type");
+        //System.out.println(contentType);
+        if(contentType.equals("application/x-www-form-urlencoded")) return HttpRequestUtils.parseQueryString(body);
+        //3. 아니라면 그냥 body를 통채로 리턴
+        Map<String,String> map = new HashMap<>();
+        map.put("body",body);
+        return map;
     }
 
 }
