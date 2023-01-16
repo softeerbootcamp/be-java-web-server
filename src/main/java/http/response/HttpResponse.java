@@ -26,7 +26,7 @@ public class HttpResponse {
 
     public void send() {
         try {
-            assembleMessage();
+            writeMessage();
             out.flush();
         } catch (IOException e) {
             logger.error("server error");
@@ -40,26 +40,14 @@ public class HttpResponse {
         body.setBody(findResult.getResource());
     }
 
-    private void assembleMessage() {
+    private void writeMessage() {
         try {
-            assembleStatusLine();
-            assembleHeader();
-            assembleBody();
+            out.writeBytes(startLine.toString());
+            out.writeBytes(header.toString());
+            out.write(body.getData(), 0, body.getData().length);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
-    }
-
-    private void assembleStatusLine() throws IOException {
-        out.writeBytes(startLine.toString());
-    }
-
-    private void assembleHeader() throws IOException {
-        out.writeBytes(header.toString());
-    }
-
-    private void assembleBody() throws IOException {
-        out.write(body.getData(), 0, body.getData().length);
     }
 
     public void redirect(String redirectUrl) {
