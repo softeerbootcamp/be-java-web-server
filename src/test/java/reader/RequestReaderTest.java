@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import request.HttpRequest;
+import request.RequestHeader;
 import util.HttpMethod;
 import util.error.HttpsErrorMessage;
 
@@ -35,10 +36,10 @@ class RequestReaderTest {
     @Test
     @DisplayName("Get 메서드의 요청의 경우 url파싱 테스트")
     void findPathInRequest() {
-        final String requestHeader = "GET /index.html HTTP/1.1";
+        final String requestLine = "GET /index.html HTTP/1.1";
         HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put(HttpRequest.REQUEST_LINE, requestHeader);
-        HttpRequest httpRequest = new HttpRequest(hashMap);
-        Assertions.assertThat(RequestReader.findPathInRequest(httpRequest)).isEqualTo("/index.html");
+        hashMap.put(RequestHeader.REQUEST_LINE, requestLine);
+        RequestHeader requestHeader=new RequestHeader(hashMap);
+        Assertions.assertThat(RequestReader.findPathInRequest(requestHeader)).isEqualTo("/index.html");
     }
 }
