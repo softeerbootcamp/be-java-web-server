@@ -18,5 +18,9 @@ public class RequestStartLine {
     public String getUrl() {
         return url;
     }
+
+    public Method getMethod() {
+        return method;
+    }
 }
 

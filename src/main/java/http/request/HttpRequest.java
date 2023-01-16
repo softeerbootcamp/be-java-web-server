@@ -1,5 +1,7 @@
 package http.request;
 
+import http.common.Method;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +20,10 @@ public class HttpRequest {
 
     public String getUrl() {
         return startLine.getUrl();
+    }
+
+    public Method getMethod() {
+        return startLine.getMethod();
     }
 
     public Map<String, String> getParameters(String... args) {
