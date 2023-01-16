@@ -1,5 +1,6 @@
 package Controller;
 
+import exception.UrlNotFoundException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import service.UserService;
@@ -29,7 +30,6 @@ public class UserController implements Controller {
             return "";
         }
 
-        // TODO 잘못된 URL이 들어올 경우 404 NOT_FOUND 응답
-        throw new IllegalArgumentException();
+        throw new UrlNotFoundException("요청하신 URL을 찾을 수 없습니다.");
     }
 }
