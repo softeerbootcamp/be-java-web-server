@@ -1,5 +1,6 @@
 package webserver.domain.request;
 
+import webserver.utils.CommonUtils;
 import webserver.utils.HttpRequestUtils;
 
 import java.util.Map;
@@ -10,7 +11,7 @@ public class Request {
 
     private RequestLine requestLine;
     private Map<String, String> header;
-    private Map<String, String> body;
+    private Map<String, String> body;  //TODO : requestBody의 형식을 Map이 아닌 String 형태로 받은 뒤 Controller 단에서 parsing하도록
 
     private Request(RequestLine requestLine, Map<String, String> header, Map<String, String> body){
         this.requestLine = requestLine;
@@ -32,4 +33,7 @@ public class Request {
         return requestLine;
     }
 
+    public void readBody(){
+        CommonUtils.readMap(body);
+    }
 }
