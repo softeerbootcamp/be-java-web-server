@@ -2,6 +2,7 @@ package Controller;
 
 import Request.HttpRequest;
 import Response.HttpResponse;
+import Response.HttpResponseBody;
 import Response.HttpResponseStartLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,8 @@ public class JoinController implements Controller {
         ManageDB.saveUser(this.httpRequest);
 
         HttpResponse response = new HttpResponse().startLine(new HttpResponseStartLine(StatusCode.FOUND, httpRequest.getProtocol()))
-                .headers(HttpResponseUtil.generateHeaders("", StatusCode.NOT_FOUND, 0));
+                .headers(HttpResponseUtil.generateHeaders("", StatusCode.NOT_FOUND, 0))
+                .body(new HttpResponseBody("".getBytes()));
         response.putHeader("Location", "/index.html");
         return response;
     }
