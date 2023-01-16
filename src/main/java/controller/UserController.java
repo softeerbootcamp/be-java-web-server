@@ -19,7 +19,6 @@ import java.util.Map;
 
 public class UserController implements Controller{
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-    private static final String RELATIVE_PATH = "./src/main/resources";
     private static final String USER_ID = "userId";
     private static final String PASSWORD = "password";
     private static final String NAME = "name";
