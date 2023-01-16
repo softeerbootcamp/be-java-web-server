@@ -2,8 +2,11 @@ package http;
 
 import java.util.Map;
 
+
 public class HttpHeader {
+    private static final String CONTENT_LENGTH = "Content-Length";
     private final Map<String, String> headers;
+
 
     private HttpHeader(Map<String, String> headers) {
         this.headers = headers;
@@ -17,9 +20,15 @@ public class HttpHeader {
         headers.put(header, value);
     }
 
+    public int getContentLength() {
+        if (headers.containsKey(CONTENT_LENGTH))
+            return Integer.parseInt(headers.get(CONTENT_LENGTH));
+        return -1;
+    }
+
     public String getMessage() {
         StringBuilder sb = new StringBuilder();
-        for (String header : headers.keySet()){
+        for (String header : headers.keySet()) {
             sb.append(String.format("%s: %s \r\n", header, headers.get(header)));
         }
         return sb.toString();
