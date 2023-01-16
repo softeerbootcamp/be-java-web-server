@@ -2,27 +2,45 @@
 Java Web Application Server 2022
 
 ## 프로젝트 구조
+    ├── java
+    │   ├── controller
+    │   │   ├── Controller.java
+    │   │   ├── ControllerSelector.java
+    │   │   ├── StaticController.java
+    │   │   ├── TemplateController.java
+    │   │   └── UserController.java
+    │   ├── db
+    │   │   └── Database.java
+    │   ├── enums
+    │   │   ├── ContentTypeEnum.java
+    │   │   ├── ControllerTypeEnum.java
+    │   │   ├── HeaderReferenceEnum.java
+    │   │   ├── HttpVersionTypeEnum.java
+    │   │   └── StatusCodeWithMessageEnum.java
+    │   ├── model
+    │   │   └── User.java
+    │   ├── request
+    │   │   ├── Request.java
+    │   │   ├── RequestHeader.java
+    │   │   ├── RequestLine.java
+    │   │   └── RequestURL.java
+    │   ├── response
+    │   │   ├── Response.java
+    │   │   ├── ResponseHeader.java
+    │   │   └── ResponseStatusLine.java
+    │   └── webserver
+    │       ├── RequestHandler.java
+    │       └── WebServer.java
 
 
+## 기능 설명
+### webserver
+    WebServer.java
+socket을 형성하고, 스레드를 형성하는, 서버 시작점.
+
+    RequestHandler.java
 
 
-
-
-
-## Step 1 
-2023.01.09(월)
-
-1. 요청들어오는 request들 출력해보기 [check]
-2. request들 중 index.html 파싱해서 빼기 [check]
-3. 해당 기능 객체 분리하기.[check]
-
-2023.01.10(화)
-
-1. 어제 했는 부분들 객체 request, controller 등으로 전부 분리[check]
-2. step2 진행[check]
-
-## Step 2
-
-1. user 클래스 사용해보기
-2. get 설정하기
-3. get 기능 구현 완성
+### controller
+    controller.java
+각각의 controller 들의 주요 기능인 ser
