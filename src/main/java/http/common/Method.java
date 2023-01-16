@@ -11,9 +11,9 @@ public enum Method {
         this.value = value;
     }
 
-    public Method find(String method) {
+    public static Method find(String method) {
         return Arrays.stream(Method.values())
-                .filter(m -> m.value.equals(value))
+                .filter(m -> m.value.equals(method))
                 .findAny()
                 .orElse(GET);
     }
