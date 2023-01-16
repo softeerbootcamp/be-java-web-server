@@ -42,7 +42,9 @@ public class Request {
         Map<String, String> headers = new HashMap<>();
         while (!line.equals("")) {
             line = br.readLine();
-
+            if (line == null) {
+                break;
+            }
             logger.debug("> header : {}", line);
             String[] headerTokens = line.split(": ");
             if (headerTokens.length == 2) {
