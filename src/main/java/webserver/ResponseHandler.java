@@ -1,6 +1,6 @@
 package webserver;
 
-import model.Request;
+import model.Request.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
