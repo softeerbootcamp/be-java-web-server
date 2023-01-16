@@ -44,9 +44,7 @@ class ArgumentResolverTest {
 
         //given
         Map<String, String> queryStrs = new HashMap<>();
-        queryStrs.put("password", "testPass");
-        queryStrs.put("name", "testName");
-        queryStrs.put("email", "test@email.com");
+        queryStrs.put("test", "test@email.com");
         List<String> listStr = List.of("userId", "password", "name", "email");
 
         //then
