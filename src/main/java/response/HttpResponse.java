@@ -9,32 +9,26 @@ import java.io.OutputStream;
 public class HttpResponse {
     private final DataOutputStream outputStream;
 
+    public static String DEFAULT_HTTP_VERSION = "HTTP/1.1";
+
     private HttpResponse(OutputStream outputStream) {
         this.outputStream = new DataOutputStream(outputStream);
     }
 
-    public static void Http200Response(Request request, OutputStream outputStream, HttpResponseBody responseBody) throws IOException {
-        HttpResponse response = new HttpResponse(outputStream);
-        response.outputStream.writeBytes(HttpResponseHeader.DEFAULT_HTTP_VERSION
-                + " " + HttpResponseStatus.OK.getMessage());
-        response.outputStream.writeBytes("Content-Type: " + request.getResourceFileContentType() + ";charset=utf-8\r\n");
-        response.outputStream.writeBytes("Content-Length: " + responseBody.length() + "\r\n");
-        response.outputStream.writeBytes("\r\n");
+    // TODO: 응답 기능 요청 메소드 및 url로 분리하기
+    public static void handleHttpResponse(OutputStream outputStream, Request request, Response response) throws IOException {
+        HttpResponse httpResponse = new HttpResponse(outputStream);
+        int contentLength = (response.getFile() == null ? response.getData().getBytes().length : response.getFile().length);
+        httpResponse.outputStream.writeBytes(DEFAULT_HTTP_VERSION
+                + " " + response.getCode());
+        httpResponse.outputStream.writeBytes("Content-Type: " + request.getResourceFileContentType() + ";charset=utf-8\r\n");
+        httpResponse.outputStream.writeBytes("Content-Length: " + contentLength + "\r\n");
+        if(response.getCode() == HttpResponseStatus.FOUND.getCode()) {
+            httpResponse.outputStream.writeBytes("Location: /index.html");
+        }
+        httpResponse.outputStream.writeBytes("\r\n");
 
-        response.outputStream.write(responseBody.getBody(), 0, responseBody.length());
-        response.outputStream.flush();
-    }
-
-    public static void Http404Response(OutputStream outputStream) throws IOException {
-        HttpResponse response = new HttpResponse(outputStream);
-        response.outputStream.writeBytes(HttpResponseHeader.DEFAULT_HTTP_VERSION
-                + " " + HttpResponseStatus.NOT_FOUND.getMessage());
-        response.outputStream.writeBytes("\r\n");
-        response.outputStream.flush();
-    }
-
-    public static void Http302Response(OutputStream outputStream) {
-        HttpResponse response = new HttpResponse(outputStream);
-
+        httpResponse.outputStream.write((response.getFile() == null ? response.getData().getBytes() : response.getFile()), 0, contentLength);
+        httpResponse.outputStream.flush();
     }
 }
