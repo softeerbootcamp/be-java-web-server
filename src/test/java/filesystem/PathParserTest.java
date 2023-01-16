@@ -19,7 +19,7 @@ public class PathParserTest {
 
         // when, then
         assertThat(fileNames.stream()
-                .allMatch(f -> PathParser.parse(f).contains("template") || PathParser.parse(f).contains("static")))
+                .allMatch(f -> PathResolver.parse(f).contains("template") || PathResolver.parse(f).contains("static")))
                 .isTrue();
     }
 

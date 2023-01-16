@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 
 import static dto.UserInfoDTO.*;
-import static filesystem.PathParser.DOMAIN;
+import static filesystem.PathResolver.DOMAIN;
 
 public class UserController implements Controller {
 
