@@ -6,12 +6,16 @@ import webserver.RequestHandler;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Map;
 
 public class HttpResponse {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private final String httpVersion;
-
+    private final HttpStatus httpStatus;
+    private final ResourceType resourceType;
+    private final Map<String, String> headers;
+    private final byte[] body;
     private final DataOutputStream dos;
 
     private HttpResponse(
@@ -31,7 +35,31 @@ public class HttpResponse {
         return new HttpResponse(
                 requestLine.getVersion(),
                 dos
-                );
+        );
+    }
+
+    private HttpResponse(
+            HttpStatus httpStatus,
+            ResourceType resourceType,
+            Map<String, String> headers,
+            byte[] body,
+            String httpVersion
+    ) {
+        this.httpStatus = httpStatus;
+        this.resourceType = resourceType;
+        this.headers = headers;
+        this.body = body;
+        this.httpVersion = httpVersion;
+    }
+
+    public static HttpResponse of(
+            HttpStatus httpStatus,
+            ResourceType resourceType,
+            Map<String, String> headers,
+            byte[] body,
+            String httpVersion
+    ) {
+        return new HttpResponse(httpStatus, resourceType, headers, body, httpVersion);
     }
 
 
