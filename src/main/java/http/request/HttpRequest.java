@@ -10,10 +10,10 @@ public class HttpRequest {
     private HttpMethod method;
     private URL url;
     private HttpHeaders headers;
-    // TODO: HttpBody를 사용할 수 있도록 수정하기
     private Map<String, String> data;
 
-    // TODO: 케이스에 따른 생성자 처리 수정하기
+    // TODO: 정적 생성자로 처리 가능하나 다른 객체들 또한 함께 변경 필요.
+    // TODO: 따라서 나중에 시간 남을 때 진행 예정
     public HttpRequest(
             HttpMethod method,
             URL url,
@@ -42,7 +42,7 @@ public class HttpRequest {
         return this.method;
     }
 
-    public URL getUri() {
+    public URL getUrl() {
         return this.url;
     }
 

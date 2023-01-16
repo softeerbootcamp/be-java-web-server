@@ -32,7 +32,7 @@ public class HttpRequestParserTest {
 
         // when
         HttpRequest httpRequest = HttpRequestParser.parse(in);
-        URL url = httpRequest.getUri();
+        URL url = httpRequest.getUrl();
         HttpHeaders headers = httpRequest.getHeaders();
 
         // then
@@ -58,7 +58,7 @@ public class HttpRequestParserTest {
 
         // when
         HttpRequest httpRequest = HttpRequestParser.parse(in);
-        URL url = httpRequest.getUri();
+        URL url = httpRequest.getUrl();
         HttpHeaders headers = httpRequest.getHeaders();
 
         // then

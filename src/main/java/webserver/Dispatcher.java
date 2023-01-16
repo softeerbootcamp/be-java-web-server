@@ -21,7 +21,7 @@ public class Dispatcher {
     }
 
     public static void handle(HttpRequest request, HttpResponse response) {
-        Controller controller = controllers.get(request.getUri().getPath());
+        Controller controller = controllers.get(request.getUrl().getPath());
         if (Objects.nonNull(controller)) {
             controller.execute(request, response);
             return;

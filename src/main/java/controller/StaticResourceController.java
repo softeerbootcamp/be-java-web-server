@@ -12,7 +12,7 @@ public class StaticResourceController implements Controller {
 
     @Override
     public void doGet(HttpRequest request, HttpResponse response) {
-        URL url = request.getUri();
+        URL url = request.getUrl();
         response.setBody(ResourceUtils.loadFileFromClasspath(url.getPath()));
 
         int idxOfDot = url.getPath().lastIndexOf(".");
