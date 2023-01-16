@@ -8,6 +8,7 @@ Java Web Application Server 2022
 를 참고하여 작성되었습니다.
 
 
+# 2주차 web server week1
 
 ## 1일차 학습내용
 ### 정적 리소스에 관한 요청 처리
@@ -71,3 +72,35 @@ Java Web Application Server 2022
 - Mock이 달린 객체는 InjectMock이 달린 객체에 주입시킬 수 있다
 - 데이터베이스와 관련된 테스트를 진행할 때에는 매 테스트가 끝난 후 롤백 시켜줘야함
 - verify()를 사용하여 mock 객체에 대해 메소드가 특정 조건에 실행되었는지를 테스트해볼 수 있다
+
+
+# 3주차 web server week2
+
+-----
+## 1일차 학습 내용
+### pull request 피드백 반영
+- [x] 하드코딩으로 처리된 ContentType Enum 클래스 수정
+- [x] logger 레벨 의미에 맞게 수정
+- [ ] 메소드명을 해당 메소드가 하는 일이 드러나도록 수절
+
+### 오늘 할 일
+- [x] ArgumentResolver 클래스 만들기
+- [ ] RequestBody 읽고 알맞은 형태로 파싱하기
+- [x] HTTP Request Method에 따른 실행 흐름 분기
+- [x] Mockito, verify, when을 이용한 테스트 코드 작성
+
+### 공부한 것
+- 리팩토링의 조건
+   - 테스트하기 좋은 코드
+   - 변화에 강한 코드
+- 메소드의 위치를 논할 때, 메소드가 해당 클래스의 데이터를 일절 사용하지 않는다면 위치 선정을 다시한번 고려해볼 것
+- Rest API
+- HTTP 1.1 : 파이프라인을 통한 데이터 전송
+- HTTP 2.0 : 병렬 처리를 통하여 여러 데이터를 한번에 전송
+- 쿠키 : "key:value" 쌍의 형태로 브라우저에 저장되는 유저 관련 파일 데이터
+- 세션 : 사용자 한명한명마다 생성, 저장되는 데이터의 집합, session-id로 식별
+
+### 더 알아볼 것
+- Redis를 이용한 세션 DB 관리 방안
+- CRDT
+- 다양한 타입의 Request의 body를 파싱하는 시점, 방안
