@@ -2,12 +2,24 @@ package request.method.POST;
 
 import request.Request;
 import request.method.HttpMethodHandler;
+import request.method.POST.handlers.POSTHandler;
 
 import java.io.IOException;
 
 public class POSTHandlerImpl implements HttpMethodHandler {
+    private static final POSTHandlerImpl postHandlerImpl;
+
+    static {
+        postHandlerImpl = new POSTHandlerImpl();
+    }
+
+    public static POSTHandlerImpl getInstance() {
+        return postHandlerImpl;
+    }
+
     @Override
     public byte[] handle(Request request) throws IOException {
-        return null;
+        POSTHandler postHandler = POSTHandlerFactory.generateHandler(request);
+        return postHandler.handle(request);
     }
 }
