@@ -18,9 +18,9 @@ public class UserController implements Controller {
     private static final int USERPWD_INDEX = 1;
     private static final int USERNAME_INDEX = 2;
     private static final int USEREMAIL_INDEX = 3;
-
+    // todo: user 정보들을 parse 하는 것은 좋지만, 추후 Validation Check 등에서 불편할 수 있으므로, Map 형태로 바꾸어 보자.
     @Override
-    public void selectedController(Request request, Response response) throws IOException {
+    public void controllerService(Request request, Response response) throws IOException {
         System.out.println("firstLine : " + request.getRequestLine().getURL());
         String url = request.getRequestLine().getURL();
         List<String> userInfos = parseUrlToGetUserInfo(url);

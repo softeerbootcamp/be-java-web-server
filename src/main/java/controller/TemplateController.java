@@ -11,7 +11,7 @@ import java.nio.file.Files;
 
 public class TemplateController implements Controller {
     @Override
-    public void selectedController(Request request, Response response) throws IOException {
+    public void controllerService(Request request, Response response) throws IOException {
         System.out.println("firstLine : " + request.getRequestLine().getURL());
         String url = request.getRequestLine().getURL();
 

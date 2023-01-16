@@ -12,7 +12,7 @@ import java.nio.file.Files;
 public class StaticController implements Controller{
 
     @Override
-    public void selectedController(Request request, Response response) throws IOException {
+    public void controllerService(Request request, Response response) throws IOException {
         String url =  request.getRequestLine().getURL();
         if(url.contains("/user/css")||url.contains("/user/js")){
             url = url.substring(5);
