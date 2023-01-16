@@ -4,15 +4,23 @@ import http.common.HttpBody;
 import http.common.HttpHeaders;
 import http.common.HttpStatus;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 public class HttpResponse {
+    private static final String HTTP_VERSION = "HTTP/1.1";
+
     private HttpStatus status;
     private HttpHeaders headers;
     private HttpBody body;
 
-    public HttpResponse() {
+    private final DataOutputStream dos;
+
+    public HttpResponse(DataOutputStream dos) {
         this.status = HttpStatus.OK;
         this.headers = new HttpHeaders();
         this.body = new HttpBody();
+        this.dos = dos;
     }
 
 
@@ -52,5 +60,15 @@ public class HttpResponse {
     public void redirect(String path) {
         this.status = HttpStatus.FOUND;
         this.headers.addHeader("Location", path);
+    }
+
+    public void send() throws IOException {
+        String statusLine = HTTP_VERSION + " " + status.code() + " " + status.name() + "\r\n";
+        dos.writeBytes(statusLine);
+        String headers = this.headers.toString();
+        dos.writeBytes(headers);
+        dos.writeBytes("\n");
+        dos.write(body.data());
+        dos.flush();
     }
 }

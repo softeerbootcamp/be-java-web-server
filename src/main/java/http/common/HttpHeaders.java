@@ -30,4 +30,15 @@ public class HttpHeaders {
     public Set<String> keys() {
         return this.headers.keySet();
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sbOfHeaders = new StringBuilder();
+
+        for (String key: headers.keySet()) {
+            sbOfHeaders.append(key).append(" : ").append(headers.get(key)).append("\r\n");
+        }
+
+        return sbOfHeaders.toString();
+    }
 }

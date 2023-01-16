@@ -37,7 +37,7 @@ public class HttpRequestParserTest {
         // then
         assertAll(
                 () -> assertEquals("/index.html", uri.getPath()),
-                () -> assertEquals(0, uri.getQuerys().size()),
+                () -> assertEquals(0, uri.getQueries().size()),
                 () -> assertEquals(5, headers.size()),
                 () -> assertEquals("localhost:8080", headers.getValue("Host")));
     }
@@ -63,9 +63,9 @@ public class HttpRequestParserTest {
         // then
         assertAll(
                 () -> assertEquals("/index.html", uri.getPath()),
-                () -> assertEquals(2, uri.getQuerys().size()),
-                () -> assertEquals("sol", uri.getQuerys().get("name")),
-                () -> assertEquals("26", uri.getQuerys().get("age")),
+                () -> assertEquals(2, uri.getQueries().size()),
+                () -> assertEquals("sol", uri.getQueries().get("name")),
+                () -> assertEquals("26", uri.getQueries().get("age")),
                 () -> assertEquals(5, headers.size()),
                 () -> assertEquals("localhost:8080", headers.getValue("Host")));
     }

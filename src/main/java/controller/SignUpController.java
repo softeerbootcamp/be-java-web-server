@@ -16,13 +16,13 @@ public class SignUpController implements Controller{
 
     @Override
     public void doGet(HttpRequest request, HttpResponse response) {
-        Map<String, String> querys = request.getQuerys();
+        Map<String, String> queries = request.getQueries();
 
         User user = new User(
-                querys.get("userId"),
-                querys.get("password"),
-                querys.get("name"),
-                URLDecoder.decode(querys.get("email"), StandardCharsets.UTF_8)
+                queries.get("userId"),
+                queries.get("password"),
+                queries.get("name"),
+                URLDecoder.decode(queries.get("email"), StandardCharsets.UTF_8)
         );
 
         Database.addUser(user);

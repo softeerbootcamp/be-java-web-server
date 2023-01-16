@@ -1,9 +1,6 @@
 package controller;
 
-import http.common.HttpHeaders;
-import http.common.HttpMethod;
-import http.common.HttpStatus;
-import http.common.URI;
+import http.common.*;
 import http.exception.MethodNotAllowException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -16,8 +13,8 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("SignupController Test")
-public class SignUpControllerTest {
+@DisplayName("StaticResourceController Test")
+public class StaticResourceControllerTest {
 
     private final DataOutputStream mockDos = new DataOutputStream(new OutputStream() {
         @Override
@@ -27,53 +24,47 @@ public class SignUpControllerTest {
     });
 
     @Test
-    @DisplayName("execute() - 회원가입 성공 후 리다이렉트 테스트")
-    void signUp() {
+    @DisplayName("execute() - 정상 리드 테스트")
+    void execute() {
         // given
-        SignUpController controller = new SignUpController();
-        Map<String, String> user = Map.of(
-                "userId", "sol",
-                "password", "1234",
-                "name", "sol",
-                "email", "sol@sol.com");
+        StaticResourceController controller = new StaticResourceController();
         HttpRequest request = new HttpRequest(
                 HttpMethod.GET,
-                new URI("/user/create", user),
-                new HttpHeaders());
+                new URI("/index.html", Map.of()),
+                new HttpHeaders()
+        );
         HttpResponse response = new HttpResponse(mockDos);
 
         // when
         controller.execute(request, response);
 
         // then
-        String redirect = response.getHeaders().getValue("Location");
-        HttpStatus status = response.getStatus();
+        HttpBody body = response.getBody();
+        HttpHeaders headers = response.getHeaders();
         assertAll(
-                () -> assertEquals("/user/login.html", redirect),
-                () -> assertEquals(HttpStatus.FOUND, status)
+                () -> assertEquals(HttpStatus.OK, response.getStatus()),
+                () -> assertEquals(MediaType.TEXT_HTML.getType(), headers.getValue("Content-Type")),
+                () -> assertEquals(6902, body.size())
         );
     }
 
     @Test
     @DisplayName("execute() - 지원하지 않는 메서드(POST) 테스트")
-    void signUpToNotAllowMethod() {
+    void executeWhenNotAllowMethod() {
         // given
-        SignUpController controller = new SignUpController();
-        Map<String, String> user = Map.of(
-                "userId", "sol",
-                "password", "1234",
-                "name", "sol",
-                "email", "sol@sol.com");
+        StaticResourceController controller = new StaticResourceController();
         HttpRequest request = new HttpRequest(
                 HttpMethod.POST,
-                new URI("/user/create", user),
-                new HttpHeaders());
+                new URI("/index.html", Map.of()),
+                new HttpHeaders()
+        );
         HttpResponse response = new HttpResponse(mockDos);
 
         // when
         MethodNotAllowException exception = assertThrows(
                 MethodNotAllowException.class,
                 () -> controller.execute(request, response));
+
         // then
         assertEquals("Method Not Allowed", exception.getMessage());
     }

@@ -33,7 +33,7 @@ public class HttpRequest {
         return this.uri.getPath();
     }
 
-    public Map<String, String> getQuerys() {
-        return this.uri.getQuerys();
+    public Map<String, String> getQueries() {
+        return this.uri.getQueries();
     }
 }

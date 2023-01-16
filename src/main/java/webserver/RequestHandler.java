@@ -8,7 +8,6 @@ import http.exception.HttpExceptionHandler;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.util.HttpRequestParser;
-import http.util.HttpResponseWriter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,10 +28,10 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
 
             HttpRequest request = HttpRequestParser.parse(in);
-            HttpResponse response = new HttpResponse();
+            HttpResponse response = new HttpResponse(new DataOutputStream(out));
 
             handle(request, response);
-            HttpResponseWriter.write(out, response);
+            response.send();
 
         } catch (IOException e) {
             logger.error(e.getMessage());
