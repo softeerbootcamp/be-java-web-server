@@ -10,7 +10,7 @@ public enum FileContentType {
     TTF("ttf", "application/x-font-ttf"),
     WOFF("woff", "application/font-woff"),
     WOFF2("woff2", "application/font-woff2"),
-    NO_MATCH("","");
+    NO_MATCH("","text/plain");
 
     private String postfix;
 
