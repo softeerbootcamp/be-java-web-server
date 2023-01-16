@@ -68,4 +68,12 @@ public class UserController implements Controller {
 
         return headers;
     }
+
+    private Map<Header, String> responseLoginSuccessHeader() {
+        Map<Header, String> headers = new HashMap<>();
+        headers.put(Header.from("Location"), "/index.html");
+        headers.put(Header.from("Set-Cookie"), "sid=" + "123" + "; Path=/");
+
+        return headers;
+    }
 }
