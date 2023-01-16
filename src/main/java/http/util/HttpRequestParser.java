@@ -27,7 +27,7 @@ public class HttpRequestParser {
             if (hasBody(headers)) {
                 strOfBody = readStrOfBody(br, Integer.parseInt(headers.getValue("Content-Length")));
             }
-            Map<String, String> data = HttpBodyParser.parse(strOfBody);
+            Map<String, String> data = HttpFormBodyParser.parse(strOfBody);
 
             return new HttpRequest(method, uri, headers, data);
         } catch (IOException e) {

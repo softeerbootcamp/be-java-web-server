@@ -8,8 +8,8 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("HttpBodyParser Test")
-public class HttpBodyParserTest {
+@DisplayName("HttpFormBodyParser Test")
+public class HttpFormBodyParserTest {
 
     @Test
     @DisplayName("parse - 정상 바디 데이터 형식 케이스")
@@ -18,14 +18,14 @@ public class HttpBodyParserTest {
         String stringBody = "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net\n";
 
         // when
-        Map<String, String> datas = HttpBodyParser.parse(stringBody);
+        Map<String, String> data = HttpFormBodyParser.parse(stringBody);
 
         // then
         assertAll(
-                () -> assertEquals("javajigi", datas.get("userId")),
-                () -> assertEquals("password", datas.get("password")),
-                () -> assertEquals("박재성", datas.get("name")),
-                () -> assertEquals("javajigi@slipp.net", datas.get("email"))
+                () -> assertEquals("javajigi", data.get("userId")),
+                () -> assertEquals("password", data.get("password")),
+                () -> assertEquals("박재성", data.get("name")),
+                () -> assertEquals("javajigi@slipp.net", data.get("email"))
         );
     }
 
@@ -36,7 +36,7 @@ public class HttpBodyParserTest {
         String stringBody = "userId=javajigi&password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net\n";
 
         // when
-        Map<String, String> data = HttpBodyParser.parse(stringBody);
+        Map<String, String> data = HttpFormBodyParser.parse(stringBody);
 
         // then
         assertAll(
