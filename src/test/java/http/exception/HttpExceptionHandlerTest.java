@@ -30,7 +30,7 @@ public class HttpExceptionHandlerTest {
         // given
         HttpRequest request = new HttpRequest(
                 HttpMethod.GET,
-                new URI("/index", Map.of()),
+                new URL("/index", Map.of()),
                 new HttpHeaders()
         );
         HttpResponse response = new HttpResponse(mockDos);
@@ -55,7 +55,7 @@ public class HttpExceptionHandlerTest {
         // given
         HttpRequest request = new HttpRequest(
                 HttpMethod.GET,
-                new URI("/index", Map.of()),
+                new URL("/index", Map.of()),
                 new HttpHeaders()
         );
         HttpResponse response = new HttpResponse(mockDos);
