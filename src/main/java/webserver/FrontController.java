@@ -13,31 +13,32 @@ import view.ViewResolver;
 import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.OutputStream;
 
 public class FrontController {
 
     private static final Logger logger = LoggerFactory.getLogger(FrontController.class);
 
-    public void process(HttpRequest httpRequest, HttpResponse httpResponse, OutputStream out) {
+    public void process(HttpRequest httpRequest, HttpResponse httpResponse, DataOutputStream dos) {
         try {
             Controller controller = ControllerMapper.getController(httpRequest);
 
             String viewName = controller.process(httpRequest, httpResponse);
             String viewPath = ViewResolver.resolveViewName(viewName);
 
-            sendResponse(out, httpResponse, viewPath);
+            sendResponse(dos, httpResponse, viewPath);
         } catch (ControllerNotFoundException | UrlNotFoundException | FileNotFoundException e) {
             logger.error(e.getMessage());
+
+            httpResponse.notFound(httpRequest, e.getMessage());
+            httpResponse.send(dos);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void sendResponse(OutputStream out, HttpResponse httpResponse, String viewPath) throws IOException {
+    private void sendResponse(DataOutputStream dos, HttpResponse httpResponse, String viewPath) throws IOException {
         httpResponse.makeBodyMessage(viewPath);
 
-        DataOutputStream dos = new DataOutputStream(out);
         httpResponse.send(dos);
     }
 }

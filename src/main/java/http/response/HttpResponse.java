@@ -9,6 +9,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 public class HttpResponse {
@@ -30,6 +31,12 @@ public class HttpResponse {
         setEmptyBody();
     }
 
+    public void notFound(HttpRequest request, String errorMessage) {
+        setHttpStatusLine(request, HttpStatusCode.NOT_FOUND);
+        addHttpHeader("Content-Type", request.getHttpHeader("Accept"));
+        setBodyMessage(errorMessage);
+    }
+
     public void setHttpStatusLine(HttpRequest request, HttpStatusCode statusCode) {
         this.httpStatusLine = HttpStatusLine.of(request.getHttpVersion(), statusCode);
     }
@@ -46,6 +53,11 @@ public class HttpResponse {
 
     public void setEmptyBody() {
         this.body = new byte[0];
+        addHttpHeader("Content-Length", String.valueOf(body.length));
+    }
+    public void setBodyMessage(String message) {
+        this.body = message.getBytes(StandardCharsets.UTF_8);
+        addHttpHeader("Content-Length", String.valueOf(body.length));
     }
 
     public void makeBodyMessage(String viewPath) throws IOException {
