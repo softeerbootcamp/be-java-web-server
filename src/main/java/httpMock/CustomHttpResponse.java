@@ -1,4 +1,4 @@
-package httpMock.response;
+package httpMock;
 
 import httpMock.constants.ContentType;
 import httpMock.constants.StatusCode;

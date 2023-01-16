@@ -1,6 +1,5 @@
-package httpMock.request;
+package httpMock;
 
-import httpMock.response.CustomHttpResponse;
 import httpMock.constants.ContentType;
 import httpMock.constants.StatusCode;
 
