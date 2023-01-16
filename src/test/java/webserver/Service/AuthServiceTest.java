@@ -3,8 +3,11 @@ package webserver.Service;
 import db.Database;
 import model.User;
 import org.junit.jupiter.api.*;
+import org.mockito.Mockito;
 import webserver.domain.StatusCodes;
 import webserver.exception.HttpRequestException;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -15,7 +18,6 @@ public class AuthServiceTest {
 
     @BeforeEach
     void testSetUp(){
-
         authService = new AuthService();
     }
     @Test
@@ -32,6 +34,7 @@ public class AuthServiceTest {
 
         //when
         authService.join(userId, password, email, email);
+        when(database.findUserById(Mockito.anyString())).thenReturn(Optional.empty());
 
         //then
         verify(database, times(1)).addUser(user);
@@ -51,8 +54,11 @@ public class AuthServiceTest {
         User user = new User(userId, password, email, name);
 
         //when
+        when(database.findUserById(Mockito.anyString())).thenReturn(Optional.empty());
+
         authService.join(userId, password, email, name);
         authService.join("anotherID", password, email,name);
+
 
         //then
         verify(database, times(2)).addUser(user);
@@ -71,11 +77,12 @@ public class AuthServiceTest {
         User user = new User(userId, password, email, name);
 
         //when
+        when(database.findUserById(Mockito.anyString())).thenReturn(Optional.of(user));
+
         authService.join(userId, password, email, email);
 
         //then
         Assertions.assertThrows(HttpRequestException.class, () -> authService.join(userId, password, email, email));
-        verify(database, times(2)).addUser(user);
     }
 
 
