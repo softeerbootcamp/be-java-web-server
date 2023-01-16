@@ -1,7 +1,5 @@
 package http.common;
 
-import http.common.HeaderAttribute;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
