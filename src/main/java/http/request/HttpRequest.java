@@ -36,7 +36,7 @@ public class HttpRequest {
         String contentLength = httpHeader.getHeader("Content-Length");
         if (contentLength != null) {
             body = readBodyMessage(br, Integer.parseInt(contentLength));
-            logger.debug("body: {}", body);
+            logger.debug("request body: {}", body);
         }
 
         return new HttpRequest(httpRequestLine, httpHeader, body);
@@ -85,5 +85,9 @@ public class HttpRequest {
 
     public String getHttpHeader(String name) {
         return httpHeader.getHeader(name);
+    }
+
+    public String getBody() {
+        return body;
     }
 }
