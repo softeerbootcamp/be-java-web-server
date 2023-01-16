@@ -10,12 +10,12 @@ import utils.HttpMethod;
 
 import java.util.Map;
 
-public class LoginController implements Controller {
+public class UserLoginController implements Controller {
     public static final String PATH = "/user/login";
-    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserLoginController.class);
     private final UserService userService;
 
-    public LoginController(UserService userService) {
+    public UserLoginController(UserService userService) {
         this.userService = userService;
     }
 

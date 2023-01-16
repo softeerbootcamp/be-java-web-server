@@ -13,13 +13,13 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-public class UserController implements Controller {
+public class UserCreateController implements Controller {
     public static final String PATH = "/user/create";
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserCreateController.class);
     private final UserService userService;
 
 
-    public UserController(UserService userService) {
+    public UserCreateController(UserService userService) {
         this.userService = userService;
     }
 
