@@ -24,14 +24,14 @@ public class HttpRequest {
     }
 
     public static HttpRequest of(BufferedReader br) throws IOException {
-        String line = br.readLine();
+        String line = br.readLine(); // Read StartLine
         RequestStartLine requestLine = RequestStartLine.of(line);
         logger.debug("Request Line : {}{}{}", lineSeparator, line, lineSeparator);
         StringBuilder header = new StringBuilder();
-        while (!line.equals("")) {
+        while (!line.equals("")) { // Read Header
             line = br.readLine();
             header.append(line);
-            header.append(lineSeparator);
+            header.append(lineSeparator); // Read Header 후 구분 공백 라인
 
             if (line == null) {
                 break;

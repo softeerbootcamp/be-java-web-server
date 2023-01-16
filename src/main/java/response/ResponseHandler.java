@@ -57,7 +57,7 @@ public class ResponseHandler {
             return HttpResponse.of("302", header);
         }
 
-        throw new AssertionError("HttpRequest는 정적 혹은 동적 컨텐츠 요청만 가능합니다.");
+        throw new RuntimeException("[ERROR] : HttpRequest는 정적 혹은 동적 컨텐츠 요청만 가능합니다.");
     }
 
 }
