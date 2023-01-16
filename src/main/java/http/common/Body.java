@@ -8,7 +8,7 @@ public class Body {
         this.data = data;
     }
 
-    public byte[] getBody() {
+    public byte[] getData() {
         return data;
     }
 
