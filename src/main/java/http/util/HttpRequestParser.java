@@ -23,17 +23,20 @@ public class HttpRequestParser {
             String strOfHeaders = readStrOfHeaders(br);
             HttpHeaders headers = HttpHeaderParser.parse(strOfHeaders);
 
-            // TODO: 책임 contentLength 계산 책임 분리하기.
-            int contentLength = headers.keys().contains("Content-Length")
-                    ? Integer.parseInt(headers.getValue("Content-Length"))
-                    : 0;
-            String strOfBody = readStrOfBody(br, contentLength);
+            String strOfBody = "";
+            if (hasBody(headers)) {
+                strOfBody = readStrOfBody(br, Integer.parseInt(headers.getValue("Content-Length")));
+            }
             Map<String, String> data = HttpBodyParser.parse(strOfBody);
 
             return new HttpRequest(method, uri, headers, data);
         } catch (IOException e) {
             throw new RuntimeException("잘못된 형식의 요청입니다.");
         }
+    }
+
+    private static boolean hasBody(HttpHeaders headers) {
+        return headers.keys().contains("Content-Type") || headers.keys().contains("Content-Length");
     }
 
     private static String readStrOfHeaders(BufferedReader br) throws IOException {
