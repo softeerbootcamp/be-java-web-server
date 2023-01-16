@@ -17,15 +17,24 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class ErrorController implements Controller{
-    private final static String ERROR_ROUTE = "/error.html";
+    private final static String ERROR_404_ROUTE = "/error404.html";
+    private final static String ERROR_500_ROUTE = "/error500.html";
 
 
-    public  HttpResponse getErrorResponse(DataOutputStream dataOutputStream) throws IOException {
+    public static HttpResponse get404ErrorResponse(DataOutputStream dataOutputStream) throws IOException {
         FileReader fileReader = new TemplatesFileReader();
 
-        byte[] data = fileReader.readFile(new Url(ERROR_ROUTE, UrlType.TEMPLATES_FILE));
+        byte[] data = fileReader.readFile(new Url(ERROR_404_ROUTE, UrlType.TEMPLATES_FILE));
 
-        return new HttpResponse(new Data(dataOutputStream,data), FileType.HTML, HttpStatus.NOT_FOUND);
+        return new HttpResponse(new Data(dataOutputStream, data), FileType.HTML, HttpStatus.NOT_FOUND);
+    }
+
+    public static HttpResponse get500ErrorResponse(DataOutputStream dataOutputStream) throws IOException {
+        FileReader fileReader = new TemplatesFileReader();
+
+        byte[] data = fileReader.readFile(new Url(ERROR_500_ROUTE, UrlType.TEMPLATES_FILE));
+
+        return new HttpResponse(new Data(dataOutputStream, data), FileType.HTML, HttpStatus.NOT_FOUND);
     }
 
 }
