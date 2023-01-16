@@ -8,6 +8,7 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reader.RequestGetReader;
+import reader.RequestPostReader;
 import reader.RequestReader;
 import request.HttpRequest;
 import response.Data;
@@ -31,9 +32,9 @@ public class UserController implements Controller {
     private RequestReader requestReader;
 
 
-    @ControllerInfo(path = "/user/create", u = UrlType.QUERY_STRING, method = HttpMethod.GET)
+    @ControllerInfo(path = "/user/create", u = UrlType.NOTHING, method = HttpMethod.POST)
     public HttpResponse UserQueryString(DataOutputStream dataOutputStream, HttpRequest httpRequest) throws IOException {
-        requestReader = new RequestGetReader();
+        requestReader = new RequestPostReader();
 
         HashMap<String, String> userMap = requestReader.readData(httpRequest);
         User user = (User) userService.createModel(userMap);
