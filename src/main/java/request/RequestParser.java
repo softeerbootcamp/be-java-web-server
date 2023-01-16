@@ -29,19 +29,6 @@ public class RequestParser{
         return requestHeaderMap;
     }
 
-    /*public static Map<String, String> parseBody(String requestBody) {
-        Map<String, String> requestBodyMap = new HashMap<>();
-        if(!requestBody.isBlank()) {
-            String[] tokens = requestBody.split("&");
-            for (String token : tokens) {
-                String[] subTokens = token.split("=");
-                requestBodyMap.put(subTokens[0], subTokens[1]);
-            }
-        }
-
-        return requestBodyMap;
-    }*/
-
     private static String[] splitRequestLine(String line) {
         return line.split(" ");
     }
