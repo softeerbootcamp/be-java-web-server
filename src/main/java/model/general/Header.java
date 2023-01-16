@@ -33,6 +33,7 @@ public enum Header {
     ALLOW("Allow"),
     CONTENT_DISPOSITION("Content-Disposition"),
     LOCATION("Location"),
+    SET_COOKIE("Set-Cookie"),
     CONTENT_SECURITY_POLICY("Content-Security-Policy");
 
     private final String header;
