@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ControllerHandler {
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(ControllerHandler.class);
 
     private static List<Controller> controllers = new ArrayList<>();
 

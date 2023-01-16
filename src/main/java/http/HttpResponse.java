@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class HttpResponse {
 
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
     private final String httpVersion;
     private final HttpStatus httpStatus;
     private final String contentType;
