@@ -7,7 +7,7 @@ import request.HttpRequest;
 
 public enum RequestMappingHandler {
 
-	USER_CONTROLLER("/create", new UserController());
+	USER_CONTROLLER("/user/create", new UserController());
 	private String path;
 	private Controller controller;
 
