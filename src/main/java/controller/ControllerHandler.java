@@ -23,16 +23,20 @@ public class ControllerHandler {
     }
 
     public static HttpResponse handle(HttpRequest httpRequest) throws IOException, URISyntaxException {
+        Controller controller = findController(httpRequest);
+        return controller.doService(httpRequest);
+    }
+
+    public static Controller findController(HttpRequest httpRequest) {
         RequestLine requestLine = httpRequest.getRequestLine();
         Uri uri = requestLine.getUri();
         if (!uri.isQueryParameterExist() && uri.isEndWithResourceType()) {
-            return new ViewController().doService(httpRequest);
+            return new ViewController();
         }
         return controllers
                 .stream()
                 .filter(controller -> controller.isMatch(httpRequest))
                 .findFirst()
-                .orElseThrow(() -> new ControllerNotFoundException("Not Found Controller"))
-                .doService(httpRequest);
+                .orElseThrow(() -> new ControllerNotFoundException("Not Found Controller"));
     }
 }
