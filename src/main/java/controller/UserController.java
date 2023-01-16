@@ -76,4 +76,11 @@ public class UserController implements Controller {
 
         return headers;
     }
+
+    private Map<Header, String> responseLoginFailHeader() {
+        Map<Header, String> headers = new HashMap<>();
+        headers.put(Header.from("Location"), " /user/login_failed.html");
+
+        return headers;
+    }
 }
