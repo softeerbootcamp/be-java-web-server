@@ -30,6 +30,6 @@ public class UserController implements Controller {
             return "";
         }
 
-        throw new UrlNotFoundException("요청하신 URL을 찾을 수 없습니다.");
+        throw new UrlNotFoundException("잘못된 URL 요청입니다.");
     }
 }
