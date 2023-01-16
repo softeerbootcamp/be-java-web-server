@@ -13,7 +13,9 @@ public class StaticController implements Controller {
 
     @Override
     public void chain(Request req, Response res) throws HttpRequestException, IOException {
-        String path = req.getRequestLine().getResource().getPath();
+
+        String path = req.getRequestLine().getResource().getPath();  //리소스 위치 경로
+
         StaticResourceFinder.staticFileResolver(path).ifPresentOrElse(
                 (fileAsBytes) -> res.ok(StatusCodes.OK, fileAsBytes, StaticResourceFinder.getExtension(path)),  //if file exists
                 ()-> res.notFoundError(StatusCodes.NOT_FOUND)); //if not
