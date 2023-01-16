@@ -12,12 +12,12 @@ public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private final Socket connection;
-    private final UserService userService;
+    private final UserController userController;
 
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
-        this.userService = new UserService();
+        this.userController = new UserController();
     }
 
     public void run() {
@@ -27,8 +27,9 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream()) {
             Request request = new Request(in);
 
+            //TODO Controller 고민, 조건에 맞게 처리될 수 있도록
             if (request.getRequestParams().size() != 0) {
-                userService.signUpUser(request);
+                userController.signUp(request);
             }
 
             ResponseHandler responseHandler = new ResponseHandler(connection);
