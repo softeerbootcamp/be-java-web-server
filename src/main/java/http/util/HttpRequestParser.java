@@ -3,10 +3,12 @@ package http.util;
 import http.common.HttpHeaders;
 import http.common.HttpMethod;
 import http.common.URI;
+import http.exception.BadRequestException;
 import http.request.HttpRequest;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 public class HttpRequestParser {
     private HttpRequestParser() {}
@@ -21,7 +23,14 @@ public class HttpRequestParser {
             String strOfHeaders = readStrOfHeaders(br);
             HttpHeaders headers = HttpHeaderParser.parse(strOfHeaders);
 
-            return new HttpRequest(method, uri, headers);
+            // TODO: 책임 contentLength 계산 책임 분리하기.
+            int contentLength = headers.keys().contains("Content-Length")
+                    ? Integer.parseInt(headers.getValue("Content-Length"))
+                    : 0;
+            String strOfBody = readStrOfBody(br, contentLength);
+            Map<String, String> data = HttpBodyParser.parse(strOfBody);
+
+            return new HttpRequest(method, uri, headers, data);
         } catch (IOException e) {
             throw new RuntimeException("잘못된 형식의 요청입니다.");
         }
@@ -34,5 +43,14 @@ public class HttpRequestParser {
             strOfHeaders.append(line).append("\n");
         }
         return strOfHeaders.toString();
+    }
+
+    private static String readStrOfBody(BufferedReader br, int contentLength) throws IOException {
+        char[] data = new char[contentLength];
+        int read = br.read(data);
+        if (read == -1) {
+            throw new BadRequestException("요청 형식이 잘못되었습니다.");
+        }
+        return String.valueOf(data);
     }
 }

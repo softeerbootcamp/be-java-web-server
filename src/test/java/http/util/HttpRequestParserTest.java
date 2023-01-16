@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -68,5 +69,32 @@ public class HttpRequestParserTest {
                 () -> assertEquals("26", uri.getQueries().get("age")),
                 () -> assertEquals(5, headers.size()),
                 () -> assertEquals("localhost:8080", headers.getValue("Host")));
+    }
+
+    @Test
+    @DisplayName("parse() - data(body)가 존재하는 경우")
+    void test() {
+        // given
+        String getRequestWithData =
+                "POST /user/create HTTP/1.1\n" +
+                        "Host: localhost:8080\n" +
+                        "Connection: keep-alive\n" +
+                        "Content-Length: 93\n" +
+                        "Content-Type: application/x-www-form-urlencoded\n" +
+                        "Accept: */*\n" +
+                        "\n" +
+                        "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
+        InputStream in = new ByteArrayInputStream(getRequestWithData.getBytes(StandardCharsets.UTF_8));
+
+        // when
+        HttpRequest httpRequest = HttpRequestParser.parse(in);
+        Map<String, String> data = httpRequest.getDatas();
+
+        assertAll(
+                () -> assertEquals("password", data.get("password")),
+                () -> assertEquals("박재성", data.get("name")),
+                () -> assertEquals("javajigi@slipp.net", data.get("email")),
+                () -> assertEquals("javajigi", data.get("userId"))
+        );
     }
 }
