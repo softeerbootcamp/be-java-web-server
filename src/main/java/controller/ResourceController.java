@@ -22,9 +22,11 @@ public class ResourceController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(ResourceController.class);
 
     private final List<String> paths;
+
     public ResourceController() {
         this.paths = Arrays.asList(".html", ".ico", ".css", ".js", "woff", "ttf", "png");
     }
+
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         doGet(httpRequest, httpResponse);
@@ -43,7 +45,7 @@ public class ResourceController implements Controller {
         logger.debug("filePath: {}" + filePath);
         byte[] body = loadFile(filePath);
 
-        if(body.length == EMPTY_LENGTH){
+        if (body.length == EMPTY_LENGTH) {
             byte[] errorBody = load404ErrorFile();
             httpResponse.do404(errorBody);
             return;

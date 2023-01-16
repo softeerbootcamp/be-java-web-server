@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.Objects;
 
 public class HttpRequest {
 
@@ -21,11 +20,12 @@ public class HttpRequest {
 
     private final HttpStartLine startLine;
     private final HttpHeaders httpHeaders;
+    private final HttpRequestBody requestBody;
 
-    private HttpRequest(HttpStartLine startLine, HttpHeaders headers) {
+    private HttpRequest(HttpStartLine startLine, HttpHeaders headers, HttpRequestBody requestBody) {
         this.startLine = startLine;
         this.httpHeaders = headers;
-        logger.debug(httpHeaders.getHeaders().toString());
+        this.requestBody = requestBody;
     }
 
     public static HttpRequest from(InputStream in) throws IOException {
@@ -34,15 +34,29 @@ public class HttpRequest {
         String extracted = extractHeaders(br);
         String[] headers = extracted.split(ENTER);
 
-        return new HttpRequest(HttpStartLine.from(startLine), HttpHeaders.from(headers));
+        return HttpRequest.from(HttpStartLine.from(startLine), HttpHeaders.from(headers), br);
 
     }
+
+    public static HttpRequest from(HttpStartLine startLine, HttpHeaders headers, BufferedReader br) throws IOException {
+        HttpMethod httpMethod = startLine.getMethod();
+
+        if (httpMethod.equals(HttpMethod.GET)) {
+            HttpRequestBody httpRequestBody = HttpRequestBody.createEmptyRequestBody();
+            return new HttpRequest(startLine, headers, httpRequestBody);
+        }
+
+        String queryString = br.readLine();
+        HttpRequestBody httpRequestBody = HttpRequestBody.createRequestBody(queryString);
+        return new HttpRequest(startLine, headers, httpRequestBody);
+    }
+
 
     private static String extractHeaders(BufferedReader br) throws IOException {
         StringBuilder sb = new StringBuilder();
         String line;
 
-        while (Objects.nonNull(line = br.readLine()) && !line.isEmpty()) {
+        while ((line = br.readLine()) != null && !line.isEmpty()) {
             sb.append(line).append(System.lineSeparator());
         }
 
@@ -55,6 +69,10 @@ public class HttpRequest {
 
     public HttpMethod getMethod() {
         return startLine.getMethod();
+    }
+
+    public HttpRequestBody getRequestBody() {
+        return requestBody;
     }
 
     public Uri getUri() {
