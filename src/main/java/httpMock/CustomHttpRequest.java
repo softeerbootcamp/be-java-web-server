@@ -11,10 +11,13 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+import static webserver.RequestHandler.CRLF;
+
 public class CustomHttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(CustomHttpRequest.class);
     private Map<String, String> requestParams;
     private Map<String, List<String>> requestHeaders;
+    private Map<String, String> requestBodies;
     private HttpMethod httpMethod;
     private String protocolVersion;
     private String url;
@@ -25,10 +28,20 @@ public class CustomHttpRequest {
         try {
             String firstLine = br.readLine();
             List<String> headers = new ArrayList<>();
+            List<String> bodies = new ArrayList<>();
             while (br.ready()) {
-                headers.add(br.readLine());
+                String nextLine = br.readLine();
+                if(nextLine.equals(CRLF))
+                    break;
+                headers.add(nextLine);
             }
-            return of(firstLine, headers);
+            while (br.ready()){
+                String nextLine = br.readLine();
+                if(nextLine.equals(CRLF))
+                    break;
+                bodies.add(nextLine);
+            }
+            return of(firstLine, headers, bodies);
         }
         catch (IOException e){
             logger.error(e.getMessage());
@@ -36,14 +49,15 @@ public class CustomHttpRequest {
         }
     }
 
-    public static CustomHttpRequest of(String firstLine, List<String> headers){
-        return new CustomHttpRequest(firstLine, headers);
+    public static CustomHttpRequest of(String firstLine, List<String> headers, List<String> bodies){
+        return new CustomHttpRequest(firstLine, headers, bodies);
     }
 
-    private CustomHttpRequest(String firstLine, List<String> headers) {
+    private CustomHttpRequest(String firstLine, List<String> headers, List<String> bodies) {
         setFirstLineHeaders(firstLine);
         setRequestHeaders(headers);
         setRequestParams(this.url);
+        setRequestBody(bodies);
         logger.info("url : " + this.url + ", method : " + this.httpMethod + ", params : " + this.requestParams);
     }
 
@@ -64,6 +78,16 @@ public class CustomHttpRequest {
     private void setRequestHeaders(List<String> headers){
         requestHeaders = new HashMap<>();
         headers.forEach(this::addToRequestHeader);
+    }
+
+    //TODO: 아래 body parsing 코드는 queryString 형태로 들어옴을 가정하고 있습니다.
+    private void setRequestBody(List<String> bodyLines){
+        requestBodies = new HashMap<>();
+        List<String> bodyParams = new ArrayList<>();
+        for(String line : bodyLines){
+            bodyParams.addAll(List.of(line.split("&")));
+        }
+        bodyParams.forEach(this::addToRequestBody);
     }
 
     private void setRequestParams(String url) {
@@ -93,6 +117,10 @@ public class CustomHttpRequest {
         this.requestHeaders.put(itemName, itemList);
     }
 
+    private void addToRequestBody(String line){
+        String[] split = line.split("=");
+        this.requestBodies.put(split[0], split[1]);
+    }
 
     public String getUrl() {
         return url;
@@ -106,5 +134,7 @@ public class CustomHttpRequest {
         return protocolVersion;
     }
 
-
+    public HttpMethod getHttpMethod(){
+        return httpMethod;
+    }
 }
