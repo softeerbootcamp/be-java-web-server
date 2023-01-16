@@ -48,6 +48,20 @@ public class UserController implements Controller {
         return Response.of(StatusLine.of(request.getRequestLine().getHttpVersion(), Status.FOUND), headers);
     }
 
+    private Response loginUserResponse(Request request) {
+        Map<String, String> userLoginInfo = request.getBody().getContent();
+        boolean isLoginSuccess = userService.logIn(userLoginInfo);
+
+        Map<Header, String> headers;
+        if(isLoginSuccess) {
+            headers = responseLoginSuccessHeader();
+            return Response.of(StatusLine.of(request.getRequestLine().getHttpVersion(), Status.FOUND), headers);
+        }
+
+        headers = responseLoginFailHeader();
+        return Response.of(StatusLine.of(request.getRequestLine().getHttpVersion(), Status.FOUND), headers);
+    }
+
     private Map<Header, String> response302Header() {
         Map<Header, String> headers = new HashMap<>();
         headers.put(Header.from("Location"), "/index.html");
