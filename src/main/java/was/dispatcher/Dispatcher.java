@@ -25,10 +25,6 @@ public class Dispatcher implements ControllerHandler{
     public HttpResponseMessage handle(HttpRequest httpRequest) {
         Controller controller = new UserController();
         String path = httpRequest.getRequestLine().getUrl();
-        /*
-        for (String s : httpRequest.getBody().keySet()) {
-            System.out.println(s + " : " + httpRequest.getBody().get(s));
-        }*/
         if (path.contains("user")) {
             controller = new UserController();
         }
