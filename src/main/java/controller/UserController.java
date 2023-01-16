@@ -43,8 +43,8 @@ public class UserController implements Controller{
     public void userCommand(){
         if (requestHeaderMessage.getRequestAttribute().equals("/create")){
             try{
-                userCreate(requestHeaderMessage);
-                setLocation(Redirect.getRedirectLink(requestHeaderMessage.getHttpOnlyURL()));
+                //userCreateByGet(requestHeaderMessage);
+                userCreateByPost();
             } catch (IllegalStateException e){
                 setLocation("/user/form.html");
                 logger.debug(e.getMessage());
@@ -52,9 +52,14 @@ public class UserController implements Controller{
         }
     }
 
-    private void userCreate(RequestHeaderMessage requestHeaderMessage){
+    private void userCreateByGet(RequestHeaderMessage requestHeaderMessage){
         Map<String,String> userInfo = HttpRequestUtil.parseQueryString(requestHeaderMessage.getHttpReqParams());
         userService.join(new User(userInfo.get(USER_ID),userInfo.get(PASSWORD),userInfo.get(NAME),userInfo.get(EMAIL)));
+        setLocation(Redirect.getRedirectLink(requestHeaderMessage.getHttpOnlyURL()));
+    }
+
+    private void userCreateByPost(){
+
     }
 
     private void setLocation(String redirectLink){
