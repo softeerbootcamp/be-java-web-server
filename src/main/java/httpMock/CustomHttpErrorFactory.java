@@ -1,9 +1,8 @@
-package httpMock;
+package httpMock.request;
 
+import httpMock.response.CustomHttpResponse;
 import httpMock.constants.ContentType;
 import httpMock.constants.StatusCode;
-
-import java.nio.charset.StandardCharsets;
 
 public class CustomHttpErrorFactory {
 

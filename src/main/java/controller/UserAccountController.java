@@ -44,10 +44,11 @@ public class UserAccountController implements RequestController {
         if(!allowedMethods.contains(req.getHttpMethod()))
             return CustomHttpErrorFactory.METHOD_NOT_ALLOWED();
 
-        String userId = req.getRequestBodies().get("userId");
-        String password = req.getRequestBodies().get("password");
-        String name = req.getRequestBodies().get("name");
-        String email = req.getRequestBodies().get("email");
+        Map<String, String> bodyParams = req.parseBodyFromUrlEncoded();
+        String userId = bodyParams.get("userId");
+        String password = bodyParams.get("password");
+        String name = bodyParams.get("name");
+        String email = bodyParams.get("email");
 
         if (UserService.findUserById(userId) != null)
             return CustomHttpErrorFactory.BAD_REQUEST("userID duplicated");
