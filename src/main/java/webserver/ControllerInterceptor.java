@@ -21,7 +21,7 @@ public class ControllerInterceptor {
                 .collect(Collectors.toList());
     }
 
-    private static Map<String, String> checkMethodType(Request req, ControllerInfo controllerInfo, RequestMethod requestMethod) {
+    private static Map<String, String> checkMethodThenReturnBody(Request req, ControllerInfo controllerInfo, RequestMethod requestMethod) {
         if (requestMethod != controllerInfo.method())
             throw new HttpRequestException(StatusCodes.METHOD_NOT_ALLOWED);
         if (requestMethod == RequestMethod.GET)
@@ -37,7 +37,7 @@ public class ControllerInterceptor {
             ControllerInfo controllerInfo = method.getAnnotation(ControllerInfo.class);
             if(controllerInfo.path().startsWith(req.getRequestLine().getResource().getPath())){
                 try {
-                    Map<String, String> contentMap = checkMethodType(req, controllerInfo, req.getRequestLine().getRequestMethod());
+                    Map<String, String> contentMap = checkMethodThenReturnBody(req, controllerInfo, req.getRequestLine().getRequestMethod());
                     ArgumentResolver.checkParameters(contentMap, Arrays.asList(controllerInfo.queryStr()));  //check the validity of parameters before executing the method
                     method.invoke(clazz.newInstance(), contentMap, res);    //invoke method
                 } catch (InstantiationException | IllegalAccessException e) {
