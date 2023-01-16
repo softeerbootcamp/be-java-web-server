@@ -1,8 +1,9 @@
 package request.method.GET.handlers;
 
 public enum GETHandlerEnum {
-    FORM("/user/create?", GETUserRegisterHandler.of()),
-    NO_MATCH("", GETNoMatchHandler.of())
+    // TODO: 추후 각 enum 별 url 정규식으로 교체
+    FORM("/user/create?", GETUserRegisterHandler.getInstance()),
+    NO_MATCH("", GETNoMatchHandler.getInstance())
     ;
 
     private String url;
