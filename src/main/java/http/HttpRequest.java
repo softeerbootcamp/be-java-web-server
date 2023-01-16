@@ -39,18 +39,26 @@ public class HttpRequest {
         RequestHeader requestHeader = RequestHeader.from(requests.subList(1, requests.size()));
 
         if (requestHeader.hasContentLength()) {
-            Map<String, String> requestBody = new HashMap<>();
             int contentLength = requestHeader.getContentLength();
             char[] body = new char[contentLength];
             br.read(body, 0, contentLength);
-            String bodys = String.copyValueOf(body);
-            requestBody = Stream.of(bodys.split("&"))
-                    .map(q -> q.split("="))
-                    .filter(q -> q.length == 2)
-                    .collect((toMap(q -> q[0], q -> URLDecoder.decode(q[1], StandardCharsets.UTF_8))));
-            return new HttpRequest(requestLine, requestHeader, requestBody);
+            return new HttpRequest(
+                    requestLine,
+                    requestHeader,
+                    parseRequestBody(String.copyValueOf(body)
+                    ));
         }
-        return new HttpRequest(requestLine, requestHeader, new HashMap<>());
+        return new HttpRequest(
+                requestLine,
+                requestHeader,
+                new HashMap<>());
+    }
+
+    private static Map<String, String> parseRequestBody(String body) {
+        return Stream.of(body.split("&"))
+                .map(q -> q.split("="))
+                .filter(q -> q.length == 2)
+                .collect((toMap(q -> q[0], q -> URLDecoder.decode(q[1], StandardCharsets.UTF_8))));
     }
 
     public RequestLine getRequestLine() {
