@@ -29,31 +29,6 @@ public class UserController implements Controller {
             return "";
         }
 
-        if (path.equals("/form.html")) {
-            response.ok(request);
-            return url;
-        }
-
-        if (path.equals("/list.html")) {
-            response.ok(request);
-            return url;
-        }
-
-        if (path.equals("/login.html")) {
-            response.ok(request);
-            return url;
-        }
-
-        if (path.equals("/login_failed.html")) {
-            response.ok(request);
-            return url;
-        }
-
-        if (path.equals("/profile.html")) {
-            response.ok(request);
-            return url;
-        }
-
         // TODO 잘못된 URL이 들어올 경우 404 NOT_FOUND 응답
         throw new IllegalArgumentException();
     }

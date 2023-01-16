@@ -14,14 +14,14 @@ public class ControllerMapper {
 
     public static Controller getController(HttpRequest request) {
         String url = request.getUrl();
+        if (url.equals("/") || StaticResourceController.isSupported(url)) {
+            return new StaticResourceController();
+        }
+
         for (String key : controllerMap.keySet()) {
             if (url.startsWith(key)) {
                 return controllerMap.get(key);
             }
-        }
-
-        if (url.equals("/") || StaticResourceController.isSupported(url)) {
-            return new StaticResourceController();
         }
 
         throw new IllegalArgumentException();
