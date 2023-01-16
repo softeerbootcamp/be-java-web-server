@@ -7,36 +7,39 @@ import static util.HttpRequestUtils.parseQuerystring;
 
 public class Request {
 
+    private final String method;
     private final String url;
-    private final Map<String, String> requestParams = new HashMap<>();
+    private final Map<String, String> requestParams;
 
 
     public Request(String line) {
-        this.url = extractUrl(line);
-        this.checkUrlQueryString();
-    }
-
-    private String extractUrl(String line) {
-        //문자열 분리 후 -> 문자열 배열에 삽입
         String[] tokens = line.split(" ");
+        this.method = tokens[0];
+
         String url = tokens[1];
         if (url.equals("/")) {
             url = "/index.html";
         }
-        return url;
+        this.url = url;
+        this.requestParams = createRequestParams();
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void checkUrlQueryString() {
+    public Map<String, String> createRequestParams() {
         String[] queryStrings = url.split("\\?");
         if (queryStrings.length != 1) {
             String queryString = queryStrings[1];
 
-            requestParams.putAll(parseQuerystring(queryString));
+            return new HashMap<>(parseQuerystring(queryString));
         }
+        return Map.of();
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public String getUrl() {
+        return url;
     }
 
     public Map<String, String> getRequestParams() {
