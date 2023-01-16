@@ -48,6 +48,7 @@ public class Request {
         String header = br.readLine();
 
         while (!"".equals(header)) {
+            logger.debug("Request Header: {}", header);
             String[] headerSplit = header.split(": ");
             headers.put(Header.from(headerSplit[0]), headerSplit[1]);
             header = br.readLine();
