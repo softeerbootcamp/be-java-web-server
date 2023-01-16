@@ -1,6 +1,8 @@
 package request.method.POST.handlers;
 
 import request.Request;
+import response.HttpResponseStatus;
+import response.Response;
 
 public class POSTNoMatchHandler implements POSTHandler {
     private static final POSTNoMatchHandler POST_NO_MATCH_HANDLER;
@@ -14,7 +16,7 @@ public class POSTNoMatchHandler implements POSTHandler {
     }
 
     @Override
-    public byte[] handle(Request request) {
-        return null;
+    public Response handle(Request request) {
+        return Response.of(HttpResponseStatus.NOT_FOUND.getMessage(), HttpResponseStatus.NOT_FOUND.getCode());
     }
 }

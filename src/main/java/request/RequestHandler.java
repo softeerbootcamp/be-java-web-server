@@ -1,7 +1,7 @@
 package request;
 
-import java.io.InputStream;
+import response.Response;
 
 public interface RequestHandler {
-    byte[] handleRequest(Request request, int port);
+    Response handleRequest(Request request, int port);
 }

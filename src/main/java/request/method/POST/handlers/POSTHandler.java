@@ -1,7 +1,8 @@
 package request.method.POST.handlers;
 
 import request.Request;
+import response.Response;
 
 public interface POSTHandler {
-    byte[] handle(Request request);
+    Response handle(Request request);
 }

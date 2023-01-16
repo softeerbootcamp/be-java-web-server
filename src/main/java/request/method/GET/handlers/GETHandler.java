@@ -1,7 +1,8 @@
 package request.method.GET.handlers;
 
 import request.Request;
+import response.Response;
 
 public interface GETHandler {
-    byte[] handle(Request request);
+    Response handle(Request request);
 }

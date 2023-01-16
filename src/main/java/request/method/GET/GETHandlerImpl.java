@@ -3,6 +3,7 @@ package request.method.GET;
 import request.Request;
 import request.method.GET.handlers.GETHandler;
 import request.method.HttpMethodHandler;
+import response.Response;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class GETHandlerImpl implements HttpMethodHandler {
     }
 
     @Override
-    public byte[] handle(Request request) {
+    public Response handle(Request request) {
         for(GETFileRequestEnum fileRequestEnum : GETFileRequestEnum.values()) {
             if( contains(fileRequestEnum.getSupportingFilePostfix(fileRequestEnum), request.getResource() )) {
                 return fileRequestEnum.handle(request);

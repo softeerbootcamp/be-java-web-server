@@ -9,7 +9,7 @@ public class GETHandlerFactory {
     public static GETHandler generateHandler(Request request) {
         GETHandler handler = GETNoMatchHandler.getInstance();
         for(GETHandlerEnum GETHandlerEnum : GETHandlerEnum.values()) {
-            // TODO: resource를 enum의 url과 비교하는 것을 equals 메소드를 사용할 수 있도록 수정
+            // TODO: resource를 enum의 url과 비교하는 것을 regex를 사용하도록 수정
             if(request.getResource().contains(GETHandlerEnum.getUrl())) {
                 return GETHandlerEnum.getHandler();
             }

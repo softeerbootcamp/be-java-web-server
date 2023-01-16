@@ -1,8 +1,12 @@
 package request.method.POST.handlers;
 
+import db.Database;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.Request;
+import response.HttpResponseStatus;
+import response.Response;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,18 +25,28 @@ public class POSTUserRegisterHandler implements POSTHandler{
     }
 
     @Override
-    public byte[] handle(Request request) {
-        Map<String, String> requestBody = parseBody(request);
-        logger.debug("{}", requestBody);
-        return new byte[0];
+    public Response handle(Request request) {
+        try {
+            Map<String, String> requestBody = parseBody(request);
+            User user = new User(requestBody);
+            Database.addUser(user);
+            logger.debug("saved: {}", user);
+            return Response.of(HttpResponseStatus.FOUND.getMessage(), HttpResponseStatus.FOUND.getCode());
+        } catch (IllegalArgumentException e) {
+            logger.error("잘못된 입력값");
+            return Response.of(HttpResponseStatus.BAD_REQUEST.getMessage(), HttpResponseStatus.BAD_REQUEST.getCode());
+        }
     }
 
-    private Map<String, String> parseBody(Request request) {
+    private Map<String, String> parseBody(Request request) throws IllegalArgumentException{
         Map<String, String> map = new HashMap<>();
         String[] tokens = request.getRequestBody().split("&");
         for(String token : tokens) {
             String[] subTokens = token.split("=");
-            map.put(subTokens[0], subTokens.length == 2 ? subTokens[1] : "");
+            if(subTokens.length != 2) {
+                throw new IllegalArgumentException();
+            }
+            map.put(subTokens[0], subTokens[1]);
         }
         return map;
     }

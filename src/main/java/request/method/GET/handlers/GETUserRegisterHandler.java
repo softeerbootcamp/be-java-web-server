@@ -1,8 +1,8 @@
 package request.method.GET.handlers;
 
-import model.User;
 import request.Request;
-import request.RequestParser;
+import response.HttpResponseStatus;
+import response.Response;
 
 public class GETUserRegisterHandler implements GETHandler{
     private final static GETUserRegisterHandler GET_USER_REGISTER_HANDLER;
@@ -16,9 +16,7 @@ public class GETUserRegisterHandler implements GETHandler{
     }
 
     @Override
-    public byte[] handle(Request request) {
-        User user = new User(RequestParser.parseGETQueryString(request.getResource()));
-        System.out.println(user);
-        return new byte[0];
+    public Response handle(Request request) {
+        return Response.of(HttpResponseStatus.NOT_FOUND.getMessage(), HttpResponseStatus.NOT_FOUND.getCode());
     }
 }

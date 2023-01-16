@@ -3,6 +3,8 @@ package request.method.GET;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.Request;
+import response.HttpResponseStatus;
+import response.Response;
 import webserver.WebServer;
 
 import java.io.File;
@@ -13,25 +15,27 @@ import java.util.*;
 public enum GETFileRequestEnum {
     TEMPLATE(".html .ico") {
         @Override
-        public byte[] handle(Request request) {
+        public Response handle(Request request) {
             try {
                 logger.debug("{}", "src/main/resources/templates" + request.getResource());
-                return Files.readAllBytes(new File("src/main/resources/templates" + request.getResource()).toPath());
+                return Response.of(Files.readAllBytes(new File("src/main/resources/templates" + request.getResource()).toPath()),
+                        HttpResponseStatus.OK.getMessage(), HttpResponseStatus.OK.getCode());
             } catch (IOException e) {
                 logger.error("invalid request {}", request.getResource());
-                return null;
+                return Response.of(HttpResponseStatus.NOT_FOUND.getMessage(), HttpResponseStatus.NOT_FOUND.getCode());
             }
         }
     },
     STATIC(".css .eot .svg .ttf .woff .woff2 .png .js") {
         @Override
-        public byte[] handle(Request request) {
+        public Response handle(Request request) {
             try {
                 logger.debug("{}", "src/main/resources/static" + request.getResource());
-                return Files.readAllBytes(new File("src/main/resources/static" + request.getResource()).toPath());
+                return Response.of(Files.readAllBytes(new File("src/main/resources/static" + request.getResource()).toPath()),
+                        HttpResponseStatus.OK.getMessage(), HttpResponseStatus.OK.getCode());
             } catch (IOException e) {
                 logger.error("invalid request {}", request.getResource());
-                return null;
+                return Response.of(HttpResponseStatus.NOT_FOUND.getMessage(), HttpResponseStatus.NOT_FOUND.getCode());
             }
         }
     };
@@ -57,5 +61,5 @@ public enum GETFileRequestEnum {
         return list;
     }
 
-    public abstract byte[] handle(Request request);
+    public abstract Response handle(Request request);
 }

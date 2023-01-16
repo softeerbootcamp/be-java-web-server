@@ -3,13 +3,14 @@ package request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.method.HttpMethod;
+import response.Response;
 
 import java.io.IOException;
 
 public class RequestHandlerImpl implements RequestHandler {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandlerImpl.class);
     @Override
-    public byte[] handleRequest(Request request, int port) {
+    public Response handleRequest(Request request, int port) {
         try {
             for (HttpMethod method : HttpMethod.values()) {
                 if (request.getMethod().equals(method.getMethod())) {
