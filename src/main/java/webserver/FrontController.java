@@ -14,7 +14,7 @@ import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class FrontController {
+public class FrontController { // TODO 클래스명 변경 또는 메서드명 변경
 
     private static final Logger logger = LoggerFactory.getLogger(FrontController.class);
 
