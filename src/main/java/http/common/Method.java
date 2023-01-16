@@ -3,7 +3,8 @@ package http.common;
 import java.util.Arrays;
 
 public enum Method {
-    GET("GET");
+    GET("GET"),
+    POST("POST");
 
     private String value;
 
