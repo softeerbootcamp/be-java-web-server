@@ -43,7 +43,7 @@ public class UserController implements Controller {
                 userInfo.get("name"), userInfo.get("email"));
         userService.signUp(user);
 
-        Map<Header, String> headers = response302Header();
+        Map<Header, String> headers = responseCreateUserHeader();
 
         return Response.of(StatusLine.of(request.getRequestLine().getHttpVersion(), Status.FOUND), headers);
     }
@@ -62,7 +62,7 @@ public class UserController implements Controller {
         return Response.of(StatusLine.of(request.getRequestLine().getHttpVersion(), Status.FOUND), headers);
     }
 
-    private Map<Header, String> response302Header() {
+    private Map<Header, String> responseCreateUserHeader() {
         Map<Header, String> headers = new HashMap<>();
         headers.put(Header.from("Location"), "/index.html");
 
