@@ -2,7 +2,6 @@ package http.common;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class HttpHeaders {
     private final Map<String, String> headers;
@@ -27,8 +26,9 @@ public class HttpHeaders {
         return headers.size();
     }
 
-    public Set<String> keys() {
-        return this.headers.keySet();
+    public int contentLength() {
+        boolean hasBody = headers.containsKey("Content-Type") && headers.containsKey("Content-Length");
+        return hasBody ? Integer.parseInt(headers.get("Content-Length")) : 0;
     }
 
     @Override
