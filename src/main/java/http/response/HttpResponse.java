@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Arrays;
 import java.util.Map;
 
 public class HttpResponse {
@@ -74,8 +73,7 @@ public class HttpResponse {
         dos.writeBytes(headers.toString());
         dos.writeBytes(System.lineSeparator());
 
-        Arrays.asList(String.format("status line: %s", statusLine),
-                String.format("headers: %s", headers)).forEach(logger::debug);
+        logger.debug("HttpResponse statusLine: " + statusLine);
 
         if (responseBody.hasBody()) {
             byte[] body = responseBody.getBody();
