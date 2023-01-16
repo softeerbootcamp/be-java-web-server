@@ -4,17 +4,23 @@ import db.Database;
 import http.*;
 import model.User;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class UserController implements Controller{
 
     private static final String path = "user";
     @Override
-    public void doService(HttpRequest httpRequest, HttpResponse httpResponse) {
+    public HttpResponse doService(HttpRequest httpRequest, HttpResponse httpResponse) {
         RequestLine requestLine = httpRequest.getRequestLine();
         Uri uri = requestLine.getUri();
         QueryParameters queryParameters = uri.getQueryParameters();
+
         Database.addUser(User.from(queryParameters.getParameters()));
-        httpResponse.response302Header("/index.html");
-        httpResponse.responseBody();
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Location", "/index.html");
+        return HttpResponse.of(HttpStatus.FOUND, "", headers, "".getBytes(), requestLine.getVersion());
     }
 
     @Override

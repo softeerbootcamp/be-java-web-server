@@ -13,40 +13,21 @@ public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private final String httpVersion;
     private final HttpStatus httpStatus;
-    private final ResourceType resourceType;
+    private final String contentType;
     private final Map<String, String> headers;
     private final byte[] body;
     private final DataOutputStream dos;
 
-    private HttpResponse(
-            String httpVersion,
-            DataOutputStream dos
-    ) {
-        this.httpVersion = httpVersion;
-        this.dos = dos;
-    }
-
-    public static HttpResponse of(
-            HttpRequest httpRequest,
-            DataOutputStream dos
-    ) {
-        RequestLine requestLine = httpRequest.getRequestLine();
-        Uri uri = requestLine.getUri();
-        return new HttpResponse(
-                requestLine.getVersion(),
-                dos
-        );
-    }
 
     private HttpResponse(
             HttpStatus httpStatus,
-            ResourceType resourceType,
+            String contentType,
             Map<String, String> headers,
             byte[] body,
             String httpVersion
     ) {
         this.httpStatus = httpStatus;
-        this.resourceType = resourceType;
+        this.contentType = contentType;
         this.headers = headers;
         this.body = body;
         this.httpVersion = httpVersion;
@@ -54,12 +35,12 @@ public class HttpResponse {
 
     public static HttpResponse of(
             HttpStatus httpStatus,
-            ResourceType resourceType,
+            String  contentType,
             Map<String, String> headers,
             byte[] body,
             String httpVersion
     ) {
-        return new HttpResponse(httpStatus, resourceType, headers, body, httpVersion);
+        return new HttpResponse(httpStatus, contentType, headers, body, httpVersion);
     }
 
 
