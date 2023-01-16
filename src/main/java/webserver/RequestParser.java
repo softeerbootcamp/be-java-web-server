@@ -1,6 +1,9 @@
 package webserver;
 
+import utils.HttpRequestUtils;
+
 import java.io.*;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,11 +16,8 @@ public class RequestParser {
         BufferedReader br = new BufferedReader(new InputStreamReader(in,"UTF-8"));
         RequestStartLine startLine = RequestStartLine.from(br.readLine());
         Map<String,String> headers = parseHeader(br);
-        System.out.println(headers.entrySet());
-        br.readLine();
-        String body=br.readLine();
-        System.out.println("here : parseInputStreamToHttpRequest");
-        System.out.println(body);
+        //System.out.println(headers.entrySet());
+        String body = readBody(br,headers);
         return new HttpRequest(startLine.getMethod(),startLine.getUrl(),startLine.getQueries(),headers,body);
 
     }
@@ -36,6 +36,20 @@ public class RequestParser {
 
     private static boolean hasMoreLine(String line) {
         return !(line == null || line.isEmpty());
+    }
+
+    private static String readBody(BufferedReader br, Map<String, String> headers) throws IOException {
+        String contentLengthHeader = headers.get("Content-Length");
+        //contentLength가 있다 == body가 존재한다
+        if (contentLengthHeader != null) {
+            Integer contentLength = Integer.parseInt(contentLengthHeader);
+            //int read(char[] cbuf, int off, int len) : 인수로 들어간 cbuf의 문자열에서, off(=offset) 부터 len만큼의 문자열을 읽습니다.
+            char[] body = new char[contentLength];
+            br.read(body, 0, contentLength);
+            //System.out.println(String.copyValueOf(body));
+            return String.copyValueOf(body);
+        }
+        return null;
     }
 
     public static String parseRequestStartLineTarget(InputStream in) throws IOException {
