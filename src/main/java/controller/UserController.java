@@ -20,8 +20,6 @@ public class UserController implements Controller {
         // Uri  받아옵시다
         String uri = httpRequest.getUri();
 
-        // TODO 할 일 enum 으로 구현 가능 할듯
-
         // 회원가입일 때
         if (isSignUpService(uri)) {
             // user 정보 받아서 데이터베이스에 입력
