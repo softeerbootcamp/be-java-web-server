@@ -9,4 +9,8 @@ public class RequestBody {
     public void addBodyLines(String oneLine){
         bodyLines.add(oneLine);
     }
+
+    public static List<String> getBodyLines() {
+        return bodyLines;
+    }
 }

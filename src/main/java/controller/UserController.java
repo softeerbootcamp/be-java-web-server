@@ -27,8 +27,8 @@ public class UserController implements Controller {
     @Override
     public void controllerService(Request request, Response response) throws IOException {
         logger.debug("firstLine : " + request.getRequestLine().getURL());
-        String url = request.getRequestLine().getURL();
-        List<String> userInfos = parseUrlToGetUserInfo(url);
+        List<String> requestRequestBody = request.getRequestBody().getBodyLines();
+        List<String> userInfos = parseUrlToGetUserInfo(requestRequestBody);
         User user = new User(userInfos.get(USERID_INDEX), userInfos.get(USERPWD_INDEX),
                 userInfos.get(USERNAME_INDEX), userInfos.get(USEREMAIL_INDEX));
 
@@ -39,9 +39,8 @@ public class UserController implements Controller {
         response.responseBody(body);
     }
 
-    public List<String> parseUrlToGetUserInfo(String requestURL) {
-        String result;
-        result = requestURL.split("\\?")[1];
+    public List<String> parseUrlToGetUserInfo(List<String> requestBodyLine) {
+        String result = requestBodyLine.get(0);
         String[] unParsedUserInfos;
         List<String> parsedUserInfo = new ArrayList<>();
         unParsedUserInfos = result.split("&");

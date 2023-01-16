@@ -32,7 +32,6 @@ public class RequestLine {
         this.METHOD = lineArr[METHOD_TOKEN_INDEX];
         this.URL = lineArr[URL_TOKEN_INDEX];
         this.VERSION = lineArr[VERSION_TOKEN_INDEX];
-        // this.userRequest = isUserRequest(this.URL);
     }
 
     // todo : 헤당 메소드 나중에 쓸일 있는지 확인해보자. requestline 에 요청이 담길 가능성이 있을까?

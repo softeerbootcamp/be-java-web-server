@@ -33,17 +33,27 @@ public class Request {
         requestHeader = new RequestHeader();
         while (true) {
             String oneLine = bufferedReader.readLine();
-            if(isBodyExistsOrEOL(oneLine)) break;
+            logger.debug("set request header line : " + oneLine);
+            if (isBodyExistsOrEOL(oneLine)) {
+                break;
+            }
             requestHeader.addHeaderLines(oneLine);
         }
+
     }
 
     public void setRequestBody(BufferedReader bufferedReader) throws IOException {
         requestBody = new RequestBody();
-        if(bufferedReader.ready()){
-            requestBody.addBodyLines(bufferedReader.readLine());
+        String fullLine = "";
+        while (bufferedReader.ready()) {
+            int line = bufferedReader.read();
+            fullLine += (char) line;
         }
+        logger.debug("requestBody : " + fullLine);
+        requestBody.addBodyLines(fullLine);
     }
+
+
 
     public boolean isBodyExistsOrEOL(String oneLine) throws IOException {
         if (oneLine.equals("")) {
