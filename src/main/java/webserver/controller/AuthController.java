@@ -20,6 +20,7 @@ public class AuthController implements Controller {
     
     @ControllerInfo(path = "/user/create", methodName = "userCreate", queryStr = {"userId", "password", "name", "email"})
     public void userCreate(Map<String, String> queryStrs, Response response) throws HttpRequestException{
+        //TODO: authService.join의 리턴값 핸들링
         byte[] result = authService.join(queryStrs.get("userId"), queryStrs.get("password"), queryStrs.get("name"), queryStrs.get("email"));
         response.ok(
                 StatusCodes.OK,

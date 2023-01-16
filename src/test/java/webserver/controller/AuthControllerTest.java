@@ -1,5 +1,9 @@
 package webserver.controller;
+import net.bytebuddy.matcher.CollectionOneToOneMatcher;
 import org.junit.jupiter.api.*;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import webserver.ControllerExecutioner;
 import webserver.Service.AuthService;
 import webserver.domain.ContentType;
 import webserver.domain.StatusCodes;
@@ -9,6 +13,7 @@ import webserver.exception.HttpRequestException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class AuthControllerTest {
@@ -36,31 +41,35 @@ class AuthControllerTest {
         byte[] joinResult = "testResult".getBytes();
 
         // when
-        authController.userCreate(queryStrs, response);
-        when(authService.join("testUser", "testPass", "testName", "test@email.com")).thenReturn(joinResult);
+        when(authService.join(anyString(), anyString(), anyString(), anyString())).thenReturn(joinResult);
 
         //then
-        verify(authService, times(1)).join("testUser", "testPass", "testName", "test@email.com");
+        authController.userCreate(queryStrs, response);
         verify(response).redirect(StatusCodes.SEE_OTHER, joinResult, ContentType.TEXT_HTML, "http://localhost:8080/index.html");
     }
 
     @Test
-    @DisplayName("체이닝 메소드 검사")
+    @DisplayName("체이닝 메소드 검사-올바른 경로로 보냈을 떄")
     void chainingMethodTest_ValidPath(){
 
         //given
         String path = "/user/create";
         Response res = mock(Response.class);
+        AuthService authService = mock(AuthService.class);
+
         Map<String, String> queryStrs = new HashMap<>();
+        MockedStatic<ControllerExecutioner> ceMock = mockStatic(ControllerExecutioner.class);
+
         queryStrs.put("userId", "testUser");
         queryStrs.put("password", "testPass");
         queryStrs.put("name", "testName");
         queryStrs.put("email", "test@email.com");
 
+        ceMock.when(()-> ControllerExecutioner.executeController(Mockito.any(Class.class), Mockito.any(Map.class), Mockito.any(Response.class), Mockito.any(String.class))).thenAnswer(invocation->null);
         authController.chain(path, queryStrs, res);
 
         //then
-        verify(authController, times(1)).userCreate(queryStrs, res);
+        verify(authService, times(1)).join(anyString(), anyString(), anyString(), anyString());
     }
 
 
@@ -71,11 +80,17 @@ class AuthControllerTest {
         //given
         String path = "/user/***";
         Response res = mock(Response.class);
+        MockedStatic<ControllerExecutioner> ceMock = mockStatic(ControllerExecutioner.class);
+
         Map<String, String> queryStrs = new HashMap<>();
         queryStrs.put("userId", "testUser");
         queryStrs.put("password", "testPass");
         queryStrs.put("name", "testName");
         queryStrs.put("email", "test@email.com");
+
+        //when
+        ceMock.when(()-> ControllerExecutioner.executeController(Mockito.any(Class.class), Mockito.any(Map.class), Mockito.any(Response.class), Mockito.any(String.class))).thenAnswer(invocation->null);
+        authController.chain(path, queryStrs, res);
 
         //then
         Assertions.assertThrows(HttpRequestException.class, () -> authController.chain(path, queryStrs, res));
@@ -90,15 +105,19 @@ class AuthControllerTest {
         //given
         String path = "/user/***";
         Response res = mock(Response.class);
+        MockedStatic<ControllerExecutioner> ceMock = mockStatic(ControllerExecutioner.class);
+
         Map<String, String> queryStrs = new HashMap<>();
         queryStrs.put("password", "testPass");
         queryStrs.put("name", "testName");
         queryStrs.put("email", "test@email.com");
 
         //when
+        ceMock.when(()-> ControllerExecutioner.executeController(Mockito.any(Class.class), Mockito.any(Map.class), Mockito.any(Response.class), Mockito.any(String.class))).thenThrow(new HttpRequestException(StatusCodes.INTERNAL_SERVER_ERROR));
+        authController.chain(path, queryStrs, res);
 
         //then
-        Assertions.assertThrows(HttpRequestException.class, () -> authController.chain(path, queryStrs, res));
+        assertEquals(StatusCodes.INTERNAL_SERVER_ERROR, res.getStatusCode());
     }
 
 
