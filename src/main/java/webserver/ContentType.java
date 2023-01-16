@@ -8,6 +8,7 @@ public enum ContentType {
     JS("application/javascript", "js"),
     CSS("text/css", "css"),
     PNG("image/png", "png"),
+    ICO("image/avif", "ico"),
     EOT("application/vnd.ms-fontobject", "eot"),
     SVG("image/svg+xml", "svg"),
     TTF("application/font-sfnt", "ttf"),
