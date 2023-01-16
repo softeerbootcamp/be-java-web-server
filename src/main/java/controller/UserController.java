@@ -9,15 +9,15 @@ import org.slf4j.LoggerFactory;
 import service.UserService;
 
 import java.util.Map;
-import java.util.function.BiConsumer;
 
+import static dto.UserInfoDTO.*;
 import static filesystem.PathParser.DOMAIN;
 
 public class UserController implements Controller {
 
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService = new UserService();
-    private final Map<Method, BiConsumer<HttpRequest, HttpResponse>> handlers = Map.of(
+    private final Map<Method, BiConsumerThrowable<HttpRequest, HttpResponse>> handlers = Map.of(
             Method.GET, this::doGet,
             Method.POST, this::doPost
     );
@@ -32,7 +32,7 @@ public class UserController implements Controller {
     }
 
     private void doPost(HttpRequest request, HttpResponse response) {
-        UserInfoDTO userInfo = UserInfoDTO.of(request.getParameters("userId", "password", "name", "email"));
+        UserInfoDTO userInfo = UserInfoDTO.of(request.getParameters(USER_ID, PASSWORD, NAME, EMAIL));
         userService.signIn(userInfo);
         response.redirect(DOMAIN);
     }
