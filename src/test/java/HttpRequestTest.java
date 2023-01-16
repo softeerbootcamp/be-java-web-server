@@ -3,6 +3,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.Map;
 
@@ -55,4 +56,33 @@ public class HttpRequestTest {
         assertEquals("application/json", requestHeader.getHeader("Accept"));
     }
 
+    @DisplayName("Post 회원가입 테스트")
+    @Test
+    public void POST_회원가입_테스트() throws IOException {
+        String input = "POST /user/create HTTP/1.1\n" +
+                        "Host: localhost:8080\n" +
+                        "Content-Length: 69\n" +
+                        "Content-Type: application/x-www-form-urlencoded\n" +
+                        "Accept: text/html,application/xhtml+xml,application/xml;q=0.9," +
+                        "image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9\n" +
+                        "\n" +
+                        "userId=askldnf&password=lskandf&name=rlkasndfl&email=ksadnf%40askndlf";
+        BufferedReader br = new BufferedReader(new StringReader(input));
+        HttpRequest request = HttpRequest.from(br);
+        RequestLine requestLine = request.getRequestLine();
+        Uri uri = requestLine.getUri();
+
+        assertEquals(Method.POST, requestLine.getMethod());
+        assertEquals("/user/create", uri.getPath());
+        assertEquals("HTTP/1.1", requestLine.getVersion());
+
+        Map<String, String> requestBody = request.getRequestBody();
+        assertEquals("askldnf", requestBody.get("userId"));
+        assertEquals("lskandf", requestBody.get("password"));
+        assertEquals("rlkasndfl", requestBody.get("name"));
+        assertEquals("ksadnf@askndlf", requestBody.get("email"));
+
+        RequestHeader requestHeader = request.getRequestHeader();
+        assertEquals("69", requestHeader.getHeader("Content-Length"));
+    }
 }
