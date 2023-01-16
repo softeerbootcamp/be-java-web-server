@@ -37,9 +37,10 @@ public class SignUpControllerTest {
                 "name", "sol",
                 "email", "sol@sol.com");
         HttpRequest request = new HttpRequest(
-                HttpMethod.GET,
-                new URI("/user/create", user),
-                new HttpHeaders());
+                HttpMethod.POST,
+                new URI("/user/create", Map.of()),
+                new HttpHeaders(),
+                user);
         HttpResponse response = new HttpResponse(mockDos);
 
         // when
@@ -55,7 +56,7 @@ public class SignUpControllerTest {
     }
 
     @Test
-    @DisplayName("execute() - 지원하지 않는 메서드(POST) 테스트")
+    @DisplayName("execute() - 지원하지 않는 메서드(GET) 테스트")
     void signUpToNotAllowMethod() {
         // given
         SignUpController controller = new SignUpController();
@@ -65,7 +66,7 @@ public class SignUpControllerTest {
                 "name", "sol",
                 "email", "sol@sol.com");
         HttpRequest request = new HttpRequest(
-                HttpMethod.POST,
+                HttpMethod.GET,
                 new URI("/user/create", user),
                 new HttpHeaders());
         HttpResponse response = new HttpResponse(mockDos);
