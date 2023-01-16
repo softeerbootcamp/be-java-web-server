@@ -34,6 +34,8 @@ public class RequestParser {
     {
         Map<String, String> parsedRequestLine = new HashMap<String, String>();
 
+        logger.debug(currentLine);
+
         String tokens[] = currentLine.split(" ");
         parsedRequestLine.put(Request.METHOD, tokens[0]);
         parsedRequestLine.put(Request.QUERY, tokens[1].equals("/") ?
@@ -50,6 +52,7 @@ public class RequestParser {
 
         while(!currentLine.isBlank())
         {
+            logger.debug(currentLine);
             String keyVal[] = currentLine.split(": ");
             parsedHeader.put(keyVal[0], keyVal[1]);
 
@@ -62,19 +65,17 @@ public class RequestParser {
     {
         String parsedBody = new String();
         try{
+            StringBuilder sb = new StringBuilder();
             while(br.ready())
             {
-                currentLine = br.readLine();
-                if(currentLine == null) break;
-
-                parsedBody.concat(currentLine);
+                sb.append(((char) br.read()));
             }
+            parsedBody = sb.toString();
         } catch(Exception e)
         {
             e.printStackTrace();
         }finally {
-            System.out.println(parsedBody);
-            return parsedBody;
+            return URLDecoder.decode(parsedBody);
         }
     }
 }

@@ -3,8 +3,6 @@ package webserver.controller;
 import customException.AlreadyHasSameIdException;
 import db.Database;
 import model.User;
-import webserver.Paths;
-import webserver.controller.Controller;
 import webserver.httpUtils.Request;
 import webserver.httpUtils.Response;
 import webserver.httpUtils.ResponseHandler;
