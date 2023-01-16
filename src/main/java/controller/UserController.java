@@ -29,11 +29,11 @@ public class UserController implements Controller {
     }
 
     private void doGet(HttpRequest request, HttpResponse response) {
-        UserInfoDTO userInfo = UserInfoDTO.of(request.getParameters("userId", "password", "name", "email"));
-        userService.signIn(userInfo);
-        response.redirect(DOMAIN);
     }
 
     private void doPost(HttpRequest request, HttpResponse response) {
+        UserInfoDTO userInfo = UserInfoDTO.of(request.getParameters("userId", "password", "name", "email"));
+        userService.signIn(userInfo);
+        response.redirect(DOMAIN);
     }
 }
