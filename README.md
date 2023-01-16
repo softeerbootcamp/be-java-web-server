@@ -58,6 +58,7 @@ Java Web Application Server 2022
 * 쿠키는 클라이언트가 매 요청마다 서버로 전송해야 하는 정보를 파일의 형태로 기록한 것
 * 쿠키 생성의 주체는 서버로, response header에 Set-Cookie라는 항목에 key-value 값을 넣어 해당 값으로 쿠키를 생성하라고 클라이언트에게 지시함 
     * 이후, 클라이언트는 생성한 쿠키를 매 요청마다 request header에 Cookie라는 항목에 첨부해 서버로 전송함
+    * 쿠키는 주로 브라우저에 의해 저장되고 관리됨(주로 SQLite 사용)
 * 세션의 경우, 클라이언트와 서버 간의 논리적 연결
     * 세션은 서버와 연결된 클라이언트 수 만큼 생성됨 
     * 세션을 이용해 stateless한 http 프로토콜을 stateful한 것처럼 보이게 할 수 있음
