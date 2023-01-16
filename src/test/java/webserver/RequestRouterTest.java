@@ -5,7 +5,6 @@ import httpMock.CustomHttpRequest;
 import httpMock.CustomHttpResponse;
 import httpMock.constants.ContentType;
 import httpMock.constants.StatusCode;
-import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import service.StaticFileService;
