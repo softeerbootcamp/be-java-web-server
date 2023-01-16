@@ -28,15 +28,20 @@ public class HttpRequestUtils {
         requestLine = br.readLine();
         logger.info(requestLine);  //print out http request line
 
-        //Store Http Request header into HashMap
-        String line = br.readLine();
-        while(!line.equals("")){
-            header += line + '\n';
-            logger.info(line);  //print out http header
-            line = br.readLine();
+        //Store Http Request header
+        String headerLine = br.readLine();
+        while(!headerLine.equals("")){
+            header += headerLine + '\n';
+            logger.info(headerLine);  //print out http header
+            headerLine = br.readLine();
         }
 
-        return Request.of(requestLine, header);  //make a Request instance using static factory method
+        br.readLine(); // to leave out a one-line spacing between http header and body
+
+        //Store Http Request body
+        String bodyLine = br.readLine();
+
+        return Request.of(requestLine, headerLine, bodyLine);  //make a Request instance using static factory method
     }
 
     public static Map<String, String> parseQueryString(String queryString) {
