@@ -1,5 +1,6 @@
 package httpMock;
 
+import httpMock.constants.HttpMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +15,7 @@ public class CustomHttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(CustomHttpRequest.class);
     private Map<String, String> requestParams;
     private Map<String, List<String>> requestHeaders;
-    private String httpMethod;
+    private HttpMethod httpMethod;
     private String protocolVersion;
     private String url;
 
@@ -55,7 +56,7 @@ public class CustomHttpRequest {
         if (firstLineDatas[1].equals("/") || firstLineDatas[1].equals(""))
             firstLineDatas[1] = "/index.html";
 
-        this.httpMethod = firstLineDatas[0];
+        this.httpMethod = HttpMethod.valueOf(firstLineDatas[0]);
         this.url = java.net.URLDecoder.decode(firstLineDatas[1], StandardCharsets.UTF_8);
         this.protocolVersion = firstLineDatas[2];
     }
