@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import service.UserService;
 
 import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -26,9 +27,9 @@ class UserAccountControllerTest {
         UserService.addUser(new User("asdf", "asdfasdf123", "asdf", "asdfasdf@asdf.com"));
 
         CustomHttpRequest req = CustomHttpRequest.of(
-                "GET /user/create?userId=asdf&password=123123&email=asdfasdf@asdf.com HTTP/1.1",
+                "GET /user/create HTTP/1.1",
                 Collections.EMPTY_LIST,
-                Collections.EMPTY_LIST
+                List.of("userId=asdf&password=123123&email=asdfasdf@asdf.com")
         );
 
         CustomHttpResponse res = userAccountController.makeAccount(req);
