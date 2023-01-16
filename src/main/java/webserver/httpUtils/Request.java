@@ -12,7 +12,7 @@ public class Request {
 
     private Map<String, String> reqLine;
     private Map<String, String> reqHeader;
-    private List<String> reqBody;
+    private String reqBody;
 
     Request(){
         reqLine = new HashMap<String, String>();
@@ -35,11 +35,11 @@ public class Request {
         this.reqHeader = reqHeader;
     }
 
-    public List<String> getReqBody() {
+    public String getReqBody() {
         return reqBody;
     }
 
-    public void setReqBody(List<String> reqBody) {
+    public void setReqBody(String reqBody) {
         this.reqBody = reqBody;
     }
     // endregion

@@ -1,11 +1,10 @@
 package webserver.httpUtils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import webserver.Paths;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +14,7 @@ import java.net.URLDecoder;
 
 public class RequestParser {
 
+    private static final Logger logger = LoggerFactory.getLogger(RequestParser.class);
     private String currentLine;
 
     public RequestParser(){currentLine = new String();}
@@ -25,14 +25,14 @@ public class RequestParser {
         currentLine = br.readLine();
 
         Request req = new Request();
-        req.setReqLine(parseRequestLine()); currentLine = br.readLine();
+        req.setReqLine(parseRequestLine(br));
         req.setReqHeader(getHeaderKeyValues(br));
-        // req.setReqBody(getBody(br)); NPE 때문에 안되는 듯?
+        req.setReqBody(getBody(br));
 
         return req;
     }
 
-    private Map<String, String> parseRequestLine()
+    private Map<String, String> parseRequestLine(BufferedReader br) throws IOException
     {
         Map<String, String> parsedRequestLine = new HashMap<String, String>();
 
@@ -42,29 +42,41 @@ public class RequestParser {
                 Paths.HOME_PATH :
                 URLDecoder.decode(tokens[1]));
         parsedRequestLine.put(Request.VERSION, tokens[2]);
-
+        currentLine = br.readLine();
         return parsedRequestLine;
     }
 
-    private Map<String, String> getHeaderKeyValues(BufferedReader br) throws IOException{
-        Map<String, String> ret = new HashMap<String, String>();
+    private Map<String, String> getHeaderKeyValues(BufferedReader br) throws IOException
+    {
+        Map<String, String> parsedHeader = new HashMap<String, String>();
 
         while(!currentLine.isBlank())
         {
             String keyVal[] = currentLine.split(": ");
-            ret.put(keyVal[0], keyVal[1]);
+            parsedHeader.put(keyVal[0], keyVal[1]);
 
             currentLine = br.readLine();
         }
-        return ret;
+        return parsedHeader;
     }
 
-    private List<String> getBody(BufferedReader br) throws IOException {
-        List<String> ret = new ArrayList<String>();
-        while((currentLine=br.readLine()) != null)
+    private String getBody(BufferedReader br) throws IOException
+    {
+        String parsedBody = new String();
+        try{
+            while(br.ready())
+            {
+                currentLine = br.readLine();
+                if(currentLine == null) break;
+
+                parsedBody.concat(currentLine);
+            }
+        } catch(Exception e)
         {
-            ret.add(currentLine);
+            e.printStackTrace();
+        }finally {
+            System.out.println(parsedBody);
+            return parsedBody;
         }
-        return ret;
     }
 }
