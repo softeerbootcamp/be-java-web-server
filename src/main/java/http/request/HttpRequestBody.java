@@ -11,6 +11,11 @@ public class HttpRequestBody {
         this.parameter = parameter;
     }
 
+    public static HttpRequestBody createEmptyRequestBody() {
+        Parameter emptyParam = Parameter.createEmptyParam();
+        return new HttpRequestBody(emptyParam);
+    }
+
     public static HttpRequestBody createRequestBody(String queryString) {
         Parameter param = Parameter.createParam(queryString);
         return new HttpRequestBody(param);
