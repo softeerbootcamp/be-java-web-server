@@ -9,23 +9,30 @@ import java.util.Map;
 
 public class ServletController {
 
-    private final Map<String, Class<? extends Servlet>> controller;
+    /*
+    *  TODO :
+    *   정적 팩토리 메서드에서 멤버 변수를 controller static 으로 구현하는게 어색한데, 왜일까..?
+    * */
 
-    public ServletController() {
+    private static Map<String, Class<? extends Servlet>> controller = new HashMap<>();
+    private final Class<? extends Servlet> servlet;
+
+    public ServletController(Class<? extends Servlet> servlet) {
         this.controller = new HashMap<>();
+        this.servlet = servlet;
+    }
+
+    public static ServletController of(String path) {
         controller.put("/user/create", UserCreate.class);
+        return new ServletController(controller.get(path));
     }
 
-    public Class<? extends Servlet> getServlet(String path) {
-        return controller.get(path);
-    }
-
-    public Servlet newInstance(Class<? extends Servlet> servletClass)
+    public Servlet newInstance()
             throws NoSuchMethodException,
             InvocationTargetException,
             InstantiationException,
             IllegalAccessException {
-        Servlet servlet = servletClass.getDeclaredConstructor().newInstance();
-        return servlet;
+        Servlet servletInstance = servlet.getDeclaredConstructor().newInstance();
+        return servletInstance;
     }
 }

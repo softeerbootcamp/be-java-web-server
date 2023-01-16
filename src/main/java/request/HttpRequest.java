@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HttpRequest {
-    private static final String lineSeparator = System.getProperty("line.separator");
+    private static final String lineSeparator = System.lineSeparator();
     // 개행 문자 구분
 
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
@@ -25,13 +25,9 @@ public class HttpRequest {
 
     public static HttpRequest of(BufferedReader br) throws IOException {
         String line = br.readLine();
-
         RequestStartLine requestLine = RequestStartLine.of(line);
-
         logger.debug("Request Line : {}{}{}", lineSeparator, line, lineSeparator);
-
         StringBuilder header = new StringBuilder();
-
         while (!line.equals("")) {
             line = br.readLine();
             header.append(line);
