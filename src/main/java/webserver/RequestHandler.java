@@ -1,6 +1,5 @@
 package webserver;
 
-import customException.AlreadyHasSameIdException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.httpUtils.Request;
@@ -33,21 +32,21 @@ public class RequestHandler implements Runnable {
 
             reqParser = new RequestParser();
             req = reqParser.parseRequestFromInputStream(in); // parse to reqline, header, body
-            String reqQuery = req.getReqLine().get(Request.REQLINE_QUERY);
+            String reqQuery = req.getReqLine().get(Request.QUERY);
 
             ResponseHandler resHandle = new ResponseHandler(new Response());
             if(reqQuery.contains("/create") &&
-               req.getReqLine().get(Request.REQLINE_METHOD).equals("GET"))
+               req.getReqLine().get(Request.METHOD).equals("GET"))
             {
                 // GET 방식의 회원가입 처리
                 req.getReqLine()
-                        .put(Request.REQLINE_QUERY,
+                        .put(Request.QUERY,
                              SignUpController.enrollNewUser(reqQuery));
             }
             // reqLine을 통해 어떤 resLine을 만들지 추론
             resHandle.probeResLine(req.getReqLine());
 
-            resHandle.sendResponse(out, req.getReqLine().get(Request.REQLINE_QUERY));
+            resHandle.sendResponse(out, req.getReqLine().get(Request.QUERY));
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

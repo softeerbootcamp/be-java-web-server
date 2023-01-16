@@ -37,11 +37,11 @@ public class RequestParser {
         Map<String, String> parsedRequestLine = new HashMap<String, String>();
 
         String tokens[] = currentLine.split(" ");
-        parsedRequestLine.put(Request.REQLINE_METHOD, tokens[0]);
-        parsedRequestLine.put(Request.REQLINE_QUERY, tokens[1].equals("/") ?
+        parsedRequestLine.put(Request.METHOD, tokens[0]);
+        parsedRequestLine.put(Request.QUERY, tokens[1].equals("/") ?
                 Paths.HOME_PATH :
                 URLDecoder.decode(tokens[1]));
-        parsedRequestLine.put(Request.REQLINE_VERSION, tokens[2]);
+        parsedRequestLine.put(Request.VERSION, tokens[2]);
 
         return parsedRequestLine;
     }

@@ -76,9 +76,9 @@ public class ResponseHandler {
     }
 
     public void probeResLine(Map<String, String> reqLine) {
-        res.getResLine().put(Response.VERSION, reqLine.get(Request.REQLINE_VERSION));
+        res.getResLine().put(Response.VERSION, reqLine.get(Request.VERSION));
 
-        if (isSignUp(reqLine.get(Request.REQLINE_QUERY))) {
+        if (isSignUp(reqLine.get(Request.QUERY))) {
             res.getResLine().put(Response.CODE, "302");
             res.getResLine().put(Response.TEXT, "FOUND");
             return;

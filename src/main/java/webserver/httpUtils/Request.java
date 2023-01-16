@@ -6,9 +6,9 @@ import java.util.Map;
 
 public class Request {
 
-    public final static String REQLINE_METHOD = "method";
-    public final static String REQLINE_QUERY = "query";
-    public final static String REQLINE_VERSION = "version";
+    public final static String METHOD = "method";
+    public final static String QUERY = "query";
+    public final static String VERSION = "version";
 
     private Map<String, String> reqLine;
     private Map<String, String> reqHeader;
