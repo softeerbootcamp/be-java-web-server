@@ -10,12 +10,8 @@ public class Response {
     public static final String TEXT = "text";
 
     private Map<String, String> resLine; // version, status code, status text
-    private String resHeader;
+    private Map<String, String> resHeader;
     private byte resBody[];
-
-    private String httpVersion;
-    private String statusCode;
-    private String statusText;
 
 
     public Response()
@@ -32,11 +28,11 @@ public class Response {
         this.resLine = resLine;
     }
 
-    public String getResHeader() {
+    public Map<String, String> getResHeader() {
         return resHeader;
     }
 
-    public void setResHeader(String resHeader) {
+    public void setResHeader(Map<String, String> resHeader) {
         this.resHeader = resHeader;
     }
 

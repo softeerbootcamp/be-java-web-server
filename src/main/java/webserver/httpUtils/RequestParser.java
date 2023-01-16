@@ -34,8 +34,6 @@ public class RequestParser {
     {
         Map<String, String> parsedRequestLine = new HashMap<String, String>();
 
-        logger.debug(currentLine);
-
         String tokens[] = currentLine.split(" ");
         parsedRequestLine.put(Request.METHOD, tokens[0]);
         parsedRequestLine.put(Request.QUERY, tokens[1].equals("/") ?
@@ -52,8 +50,8 @@ public class RequestParser {
 
         while(!currentLine.isBlank())
         {
-            logger.debug(currentLine);
-            String keyVal[] = currentLine.split(": ");
+            String keyVal[] = new String[2];
+            keyVal = currentLine.split(": ");
             parsedHeader.put(keyVal[0], keyVal[1]);
 
             currentLine = br.readLine();

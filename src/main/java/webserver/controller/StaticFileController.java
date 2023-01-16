@@ -17,8 +17,6 @@ public class StaticFileController implements Controller{
         resHandler = new ResponseHandler(res);
 
 
-        resHandler.probeResLine(req.getReqLine());
-
-        resHandler.sendResponse(out, req.getReqLine().get(Request.QUERY));
+        resHandler.makeAndSendRes(out, req.getReqLine());
     }
 }

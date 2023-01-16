@@ -9,74 +9,28 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.Map;
 
 public class ResponseHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(Response.class);
+    private static final Logger logger = LoggerFactory.getLogger(ResponseHandler.class);
 
-    private ResponseHandler instance;
     private Response res;
     public ResponseHandler(Response res) {
         this.res = res;
     }
 
-    public void sendResponse(OutputStream out, String reqQuery) throws IOException {
+    public void makeAndSendRes(OutputStream out, Map<String, String> reqLine) throws IOException {
         DataOutputStream dos = new DataOutputStream(out);
 
-        responseHeader(dos, reqQuery);
-        responseBody(dos, res.getResBody());
+        makeResponseLine(reqLine);
+        makeHeaderAndBody(reqLine);
+
+        sendRes(dos);
     }
 
-    private void responseHeader(DataOutputStream dos, String reqQuery) throws IOException {
-        if (res.getResLine().get(Response.CODE).equals("302")) {
-            response302Header(dos);
-            logger.debug("302");
-            return;
-        }
-
-        String contentType = Files.probeContentType(new File(reqQuery).toPath());
-        res.setResBody(Byte.urlToByte(reqQuery));
-        response200Header(dos, res.getResBody().length, contentType);
-    }
-
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
-        try {
-            dos.writeBytes(res.getResLine().get(Response.VERSION) + " " +
-                    res.getResLine().get(Response.CODE) + " " +
-                    res.getResLine().get(Response.TEXT) + "\r\n");
-            dos.writeBytes("Content-Type: " + contentType + ";charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response302Header(DataOutputStream dos) {
-        try {
-            dos.writeBytes(res.getResLine().get(Response.VERSION) + " " +
-                    res.getResLine().get(Response.CODE) + " " +
-                    res.getResLine().get(Response.TEXT) + "\r\n");
-            dos.writeBytes("Location: " + Paths.HOME_PATH + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        } catch (NullPointerException e) {
-            logger.debug("body가 null");
-        }
-    }
-
-    public void probeResLine(Map<String, String> reqLine) {
+    private void makeResponseLine(Map<String, String> reqLine) {
         res.getResLine().put(Response.VERSION, reqLine.get(Request.VERSION));
 
         if (isSignUp(reqLine.get(Request.QUERY))) {
@@ -87,6 +41,47 @@ public class ResponseHandler {
         res.getResLine().put(Response.CODE, "200");
         res.getResLine().put(Response.TEXT, "OK");
     }
+
+    private void makeHeaderAndBody(Map<String, String> reqLine) throws IOException {
+        String reqQuery = reqLine.get(Request.QUERY);
+        res.setResBody(Byte.urlToByte(reqQuery));
+        Map<String, String> header = new HashMap<>();
+
+        if(res.getResLine().get(Response.CODE).equals("302"))
+        {
+            header.put("Location: ", Paths.HOME_PATH);
+            return;
+        }
+
+        String contentType = Files.probeContentType(new File(reqQuery).toPath());
+        header.put("Content-Type: ", contentType + ";charset=utf-8");
+        header.put("Content-Length: " , Integer.toString(res.getResBody().length));
+        res.setResHeader(header);
+    }
+
+    private void sendRes(DataOutputStream dos) throws IOException
+    {
+        // resline
+        dos.writeBytes(res.getResLine().get(Response.VERSION) + " " +
+                res.getResLine().get(Response.CODE) + " " +
+                res.getResLine().get(Response.TEXT) + "\r\n");
+        // header
+        res.getResHeader().entrySet().forEach(elem ->
+                {
+                    logger.debug(elem.getKey() + elem.getValue());
+                    try {
+                        dos.writeBytes(elem.getKey() + elem.getValue() + "\r\n");
+                    } catch (IOException e) {
+                        logger.error(e.getMessage());
+                    }
+                }
+        );
+        dos.writeBytes("\r\n");
+        // body
+        dos.write(res.getResBody(), 0, res.getResBody().length);
+        dos.flush();
+    }
+
 
     private boolean isSignUp(String query) {
         if (query.contains("create?")) return true;

@@ -28,23 +28,15 @@ public class SignUpController implements Controller {
         UserInfo = getUserInfoFromString(req.getReqBody());
 
         try{
-            if(null != Database.findUserById(UserInfo.get(USER_ID)))
-            // 이미 데이터베이스에 같은 이름의 아이디가 있는 경우
-            {
-                throw new AlreadyHasSameIdException("이미 같은 아이디의 유저가 있습니다.");
-            }
+            checkDuplicateID(UserInfo);
             User newUser = new User(UserInfo.get(USER_ID), UserInfo.get(USER_PassWord), UserInfo.get(USER_Name), UserInfo.get(USER_Email));
             Database.addUser(newUser);
         } catch(AlreadyHasSameIdException e) {
             //unparsedInfo = Paths.ENROLL_FAIL_PATH;
         }
 
-
-            resHandler.probeResLine(req.getReqLine());
-
-            resHandler.sendResponse(out, req.getReqLine().get(Request.QUERY));
+        resHandler.makeAndSendRes(out, req.getReqLine());
     }
-
 
     private static HashMap<String, String> getUserInfoFromString(String str)
     {
@@ -56,5 +48,12 @@ public class SignUpController implements Controller {
             userInfo.put(splitToken[0], splitToken[1]);
         }
         return userInfo;
+    }
+
+    private void checkDuplicateID(Map<String, String> UserInfo) {
+        if (null != Database.findUserById(UserInfo.get(USER_ID)))
+        {
+            throw new AlreadyHasSameIdException("이미 같은 아이디의 유저가 있습니다.");
+        }
     }
 }
