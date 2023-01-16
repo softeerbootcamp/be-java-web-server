@@ -1,6 +1,7 @@
 package service;
 
 import db.Database;
+import exception.UserValidationException;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,10 +13,18 @@ public class UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public void signUp(Map<String, String> userInfo) {
+        validateDuplication(userInfo.get("userId"));
+
         User user = createUser(userInfo);
         logger.debug("user : {}", user);
 
         Database.addUser(user);
+    }
+
+    private void validateDuplication(String userId) {
+        if (Database.findUserById(userId) != null) {
+            throw new UserValidationException("중복되는 아이디입니다.");
+        }
     }
 
     private User createUser(Map<String, String> userInfo) {
