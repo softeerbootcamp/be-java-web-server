@@ -1,10 +1,14 @@
 package util;
+
 import Controller.Controller;
-import Controller.UserController;
 import Controller.StaticResourceController;
+import Controller.UserController;
+import exception.ControllerNotFoundException;
 import http.request.HttpRequest;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
+
 public class ControllerMapper {
     private static final Map<String, Controller> controllerMap = new LinkedHashMap<>();
 
@@ -24,6 +28,6 @@ public class ControllerMapper {
             }
         }
 
-        throw new IllegalArgumentException();
+        throw new ControllerNotFoundException("요청에 해당되는 컨트롤러가 없습니다.");
     }
 }
