@@ -14,7 +14,7 @@ public enum HttpMethod {
             HttpRequestParams httpRequestParams;
             try {
                 String query = FileIoUtil.splitQuery(httpRequestStartLine.getPath());
-                httpRequestParams = HttpRequestParams.of(query);
+                httpRequestParams = HttpRequestParams.from(query);
             } catch (RuntimeException e) {
                 httpRequestParams = new HttpRequestParams(new HashMap<>());
             }
@@ -28,7 +28,7 @@ public enum HttpMethod {
             HttpRequestHeaders httpRequestHeaders = HttpRequestHeaders.from(br);
             int length = Integer.parseInt(httpRequestHeaders.getHeaders().get("Content-Length"));
             String data = FileIoUtil.readBuffer(br, length);
-            HttpRequestParams httpRequestParams = HttpRequestParams.of(data);
+            HttpRequestParams httpRequestParams = HttpRequestParams.from(data);
             return new HttpRequest(httpRequestStartLine, httpRequestParams, httpRequestHeaders);
         }
     };
