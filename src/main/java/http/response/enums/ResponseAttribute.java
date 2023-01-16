@@ -5,13 +5,13 @@ public enum ResponseAttribute {
     CONTENT_LENGTH("Content-Length"),
     LOCATION("Location");
 
-    private String attribute;
+    private String value;
 
-    ResponseAttribute(String attribute) {
-        this.attribute = attribute;
+    ResponseAttribute(String value) {
+        this.value = value;
     }
 
-    public String getAttribute() {
-        return attribute;
+    public String getValue() {
+        return value;
     }
 }

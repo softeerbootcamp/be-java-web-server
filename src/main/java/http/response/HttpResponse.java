@@ -17,7 +17,7 @@ public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
     private ResponseStartLine startLine = new ResponseStartLine();
     private Header header = new Header();
-    private Body body = new Body();
+    private Body body = new Body(new byte[0]);
     private DataOutputStream out;
 
     public HttpResponse(DataOutputStream out) {
@@ -59,11 +59,11 @@ public class HttpResponse {
     }
 
     private void assembleBody() throws IOException {
-        out.write(body.getBody(), 0, body.getBody().length);
+        out.write(body.getData(), 0, body.getData().length);
     }
 
     public void redirect(String redirectUrl) {
-        startLine.setStatus(Status.REDIRECT);
+        startLine.setStatus(Status.FOUND);
         header.setAttribute(LOCATION, redirectUrl);
         body.clear();
         send();
