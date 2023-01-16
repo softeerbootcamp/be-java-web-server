@@ -23,6 +23,12 @@ public class HttpResponse {
         addHttpHeader("Content-Type", request.getHttpHeader("Accept"));
     }
 
+    public void redirect(HttpRequest request, String redirectUrl) {
+        setHttpStatusLine(request, HttpStatusCode.FOUND);
+        addHttpHeader("Location", redirectUrl);
+        setEmptyBody();
+    }
+
     public void setHttpStatusLine(HttpRequest request, HttpStatusCode statusCode) {
         this.httpStatusLine = HttpStatusLine.of(request.getHttpVersion(), statusCode);
     }
@@ -37,14 +43,20 @@ public class HttpResponse {
         httpHeader.addHeader(name, value);
     }
 
-    public void setBody(String viewPath) throws IOException {
-        byte[] body = new byte[0];
+    public void setEmptyBody() {
+        this.body = new byte[0];
+    }
+
+    public void makeBodyMessage(String viewPath) throws IOException {
         File file = new File(viewPath);
         if (file.exists() && file.isFile()) {
-            body = Files.readAllBytes(file.toPath());
+            this.body = Files.readAllBytes(file.toPath());
         }
 
-        this.body = body;
+        if (this.body == null) {
+            throw new IllegalArgumentException();
+        }
+
         addHttpHeader("Content-Length", String.valueOf(body.length));
     }
 
@@ -64,7 +76,4 @@ public class HttpResponse {
         }
     }
 
-    public HttpStatusCode getStatusCode() {
-        return httpStatusLine.getStatusCode();
-    }
 }
