@@ -61,4 +61,15 @@ public class HttpRequestUtils {
     }
 
 
+    public static String readBody(BufferedReader br, HttpHeader header) throws IOException {
+        String requestBody = readData(br, Integer.parseInt(header.getContentLength()));
+        logger.debug("Request Body : {}", requestBody);
+        return requestBody;
+    }
+
+    public static String readData(BufferedReader br, int contentLength) throws IOException{
+        char[] body = new char[contentLength];
+        br.read(body, 0, contentLength);
+        return String.copyValueOf(body);
+    }
 }

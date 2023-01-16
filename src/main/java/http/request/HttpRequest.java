@@ -12,12 +12,14 @@ public class HttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
     private HttpRequestLine httpRequestLine;
     private HttpHeader httpHeader;
+    private String body;
 
     public HttpRequest(BufferedReader br) throws IOException {
         String line = br.readLine();
         if (line == null) return;
         this.httpRequestLine = HttpRequestUtils.readRequestLine(line);
         this.httpHeader = HttpRequestUtils.readHeaders(br);
+        if(httpRequestLine.getHttpMethod().equals("POST")) this.body = HttpRequestUtils.readBody(br, httpHeader);
     }
 
     public String getUri() {
@@ -41,4 +43,11 @@ public class HttpRequest {
         return httpRequestLine.getHttpVersion();
     }
 
+    public boolean isPost() {
+        return this.httpRequestLine.getHttpMethod().equals("POST");
+    }
+
+    public String getBody(){
+        return this.body;
+    }
 }

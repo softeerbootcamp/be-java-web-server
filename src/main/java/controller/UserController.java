@@ -25,7 +25,7 @@ public class UserController implements Controller {
         // 회원가입일 때
         if (isSignUpService(uri)) {
             // user 정보 받아서 데이터베이스에 입력
-            Database.addUser(SignUpService.makeUserInfo(uri));
+            Database.addUser(SignUpService.makeUserInfo(httpRequest.getBody()));
             // 302 응답이라 location만 필요하기 때문에 body랑 contentType는 없음!
             return new HttpResponse(new HttpStatusLine(HttpStatus.FOUND, httpRequest.getHttpVersion()), null, null);
         }
