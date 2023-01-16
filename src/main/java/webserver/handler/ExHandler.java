@@ -7,7 +7,7 @@ import webserver.domain.HttpResponseMessage;
 public class ExHandler implements ControllerHandler{
 
     @Override
-    public HttpResponseMessage handle() {
+    public HttpResponseMessage handle(HttpRequest httpRequest) {
         HttpResponse httpResponse = new HttpResponse();
         return new HttpResponseMessage(httpResponse.sendRedirect("/index.html"), httpResponse.getBody());
     }

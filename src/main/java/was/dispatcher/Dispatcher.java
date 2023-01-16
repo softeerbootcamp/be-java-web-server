@@ -10,14 +10,9 @@ import webserver.domain.HttpResponseMessage;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 public class Dispatcher implements ControllerHandler{
-    private HttpRequest httpRequest;
-
-    public Dispatcher(HttpRequest httpRequest) {
-        this.httpRequest = httpRequest;
-    }
 
     @Override
-    public HttpResponseMessage handle() {
+    public HttpResponseMessage handle(HttpRequest httpRequest) {
         Controller controller = new UserController();
         String path = httpRequest.getRequestLine().getUrl();
         /*
@@ -27,9 +22,9 @@ public class Dispatcher implements ControllerHandler{
         if (path.contains("user")) {
             controller = new UserController();
         }
-        return dispatch(controller, path);
+        return dispatch(httpRequest, controller, path);
     }
-    public HttpResponseMessage dispatch(Controller controller, String path) {
+    public HttpResponseMessage dispatch(HttpRequest httpRequest, Controller controller, String path) {
         Method[] methods = controller.getClass().getDeclaredMethods();
         for (Method method : methods) {
             Annotation annotation = method.getAnnotation(GetMapping.class);
