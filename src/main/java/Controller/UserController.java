@@ -1,6 +1,7 @@
 package Controller;
 
 import exception.UrlNotFoundException;
+import exception.UserValidationException;
 import http.request.HttpMethod;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -19,16 +20,21 @@ public class UserController implements Controller {
         String path = url.split(PREFIX)[1];
 
         if (path.startsWith("/create") && request.getMethod() == HttpMethod.POST) {
-            String body = request.getBody();
+            try {
+                String body = request.getBody();
 
-            Map<String, String> userInfo = HttpRequestUtils.parseBodyMessage(body);
+                Map<String, String> userInfo = HttpRequestUtils.parseBodyMessage(body);
 
-            UserService userService = new UserService();
-            userService.signUp(userInfo);
+                UserService userService = new UserService();
+                userService.signUp(userInfo);
 
-            response.redirect(request, "/index.html");
+                response.redirect(request, "/index.html");
 
-            return "";
+                return "";
+            } catch (UserValidationException e) {
+                response.redirect(request, "/user/form_failed.html");
+                return "";
+            }
         }
 
         throw new UrlNotFoundException("잘못된 URL 요청입니다.");
