@@ -3,6 +3,7 @@ package webserver.handler;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import webserver.domain.HttpRequest;
+import webserver.domain.HttpRequestMessage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +17,7 @@ class ControllerHandlerFactoryTest {
         headers.put("HOST", "www.test01.com");
 
 
-        ControllerHandler controllerHandler = ControllerHandlerFactory.getHandler(HttpRequest.newInstance(headers));
+        ControllerHandler controllerHandler = ControllerHandlerFactory.getHandler(HttpRequest.newInstance(new HttpRequestMessage(headers, null)));
         Assertions.assertThat(controllerHandler).isInstanceOf(QueryStringHandler.class);
     }
     @Test
@@ -26,7 +27,7 @@ class ControllerHandlerFactoryTest {
         headers.put("HOST", "www.test01.com");
 
 
-        ControllerHandler controllerHandler = ControllerHandlerFactory.getHandler(HttpRequest.newInstance(headers));
+        ControllerHandler controllerHandler = ControllerHandlerFactory.getHandler(HttpRequest.newInstance(new HttpRequestMessage(headers, null)));
         Assertions.assertThat(controllerHandler).isInstanceOf(StaticHandler.class);
     }
 }

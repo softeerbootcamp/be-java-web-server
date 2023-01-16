@@ -12,8 +12,7 @@ public class ControllerHandlerFactory {
             return new QueryStringHandler(httpRequest);
         }
         if (httpMethod == HttpMethod.POST) {
-            //return new Dispatcher(httpRequest);
-            return new ExHandler();
+            return new Dispatcher(httpRequest);
         }
         return new StaticHandler(httpRequest);
     }

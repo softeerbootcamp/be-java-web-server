@@ -31,14 +31,10 @@ public class HttpParser {
         Map<String, String> body = new HashMap<>();
         if (header.get(REQUEST_LINE).contains("POST")) {
             int contentLength = Integer.valueOf(header.get("Content-Length"));
-            System.out.println("contentLength = " + contentLength);
             char[] data = new char[contentLength];
             br.read(data, 0, contentLength);
             String line = String.valueOf(data);
-            System.out.println(line);
-        }
-        for (String s : body.keySet()) {
-            System.out.println(s +" : " + body.get(s));
+            body = parseQueryString(line);
         }
         return new HttpRequestMessage(header, body);
     }

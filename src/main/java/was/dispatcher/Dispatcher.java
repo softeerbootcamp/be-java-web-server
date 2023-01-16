@@ -20,6 +20,10 @@ public class Dispatcher implements ControllerHandler{
     public HttpResponseMessage handle() {
         Controller controller = new UserController();
         String path = httpRequest.getRequestLine().getUrl();
+        /*
+        for (String s : httpRequest.getBody().keySet()) {
+            System.out.println(s + " : " + httpRequest.getBody().get(s));
+        }*/
         if (path.contains("user")) {
             controller = new UserController();
         }
@@ -37,7 +41,6 @@ public class Dispatcher implements ControllerHandler{
             parameter[0] = httpRequest;
             if (path.equals(getMapping.value())) {
                 try{
-                    System.out.println("여기까진 오나?");
                     return (HttpResponseMessage) method.invoke(controller, parameter);
                 } catch (Exception e) {
                     e.printStackTrace();
