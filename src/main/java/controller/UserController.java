@@ -37,15 +37,14 @@ public class UserController implements Controller {
     public HttpResponse doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         Map<String, String> query = httpRequest.getQuery();
         userService.join(createUser(query));
-        httpResponse.redirect();
+        httpResponse.redirectHome();
         return httpResponse;
     }
 
     public HttpResponse doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        logger.debug(httpRequest.getRequestBody());
         Map<String, String> params = FileIoUtils.parseQueryString(httpRequest.getRequestBody());
         userService.join(createUser(params));
-        httpResponse.redirect();
+        httpResponse.redirectHome();
         return httpResponse;
     }
 

@@ -36,6 +36,10 @@ public class HttpResponse {
         this.body.setBody(body);
     }
 
+    public void setCookie(int sid) {
+        this.headers.addHeader("Set-Cookie", String.valueOf(sid).concat("; Path=/"));
+    }
+
     public String getHeaderMessage() {
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("%s %s \r\n", this.version, this.statusCode));
@@ -44,8 +48,13 @@ public class HttpResponse {
         return sb.toString();
     }
 
-    public void redirect() {
+    public void redirectHome() {
         this.statusCode = StatusCode.FOUND;
         headers.addHeader("Location", "/index.html");
+    }
+
+    public void redirectLogin() {
+        this.statusCode = StatusCode.FOUND;
+        headers.addHeader("Location", "/user/login_failed.html");
     }
 }
