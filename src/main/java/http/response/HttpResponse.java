@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 
@@ -54,7 +55,7 @@ public class HttpResponse {
         }
 
         if (this.body == null) {
-            throw new IllegalArgumentException();
+            throw new FileNotFoundException();
         }
 
         addHttpHeader("Content-Length", String.valueOf(body.length));
