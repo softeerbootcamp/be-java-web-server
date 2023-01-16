@@ -43,15 +43,16 @@ public class ResponseHandler {
     }
 
     private void makeHeaderAndBody(Map<String, String> reqLine) throws IOException {
-        String reqQuery = reqLine.get(Request.QUERY);
-        res.setResBody(Byte.urlToByte(reqQuery));
         Map<String, String> header = new HashMap<>();
-
         if(res.getResLine().get(Response.CODE).equals("302"))
         {
             header.put("Location: ", Paths.HOME_PATH);
+            res.setResHeader(header);
             return;
         }
+
+        String reqQuery = reqLine.get(Request.QUERY);
+        res.setResBody(Byte.urlToByte(reqQuery));
 
         String contentType = Files.probeContentType(new File(reqQuery).toPath());
         header.put("Content-Type: ", contentType + ";charset=utf-8");
@@ -78,13 +79,14 @@ public class ResponseHandler {
         );
         dos.writeBytes("\r\n");
         // body
-        dos.write(res.getResBody(), 0, res.getResBody().length);
+        if(res.getResBody() != null)
+            dos.write(res.getResBody(), 0, res.getResBody().length);
         dos.flush();
     }
 
 
     private boolean isSignUp(String query) {
-        if (query.contains("create?")) return true;
+        if (query.contains("create")) return true;
         return false;
     }
 }
