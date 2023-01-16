@@ -1,5 +1,7 @@
 package httpMock.constants;
 
+import httpMock.CustomHttpResponse;
+
 import java.util.List;
 
 public enum ContentType {
@@ -29,6 +31,6 @@ public enum ContentType {
 
 
     public String getContentType() {
-        return contentType;
+        return contentType + "; charset=" + CustomHttpResponse.CHARSET;
     }
 }
