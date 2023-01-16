@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class ViewController implements Controller {
 
     @Override
-    public HttpResponse doService(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+    public HttpResponse doService(HttpRequest httpRequest) throws IOException {
         RequestLine requestLine = httpRequest.getRequestLine();
         RequestHeader requestHeader = httpRequest.getRequestHeader();
         Uri uri = requestLine.getUri();

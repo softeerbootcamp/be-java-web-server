@@ -11,7 +11,7 @@ public class UserController implements Controller{
 
     private static final String path = "user";
     @Override
-    public HttpResponse doService(HttpRequest httpRequest, HttpResponse httpResponse) {
+    public HttpResponse doService(HttpRequest httpRequest) {
         RequestLine requestLine = httpRequest.getRequestLine();
         Uri uri = requestLine.getUri();
         QueryParameters queryParameters = uri.getQueryParameters();

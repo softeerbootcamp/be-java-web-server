@@ -8,7 +8,7 @@ import java.net.URISyntaxException;
 
 public interface Controller {
 
-    HttpResponse doService(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException;
+    HttpResponse doService(HttpRequest httpRequest) throws IOException, URISyntaxException;
 
     boolean isMatch(HttpRequest httpRequest);
 }
