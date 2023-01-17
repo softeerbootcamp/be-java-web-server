@@ -1,5 +1,7 @@
 package webserver.domain;
 
+import enums.UserEnum;
+import model.User;
 import util.FileFinder;
 
 import java.util.HashMap;
@@ -17,6 +19,12 @@ public class HttpResponse {
     public String unauthorized() {
         return "HTTP/1.1 401 Unauthorized";
     }
+
+    public String sendCookieWithRedirect(User user, String url) {
+        addHeader("Set-Cookie", UserEnum.ID + "=" + user.getUserId());
+        return sendRedirect(url);
+    }
+
     public String sendRedirect(String url) {
         addHeader("Location", url);
         return createRedirectMessage();
