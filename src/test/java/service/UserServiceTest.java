@@ -1,6 +1,7 @@
 package service;
 
 import db.Database;
+import db.SessionDb;
 import exception.DuplicateUserIdException;
 import exception.UserNotFoundException;
 import model.User;
@@ -78,13 +79,8 @@ public class UserServiceTest {
     @DisplayName("유저 로그인 성공 (응답에서 쿠키 구워주는지)")
     void login_success() throws Exception {
         //given
-        User user = new User("11", "22", "abc", "test@test");
-        Database.addUser(user);
-        UserService userService = new UserService();
-
-        //when
-        String body = "userId=11&password=22";
-        String requestMessage = "POST /user/login HTTP/1.1\n"
+        String body = "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
+        String requestMessage = "POST /user/create HTTP/1.1\n"
                 + "Host: localhost:8080\n"
                 + "Connection: keep-alive\n"
                 + "Content-Length: " + body.length() + "\n"
@@ -93,9 +89,27 @@ public class UserServiceTest {
                 + body;
         InputStream inputStream = new ByteArrayInputStream(requestMessage.getBytes());
         Request request = new Request(inputStream);
-        Response response = userService.loginUser(request);
+        UserService userService = new UserService();
+        userService.signUpUser(request);
+
+        //when
+        String body2 = "userId=javajigi&password=password";
+        String requestMessage2 = "POST /user/login HTTP/1.1\n"
+                + "Host: localhost:8080\n"
+                + "Connection: keep-alive\n"
+                + "Content-Length: " + body2.length() + "\n"
+                + "Content-Type: application/x-www-form-urlencoded\n"
+                + "Accept: */*\n\n"
+                + body2;
+        InputStream inputStream2 = new ByteArrayInputStream(requestMessage2.getBytes());
+        Request request2 = new Request(inputStream2);
+        Response response = userService.loginUser(request2);
+
         //then
-        assert response.getHeaders().containsKey("Set-Cookie");
+        String setCookieHeader = response.getHeaders().get("Set-Cookie");
+        User bySession = SessionDb.findBySessionId(response.getHeaders().get("Set-Cookie")).orElseThrow(UserNotFoundException::new);
+
+        assertThat(bySession.getUserId()).isEqualTo("javajigi");
     }
 
     @Test

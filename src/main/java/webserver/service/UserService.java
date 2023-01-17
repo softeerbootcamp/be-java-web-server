@@ -1,6 +1,7 @@
 package webserver.service;
 
 import db.Database;
+import db.SessionDb;
 import exception.UserNotFoundException;
 import model.User;
 import model.request.Request;
@@ -33,7 +34,9 @@ public class UserService {
         boolean isValid = byUser.getPassword().equals(request.getRequestParams().get("password"));
         if (isValid) {
             String sid = String.valueOf(UUID.randomUUID());
-            logger.debug("로그인 성공 user id : {}, sid : {}", byUser.getUserId(), sid);
+            SessionDb.addSession(sid, byUser);
+            logger.debug("로그인 성공 (세션 저장) user id : {}, sid : {}", byUser.getUserId(), sid);
+
             return Response.of(request.getHttpVersion(), FOUND, Map.of("Set-Cookie", "sid=" + sid + "; Path=/",
                     "Location", "/index.html"), new byte[0]);
         }

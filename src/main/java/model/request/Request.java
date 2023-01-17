@@ -57,6 +57,10 @@ public class Request {
         return requestParams;
     }
 
+    public Map<String, String> getHeaders() {
+        return headers;
+    }
+
     public String getHttpVersion() {
         return this.requestLine.getVersion();
     }

@@ -28,6 +28,10 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream()) {
             Request request = new Request(in);
 
+            if (request.getHeaders().containsKey("Cookie")) {
+                logger.debug(">> 쿠키 있어요! {}", request.getHeaders().get("Cookie"));
+            }
+
             Response response = frontServlet.process(request);
 
             ResponseHandler responseHandler = new ResponseHandler(connection);
