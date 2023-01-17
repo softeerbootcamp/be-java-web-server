@@ -10,6 +10,7 @@ import webserver.domain.HttpResponse;
 import webserver.domain.HttpResponseMessage;
 
 import java.util.Map;
+import java.util.UUID;
 
 public class UserController implements Controller{
     private static UserController userController;
@@ -37,8 +38,8 @@ public class UserController implements Controller{
 
         HttpResponse httpResponse = new HttpResponse();
         if (userService.login(user)) {
-            SessionStorage.addSession(Session.createSessionWith(user));
-            return new HttpResponseMessage(httpResponse.sendCookieWithRedirect(user, "/index.html"), httpResponse.getBody());
+            UUID sid = SessionStorage.addSession(Session.createSessionWith(user));
+            return new HttpResponseMessage(httpResponse.sendCookieWithRedirect(sid, "/index.html"), httpResponse.getBody());
         }
         return new HttpResponseMessage(httpResponse.unauthorized(), httpResponse.getBody());
     }

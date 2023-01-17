@@ -8,9 +8,14 @@ import java.util.Map;
 import java.util.UUID;
 
 public class SessionStorage {
-    private static Map<UUID, String> sessions = new HashMap<>();
+    private static Map<UUID, Session> sessions = new HashMap<>();
 
-    public static void addSession(Session session) {
-        sessions.put(session.getSid(), session.getId());
+    public static UUID addSession(Session session) {
+        UUID sid = session.getSid();
+        sessions.put(sid, session);
+        return sid;
+    }
+    public static Session findSessionBy(UUID uuid) {
+        return sessions.get(uuid);
     }
 }
