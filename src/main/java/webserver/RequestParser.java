@@ -1,11 +1,10 @@
 package webserver;
 
-import utils.HttpRequestUtils;
-
 import java.io.*;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class RequestParser {
 
@@ -15,10 +14,12 @@ public class RequestParser {
     public static HttpRequest parseInputStreamToHttpRequest(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in,"UTF-8"));
         RequestStartLine startLine = RequestStartLine.from(br.readLine());
+        System.out.println(startLine.getUrl());
         Map<String,String> headers = parseHeader(br);
-        //System.out.println(headers.entrySet());
+        String cookieHeader = headers.get("Cookie");
+        Map<String,String> cookies = parseCookie(cookieHeader);
         String body = readBody(br,headers);
-        return new HttpRequest(startLine.getMethod(),startLine.getUrl(),startLine.getQueries(),headers,body);
+        return new HttpRequest(startLine.getMethod(),startLine.getUrl(),startLine.getQueries(), cookies, headers,body);
 
     }
 
@@ -32,6 +33,16 @@ public class RequestParser {
             line = br.readLine();
         }
         return headers;
+    }
+
+    private static Map<String,String> parseCookie(String cookieHeader){
+        if (cookieHeader != null) {
+            return Arrays.stream(cookieHeader.split("; "))
+                    .collect(Collectors.toMap(
+                            token -> token.split("=", 2)[0],
+                            token -> token.split("=", 2)[1]));
+        }
+        return new HashMap<>();
     }
 
     private static boolean hasMoreLine(String line) {
