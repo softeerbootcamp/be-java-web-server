@@ -22,8 +22,8 @@ public class ControllerHandler {
 
         // 파일을 원한다면? ex) index.html, /user/form.html, .css, .js
 
-        // .html 파일을 원한다면 - 동적 처리
-        if(httpRequest.wantHtml()){
+        // /index.html, /user/list.html 파일을 원한다면 - 동적 처리
+        if(httpRequest.wantDynamicHtml()){
             String userId = httpRequest.checkLoginStatus();
             // 쿠키 체크 해서 쿠키에 맞는 user 있는지 확인
             if(userId != null){
@@ -34,7 +34,7 @@ public class ControllerHandler {
 
         // 나머지 - 정적 처리
         return new StaticFileController();
-        
+
     }
 
     // ControllerHandler Util을 빼줘야 하나?

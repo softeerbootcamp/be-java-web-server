@@ -25,26 +25,26 @@ public class DynamicFileController implements Controller{
         String fileNameExtension = httpRequest.getFileNameExtension();
         String uri = httpRequest.getUri();
 
-        if(uri.equals("/index.html")){
-            String filePath = HttpResponseUtils.makeFilePath(fileNameExtension);
 
-            // 파일 경로를 넘겨서 http response string 생성
-            String responseString = new String(HttpResponseUtils.makeBody(httpRequest.getUri(), filePath));
-            byte[] responseBody = responseString.replace("로그인", user.getName()).getBytes();
 
-            // 만들어진 body로 응답 객체를 만들어서 리턴
-            return new HttpResponse.HttpResponseBuilder()
-                    .setHttpStatusLine(new HttpStatusLine(HttpStatus.OK, httpRequest.getHttpVersion()))
-                    .setBody(responseBody)
-                    .setContentType(contentType)
-                    .makeHeader()
-                    .build();
-        }
-
-        if(uri.equals("/user/list")){
+        if(uri.equals("/user/list.html")){
 
         }
 
-        return null;
+
+        //default > .html로 끝나는 경우
+        String filePath = HttpResponseUtils.makeFilePath(fileNameExtension);
+
+        // 파일 경로를 넘겨서 http response string 생성
+        String responseString = new String(HttpResponseUtils.makeBody(httpRequest.getUri(), filePath));
+        byte[] responseBody = responseString.replace("로그인", user.getName()).getBytes();
+
+        // 만들어진 body로 응답 객체를 만들어서 리턴
+        return new HttpResponse.HttpResponseBuilder()
+                .setHttpStatusLine(new HttpStatusLine(HttpStatus.OK, httpRequest.getHttpVersion()))
+                .setBody(responseBody)
+                .setContentType(contentType)
+                .makeHeader()
+                .build();
     }
 }
