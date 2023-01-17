@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class HttpRequestTest {
 
     @Test
-    public void testFrom() throws IOException {
+    public void testGetFrom() throws IOException {
         String input = "GET /test HTTP/1.1\r\n" +
                 "Host: localhost:8080\r\n" +
                 "User-Agent: curl/7.68.0\r\n" +
@@ -25,19 +25,11 @@ public class HttpRequestTest {
         HttpRequest request = HttpRequest.from(in);
 
         HttpStartLine startLine = request.getStartLine();
-        assertEquals(HttpMethod.GET, startLine.getMethod());
 
         Uri uri = Uri.from("/test");
-        assertEquals(uri.getPath(), startLine.getUri().getPath());
 
         Map<String, String> headers = request.getHttpHeaders();
         System.out.println(headers.toString());
-        assertTrue(headers.containsKey("Host"));
-        assertEquals("localhost:8080", headers.get("Host"));
-        assertTrue(headers.containsKey("User-Agent"));
-        assertEquals("curl/7.68.0", headers.get("User-Agent"));
-        assertTrue(headers.containsKey("Accept"));
-        assertEquals("*/*", headers.get("Accept"));
 
         assertAll(
                 () -> assertThat(startLine.getMethod()).isEqualTo(HttpMethod.GET),
@@ -50,4 +42,49 @@ public class HttpRequestTest {
                 () -> assertThat(headers.get("Accept")).isEqualTo("*/*")
         );
     }
+
+    @Test
+    public void testPostFrom() throws IOException {
+        String input = "POST /test HTTP/1.1\r\n" +
+                "Content-Length: 67\r\n" +
+                "Host: localhost:8080\r\n" +
+                "User-Agent: curl/7.68.0\r\n" +
+                "Accept: */*\r\n" +
+                "\r\n" +
+                "userId=kgstiger&password=password&name=김강산&email=kgstiger@slipp.net";
+
+        ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));
+        HttpRequest request = HttpRequest.from(in);
+
+        HttpStartLine startLine = request.getStartLine();
+
+        Uri uri = Uri.from("/test");
+
+        Map<String, String> headers = request.getHttpHeaders();
+
+        Map<String, String> parameters = request.getParameters();
+
+        assertAll(
+                () -> assertThat(startLine.getMethod()).isEqualTo(HttpMethod.POST),
+                () -> assertThat(startLine.getUri().getPath()).isEqualTo(uri.getPath()),
+                () -> assertThat(headers.containsKey("Content-Length")).isTrue(),
+                () -> assertThat(headers.get("Content-Length")).isEqualTo("67"),
+                () -> assertThat(headers.containsKey("Host")).isTrue(),
+                () -> assertThat(headers.get("Host")).isEqualTo("localhost:8080"),
+                () -> assertThat(headers.containsKey("User-Agent")).isTrue(),
+                () -> assertThat(headers.get("User-Agent")).isEqualTo("curl/7.68.0"),
+                () -> assertThat(headers.containsKey("Accept")).isTrue(),
+                () -> assertThat(headers.get("Accept")).isEqualTo("*/*"),
+                () -> assertThat(parameters.containsKey("userId")).isTrue(),
+                () -> assertThat(parameters.get("userId")).isEqualTo("kgstiger"),
+                () -> assertThat(parameters.containsKey("password")).isTrue(),
+                () -> assertThat(parameters.get("password")).isEqualTo("password"),
+                () -> assertThat(parameters.containsKey("name")).isTrue(),
+                () -> assertThat(parameters.get("name")).isEqualTo("김강산"),
+                () -> assertThat(parameters.containsKey("email")).isTrue(),
+                () -> assertThat(parameters.get("email")).isEqualTo("kgstiger@slipp.net")
+        );
+    }
+
+
 }

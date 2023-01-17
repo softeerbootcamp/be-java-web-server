@@ -1,6 +1,12 @@
 package http.response;
 
+
+import static utils.FileIoUtils.getEmptyBody;
+
 public class HttpResponseBody {
+
+    public static final int EMPTY_LENGTH = 0;
+
     private byte[] body;
 
     private HttpResponseBody(byte[] bytes) {
@@ -8,11 +14,16 @@ public class HttpResponseBody {
     }
 
     public static HttpResponseBody createDefaultBody() {
-        return new HttpResponseBody("".getBytes());
+        byte[] emptyBody = getEmptyBody();
+        return new HttpResponseBody(emptyBody);
     }
 
     public byte[] getBody() {
         return body;
+    }
+
+    public boolean hasBody() {
+        return body.length != EMPTY_LENGTH;
     }
 
     public void setBody(byte[] body) {

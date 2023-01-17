@@ -5,22 +5,22 @@ import java.util.Map;
 
 import static utils.HttpRequestUtil.parseQuerystring;
 
-public class Parameter {
+public class Parameters {
 
     public final boolean isEmpty;
     private final Map<String, String> parameters;
 
-    private Parameter(Map<String, String> parameters, boolean isEmpty) {
+    private Parameters(Map<String, String> parameters, boolean isEmpty) {
         this.parameters = parameters;
         this.isEmpty = isEmpty;
     }
 
-    public static Parameter createEmptyParam() {
-        return new Parameter(Collections.emptyMap(), true);
+    public static Parameters createEmptyParam() {
+        return new Parameters(Collections.emptyMap(), true);
     }
 
-    public static Parameter createParam(String queryString) {
-        return new Parameter(parseQuerystring(queryString), false);
+    public static Parameters createParam(String queryString) {
+        return new Parameters(parseQuerystring(queryString), false);
     }
 
     public Map<String, String> getParameters() {

@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.Objects;
 
 public class HttpRequest {
 
@@ -21,28 +20,53 @@ public class HttpRequest {
 
     private final HttpStartLine startLine;
     private final HttpHeaders httpHeaders;
+    private final HttpRequestBody requestBody;
 
-    private HttpRequest(HttpStartLine startLine, HttpHeaders headers) {
+    private HttpRequest(
+            HttpStartLine startLine,
+            HttpHeaders headers,
+            HttpRequestBody requestBody
+    ) {
         this.startLine = startLine;
         this.httpHeaders = headers;
-        logger.debug(httpHeaders.getHeaders().toString());
+        this.requestBody = requestBody;
+
+        logger.debug(startLine.getMethod().toString());
     }
 
     public static HttpRequest from(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         String startLine = br.readLine();
+        logger.debug(startLine);
         String extracted = extractHeaders(br);
         String[] headers = extracted.split(ENTER);
 
-        return new HttpRequest(HttpStartLine.from(startLine), HttpHeaders.from(headers));
+        return of(HttpStartLine.from(startLine), HttpHeaders.from(headers), br);
+    }
 
+    public static HttpRequest of(
+            HttpStartLine startLine,
+            HttpHeaders headers,
+            BufferedReader br
+    ) throws IOException {
+        HttpMethod httpMethod = startLine.getMethod();
+
+        if (httpMethod.equals(HttpMethod.GET)) {
+            HttpRequestBody httpRequestBody = HttpRequestBody.createEmptyRequestBody();
+            return new HttpRequest(startLine, headers, httpRequestBody);
+        }
+
+        int contentLength = Integer.parseInt(headers.getValue("Content-Length"));
+        String queryString = readData(br, contentLength);
+        HttpRequestBody httpRequestBody = HttpRequestBody.createRequestBody(queryString);
+        return new HttpRequest(startLine, headers, httpRequestBody);
     }
 
     private static String extractHeaders(BufferedReader br) throws IOException {
         StringBuilder sb = new StringBuilder();
         String line;
 
-        while (Objects.nonNull(line = br.readLine()) && !line.isEmpty()) {
+        while ((line = br.readLine()) != null && !line.isEmpty()) {
             sb.append(line).append(System.lineSeparator());
         }
 
@@ -57,12 +81,26 @@ public class HttpRequest {
         return startLine.getMethod();
     }
 
+    public HttpRequestBody getRequestBody() {
+        return requestBody;
+    }
+
+    public Map<String, String> getParameters() {
+        return requestBody.getParameters();
+    }
+
     public Uri getUri() {
         return startLine.getUri();
     }
 
     public Map<String, String> getHttpHeaders() {
         return httpHeaders.getHeaders();
+    }
+
+    public static String readData(BufferedReader br, int contentLength) throws IOException {
+        char[] body = new char[contentLength];
+        br.read(body, 0, contentLength);
+        return String.copyValueOf(body);
     }
 
 }

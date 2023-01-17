@@ -1,7 +1,7 @@
-package controller;
+package webserver;
 
+import controller.*;
 import http.request.HttpRequest;
-import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,15 +10,13 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static utils.FileIoUtils.load404ErrorFile;
 
-
-public class ControllerFactory {
-    private static final Logger logger = LoggerFactory.getLogger(ControllerFactory.class);
+public class ControllerMapper {
+    private static final Logger logger = LoggerFactory.getLogger(ControllerMapper.class);
 
     private static final List<Controller> controllers;
 
-    private ControllerFactory() {
+    private ControllerMapper() {
     }
 
     static {
@@ -26,24 +24,17 @@ public class ControllerFactory {
         controllers.add(new IndexController());
         controllers.add(new ResourceController());
         controllers.add(new UserCreateController());
+        controllers.add(new UserLogInController());
     }
 
-    public static void handle(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
+    public static Controller findController(HttpRequest httpRequest) throws IOException, URISyntaxException {
         Controller controller = controllers
                 .stream()
                 .filter(c -> c.isUri(httpRequest))
                 .findFirst()
                 .orElse(null);
 
-        if(controller == null) {
-            byte[] errorBody = load404ErrorFile();
-            httpResponse.do404(errorBody);
-            return;
-        }
-
-        logger.debug("Controller {}",controller);
-        controller.service(httpRequest, httpResponse);
+        logger.debug("Controller {}", controller);
+        return controller;
     }
-
-
 }
