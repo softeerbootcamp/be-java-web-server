@@ -1,6 +1,7 @@
 package http.response;
 
 import http.ContentType;
+import http.Cookie;
 import http.HttpHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +57,12 @@ public class HttpResponse {
         send();
     }
 
+    public void sendRedirect(HttpStatusCode statusCode, String location, Cookie cookie) throws IOException {
+        setStatusCode(statusCode);
+        set302Headers(location, cookie);
+        send();
+    }
+
     public void do404(byte[] body) throws IOException {
         setStatusCode(HttpStatusCode.NOT_FOUND);
         dos.writeBytes(statusLine.toString());
@@ -69,6 +76,10 @@ public class HttpResponse {
         return statusLine.getHttpStatusCode().getCode();
     }
 
+    private void setStatusCode(HttpStatusCode statusCode) {
+        statusLine.setHttpStatusCode(statusCode);
+    }
+
     public Map<String, String> getHeaders() {
         return headers.getHeaders();
     }
@@ -78,7 +89,7 @@ public class HttpResponse {
         dos.writeBytes(headers.toString());
         dos.writeBytes(System.lineSeparator());
 
-        logger.debug("HttpResponse statusLine: {}",  statusLine);
+        logger.debug("HttpResponse statusLine: {}", statusLine);
 
         if (responseBody.hasBody()) {
             byte[] body = responseBody.getBody();
@@ -97,8 +108,9 @@ public class HttpResponse {
         headers.addHeader("Location", location);
     }
 
-    private void setStatusCode(HttpStatusCode statusCode) {
-        statusLine.setHttpStatusCode(statusCode);
+    private void set302Headers(String location, Cookie cookie) {
+        headers.addHeader("Location", location);
+        headers.addHeader("Set-Cookie", cookie.toString());
     }
 
     private void setResponseBody(byte[] body) {
