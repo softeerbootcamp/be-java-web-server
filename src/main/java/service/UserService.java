@@ -44,4 +44,8 @@ public class UserService {
 		userRepository.addUser(user);
 		logger.info(user + " 회원가입했습니다.");
 	}
+
+	public User findByUserId(String userId) {
+		return userRepository.findUserById(userId);
+	}
 }
