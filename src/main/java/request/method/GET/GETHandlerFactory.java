@@ -15,8 +15,7 @@ public class GETHandlerFactory {
             }
         }
         for(GETHandlerEnum GETHandlerEnum : GETHandlerEnum.values()) {
-            // TODO: resource를 enum의 url과 비교하는 것을 regex를 사용하도록 수정
-            if(request.getResource().contains(GETHandlerEnum.getUrl())) {
+            if(request.getResource().matches(GETHandlerEnum.getUrlRegEx())) {
                 return GETHandlerEnum.getHandler();
             }
         }
