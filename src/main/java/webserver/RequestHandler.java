@@ -4,14 +4,9 @@ import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
 
-import controller.ServletController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import request.Header;
 import request.HttpRequest;
 import response.HttpResponse;
 import response.ResponseHandler;

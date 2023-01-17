@@ -50,6 +50,6 @@ public class RequestHeader {
     }
 
     public String getContentLength() {
-        return fields.get("content-length");
+        return fields.get("Content-Length");
     }
 }

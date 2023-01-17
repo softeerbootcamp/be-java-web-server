@@ -3,8 +3,8 @@ package response;
 import controller.ServletController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import request.Header;
 import request.HttpRequest;
+import request.RequestHeader;
 import servlet.Servlet;
 import util.FileIoUtils;
 import util.PathUtils;
@@ -40,8 +40,8 @@ public class ResponseHandler {
 
             logger.debug("Content-Type : {}", headerFields.get("Content-Type"));
             headerFields.put("Content-Length", String.valueOf(body.length));
-            Header header = new Header(headerFields);
-            return HttpResponse.of("200", header, body);
+            ResponseHeader responseHeader = new ResponseHeader(headerFields);
+            return HttpResponse.of("200", responseHeader, body);
         }
 
         if (httpRequest.isQueryContent()) {
@@ -55,8 +55,8 @@ public class ResponseHandler {
             Map<String, String > headerFields = new HashMap<>();
 
             headerFields.put("Location", "/index.html");
-            Header header = new Header(headerFields);
-            return HttpResponse.of("302", header);
+            ResponseHeader responseHeader = new ResponseHeader(headerFields);
+            return HttpResponse.of("302", responseHeader);
         }
 
         throw new RuntimeException("[ERROR] : HttpRequest는 정적 혹은 동적 컨텐츠 요청만 가능합니다.");

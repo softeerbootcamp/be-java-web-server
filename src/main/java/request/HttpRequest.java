@@ -24,7 +24,7 @@ public class HttpRequest {
     public HttpRequest(RequestStartLine requestStartLine, RequestHeader requestHeader, String body) {
         this.requestStartLine = requestStartLine;
         this.header = requestHeader;
-        this.body = "";
+        this.body = body;
     }
 
     public static HttpRequest of(InputStream inputStream) throws IOException {
@@ -37,7 +37,17 @@ public class HttpRequest {
         RequestStartLine requestStartLine = RequestStartLine.of(bufferedReader);
         RequestHeader requestHeader = RequestHeader.of(bufferedReader);
 
-        return new HttpRequest(requestStartLine, requestHeader, "");
+        String contentLength = requestHeader.getContentLength();
+        logger.debug("contentLength : {}",contentLength);
+
+        if (Objects.isNull(contentLength)) {
+            return new HttpRequest(requestStartLine, requestHeader, "");
+        }
+
+        String body = IOUtils.readData(bufferedReader, Integer.parseInt(contentLength));
+        logger.debug("body : {}",body);
+
+        return new HttpRequest(requestStartLine, requestHeader, body);
     }
 
     public String getPath() {
