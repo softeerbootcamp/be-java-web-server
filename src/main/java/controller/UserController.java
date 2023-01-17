@@ -19,89 +19,85 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UserController implements Controller{
+    static UserController userController;
+
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private static final String USER_ID = "userId";
     private static final String PASSWORD = "password";
     private static final String NAME = "name";
     private static final String EMAIL = "email";
-    private Map<String,String> headerKV= new HashMap<>();
-    byte[] body = new byte[0];
+
     private HttpStatus httpStatus = HttpStatus.ClientError;
-    private RequestMessage requestMessage;
-    private RequestHeaderMessage requestHeaderMessage;
-    private RequestBodyMessage requestBodyMessage;
-    private UserService userService = new UserService(new MemoryUserRepository());
-    private OutputStream out;
-    public UserController(){};
-    public UserController(RequestMessage requestMessage, OutputStream out){
-        this.requestMessage = requestMessage;
-        this.requestHeaderMessage = requestMessage.getRequestHeaderMessage();
-        this.requestBodyMessage = requestMessage.getRequestBodyMessage();
-        this.out = out;
+
+    public static UserController getInstance(){
+        if (userController != null)
+            return userController;
+        return userController = new UserController();
     }
+
     @Override
-    public void control() {
-        userCommand();
+    public void control(RequestMessage requestMessage, OutputStream out) {
+        UserService userService = new UserService(new MemoryUserRepository());
+        byte[] body = new byte[0];
+        Map<String,String> headerKV= new HashMap<>();
+        httpStatus = HttpStatus.ClientError;
+        userCommand(requestMessage,userService, headerKV);
         Response response = new Response(new DataOutputStream(out));
-        response.response(body,requestHeaderMessage, httpStatus, headerKV);
+        response.response(body,requestMessage.getRequestHeaderMessage(), httpStatus, headerKV);
     }
 
-    public void userCommand(){
-        if (requestHeaderMessage.getRequestAttribute().equals("/create")){
-            userCreate();
+    public void userCommand(RequestMessage requestMessage, UserService userService, Map<String,String> headerKV){
+        if (requestMessage.getRequestHeaderMessage().getRequestAttribute().equals("/create")){
+            userCreate(requestMessage, userService, headerKV);
             return;
         }
-        if (requestHeaderMessage.getRequestAttribute().equals("/login")){
-            userLogin();
+        if (requestMessage.getRequestHeaderMessage().getRequestAttribute().equals("/login")){
+            userLogin(requestMessage, userService, headerKV);
             return;
         }
     }
 
-    private void userCreate(){
+    private void userCreate(RequestMessage requestMessage, UserService userService, Map<String, String> headerKV){
         Map<String,String> userInfo;
-        if (requestBodyMessage.getQueryString().equals(""))
-            userInfo = MessageParser.parseQueryString(requestHeaderMessage.getHttpReqParams());
-        else userInfo = MessageParser.parseQueryString(requestBodyMessage.getQueryString());
+        if (requestMessage.getRequestBodyMessage().getQueryString().equals(""))
+            userInfo = MessageParser.parseQueryString(requestMessage.getRequestHeaderMessage().getHttpReqParams());
+        else userInfo = MessageParser.parseQueryString(requestMessage.getRequestBodyMessage().getQueryString());
         try{
             userService.join(new User(userInfo.get(USER_ID),userInfo.get(PASSWORD),userInfo.get(NAME),userInfo.get(EMAIL)));
-            setLocation(Redirect.getRedirectLink(requestHeaderMessage.getRequestAttribute()));
+            setLocation(Redirect.getRedirectLink(requestMessage.getRequestHeaderMessage().getRequestAttribute()), headerKV);
         } catch (IllegalStateException e){
-            setLocation("/user/form_failed.html");
+            setLocation("/user/form_failed.html", headerKV);
             logger.debug(e.getMessage());
         }
     }
 
-    private void userLogin(){
+    private void userLogin(RequestMessage requestMessage, UserService userService, Map<String,String> headerKV){
         Map<String,String> loginInfo;
-        loginInfo = MessageParser.parseQueryString(requestBodyMessage.getQueryString());
+        loginInfo = MessageParser.parseQueryString(requestMessage.getRequestBodyMessage().getQueryString());
         try {
             User user = userService.login(loginInfo.get(USER_ID), loginInfo.get(PASSWORD));
-            setLocation(Redirect.getRedirectLink(requestHeaderMessage.getRequestAttribute()));
-            setCookie(Session.newLoginSession(user));
+            setLocation(Redirect.getRedirectLink(requestMessage.getRequestHeaderMessage().getRequestAttribute()), headerKV);
+            setCookie(Session.newLoginSession(user), headerKV);
         } catch (IllegalStateException e){
-            setLocation("/user/login_failed.html");
+            setLocation("/user/login_failed.html", headerKV);
             logger.debug(e.getMessage());
         }
     }
 
-    private void setCookie(String sid){
+    private void setCookie(String sid, Map<String,String> headerKV){
         logger.debug("sid: "+sid);
-        setHeader("Set-Cookie","sid="+sid+"; Path=/");
+        setHeader(headerKV, "Set-Cookie","sid="+sid+"; Path=/");
     }
 
-    private void setLocation(String redirectLink){
+    private void setLocation(String redirectLink, Map<String,String> headerKV){
         if (!redirectLink.equals("")){
             httpStatus = HttpStatus.Redirection;
-            setHeader("Location",redirectLink);
+            setHeader(headerKV,"Location", redirectLink);
         }
     }
 
-    private void setHeader(String key, String value){
+    private void setHeader(Map<String,String> headerKV, String key, String value){
         headerKV.put(key,value);
-    }
-
-    public String toString(){
-        return "UserController: request " + requestHeaderMessage.getHttpOnlyURL();
     }
 
 }

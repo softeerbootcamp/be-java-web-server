@@ -2,14 +2,16 @@ package controller;
 
 import util.HttpStatus;
 import view.RequestHeaderMessage;
+import view.RequestMessage;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 
 public interface Controller {
 
-    void control();
+    void control(RequestMessage requestMessage, OutputStream out);
     default byte[] getBodyFile(String fileURL){
         if (fileURL.contains(".")) {  //파일을 요청 (.html, .js, .css etc..)
             try {

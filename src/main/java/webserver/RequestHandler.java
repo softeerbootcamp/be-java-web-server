@@ -30,7 +30,7 @@ public class RequestHandler implements Runnable {
             RequestMessage requestMessage = new RequestMessage(new RequestHeaderMessage(rr.startLine), new RequestBodyMessage(rr.body));
             setController(requestMessage, out);
             logger.info(controller.toString());
-            controller.control();
+            controller.control(requestMessage, out);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -38,19 +38,12 @@ public class RequestHandler implements Runnable {
 
     private void setController(RequestMessage requestMessage, OutputStream out){
         RequestHeaderMessage requestHeaderMessage = requestMessage.getRequestHeaderMessage();
-        /*
-        if (requestHeaderMessage.getContentType().contains("html")){
-            controller = new TemplatesController(requestHeaderMessage, out);
-            return;
-        }
-
-         */
         if (requestHeaderMessage.getHttpOnlyURL().contains(".")) {
-            controller = new StaticController(requestHeaderMessage, out);
+            controller = StaticController.getInstance();
             return;
         }
         if (requestHeaderMessage.getHttpOnlyURL().startsWith("/user")) {
-            controller = new UserController(requestMessage, out);
+            controller = UserController.getInstance();
             return;
         }
     }
