@@ -36,7 +36,6 @@ public class HttpRequest {
     public static HttpRequest from(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         String startLine = br.readLine();
-        logger.info("StartLine: {}", startLine);
         String extracted = extractHeaders(br);
         String[] headers = extracted.split(ENTER);
 
@@ -49,6 +48,9 @@ public class HttpRequest {
             BufferedReader br
     ) throws IOException {
         HttpMethod httpMethod = startLine.getMethod();
+
+        logger.info("HttpStartLine: {}{}{}", startLine.getMethod(), startLine.getUri(), startLine.getHttpVersion());
+        logger.debug("Headers: {}", headers.toString());
 
         if (httpMethod.equals(HttpMethod.GET)) {
             HttpRequestBody httpRequestBody = HttpRequestBody.createEmptyRequestBody();
