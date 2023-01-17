@@ -35,11 +35,11 @@ public class SignUpService {
 
     }
 
-    public User createUser(String userId,String password,String name,String email){
+    private User createUser(String userId,String password,String name,String email){
         return User.of(userId,password,name,email);
     }
 
-    public void saveNewUser(String userId,String password,String name,String email){
+    private void saveNewUser(String userId,String password,String name,String email){
         Database.addUser(createUser(userId,password,name,email));
     }
 
