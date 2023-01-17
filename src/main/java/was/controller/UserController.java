@@ -18,7 +18,7 @@ public class UserController implements Controller{
     }
     @PostMapping("/user/create")
     public HttpResponseMessage create(HttpRequest httpRequest) {
-        UserService userService = new UserService();
+        UserService userService = UserService.getInstance();
         userService.addUser(httpRequest.getBody());
 
         HttpResponse httpResponse = new HttpResponse();

@@ -25,7 +25,7 @@ public class QueryStringHandler implements ControllerHandler {
     public HttpResponseMessage handle(HttpRequest httpRequest) {
         String url = httpRequest.getRequestURL();
         Map<String, String> map = HttpParser.parseQueryString(url);
-        UserService userService = new UserService();
+        UserService userService = UserService.getInstance();
         userService.addUser(map);
 
         HttpResponse httpResponse = new HttpResponse();
