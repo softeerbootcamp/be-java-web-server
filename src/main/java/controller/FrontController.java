@@ -10,13 +10,16 @@ import java.util.Map;
 public class FrontController implements Controller {
     private static final Map<String,Controller> controllers;
     private static final String SIGN_UP_PATH_URL = "/user/create";
+    private static final String LOGIN_PATH_URL ="/user/login";
 
     //객체 캐싱
     static{
         controllers = new HashMap<>();
         SignUpService signUpService = new SignUpService();
         SignUpController signUpController = new SignUpController(signUpService);
+        LoginController loginInController = new LoginController();
         controllers.put(SIGN_UP_PATH_URL,signUpController);
+        controllers.put(LOGIN_PATH_URL,loginInController);
     }
 
     public Controller getControllerByUrl(String pathUrl){
