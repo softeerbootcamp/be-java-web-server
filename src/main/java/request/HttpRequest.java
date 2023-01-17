@@ -28,13 +28,24 @@ public class HttpRequest {
     }
 
     public static HttpRequest of(InputStream inputStream) throws IOException {
-        /* TODO : PR Feedback 수행 - refactoring [ RequestHeader, RequestBody 분리 ]*/
+        /* TODO :
+            1) PR Feedback 수행 - refactoring [ RequestHeader, RequestBody 분리 ]
+            2) BufferedReader  : InputStream을 읽기 위해 사용
+            */
 
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+//        String br = bufferedReader.readLine();
+//        logger.debug("[HttpRequest] buffedReader : {}",bufferedReader.readLine());
+
         RequestStartLine requestStartLine = RequestStartLine.of(bufferedReader);
         RequestHeader requestHeader = RequestHeader.of(bufferedReader);
+
+        logger.debug("[HttpRequest] RequestHeader Line : {}",requestHeader.getStringContentLength());
+        logger.debug("[HttpRequest] RequestHeader value : {}",requestHeader.toValue());
+
         RequestBody requestBody = RequestBody.of(bufferedReader, requestHeader.getContentLength());
 
+        logger.debug("[ HttpRequest ] requestHeader length : {}",requestHeader.getContentLength());
         return new HttpRequest(requestStartLine, requestHeader, requestBody);
     }
 

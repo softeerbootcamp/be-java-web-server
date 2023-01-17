@@ -21,14 +21,15 @@ public class RequestBody {
     }
 
     public static RequestBody of(BufferedReader bufferedReader, Optional<String> contentLength) throws IOException {
-        logger.debug("contentLength : {}",contentLength);
 
         if (!contentLength.isPresent()) {
             return EMPTY_REQUEST_BODY;
         }
 
+        logger.debug("[ Request Body ] contentLength : {}", Integer.parseInt(contentLength.get()));
+
         String body = IOUtils.readData(bufferedReader, Integer.parseInt(contentLength.get()));
-        logger.debug("body : {}",body);
+        logger.debug("[ Request Body ] body : {}",body);
 
         return new RequestBody(body);
     }

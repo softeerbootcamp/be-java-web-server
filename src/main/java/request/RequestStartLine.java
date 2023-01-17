@@ -22,15 +22,21 @@ public class RequestStartLine {
     }
 
     public static RequestStartLine of(BufferedReader bufferedReader) throws IOException {
-        if (!bufferedReader.ready()) {
-            throw new RuntimeException("HTTP 요청메시지의 요청라인이 비어있습니다.");
-        }
+//        if (!bufferedReader.ready()) {
+//            logger.debug("[RequestStartLine] Not ready : {}", bufferedReader.readLine());
+//            throw new RuntimeException("HTTP 요청메시지의 요청라인이 비어있습니다.");
+//        }
         String source = bufferedReader.readLine();
-
-        String[] sources = source.split(" ");
+        logger.debug("[RequestStartLine] source : {}",source);
+        String[] sources = source.split("\\s");
+        logger.debug("[RequestStartLine] sources : {}", sources[0]);
         Method method = Method.of(sources[0]);
         Uri uri = Uri.of(sources[1]);
         HttpVersion version = HttpVersion.of(sources[2]);
+
+        logger.debug("[RequestStartLine] method : {}",method.getMethodName());
+        logger.debug("[RequestStartLine] uri : {}",uri.getPath());
+        logger.debug("[RequestStartLine] version : {}",version.getVersion());
 
         return new RequestStartLine(method, uri, version);
     }
@@ -44,7 +50,6 @@ public class RequestStartLine {
     }
 
     public Method getMethod() {
-        logger.debug("Input Method : {}",method);
         return method;
     }
 

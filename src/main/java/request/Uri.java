@@ -22,17 +22,17 @@ public class Uri {
     public static Uri of(String uri) {
         String[] uriSources =  uri.split("\\?");
         String path = uriSources[0];
-
-        logger.debug("Input uri path : {}",path);
         Map<String, String> parameters = StringParser.dataParsing(uri);
         return new Uri(path, parameters);
     }
 
     public boolean isTemplatesResource() {
+        logger.debug("[ Uri ] isTemplateResource : {}",path);
         return path.endsWith("html") || path.equals("/favicon.ico");
     }
 
     public boolean isStaticResource() {
+        logger.debug("[ Uri ] isStaticResource : {}",path);
         return !isTemplatesResource() && path.contains(".");
     }
 

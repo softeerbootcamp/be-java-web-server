@@ -12,6 +12,7 @@ import util.PathUtils;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +22,7 @@ public class ResponseHandler {
     *   Exception 을 이렇게 주렁주렁 작성하는 것이 맞는지
     * */
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
+    private static final String lineSeparator = System.lineSeparator();
 
     public static HttpResponse controlRequestAndResponse(HttpRequest httpRequest)
             throws IOException,
@@ -30,25 +32,32 @@ public class ResponseHandler {
             NoSuchMethodException,
             InvocationTargetException {
 
+        logger.debug("[inResponseHandler]");
         if (httpRequest.isForStaticContent()) {
             String path = httpRequest.getPath();
             byte[] body = FileIoUtils.loadFileFromClasspath(path);
             Map<String, String > headerFields = new HashMap<>();
 
+            logger.debug("[ Response Handler ] Content-Type : {}", headerFields.get("Content-Type"));
+            logger.debug("[ Response Handler ] Response_body : {}", String.valueOf(body.length));
+
             String mData = PathUtils.pathEndCheck(path);
 
             headerFields.put("Content-Type", mData);
-            logger.debug("Content-Type : {}", headerFields.get("Content-Type"));
-
             headerFields.put("Content-Length", String.valueOf(body.length));
             ResponseHeader responseHeader = new ResponseHeader(headerFields);
+
             return HttpResponse.of("200", responseHeader, body);
         }
 
         if (httpRequest.isQueryContent()) {
-//            Map<String, String> parameters = httpRequest.getParameters();
+            Map<String, String> parameters = httpRequest.getParameters();
+
+            logger.debug("[inQueryMethod]");
+            logger.debug(httpRequest.getPath());
 
             String path = httpRequest.getPath();
+            logger.debug("[ResponseHandler] path : {}",path);
             ServletController servletController = ServletController.of(path);
             Servlet servlet = servletController.newInstance();
             servlet.service(httpRequest);

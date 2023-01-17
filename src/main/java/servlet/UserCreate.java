@@ -30,6 +30,7 @@ public class UserCreate implements Servlet{
 
     @Override
     public void post(HttpRequest httpRequest) {
+        logger.debug("DoPost");
         Map<String, String> data = new HashMap<>();
         String body = httpRequest.getBody();
         logger.debug("body : {}", body);
@@ -50,11 +51,14 @@ public class UserCreate implements Servlet{
         String email = data.get("email");
 
         User user = new User(userId, password, name, email);
+        logger.debug("[User Create] POST user data : {}", user);
+
         Database.addUser(user);
     }
 
     @Override
     public void get(HttpRequest httpRequest) {
+        logger.debug("DoGet");
         Map<String, String> parameters = httpRequest.getParameters();
         String userId = parameters.get("userId");
         String password = parameters.get("password");
@@ -66,6 +70,8 @@ public class UserCreate implements Servlet{
         }
 
         User user = new User(userId, password, name, email);
+        logger.debug("[User Create] GET user data : {}", user);
+
         Database.addUser(user);
     }
 }

@@ -15,7 +15,7 @@ public class ResponseHeader {
         StringBuilder sb = new StringBuilder();
 
         for (Map.Entry<String, String> field : fields.entrySet()) {
-            sb.append(String.format("%s: %s%s", field.getKey(), field.getValue(), lineSeparator));
+            sb.append(String.format("[ ResponseHeader.class ] %s: %s%s", field.getKey(), field.getValue(), lineSeparator));
         }
 
         return sb.toString();

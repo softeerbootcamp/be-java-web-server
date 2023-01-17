@@ -23,9 +23,13 @@ public class RequestHandler implements Runnable{
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
 
+
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            HttpRequest httpRequest = HttpRequest.of(in);
-            HttpResponse httpResponse = ResponseHandler.controlRequestAndResponse(httpRequest);
+            /* TODO
+            *  - in : 서버 -> 클라이언트로 응답을 보내는 데이터를 싣음
+            * */
+
+            HttpResponse httpResponse = ResponseHandler.controlRequestAndResponse(HttpRequest.of(in));
             respondToHttpRequest(out, httpResponse);
         } catch (IOException | URISyntaxException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             logger.error(e.getMessage());
