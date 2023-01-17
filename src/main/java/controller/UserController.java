@@ -36,10 +36,11 @@ public class UserController implements Controller {
 
         Database.addUser(user);
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + "/index.html").toPath());
+        String addedLine="Location : /index.html";
         NewResponse newResponse = new NewResponse.Builder()
                 .setResponseStatusLine(ControllerTypeEnum.USER)
                 .setResponseHeader(ContentTypeEnum.CSS,body.length)
-                .addResponseHeader("Location : /index.html")
+                .addResponseHeader(addedLine)
                 .setResponseBody(body)
                 .build();
         return newResponse;

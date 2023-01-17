@@ -1,14 +1,20 @@
 package session;
 
+import com.google.common.collect.Maps;
+
 import java.util.Map;
 import java.util.Random;
 
 public class HttpSessions {
     private String id;
-    public static Map<String, HttpSession> httpSessions;
+    public static Map<String, HttpSession> httpSessions = Maps.newHashMap();
 
     public static void addHttpSession(String id) {
         httpSessions.put(id, new HttpSession(getRandStringForSessionId()));
+    }
+    // todo : 적절한 이름 찾자..
+    public static String findSessionById(String userId){
+        return httpSessions.get(userId).getSessionIdById();
     }
 
     public static String getRandStringForSessionId() {

@@ -41,7 +41,7 @@ public class LoginController implements Controller{
             //response 에 추가.
             addedLine+=HeaderReferenceEnum.SET_COOKIE.getValueWithSpace()+
                     "sid="+
-                    httpSessions.get(userInfos.get(USERID_INDEX))+
+                    HttpSessions.findSessionById(userInfos.get(USERID_INDEX))+
                     "; Path=/";
         }else{
             logger.debug("login failed!");

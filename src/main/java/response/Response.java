@@ -31,7 +31,7 @@ public class Response {
 
             ResponseStatusLine responseStatusLine = new ResponseStatusLine(controllerTypeEnum);
             ResponseHeader responseHeader = new ResponseHeader(contentTypeEnum, lengthOfBodyContent);
-            dos.writeBytes(responseStatusLine.getResponseStatusLine() + NEW_LINE);
+            dos.writeBytes(responseStatusLine.getResponseStatusLineInString() + NEW_LINE);
             responseHeader.addHeaderIfRedirect(redirectUrl,responseStatusLine.getStatusCodeWithMessage());
             responseHeader.addHeaderIfCookie(isCookie,sid);
             dos.writeBytes(responseHeader.getHeaderLine() + NEW_LINE);

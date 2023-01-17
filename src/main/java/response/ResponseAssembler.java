@@ -8,7 +8,7 @@ public class ResponseAssembler {
     private byte[] body;
     public ResponseAssembler(NewResponse newResponse) {
          assembled =
-                newResponse.getResponseStatusLine().getResponseStatusLine() + NEW_LINE +
+                newResponse.getResponseStatusLine().getResponseStatusLineInString() + NEW_LINE +
                 newResponse.getResponseHeader().getHeaderLine() +
                 ResponseAdderListToString(newResponse.getResponseAdder());
          body = newResponse.getResponseBody().getBody();
@@ -26,6 +26,9 @@ public class ResponseAssembler {
 
     public String ResponseAdderListToString(List<String> responseAdder) {
         String result = "";
+        if (responseAdder.isEmpty()){
+            return result+NEW_LINE;
+        }
         for (String line : responseAdder) {
             result += (line + NEW_LINE);
         }

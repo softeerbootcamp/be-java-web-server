@@ -29,7 +29,7 @@ public class ResponseStatusLine {
         }
     }
 
-    public String getResponseStatusLine() {
+    public String getResponseStatusLineInString() {
         return protocol + " " + statusCodeWithMessage;
     }
 
