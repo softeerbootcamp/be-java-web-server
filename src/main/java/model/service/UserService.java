@@ -37,4 +37,12 @@ public class UserService {
         return userRepository.findUserById(userId);
     }
 
+    public User login(String userId, String password){
+        User user = findOneUser(userId).orElseThrow(()->new IllegalStateException("존재하지 않는 계정입니다."));
+        if (!user.getPassword().equals(password))
+            throw new IllegalStateException("존재하지 않는 계정입니다.");
+        return user;
+    }
+
+
 }

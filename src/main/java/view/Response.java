@@ -17,6 +17,12 @@ public class Response {
     public Response(DataOutputStream dos){
         this.dos = dos;
     }
+
+    public void response(byte[] body, RequestHeaderMessage requestHeaderMessage, HttpStatus httpStatus){
+        responseHeader(requestHeaderMessage,body,httpStatus,new HashMap<>());
+        responseBody(body);
+    }
+
     public void response(byte[] body, RequestHeaderMessage requestHeaderMessage, HttpStatus httpStatus, Map<String,String> header){
         responseHeader(requestHeaderMessage,body,httpStatus,header);
         responseBody(body);
