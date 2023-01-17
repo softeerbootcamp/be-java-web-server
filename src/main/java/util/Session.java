@@ -43,7 +43,7 @@ public class Session {
     }
     public long getIdleTime() {
         long timeNow = System.currentTimeMillis();
-        long timeIdle = lastAcceptedTime - timeNow;
+        long timeIdle = timeNow - lastAcceptedTime;
         return timeIdle;
     }
     public boolean isValid() {
