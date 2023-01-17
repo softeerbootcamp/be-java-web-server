@@ -3,9 +3,9 @@ package model;
 import java.time.LocalDateTime;
 public class Session {
     public static final int TIMEOUT_MINUTE = 60;
-    private String ssid;
+    private final String ssid;
     private LocalDateTime expiredAt;
-    private String userId;
+    private final String userId;
 
     public Session(String ssid, String userId){
         this.userId = userId;
@@ -30,7 +30,7 @@ public class Session {
     }
 
     public String toString(){
-        return String.format("sessionId=%s; Expires=%s; HttpOnly; Secure",ssid, expiredAt, userId );
+        return String.format("sessionId=%s; Path=/; Expires=%s; HttpOnly; Secure", ssid, expiredAt, userId);
     }
 
     public void expire() {
