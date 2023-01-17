@@ -3,7 +3,7 @@ package db;
 import model.User;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import util.Session;
+import webserver.session.Session;
 
 import java.util.HashMap;
 import java.util.UUID;

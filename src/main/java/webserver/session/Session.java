@@ -1,4 +1,4 @@
-package util;
+package webserver.session;
 
 import db.SessionStorage;
 import model.User;

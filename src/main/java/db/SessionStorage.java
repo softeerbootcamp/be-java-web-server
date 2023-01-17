@@ -1,6 +1,6 @@
 package db;
 
-import util.Session;
+import webserver.session.Session;
 
 import java.util.HashMap;
 import java.util.Map;

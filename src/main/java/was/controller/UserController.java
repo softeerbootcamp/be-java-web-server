@@ -3,7 +3,7 @@ package was.controller;
 import db.SessionStorage;
 import model.User;
 import service.UserService;
-import util.Session;
+import webserver.session.Session;
 import was.annotation.PostMapping;
 import webserver.domain.HttpRequest;
 import webserver.domain.HttpResponse;
