@@ -7,7 +7,9 @@ import httpMock.CustomHttpResponse;
 import httpMock.constants.ContentType;
 import httpMock.constants.HttpMethod;
 import httpMock.constants.StatusCode;
+import model.Session;
 import model.User;
+import service.SessionService;
 import service.UserService;
 
 import java.util.HashMap;
@@ -75,13 +77,14 @@ public class UserAccountController implements RequestController {
         String password = bodyParams.get("password");
 
         User customer = UserService.findUserById(userId);
-        if(customer != null)
-            if(customer.getPassword().equals(password)) {
-                logger.debug("User {} login success", customer.getName());
-                return CustomHttpFactory.REDIRECT("/index.html");
-            }
+        if(customer != null && customer.getPassword().equals(password)){
+            logger.debug("User {} login success", customer.getName());
+            CustomHttpResponse res = CustomHttpFactory.REDIRECT("/index.html");
+            Session sess = SessionService.addUserToSession(customer);
+            res.addToCookie(sess.toString());
+            return res;
+        }
 
         return CustomHttpFactory.BAD_REQUEST("You password or email is wrong");
-
     }
 }
