@@ -4,6 +4,7 @@ import model.User;
 
 public class Session {
 
+    public static final String SESSION_FIELD_NAME = "sid";
     private String id;
     private User user;
 
