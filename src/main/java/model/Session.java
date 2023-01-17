@@ -33,4 +33,7 @@ public class Session {
         return String.format("sessionId=%s; Expires=%s; HttpOnly; Secure",ssid, expiredAt, userId );
     }
 
+    public void expire() {
+        expiredAt = LocalDateTime.now();
+    }
 }
