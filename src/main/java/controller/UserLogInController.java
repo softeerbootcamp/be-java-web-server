@@ -1,8 +1,8 @@
 package controller;
 
 import http.cookie.Cookie;
-import http.Session;
-import http.SessionManager;
+import http.session.Session;
+import http.session.SessionManager;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.response.HttpStatusCode;
