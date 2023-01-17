@@ -40,6 +40,6 @@ class RequestReaderTest {
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put(RequestHeader.REQUEST_LINE, requestLine);
         RequestHeader requestHeader=new RequestHeader(hashMap);
-        Assertions.assertThat(RequestReader.findPathInRequest(requestHeader)).isEqualTo("/index.html");
+        assertThat(RequestReader.findPathInRequest(requestHeader)).isEqualTo("/index.html");
     }
 }

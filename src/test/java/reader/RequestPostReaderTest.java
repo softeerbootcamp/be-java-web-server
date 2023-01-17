@@ -33,9 +33,12 @@ class RequestPostReaderTest {
         RequestReader requestReader = new RequestPostReader();
         HashMap<String, String> usermap = requestReader.readData(httpRequest);
         //then
-        assertThat(usermap.get("userId")).isEqualTo("test");
-        assertThat(usermap.get("password")).isEqualTo("testPW");
-        assertThat(usermap.get("name")).isEqualTo("test");
-        assertThat(usermap.get("email")).isEqualTo("test@naver.com");
+        assertAll(
+                () -> assertEquals(usermap.get("userId"), "test"),
+                () -> assertEquals(usermap.get("password"), "testPW"),
+                () -> assertEquals(usermap.get("name"), "test"),
+                () -> assertEquals(usermap.get("email"), "test@naver.com")
+        );
+
     }
 }
