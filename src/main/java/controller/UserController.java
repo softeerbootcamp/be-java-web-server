@@ -85,4 +85,11 @@ public class UserController implements Controller {
 
         return headers;
     }
+
+    private String parseSessionIdFromHeaders(Map<Header, String> headers) {
+        String cookie = headers.get(Header.SET_COOKIE);
+        String sessionId = cookie.split(" ")[0].split("=")[1];
+
+        return sessionId.substring(0, sessionId.length() - 1);
+    }
 }
