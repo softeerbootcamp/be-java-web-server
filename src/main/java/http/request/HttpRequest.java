@@ -50,11 +50,6 @@ public class HttpRequest {
         return httpRequestLine.getHttpUri().getFileNameExtension();
     }
 
-    public String checkLoginStatus() {
-        return Session.findUserIdBySessionId(getCookie());
-        // userId가 null 이 아닌 경우 login 상태임 !
-    }
-
     public String getCookie(){
         logger.debug("Cookie :  {}", httpHeader.getCookie());
         String cookie = httpHeader.getCookie();
@@ -65,5 +60,10 @@ public class HttpRequest {
     public boolean wantDynamicHtml() {
         // TODO 동적으로 작동하는 html 리스트를 따로 빼야 할까
         return getUri().equals("/index.html") || getUri().equals("/user/list.html");
+    }
+
+    public boolean isLogin() {
+        // userId가 null 이 아닌 경우 login 상태임 !
+        return Session.findUserIdBySessionId(getCookie()) != null;
     }
 }

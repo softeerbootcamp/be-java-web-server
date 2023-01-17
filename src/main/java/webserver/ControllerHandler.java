@@ -1,12 +1,10 @@
 package webserver;
 
 import controller.Controller;
-import controller.DynamicFileController;
+import controller.DynamicHtmlController;
 import controller.StaticFileController;
 import controller.UserController;
 import http.request.HttpRequest;
-
-import javax.annotation.Nonnull;
 
 public class ControllerHandler {
     public static Controller handleController(HttpRequest httpRequest) {
@@ -21,15 +19,13 @@ public class ControllerHandler {
         }
 
         // 파일을 원한다면? ex) index.html, /user/form.html, .css, .js
-
-        // /index.html, /user/list.html 파일을 원한다면 - 동적 처리
+        // /index.html, /user/list.html
+        // Login 정보가 필요한 파일들을 원한다면 - 동적 html 처리
         if(httpRequest.wantDynamicHtml()){
-            String userId = httpRequest.checkLoginStatus();
-            // 쿠키 체크 해서 쿠키에 맞는 user 있는지 확인
-            if(userId != null){
-                // 로그인 상태인 경우에 user 넘겨줘서 처리
-                return new DynamicFileController();
-            }
+            // 로그인을 하지 않은 index.html인 경우 정적 html 처리
+            if(httpRequest.getUri().equals("/index.html") && !httpRequest.isLogin())
+                return new StaticFileController();
+            return new DynamicHtmlController();
         }
 
         // 나머지 - 정적 처리
