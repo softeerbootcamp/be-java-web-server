@@ -41,11 +41,13 @@ public class Session {
         this.creationTime = creationTime;
         this.lastAcceptedTime = creationTime;
     }
+
     public long getIdleTime() {
         long timeNow = System.currentTimeMillis();
         long timeIdle = timeNow - lastAcceptedTime;
         return timeIdle;
     }
+
     public boolean isValid() {
         int timeIdle = (int) (getIdleTime() / 1000L);
         if (timeIdle >= maxInactiveInterval) {
@@ -54,6 +56,7 @@ public class Session {
         }
         return true;
     }
+
     public void expire() {
         SessionStorage.remove(this);
     }
