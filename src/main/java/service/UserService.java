@@ -8,7 +8,7 @@ public class UserService {
 	private static UserService instance;
 	private final UserRepository userRepository;
 
-	private static UserService getInstance() {
+	public static UserService getInstance() {
 		if (instance == null) {
 			synchronized (UserService.class) {
 				instance = new UserService();
