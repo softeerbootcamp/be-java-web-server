@@ -20,7 +20,7 @@ public class Sessions {
         return newSession;
     }
 
-    public boolean isExistSession(String sessionId) {
+    public static boolean isExistSession(String sessionId) {
         return Objects.nonNull(sessions.get(sessionId));
     }
 }
