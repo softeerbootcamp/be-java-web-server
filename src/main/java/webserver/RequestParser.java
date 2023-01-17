@@ -49,7 +49,7 @@ public class RequestParser {
             //System.out.println(String.copyValueOf(body));
             return String.copyValueOf(body);
         }
-        return null;
+        return "";
     }
 
     public static String parseRequestStartLineTarget(InputStream in) throws IOException {

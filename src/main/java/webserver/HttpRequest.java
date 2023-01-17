@@ -58,7 +58,7 @@ public class HttpRequest {
     public Map<String,String> parseBody() throws IOException {
         Map<String, String> parsedBody = new HashMap<>();
         //1. body가 없으면 빈 map을 리턴
-        if(body == null) return Collections.EMPTY_MAP;
+        if(body.isEmpty()) return Collections.EMPTY_MAP;
         //2. 요청의 contentType이 application/x-www-form-urlencoded이면 폼 내용을 파싱
         String contentType = headers.get("Content-Type");
         if(contentType.equals("application/x-www-form-urlencoded")) parsedBody= HttpRequestUtils.parseQueryString(body);
