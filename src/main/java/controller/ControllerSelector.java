@@ -11,17 +11,15 @@ public class ControllerSelector {
 
     private static final StaticController staticController = new StaticController();
     private static final LoginController loginController = new LoginController();
-    private RequestLine requestLine;
     private static final int _TOKEN_INDEX = 1;
 
     public static Controller setController(Request request) {
         String method = request.getRequestLine().getMETHOD();
         String url = request.getRequestLine().getURL();
-        RequestLine requestLine = request.getRequestLine();
         // todo : 나!!누!!자!!
         if (method.equals(MethodEnums.GET.getValue())) {
-            if (requestLine.getURL().split("\\.")[_TOKEN_INDEX].equals("html") ||
-                    requestLine.getURL().split("\\.")[_TOKEN_INDEX].equals("ico")) {
+            if (request.getRequestLine().getURL().split("\\.")[_TOKEN_INDEX].equals("html") ||
+                    request.getRequestLine().getURL().split("\\.")[_TOKEN_INDEX].equals("ico")) {
                 return templateController;
             }
             return staticController;

@@ -30,7 +30,6 @@ public class LoginController implements Controller{
         logger.debug("login request : "+request.getRequestLine().getMETHOD());
         logger.debug("login request : "+request.getRequestLine().getURL());
         logger.debug("login request : "+request.getRequestLine().getVERSION());
-        logger.debug("login request : "+request.getRequestLine().getVERSION());
         logger.debug("login request : "+request.getRequestBody().getBodyLines());
         List<String> bodyLine = request.getRequestBody().getBodyLines();
         List<String> userInfos = parseUrlToGetUserInfo(bodyLine);
@@ -44,6 +43,8 @@ public class LoginController implements Controller{
                     "sid="+
                     httpSessions.get(userInfos.get(USERID_INDEX))+
                     "; Path=/";
+        }else{
+            logger.debug("login failed!");
         }
         NewResponse newResponse = new NewResponse.Builder()
                 .setResponseStatusLine(ControllerTypeEnum.LOGIN)
@@ -64,12 +65,19 @@ public class LoginController implements Controller{
     }
     // todo : 해당 메소드 2번 사용되는데 받는 형태도 비슷하다. 어디 묶어볼까?
     public List<String> parseUrlToGetUserInfo(List<String> requestBodyLine) {
-        String result = requestBodyLine.get(USERINFO_INDEX);
+        String result = getUserInfoFromBodyLines(requestBodyLine);
         List<String> parsedUserInfo = new ArrayList<>();
         String[] unParsedUserInfos = result.split("&");
         for (String eachInfo : unParsedUserInfos) {
             parsedUserInfo.add(eachInfo.split("=")[1]);
         }
         return parsedUserInfo;
+    }
+    public String getUserInfoFromBodyLines(List<String> lines){
+        for (String line:lines
+        ) {
+            if (line.contains("user")) return line;
+        }
+        return null;
     }
 }

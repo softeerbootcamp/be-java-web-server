@@ -27,7 +27,7 @@ public class RequestResponseHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             //Response response = new Response(out);
-            BufferedReader br = new BufferedReader(new InputStreamReader(in,"UTF-8"));
+            BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
             Request request = new Request(br);
 
             Controller controller = ControllerSelector.setController(request);
@@ -38,6 +38,8 @@ public class RequestResponseHandler implements Runnable {
 
         } catch (IOException e) {
             logger.error(e.getMessage());
+        }catch (NullPointerException nullPointerException){
+            logger.error("아무런 요청이 없습니다!!~!");
         }
     }
 

@@ -10,20 +10,20 @@ import java.io.IOException;
 public class Request {
 
 
-    private static RequestLine requestLine;
-    private static RequestHeader requestHeader;
-    private static RequestBody requestBody;
+    private RequestLine requestLine;
+    private RequestHeader requestHeader;
+    private RequestBody requestBody;
     private static final Logger logger = LoggerFactory.getLogger(RequestResponseHandler.class);
     private static final String NEW_LINE = "\r\n";
 
 
     public Request(BufferedReader bufferedReader) throws IOException {
-        requestLine = new RequestLine();
-        requestHeader = new RequestHeader();
-        requestBody = new RequestBody();
         setRequestLine(bufferedReader);
         setRequestHeader(bufferedReader);
         setRequestBody(bufferedReader);
+        if(requestLine.getMETHOD().equals(null)){
+            throw new NullPointerException("아무런 요청이 없습니다!!");
+        }
     }
 
     public void setRequestLine(BufferedReader bufferedReader) throws IOException {
@@ -40,6 +40,7 @@ public class Request {
                 break;
             }
             String[] headerMap = oneLine.split(":");
+            //todo map 만 사용가능하게 바꾸자.
             requestHeader.addHeaderMap(headerMap[0],headerMap[1]);
             requestHeader.addHeaderLines(oneLine);
         }

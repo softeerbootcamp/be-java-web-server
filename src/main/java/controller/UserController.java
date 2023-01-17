@@ -49,12 +49,19 @@ public class UserController implements Controller {
     }
 
     public List<String> parseUrlToGetUserInfo(List<String> requestBodyLine) {
-        String result = requestBodyLine.get(0);
+        String UserInfos = getUserInfoFromBodyLines(requestBodyLine);
         List<String> parsedUserInfo = new ArrayList<>();
-        String[] unParsedUserInfos = result.split("&");
+        String[] unParsedUserInfos = UserInfos.split("&");
         for (String eachInfo : unParsedUserInfos) {
             parsedUserInfo.add(eachInfo.split("=")[1]);
         }
         return parsedUserInfo;
+    }
+    public String getUserInfoFromBodyLines(List<String> lines){
+        for (String line:lines
+             ) {
+            if (line.contains("user")) return line;
+        }
+        return null;
     }
 }
