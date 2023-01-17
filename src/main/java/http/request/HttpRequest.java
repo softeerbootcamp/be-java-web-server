@@ -41,7 +41,7 @@ public class HttpRequest {
     }
 
     public boolean isPost() {
-        logger.debug("HTTP method : {}", httpRequestLine.getHttpMethod());
+        //logger.debug("HTTP method : {}", httpRequestLine.getHttpMethod());
         return this.httpRequestLine.getHttpMethod().equals("POST");
     }
 
