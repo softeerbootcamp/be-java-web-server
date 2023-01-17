@@ -34,6 +34,11 @@ public class HttpUri {
         return split[1];
     }
 
+    public String getDetachServicePath() {
+        String[] split = path.split("/");
+        return split[2];
+    }
+
     public ResourceType parseResourceType() {
         return ResourceType.findResourceType(path);
     }

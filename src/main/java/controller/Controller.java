@@ -3,12 +3,9 @@ package controller;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-
 public interface Controller {
 
-    HttpResponse doService(HttpRequest httpRequest) throws IOException, URISyntaxException;
+    HttpResponse doService(HttpRequest httpRequest) throws Exception;
 
     boolean isMatch(HttpRequest httpRequest);
 }

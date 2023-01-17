@@ -8,8 +8,6 @@ import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +20,7 @@ public class ControllerHandler {
         controllers.add(new UserController());
     }
 
-    public static HttpResponse handle(HttpRequest httpRequest) throws IOException, URISyntaxException {
+    public static HttpResponse handle(HttpRequest httpRequest) throws Exception {
         Controller controller = findController(httpRequest);
         return controller.doService(httpRequest);
     }

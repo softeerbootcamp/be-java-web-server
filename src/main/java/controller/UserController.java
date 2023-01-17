@@ -1,31 +1,27 @@
 package controller;
 
-import db.Database;
 import http.request.HttpRequest;
 import http.request.HttpUri;
-import http.request.QueryParameters;
 import http.request.RequestLine;
 import http.response.HttpResponse;
-import http.response.HttpStatus;
-import model.User;
+import service.UserService;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
-public class UserController implements Controller{
+public class UserController implements Controller {
 
     private static final String path = "user";
+    private static final UserService userService = new UserService();
+
     @Override
-    public HttpResponse doService(HttpRequest httpRequest) {
+    public HttpResponse doService(HttpRequest httpRequest) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         RequestLine requestLine = httpRequest.getRequestLine();
         HttpUri httpUri = requestLine.getHttpUri();
-        QueryParameters queryParameters = httpUri.getQueryParameters();
 
-        Database.addUser(User.from(httpRequest.getRequestBody()));
+        Method method = UserService.class.getDeclaredMethod(httpUri.getDetachServicePath(), HttpRequest.class);
+        return (HttpResponse) method.invoke(userService, httpRequest);
 
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Location", "/index.html");
-        return HttpResponse.of(HttpStatus.FOUND, "", headers, "".getBytes(), requestLine.getVersion());
     }
 
     @Override
