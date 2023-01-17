@@ -9,9 +9,7 @@ import controller.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.HttpRequest;
-import response.HttpResponse;
 import util.HttpStatus;
-import util.UrlType;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -32,11 +30,13 @@ public class RequestHandler implements Runnable {
 
             DataOutputStream clientOutPutStream = new DataOutputStream(out);
 
-            Controller controller = ControllerFinder.factoryController(httpRequest.getUrl());
+            Controller controller = ControllerFinder.findController(httpRequest.getUrl());
+
 
             try {
                 ControllerFinder.handleControllerInfoAnnotation(controller, httpRequest, clientOutPutStream);
-            } catch (InvocationTargetException e) {
+            } catch (InvocationTargetException | NoSuchFileException e) {
+                e.printStackTrace();
                 ErrorController.getErrorResponse(clientOutPutStream,HttpStatus.NOT_FOUND);
                 logger.error("[ERROR]:{} {}", HttpStatus.NOT_FOUND.getCode(), HttpStatus.NOT_FOUND.getMessage());
                 logger.error("FileReaderContoller에서 url에 맞는 페이지가 없습니다. url:{}", httpRequest.getUrl().getUrl());
