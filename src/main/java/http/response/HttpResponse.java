@@ -37,15 +37,13 @@ public class HttpResponse {
     }
 
     public void setCookie(int sid) {
-        this.headers.addHeader("Set-Cookie", String.valueOf(sid).concat("; Path=/"));
+        this.headers.addHeader("Set-Cookie", "sid=".concat(String.valueOf(sid)).concat("; Path=/"));
     }
 
     public String getHeaderMessage() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(String.format("%s %s \r\n", this.version, this.statusCode));
-        sb.append(headers.getMessage());
-        sb.append("\r\n");
-        return sb.toString();
+        return String.format("%s %s \r\n", this.version, this.statusCode) +
+                headers.getMessage() +
+                "\r\n";
     }
 
     public void redirectHome() {
