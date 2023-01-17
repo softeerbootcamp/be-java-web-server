@@ -42,6 +42,11 @@ public class UserController implements Controller {
             return;
         }
 
+        if (path.startsWith("/list") && request.getMethod() == HttpMethod.GET) {
+            showUserList(request, response);
+            return;
+        }
+
         throw new UrlNotFoundException("잘못된 URL 요청입니다.");
     }
 
@@ -79,5 +84,9 @@ public class UserController implements Controller {
         } catch (NullValueException e) {
             response.redirect(request, "/user/login.html");
         }
+    }
+
+    private void showUserList(HttpRequest request, HttpResponse response) {
+
     }
 }
