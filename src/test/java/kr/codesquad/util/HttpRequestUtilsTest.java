@@ -39,7 +39,7 @@ public class HttpRequestUtilsTest {
     void parseQueryString() {
         String queryString = "userId=abc&password=aaa%40%40%40&name=%EC%9E%84%EC%88%98%EB%AF%BC&email=a%40a";
 
-        Map<String, String> result = HttpRequestUtils.parseQueryString(queryString);
+        Map<String, String> result = HttpRequestUtils.parseBodyMessage(queryString);
 
         assertThat(result.get("userId")).isEqualTo("abc");
         assertThat(result.get("password")).isEqualTo("aaa@@@");

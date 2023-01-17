@@ -1,5 +1,9 @@
 package Controller;
 
+import exception.NullValueException;
+import exception.UrlNotFoundException;
+import exception.UserValidationException;
+import http.request.HttpMethod;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import service.UserService;
@@ -16,45 +20,24 @@ public class UserController implements Controller {
         String url = request.getUrl();
         String path = url.split(PREFIX)[1];
 
-        if (path.startsWith("/create")) {
-            String queryString = HttpRequestUtils.getQueryString(path);
+        if (path.startsWith("/create") && request.getMethod() == HttpMethod.POST) {
+            try {
+                String body = request.getBody();
 
-            Map<String, String> userInfo = HttpRequestUtils.parseQueryString(queryString);
+                Map<String, String> userInfo = HttpRequestUtils.parseBodyMessage(body);
 
-            UserService userService = new UserService();
-            userService.signUp(userInfo);
+                UserService userService = new UserService();
+                userService.signUp(userInfo);
 
-            response.redirect(request, "/user/login.html");
+                response.redirect(request, "/index.html");
 
-            return "";
+                return "";
+            } catch (NullValueException | UserValidationException e) {
+                response.redirect(request, "/user/form_failed.html");
+                return "";
+            }
         }
 
-        if (path.equals("/form.html")) {
-            response.ok(request);
-            return url;
-        }
-
-        if (path.equals("/list.html")) {
-            response.ok(request);
-            return url;
-        }
-
-        if (path.equals("/login.html")) {
-            response.ok(request);
-            return url;
-        }
-
-        if (path.equals("/login_failed.html")) {
-            response.ok(request);
-            return url;
-        }
-
-        if (path.equals("/profile.html")) {
-            response.ok(request);
-            return url;
-        }
-
-        // TODO 잘못된 URL이 들어올 경우 404 NOT_FOUND 응답
-        throw new IllegalArgumentException();
+        throw new UrlNotFoundException("잘못된 URL 요청입니다.");
     }
 }

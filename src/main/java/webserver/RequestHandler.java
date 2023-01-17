@@ -1,23 +1,25 @@
 package webserver;
 
-import Controller.Controller;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.ControllerMapper;
-import view.ViewResolver;
 
-import java.io.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private final Socket connection;
+    private final FrontController frontController;
 
-    public RequestHandler(Socket connectionSocket) {
+    public RequestHandler(Socket connectionSocket, FrontController frontController) {
         this.connection = connectionSocket;
+        this.frontController = frontController;
     }
 
     public void run() {
@@ -27,21 +29,12 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest httpRequest = HttpRequest.from(in);
             HttpResponse httpResponse = new HttpResponse();
-            Controller controller = ControllerMapper.getController(httpRequest);
 
-            String viewName = controller.process(httpRequest, httpResponse);
-            String viewPath = ViewResolver.process(viewName);
+            DataOutputStream dos = new DataOutputStream(out);
 
-            sendResponse(out, httpResponse, viewPath);
+            frontController.process(httpRequest, httpResponse, dos);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
-    }
-
-    private void sendResponse(OutputStream out, HttpResponse httpResponse, String viewPath) throws IOException {
-        httpResponse.makeBodyMessage(viewPath);
-
-        DataOutputStream dos = new DataOutputStream(out);
-        httpResponse.send(dos);
     }
 }
