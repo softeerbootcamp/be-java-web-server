@@ -6,14 +6,15 @@ import model.User;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public class UserDatabase implements Database<User>{
     private static Map<String, User> users = Maps.newHashMap();
 
     @Override
-    public User findObjectById(String userId) {
-        return users.get(userId);
+    public Optional<User> findObjectById(String userId) {
+        return Optional.ofNullable(users.get(userId));
     }
 
     @Override

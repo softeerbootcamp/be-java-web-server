@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -30,7 +31,8 @@ class UserServiceAndDBTest {
         //given
         saveUser(userValue);
         //when
-        User user = (User) userDataBase.findObjectById(userValue[0]);
+        Optional<User> objectById = userDataBase.findObjectById(userValue[0]);
+        User user = objectById.get();
         //then
         assertAll(
                 () -> assertEquals(user.getUserId(), userValue[0]),
