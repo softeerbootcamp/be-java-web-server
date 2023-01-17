@@ -85,6 +85,7 @@ public class UserController implements Controller{
     }
 
     private void setCookie(String sid){
+        logger.debug("sid: "+sid);
         setHeader("Set-Cookie","sid="+sid+"; Path=/");
     }
 

@@ -15,10 +15,10 @@ import util.HttpStatus;
 import view.RequestBodyMessage;
 import view.RequestHeaderMessage;
 import view.RequestMessage;
+import view.RequestReader;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private HttpStatus httpStatus;
     private Socket connection;
     private Controller controller;
     public RequestHandler(Socket connectionSocket) {
@@ -29,29 +29,13 @@ public class RequestHandler implements Runnable {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            httpStatus = HttpStatus.ClientError;
-            InputStreamReader reader = new InputStreamReader(in);
-            BufferedReader br = new BufferedReader(reader);
-            String startLine = br.readLine();
-            //RequestHeaderMessage requestHeaderMessage = new RequestHeaderMessage(br.readLine());
-            String brStr = "";
-            boolean bodyExist = false;
-            char[] body = new char[0];
-            int body_sz = 0;
-            while(!(brStr=br.readLine()).equals("")){
-                int idx = -1;
-                if (brStr.contains("Content-Length")){
-                    body_sz = Integer.parseInt(brStr.substring("Content-Length: ".length()));
-                    body = new char[body_sz];
-                }
-                logger.debug(brStr);
-            }
-            br.read(body);
-            logger.debug(new String(body));
-            RequestMessage requestMessage = new RequestMessage(new RequestHeaderMessage(startLine), new RequestBodyMessage(body));
+            RequestReader rr = new RequestReader(in);
+            rr.readRequest();
+            RequestMessage requestMessage = new RequestMessage(new RequestHeaderMessage(rr.startLine), new RequestBodyMessage(rr.body));
             setController(requestMessage, out);
             logger.debug(controller.toString());
             controller.control();
+
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

@@ -5,7 +5,9 @@ function signUpByEnter(event){
   }
 }
 
-document.question.addEventListener('keyup', event => signUpByEnter(event));
+window.onload = function (){
+  document.question.addEventListener('keyup', event => signUpByEnter(event));
+}
 function emptyChk(){
   var signUpForm = document.question;
   var userId = signUpForm.userId.value;

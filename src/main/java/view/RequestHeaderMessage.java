@@ -13,6 +13,7 @@ public class RequestHeaderMessage {
     private String fileExtension;
     private String requestAttribute;
     private String contentType;
+    private String contentLength;
     public String getHttpOnlyURL() {
         return httpOnlyURL;
     }
