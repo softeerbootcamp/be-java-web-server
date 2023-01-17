@@ -24,6 +24,7 @@ public class UserAccountController implements RequestController {
     private final Map<String, RequestController> routingTable = new HashMap<>() {{
         put("/user/create", (req) -> makeAccount(req));
         put("/user/login", (req) -> loginAccount(req));
+        put("/user/logout", (req) -> logoutAccount(req));
     }};
 
 
@@ -89,5 +90,16 @@ public class UserAccountController implements RequestController {
 
         logger.debug("User login failed");
         return CustomHttpFactory.REDIRECT("/user/login_failed.html");
+    }
+
+    public CustomHttpResponse logoutAccount(CustomHttpRequest req){
+        Set<HttpMethod> allowedMethods = Set.of(HttpMethod.POST, HttpMethod.GET);
+        if (!allowedMethods.contains(req.getHttpMethod()))
+            return CustomHttpFactory.METHOD_NOT_ALLOWED();
+
+        Session expired = SessionService.expireSession(req.getSSID());
+        CustomHttpResponse res = CustomHttpFactory.REDIRECT("/user/login.html");
+        res.addToCookie(expired.toString());
+        return res;
     }
 }
