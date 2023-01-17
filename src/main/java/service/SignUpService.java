@@ -20,8 +20,6 @@ public class SignUpService{
                 params.get("name"),
                 params.get("email"));
 
-        logger.debug("User : {}", user);
-
         return user;
     }
 }

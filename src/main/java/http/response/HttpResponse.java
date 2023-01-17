@@ -71,8 +71,9 @@ public class HttpResponse {
             return this;
         }
 
-        public void addCookie(String cookieValue){
+        public HttpResponseBuilder addCookie(String cookieValue){
             this.header.addHeader("Set-Cookie", cookieValue);
+            return this;
         }
 
         public HttpResponse build(){

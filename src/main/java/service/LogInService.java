@@ -9,7 +9,7 @@ import util.HttpRequestUtils;
 import java.util.Map;
 
 public class LogInService {
-    private static final Logger logger = LoggerFactory.getLogger(SignUpService.class);
+    private static final Logger logger = LoggerFactory.getLogger(LogInService.class);
 
     public static boolean isLoginSuccess(String body) {
         Map<String, String> params = HttpRequestUtils.parseQueryString(body);

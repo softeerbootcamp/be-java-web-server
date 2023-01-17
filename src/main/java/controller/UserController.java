@@ -18,7 +18,7 @@ public class UserController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Override
-    public HttpResponse makeResponse(HttpRequest httpRequest) throws IOException {
+    public HttpResponse makeResponse(HttpRequest httpRequest) {
         // Uri  받아옵시다
         String uri = httpRequest.getUri();
 
@@ -42,10 +42,21 @@ public class UserController implements Controller {
                 // HTTP 헤더의 쿠키 값을 SID = 세션 ID로 응답
                 // 세션 ID는 적당한 크기의 무작위 숫자 또는 문자열
                 // 서버는 세션 아이디에 해당하는 User 정보에 접근 가능해야 한다.
+                return new HttpResponse.HttpResponseBuilder()
+                        .setHttpStatusLine(new HttpStatusLine(HttpStatus.FOUND, httpRequest.getHttpVersion()))
+                        .setDestination("/index.html")
+                        .makeHeader()
+                        .addCookie("cococoocockkekeiie")
+                        .build();
             }
 
             // 실패
             // /user/login_failed.html로 이동
+            return new HttpResponse.HttpResponseBuilder()
+                    .setHttpStatusLine(new HttpStatusLine(HttpStatus.FOUND, httpRequest.getHttpVersion()))
+                    .setDestination("/user/login_failed.html")
+                    .makeHeader()
+                    .build();
 
         }
 
