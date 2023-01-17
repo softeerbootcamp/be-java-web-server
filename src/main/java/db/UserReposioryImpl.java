@@ -20,6 +20,7 @@ public class UserReposioryImpl implements UserRepository {
 	}
 
 	private Map<String, User> users = Maps.newHashMap();
+
 	@Override
 	public void addUser(User user) {
 		users.put(user.getUserId(), user);
@@ -33,5 +34,10 @@ public class UserReposioryImpl implements UserRepository {
 	@Override
 	public Collection<User> findAll() {
 		return users.values();
+	}
+
+	@Override
+	public boolean idExist(String userId) {
+		return users.containsKey(userId);
 	}
 }
