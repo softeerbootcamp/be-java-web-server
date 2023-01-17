@@ -7,6 +7,15 @@ import webserver.domain.HttpResponse;
 import webserver.domain.HttpResponseMessage;
 
 public class UserController implements Controller{
+    private static UserController userController;
+    private UserController() {
+    }
+    public static UserController getInstance() {
+        if (userController == null) {
+            return new UserController();
+        }
+        return userController;
+    }
     @PostMapping("/user/create")
     public HttpResponseMessage create(HttpRequest httpRequest) {
         UserService userService = new UserService();

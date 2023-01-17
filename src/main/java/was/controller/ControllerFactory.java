@@ -9,7 +9,7 @@ public class ControllerFactory {
     public static Controller getControllerInstance(HttpRequest httpRequest) {
         String path = httpRequest.getRequestLine().getUrl();
         if (path.contains("user")) {
-            return new UserController();
+            return UserController.getInstance();
         }
         throw new RuntimeException();
     }
