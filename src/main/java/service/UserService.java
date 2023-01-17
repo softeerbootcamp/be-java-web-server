@@ -21,7 +21,7 @@ public class UserService {
         Database.addUser(user);
     }
 
-    public void login(Map<String, String> userInfo) {
+    public User login(Map<String, String> userInfo) {
         String userId = userInfo.get("userId");
         String password = userInfo.get("password");
 
@@ -34,6 +34,8 @@ public class UserService {
         if (!findUser.getPassword().equals(password)) {
             throw new UserValidationException("아이디 또는 비밀번호가 틀립니다.");
         }
+
+        return findUser;
     }
 
     private void validateDuplication(String userId) {

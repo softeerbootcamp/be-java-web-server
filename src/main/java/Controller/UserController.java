@@ -6,10 +6,14 @@ import exception.UserValidationException;
 import http.request.HttpMethod;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import model.User;
 import service.UserService;
 import util.HttpRequestUtils;
+import webserver.session.SessionManager;
 
 import java.util.Map;
+
+import static webserver.session.SessionManager.SESSION_COOKIE_NAME;
 
 public class UserController implements Controller {
 
@@ -59,10 +63,12 @@ public class UserController implements Controller {
             String body = request.getBody();
             Map<String, String> userInfo = HttpRequestUtils.parseBodyMessage(body);
 
-            userService.login(userInfo);
+            User loginUser = userService.login(userInfo);
+
+            String sessionId = SessionManager.createSession(loginUser.getUserId());
+            response.addHttpHeader("Set-Cookie", SESSION_COOKIE_NAME + "=" + sessionId+ "; Path=/");
 
             response.redirect(request, "/index.html");
-            response.addHttpHeader("Set-Cookie", "sid=" + "");
         } catch (UserValidationException e) {
             response.redirect(request, "/user/login_failed.html");
         } catch (NullValueException e) {
