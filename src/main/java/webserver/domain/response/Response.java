@@ -67,4 +67,7 @@ public class Response {
         }
     }
 
+    public void addCookieOnHeader(String cookie){
+        headerMaps.put("Set-Cookie" , cookie);
+    }
 }
