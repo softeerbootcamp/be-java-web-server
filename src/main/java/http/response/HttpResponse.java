@@ -1,6 +1,6 @@
 package http.response;
 
-import controller.ConnectionClosedException;
+import exception.ConnectionClosedException;
 import enums.Status;
 import filesystem.FindResult;
 import http.common.Body;
