@@ -40,7 +40,7 @@ public class HttpRequest {
         return this.startLine.getVersion();
     }
 
-    public Map<String, String> getQuery() {
+    public Map<String, String> getQueryParams() {
         return this.getUri().getQuery();
     }
 }

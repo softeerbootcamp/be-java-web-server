@@ -2,15 +2,12 @@ package controller;
 
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
 import utils.FileIoUtils;
 import utils.HttpMethod;
 
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class UserCreateController implements Controller {
@@ -35,25 +32,16 @@ public class UserCreateController implements Controller {
     }
 
     public HttpResponse doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        Map<String, String> query = httpRequest.getQuery();
-        userService.join(createUser(query));
+        Map<String, String> queryParams = httpRequest.getQueryParams();
+        userService.createUser(queryParams);
         httpResponse.redirectHome();
         return httpResponse;
     }
 
     public HttpResponse doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         Map<String, String> params = FileIoUtils.parseQueryString(httpRequest.getRequestBody());
-        userService.join(createUser(params));
+        userService.createUser(params);
         httpResponse.redirectHome();
         return httpResponse;
-    }
-
-    public User createUser(Map<String, String> params) {
-        return new User(
-                params.get("userId"),
-                params.get("password"),
-                params.get("name"),
-                URLDecoder.decode(params.get("email"), StandardCharsets.UTF_8)
-        );
     }
 }

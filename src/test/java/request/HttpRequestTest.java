@@ -29,7 +29,7 @@ class HttpRequestTest {
     @Test
     void test_HttpRequest() {
         assertThat(httpRequest.getVersion()).isEqualTo("HTTP/1.1");
-        assertThat(httpRequest.getQuery().get("id")).isEqualTo("mino");
+        assertThat(httpRequest.getQueryParams().get("id")).isEqualTo("mino");
         assertThat(httpRequest.getUri().getPath()).isEqualTo("/user/create");
     }
 }
