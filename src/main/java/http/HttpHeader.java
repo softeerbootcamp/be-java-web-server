@@ -38,4 +38,6 @@ public class HttpHeader {
     public String getContentLength() {
         return headers.get("Content-Length");
     }
+
+    public String getCookie() { return headers.get("Cookie"); }
 }
