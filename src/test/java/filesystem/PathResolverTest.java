@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PathParserTest {
+public class PathResolverTest {
 
     @Test
     @DisplayName("정상적인 static 파일명은 template 또는 static 경로에 속한다")
