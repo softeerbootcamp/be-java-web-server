@@ -6,7 +6,7 @@ import service.SignUpService;
 import webserver.HttpRequest;
 import webserver.HttpResponse;
 
-public class SignUpController extends BaseController{
+public class SignUpController implements Controller{
     private static final String SIGN_UP_PATH_URL = "/user/create";
     // service는 BaseController에서 더 건들이지 않아도 되므로 오버라이딩 하지 않음
 

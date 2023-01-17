@@ -7,7 +7,7 @@ import webserver.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FrontController extends BaseController {
+public class FrontController implements Controller {
     private static final Map<String,Controller> controllers;
     private static final String SIGN_UP_PATH_URL = "/user/create";
 

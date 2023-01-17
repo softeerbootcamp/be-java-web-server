@@ -4,7 +4,7 @@ import webserver.HttpRequest;
 import webserver.HttpResponse;
 import webserver.RequestDispatcher;
 
-public class ReturnFileController extends BaseController{
+public class ReturnFileController implements Controller{
 
     @Override
     public void doGet(HttpRequest request, HttpResponse response) {
