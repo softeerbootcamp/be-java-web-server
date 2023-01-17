@@ -5,12 +5,10 @@ import org.slf4j.LoggerFactory;
 import request.method.HttpMethod;
 import response.Response;
 
-import java.io.IOException;
-
 public class RequestHandlerImpl implements RequestHandler {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandlerImpl.class);
     @Override
-    public Response handleRequest(Request request, int port) {
+    public Response handle(Request request, int port) {
         for (HttpMethod method : HttpMethod.values()) {
             if (request.getMethod().equals(method.getMethod())) {
                 logger.debug("handle request {} of port {}, request header {}", request.getMethod(), port, request);
