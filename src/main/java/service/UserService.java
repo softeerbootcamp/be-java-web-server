@@ -9,12 +9,14 @@ import model.User;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class UserService {
 
     public HttpResponse create(HttpRequest httpRequest) {
         RequestLine requestLine = httpRequest.getRequestLine();
         Database.addUser(User.from(httpRequest.getRequestBody()));
+
         Map<String, String> headers = new HashMap<>();
         headers.put("Location", "/index.html");
         return HttpResponse.of(HttpStatus.FOUND, "", headers, "".getBytes(), requestLine.getVersion());
@@ -25,12 +27,12 @@ public class UserService {
         Map<String, String> headers = new HashMap<>();
         String requestId = httpRequest.getRequestBody().get("userId");
         String requestPassword = httpRequest.getRequestBody().get("password");
+
         if (isExistUser(requestId, requestPassword)) {
             headers.put("Location", "/index.html");
+            headers.put("Set-Cookie", "sid=" + UUID.randomUUID().toString() + ";" + " Path=/");
             return HttpResponse.of(HttpStatus.FOUND, "", headers, "".getBytes(), requestLine.getVersion());
-
         }
-
         headers.put("Location", "/user/login_failed.html");
         return HttpResponse.of(HttpStatus.FOUND, "", headers, "".getBytes(), requestLine.getVersion());
     }
