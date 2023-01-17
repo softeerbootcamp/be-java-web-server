@@ -2,10 +2,12 @@ package controller;
 
 import dto.LogInDTO;
 import dto.SignUpDTO;
+import http.common.Cookie;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import http.common.Session;
 import service.UserService;
 
 import java.util.Map;
@@ -13,6 +15,7 @@ import java.util.function.BiConsumer;
 
 import static dto.SignUpDTO.*;
 import static filesystem.PathResolver.DOMAIN;
+import static http.common.Session.SESSION_FIELD_NAME;
 
 public class UserController implements Controller {
 
@@ -31,8 +34,8 @@ public class UserController implements Controller {
 
     private void logIn(HttpRequest request, HttpResponse response) {
         LogInDTO userInfo = LogInDTO.of(request.getParameters(USER_ID, PASSWORD));
-        userService.logIn(userInfo);
-        // response.setCookie();
+        Session session = userService.logIn(userInfo);
+        response.setCookie(new Cookie(SESSION_FIELD_NAME, session.getId()));
         response.redirect(DOMAIN);
     }
 
