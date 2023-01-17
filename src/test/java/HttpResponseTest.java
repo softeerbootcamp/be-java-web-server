@@ -50,7 +50,7 @@ public class HttpResponseTest {
 
     @DisplayName("Post 회원가입 테스트")
     @Test
-    public void POST_회원가입_테스트() throws IOException, URISyntaxException {
+    public void POST_회원가입_테스트() throws Exception {
         String input = "POST /user/create HTTP/1.1\n" +
                 "Host: localhost:8080\n" +
                 "Content-Length: 69\n" +
