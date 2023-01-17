@@ -22,15 +22,12 @@ public class UserService {
 
     public Session logIn(LogInDTO logInUserInfo) {
         User findUser = Database.findUserById(logInUserInfo.getUserId());
-
         if (findUser != null && passwordMatch(findUser, logInUserInfo)) {
             Session session = new Session(findUser);
             Database.addSession(session);
-            System.out.println(session.getId());
             return session;
         }
-
-        return new Session(null); // todo: throw 적용하기
+        return null;
     }
 
     private boolean passwordMatch(User findUser, LogInDTO logInUserInfo) {

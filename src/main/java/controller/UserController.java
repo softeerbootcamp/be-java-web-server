@@ -15,6 +15,7 @@ import java.util.function.BiConsumer;
 
 import static dto.SignUpDTO.*;
 import static filesystem.PathResolver.DOMAIN;
+import static filesystem.PathResolver.LOGIN_FAILED_HTML;
 import static http.common.Session.SESSION_FIELD_NAME;
 
 public class UserController implements Controller {
@@ -35,8 +36,12 @@ public class UserController implements Controller {
     private void logIn(HttpRequest request, HttpResponse response) {
         LogInDTO userInfo = LogInDTO.of(request.getParameters(USER_ID, PASSWORD));
         Session session = userService.logIn(userInfo);
-        response.setCookie(new Cookie(SESSION_FIELD_NAME, session.getId()));
-        response.redirect(DOMAIN);
+        if (session != null) {
+            response.setCookie(new Cookie(SESSION_FIELD_NAME, session.getId()));
+            response.redirect(DOMAIN);
+            return;
+        }
+        response.redirect(LOGIN_FAILED_HTML);
     }
 
     private void signUp(HttpRequest request, HttpResponse response) {
