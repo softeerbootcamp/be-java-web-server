@@ -34,6 +34,7 @@ public enum Header {
     CONTENT_DISPOSITION("Content-Disposition"),
     LOCATION("Location"),
     SET_COOKIE("Set-Cookie"),
+    POSTMAN_TOKEN("Postman-Token"),
     CONTENT_SECURITY_POLICY("Content-Security-Policy");
 
     private final String header;
