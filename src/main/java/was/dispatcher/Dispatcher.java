@@ -1,9 +1,8 @@
 package was.dispatcher;
 
-import was.annotation.GetMapping;
 import was.annotation.PostMapping;
-import webserver.controller.Controller;
-import webserver.controller.UserController;
+import was.controller.Controller;
+import was.controller.UserController;
 import webserver.handler.ControllerHandler;
 import webserver.domain.HttpRequest;
 import webserver.domain.HttpResponseMessage;
@@ -31,7 +30,7 @@ public class Dispatcher implements ControllerHandler{
         }
         return dispatch(httpRequest, controller, path);
     }
-    public HttpResponseMessage dispatch(HttpRequest httpRequest, Controller controller, String path) {
+    private HttpResponseMessage dispatch(HttpRequest httpRequest, Controller controller, String path) {
         Method[] methods = controller.getClass().getDeclaredMethods();
         for (Method method : methods) {
             Annotation annotation = method.getAnnotation(PostMapping.class);

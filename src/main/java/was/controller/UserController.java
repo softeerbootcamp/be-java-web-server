@@ -1,4 +1,4 @@
-package webserver.controller;
+package was.controller;
 
 import service.UserService;
 import was.annotation.PostMapping;
