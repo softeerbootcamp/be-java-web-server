@@ -18,7 +18,10 @@ public class LoginController implements Controller{
         String userId = request.parseBody().get("userId");
         String password = request.parseBody().get("password");
         boolean alreadyUser = service.checkRightUser(userId,password);
-        if(alreadyUser) response.redirect(REDIRECT_URL);
+        if(alreadyUser){
+            response.addCookie("sid","logined");
+            response.redirect(REDIRECT_URL);
+        }
         else response.redirect(FAILED_REDIRECT_URL);
     }
 
