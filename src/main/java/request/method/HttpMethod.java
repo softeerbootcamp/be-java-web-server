@@ -10,25 +10,25 @@ import java.io.IOException;
 public enum HttpMethod {
     GET("GET") {
         @Override
-        public Response handleRequest(Request request) throws IOException {
+        public Response handleRequest(Request request) {
             return GETHandlerFactory.generateHandler(request).handle(request);
         }
     },
     POST("POST") {
         @Override
-        public Response handleRequest(Request request) throws IOException {
+        public Response handleRequest(Request request) {
             return POSTHandlerFactory.generateHandler(request).handle(request);
         }
     },
     PUT("PUT") {
         @Override
-        public Response handleRequest(Request request) throws IOException {
+        public Response handleRequest(Request request) {
             return null;
         }
     },
     DELETE("DELETE") {
         @Override
-        public Response handleRequest(Request request) throws IOException {
+        public Response handleRequest(Request request) {
             return null;
         }
     };
@@ -43,5 +43,5 @@ public enum HttpMethod {
         return method;
     }
 
-    public abstract Response handleRequest(Request request) throws IOException;
+    public abstract Response handleRequest(Request request);
 }
