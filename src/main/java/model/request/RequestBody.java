@@ -1,5 +1,8 @@
 package model.request;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Arrays;
@@ -7,6 +10,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class RequestBody {
+    private static final Logger logger = LoggerFactory.getLogger(RequestBody.class);
+
     private final Map<String, String> content;
 
     private RequestBody(Map<String, String> content) {
@@ -17,6 +22,7 @@ public class RequestBody {
         char[] body = new char[contentLength];
         int bodyLength = br.read(body, 0, contentLength);
 
+        logger.debug("Request Body: {}", String.valueOf(body));
         Map<String, String> content = parseRequestBody(String.valueOf(body));
         return new RequestBody(content);
     }
