@@ -15,6 +15,16 @@ import webserver.Url;
 
 public class UserController extends AbstractController {
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+	private static UserController instance;
+
+	public static UserController getInstance() {
+		if (instance == null) {
+			synchronized (UserController.class) {
+				instance = new UserController();
+			}
+		}
+		return instance;
+	}
 
 	public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
 		Url url = httpRequest.getUrl();
