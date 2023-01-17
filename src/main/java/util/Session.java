@@ -6,27 +6,27 @@ import model.User;
 import java.util.UUID;
 
 public class Session {
-    private UUID sid;
-    private String id;
+    private UUID sessionId;
+    private String userId;
 
     private int maxInactiveInterval = 5;
     private long creationTime = 0L;
     private long lastAcceptedTime = creationTime;
 
-    private Session(String id) {
-        this.sid = UUID.randomUUID();
-        this.id = id;
+    private Session(String userId) {
+        this.sessionId = UUID.randomUUID();
+        this.userId = userId;
     }
     public static Session createSessionWith(User user) {
         return new Session(user.getUserId());
     }
 
-    public UUID getSid() {
-        return sid;
+    public UUID getSessionId() {
+        return sessionId;
     }
 
-    public String getId() {
-        return id;
+    public String getUserId() {
+        return userId;
     }
 
     public void setMaxInactiveInterval(int maxInactiveInterval) {

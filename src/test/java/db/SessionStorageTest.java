@@ -15,7 +15,7 @@ class SessionStorageTest {
         Session session = Session.createSessionWith(new User("ajongs", "password"));
         SessionStorage.addSession(session);
 
-        Session find = SessionStorage.findSessionBy(session.getSid());
+        Session find = SessionStorage.findSessionBy(session.getSessionId());
 
         Assertions.assertThat(session).isEqualTo(find);
     }

@@ -1,6 +1,5 @@
 package db;
 
-import model.User;
 import util.Session;
 
 import java.util.HashMap;
@@ -11,7 +10,7 @@ public class SessionStorage {
     private static Map<UUID, Session> sessions = new HashMap<>();
 
     public static UUID addSession(Session session) {
-        UUID sid = session.getSid();
+        UUID sid = session.getSessionId();
         sessions.put(sid, session);
         return sid;
     }
@@ -20,8 +19,8 @@ public class SessionStorage {
     }
 
     public static void remove(Session session) {
-        if (session.getSid() != null) {
-            sessions.remove(session.getSid());
+        if (session.getSessionId() != null) {
+            sessions.remove(session.getSessionId());
         }
     }
 }
