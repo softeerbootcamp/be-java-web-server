@@ -7,7 +7,7 @@ import request.HttpRequest;
 
 public enum RequestMappingHandler {
 
-	USER_CONTROLLER("/user/create", new UserController());
+	USER_CONTROLLER("/user/create", UserController.getInstance());
 	private String path;
 	private Controller controller;
 
@@ -22,7 +22,7 @@ public enum RequestMappingHandler {
 	public static Controller findController(HttpRequest httpRequest) {
 		String path = httpRequest.getUrl().getPath();
 		if (FILE_REGEX.matcher(path).matches()) {
-			return new FileController();
+			return FileController.getInstance();
 		}
 		return Arrays.stream(RequestMappingHandler.values())
 			.filter(p -> path.startsWith(p.path))
