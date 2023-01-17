@@ -1,7 +1,9 @@
 package was.controller;
 
+import db.SessionStorage;
 import model.User;
 import service.UserService;
+import util.Session;
 import was.annotation.PostMapping;
 import webserver.domain.HttpRequest;
 import webserver.domain.HttpResponse;
@@ -35,6 +37,7 @@ public class UserController implements Controller{
 
         HttpResponse httpResponse = new HttpResponse();
         if (userService.login(user)) {
+            SessionStorage.addSession(Session.createSessionWith(user));
             return new HttpResponseMessage(httpResponse.sendCookieWithRedirect(user, "/index.html"), httpResponse.getBody());
         }
         return new HttpResponseMessage(httpResponse.unauthorized(), httpResponse.getBody());
