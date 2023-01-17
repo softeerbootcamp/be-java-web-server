@@ -5,6 +5,7 @@ import Controller.StaticResourceController;
 import Controller.UserController;
 import exception.ControllerNotFoundException;
 import http.request.HttpRequest;
+import service.UserService;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -13,7 +14,7 @@ public class ControllerMapper {
     private static final Map<String, Controller> controllerMap = new LinkedHashMap<>();
 
     static {
-        controllerMap.put(UserController.PREFIX, new UserController());
+        controllerMap.put(UserController.PREFIX, new UserController(new UserService()));
     }
 
     public static Controller getController(HttpRequest request) {

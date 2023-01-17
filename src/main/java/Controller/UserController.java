@@ -14,6 +14,11 @@ import java.util.Map;
 public class UserController implements Controller {
 
     public static final String PREFIX = "/user";
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     public String process(HttpRequest request, HttpResponse response) {
@@ -26,7 +31,6 @@ public class UserController implements Controller {
 
                 Map<String, String> userInfo = HttpRequestUtils.parseBodyMessage(body);
 
-                UserService userService = new UserService();
                 userService.signUp(userInfo);
 
                 response.redirect(request, "/index.html");
