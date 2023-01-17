@@ -2,7 +2,7 @@ import controller.Controller;
 import controller.ControllerHandler;
 import controller.UserController;
 import controller.ViewController;
-import http.HttpRequest;
+import http.request.HttpRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

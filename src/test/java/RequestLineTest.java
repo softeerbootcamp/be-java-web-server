@@ -1,7 +1,7 @@
-import http.HttpMethod;
-import http.QueryParameters;
-import http.RequestLine;
-import http.HttpUri;
+import http.request.HttpMethod;
+import http.request.QueryParameters;
+import http.request.RequestLine;
+import http.request.HttpUri;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

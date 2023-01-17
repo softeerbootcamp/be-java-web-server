@@ -1,10 +1,10 @@
 package controller;
 
 import exception.ControllerNotFoundException;
-import http.HttpRequest;
+import http.request.HttpRequest;
 import http.HttpResponse;
-import http.RequestLine;
-import http.HttpUri;
+import http.request.RequestLine;
+import http.request.HttpUri;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

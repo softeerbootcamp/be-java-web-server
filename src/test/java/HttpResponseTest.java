@@ -1,5 +1,6 @@
 import controller.ControllerHandler;
 import http.*;
+import http.request.HttpRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +9,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.URISyntaxException;
 import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
