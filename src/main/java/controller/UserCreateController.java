@@ -37,6 +37,7 @@ public class UserCreateController extends AbstractController {
         logger.debug("query params: {}", queryParams);
         UserService.create(queryParams);
 
+        logger.info("Create User Success");
         httpResponse.sendRedirect(HttpStatusCode.FOUND, REDIRECT_PATH);
 
     }

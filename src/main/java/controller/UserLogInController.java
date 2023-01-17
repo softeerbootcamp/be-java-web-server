@@ -7,6 +7,8 @@ import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.response.HttpStatusCode;
 import model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -26,6 +28,8 @@ public class UserLogInController extends AbstractController {
         this.paths = Collections.singletonList("/user/login");
     }
 
+    private static final Logger logger = LoggerFactory.getLogger(UserLogInController.class);
+
     @Override
     public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         try {
@@ -41,8 +45,11 @@ public class UserLogInController extends AbstractController {
             String id = session.getId();
             Cookie cookie = Cookie.of(Session.DEFAULT_SESSION_ID, id + COOKIE_SUFFIX);
 
+            logger.info("Login Success");
             httpResponse.sendRedirect(HttpStatusCode.FOUND, INDEX_PATH, cookie);
+
         } catch (IllegalArgumentException e) {
+            logger.info("Login Failed");
             httpResponse.sendRedirect(HttpStatusCode.FOUND, LOGIN_FAILED_PATH);
         }
     }

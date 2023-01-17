@@ -50,7 +50,7 @@ public class HttpRequest {
     ) throws IOException {
         HttpMethod httpMethod = startLine.getMethod();
         CookieManager cookies = new CookieManager(headers.getHeaders().get("Cookie"));
-        logger.info("HttpStartLine: {}{}{}", startLine.getMethod(), startLine.getUri(), startLine.getHttpVersion());
+        logger.info("HttpStartLine: {} {} {}", startLine.getMethod(), startLine.getUri().getPath(), startLine.getHttpVersion());
         logger.debug("Headers: {}", headers);
 
         if (httpMethod.equals(HttpMethod.GET)) {
