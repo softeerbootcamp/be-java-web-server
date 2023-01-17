@@ -1,6 +1,6 @@
 package http.request;
 
-import http.HttpHeaders;
+import http.HttpHeader;
 import http.Uri;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +19,12 @@ public class HttpRequest {
     private static final String ENTER = "\n";
 
     private final HttpStartLine startLine;
-    private final HttpHeaders httpHeaders;
+    private final HttpHeader httpHeaders;
     private final HttpRequestBody requestBody;
 
     private HttpRequest(
             HttpStartLine startLine,
-            HttpHeaders headers,
+            HttpHeader headers,
             HttpRequestBody requestBody
     ) {
         this.startLine = startLine;
@@ -40,12 +40,12 @@ public class HttpRequest {
         String extracted = extractHeaders(br);
         String[] headers = extracted.split(ENTER);
 
-        return of(HttpStartLine.from(startLine), HttpHeaders.from(headers), br);
+        return of(HttpStartLine.from(startLine), HttpHeader.from(headers), br);
     }
 
     public static HttpRequest of(
             HttpStartLine startLine,
-            HttpHeaders headers,
+            HttpHeader headers,
             BufferedReader br
     ) throws IOException {
         HttpMethod httpMethod = startLine.getMethod();
