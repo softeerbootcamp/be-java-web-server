@@ -76,10 +76,10 @@ public class UserController implements Controller {
         RequestLine requestLine = request.getRequestLine();
 
         if(Sessions.isExistSession(request.getSessionId())) {
-            // TODO: 로그인되어 있는 경우 유저 리스트 불러올 수 있도록 구현
+            // TODO: 로그인되어 있는 경우 유저 리스트 불러올 수 있도경 구현
         }
 
-        headers = responseRedirectIndexHtmlHeader();
+        headers = responseRedirectLoginHtmlHeader();
         return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.FOUND), headers);
     }
 
@@ -101,6 +101,13 @@ public class UserController implements Controller {
     private Map<Header, String> responseLoginFailHeader() {
         Map<Header, String> headers = new HashMap<>();
         headers.put(Header.from("Location"), " /user/login_failed.html");
+
+        return headers;
+    }
+
+    private Map<Header, String> responseRedirectLoginHtmlHeader() {
+        Map<Header, String> headers = new HashMap<>();
+        headers.put(Header.from("Location"), " /user/login.html");
 
         return headers;
     }
