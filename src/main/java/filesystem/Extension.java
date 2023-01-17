@@ -5,7 +5,7 @@ import java.util.List;
 public enum Extension {
 
     INDEX(List.of("/")),
-    TEMPLATE(List.of(".html")),
+    TEMPLATE(List.of(".html", ".ico")),
     STATIC(List.of(".css", ".js", ".css", ".js", ".eot", ".svg", ".ttf", ".woff", ".woff2", ".png")),
     ELSE(List.of("*"));
 
