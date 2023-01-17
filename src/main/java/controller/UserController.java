@@ -30,9 +30,9 @@ public class UserController implements Controller {
     public Response getResponse(Request request) {
         RequestLine requestLine = request.getRequestLine();
 
-        if(requestLine.getMethod().equals(Method.from("POST")) &&
+        if(requestLine.getMethod().equals(Method.POST) &&
                 requestLine.getUri().startsWith("/user/create")) return createUserResponse(request);
-        else if(requestLine.getMethod().equals(Method.from("POST")) &&
+        else if(requestLine.getMethod().equals(Method.POST) &&
                 requestLine.getUri().startsWith("/user/login")) return loginUserResponse(request);
 
         return Response.of(request, Status.NOT_FOUND);
