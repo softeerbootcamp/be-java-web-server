@@ -21,9 +21,9 @@ public class HttpRequestTest {
         HttpRequest request = HttpRequest.from(br);
 
         RequestLine requestLine = request.getRequestLine();
-        Uri uri = requestLine.getUri();
+        HttpUri httpUri = requestLine.getHttpUri();
         assertEquals(HttpMethod.GET, requestLine.getHttpMethod());
-        assertEquals("/", uri.getPath());
+        assertEquals("/", httpUri.getPath());
         assertEquals("HTTP/1.1", requestLine.getVersion());
 
         RequestHeader requestHeader = request.getRequestHeader();
@@ -42,12 +42,12 @@ public class HttpRequestTest {
         HttpRequest request = HttpRequest.from(br);
 
         RequestLine requestLine = request.getRequestLine();
-        Uri uri = requestLine.getUri();
+        HttpUri httpUri = requestLine.getHttpUri();
         assertEquals(HttpMethod.GET, requestLine.getHttpMethod());
-        assertEquals("/search", uri.getPath());
+        assertEquals("/search", httpUri.getPath());
         assertEquals("HTTP/1.1", requestLine.getVersion());
 
-        Map<String, String> queryParams = uri.getQueryParameters().getParameters();
+        Map<String, String> queryParams = httpUri.getQueryParameters().getParameters();
         assertEquals("test", queryParams.get("q"));
         assertEquals("asc", queryParams.get("sort"));
 
@@ -70,10 +70,10 @@ public class HttpRequestTest {
         BufferedReader br = new BufferedReader(new StringReader(input));
         HttpRequest request = HttpRequest.from(br);
         RequestLine requestLine = request.getRequestLine();
-        Uri uri = requestLine.getUri();
+        HttpUri httpUri = requestLine.getHttpUri();
 
         assertEquals(HttpMethod.POST, requestLine.getHttpMethod());
-        assertEquals("/user/create", uri.getPath());
+        assertEquals("/user/create", httpUri.getPath());
         assertEquals("HTTP/1.1", requestLine.getVersion());
 
         Map<String, String> requestBody = request.getRequestBody();

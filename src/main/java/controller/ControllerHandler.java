@@ -4,7 +4,7 @@ import exception.ControllerNotFoundException;
 import http.HttpRequest;
 import http.HttpResponse;
 import http.RequestLine;
-import http.Uri;
+import http.HttpUri;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,8 +29,8 @@ public class ControllerHandler {
 
     public static Controller findController(HttpRequest httpRequest) {
         RequestLine requestLine = httpRequest.getRequestLine();
-        Uri uri = requestLine.getUri();
-        if (!uri.isQueryParameterExist() && uri.isEndWithResourceType()) {
+        HttpUri httpUri = requestLine.getHttpUri();
+        if (!httpUri.isQueryParameterExist() && httpUri.isEndWithResourceType()) {
             return new ViewController();
         }
         return controllers

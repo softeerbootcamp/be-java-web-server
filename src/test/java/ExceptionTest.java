@@ -3,7 +3,7 @@ import exception.ControllerNotFoundException;
 import http.HttpRequest;
 import http.RequestLine;
 import exception.ResourceTypeNotFoundException;
-import http.Uri;
+import http.HttpUri;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +33,7 @@ public class ExceptionTest {
         BufferedReader br = new BufferedReader(new StringReader(input));
         HttpRequest request = HttpRequest.from(br);
         RequestLine requestLine = request.getRequestLine();
-        Uri uri = requestLine.getUri();
-        Assertions.assertThrows(ResourceTypeNotFoundException.class, uri::isEndWithResourceType);
+        HttpUri httpUri = requestLine.getHttpUri();
+        Assertions.assertThrows(ResourceTypeNotFoundException.class, httpUri::isEndWithResourceType);
     }
 }

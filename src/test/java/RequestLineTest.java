@@ -1,7 +1,7 @@
 import http.HttpMethod;
 import http.QueryParameters;
 import http.RequestLine;
-import http.Uri;
+import http.HttpUri;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -25,8 +25,8 @@ public class RequestLineTest {
 
         //when
         RequestLine requestLine = RequestLine.from(request);
-        Uri uri = requestLine.getUri();
-        QueryParameters queryParameters = uri.getQueryParameters();
+        HttpUri httpUri = requestLine.getHttpUri();
+        QueryParameters queryParameters = httpUri.getQueryParameters();
 
         //then
         assertThat(requestLine.getHttpMethod()).isEqualTo(HttpMethod.GET);
@@ -48,7 +48,7 @@ public class RequestLineTest {
 
         //then
         assertThat(requestLine.getHttpMethod()).isEqualTo(HttpMethod.GET);
-        assertThat(requestLine.getUri().getPath()).isEqualTo("/index.html");
+        assertThat(requestLine.getHttpUri().getPath()).isEqualTo("/index.html");
         assertThat(requestLine.getVersion()).isEqualTo("HTTP/1.1");
 
     }

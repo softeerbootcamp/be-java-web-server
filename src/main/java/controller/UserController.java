@@ -13,8 +13,8 @@ public class UserController implements Controller{
     @Override
     public HttpResponse doService(HttpRequest httpRequest) {
         RequestLine requestLine = httpRequest.getRequestLine();
-        Uri uri = requestLine.getUri();
-        QueryParameters queryParameters = uri.getQueryParameters();
+        HttpUri httpUri = requestLine.getHttpUri();
+        QueryParameters queryParameters = httpUri.getQueryParameters();
 
         Database.addUser(User.from(httpRequest.getRequestBody()));
 
@@ -26,7 +26,7 @@ public class UserController implements Controller{
     @Override
     public boolean isMatch(HttpRequest httpRequest) {
         RequestLine requestLine = httpRequest.getRequestLine();
-        Uri uri = requestLine.getUri();
-        return path.equals(uri.getDetachControllerPath());
+        HttpUri httpUri = requestLine.getHttpUri();
+        return path.equals(httpUri.getDetachControllerPath());
     }
 }

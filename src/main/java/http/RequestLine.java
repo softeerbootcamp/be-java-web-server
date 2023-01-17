@@ -3,16 +3,16 @@ package http;
 public class RequestLine {
 
     private final HttpMethod httpMethod;
-    private final Uri uri;
+    private final HttpUri httpUri;
     private final String version;
 
     private RequestLine(
             HttpMethod httpMethod,
-            Uri uri,
+            HttpUri httpUri,
             String version
     ) {
         this.httpMethod = httpMethod;
-        this.uri = uri;
+        this.httpUri = httpUri;
         this.version = version;
     }
 
@@ -20,7 +20,7 @@ public class RequestLine {
         String[] splitRequestLine = requestLine.split(" ");
         return new RequestLine(
                 HttpMethod.valueOf(splitRequestLine[0]),
-                Uri.from(splitRequestLine[1]),
+                HttpUri.from(splitRequestLine[1]),
                 splitRequestLine[2]
                 );
     }
@@ -29,8 +29,8 @@ public class RequestLine {
         return httpMethod;
     }
 
-    public Uri getUri() {
-        return uri;
+    public HttpUri getHttpUri() {
+        return httpUri;
     }
 
     public String getVersion() {
@@ -41,7 +41,7 @@ public class RequestLine {
     public String toString() {
         return "RequestLine{" +
                 "method=" + httpMethod +
-                ", url='" + uri + '\'' +
+                ", url='" + httpUri + '\'' +
                 ", version='" + version + '\'' +
                 '}';
     }
