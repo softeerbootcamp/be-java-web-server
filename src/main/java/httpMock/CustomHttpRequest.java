@@ -118,11 +118,17 @@ public class CustomHttpRequest {
         if (split1.length < 2) {
             return;
         }
-        String[] itemString = Arrays.stream(split1[1].split(",")).map(String::trim).toArray(String[]::new);
+        String[] itemString = Arrays.stream(split1[1].split(";")).map(String::trim).toArray(String[]::new);
         List<String> itemList = new ArrayList<>(List.of(itemString));
         this.requestHeaders.put(itemName, itemList);
     }
 
+    public String getSSID(){
+        String sidLine = requestHeaders.get("Cookie").stream().filter(s -> s.startsWith("SID=")).findFirst().orElse(null);
+        if(sidLine == null)
+            return null;
+        return sidLine.substring(sidLine.indexOf("=") + 1);
+    }
     public String getUrl() {
         return url;
     }
