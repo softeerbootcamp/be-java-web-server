@@ -14,7 +14,10 @@ import java.io.OutputStream;
 public class Response {
     private static final Logger logger = LoggerFactory.getLogger(RequestResponseHandler.class);
     private static final String NEW_LINE = "\r\n";
-
+    private ResponseStatusLine responseStatusLine;
+    private ResponseHeader responseHeader;
+    private ResponseBody responseBody;
+    private HttpSession httpSession;
     private DataOutputStream dos;
 
     public Response(OutputStream outputStream) {
@@ -25,6 +28,7 @@ public class Response {
     public void responseMaker(ControllerTypeEnum controllerTypeEnum, ContentTypeEnum contentTypeEnum,
                               int lengthOfBodyContent, String redirectUrl, boolean isCookie, String sid) {
         try {
+
             ResponseStatusLine responseStatusLine = new ResponseStatusLine(controllerTypeEnum);
             ResponseHeader responseHeader = new ResponseHeader(contentTypeEnum, lengthOfBodyContent);
             dos.writeBytes(responseStatusLine.getResponseStatusLine() + NEW_LINE);

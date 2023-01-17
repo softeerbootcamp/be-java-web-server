@@ -5,7 +5,7 @@ import enums.ControllerTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.Request;
-import response.Response;
+import response.*;
 import webserver.RequestResponseHandler;
 
 import java.io.File;
@@ -23,8 +23,15 @@ public class StaticController implements Controller{
         }
         logger.debug("firstLine : "+ request.getRequestLine().getURL());
         byte[] body = Files.readAllBytes(new File("./src/main/resources/static"+url).toPath());
-        response.responseMaker(ControllerTypeEnum.STATIC, ContentTypeEnum.CSS,body.length,url);
-        response.responseNewLineAdder();
-        response.responseBody(body);
+        NewResponse newResponse = new NewResponse.Builder()
+                .setResponseStatusLine(ControllerTypeEnum.STATIC)
+                .SetResponseHeader(ContentTypeEnum.CSS,body.length)
+                .SetResponseBody(body)
+                .responseAdder("").build();
+        ResponseSender responseSender = new ResponseSender();
+        responseSender.send(newResponse);
+        //response.responseMaker(ControllerTypeEnum.STATIC, ContentTypeEnum.CSS,body.length,url);
+//        response.responseNewLineAdder();
+//        response.responseBody(body);
     }
 }
