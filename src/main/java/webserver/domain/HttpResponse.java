@@ -18,11 +18,12 @@ public class HttpResponse {
     private static final String JS = "text/javascript";
 
     public String unauthorized() {
-        return "HTTP/1.1 401 Unauthorized";
+        sendRedirect("/user/login_failed.html");
+        return "HTTP/1.1 302 Found\r\n" + processHeaders();
     }
 
-    public String sendCookieWithRedirect(User user, String url) {
-        addHeader("Set-Cookie", UserEnum.ID + "=" + user.getUserId());
+    public String sendCookieWithRedirect(UUID sid, String url) {
+        addHeader("Set-Cookie", "SID=" + sid + "; Path=/");
         return sendRedirect(url);
     }
 
