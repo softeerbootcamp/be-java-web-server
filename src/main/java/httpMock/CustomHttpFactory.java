@@ -7,14 +7,17 @@ import java.util.HashMap;
 
 public class CustomHttpFactory {
 
-    public static CustomHttpResponse REDIRECT(String location){
+    public static CustomHttpResponse REDIRECT(String location) {
         return CustomHttpResponse.of(
                 StatusCode.FOUND,
                 ContentType.TEXT_PLAIN,
-                new HashMap<>(){{put("Location", location);}},
+                new HashMap<>() {{
+                    put("Location", location);
+                }},
                 CustomHttpResponse.EMPTY_BODY
         );
     }
+
     public static CustomHttpResponse BAD_REQUEST(String reason) {
         return CustomHttpResponse.of(
                 StatusCode.BAD_REQUEST,
@@ -33,7 +36,7 @@ public class CustomHttpFactory {
         );
     }
 
-    public static CustomHttpResponse METHOD_NOT_ALLOWED(){
+    public static CustomHttpResponse METHOD_NOT_ALLOWED() {
         return CustomHttpResponse.of(
                 StatusCode.METHOD_NOT_ALLOWED,
                 ContentType.TEXT_PLAIN,

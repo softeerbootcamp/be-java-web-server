@@ -4,9 +4,7 @@ import Utility.UserValidation;
 import httpMock.CustomHttpFactory;
 import httpMock.CustomHttpRequest;
 import httpMock.CustomHttpResponse;
-import httpMock.constants.ContentType;
 import httpMock.constants.HttpMethod;
-import httpMock.constants.StatusCode;
 import model.Session;
 import model.User;
 import service.SessionService;
@@ -44,7 +42,7 @@ public class UserAccountController implements RequestController {
 
     public CustomHttpResponse makeAccount(CustomHttpRequest req) {
         Set<HttpMethod> allowedMethods = Set.of(HttpMethod.POST);
-        if(!allowedMethods.contains(req.getHttpMethod()))
+        if (!allowedMethods.contains(req.getHttpMethod()))
             return CustomHttpFactory.METHOD_NOT_ALLOWED();
 
         Map<String, String> bodyParams = req.parseBodyFromUrlEncoded();
@@ -67,9 +65,9 @@ public class UserAccountController implements RequestController {
         return CustomHttpFactory.REDIRECT("/index.html");
     }
 
-    public CustomHttpResponse loginAccount(CustomHttpRequest req){
+    public CustomHttpResponse loginAccount(CustomHttpRequest req) {
         Set<HttpMethod> allowedMethods = Set.of(HttpMethod.POST);
-        if(!allowedMethods.contains(req.getHttpMethod()))
+        if (!allowedMethods.contains(req.getHttpMethod()))
             return CustomHttpFactory.METHOD_NOT_ALLOWED();
 
         Map<String, String> bodyParams = req.parseBodyFromUrlEncoded();
@@ -77,7 +75,7 @@ public class UserAccountController implements RequestController {
         String password = bodyParams.get("password");
 
         User customer = UserService.findUserById(userId);
-        if(customer != null && customer.getPassword().equals(password)){
+        if (customer != null && customer.getPassword().equals(password)) {
             logger.debug("User {} login success", customer.getName());
             CustomHttpResponse res = CustomHttpFactory.REDIRECT("/index.html");
             Session sess = SessionService.addUserToSession(customer);

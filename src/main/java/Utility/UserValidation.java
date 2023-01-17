@@ -2,12 +2,12 @@ package Utility;
 
 public class UserValidation {
 
-    public static boolean isNull(Object target){
+    public static boolean isNull(Object target) {
         return target == null;
     }
 
     public static boolean isEmailValid(String email) {
-        if(isNull(email))
+        if (isNull(email))
             return false;
         if (!email.contains("@"))
             return false;
@@ -17,12 +17,12 @@ public class UserValidation {
     }
 
     public static boolean isPasswordValid(String password) {
-        if(isNull(password))
+        if (isNull(password))
             return false;
         return password.length() >= 6;
     }
 
-    public static boolean isNameValid(String name){
+    public static boolean isNameValid(String name) {
         return name != null;
     }
 }

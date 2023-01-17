@@ -44,11 +44,11 @@ public class CustomHttpResponse {
         this.headers.put("Set-Cookie", exist + value);
     }
 
-    public String getContentTypeLine(){
+    public String getContentTypeLine() {
         return "Content-Type: " + contentType.getContentType();
     }
 
-    public String getStatusLine(String protocol){
+    public String getStatusLine(String protocol) {
         return protocol + " " + statusCode.getCode() + " " + statusCode.getMessage();
     }
 
@@ -57,7 +57,7 @@ public class CustomHttpResponse {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return statusCode.getMessage() + " " + headers.toString();
     }
 
