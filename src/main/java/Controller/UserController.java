@@ -7,6 +7,8 @@ import http.request.HttpMethod;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import service.UserService;
 import util.HttpRequestUtils;
 import webserver.session.SessionManager;
@@ -17,6 +19,7 @@ import static webserver.session.SessionManager.SESSION_COOKIE_NAME;
 
 public class UserController implements Controller {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     public static final String PREFIX = "/user";
     private final UserService userService;
 
@@ -25,22 +28,24 @@ public class UserController implements Controller {
     }
 
     @Override
-    public String process(HttpRequest request, HttpResponse response) {
+    public void process(HttpRequest request, HttpResponse response) {
         String url = request.getUrl();
         String path = url.split(PREFIX)[1];
 
         if (path.startsWith("/create") && request.getMethod() == HttpMethod.POST) {
-            return createUser(request, response);
+            createUser(request, response);
+            return;
         }
 
         if (path.startsWith("/login") && request.getMethod() == HttpMethod.POST) {
-            return login(request, response);
+            login(request, response);
+            return;
         }
 
         throw new UrlNotFoundException("잘못된 URL 요청입니다.");
     }
 
-    private String createUser(HttpRequest request, HttpResponse response) {
+    private void createUser(HttpRequest request, HttpResponse response) {
         try {
             String body = request.getBody();
 
@@ -50,15 +55,15 @@ public class UserController implements Controller {
 
             response.redirect(request, "/index.html");
         } catch (UserValidationException e) {
+            logger.error(e.getMessage());
             response.redirect(request, "/user/form_failed.html");
         } catch (NullValueException e) {
+            logger.error(e.getMessage());
             response.redirect(request, "/user/form.html");
         }
-
-        return "";
     }
 
-    private String login(HttpRequest request, HttpResponse response) {
+    private void login(HttpRequest request, HttpResponse response) {
         try {
             String body = request.getBody();
             Map<String, String> userInfo = HttpRequestUtils.parseBodyMessage(body);
@@ -74,7 +79,5 @@ public class UserController implements Controller {
         } catch (NullValueException e) {
             response.redirect(request, "/user/login.html");
         }
-
-        return "";
     }
 }
