@@ -1,9 +1,7 @@
 package request.method;
 
-import request.method.DELETE.DELETEHandlerImpl;
-import request.method.GET.GETHandlerImpl;
-import request.method.POST.POSTHandlerImpl;
-import request.method.PUT.PUTHandlerImpl;
+import request.method.GET.GETHandlerFactory;
+import request.method.POST.POSTHandlerFactory;
 import request.Request;
 import response.Response;
 
@@ -13,29 +11,25 @@ public enum HttpMethod {
     GET("GET") {
         @Override
         public Response handle(Request request) throws IOException {
-            HttpMethodHandler httpMethodHandler = GETHandlerImpl.getInstance();
-            return httpMethodHandler.handle(request);
+            return GETHandlerFactory.generateHandler(request).handle(request);
         }
     },
     POST("POST") {
         @Override
         public Response handle(Request request) throws IOException {
-            HttpMethodHandler httpMethodHandler = POSTHandlerImpl.getInstance();
-            return httpMethodHandler.handle(request);
+            return POSTHandlerFactory.generateHandler(request).handle(request);
         }
     },
     PUT("PUT") {
         @Override
         public Response handle(Request request) throws IOException {
-            HttpMethodHandler httpMethodHandler = new PUTHandlerImpl();
-            return httpMethodHandler.handle(request);
+            return null;
         }
     },
     DELETE("DELETE") {
         @Override
         public Response handle(Request request) throws IOException {
-            HttpMethodHandler httpMethodHandler = new DELETEHandlerImpl();
-            return httpMethodHandler.handle(request);
+            return null;
         }
     };
 
