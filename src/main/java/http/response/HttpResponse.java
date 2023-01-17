@@ -1,7 +1,7 @@
 package http.response;
 
 import http.ContentType;
-import http.Cookie;
+import http.cookie.Cookie;
 import http.HttpHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

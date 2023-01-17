@@ -1,4 +1,4 @@
-package http;
+package http.cookie;
 
 import java.util.Arrays;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package http;
+package http.cookie;
 
 public class Cookie {
 
