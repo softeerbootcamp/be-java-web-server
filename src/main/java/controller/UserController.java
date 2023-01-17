@@ -6,7 +6,6 @@ import http.request.RequestLine;
 import http.response.HttpResponse;
 import service.UserService;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class UserController implements Controller {
@@ -15,7 +14,7 @@ public class UserController implements Controller {
     private static final UserService userService = new UserService();
 
     @Override
-    public HttpResponse doService(HttpRequest httpRequest) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public HttpResponse doService(HttpRequest httpRequest) throws Exception {
         RequestLine requestLine = httpRequest.getRequestLine();
         HttpUri httpUri = requestLine.getHttpUri();
 
