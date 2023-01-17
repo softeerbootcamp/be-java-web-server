@@ -41,6 +41,6 @@ public class HttpRequest {
     }
 
     public Map<String, String> getQueryParams() {
-        return this.getUri().getQuery();
+        return this.getUri().getParams();
     }
 }
