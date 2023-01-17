@@ -5,9 +5,11 @@ import java.util.Map;
 
 public class HttpHeaders {
     private final Map<String, String> headers;
+    private final Map<String, String> cookies;
 
     public HttpHeaders() {
         this.headers = new HashMap<>();
+        this.cookies = new HashMap<>();
     }
 
     public String getValue(String key) {
@@ -20,6 +22,18 @@ public class HttpHeaders {
 
     public void addHeaders(HttpHeaders headers) {
         this.headers.putAll(headers.headers);
+    }
+
+    public void addCookie(String key, String value) {
+        cookies.put(key, value);
+    }
+
+    public String getCookie(String key) {
+        if (cookies.containsKey(key)) {
+            return cookies.get(key);
+        }
+
+        return "";
     }
 
     public int size() {
