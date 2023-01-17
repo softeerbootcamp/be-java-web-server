@@ -11,4 +11,8 @@ public class Session {
         this.sessionId = sessionId;
         this.sessionData = new HashMap<>();
     }
+
+    public void setSessionData(String name, Object value) {
+        sessionData.put(name, value);
+    }
 }
