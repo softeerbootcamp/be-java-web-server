@@ -18,7 +18,7 @@ public class CustomHttpRequest {
     private String protocolVersion;
     private Map<String, String> urlParams;
     private Map<String, List<String>> requestHeaders;
-    private List<String> requestBody;
+    private final List<String> requestBody;
 
     private CustomHttpRequest(String firstLine, List<String> headers, List<String> bodies) {
         setFirstLineHeaders(firstLine);
@@ -124,8 +124,10 @@ public class CustomHttpRequest {
     }
 
     public String getSSID(){
+        if (requestHeaders.get("Cookie") == null)
+            return null;
         String sidLine = requestHeaders.get("Cookie").stream().filter(s -> s.startsWith("SID=")).findFirst().orElse(null);
-        if(sidLine == null)
+        if (sidLine == null)
             return null;
         return sidLine.substring(sidLine.indexOf("=") + 1);
     }
