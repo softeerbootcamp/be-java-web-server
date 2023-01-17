@@ -2,7 +2,7 @@ package db;
 
 import com.google.common.collect.Maps;
 import model.User;
-import service.Session;
+import http.common.Session;
 
 import java.util.Collection;
 import java.util.Map;
