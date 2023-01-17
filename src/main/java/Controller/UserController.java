@@ -36,8 +36,11 @@ public class UserController implements Controller {
                 response.redirect(request, "/index.html");
 
                 return "";
-            } catch (NullValueException | UserValidationException e) {
+            } catch (UserValidationException e) {
                 response.redirect(request, "/user/form_failed.html");
+                return "";
+            } catch (NullValueException e) {
+                response.redirect(request, "/user/form.html");
                 return "";
             }
         }
