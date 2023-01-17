@@ -1,7 +1,8 @@
 package controller;
 
-import http.*;
 import http.request.*;
+import http.response.HttpResponse;
+import http.response.HttpStatus;
 
 import java.io.File;
 import java.io.IOException;

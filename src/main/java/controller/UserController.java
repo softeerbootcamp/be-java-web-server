@@ -1,11 +1,12 @@
 package controller;
 
 import db.Database;
-import http.*;
 import http.request.HttpRequest;
 import http.request.HttpUri;
 import http.request.QueryParameters;
 import http.request.RequestLine;
+import http.response.HttpResponse;
+import http.response.HttpStatus;
 import model.User;
 
 import java.util.HashMap;
