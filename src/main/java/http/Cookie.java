@@ -10,7 +10,7 @@ public class Cookie {
         this.value = value;
     }
 
-    public Cookie of(String name, String value) {
+    public static Cookie of(String name, String value) {
         return new Cookie(name, value);
     }
 
@@ -24,7 +24,7 @@ public class Cookie {
 
     @Override
     public String toString() {
-        return this.name + ":" + this.value;
+        return this.name + "=" + this.value;
     }
 
 }
