@@ -7,6 +7,8 @@ import httpMock.CustomHttpResponse;
 import httpMock.constants.HttpMethod;
 import model.Session;
 import model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import service.SessionService;
 import service.UserService;
 
@@ -15,6 +17,8 @@ import java.util.Map;
 import java.util.Set;
 
 public class UserAccountController implements RequestController {
+    private static Logger logger = LoggerFactory.getLogger(UserAccountController.class);
+
     static UserAccountController userAccountService;
 
     private final Map<String, RequestController> routingTable = new HashMap<>() {{

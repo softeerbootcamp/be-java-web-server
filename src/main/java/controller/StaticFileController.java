@@ -5,6 +5,8 @@ import httpMock.CustomHttpRequest;
 import httpMock.CustomHttpResponse;
 import httpMock.constants.ContentType;
 import httpMock.constants.StatusCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import service.StaticFileService;
 
 import java.io.File;
@@ -16,6 +18,8 @@ import java.util.HashMap;
 import static service.StaticFileService.getFileTypeFromUrl;
 
 public class StaticFileController implements RequestController {
+    private static Logger logger = LoggerFactory.getLogger(StaticFileController.class);
+
     private static final StaticFileController fileController = new StaticFileController();
     public static final String[] supportedFileTypes = {
             "html", "ico", "css", "js", "ttf", "woff", "svg", "eot", "woff2", "png", "jpeg", "gif"
