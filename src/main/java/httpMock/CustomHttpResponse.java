@@ -3,7 +3,10 @@ package httpMock;
 import httpMock.constants.ContentType;
 import httpMock.constants.StatusCode;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 public class CustomHttpResponse {
@@ -11,7 +14,8 @@ public class CustomHttpResponse {
     public static final Map<String, String> EMPTY_HEADER = Collections.EMPTY_MAP;
     private final StatusCode statusCode;
     private final ContentType contentType;
-    private final Map<String, String> headers;
+    private Map<String, String> headers;
+    public static final Charset CHARSET = StandardCharsets.UTF_8;
     private final byte[] body;
 
     public CustomHttpResponse(StatusCode statusCode, ContentType contentType, Map<String, String> headers, byte[] body) {
@@ -26,7 +30,18 @@ public class CustomHttpResponse {
     }
 
     public Map<String, String> getHeaders() {
-        return this.headers;
+        return new HashMap<>(this.headers);
+    }
+
+    public void addToCookie(String key, String value){
+        if(this.headers == EMPTY_HEADER){
+            this.headers = new HashMap<>();
+        }
+        String exist = "";
+        if(this.headers.containsKey("Set-Cookie")){
+            exist = this.headers.get("Set-Cookie");
+        }
+        this.headers.put("Set-Cookie", exist + key+"="+value+";");
     }
 
     public String getContentTypeLine(){
@@ -41,6 +56,7 @@ public class CustomHttpResponse {
         return body;
     }
 
+    @Override
     public String toString(){
         return statusCode.getMessage() + " " + headers.toString();
     }

@@ -1,5 +1,6 @@
 package httpMock;
 
+import httpMock.constants.HttpMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,38 +13,54 @@ import java.util.*;
 
 public class CustomHttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(CustomHttpRequest.class);
-    private Map<String, String> requestParams;
-    private Map<String, List<String>> requestHeaders;
-    private String httpMethod;
-    private String protocolVersion;
+    private HttpMethod httpMethod;
     private String url;
+    private String protocolVersion;
+    private Map<String, String> urlParams;
+    private Map<String, List<String>> requestHeaders;
+    private List<String> requestBody;
 
-    public static CustomHttpRequest from(InputStream inputStream){
+    private CustomHttpRequest(String firstLine, List<String> headers, List<String> bodies) {
+        setFirstLineHeaders(firstLine);
+        setRequestHeaders(headers);
+        setUrlParams(this.url);
+        requestBody = bodies;
+        if(this.httpMethod == HttpMethod.GET)
+            logger.debug("url : " + this.url + ", method : " + this.httpMethod + ", urlParams : " + this.urlParams + ", body : " + this.requestBody);
+        else
+            logger.info("url : " + this.url + ", method : " + this.httpMethod + ", urlParams : " + this.urlParams + ", body : " + this.requestBody);
+
+    }
+
+    public static CustomHttpRequest of(String firstLine, List<String> headers, List<String> bodies) {
+        return new CustomHttpRequest(firstLine, headers, bodies);
+    }
+
+    public static CustomHttpRequest from(InputStream inputStream) {
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
         BufferedReader br = new BufferedReader(inputStreamReader);
         try {
             String firstLine = br.readLine();
             List<String> headers = new ArrayList<>();
+
             while (br.ready()) {
-                headers.add(br.readLine());
+                String nextLine = br.readLine();
+                if (nextLine.equals(""))
+                    break;
+                headers.add(nextLine);
+                logger.debug(nextLine);
             }
-            return of(firstLine, headers);
+            StringBuilder sb = new StringBuilder();
+            while (br.ready()) {
+                int next = br.read();
+                sb.append((char) next);
+            }
+            return of(firstLine, headers, List.of(sb.toString().split(System.lineSeparator())));
         }
         catch (IOException e){
             logger.error(e.getMessage());
             throw new RuntimeException();
         }
-    }
-
-    public static CustomHttpRequest of(String firstLine, List<String> headers){
-        return new CustomHttpRequest(firstLine, headers);
-    }
-
-    private CustomHttpRequest(String firstLine, List<String> headers) {
-        setFirstLineHeaders(firstLine);
-        setRequestHeaders(headers);
-        setRequestParams(this.url);
-        logger.info("url : " + this.url + ", method : " + this.httpMethod + ", params : " + this.requestParams);
     }
 
     private void setFirstLineHeaders(String firstLine) {
@@ -55,7 +72,7 @@ public class CustomHttpRequest {
         if (firstLineDatas[1].equals("/") || firstLineDatas[1].equals(""))
             firstLineDatas[1] = "/index.html";
 
-        this.httpMethod = firstLineDatas[0];
+        this.httpMethod = HttpMethod.valueOf(firstLineDatas[0]);
         this.url = java.net.URLDecoder.decode(firstLineDatas[1], StandardCharsets.UTF_8);
         this.protocolVersion = firstLineDatas[2];
     }
@@ -65,19 +82,34 @@ public class CustomHttpRequest {
         headers.forEach(this::addToRequestHeader);
     }
 
-    private void setRequestParams(String url) {
-        requestParams = new HashMap<>();
+    public Map<String, String> parseBodyFromUrlEncoded() {
+        Map<String, String> parsedBody = new HashMap<>();
+        List<String> bodyParams = new ArrayList<>();
+        for (String line : requestBody) {
+            line = java.net.URLDecoder.decode(line, StandardCharsets.UTF_8);
+            bodyParams.addAll(List.of(line.split("&")));
+        }
+        bodyParams.forEach(s -> {
+            String[] split = s.split("=");
+            parsedBody.put(split[0].trim(), split[1].trim());
+        });
+        return parsedBody;
+    }
+
+    private void setUrlParams(String url) {
+        urlParams = new HashMap<>();
         if (url.contains("?")) {
             String tempParamStr = url.substring(url.indexOf("?") + 1);
             String[] params = tempParamStr.split("&");
             for (String param : params) {
                 try {
                     String[] data = param.split("=");
-                    requestParams.put(data[0], data[1]);
+                    urlParams.put(data[0], data[1]);
                 } catch (Exception e) {
                     logger.error("String split failed : " + param);
                 }
             }
+            this.url = url.substring(0, url.indexOf("?"));
         }
     }
 
@@ -92,18 +124,19 @@ public class CustomHttpRequest {
         this.requestHeaders.put(itemName, itemList);
     }
 
-
     public String getUrl() {
         return url;
     }
 
-    public Map<String, String> getRequestParams() {
-        return requestParams;
+    public Map<String, String> getUrlParams() {
+        return urlParams;
     }
 
     public String getProtocolVersion() {
         return protocolVersion;
     }
 
-
+    public HttpMethod getHttpMethod(){
+        return httpMethod;
+    }
 }

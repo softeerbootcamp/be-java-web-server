@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -30,6 +31,7 @@ class RequestRouterTest {
         //given
         CustomHttpRequest req = CustomHttpRequest.of(
                 "GET /index.html HTTP/1.1",
+                Collections.EMPTY_LIST,
                 Collections.EMPTY_LIST
         );
         CustomHttpResponse expected = CustomHttpResponse.of(
@@ -52,6 +54,7 @@ class RequestRouterTest {
         //given
         CustomHttpRequest req = CustomHttpRequest.of(
                 "GET / HTTP/1.1",
+                Collections.EMPTY_LIST,
                 Collections.EMPTY_LIST
         );
         CustomHttpResponse expected = new CustomHttpResponse(
@@ -72,8 +75,9 @@ class RequestRouterTest {
     void 회원가입_리다이렉트확인() {
         //given
         CustomHttpRequest req = CustomHttpRequest.of(
-                "GET /user/create?userId=rohsik2&password=qwevcqvew&name=adfqewfrw&email=rohsik@gmail.com HTTP/1.1",
-                Collections.EMPTY_LIST
+                "POST /user/create HTTP/1.1",
+                Collections.EMPTY_LIST,
+                List.of("userId=rohsik2&password=qwevcqvew&name=adfqewfrw&email=rohsik@gmail.com")
         );
 
         CustomHttpResponse expected = new CustomHttpResponse(
@@ -89,8 +93,8 @@ class RequestRouterTest {
         CustomHttpResponse response = requestRouter.handleRequest(req);
 
         //then
-        assertEquals(response.getHeaders().get("Location"), "/index.html");
-        assertEquals(response.toString(), expected.toString());
+        assertEquals("/index.html", response.getHeaders().get("Location"));
+        assertEquals(expected.toString(), response.toString());
 
     }
 
@@ -99,6 +103,7 @@ class RequestRouterTest {
         //given
         CustomHttpRequest req = CustomHttpRequest.of(
                 "GET /asdrqweboq HTTP/1.1",
+                Collections.EMPTY_LIST,
                 Collections.EMPTY_LIST
         );
 
@@ -121,6 +126,7 @@ class RequestRouterTest {
         //given
         CustomHttpRequest req = CustomHttpRequest.of(
                 "GET /hellmynameisrohyunuk.html HTTP/1.1",
+                Collections.EMPTY_LIST,
                 Collections.EMPTY_LIST
         );
 
