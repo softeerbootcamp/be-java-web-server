@@ -7,12 +7,12 @@ import java.util.Map;
 
 public class HttpRequest {
     private final HttpRequestLine startLine;
-    private final HttpHeader headers;
+    private final HttpHeader httpHeader;
     private final HttpRequestBody requestBody;
 
     private HttpRequest(HttpRequestLine startLine, HttpHeader requestHeader, HttpRequestBody requestBody) {
         this.startLine = startLine;
-        this.headers = requestHeader;
+        this.httpHeader = requestHeader;
         this.requestBody = requestBody;
     }
 
@@ -30,6 +30,10 @@ public class HttpRequest {
 
     public HttpMethod getHttpMethod() {
         return this.startLine.getMethod();
+    }
+
+    public String getHeaderValue(String key) {
+        return this.httpHeader.getHeaders().get(key);
     }
 
     public URI getUri() {
