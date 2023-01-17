@@ -35,7 +35,7 @@ public class UserLoginController implements Controller {
             httpResponse.redirectHome();
         }
         catch (IllegalArgumentException e) {
-            httpResponse.redirectLogin();
+            httpResponse.redirectLoginFailed();
         }
         return httpResponse;
     }

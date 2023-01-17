@@ -51,7 +51,7 @@ public class HttpResponse {
         headers.addHeader("Location", "/index.html");
     }
 
-    public void redirectLogin() {
+    public void redirectLoginFailed() {
         this.statusCode = StatusCode.FOUND;
         headers.addHeader("Location", "/user/login_failed.html");
     }
