@@ -2,6 +2,7 @@ package was.dispatcher;
 
 import was.annotation.PostMapping;
 import was.controller.Controller;
+import was.controller.ControllerFactory;
 import was.controller.UserController;
 import webserver.handler.ControllerHandler;
 import webserver.domain.HttpRequest;
@@ -23,12 +24,8 @@ public class Dispatcher implements ControllerHandler{
     }
     @Override
     public HttpResponseMessage handle(HttpRequest httpRequest) {
-        Controller controller = new UserController();
         String path = httpRequest.getRequestLine().getUrl();
-        if (path.contains("user")) {
-            controller = new UserController();
-        }
-        return dispatch(httpRequest, controller, path);
+        return dispatch(httpRequest, ControllerFactory.getControllerInstance(httpRequest), path);
     }
     private HttpResponseMessage dispatch(HttpRequest httpRequest, Controller controller, String path) {
         Method[] methods = controller.getClass().getDeclaredMethods();
