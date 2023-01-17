@@ -48,4 +48,8 @@ public class HttpRequest {
     public String getBody(){
         return this.body;
     }
+
+    public String getFileNameExtension() {
+        return httpRequestLine.getHttpUri().getFileNameExtension();
+    }
 }

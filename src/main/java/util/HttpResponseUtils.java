@@ -14,8 +14,8 @@ public class HttpResponseUtils {
     private static final String htmlFilePath = "/templates";
     private static final String staticFilePath = "/static";
 
-    public static String makeFilePath(String contentType) {
-        if (contentType.equals("text/html")) {
+    public static String makeFilePath(String fileNameExtension) {
+        if (fileNameExtension.equals("html")) {
             return basePath + htmlFilePath;
         }
         return basePath + staticFilePath;
