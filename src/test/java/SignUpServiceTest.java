@@ -2,6 +2,9 @@ import model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import service.SignUpService;
+import util.HttpRequestUtils;
+
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -14,9 +17,9 @@ public class SignUpServiceTest {
                 "password=12349865&" +
                 "name=%EC%B5%9C%EC%A3%BC%ED%98%95&" +
                 "email=jhchoi57%40gmail.com";
-
+        final Map<String, String> params = HttpRequestUtils.parseQueryString(body);
         // when
-        final User user = SignUpService.makeUserByBody(body);
+        final User user = SignUpService.makeUserByParams(params);
 
         // then
         assertThat(user).usingRecursiveComparison().isEqualTo(new User(
