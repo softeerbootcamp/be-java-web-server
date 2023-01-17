@@ -8,6 +8,8 @@ import model.request.Request;
 import model.request.RequestLine;
 import model.response.Response;
 import model.response.StatusLine;
+import model.session.Session;
+import model.session.Sessions;
 import service.UserService;
 import util.SessionUtils;
 
@@ -51,12 +53,17 @@ public class UserController implements Controller {
 
     private Response loginUserResponse(Request request) {
         Map<String, String> userLoginInfo = request.getBody().getContent();
-        boolean isLoginSuccess = userService.logIn(userLoginInfo);
+        User user = User.of(userLoginInfo.get("userId"), userLoginInfo.get("password"),
+                userLoginInfo.get("name"), userLoginInfo.get("email"));
+        boolean isLoginSuccess = userService.logIn(user);
 
         Map<Header, String> headers;
         RequestLine requestLine = request.getRequestLine();
         if(isLoginSuccess) {
             headers = responseLoginSuccessHeader();
+            Session session = Sessions.getSession(parseSessionIdFromHeaders(headers));
+            session.setSessionData("user", user);
+
             return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.FOUND), headers);
         }
 
