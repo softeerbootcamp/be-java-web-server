@@ -2,7 +2,7 @@ package http.response;
 
 import enums.Status;
 import exception.ConnectionClosedException;
-import filesystem.FindResult;
+import filesystem.FindResource;
 import http.common.Body;
 import http.common.Cookie;
 import http.common.Header;
@@ -35,7 +35,7 @@ public class HttpResponse {
         }
     }
 
-    public void update(FindResult findResult) {
+    public void update(FindResource findResult) {
         startLine.setStatus(findResult.getStatus());
         header.setAttribute(CONTENT_TYPE, findResult.getContentType().getType());
         header.setAttribute(CONTENT_LENGTH, findResult.getResource().length);

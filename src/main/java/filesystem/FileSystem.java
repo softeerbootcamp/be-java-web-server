@@ -14,11 +14,11 @@ public class FileSystem {
     private FileSystem() {
     }
 
-    public static FindResult findResource(String url) {
+    public static FindResource findResource(String url) {
         String resourcePath = PathResolver.parse(url);
         byte[] resource = readFile(new File(resourcePath));
 
-        FindResult findResult = new FindResult(resourcePath, resource);
+        FindResource findResult = new FindResource(resourcePath, resource);
         return findResult;
     }
 

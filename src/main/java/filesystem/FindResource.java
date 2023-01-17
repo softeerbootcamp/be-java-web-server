@@ -3,13 +3,13 @@ package filesystem;
 import enums.ContentType;
 import enums.Status;
 
-public class FindResult {
+public class FindResource {
 
     private Status status = Status.OK;
     private ContentType contentType;
     private byte[] resource;
 
-    public FindResult(String resourcePath, byte[] resource) {
+    public FindResource(String resourcePath, byte[] resource) {
         this.resource = resource;
         this.contentType = ContentType.find(resourcePath);
 
