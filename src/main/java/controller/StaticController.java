@@ -19,13 +19,11 @@ public class StaticController implements Controller{
     private static final String STATIC = "/static";
     private static final String TEMPLATES = "/templates";
 
-
     public static StaticController getInstance(){
         if (staticController != null)
             return staticController;
         return staticController = new StaticController();
     }
-
 
     private String getSubPath(RequestMessage requestMessage){
         if (requestMessage.getRequestHeaderMessage().getFileExtension().contains("html"))

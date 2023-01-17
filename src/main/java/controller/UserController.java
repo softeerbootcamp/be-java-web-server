@@ -59,9 +59,9 @@ public class UserController implements Controller{
 
     private void userCreate(RequestMessage requestMessage, UserService userService, Map<String, String> headerKV){
         Map<String,String> userInfo;
-        if (requestMessage.getRequestBodyMessage().getQueryString().equals(""))
+        if (requestMessage.getRequestBodyMessage().getBodyParams().equals(""))
             userInfo = MessageParser.parseQueryString(requestMessage.getRequestHeaderMessage().getHttpReqParams());
-        else userInfo = MessageParser.parseQueryString(requestMessage.getRequestBodyMessage().getQueryString());
+        else userInfo = MessageParser.parseQueryString(requestMessage.getRequestBodyMessage().getBodyParams());
         try{
             userService.join(new User(userInfo.get(USER_ID),userInfo.get(PASSWORD),userInfo.get(NAME),userInfo.get(EMAIL)));
             setLocation(Redirect.getRedirectLink(requestMessage.getRequestHeaderMessage().getRequestAttribute()), headerKV);
@@ -73,7 +73,7 @@ public class UserController implements Controller{
 
     private void userLogin(RequestMessage requestMessage, UserService userService, Map<String,String> headerKV){
         Map<String,String> loginInfo;
-        loginInfo = MessageParser.parseQueryString(requestMessage.getRequestBodyMessage().getQueryString());
+        loginInfo = MessageParser.parseQueryString(requestMessage.getRequestBodyMessage().getBodyParams());
         try {
             User user = userService.login(loginInfo.get(USER_ID), loginInfo.get(PASSWORD));
             setLocation(Redirect.getRedirectLink(requestMessage.getRequestHeaderMessage().getRequestAttribute()), headerKV);

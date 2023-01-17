@@ -2,6 +2,7 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Map;
 
 import controller.Controller;
 import controller.StaticController;
@@ -25,18 +26,21 @@ public class RequestHandler implements Runnable {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            RequestReader rr = new RequestReader(in);
-            rr.readRequest();
-            RequestMessage requestMessage = new RequestMessage(new RequestHeaderMessage(rr.startLine), new RequestBodyMessage(rr.body));
-            setController(requestMessage, out);
-            logger.info(controller.toString());
+            InputStreamReader reader = new InputStreamReader(in);
+            BufferedReader br = new BufferedReader(reader);
+            RequestReader rr = new RequestReader(br);
+            String startLine = rr.readStartLine();
+            Map<String,String> header = rr.readHeader();
+            char[] body = rr.readBody(Integer.parseInt(header.getOrDefault("Content-Length","0")));
+            RequestMessage requestMessage = new RequestMessage(new RequestHeaderMessage(startLine, header), new RequestBodyMessage(body));
+            setController(requestMessage);
             controller.control(requestMessage, out);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void setController(RequestMessage requestMessage, OutputStream out){
+    private void setController(RequestMessage requestMessage){
         RequestHeaderMessage requestHeaderMessage = requestMessage.getRequestHeaderMessage();
         if (requestHeaderMessage.getHttpOnlyURL().contains(".")) {
             controller = StaticController.getInstance();
