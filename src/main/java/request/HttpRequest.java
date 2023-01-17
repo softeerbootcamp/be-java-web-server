@@ -12,9 +12,12 @@ public class HttpRequest {
 
 	private Map<String, String> headers;
 
-	private HttpRequest(HttpRequestLine httpRequestLine, Map<String, String> headers) {
+	private Map<String, String> body;
+
+	private HttpRequest(HttpRequestLine httpRequestLine, Map<String, String> headers, Map<String,String> body) {
 		this.httpRequestLine = httpRequestLine;
 		this.headers = headers;
+		this.body = body;
 	}
 
 	public HttpMethod getMethod() {
@@ -25,8 +28,12 @@ public class HttpRequest {
 		return httpRequestLine.getRequestUrl();
 	}
 
-	public static HttpRequest of(HttpRequestLine httpRequestLine, Map<String, String> headers) {
-		return new HttpRequest(httpRequestLine, headers);
+	public static HttpRequest of(HttpRequestLine httpRequestLine, Map<String, String> headers, Map<String, String> body) {
+		return new HttpRequest(httpRequestLine, headers, body);
+	}
+
+	public String getRequestBody(String key) {
+		return body.get(key);
 	}
 
 	public boolean urlStartsWith(String path) {

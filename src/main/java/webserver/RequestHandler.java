@@ -34,7 +34,6 @@ public class RequestHandler implements Runnable {
 			Controller controller = RequestMappingHandler.findController(httpRequest);
 			HttpResponse httpResponse = new HttpResponse();
 			controller.service(httpRequest, httpResponse);
-			logger.debug(httpRequest.getUrl().getPath());
 			// 전송
 			out.write(httpResponse.toString().getBytes(StandardCharsets.UTF_8));
 			out.flush();

@@ -1,6 +1,8 @@
 package controller;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 import response.ContentType;
 import webserver.HttpMethod;
@@ -20,12 +22,16 @@ public class AbstractController implements Controller {
 	}
 
 	public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
-
-		httpResponse.setHttpResponse(HttpStatus.OK, "500 error", ContentType.HTML); // 500내려주기
+		defaultErrorPage(httpResponse);
 	}
 
-	public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-		httpResponse.setHttpResponse(HttpStatus.OK, "500 error", ContentType.HTML); // 500내려주기 // 500내려주기
+	public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+		defaultErrorPage(httpResponse);
+	}
+
+	private void defaultErrorPage(HttpResponse httpResponse) throws IOException {
+		File file = new File("./webapp/400.html");
+		httpResponse.setHttpResponse(HttpStatus.OK, new String(Files.readAllBytes(file.toPath())), ContentType.HTML); // 500내려주기
 	}
 
 }
