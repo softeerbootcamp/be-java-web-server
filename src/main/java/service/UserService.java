@@ -21,6 +21,10 @@ public class UserService {
         Database.addUser(user);
     }
 
+    public void login() {
+
+    }
+
     private void validateDuplication(String userId) {
         if (Database.findUserById(userId) != null) {
             throw new UserValidationException("중복되는 아이디입니다.");

@@ -42,6 +42,16 @@ public class UserController implements Controller {
             }
         }
 
+        if (path.startsWith("/login") && request.getMethod() == HttpMethod.POST) {
+            String body = request.getBody();
+            Map<String, String> userInfo = HttpRequestUtils.parseBodyMessage(body);
+
+            userService.login();
+
+            response.redirect(request, "/index.html");
+            return "";
+        }
+
         throw new UrlNotFoundException("잘못된 URL 요청입니다.");
     }
 }
