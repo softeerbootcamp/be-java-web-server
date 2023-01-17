@@ -28,7 +28,7 @@ public class UserCreateController extends AbstractController {
         Map<String, String> queryParams = uri.getParameters();
         UserService.create(queryParams);
 
-        httpResponse.sendRedirect(HttpStatusCode.FOUND, REDIRECT_PATH);
+        httpResponse.sendRedirect(REDIRECT_PATH);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class UserCreateController extends AbstractController {
         UserService.create(queryParams);
 
         logger.info("Create User Success");
-        httpResponse.sendRedirect(HttpStatusCode.FOUND, REDIRECT_PATH);
+        httpResponse.sendRedirect(REDIRECT_PATH);
 
     }
 

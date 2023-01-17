@@ -48,11 +48,11 @@ public class UserLogInController extends AbstractController {
             logger.info("Login Success");
             logger.info("Session ID: " + id);
 
-            httpResponse.sendRedirect(HttpStatusCode.FOUND, INDEX_PATH, cookie);
+            httpResponse.sendRedirect(INDEX_PATH, cookie);
 
         } catch (IllegalArgumentException e) {
             logger.info("Login Failed");
-            httpResponse.sendRedirect(HttpStatusCode.FOUND, LOGIN_FAILED_PATH);
+            httpResponse.sendRedirect(LOGIN_FAILED_PATH);
         }
     }
 

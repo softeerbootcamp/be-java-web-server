@@ -38,7 +38,7 @@ public class ResourceController extends AbstractController {
             return;
         }
 
-        httpResponse.forward(HttpStatusCode.OK, contentType, body);
+        httpResponse.forward(contentType, body);
     }
 
 }
