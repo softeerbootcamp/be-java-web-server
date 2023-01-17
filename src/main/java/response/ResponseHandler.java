@@ -45,6 +45,13 @@ public class ResponseHandler {
         }
 
         if (httpRequest.isQueryContent()) {
+            Map<String, String> parameters = httpRequest.getParameters();
+            for (Map.Entry<String, String> entry : parameters.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                logger.debug("KeyData : {} ValueData : {}",key,value);
+            }
+
             String path = httpRequest.getPath();
             ServletController servletController = ServletController.of(path);
             Servlet servlet = servletController.newInstance();
@@ -57,7 +64,7 @@ public class ResponseHandler {
             return HttpResponse.of("302", header);
         }
 
-        throw new AssertionError("HttpRequest는 정적 혹은 동적 컨텐츠 요청만 가능합니다.");
+        throw new RuntimeException("[ERROR] : HttpRequest는 정적 혹은 동적 컨텐츠 요청만 가능합니다.");
     }
 
 }

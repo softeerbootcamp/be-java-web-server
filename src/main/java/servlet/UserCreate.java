@@ -15,13 +15,14 @@ public class UserCreate implements Servlet{
     
     @Override
     public void service(HttpRequest httpRequest) {
-        logger.debug("Method : {}", httpRequest);
         if (httpRequest.isGet()) {
+            logger.debug("GET 수행");
             get(httpRequest);
             return;
         }
 
         if (httpRequest.isPost()) {
+            logger.debug("POST 수행");
             post(httpRequest);
             return;
         }
@@ -29,7 +30,27 @@ public class UserCreate implements Servlet{
 
     @Override
     public void post(HttpRequest httpRequest) {
+        Map<String, String> data = new HashMap<>();
+        String body = httpRequest.getBody();
+        logger.debug("body : {}", body);
+        String[] inputs = body.split("&");
+        for (String input : inputs) {
+            logger.debug("bodyParam : {}", input);
+            String[] keyAndValue = input.split("=");
+            if (keyAndValue.length < 2) {
+                return;
+            }
+            logger.debug("key : {}", keyAndValue[0]);
+            logger.debug("value : {}", keyAndValue[1]);
+            data.put(keyAndValue[0], keyAndValue[1]);
+        }
+        String userId = data.get("userId");
+        String password = data.get("password");
+        String name = data.get("name");
+        String email = data.get("email");
 
+        User user = new User(userId, password, name, email);
+        Database.addUser(user);
     }
 
     @Override

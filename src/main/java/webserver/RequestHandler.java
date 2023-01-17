@@ -19,7 +19,7 @@ import response.ResponseHandler;
 public class RequestHandler implements Runnable{
 
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private final Socket connection;
+    private final Socket connection; // Client
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
     }

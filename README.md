@@ -1,19 +1,28 @@
 # Java web server
 
- ## 집중했던 부분: 
+## 요구사항:
 
 <br/>
 
-- 다른 사람 코드를 읽으며 네이밍에 신경쓰기
-
-- 피드백 적용 및 사용하지 않았던 자바의 유용한 기능들 써보기
-  - ClassLoader
-  - Buffer & Stream
-  - Reflection
-
-- STEP2 리팩토링 및 STEP3 기능 구현
+- HTTP POST 동작방식 이해하기
+- HTTP redirection 기능을 이해하고 회원가입 후 페이지 이동에 적용한다.
+- 로그인을 GET에서 POST로 수정 후 정상 동작하도록 구현한다.
+- 가입을 완료하면 /index.html 페이지로 이동한다.
 
 <br>
+
+## 동작 과정:
+
+<br>
+
+1. RequsetHandler / HttpRequest.of 를 통해 HttpRequest 메시지 읽기
+2. ResponseHandler / controlRequestAndResponse 를 통해 쿼리 데이터인지 아닌지 구분
+   - Static Content인 경우 :
+     - headerFields 에 Content-Type, Content-Length 정보를 넣고 200 메시지와 함께 Response 메시지 리턴
+   - Query Data인 경우 :
+     - 리플렉션을 통해 서블릿을 만들어 주고, 해당 서블릿을 통해 POST/GET 메서드에 대한 응답 처리 수행
+     - 리다이렉션 디렉터리 정보 넣고, 302 Response 메시지 리턴 
+3. Response respond 메서드를 통해 Start Line, Header, Body 정보를 전달 
 
 
  ## 클래스 역할
@@ -122,7 +131,7 @@
 <br/>
 
 
-2. InputStreamReader
+6. InputStreamReader
 
 - InputStream 은 1바이트만 인식해 한글을 읽지 못한다.
 - 그래서 InputStreamReader는 바이트 단위로 읽어 들이는 형식을
@@ -131,20 +140,20 @@
 <br/>
 
 
-3. BufferedReader
+7. BufferedReader
 
 - BufferReader 를 통해 입력 데이터가 바로 출력되기 보다는 버퍼를 통해 데이터를 묶어서 한 문장씩 읽어들일 수 있게 한다.
 
 <br/>
 
 
-4. StringBuilder
+8. StringBuilder
 
 - String은 변경 불가능한 문자열이다. 그래서 문자열을 더할때마다 문자열을 연결해 새로운 문자열을 만들어내는 많은 비용이 발생한다. 이러한 문제를 스트링 빌더의 append 를 통해 해결 가능하다.
 
 <br/>
 
-5. reflection
+9. reflection
 
 - Reflection이란 클래스의 구조를 분석하여 동적 로딩을 가능하게 하는 기능
   - new Instance () : 동적 객체 생성시 사용됨
@@ -157,6 +166,77 @@
   - getDeclaredConstructors(), getDeclaredFields(), getDeclaredMethods() : 클래스 생성자, 필드정보, 메소드 정보를 알고 싶을 때 사용한다
 
   - invoke : Method를 동적으로 실행시켜 주는 메소드
+
+10. HTTP 메시지 구조
+  - Header + Body 로 나뉨
+    - Header (주소정보, 메서드 방식, 클라이언트 정보, 브라우저 정보, 접속 URL)
+      - start line에는 요청이나 응답의 상태를 나타낸다.
+      - 요청을 지정하거나, 메시지에 포함된 본문을 설명하는 헤더의 집합이다.
+      - 헤더와 본문을 구분하는 빈 줄이 있다. 그 줄을 말한다.
+    - Body (비어 있다가 필요시 데이터 정보 담김)
+      - 요청과 관련된 데이터나 응답과 관련된 데이터 또는 문서를 포함 (선택적 사용됨)
+
+11. Request Body 역할
+
+ - Request Body 가 책임져야 하는 것 : 
+   - code : API 사용 프로그램 처리 결과를 간략히 전달하는 것
+     - 첫 세자리 (프로토콜 상태 코드), 넷째 자리 (타입 코드), 마지막 두 자리 (구분 코드)
+   - message : 코더,개발자를 위한 메시지를 주는 것
+   - result : 처리 결과 값을 넘겨주는 것
+   - 세가지 요소
+     - HTTP method
+     - URL
+     - HTTP version
+
+ ~~~
+ {
+	"code": 200000,
+	"message": "ok",
+	"result": {
+		"foo":{}
+		"somethings":[{},{}]
+	}
+}
+ ~~~
+
+ex. 사용자 등록
+
+~~~
+# POST ~/register
+
+{
+  "email": "foo@bar.baz",
+  "password": "hellowrold!@"
+}
+
+# Response Code
+
+// 정상동작 코드
+{
+  "code": 201000,
+  // 201 는 HTTP Status code 에서 말하는 생성을 뜻
+  // 000 은 아무의미 없이 자리를 맞춰주는 코드
+  "message": "ok",
+  "result": {
+    "user": {
+      // 반드시 resource 표현
+      "id": 1,
+      "email": "foo@bar.baz",
+      "password": "hellowrold!@"
+    }
+  }
+}
+
+// email 이 없을 경우
+{
+  "code": 412000,
+  // 412 : 사전조건 실패
+  // 0 : required param error
+  // 00 : 이메일 - 임의로 00 은 이메일로 정한 것
+  "message": "email Required in request body"
+}
+
+~~~
 
 <br/>
 
@@ -319,11 +399,6 @@ connect socket이 accept 되기 전까지는 그 아래 기능은 동작하지 �
 - Non-blocking 방식?
   - API호출 시 작업 완료 여부와 상관없이 즉각적으로 현재 상태에 대한 응답이 옴
   - API호출 후 쓰레드 제어권이 있기 때문에 다른 작업 진행할 수 있음
-
-  ~~~
-  [ 구현해야 함 ]
-  
-  ~~~
   
   - 정리
   aceept(), read() 등의 메서드를 호출해도 블락되지 않습니다. <br/>

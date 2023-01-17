@@ -3,7 +3,8 @@ package webserver;
 public enum ContentType {
     HTML(".html","text/html;charset=utf-8"),
     CSS(".css","text/css"),
-    JS(".js","application/javascript");
+    JS(".js","application/javascript"),
+    FONT(".woff", "application/x-font-woff");
 
     private String extension;
     private String mimeData;

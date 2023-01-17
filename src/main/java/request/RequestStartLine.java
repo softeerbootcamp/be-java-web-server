@@ -1,8 +1,14 @@
 package request;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Map;
 
 public class RequestStartLine {
+
+    private static final Logger logger = LoggerFactory.getLogger(RequestStartLine.class);
+
     private final Method method;
     private final Uri uri;
     private final HttpVersion version;
@@ -31,6 +37,7 @@ public class RequestStartLine {
     }
 
     public Method getMethod() {
+        logger.debug("Input Method : {}",method);
         return method;
     }
 

@@ -13,6 +13,10 @@ public class PathUtils {
         if (path.endsWith(ContentType.JS.getExtensionValue())) {
             return ContentType.JS.getMimeData();
         }
+        if (path.endsWith(ContentType.FONT.getExtensionValue())) {
+            return ContentType.FONT.getMimeData();
+        }
+
         return "text/plain";
     }
 }
