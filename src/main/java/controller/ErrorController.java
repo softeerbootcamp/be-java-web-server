@@ -20,20 +20,16 @@ public class ErrorController implements Controller{
     private final static String ERROR_404_ROUTE = "/error404.html";
     private final static String ERROR_500_ROUTE = "/error500.html";
 
-
-    public static HttpResponse get404ErrorResponse(DataOutputStream dataOutputStream) throws IOException {
+    public static HttpResponse getErrorResponse(DataOutputStream dataOutputStream, HttpStatus httpStatus) throws IOException {
         FileReader fileReader = new TemplatesFileReader();
-
-        byte[] data = fileReader.readFile(new Url(ERROR_404_ROUTE, UrlType.TEMPLATES_FILE));
-
-        return new HttpResponse(new Data(dataOutputStream, data), FileType.HTML, HttpStatus.NOT_FOUND);
-    }
-
-    public static HttpResponse get500ErrorResponse(DataOutputStream dataOutputStream) throws IOException {
-        FileReader fileReader = new TemplatesFileReader();
-
-        byte[] data = fileReader.readFile(new Url(ERROR_500_ROUTE, UrlType.TEMPLATES_FILE));
-
+        byte[] data;
+        switch (httpStatus) {
+            case NOT_FOUND:
+                data=fileReader.readFile(new Url(ERROR_404_ROUTE, UrlType.TEMPLATES_FILE));
+                break;
+            default :
+                data=fileReader.readFile(new Url(ERROR_500_ROUTE, UrlType.TEMPLATES_FILE));
+        }
         return new HttpResponse(new Data(dataOutputStream, data), FileType.HTML, HttpStatus.NOT_FOUND);
     }
 

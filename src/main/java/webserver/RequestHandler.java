@@ -37,14 +37,14 @@ public class RequestHandler implements Runnable {
             try {
                 ControllerFinder.handleControllerInfoAnnotation(controller, httpRequest, clientOutPutStream);
             } catch (InvocationTargetException e) {
-                ErrorController.get404ErrorResponse(clientOutPutStream);
+                ErrorController.getErrorResponse(clientOutPutStream,HttpStatus.NOT_FOUND);
                 logger.error("[ERROR]:{} {}", HttpStatus.NOT_FOUND.getCode(), HttpStatus.NOT_FOUND.getMessage());
                 logger.error("FileReaderContoller에서 url에 맞는 페이지가 없습니다. url:{}", httpRequest.getUrl().getUrl());
             } catch (Exception e) {
                 e.printStackTrace();
                 logger.error("[ERROR]:{} {}", HttpStatus.INTERNAL_SERVER_ERROR.getCode(), HttpStatus.INTERNAL_SERVER_ERROR.getMessage());
                 logger.error("요청에 맞지 않은 요청이 들어옴. controller:{}, url:{}", controller.getClass(), httpRequest.getUrl().getUrl());
-                ErrorController.get500ErrorResponse(clientOutPutStream);
+                ErrorController.getErrorResponse(clientOutPutStream,HttpStatus.INTERNAL_SERVER_ERROR);
 
             }
 
