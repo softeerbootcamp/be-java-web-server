@@ -14,6 +14,9 @@ public class HttpResponse {
     private static final String CSS = "text/css";
     private static final String JS = "text/javascript";
 
+    public String unauthorized() {
+        return "HTTP/1.1 401 Unauthorized";
+    }
     public String sendRedirect(String url) {
         addHeader("Location", url);
         return createRedirectMessage();
