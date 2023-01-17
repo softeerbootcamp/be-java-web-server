@@ -3,8 +3,8 @@ package service;
 import db.Database;
 import exception.DuplicateUserIdException;
 import exception.UserNotFoundException;
-import model.request.Request;
 import model.User;
+import model.request.Request;
 import model.response.Response;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -75,11 +75,12 @@ public class UserServiceTest {
     }
 
     @Test
-    @DisplayName("유저 로그인 성공")
-    void login() throws Exception {
+    @DisplayName("유저 로그인 성공 (응답에서 쿠키 구워주는지)")
+    void login_success() throws Exception {
         //given
         User user = new User("11", "22", "abc", "test@test");
         Database.addUser(user);
+        UserService userService = new UserService();
 
         //when
         String body = "userId=11&password=22";
@@ -92,10 +93,58 @@ public class UserServiceTest {
                 + body;
         InputStream inputStream = new ByteArrayInputStream(requestMessage.getBytes());
         Request request = new Request(inputStream);
-        Response response = new Response();
-        UserService userService = new UserService();
-        userService.loginUser(request);
+        Response response = userService.loginUser(request);
         //then
+        assert response.getHeaders().containsKey("Set-Cookie");
+    }
 
+    @Test
+    @DisplayName("유저 로그인 실패 (비밀번호 틀림)")
+    void login_fail() throws Exception {
+        //given
+        User user = new User("11", "22", "abc", "test@test");
+        Database.addUser(user);
+        UserService userService = new UserService();
+
+        //when
+        String body = "userId=11&password=33";
+        String requestMessage = "POST /user/login HTTP/1.1\n"
+                + "Host: localhost:8080\n"
+                + "Connection: keep-alive\n"
+                + "Content-Length: " + body.length() + "\n"
+                + "Content-Type: application/x-www-form-urlencoded\n"
+                + "Accept: */*\n\n"
+                + body;
+        InputStream inputStream = new ByteArrayInputStream(requestMessage.getBytes());
+        Request request = new Request(inputStream);
+        Response response = userService.loginUser(request);
+        //then
+        assertThat(response.getHeaders().get("Location")).isEqualTo("/user/login_failed.html");
+        assert !response.getHeaders().containsKey("Set-Cookie");
+    }
+
+    @Test
+    @DisplayName("유저 로그인 실패 (존재하지 않는 계정)")
+    void login_fail_UserNotFound() throws Exception {
+        //given
+        User user = new User("11", "22", "abc", "test@test");
+        Database.addUser(user);
+        UserService userService = new UserService();
+
+        //when
+        String body = "userId=11&password=33";
+        String requestMessage = "POST /user/login HTTP/1.1\n"
+                + "Host: localhost:8080\n"
+                + "Connection: keep-alive\n"
+                + "Content-Length: " + body.length() + "\n"
+                + "Content-Type: application/x-www-form-urlencoded\n"
+                + "Accept: */*\n\n"
+                + body;
+        InputStream inputStream = new ByteArrayInputStream(requestMessage.getBytes());
+        Request request = new Request(inputStream);
+        Response response = userService.loginUser(request);
+        //then
+        assertThat(response.getHeaders().get("Location")).isEqualTo("/user/login_failed.html");
+        assert !response.getHeaders().containsKey("Set-Cookie");
     }
 }
