@@ -1,6 +1,7 @@
 package service;
 
 import db.Database;
+import http.HttpSession;
 import http.request.HttpRequest;
 import http.request.RequestLine;
 import http.response.HttpResponse;
@@ -29,8 +30,10 @@ public class UserService {
         String requestPassword = httpRequest.getRequestBody().get("password");
 
         if (isExistUser(requestId, requestPassword)) {
+            String sessionId = UUID.randomUUID().toString();
+            HttpSession.addSession(sessionId);
             headers.put("Location", "/index.html");
-            headers.put("Set-Cookie", "sid=" + UUID.randomUUID().toString() + ";" + " Path=/");
+            headers.put("Set-Cookie", "sid=" + sessionId + ";" + " Path=/");
             return HttpResponse.of(HttpStatus.FOUND, "", headers, "".getBytes(), requestLine.getVersion());
         }
         headers.put("Location", "/user/login_failed.html");
