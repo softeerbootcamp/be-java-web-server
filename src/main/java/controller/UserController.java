@@ -5,6 +5,7 @@ import controller.annotation.ControllerInfo;
 import controller.annotation.ControllerMethodInfo;
 import db.Database;
 import db.UserDatabase;
+import model.Session;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ import util.*;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.UUID;
 
 @ControllerInfo(regex = ".*\\/user.*" )
 public class UserController implements Controller {
@@ -40,9 +42,12 @@ public class UserController implements Controller {
         User user = (User) userService.createModel(userMap);
         userDatabase.addData(user);
 
-        HttpResponse httpResponse = new HttpResponse(new response.Data(dataOutputStream), FileType.HTML, HttpStatus.RE_DIRECT);
+        Cookie cookie = new Cookie(Session.SESSION_ID, Session.makeSessionId());
+        HttpResponse httpResponse = new HttpResponse(new response.Data(dataOutputStream), FileType.HTML, HttpStatus.RE_DIRECT
+                ,cookie);
 
-        logger.debug("저장된 user:{}", userDatabase.findAll());
+        logger.debug("저장된 user:{}", userDatabase.findObjectById(user.getUserId()));
+        logger.debug("생성된 Cookie-sid:{}",cookie.getValue() );
 
         return httpResponse;
     }
