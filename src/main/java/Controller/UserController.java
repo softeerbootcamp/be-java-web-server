@@ -26,35 +26,43 @@ public class UserController implements Controller {
         String path = url.split(PREFIX)[1];
 
         if (path.startsWith("/create") && request.getMethod() == HttpMethod.POST) {
-            try {
-                String body = request.getBody();
-
-                Map<String, String> userInfo = HttpRequestUtils.parseBodyMessage(body);
-
-                userService.signUp(userInfo);
-
-                response.redirect(request, "/index.html");
-
-                return "";
-            } catch (UserValidationException e) {
-                response.redirect(request, "/user/form_failed.html");
-                return "";
-            } catch (NullValueException e) {
-                response.redirect(request, "/user/form.html");
-                return "";
-            }
+            return createUser(request, response);
         }
 
         if (path.startsWith("/login") && request.getMethod() == HttpMethod.POST) {
-            String body = request.getBody();
-            Map<String, String> userInfo = HttpRequestUtils.parseBodyMessage(body);
-
-            userService.login();
-
-            response.redirect(request, "/index.html");
-            return "";
+            return login(request, response);
         }
 
         throw new UrlNotFoundException("잘못된 URL 요청입니다.");
+    }
+
+    private String createUser(HttpRequest request, HttpResponse response) {
+        try {
+            String body = request.getBody();
+
+            Map<String, String> userInfo = HttpRequestUtils.parseBodyMessage(body);
+
+            userService.signUp(userInfo);
+
+            response.redirect(request, "/index.html");
+
+            return "";
+        } catch (UserValidationException e) {
+            response.redirect(request, "/user/form_failed.html");
+            return "";
+        } catch (NullValueException e) {
+            response.redirect(request, "/user/form.html");
+            return "";
+        }
+    }
+
+    private String login(HttpRequest request, HttpResponse response) {
+        String body = request.getBody();
+        Map<String, String> userInfo = HttpRequestUtils.parseBodyMessage(body);
+
+        userService.login(userInfo);
+
+        response.redirect(request, "/index.html");
+        return "";
     }
 }
