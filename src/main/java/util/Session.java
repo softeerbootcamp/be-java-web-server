@@ -1,5 +1,6 @@
 package util;
 
+import db.SessionStorage;
 import model.User;
 
 import java.util.UUID;
@@ -40,5 +41,8 @@ public class Session {
         long timeNow = System.currentTimeMillis();
         long timeIdle = lastAcceptedTime - timeNow;
         return timeIdle;
+    }
+    public void expire() {
+        SessionStorage.remove(this);
     }
 }
