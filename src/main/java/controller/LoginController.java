@@ -1,14 +1,17 @@
 package controller;
 
 import db.Database;
-import model.User;
+import enums.ContentTypeEnum;
+import enums.ControllerTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.Request;
 import response.Response;
+import session.HttpSessions;
 import webserver.RequestResponseHandler;
-
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,10 +29,15 @@ public class LoginController implements Controller{
         logger.debug("login request : "+request.getRequestBody().getBodyLines());
         List<String> bodyLine = request.getRequestBody().getBodyLines();
         List<String> userInfos = parseUrlToGetUserInfo(bodyLine);
-        // 로그인이 성공하면?
-        if(checkIdPwdIsInDatabase(userInfos.get(USERID_INDEX),userInfos.get(USERPWD_INDEX) )){
-
+        byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + "/index.html").toPath());
+        response.responseMaker(ControllerTypeEnum.USER, ContentTypeEnum.HTML,body.length,"/index.html",
+                request.isRequestHaveCookie(),request.);
+        // 로그인이 성공하면? session add
+        if(checkIdPwdIsInDatabase(userInfos.get(USERID_INDEX),userInfos.get(USERPWD_INDEX))){
+            HttpSessions.addHttpSession(userInfos.get(USERID_INDEX));
         }
+        //response 에 추가.
+
 
 
     }

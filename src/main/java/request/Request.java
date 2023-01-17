@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.RequestResponseHandler;
 
-import javax.sound.sampled.Line;
 import java.io.BufferedReader;
 import java.io.IOException;
 
@@ -40,6 +39,8 @@ public class Request {
             if (isBodyExistsOrEOL(oneLine)) {
                 break;
             }
+            String[] headerMap = oneLine.split(":");
+            requestHeader.addHeaderMap(headerMap[0],headerMap[1]);
             requestHeader.addHeaderLines(oneLine);
         }
 
@@ -57,7 +58,11 @@ public class Request {
     }
 
 
-
+    public boolean isRequestHaveCookie(){
+        if(requestHeader.isHeaderMapContains("Cookie")){
+            return true;
+        }return false;
+    }
     public boolean isBodyExistsOrEOL(String oneLine) throws IOException {
         if (oneLine.equals("")) {
             return true;

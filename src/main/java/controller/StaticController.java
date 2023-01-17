@@ -24,6 +24,7 @@ public class StaticController implements Controller{
         logger.debug("firstLine : "+ request.getRequestLine().getURL());
         byte[] body = Files.readAllBytes(new File("./src/main/resources/static"+url).toPath());
         response.responseMaker(ControllerTypeEnum.STATIC, ContentTypeEnum.CSS,body.length,url);
+        response.responseNewLineAdder();
         response.responseBody(body);
     }
 }

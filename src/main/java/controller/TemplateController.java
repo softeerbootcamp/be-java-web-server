@@ -21,6 +21,7 @@ public class TemplateController implements Controller {
 
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + url).toPath());
         response.responseMaker(ControllerTypeEnum.TEMPLATE, ContentTypeEnum.HTML, body.length, url);
+        response.responseNewLineAdder();
         response.responseBody(body);
     }
 }
