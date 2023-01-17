@@ -28,6 +28,10 @@ public class UserService {
 	}
 
 	public boolean matchIdPassword(String userId, String password) {
+		// id가 존재하지 않는 경우
+		if (!idExist(userId)) {
+			return false;
+		}
 		return userRepository.findUserById(userId).matchPassword(password);
 	}
 
