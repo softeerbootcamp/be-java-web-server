@@ -1,12 +1,16 @@
 package http.response;
 
 import http.HttpHeader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.ContentType;
 import utils.StatusCode;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 public class HttpResponse {
+    private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
     private String version;
     private StatusCode statusCode;
     private HttpHeader headers;
@@ -36,8 +40,9 @@ public class HttpResponse {
         this.body.setBody(body);
     }
 
-    public void setCookie(int sid) {
-        this.headers.addHeader("Set-Cookie", "sid=".concat(String.valueOf(sid)).concat("; Path=/"));
+    public void setCookie(UUID sid) {
+        String value = String.format("sid=%s; Path=/; MAX-AGE=300", sid.toString());
+        this.headers.addHeader("Set-Cookie", value);
     }
 
     public String getHeaderMessage() {

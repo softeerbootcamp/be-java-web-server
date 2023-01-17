@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import service.UserService;
 import utils.FileIoUtils;
 import utils.HttpMethod;
+import utils.SessionManager;
 
 import javax.naming.AuthenticationException;
 import java.util.Map;
@@ -31,7 +32,7 @@ public class UserLoginController implements Controller {
         Map<String, String> params = FileIoUtils.parseQueryString(httpRequest.getRequestBody());
         try {
             userService.login(params.get("userId"), params.get("password"));
-            httpResponse.setCookie(params.get("userId").hashCode());
+            httpResponse.setCookie(SessionManager.createSession(userService.findUser(params.get("userId"))));
             httpResponse.redirectHome();
         }
         catch (AuthenticationException e) {
