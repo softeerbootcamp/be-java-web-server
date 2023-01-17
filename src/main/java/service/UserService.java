@@ -20,4 +20,24 @@ public class UserService {
         return HttpResponse.of(HttpStatus.FOUND, "", headers, "".getBytes(), requestLine.getVersion());
     }
 
+    public HttpResponse login(HttpRequest httpRequest) {
+        RequestLine requestLine = httpRequest.getRequestLine();
+        Map<String, String> headers = new HashMap<>();
+        String requestId = httpRequest.getRequestBody().get("userId");
+        String requestPassword = httpRequest.getRequestBody().get("password");
+        if (isExistUser(requestId, requestPassword)) {
+            headers.put("Location", "/index.html");
+            return HttpResponse.of(HttpStatus.FOUND, "", headers, "".getBytes(), requestLine.getVersion());
+
+        }
+
+        headers.put("Location", "/user/login_failed.html");
+        return HttpResponse.of(HttpStatus.FOUND, "", headers, "".getBytes(), requestLine.getVersion());
+    }
+
+    private boolean isExistUser(String id, String pw) {
+        User user = Database.findUserById(id);
+        return user != null && user.getPassword().equals(pw);
+    }
+
 }
