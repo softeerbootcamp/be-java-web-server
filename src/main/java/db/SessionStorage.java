@@ -18,4 +18,8 @@ public class SessionStorage {
     public static Session findSessionBy(UUID uuid) {
         return sessions.get(uuid);
     }
+
+    public static void remove(Session session) {
+        sessions.remove(session.getSid());
+    }
 }
