@@ -20,6 +20,8 @@ public class SessionStorage {
     }
 
     public static void remove(Session session) {
-        sessions.remove(session.getSid());
+        if (session.getSid() != null) {
+            sessions.remove(session.getSid());
+        }
     }
 }
