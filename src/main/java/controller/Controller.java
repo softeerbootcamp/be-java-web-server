@@ -1,6 +1,7 @@
 package controller;
 
 import http.common.HttpMethod;
+import http.exception.MethodNotAllowException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 
@@ -13,6 +14,10 @@ public interface Controller {
 
         doPost(request, response);
     }
-    void doGet(HttpRequest request, HttpResponse response);
-    void doPost(HttpRequest request, HttpResponse response);
+    default void doGet(HttpRequest request, HttpResponse response) {
+        throw new MethodNotAllowException();
+    }
+    default void doPost(HttpRequest request, HttpResponse response) {
+        throw new MethodNotAllowException();
+    }
 }

@@ -30,7 +30,7 @@ public class HttpExceptionHandlerTest {
         // given
         HttpRequest request = new HttpRequest(
                 HttpMethod.GET,
-                new URI("/index", Map.of()),
+                new URL("/index", Map.of()),
                 new HttpHeaders()
         );
         HttpResponse response = new HttpResponse(mockDos);
@@ -45,7 +45,7 @@ public class HttpExceptionHandlerTest {
                 () -> assertEquals(HttpStatus.NOT_FOUND, response.getStatus()),
                 () -> assertEquals(MediaType.TEXT_HTML.name(), response.getHeaders().getValue("Content-Type")),
                 () -> assertEquals(String.valueOf(bodyData.length), response.getHeaders().getValue("Content-Length")),
-                () -> assertEquals(bodyData.length, response.getBody().size())
+                () -> assertEquals(bodyData.length, response.getBody().length)
         );
     }
 
@@ -55,7 +55,7 @@ public class HttpExceptionHandlerTest {
         // given
         HttpRequest request = new HttpRequest(
                 HttpMethod.GET,
-                new URI("/index", Map.of()),
+                new URL("/index", Map.of()),
                 new HttpHeaders()
         );
         HttpResponse response = new HttpResponse(mockDos);
@@ -69,7 +69,7 @@ public class HttpExceptionHandlerTest {
         assertAll(
                 () -> assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatus()),
                 () -> assertEquals(MediaType.TEXT_PLAIN.name(), response.getHeaders().getValue("Content-Type")),
-                () -> assertEquals(message.getBytes().length, response.getBody().size())
+                () -> assertEquals(message.getBytes().length, response.getBody().length)
         );
     }
 }

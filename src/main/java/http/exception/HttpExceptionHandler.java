@@ -1,6 +1,5 @@
 package http.exception;
 
-import http.common.HttpBody;
 import http.common.HttpStatus;
 import http.common.MediaType;
 import http.request.HttpRequest;
@@ -34,9 +33,8 @@ public final class HttpExceptionHandler {
                 e.getMessage());
 
         response.setStatus(e.status);
-        HttpBody body = new HttpBody(e.getMessage().getBytes());
         response.addHeader("Content-Type", MediaType.TEXT_PLAIN.name());
-        response.setBody(body);
+        response.setBody(e.getMessage().getBytes());
     }
 
     private static void notFoundExceptionHandler(HttpRequest request, HttpResponse response, String message) {
@@ -46,9 +44,8 @@ public final class HttpExceptionHandler {
                 message);
 
         response.setStatus(HttpStatus.NOT_FOUND);
-        HttpBody body = new HttpBody(ResourceUtils.loadFileFromClasspath("/not_found.html"));
 
         response.addHeader("Content-Type", MediaType.TEXT_HTML.name());
-        response.setBody(body);
+        response.setBody(ResourceUtils.loadFileFromClasspath("/not_found.html"));
     }
 }

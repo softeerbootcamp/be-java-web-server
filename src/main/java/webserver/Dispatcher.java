@@ -21,7 +21,7 @@ public class Dispatcher {
     }
 
     public static void handle(HttpRequest request, HttpResponse response) {
-        Controller controller = controllers.get(request.getUri().getPath());
+        Controller controller = controllers.get(request.getUrl().getPath());
         if (Objects.nonNull(controller)) {
             controller.execute(request, response);
             return;
@@ -30,7 +30,7 @@ public class Dispatcher {
         Controller staticResourcesController = controllers.get(StaticResourceController.PATH);
         staticResourcesController.execute(request, response);
 
-        if (response.getBody().size() == 0) {
+        if (response.getBody().length == 0) {
             throw new NotFoundException("페이지를 찾을 수 없습니다.");
         }
     }

@@ -2,37 +2,29 @@ package http.util;
 
 import http.common.HttpHeaders;
 import http.common.HttpMethod;
-import http.common.URI;
+import http.common.URL;
 import http.request.HttpRequest;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
+import static http.util.HttpRequestReader.*;
 public class HttpRequestParser {
     private HttpRequestParser() {}
 
     public static HttpRequest parse(InputStream in) {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         try {
-            String requestLine = br.readLine();
-            HttpMethod method = HttpMethod.valueOf(requestLine.split(" ")[0]);
-            URI uri = HttpURIParser.parse(requestLine);
+            String readRequestLine = readRequestLine(br);
+            HttpMethod method = HttpMethod.valueOf(readRequestLine.split(" ")[0]);
+            URL url = HttpURIParser.parse(readRequestLine);
+            HttpHeaders headers = HttpHeaderParser.parse(readHeader(br));
+            Map<String, String> data = HttpFormBodyParser.parse(readBody(br, headers.contentLength()));
 
-            String strOfHeaders = readStrOfHeaders(br);
-            HttpHeaders headers = HttpHeaderParser.parse(strOfHeaders);
-
-            return new HttpRequest(method, uri, headers);
+            return new HttpRequest(method, url, headers, data);
         } catch (IOException e) {
             throw new RuntimeException("잘못된 형식의 요청입니다.");
         }
-    }
-
-    private static String readStrOfHeaders(BufferedReader br) throws IOException {
-        String line;
-        StringBuilder strOfHeaders = new StringBuilder();
-        while (!(line = br.readLine()).equals("")) {
-            strOfHeaders.append(line).append("\n");
-        }
-        return strOfHeaders.toString();
     }
 }

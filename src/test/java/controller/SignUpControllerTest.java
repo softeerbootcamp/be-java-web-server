@@ -3,7 +3,7 @@ package controller;
 import http.common.HttpHeaders;
 import http.common.HttpMethod;
 import http.common.HttpStatus;
-import http.common.URI;
+import http.common.URL;
 import http.exception.MethodNotAllowException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -37,9 +37,10 @@ public class SignUpControllerTest {
                 "name", "sol",
                 "email", "sol@sol.com");
         HttpRequest request = new HttpRequest(
-                HttpMethod.GET,
-                new URI("/user/create", user),
-                new HttpHeaders());
+                HttpMethod.POST,
+                new URL("/user/create", Map.of()),
+                new HttpHeaders(),
+                user);
         HttpResponse response = new HttpResponse(mockDos);
 
         // when
@@ -55,7 +56,7 @@ public class SignUpControllerTest {
     }
 
     @Test
-    @DisplayName("execute() - 지원하지 않는 메서드(POST) 테스트")
+    @DisplayName("execute() - 지원하지 않는 메서드(GET) 테스트")
     void signUpToNotAllowMethod() {
         // given
         SignUpController controller = new SignUpController();
@@ -65,8 +66,8 @@ public class SignUpControllerTest {
                 "name", "sol",
                 "email", "sol@sol.com");
         HttpRequest request = new HttpRequest(
-                HttpMethod.POST,
-                new URI("/user/create", user),
+                HttpMethod.GET,
+                new URL("/user/create", user),
                 new HttpHeaders());
         HttpResponse response = new HttpResponse(mockDos);
 
