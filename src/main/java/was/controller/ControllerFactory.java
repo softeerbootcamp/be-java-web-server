@@ -1,5 +1,6 @@
 package was.controller;
 
+import service.UserService;
 import webserver.domain.HttpRequest;
 
 import java.util.Optional;

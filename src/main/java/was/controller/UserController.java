@@ -8,6 +8,7 @@ import webserver.domain.HttpResponseMessage;
 
 public class UserController implements Controller{
     private static UserController userController;
+    private final UserService userService = UserService.getInstance();
     private UserController() {
     }
     public static UserController getInstance() {
@@ -18,7 +19,6 @@ public class UserController implements Controller{
     }
     @PostMapping("/user/create")
     public HttpResponseMessage create(HttpRequest httpRequest) {
-        UserService userService = UserService.getInstance();
         userService.addUser(httpRequest.getBody());
 
         HttpResponse httpResponse = new HttpResponse();
