@@ -10,6 +10,7 @@ public enum UrlType {
     QUERY_STRING(".*\\?(.*)"),
     TEMPLATES_FILE(".*\\.(html|ico)$"),
     STATIC_FILE(".*\\.(css|js|tff|woff)$"),
+    NOTHING(""),
     ;
 
 
@@ -23,7 +24,7 @@ public enum UrlType {
         return Arrays.stream(values())
                 .filter(value -> url.matches(value.regex))
                 .findAny()
-                .orElse(null);
+                .orElse(NOTHING);
     }
 
 }
