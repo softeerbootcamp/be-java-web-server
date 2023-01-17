@@ -1,4 +1,4 @@
-package model.Request;
+package model.request;
 
 public class RequestLine {
     private final String version;

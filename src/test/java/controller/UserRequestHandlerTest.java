@@ -1,6 +1,6 @@
 package controller;
 
-import model.Request.Request;
+import model.request.Request;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -1,7 +1,7 @@
 package webserver;
 
 import db.Database;
-import model.Request.Request;
+import model.request.Request;
 import model.User;
 
 import java.util.Map;

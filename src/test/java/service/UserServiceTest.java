@@ -2,7 +2,7 @@ package service;
 
 import db.Database;
 import exception.DuplicateUserIdException;
-import model.Request.Request;
+import model.request.Request;
 import model.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
