@@ -55,7 +55,7 @@ public class HttpRequest {
         return body;
     }
 
-    public Map<String,String> parseBody() throws IOException {
+    public Map<String,String> parseBody() {
         Map<String, String> parsedBody = new HashMap<>();
         //1. body가 없으면 빈 map을 리턴
         if(body.isEmpty()) return Collections.EMPTY_MAP;
@@ -63,6 +63,7 @@ public class HttpRequest {
         String contentType = headers.get("Content-Type");
         if(contentType.equals("application/x-www-form-urlencoded")) parsedBody= HttpRequestUtils.parseQueryString(body);
         return parsedBody;
+
     }
 
 
