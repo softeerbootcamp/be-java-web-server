@@ -26,7 +26,7 @@ public class UserListController implements AuthController {
 
         for (User user: users) {
             content.append("<tr><th scope=\"row\">")
-                    .append(idx)
+                    .append(idx++)
                     .append("</th> <td>")
                     .append(user.getUserId())
                     .append("</td> <td>")
