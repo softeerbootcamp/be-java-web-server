@@ -15,8 +15,8 @@ public class RequestHeaderMessage {
     private String fileExtension;
     private String requestAttribute;
     private String contentType;
-    private String contentLength;
     private Map<String, String> header;
+    private String sessionId = "";
     public String getHttpOnlyURL() {
         return httpOnlyURL;
     }
