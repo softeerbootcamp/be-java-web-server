@@ -8,7 +8,9 @@ import org.slf4j.LoggerFactory;
 import util.MessageParser;
 import util.HttpStatus;
 import util.Redirect;
+
 import util.Session;
+
 import view.RequestBodyMessage;
 import view.RequestHeaderMessage;
 import view.RequestMessage;
@@ -19,13 +21,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UserController implements Controller{
+
     static UserController userController;
+
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private static final String USER_ID = "userId";
     private static final String PASSWORD = "password";
     private static final String NAME = "name";
     private static final String EMAIL = "email";
+
 
     private HttpStatus httpStatus = HttpStatus.ClientError;
 
@@ -53,9 +58,11 @@ public class UserController implements Controller{
         }
         if (requestMessage.getRequestHeaderMessage().getRequestAttribute().equals("/login")){
             userLogin(requestMessage, userService, headerKV);
+
             return;
         }
     }
+
 
     private void userCreate(RequestMessage requestMessage, UserService userService, Map<String, String> headerKV){
         Map<String,String> userInfo;
@@ -67,9 +74,11 @@ public class UserController implements Controller{
             setLocation(Redirect.getRedirectLink(requestMessage.getRequestHeaderMessage().getRequestAttribute()), headerKV);
         } catch (IllegalStateException e){
             setLocation("/user/form_failed.html", headerKV);
+
             logger.debug(e.getMessage());
         }
     }
+
 
     private void userLogin(RequestMessage requestMessage, UserService userService, Map<String,String> headerKV){
         Map<String,String> loginInfo;
@@ -80,9 +89,11 @@ public class UserController implements Controller{
             setCookie(Session.newLoginSession(user), headerKV);
         } catch (IllegalStateException e){
             setLocation("/user/login_failed.html", headerKV);
+
             logger.debug(e.getMessage());
         }
     }
+
 
     private void setCookie(String sid, Map<String,String> headerKV){
         logger.debug("sid: "+sid);
@@ -98,6 +109,7 @@ public class UserController implements Controller{
 
     private void setHeader(Map<String,String> headerKV, String key, String value){
         headerKV.put(key,value);
+
     }
 
 }

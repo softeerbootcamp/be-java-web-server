@@ -2,6 +2,7 @@ package view;
 
 public class RequestBodyMessage {
 
+
     private String bodyParams = "";
 
     public String getBodyParams() {

@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpStatus;
 import view.RequestHeaderMessage;
+
 import view.RequestMessage;
 import view.Response;
 import webserver.RequestHandler;
@@ -12,6 +13,7 @@ import java.io.DataOutputStream;
 import java.io.OutputStream;
 
 public class StaticController implements Controller{
+
     private static StaticController staticController;
 
     private static final Logger logger = LoggerFactory.getLogger(StaticController.class);
@@ -38,5 +40,6 @@ public class StaticController implements Controller{
         Response response = new Response(new DataOutputStream(out));
         response.response(body,requestMessage.getRequestHeaderMessage(), httpStatus);
     }
+
 
 }

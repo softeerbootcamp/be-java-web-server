@@ -11,7 +11,9 @@ import java.nio.file.Files;
 
 public interface Controller {
 
+
     void control(RequestMessage requestMessage, OutputStream out);
+
     default byte[] getBodyFile(String fileURL){
         if (fileURL.contains(".")) {  //파일을 요청 (.html, .js, .css etc..)
             try {
