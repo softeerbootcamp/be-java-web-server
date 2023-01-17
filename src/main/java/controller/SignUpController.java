@@ -21,17 +21,13 @@ public class SignUpController extends BaseController{
     @Override
     public void doGet(HttpRequest request, HttpResponse response) {
         signUpService.signUp(request);
-        redirect(REDIRECT_URL,response);
+        response.redirect(REDIRECT_URL);
     }
 
     @Override
     public void doPost(HttpRequest request, HttpResponse response) {
         signUpService.singUpByPost(request);
-        redirect(REDIRECT_URL,response);
-    }
-
-    public void redirect(String redirectUrl,HttpResponse response ){
-        response.redirect(redirectUrl);
+        response.redirect(REDIRECT_URL);
     }
 
     public String getPathUrl() {
