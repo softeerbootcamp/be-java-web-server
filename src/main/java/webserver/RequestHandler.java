@@ -35,15 +35,21 @@ public class RequestHandler implements Runnable {
 
             try {
                 ControllerFinder.handleControllerInfoAnnotation(controller, httpRequest, clientOutPutStream);
-            } catch (InvocationTargetException | NoSuchFileException e) {
+            } catch (NoSuchFileException e) {
                 e.printStackTrace();
                 ErrorController.getErrorResponse(clientOutPutStream,HttpStatus.NOT_FOUND);
                 logger.error("[ERROR]:{} {}", HttpStatus.NOT_FOUND.getCode(), HttpStatus.NOT_FOUND.getMessage());
                 logger.error("FileReaderContoller에서 url에 맞는 페이지가 없습니다. url:{}", httpRequest.getUrl().getUrl());
-            } catch (Exception e) {
+            } catch(InvocationTargetException e){
+                e.printStackTrace();
+                ErrorController.getErrorResponse(clientOutPutStream,HttpStatus.METHOD_NOT_ALLOWED);
+                logger.error("[ERROR]:{} {}", HttpStatus.NOT_FOUND.getCode(), HttpStatus.METHOD_NOT_ALLOWED.getMessage());
+                logger.error("url요청이 올바르지 않습니다! url:{}", httpRequest.getUrl().getUrl());
+            }
+            catch (Exception e) {
                 e.printStackTrace();
                 logger.error("[ERROR]:{} {}", HttpStatus.INTERNAL_SERVER_ERROR.getCode(), HttpStatus.INTERNAL_SERVER_ERROR.getMessage());
-                logger.error("요청에 맞지 않은 요청이 들어옴. controller:{}, url:{}", controller.getClass(), httpRequest.getUrl().getUrl());
+                logger.error("서버에서 처리못하는 에러. controller:{}, url:{}", controller.getClass(), httpRequest.getUrl().getUrl());
                 ErrorController.getErrorResponse(clientOutPutStream,HttpStatus.INTERNAL_SERVER_ERROR);
 
             }
