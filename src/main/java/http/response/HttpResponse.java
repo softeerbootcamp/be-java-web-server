@@ -51,6 +51,11 @@ public class HttpResponse {
         headers.addHeader("Location", "/index.html");
     }
 
+    public void redirectLogin() {
+        this.statusCode = StatusCode.SEE_OTHER;
+        headers.addHeader("Location", "/users/login.html");
+    }
+
     public void redirectLoginFailed() {
         this.statusCode = StatusCode.SEE_OTHER;
         headers.addHeader("Location", "/user/login_failed.html");
