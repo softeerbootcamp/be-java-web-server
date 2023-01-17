@@ -7,6 +7,7 @@ import model.User;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 public class CookieDataBase {
 
@@ -23,6 +24,7 @@ public class CookieDataBase {
     public static void deleteCookie(String sessionId){
         cookies.remove(sessionId);
     }
+
     public static Collection<HttpCookie> findAll() {
         return cookies.values();
     }
