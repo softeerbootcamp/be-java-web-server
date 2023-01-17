@@ -58,7 +58,7 @@ public class HttpResponse {
         dos.writeBytes(System.lineSeparator());
         dos.write(body, 0, body.length);
         dos.flush();
-        logger.error("Http statusLine: " + statusLine);
+        logger.error("Http statusLine: {}", statusLine);
     }
 
     public String getStatusCode() {
@@ -74,7 +74,7 @@ public class HttpResponse {
         dos.writeBytes(headers.toString());
         dos.writeBytes(System.lineSeparator());
 
-        logger.debug("HttpResponse statusLine: " + statusLine);
+        logger.debug("HttpResponse statusLine: {}",  statusLine);
 
         if (responseBody.hasBody()) {
             byte[] body = responseBody.getBody();

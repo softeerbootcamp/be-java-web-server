@@ -28,7 +28,7 @@ public class ResourceController extends AbstractController {
         String path = httpRequest.getUri().getPath();
         ContentType contentType = ContentType.from(path);
         String filePath = contentType.getDirectory() + path;
-        logger.debug("filePath: {}" + filePath);
+        logger.debug("filePath: {}",  filePath);
         byte[] body = loadFile(filePath);
 
         if (body.length == EMPTY_LENGTH) {

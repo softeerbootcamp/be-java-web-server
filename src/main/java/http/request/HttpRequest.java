@@ -31,13 +31,12 @@ public class HttpRequest {
         this.httpHeaders = headers;
         this.requestBody = requestBody;
 
-        logger.debug(startLine.getMethod().toString());
     }
 
     public static HttpRequest from(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         String startLine = br.readLine();
-        logger.debug(startLine);
+        logger.info("StartLine: {}", startLine);
         String extracted = extractHeaders(br);
         String[] headers = extracted.split(ENTER);
 
