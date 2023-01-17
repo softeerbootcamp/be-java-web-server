@@ -19,4 +19,13 @@ class SessionStorageTest {
 
         Assertions.assertThat(session).isEqualTo(find);
     }
+    @Test
+    void UUID() {
+        UUID uid1 = UUID.randomUUID();
+        UUID uid2 = UUID.fromString(uid1.toString());
+        HashMap<UUID, String> map = new HashMap<>();
+        map.put(uid1, "1");
+
+        Assertions.assertThat(map.get(uid2)).isEqualTo("1");
+    }
 }
