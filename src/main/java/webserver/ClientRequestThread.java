@@ -34,9 +34,9 @@ public class ClientRequestThread implements Runnable {
             }
 
             this.request = Request.from(in);
-            Response response = requestHandler.handleRequest(request, connection.getPort());
+            Response response = requestHandler.handle(request, connection.getPort());
 
-            HttpResponse.handleHttpResponse(out, request, response);
+            HttpResponse.handleHttpResponse(out, response);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
