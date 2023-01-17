@@ -60,9 +60,15 @@ public class UserController implements Controller {
         String body = request.getBody();
         Map<String, String> userInfo = HttpRequestUtils.parseBodyMessage(body);
 
-        userService.login(userInfo);
+        boolean isLoginSuccess = userService.login(userInfo);
 
-        response.redirect(request, "/index.html");
+        if (isLoginSuccess) {
+            response.redirect(request, "/index.html");
+            response.addHttpHeader("Set-Cookie", "sid="+"");
+            return "";
+        }
+
+        response.redirect(request, "/user/login_failed.html");
         return "";
     }
 }
