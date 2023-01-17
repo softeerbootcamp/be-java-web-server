@@ -19,6 +19,7 @@ public class UserAccountController implements RequestController {
 
     private final Map<String, RequestController> routingTable = new HashMap<>() {{
         put("/user/create", (req) -> makeAccount(req));
+        put("/user/login", (req) -> loginAccount(req));
     }};
 
 
@@ -64,11 +65,23 @@ public class UserAccountController implements RequestController {
         return CustomHttpFactory.REDIRECT("/index.html");
     }
 
-    public CustomHttpResponse login(CustomHttpRequest req){
+    public CustomHttpResponse loginAccount(CustomHttpRequest req){
         Set<HttpMethod> allowedMethods = Set.of(HttpMethod.POST);
         if(!allowedMethods.contains(req.getHttpMethod()))
             return CustomHttpFactory.METHOD_NOT_ALLOWED();
 
+        Map<String, String> bodyParams = req.parseBodyFromUrlEncoded();
+        String userId = bodyParams.get("userId");
+        String password = bodyParams.get("password");
+
+        User customer = UserService.findUserById(userId);
+        if(customer != null)
+            if(customer.getPassword().equals(password)) {
+                logger.debug("User {} login success", customer.getName());
+                return CustomHttpFactory.REDIRECT("/index.html");
+            }
+
+        return CustomHttpFactory.BAD_REQUEST("You password or email is wrong");
 
     }
 }
