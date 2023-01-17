@@ -41,9 +41,8 @@ public class UserController implements Controller {
 
     public List<String> parseUrlToGetUserInfo(List<String> requestBodyLine) {
         String result = requestBodyLine.get(0);
-        String[] unParsedUserInfos;
         List<String> parsedUserInfo = new ArrayList<>();
-        unParsedUserInfos = result.split("&");
+        String[] unParsedUserInfos = result.split("&");
         for (String eachInfo : unParsedUserInfos) {
             parsedUserInfo.add(eachInfo.split("=")[1]);
         }

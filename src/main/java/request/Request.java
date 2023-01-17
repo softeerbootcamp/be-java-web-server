@@ -11,14 +11,17 @@ import java.io.IOException;
 public class Request {
 
 
-    private static RequestLine requestLine = new RequestLine();
-    private static RequestHeader requestHeader = new RequestHeader();
-    private static RequestBody requestBody = new RequestBody();
+    private static RequestLine requestLine;
+    private static RequestHeader requestHeader;
+    private static RequestBody requestBody;
     private static final Logger logger = LoggerFactory.getLogger(RequestResponseHandler.class);
     private static final String NEW_LINE = "\r\n";
 
 
     public Request(BufferedReader bufferedReader) throws IOException {
+        requestLine = new RequestLine();
+        requestHeader = new RequestHeader();
+        requestBody = new RequestBody();
         setRequestLine(bufferedReader);
         setRequestHeader(bufferedReader);
         setRequestBody(bufferedReader);
@@ -67,11 +70,11 @@ public class Request {
         return this.requestLine;
     }
 
-    public static RequestHeader getRequestHeader() {
+    public RequestHeader getRequestHeader() {
         return requestHeader;
     }
 
-    public static RequestBody getRequestBody() {
+    public RequestBody getRequestBody() {
         return requestBody;
     }
 }

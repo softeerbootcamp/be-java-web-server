@@ -26,6 +26,7 @@ public class RequestLine {
     }
 
     public void addRequestLine(String oneLine) {
+        logger.debug("set RequestLine : "+oneLine);
         this.requestLine = oneLine;
         //todo : map 사용에 대한 고민이 필요하다.
         String[] lineArr = requestLine.split(" ");

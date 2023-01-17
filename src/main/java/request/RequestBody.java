@@ -10,7 +10,7 @@ public class RequestBody {
         bodyLines.add(oneLine);
     }
 
-    public static List<String> getBodyLines() {
+    public List<String> getBodyLines() {
         return bodyLines;
     }
 }

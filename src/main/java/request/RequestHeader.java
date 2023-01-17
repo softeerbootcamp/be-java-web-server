@@ -9,4 +9,6 @@ public class RequestHeader {
     public void addHeaderLines(String oneLine){
         headerLines.add(oneLine);
     }
+
 }
+
