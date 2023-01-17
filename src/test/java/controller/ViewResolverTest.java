@@ -3,7 +3,7 @@ package controller;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import webserver.ViewResolver;
+import util.ViewResolver;
 
 import java.io.IOException;
 import java.nio.file.Path;

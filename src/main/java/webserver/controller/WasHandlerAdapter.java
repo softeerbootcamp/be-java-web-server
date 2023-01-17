@@ -5,6 +5,6 @@ import model.response.Response;
 
 public interface WasHandlerAdapter {
 
-    void process(Request request, Response response);
+    Response process(Request request);
 
 }

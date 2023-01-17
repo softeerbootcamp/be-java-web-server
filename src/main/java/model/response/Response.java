@@ -9,16 +9,12 @@ public class Response {
     private final Map<String, String> headers = new HashMap<>();
     private byte[] body;
 
-    public void setStatusCode(String version, HttpStatusCode httpStatusCode) {
-        this.statusLine = new StatusLine(version, httpStatusCode);
-    }
-
-    public void addHeader(String key, String value) {
-        headers.put(key, value);
-    }
-
-    public void setBody(byte[] body) {
-        this.body = body;
+    public static Response of(String version, HttpStatusCode httpStatusCode, Map<String, String> headers, byte[] body) {
+        Response response = new Response();
+        response.statusLine = new StatusLine(version, httpStatusCode);
+        response.headers.putAll(headers);
+        response.body = body;
+        return response;
     }
 
     public StatusLine getStatusLine() {

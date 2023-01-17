@@ -27,9 +27,8 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream()) {
             Request request = new Request(in);
-            Response response = new Response();
 
-            frontServlet.process(request, response);
+            Response response = frontServlet.process(request);
 
             ResponseHandler responseHandler = new ResponseHandler(connection);
             responseHandler.response(response);

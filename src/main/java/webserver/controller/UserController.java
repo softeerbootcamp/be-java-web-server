@@ -6,5 +6,5 @@ import webserver.service.UserService;
 
 public interface UserController {
     UserService userService = new UserService();
-    void service(Request request, Response response);
+    Response service(Request request);
 }

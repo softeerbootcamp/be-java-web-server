@@ -5,10 +5,11 @@ import exception.DuplicateUserIdException;
 import exception.UserNotFoundException;
 import model.request.Request;
 import model.User;
+import model.response.Response;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import webserver.UserService;
+import webserver.service.UserService;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -70,6 +71,31 @@ public class UserServiceTest {
         UserService userService = new UserService();
         //then
         assertThrows(DuplicateUserIdException.class, () -> userService.signUpUser(request));
+
+    }
+
+    @Test
+    @DisplayName("유저 로그인 성공")
+    void login() throws Exception {
+        //given
+        User user = new User("11", "22", "abc", "test@test");
+        Database.addUser(user);
+
+        //when
+        String body = "userId=11&password=22";
+        String requestMessage = "POST /user/login HTTP/1.1\n"
+                + "Host: localhost:8080\n"
+                + "Connection: keep-alive\n"
+                + "Content-Length: " + body.length() + "\n"
+                + "Content-Type: application/x-www-form-urlencoded\n"
+                + "Accept: */*\n\n"
+                + body;
+        InputStream inputStream = new ByteArrayInputStream(requestMessage.getBytes());
+        Request request = new Request(inputStream);
+        Response response = new Response();
+        UserService userService = new UserService();
+        userService.loginUser(request);
+        //then
 
     }
 }

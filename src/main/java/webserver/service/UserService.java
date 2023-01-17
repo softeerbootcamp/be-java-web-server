@@ -5,14 +5,18 @@ import exception.UserNotFoundException;
 import model.User;
 import model.request.Request;
 import model.response.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import webserver.controller.UserLoginController;
 
 import java.util.Map;
+import java.util.UUID;
 
 import static model.response.HttpStatusCode.FOUND;
 
 public class UserService {
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    //TODO 서비스 레벨까지 Request와 Response 객체를 계속 넘겨주지 않고 User만 넘겨주거나 할 수 없을까
     public void signUpUser(Request request) {
         Map<String, String> requestParams = request.getRequestParams();
         User user = new User(requestParams.get("userId"),
@@ -22,19 +26,18 @@ public class UserService {
         Database.addUser(user);
     }
 
-    public void loginUser(Request request, Response response) throws UserNotFoundException {
+    public Response loginUser(Request request) throws UserNotFoundException {
         User byUser = Database.findUserById(request.getRequestParams().get("userId"))
                 .orElseThrow(UserNotFoundException::new);
 
         boolean isValid = byUser.getPassword().equals(request.getRequestParams().get("password"));
-        response.setStatusCode(request.getHttpVersion(), FOUND);
         if (isValid) {
-            response.addHeader("Set-Cookie", "sid=123456; Path=/");
-            response.addHeader("Location", "/index.html");
-            return;
+            String sid = String.valueOf(UUID.randomUUID());
+            logger.debug("로그인 성공 user id : {}, sid : {}", byUser.getUserId(), sid);
+            return Response.of(request.getHttpVersion(), FOUND, Map.of("Set-Cookie", "sid=" + sid + "; Path=/",
+                    "Location", "/index.html"), new byte[0]);
         }
-        response.addHeader("Location", "/user/login_failed.html");
-        throw new UserNotFoundException();
+        return Response.of(request.getHttpVersion(), FOUND, Map.of("Location", "/user/login_failed.html"), new byte[0]);
     }
 
 }

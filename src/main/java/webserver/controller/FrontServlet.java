@@ -21,17 +21,19 @@ public class FrontServlet {
         adapterMap.put("user", new UserHandlerAdapter());
     }
 
-    public void process(Request request, Response response) {
+    public Response process(Request request) {
         try {
             Path path = findFilePath(request.getUrl());
-            response.addHeader("Content-Type", Files.probeContentType(path));
-            response.setBody(findActualFile(path));
-            response.setStatusCode(request.getHttpVersion(), OK);
+            return Response.of(request.getHttpVersion(), OK, Map.of("Content-Type", Files.probeContentType(path)), findActualFile(path));
 
         } catch (IOException e) {
             String[] split = request.getUrl().split("/");
             WasHandlerAdapter wasHandlerAdapter = adapterMap.get(split[1]);
-            wasHandlerAdapter.process(request, response);
+            return wasHandlerAdapter.process(request);
+        } catch (NullPointerException exception) {
+            //TODO Header Map에 content-type 넣을 때 NullPointerException 발생해서 임시방편으로 처리해둠.
+            System.out.println(request.getUrl());
+            return Response.of(request.getHttpVersion(), OK, Map.of(),new byte[0]);
         }
     }
 }

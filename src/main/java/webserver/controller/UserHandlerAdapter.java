@@ -20,15 +20,14 @@ public class UserHandlerAdapter implements WasHandlerAdapter {
         controllerMap.put("/user/login", new UserLoginController());
     }
 
-    public void process(Request request, Response response) {
+    public Response process(Request request) {
         String url = request.getUrl();
         logger.debug("user process start url : {}", url);
         UserController userController = controllerMap.get(url);
         if (userController == null) {
             logger.error("404 NOT FOUND");
-            response.setStatusCode(request.getHttpVersion(), NOT_FOUND);
-            return;
+            return Response.of(request.getHttpVersion(), NOT_FOUND, Map.of(), new byte[0]);
         }
-        userController.service(request, response);
+        return userController.service(request);
     }
 }
