@@ -33,6 +33,16 @@ public class AuthController implements Controller {
             );
     }
 
+    @ControllerInfo(path = "/user/login", methodName = "userLogin", queryStr = {"userId", "password"}, method = RequestMethod.POST)
+    public void userLogin(Map<String, String> queryStrs, Response response) throws HttpRequestException{
+        byte[] result = authService.login(queryStrs.get("userId"), queryStrs.get("password"));
+        response.ok(
+                StatusCodes.OK,
+                ("<script>alert('로그인이 완료되었습니다.'); window.location.href = 'http://localhost:8080/index.html';</script>").getBytes(),
+                ContentType.TEXT_HTML
+        );
+    }
+
     @Override
     public void chain(Request req, Response res) throws HttpRequestException, IOException {
         try{
