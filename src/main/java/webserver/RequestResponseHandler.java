@@ -10,12 +10,12 @@ import org.slf4j.LoggerFactory;
 import request.Request;
 import response.Response;
 
-public class RequestHandler implements Runnable {
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+public class RequestResponseHandler implements Runnable {
+    private static final Logger logger = LoggerFactory.getLogger(RequestResponseHandler.class);
 
     private Socket connection;
 
-    public RequestHandler(Socket connectionSocket) {
+    public RequestResponseHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
     }
 
@@ -27,9 +27,9 @@ public class RequestHandler implements Runnable {
             Response response = new Response(out);
             BufferedReader br = new BufferedReader(new InputStreamReader(in,"UTF-8"));
             Request request = new Request(br);
-//
-            Controller controller = ControllerSelector.setController(request.getRequestLine());
-            controller.selectedController(request,response);
+
+            Controller controller = ControllerSelector.setController(request);
+            controller.controllerService(request,response);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

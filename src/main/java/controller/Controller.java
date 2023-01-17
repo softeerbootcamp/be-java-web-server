@@ -6,5 +6,5 @@ import response.Response;
 import java.io.IOException;
 
 public interface Controller {
-    void selectedController(Request request, Response response) throws IOException;
+    void controllerService(Request request, Response response) throws IOException;
 }
