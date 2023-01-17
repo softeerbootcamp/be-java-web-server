@@ -30,7 +30,7 @@ public class Session {
     }
 
     public String toString(){
-        return String.format("sessionId=%s; Path=/; Expires=%s; HttpOnly; Secure", ssid, expiredAt, userId);
+        return String.format("SID=%s; Path=/; Expires=%s; HttpOnly; Secure", ssid, expiredAt, userId);
     }
 
     public void expire() {
