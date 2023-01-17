@@ -38,7 +38,8 @@ public class ResponseWriter {
 
     private void writeCookies(HttpResponse response) {
         if (!response.getCookieKeys().isEmpty()) {
-            writeHeaderLine(SET_COOKIE_HEADER_KEY, response.getCookies().toString());
+            response.getCookieKeys()
+                    .forEach(k -> writeHeaderLine(SET_COOKIE_HEADER_KEY, String.format("%s=%s; path=/", k, response.getCookieByKey(k))));
         }
     }
 
