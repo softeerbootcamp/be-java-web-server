@@ -75,6 +75,12 @@ public class HttpRequest {
         return String.copyValueOf(body);
     }
 
+    public boolean isLogin() {
+        String sessionId = httpHeader.getHeader("Cookie");
+        // TODO 세션매니저를 사용하여 로그인 여부 반환
+        return true;
+    }
+
     public HttpMethod getMethod() {
         return httpRequestLine.getMethod();
     }

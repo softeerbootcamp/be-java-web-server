@@ -87,6 +87,11 @@ public class UserController implements Controller {
     }
 
     private void showUserList(HttpRequest request, HttpResponse response) {
+        if (!request.isLogin()) {
+            response.redirect(request, "/user/login.html");
+            return;
+        }
 
+        StringBuilder sb = new StringBuilder();
     }
 }
