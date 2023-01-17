@@ -1,17 +1,18 @@
 package http.request;
 
 import http.HttpHeader;
+import utils.HttpMethod;
 
 import java.util.Map;
 
 public class HttpRequest {
     private final HttpRequestLine startLine;
-    private final HttpHeader requestHeader;
+    private final HttpHeader headers;
     private final HttpRequestBody requestBody;
 
     private HttpRequest(HttpRequestLine startLine, HttpHeader requestHeader, HttpRequestBody requestBody) {
         this.startLine = startLine;
-        this.requestHeader = requestHeader;
+        this.headers = requestHeader;
         this.requestBody = requestBody;
     }
 
@@ -23,6 +24,14 @@ public class HttpRequest {
         return new HttpRequest(startLine, requestHeader, null);
     }
 
+    public String getRequestBody() {
+        return requestBody.getContent();
+    }
+
+    public HttpMethod getHttpMethod() {
+        return this.startLine.getMethod();
+    }
+
     public URI getUri() {
         return this.startLine.getUri();
     }
@@ -31,7 +40,7 @@ public class HttpRequest {
         return this.startLine.getVersion();
     }
 
-    public Map<String, String> getQuerys() {
-        return this.getUri().getQuerys();
+    public Map<String, String> getQuery() {
+        return this.getUri().getQuery();
     }
 }

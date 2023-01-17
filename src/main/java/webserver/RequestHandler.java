@@ -1,14 +1,13 @@
 package webserver;
 
-import java.io.*;
-import java.net.Socket;
-import java.nio.charset.StandardCharsets;
-
-import http.response.HttpResponse;
 import http.request.HttpRequest;
-import utils.HttpRequestGenerator;
+import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.HttpRequestGenerator;
+
+import java.io.*;
+import java.net.Socket;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -24,7 +23,7 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
             HttpRequest httpRequest = HttpRequestGenerator.generateHttpMessage(br);
             HttpResponse httpResponse = new HttpResponse(httpRequest.getVersion());
             HttpResponse response = Dispatcher.dispatch(httpRequest, httpResponse);

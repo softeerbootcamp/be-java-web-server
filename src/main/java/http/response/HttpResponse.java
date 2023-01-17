@@ -36,16 +36,23 @@ public class HttpResponse {
         this.body.setBody(body);
     }
 
-    public String getHeaderMessage() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(String.format("%s %s \r\n", this.version, this.statusCode));
-        sb.append(headers.getMessage());
-        sb.append("\r\n");
-        return sb.toString();
+    public void setCookie(int sid) {
+        this.headers.addHeader("Set-Cookie", "sid=".concat(String.valueOf(sid)).concat("; Path=/"));
     }
 
-    public void redirect() {
+    public String getHeaderMessage() {
+        return String.format("%s %s \r\n", this.version, this.statusCode) +
+                headers.getMessage() +
+                "\r\n";
+    }
+
+    public void redirectHome() {
         this.statusCode = StatusCode.FOUND;
         headers.addHeader("Location", "/index.html");
+    }
+
+    public void redirectLogin() {
+        this.statusCode = StatusCode.FOUND;
+        headers.addHeader("Location", "/user/login_failed.html");
     }
 }

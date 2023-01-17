@@ -1,21 +1,26 @@
 package webserver;
 
 import controller.Controller;
+import controller.UserLoginController;
 import controller.StaticFileController;
-import controller.UserController;
+import controller.UserCreateController;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
 public class Dispatcher {
     private final static Map<String, Controller> controllers;
+    private final static Logger logger = LoggerFactory.getLogger(Dispatcher.class);
 
     static {
         AppConfig appConfig = new AppConfig();
         controllers = Map.of(
-                UserController.PATH, new UserController(appConfig.userService()),
-                StaticFileController.PATH, new StaticFileController()
+                UserCreateController.PATH, new UserCreateController(appConfig.userService()),
+                StaticFileController.PATH, new StaticFileController(),
+                UserLoginController.PATH, new UserLoginController(appConfig.userService())
         );
     }
 

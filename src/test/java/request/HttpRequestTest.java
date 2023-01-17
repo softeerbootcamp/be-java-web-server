@@ -21,7 +21,7 @@ class HttpRequestTest {
         HttpRequestLine requestLine = HttpRequestLine.of(HttpMethod.GET, URI.create("/user/create?id=mino&password=1234"),
                 "HTTP/1.1");
         HttpHeader httpHeader = HttpHeader.from(new HashMap<>());
-        HttpRequestBody requestBody = HttpRequestBody.of("hello");
+        HttpRequestBody requestBody = HttpRequestBody.from("hello");
         httpRequest = HttpRequest.of(requestLine, httpHeader, requestBody);
     }
 
@@ -29,7 +29,7 @@ class HttpRequestTest {
     @Test
     void test_HttpRequest() {
         assertThat(httpRequest.getVersion()).isEqualTo("HTTP/1.1");
-        assertThat(httpRequest.getQuerys().get("id")).isEqualTo("mino");
+        assertThat(httpRequest.getQuery().get("id")).isEqualTo("mino");
         assertThat(httpRequest.getUri().getPath()).isEqualTo("/user/create");
     }
 }
