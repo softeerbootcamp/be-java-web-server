@@ -21,4 +21,17 @@ class SessionTest {
 
         Assertions.assertThat(session.isValid()).isEqualTo(true);
     }
+    @Test
+    void 세션_유효성_검증_실패() {
+        Session session = Session.createSessionWith(new User("ajongs", "password"));
+        SessionStorage.addSession(session);
+
+        try {
+            Thread.sleep(6000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        Assertions.assertThat(session.isValid()).isEqualTo(false);
+    }
 }
