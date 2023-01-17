@@ -3,7 +3,8 @@ package http.common;
 public enum HeaderAttribute {
     CONTENT_TYPE("Content-type", "text/plain"),
     CONTENT_LENGTH("Content-Length", "0"),
-    LOCATION("Location", "index.html");
+    LOCATION("Location", "index.html"),
+    SET_COOKIE("Set-Cookie", "");
 
     private String value;
     private String defaultValue;
