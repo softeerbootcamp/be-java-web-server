@@ -85,6 +85,7 @@ public class UserAccountController implements RequestController {
             return res;
         }
 
-        return CustomHttpFactory.BAD_REQUEST("You password or email is wrong");
+        logger.debug("User login failed");
+        return CustomHttpFactory.REDIRECT("/user/login_failed.html");
     }
 }
