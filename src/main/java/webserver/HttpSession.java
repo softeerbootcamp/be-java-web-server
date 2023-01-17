@@ -14,7 +14,7 @@ public class HttpSession { // 각 사용자마다 해당되는 고유한 세션�
         this.valid = true;
     }
 
-    public String getSessionId() {
+    public String getId() {
         return sessionId;
     }
 
