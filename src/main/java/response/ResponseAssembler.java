@@ -26,7 +26,7 @@ public class ResponseAssembler {
 
     public String ResponseAdderListToString(List<String> responseAdder) {
         String result = "";
-        if (responseAdder.isEmpty()){
+        if (responseAdder.size()==0){
             return result+NEW_LINE;
         }
         for (String line : responseAdder) {

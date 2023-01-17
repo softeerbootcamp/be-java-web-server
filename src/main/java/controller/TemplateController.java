@@ -25,7 +25,6 @@ public class TemplateController implements Controller {
         NewResponse newResponse = new NewResponse.Builder()
                 .setResponseStatusLine(ControllerTypeEnum.TEMPLATE)
                 .setResponseHeader(ContentTypeEnum.HTML,body.length)
-                .addResponseHeader("")
                 .setResponseBody(body)
                 .build();
         return newResponse;
