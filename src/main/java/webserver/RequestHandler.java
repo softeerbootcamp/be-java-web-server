@@ -2,16 +2,12 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
 import controller.Controller;
 import controller.StaticController;
-import controller.TemplatesController;
 import controller.UserController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.HttpStatus;
 import view.RequestBodyMessage;
 import view.RequestHeaderMessage;
 import view.RequestMessage;
@@ -33,9 +29,8 @@ public class RequestHandler implements Runnable {
             rr.readRequest();
             RequestMessage requestMessage = new RequestMessage(new RequestHeaderMessage(rr.startLine), new RequestBodyMessage(rr.body));
             setController(requestMessage, out);
-            logger.debug(controller.toString());
+            logger.info(controller.toString());
             controller.control();
-
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -43,11 +38,14 @@ public class RequestHandler implements Runnable {
 
     private void setController(RequestMessage requestMessage, OutputStream out){
         RequestHeaderMessage requestHeaderMessage = requestMessage.getRequestHeaderMessage();
+        /*
         if (requestHeaderMessage.getContentType().contains("html")){
             controller = new TemplatesController(requestHeaderMessage, out);
             return;
         }
-            if (requestHeaderMessage.getHttpOnlyURL().contains(".")) {
+
+         */
+        if (requestHeaderMessage.getHttpOnlyURL().contains(".")) {
             controller = new StaticController(requestHeaderMessage, out);
             return;
         }
