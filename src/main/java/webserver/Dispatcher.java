@@ -1,9 +1,6 @@
 package webserver;
 
-import controller.Controller;
-import controller.LoginController;
-import controller.SignUpController;
-import controller.StaticResourceController;
+import controller.*;
 import http.exception.NotFoundException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -18,7 +15,8 @@ public class Dispatcher {
         controllers = Map.of(
                 StaticResourceController.PATH, new StaticResourceController(),
                 SignUpController.PATH, new SignUpController(),
-                LoginController.PATH, new LoginController()
+                LoginController.PATH, new LoginController(),
+                UserListController.PATH, new UserListController()
         );
     }
 
