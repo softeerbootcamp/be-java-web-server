@@ -6,8 +6,8 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpParser;
-import webserver.controller.ControllerHandler;
-import webserver.controller.ControllerHandlerFactory;
+import webserver.handler.ControllerHandler;
+import webserver.handler.ControllerHandlerFactory;
 import webserver.domain.HttpRequest;
 import webserver.domain.HttpResponseMessage;
 
@@ -30,8 +30,7 @@ public class RequestHandler implements Runnable {
 
             HttpRequest httpRequest = HttpRequest.newInstance(HttpParser.parseHttpRequest(in));
             ControllerHandler controllerHandler = ControllerHandlerFactory.getHandler(httpRequest);
-
-            response(dos, controllerHandler.handle());
+            response(dos, controllerHandler.handle(httpRequest));
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

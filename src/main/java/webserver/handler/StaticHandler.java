@@ -1,4 +1,4 @@
-package webserver.controller;
+package webserver.handler;
 
 
 import webserver.domain.HttpRequest;
@@ -7,14 +7,19 @@ import webserver.domain.HttpResponseMessage;
 
 public class StaticHandler implements ControllerHandler {
 
-    private final HttpRequest httpRequest;
+    private static StaticHandler staticHandler;
 
-    public StaticHandler(HttpRequest httpRequest) {
-        this.httpRequest = httpRequest;
+    private StaticHandler() {
     }
 
+    public static StaticHandler getInstance() {
+        if (staticHandler != null) {
+            return staticHandler;
+        }
+        return staticHandler = new StaticHandler();
+    }
     @Override
-    public HttpResponseMessage handle() {
+    public HttpResponseMessage handle(HttpRequest httpRequest) {
         String uri = httpRequest.getRequestLine().getUrl();
         HttpResponse httpResponse = new HttpResponse();
         return new HttpResponseMessage(httpResponse.forward(httpResponse.findPath(uri)), httpResponse.getBody());

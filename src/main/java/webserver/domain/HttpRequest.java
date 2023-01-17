@@ -9,10 +9,12 @@ import static util.HttpParser.REQUEST_LINE;
 public class HttpRequest {
     private RequestLine requestLine;
     private final Map<String, String> headers;
+    private final Map<String, String> body;
 
-    private HttpRequest(RequestLine requestLine, Map<String, String> headers) {
+    private HttpRequest(RequestLine requestLine, Map<String, String> headers, Map<String, String> body) {
         this.requestLine = requestLine;
         this.headers = headers;
+        this.body = body;
     }
 
     public RequestLine getRequestLine() {
@@ -23,8 +25,12 @@ public class HttpRequest {
         return headers;
     }
 
-    public static HttpRequest newInstance(Map<String, String> httpMessage) {
-        return new HttpRequest(initRequestLine(httpMessage), extractHeadersFrom(httpMessage));
+    public Map<String, String> getBody() {
+        return body;
+    }
+
+    public static HttpRequest newInstance(HttpRequestMessage httpMessage) {
+        return new HttpRequest(initRequestLine(httpMessage.getHeader()), extractHeadersFrom(httpMessage.getHeader()), httpMessage.getBody());
     }
 
     private static Map<String, String> extractHeadersFrom(Map<String, String> httpMessage) {

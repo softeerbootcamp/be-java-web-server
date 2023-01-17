@@ -2,6 +2,7 @@ package webserver;
 
 import org.junit.jupiter.api.Test;
 import webserver.domain.HttpRequest;
+import webserver.domain.HttpRequestMessage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +15,7 @@ class HttpRequestTest {
         Map<String, String> map = new HashMap<>();
         map.put("Request Line", "GET /index.html HTTP/1.1");
         map.put("HOST", "www.test01.com");
-        HttpRequest httpRequest = HttpRequest.newInstance(map);
+        HttpRequest httpRequest = HttpRequest.newInstance(new HttpRequestMessage(map, null));
 
         assertThat(httpRequest.getRequestLine().getHttpMethod().getMethod()).isEqualTo("GET");
         assertThat(httpRequest.getRequestLine().getUrl()).isEqualTo("/index.html");
