@@ -3,15 +3,15 @@ package util;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.io.FileNotFoundException;
+import request.RequestDataType;
+import request.Url;
 
 class FileTypeTest {
 
     @Test
     @DisplayName(".html 파일 확장자명 테스트")
     void getFileTypeHtml()  {
-        Url url = new Url("/index.html",RequestDataType.TEMPLATES_FILE);
+        Url url = new Url("/index.html", RequestDataType.TEMPLATES_FILE);
         FileType fileType = FileType.getFileType(url);
         Assertions.assertThat(fileType).isEqualTo(FileType.HTML);
     }

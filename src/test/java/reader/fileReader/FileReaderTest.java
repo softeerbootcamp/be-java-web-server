@@ -2,7 +2,7 @@ package reader.fileReader;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import util.RequestDataType;
+import request.RequestDataType;
 
 import static org.assertj.core.api.Assertions.*;
 

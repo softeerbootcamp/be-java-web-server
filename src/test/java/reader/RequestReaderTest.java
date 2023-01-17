@@ -1,16 +1,15 @@
 package reader;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import request.HttpRequest;
+import reader.requestReader.RequestGetReader;
+import reader.requestReader.RequestReader;
 import request.RequestHeader;
 import util.HttpMethod;
 import util.error.HttpsErrorMessage;
 
 import java.net.ProtocolException;
 import java.util.HashMap;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;

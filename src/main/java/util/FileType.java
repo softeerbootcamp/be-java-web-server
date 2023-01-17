@@ -1,5 +1,7 @@
 package util;
 
+import request.Url;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;

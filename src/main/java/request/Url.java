@@ -1,4 +1,6 @@
-package util;
+package request;
+
+import request.RequestDataType;
 
 public class Url {
     private final String url;

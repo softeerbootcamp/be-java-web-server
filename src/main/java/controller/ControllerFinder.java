@@ -7,7 +7,7 @@ import controller.annotation.ControllerMethodInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.HttpRequest;
-import util.Url;
+import request.Url;
 import webserver.RequestHandler;
 
 import java.io.DataOutputStream;

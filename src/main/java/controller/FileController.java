@@ -11,7 +11,7 @@ import response.HttpResponse;
 import util.FileType;
 import util.HttpMethod;
 import util.HttpStatus;
-import util.RequestDataType;
+import request.RequestDataType;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

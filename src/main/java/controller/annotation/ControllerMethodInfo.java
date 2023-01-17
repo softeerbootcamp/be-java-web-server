@@ -2,7 +2,7 @@ package controller.annotation;
 
 
 import util.HttpMethod;
-import util.RequestDataType;
+import request.RequestDataType;
 
 import java.lang.annotation.*;
 

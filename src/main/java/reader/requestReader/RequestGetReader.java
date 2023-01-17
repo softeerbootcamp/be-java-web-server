@@ -1,9 +1,8 @@
-package reader;
+package reader.requestReader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.HttpRequest;
-import util.RequestDataType;
 
 import java.util.HashMap;
 

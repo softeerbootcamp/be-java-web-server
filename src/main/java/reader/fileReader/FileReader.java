@@ -1,7 +1,7 @@
 package reader.fileReader;
 
-import util.Url;
-import util.RequestDataType;
+import request.Url;
+import request.RequestDataType;
 
 import java.io.IOException;
 

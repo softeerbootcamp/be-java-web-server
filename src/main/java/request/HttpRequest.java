@@ -1,9 +1,7 @@
 package request;
 
-import reader.RequestReader;
+import reader.requestReader.RequestReader;
 import util.HttpMethod;
-import util.RequestDataType;
-import util.Url;
 
 import java.io.BufferedReader;
 import java.io.IOException;

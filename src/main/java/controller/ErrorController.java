@@ -5,8 +5,8 @@ import reader.fileReader.TemplatesFileReader;
 import response.HttpResponse;
 import util.FileType;
 import util.HttpStatus;
-import util.RequestDataType;
-import util.Url;
+import request.RequestDataType;
+import request.Url;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

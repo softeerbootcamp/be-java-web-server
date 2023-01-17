@@ -2,8 +2,8 @@ package controller;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import util.RequestDataType;
-import util.Url;
+import request.RequestDataType;
+import request.Url;
 
 import static org.assertj.core.api.Assertions.*;
 

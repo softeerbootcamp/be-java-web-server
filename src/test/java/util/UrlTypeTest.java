@@ -2,6 +2,7 @@ package util;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import request.RequestDataType;
 
 import static org.assertj.core.api.Assertions.*;
 
