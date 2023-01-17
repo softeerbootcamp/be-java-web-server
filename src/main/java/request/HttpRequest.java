@@ -2,6 +2,7 @@ package request;
 
 import java.util.Map;
 
+import cookie.Cookie;
 import webserver.HttpMethod;
 import webserver.Url;
 
@@ -30,6 +31,14 @@ public class HttpRequest {
 
 	public static HttpRequest of(HttpRequestLine httpRequestLine, Map<String, String> headers, Map<String, String> body) {
 		return new HttpRequest(httpRequestLine, headers, body);
+	}
+
+	public Cookie getCookie() {
+		return Cookie.from(headers.get("Cookie:"));
+	}
+
+	public String getSessionId() {
+		return getCookie().getSessionId();
 	}
 
 	public String getRequestBody(String key) {
