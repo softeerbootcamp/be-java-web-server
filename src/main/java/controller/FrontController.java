@@ -35,8 +35,10 @@ public class FrontController implements Controller {
     public void service(HttpRequest request, HttpResponse response) {
         try{
             String url = request.getUrl();
+            //Controller controller = new ReturnFileController();
+            Controller controller = new NotFoundExceptionHandler();
             //일단 디폴트 컨트롤러  - 일반 파일 요청시
-            Controller controller = new ReturnFileController();
+            if(url.contains(".")) controller = new ReturnFileController();
             //만약 파일 요청이 아니라면
             if(!url.contains(".")) controller = getControllerByUrl(url);
             controller.service(request,response);

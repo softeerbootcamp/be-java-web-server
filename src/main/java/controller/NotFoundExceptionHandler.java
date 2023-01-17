@@ -9,7 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-public class NotFoundExceptionHandler {
+public class NotFoundExceptionHandler implements Controller {
 
     private static final String TEMPLATES_DIR = "./templates";
 
