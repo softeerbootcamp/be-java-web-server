@@ -21,17 +21,19 @@ public class UserService {
         Database.addUser(user);
     }
 
-    public boolean login(Map<String, String> userInfo) {
+    public void login(Map<String, String> userInfo) {
         String userId = userInfo.get("userId");
         String password = userInfo.get("password");
 
         User findUser = Database.findUserById(userId);
 
         if (findUser == null) {
-            return false;
+            throw new UserValidationException("아이디가 존재하지 않습니다.");
         }
 
-        return findUser.getPassword().equals(password);
+        if (!findUser.getPassword().equals(password)) {
+            throw new UserValidationException("아이디 또는 비밀번호가 틀립니다.");
+        }
     }
 
     private void validateDuplication(String userId) {

@@ -45,15 +45,13 @@ public class UserController implements Controller {
             userService.signUp(userInfo);
 
             response.redirect(request, "/index.html");
-
-            return "";
         } catch (UserValidationException e) {
             response.redirect(request, "/user/form_failed.html");
-            return "";
         } catch (NullValueException e) {
             response.redirect(request, "/user/form.html");
-            return "";
         }
+
+        return "";
     }
 
     private String login(HttpRequest request, HttpResponse response) {
@@ -61,19 +59,16 @@ public class UserController implements Controller {
             String body = request.getBody();
             Map<String, String> userInfo = HttpRequestUtils.parseBodyMessage(body);
 
-            boolean isLoginSuccess = userService.login(userInfo);
+            userService.login(userInfo);
 
-            if (isLoginSuccess) {
-                response.redirect(request, "/index.html");
-                response.addHttpHeader("Set-Cookie", "sid=" + "");
-                return "";
-            }
-
+            response.redirect(request, "/index.html");
+            response.addHttpHeader("Set-Cookie", "sid=" + "");
+        } catch (UserValidationException e) {
             response.redirect(request, "/user/login_failed.html");
-            return "";
         } catch (NullValueException e) {
             response.redirect(request, "/user/login.html");
-            return "";
         }
+
+        return "";
     }
 }
