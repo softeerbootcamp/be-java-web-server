@@ -27,7 +27,7 @@ public class UserController implements Controller {
 
     // todo: user 정보들을 parse 하는 것은 좋지만, 추후 Validation Check 등에서 불편할 수 있으므로, Map 형태로 바꾸어 보자.
     @Override
-    public void controllerService(Request request, Response response) throws IOException {
+    public NewResponse controllerService(Request request) throws IOException {
         logger.debug("firstLine : " + request.getRequestLine().getURL());
         List<String> requestRequestBody = request.getRequestBody().getBodyLines();
         List<String> userInfos = parseUrlToGetUserInfo(requestRequestBody);
@@ -37,13 +37,12 @@ public class UserController implements Controller {
         Database.addUser(user);
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + "/index.html").toPath());
         NewResponse newResponse = new NewResponse.Builder()
-                .setResponseStatusLine(ControllerTypeEnum.STATIC)
+                .setResponseStatusLine(ControllerTypeEnum.USER)
                 .setResponseHeader(ContentTypeEnum.CSS,body.length)
-                .setResponseBody(body)
                 .addResponseHeader("Location : /index.html")
+                .setResponseBody(body)
                 .build();
-        ResponseSender responseSender = new ResponseSender();
-        responseSender.send(newResponse);
+        return newResponse;
 //        response.responseMaker(ControllerTypeEnum.USER, ContentTypeEnum.HTML,body.length,"/index.html");
 //        response.responseNewLineAdder();
 //        response.responseBody(body);

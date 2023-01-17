@@ -5,10 +5,10 @@ import java.util.Random;
 
 public class HttpSessions {
     private String id;
-    public static Map<String, HttpSession> httpSession;
+    public static Map<String, HttpSession> httpSessions;
 
     public static void addHttpSession(String id) {
-        httpSession.put(id, new HttpSession(getRandStringForSessionId()));
+        httpSessions.put(id, new HttpSession(getRandStringForSessionId()));
     }
 
     public static String getRandStringForSessionId() {

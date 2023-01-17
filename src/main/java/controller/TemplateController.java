@@ -17,7 +17,7 @@ import java.nio.file.Files;
 public class TemplateController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(RequestResponseHandler.class);
     @Override
-    public void controllerService(Request request, Response response) throws IOException {
+    public NewResponse controllerService(Request request) throws IOException {
         logger.debug("firstLine : " + request.getRequestLine().getURL());
         String url = request.getRequestLine().getURL();
 
@@ -25,10 +25,11 @@ public class TemplateController implements Controller {
         NewResponse newResponse = new NewResponse.Builder()
                 .setResponseStatusLine(ControllerTypeEnum.TEMPLATE)
                 .setResponseHeader(ContentTypeEnum.HTML,body.length)
+                .addResponseHeader("")
                 .setResponseBody(body)
-                .addResponseHeader("").build();
-        ResponseSender responseSender = new ResponseSender();
-        responseSender.send(newResponse);
+                .build();
+        return newResponse;
+
 
 //        response.responseMaker(ControllerTypeEnum.TEMPLATE, ContentTypeEnum.HTML, body.length, url);
 //        response.responseNewLineAdder();

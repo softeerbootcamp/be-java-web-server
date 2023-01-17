@@ -3,6 +3,7 @@ package response;
 import enums.ContentTypeEnum;
 import enums.ControllerTypeEnum;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NewResponse {
@@ -15,29 +16,37 @@ public class NewResponse {
     private static final String NEW_LINE = "\r\n";
 
     public NewResponse(Builder builder){
+        this.responseStatusLine = builder.responseStatusLine;
+        this.responseHeader = builder.responseHeader;
+        this.responseBody = builder.responseBody;
+        this.responseAdder = builder.responseAdder;
+    }
 
+    public ResponseStatusLine getResponseStatusLine() {
+        return responseStatusLine;
     }
-    public String ResponseAssembler(){
-        return responseStatusLine.getResponseStatusLine()+NEW_LINE+
-                responseHeader.getHeaderLine()+NEW_LINE+
-                ResponseAdderListToString()+
-                responseBody.getBody()+responseBody.getBody().length+NEW_LINE;
+
+    public ResponseHeader getResponseHeader() {
+        return responseHeader;
     }
+
+    public ResponseBody getResponseBody() {
+        return responseBody;
+    }
+
+    public List<String> getResponseAdder() {
+        return responseAdder;
+    }
+
     // 추가된 명령들을 response에 적기 위해 하나의 string 문장으로 형성
-    public String ResponseAdderListToString(){
-        String result="";
-        for(String line : responseAdder){
-            result+=(line+NEW_LINE);
-        }
-        return result;
-    }
+
     public static class Builder {
         private ResponseStatusLine responseStatusLine;
         private ResponseHeader responseHeader;
         private ResponseBody responseBody;
-        private List<String> responseAdder;
-        public Builder(){
-
+        private List<String> responseAdder = new ArrayList<>();
+        public Builder builder(){
+            return this;
         }
 
         public Builder setResponseStatusLine(ControllerTypeEnum controllerTypeEnum) {

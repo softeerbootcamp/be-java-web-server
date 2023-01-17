@@ -17,7 +17,7 @@ public class StaticController implements Controller{
     private static final Logger logger = LoggerFactory.getLogger(RequestResponseHandler.class);
 
     @Override
-    public void controllerService(Request request, Response response) throws IOException {
+    public NewResponse controllerService(Request request) throws IOException {
         String url =  request.getRequestLine().getURL();
         if(url.contains("/user/css")||url.contains("/user/js")){
             url = url.substring(5);
@@ -38,8 +38,7 @@ public class StaticController implements Controller{
                 .addResponseHeader(addedLine)
                 .setResponseBody(body)
                 .build();
-        ResponseSender responseSender = new ResponseSender();
-        responseSender.send(newResponse);
+        return newResponse;
         //response.responseMaker(ControllerTypeEnum.STATIC, ContentTypeEnum.CSS,body.length,url);
 //        response.responseNewLineAdder();
 //        response.responseBody(body);

@@ -1,10 +1,11 @@
 package controller;
 
 import request.Request;
+import response.NewResponse;
 import response.Response;
 
 import java.io.IOException;
 
 public interface Controller {
-    void controllerService(Request request, Response response) throws IOException;
+    NewResponse controllerService(Request request) throws IOException;
 }
