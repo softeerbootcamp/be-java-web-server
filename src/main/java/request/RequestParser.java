@@ -54,4 +54,17 @@ public class RequestParser{
 
         return map;
     }
+
+    public static Map<String, String> parseBody(Request request) throws IllegalArgumentException{
+        Map<String, String> map = new HashMap<>();
+        String[] tokens = request.getRequestBody().split("&");
+        for(String token : tokens) {
+            String[] subTokens = token.split("=");
+            if(subTokens.length != 2) {
+                throw new IllegalArgumentException();
+            }
+            map.put(subTokens[0], subTokens[1]);
+        }
+        return map;
+    }
 }
