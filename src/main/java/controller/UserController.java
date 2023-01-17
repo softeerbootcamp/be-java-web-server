@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import util.MessageParser;
 import util.HttpStatus;
 import util.Redirect;
+import util.Session;
 import view.RequestBodyMessage;
 import view.RequestHeaderMessage;
 import view.RequestMessage;
@@ -76,18 +77,26 @@ public class UserController implements Controller{
         try {
             User user = userService.login(loginInfo.get(USER_ID), loginInfo.get(PASSWORD));
             setLocation(Redirect.getRedirectLink(requestHeaderMessage.getRequestAttribute()));
-            
+            setCookie(Session.newLoginSession(user));
         } catch (IllegalStateException e){
             setLocation("/user/login_failed.html");
             logger.debug(e.getMessage());
         }
     }
 
+    private void setCookie(String sid){
+        setHeader("Set-Cookie","sid="+sid+"; Path=/");
+    }
+
     private void setLocation(String redirectLink){
         if (!redirectLink.equals("")){
             httpStatus = HttpStatus.Redirection;
-            headerKV.put("Location",redirectLink);
+            setHeader("Location",redirectLink);
         }
+    }
+
+    private void setHeader(String key, String value){
+        headerKV.put(key,value);
     }
 
     public String toString(){
