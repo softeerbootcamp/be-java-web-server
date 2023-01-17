@@ -7,7 +7,8 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class SessionManager {
-    private final static HashMap<UUID, SessionData> sessions = new HashMap<>();
+    private static final HashMap<UUID, SessionData> sessions = new HashMap<>();
+    private static final long SESSION_LIFE_TIME = 300000L;
 
     public static UUID createSession(User data) {
         UUID sessionID = UUID.randomUUID();
@@ -21,5 +22,14 @@ public class SessionManager {
 
     public static void removeSession(UUID sessionId) {
         sessions.remove(sessionId);
+    }
+
+    public static void checkExpiredSessions() {
+        long currentTime = System.currentTimeMillis();
+        sessions.forEach((sessionId, data) -> {
+            if (currentTime - data.getTimeStamp() > SESSION_LIFE_TIME) {
+                removeSession(sessionId);
+            }
+        });
     }
 }
