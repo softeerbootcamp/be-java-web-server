@@ -57,7 +57,7 @@ public class ResponseHandler {
     private void response302Header(DataOutputStream dos, Response response) {
         try {
             dos.writeBytes("HTTP/1.1 " + FOUND);
-            dos.writeBytes("Location: /index.html\r\n");
+            dos.writeBytes("Location: " + response.getHeaders().get("Location")+"\r\n");
             //TODO 리팩토링 고민
             if (response.getHeaders().containsKey("Set-Cookie")) {
                 dos.writeBytes("Set-Cookie: "+ response.getHeaders().get("Set-Cookie"));
