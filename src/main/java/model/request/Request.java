@@ -54,7 +54,7 @@ public class Request {
     }
 
     public Map<String, String> getRequestParams() {
-        return new HashMap<>(requestParams);
+        return requestParams;
     }
 
     public String getHttpVersion() {

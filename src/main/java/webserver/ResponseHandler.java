@@ -1,9 +1,6 @@
 package webserver;
 
-import model.request.Request;
-import model.response.HttpStatusCode;
 import model.response.Response;
-import model.response.StatusLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,12 +8,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 import static model.response.HttpStatusCode.*;
-import static webserver.ViewResolver.*;
-import static webserver.ViewResolver.findFilePath;
 
 public class ResponseHandler {
 
@@ -38,7 +31,7 @@ public class ResponseHandler {
                     responseBody(dos, response.getBody());
                     break;
                 case FOUND:
-                    response302Header(dos);
+                    response302Header(dos, response);
                     break;
                 case NOT_FOUND:
                     response404Header(dos);
@@ -61,10 +54,14 @@ public class ResponseHandler {
         }
     }
 
-    private void response302Header(DataOutputStream dos) {
+    private void response302Header(DataOutputStream dos, Response response) {
         try {
             dos.writeBytes("HTTP/1.1 " + FOUND);
             dos.writeBytes("Location: /index.html\r\n");
+            //TODO 리팩토링 고민
+            if (response.getHeaders().containsKey("Set-Cookie")) {
+                dos.writeBytes("Set-Cookie: "+ response.getHeaders().get("Set-Cookie"));
+            }
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());

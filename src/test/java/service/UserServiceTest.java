@@ -2,6 +2,7 @@ package service;
 
 import db.Database;
 import exception.DuplicateUserIdException;
+import exception.UserNotFoundException;
 import model.request.Request;
 import model.User;
 import org.junit.jupiter.api.AfterEach;
@@ -43,7 +44,7 @@ public class UserServiceTest {
         userService.signUpUser(request);
 
         //then
-        User userById = Database.findUserById("javajigi");
+        User userById = Database.findUserById("javajigi").orElseThrow(UserNotFoundException::new);
         assertThat(userById.getEmail()).isEqualTo("javajigi@slipp.net");
     }
 

@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 
 public class Database {
     private static final Logger logger = LoggerFactory.getLogger(Database.class);
@@ -23,8 +24,8 @@ public class Database {
         logger.debug(">> User {} Saved", user.getUserId());
     }
 
-    public static User findUserById(String userId) {
-        return users.get(userId);
+    public static Optional<User> findUserById(String userId) {
+        return Optional.ofNullable(users.get(userId));
     }
 
     public static Collection<User> findAll() {

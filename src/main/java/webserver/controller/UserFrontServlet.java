@@ -17,11 +17,12 @@ public class UserFrontServlet {
 
     public UserFrontServlet() {
         controllerMap.put("/user/create", new UserCreateController());
+        controllerMap.put("/user/login", new UserLoginController());
     }
 
     public void process(Request request, Response response) {
         String url = request.getUrl();
-        logger.debug("process start url : {}", url);
+        logger.debug("user process start url : {}", url);
         UserController userController = controllerMap.get(url);
         if (userController == null) {
             logger.error("404 NOT FOUND");

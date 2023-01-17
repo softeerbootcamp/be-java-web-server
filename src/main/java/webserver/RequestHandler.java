@@ -29,7 +29,6 @@ public class RequestHandler implements Runnable {
             Request request = new Request(in);
             Response response = new Response();
 
-            //TODO Controller 고민, 조건에 맞게 처리될 수 있도록
             frontServlet.process(request, response);
 
             ResponseHandler responseHandler = new ResponseHandler(connection);
