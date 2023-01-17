@@ -35,7 +35,7 @@ public class UserController implements Controller{
 
         HttpResponse httpResponse = new HttpResponse();
         if (userService.login(user)) {
-            return new HttpResponseMessage(httpResponse.sendRedirect("/index.html"), httpResponse.getBody());
+            return new HttpResponseMessage(httpResponse.sendCookieWithRedirect(user, "/index.html"), httpResponse.getBody());
         }
         return new HttpResponseMessage(httpResponse.unauthorized(), httpResponse.getBody());
     }
