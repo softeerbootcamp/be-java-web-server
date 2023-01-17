@@ -24,6 +24,7 @@ public class ResponseWriter {
 
     public void write(HttpRequest request, HttpResponse response) throws IOException {
         writeHeader(response);
+        writeCookies(response);
         dos.writeBytes(LINE_DELIMITER); // HTTP HEADER와 Message body 사이 빈 줄
         writeBody(response);
     }
@@ -34,6 +35,13 @@ public class ResponseWriter {
         response.getHeaderKeys() // 그 외 헤더 부분 쓰기
                 .forEach(k -> writeHeaderLine(k, response.getHeaderByKey(k)));
     }
+
+    private void writeCookies(HttpResponse response) {
+        if (!response.getCookieKeys().isEmpty()) {
+            writeHeaderLine(SET_COOKIE_HEADER_KEY, response.getCookies().toString());
+        }
+    }
+
 
     private void writeContentType(HttpResponse response) {
         if (response.getContentType() != null) {
