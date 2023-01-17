@@ -46,6 +46,8 @@ public class UserLogInController extends AbstractController {
             Cookie cookie = Cookie.of(Session.DEFAULT_SESSION_ID, id + COOKIE_SUFFIX);
 
             logger.info("Login Success");
+            logger.info("Session ID: " + id);
+
             httpResponse.sendRedirect(HttpStatusCode.FOUND, INDEX_PATH, cookie);
 
         } catch (IllegalArgumentException e) {
