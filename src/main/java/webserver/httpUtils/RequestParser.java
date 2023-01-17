@@ -1,69 +1,79 @@
 package webserver.httpUtils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import webserver.Paths;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.net.URLDecoder;
 
 public class RequestParser {
 
-    private static String currentLine = new String();
+    private static final Logger logger = LoggerFactory.getLogger(RequestParser.class);
+    private String currentLine;
 
-    public static Request parseRequestFromInputStream(InputStream in) throws IOException
+    public RequestParser(){currentLine = new String();}
+
+    public Request parseRequestFromInputStream(InputStream in) throws IOException
     {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         currentLine = br.readLine();
 
         Request req = new Request();
-        req.setReqLine(parseRequestLine(currentLine)); currentLine = br.readLine();
-        req.setReqHeader(getHeaderKeyValues(currentLine, br));
-        //req.setReqBody(getBody(currentLine, br)); ?? 이거 넣으면 왜 안댐?
+        req.setReqLine(parseRequestLine(br));
+        req.setReqHeader(getHeaderKeyValues(br));
+        req.setReqBody(getBody(br));
 
         return req;
     }
 
-    private static Map<String, String> parseRequestLine(String currentLine)
+    private Map<String, String> parseRequestLine(BufferedReader br) throws IOException
     {
         Map<String, String> parsedRequestLine = new HashMap<String, String>();
 
         String tokens[] = currentLine.split(" ");
-        parsedRequestLine.put(Request.REQLINE_METHOD, tokens[0]);
-        parsedRequestLine.put(Request.REQLINE_QUERY, tokens[1].equals("/") ?
+        parsedRequestLine.put(Request.METHOD, tokens[0]);
+        parsedRequestLine.put(Request.QUERY, tokens[1].equals("/") ?
                 Paths.HOME_PATH :
                 URLDecoder.decode(tokens[1]));
-        parsedRequestLine.put(Request.REQLINE_VERSION, tokens[2]);
-
+        parsedRequestLine.put(Request.VERSION, tokens[2]);
+        currentLine = br.readLine();
         return parsedRequestLine;
     }
 
-    private static Map<String, String> getHeaderKeyValues(String currentLine, BufferedReader br) throws IOException{
-        Map<String, String> ret = new HashMap<String, String>();
+    private Map<String, String> getHeaderKeyValues(BufferedReader br) throws IOException
+    {
+        Map<String, String> parsedHeader = new HashMap<String, String>();
 
         while(!currentLine.isBlank())
         {
-            String keyVal[] = currentLine.split(": ");
-            ret.put(keyVal[0], keyVal[1]);
+            String keyVal[] = new String[2];
+            keyVal = currentLine.split(": ");
+            parsedHeader.put(keyVal[0], keyVal[1]);
 
             currentLine = br.readLine();
         }
-        return ret;
+        return parsedHeader;
     }
 
-    private static List<String> getBody(String currLine, BufferedReader br) throws IOException {
-        List<String> ret = new ArrayList<String>();
-        while(!currLine.isBlank())
+    private String getBody(BufferedReader br) throws IOException
+    {
+        String parsedBody = new String();
+        try{
+            StringBuilder sb = new StringBuilder();
+            while(br.ready())
+            {
+                sb.append(((char) br.read()));
+            }
+            parsedBody = sb.toString();
+        } catch(Exception e)
         {
-            ret.add(currLine);
-            currLine = br.readLine();
+            e.printStackTrace();
+        }finally {
+            return URLDecoder.decode(parsedBody);
         }
-        return ret;
     }
 }

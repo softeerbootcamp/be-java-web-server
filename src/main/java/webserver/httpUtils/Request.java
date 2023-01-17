@@ -6,13 +6,13 @@ import java.util.Map;
 
 public class Request {
 
-    public final static String REQLINE_METHOD = "method";
-    public final static String REQLINE_QUERY = "query";
-    public final static String REQLINE_VERSION = "version";
+    public final static String METHOD = "method";
+    public final static String QUERY = "query";
+    public final static String VERSION = "version";
 
     private Map<String, String> reqLine;
     private Map<String, String> reqHeader;
-    private List<String> reqBody;
+    private String reqBody;
 
     Request(){
         reqLine = new HashMap<String, String>();
@@ -35,11 +35,11 @@ public class Request {
         this.reqHeader = reqHeader;
     }
 
-    public List<String> getReqBody() {
+    public String getReqBody() {
         return reqBody;
     }
 
-    public void setReqBody(List<String> reqBody) {
+    public void setReqBody(String reqBody) {
         this.reqBody = reqBody;
     }
     // endregion
