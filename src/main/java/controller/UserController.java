@@ -48,7 +48,7 @@ public class UserController implements Controller {
                 userInfo.get("name"), userInfo.get("email"));
         userService.signUp(user);
 
-        Map<Header, String> headers = responseCreateUserHeader();
+        Map<Header, String> headers = responseRedirectIndexHtmlHeader();
 
         return Response.of(StatusLine.of(request.getRequestLine().getHttpVersion(), Status.FOUND), headers);
     }
@@ -71,7 +71,19 @@ public class UserController implements Controller {
         return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.FOUND), headers);
     }
 
-    private Map<Header, String> responseCreateUserHeader() {
+    private Response userListResponse(Request request) {
+        Map<Header, String> headers;
+        RequestLine requestLine = request.getRequestLine();
+
+        if(Sessions.isExistSession(request.getSessionId())) {
+            // TODO: 로그인되어 있는 경우 유저 리스트 불러올 수 있도록 구현
+        }
+
+        headers = responseRedirectIndexHtmlHeader();
+        return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.FOUND), headers);
+    }
+
+    private Map<Header, String> responseRedirectIndexHtmlHeader() {
         Map<Header, String> headers = new HashMap<>();
         headers.put(Header.from("Location"), "/index.html");
 
