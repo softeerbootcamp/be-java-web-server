@@ -28,11 +28,11 @@ public class HttpRequestParser {
         }
     }
 
-    public static String readRequestLine(BufferedReader br) throws IOException {
+    private static String readRequestLine(BufferedReader br) throws IOException {
         return br.readLine();
     }
 
-    public static String readHeader(BufferedReader br) throws IOException {
+    private static String readHeader(BufferedReader br) throws IOException {
         String line;
         StringBuilder strOfHeaders = new StringBuilder();
         while (!(line = br.readLine()).equals("")) {
@@ -41,7 +41,7 @@ public class HttpRequestParser {
         return strOfHeaders.toString();
     }
 
-    public static String readBody(BufferedReader br, int contentLength) throws IOException {
+    private static String readBody(BufferedReader br, int contentLength) throws IOException {
         char[] data = new char[contentLength];
         int read = br.read(data);
         if (read == -1) {
