@@ -33,15 +33,15 @@ public class CustomHttpResponse {
         return new HashMap<>(this.headers);
     }
 
-    public void addToCookie(String key, String value){
-        if(this.headers == EMPTY_HEADER){
+    public void addToCookie(String value) {
+        if (this.headers == EMPTY_HEADER) {
             this.headers = new HashMap<>();
         }
         String exist = "";
-        if(this.headers.containsKey("Set-Cookie")){
-            exist = this.headers.get("Set-Cookie");
+        if (this.headers.containsKey("Set-Cookie")) {
+            exist = this.headers.get("Set-Cookie") + ";";
         }
-        this.headers.put("Set-Cookie", exist + key+"="+value+";");
+        this.headers.put("Set-Cookie", exist + value);
     }
 
     public String getContentTypeLine(){
