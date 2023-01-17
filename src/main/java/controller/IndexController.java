@@ -3,6 +3,7 @@ package controller;
 import http.request.HttpRequest;
 import http.ContentType;
 import http.response.HttpResponse;
+import http.response.HttpStatusCode;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -24,7 +25,7 @@ public class IndexController extends AbstractController {
         String filePath = contentType.getDirectory() + path;
         byte[] body = loadFile(filePath);
 
-        httpResponse.forward(contentType, body);
+        httpResponse.forward(HttpStatusCode.OK, contentType, body);
     }
 
 }

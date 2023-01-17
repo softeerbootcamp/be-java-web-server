@@ -3,6 +3,7 @@ package controller;
 import http.request.HttpRequest;
 import http.ContentType;
 import http.response.HttpResponse;
+import http.response.HttpStatusCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +38,7 @@ public class ResourceController extends AbstractController {
             return;
         }
 
-        httpResponse.forward(contentType, body);
+        httpResponse.forward(HttpStatusCode.OK, contentType, body);
     }
 
 }

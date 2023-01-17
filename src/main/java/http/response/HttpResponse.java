@@ -39,15 +39,19 @@ public class HttpResponse {
         );
     }
 
-    public void forward(ContentType contentType, byte[] body) throws IOException {
-        setStatusCode(HttpStatusCode.OK);
+    public void forward(
+            HttpStatusCode statusCode,
+            ContentType contentType,
+            byte[] body
+    ) throws IOException {
+        setStatusCode(statusCode);
         set200Headers(contentType, body.length);
         setResponseBody(body);
         send();
     }
 
-    public void sendRedirect(String location) throws IOException {
-        setStatusCode(HttpStatusCode.FOUND);
+    public void sendRedirect(HttpStatusCode statusCode, String location) throws IOException {
+        setStatusCode(statusCode);
         set302Headers(location);
         send();
     }

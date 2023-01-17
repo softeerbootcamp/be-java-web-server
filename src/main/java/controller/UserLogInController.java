@@ -1,8 +1,8 @@
 package controller;
 
-import http.ContentType;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import http.response.HttpStatusCode;
 import model.User;
 
 import java.io.IOException;
@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.Map;
 
 import static db.Database.findUserById;
-import static utils.FileIoUtils.loadFile;
 
 public class UserLogInController extends AbstractController{
 
@@ -28,11 +27,11 @@ public class UserLogInController extends AbstractController{
         String requestPassword = userInfo.get("password");
 
         if(isExistUser(requestUserId, requestPassword)) {
-            httpResponse.sendRedirect(INDEX_PATH);
+            httpResponse.sendRedirect(HttpStatusCode.SEE_OTHER, INDEX_PATH);
             return;
         }
 
-        httpResponse.sendRedirect(LOGIN_FAILED_PATH);
+        httpResponse.sendRedirect(HttpStatusCode.UNAUTHORIZED, LOGIN_FAILED_PATH);
     }
 
     private boolean isExistUser(String requestUserId, String requestPassword) {
