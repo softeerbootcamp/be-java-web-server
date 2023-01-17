@@ -17,8 +17,12 @@ public class Session {
         this.sessionId = UUID.randomUUID();
         this.userId = userId;
     }
+
     public static Session createSessionWith(User user) {
-        return new Session(user.getUserId());
+        Session session = new Session(user.getUserId());
+        long timeNow = System.currentTimeMillis();
+        session.setCreationTime(timeNow);
+        return session;
     }
 
     public UUID getSessionId() {
