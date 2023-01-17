@@ -10,7 +10,8 @@ public class ControllerHandler {
         //TODO httpRequest 보고 어떤 컨트롤러 써야되는지 리턴 해줘야됨
 
         // 어떤 기능 (회원가입, 로그인 등) 을 원한다면?
-        if (httpRequest.wantDynamic()) {
+        // POST 요청일 때
+        if (httpRequest.isPost()) {
             // 누가 원하는지 > 누구의 컨트롤러가 필요한지 넘겨줌
             // User가 원하면 UserController
             return whoWant(httpRequest.getUri());

@@ -26,7 +26,10 @@ public class StaticFileController implements Controller {
         // TODO 여러 HttpStatus에 대한 처리 필요
         // 일단은 200 OK 고정 박아놓음
         // 만들어진 body로 응답 객체를 만들어서 리턴
-        return new HttpResponse(new HttpStatusLine(HttpStatus.OK, httpRequest.getHttpVersion()),
-                responseBody, contentType);
+        return new HttpResponse.HttpResponseBuilder()
+                .setHttpStatusLine(new HttpStatusLine(HttpStatus.OK, httpRequest.getHttpVersion()))
+                .setBody(responseBody)
+                .setContentType(contentType)
+                .build();
     }
 }

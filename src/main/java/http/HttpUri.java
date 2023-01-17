@@ -20,9 +20,4 @@ public class HttpUri {
     public boolean isStaticUri() {
         return uri.contains(".");
     }
-
-    public boolean isDynamicUri() {
-        return uri.contains("?");
-    }
-
 }

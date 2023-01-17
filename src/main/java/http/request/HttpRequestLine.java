@@ -20,4 +20,6 @@ public class HttpRequestLine {
     public String getHttpVersion() {
         return version;
     }
+
+    public String getHttpMethod(){ return method; }
 }
