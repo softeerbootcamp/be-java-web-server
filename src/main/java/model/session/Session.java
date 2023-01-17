@@ -15,4 +15,8 @@ public class Session {
     public void setSessionData(String name, Object value) {
         sessionData.put(name, value);
     }
+
+    public String getSessionId() {
+        return sessionId;
+    }
 }
