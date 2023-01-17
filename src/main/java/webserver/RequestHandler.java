@@ -29,17 +29,12 @@ public class RequestHandler implements Runnable{
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            HttpRequest httpRequest = generateHttpRequest(in);
+            HttpRequest httpRequest = HttpRequest.of(in);
             HttpResponse httpResponse = ResponseHandler.controlRequestAndResponse(httpRequest);
             respondToHttpRequest(out, httpResponse);
         } catch (IOException | URISyntaxException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             logger.error(e.getMessage());
         }
-    }
-
-    private HttpRequest generateHttpRequest(InputStream in) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-        return HttpRequest.of(br);
     }
 
     private void respondToHttpRequest(OutputStream out, HttpResponse httpResponse) {

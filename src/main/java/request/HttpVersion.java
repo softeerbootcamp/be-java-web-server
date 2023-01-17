@@ -6,7 +6,7 @@ public enum HttpVersion {
     ONE_POINT_ZERO("1.0"),
     ONE_POINT_ONE("1.1"),
     TWO_POINT_ZERO("2.0"),
-    UNDER_ONE_POINT_ZERO("");
+    ELSE("");
 
     private String version;
 
@@ -18,7 +18,7 @@ public enum HttpVersion {
         return Arrays.stream(values())
                 .filter(httpVersion -> httpVersion.version.equals(version))
                 .findAny()
-                .orElse(UNDER_ONE_POINT_ZERO);
+                .orElse(ELSE);
     }
 
     public String getVersion() {

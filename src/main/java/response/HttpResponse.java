@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class HttpResponse {
-    private static final String lineSeparator = System.getProperty("line.separator");
+    private static final String lineSeparator = System.lineSeparator();
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
     private final StatusLine statusLine;

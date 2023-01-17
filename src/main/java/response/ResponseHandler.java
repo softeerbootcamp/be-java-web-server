@@ -45,12 +45,7 @@ public class ResponseHandler {
         }
 
         if (httpRequest.isQueryContent()) {
-            Map<String, String> parameters = httpRequest.getParameters();
-            for (Map.Entry<String, String> entry : parameters.entrySet()) {
-                String key = entry.getKey();
-                String value = entry.getValue();
-                logger.debug("KeyData : {} ValueData : {}",key,value);
-            }
+//            Map<String, String> parameters = httpRequest.getParameters();
 
             String path = httpRequest.getPath();
             ServletController servletController = ServletController.of(path);

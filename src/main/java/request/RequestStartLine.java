@@ -3,6 +3,8 @@ package request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.Map;
 
 public class RequestStartLine {
@@ -19,13 +21,18 @@ public class RequestStartLine {
         this.version = version;
     }
 
-    public static RequestStartLine of(String source) {
+    public static RequestStartLine of(BufferedReader bufferedReader) throws IOException {
+        if (!bufferedReader.ready()) {
+            throw new RuntimeException("HTTP 요청메시지의 요청라인이 비어있습니다.");
+        }
+        String source = bufferedReader.readLine();
+
         String[] sources = source.split(" ");
         Method method = Method.of(sources[0]);
         Uri uri = Uri.of(sources[1]);
-        HttpVersion httpVersion = HttpVersion.of(sources[2]);
+        HttpVersion version = HttpVersion.of(sources[2]);
 
-        return new RequestStartLine(method, uri, httpVersion);
+        return new RequestStartLine(method, uri, version);
     }
 
     public boolean isTemplatesResource() {
