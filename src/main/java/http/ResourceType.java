@@ -14,7 +14,8 @@ public enum ResourceType {
     TTF(".ttf", "/static"),
     SVG(".svg", "/static"),
     EOT(".eot", "/static"),
-    CSS(".css", "/static");
+    CSS(".css", "/static"),
+    NONE("", "");
 
 
     private final String extension;

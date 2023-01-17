@@ -1,6 +1,5 @@
 package webserver;
 
-import controller.Controller;
 import controller.ControllerHandler;
 import http.HttpRequest;
 import http.HttpResponse;
@@ -30,8 +29,8 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
 
             HttpRequest httpRequest = HttpRequest.from(br);
-            HttpResponse httpResponse = HttpResponse.of(httpRequest, dos);
-            ControllerHandler.handle(httpRequest, httpResponse);
+            HttpResponse httpResponse = ControllerHandler.handle(httpRequest);
+            httpResponse.sendResponse(dos);
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
