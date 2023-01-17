@@ -1,5 +1,7 @@
 package http;
 
+import exception.ResourceTypeNotFoundException;
+
 import java.util.stream.Stream;
 
 public enum ResourceType {

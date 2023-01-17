@@ -1,9 +1,8 @@
-import controller.Controller;
 import controller.ControllerHandler;
-import controller.ControllerNotFoundException;
+import exception.ControllerNotFoundException;
 import http.HttpRequest;
 import http.RequestLine;
-import http.ResourceTypeNotFoundException;
+import exception.ResourceTypeNotFoundException;
 import http.Uri;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
