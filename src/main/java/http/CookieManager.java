@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class CookieMap {
+public class CookieManager {
 
     public static final String COLON = ":";
     public static final String EQUALS = "=";
@@ -13,7 +13,7 @@ public class CookieMap {
 
     private final Map<String, Cookie> cookies = new HashMap<>();
 
-    public CookieMap(String cookies) {
+    public CookieManager(String cookies) {
         if (cookies == null) return;
 
         String[] tokens = cookies.split(COLON);
@@ -31,7 +31,8 @@ public class CookieMap {
 
     @Override
     public String toString() {
-        return cookies.values()
+        return cookies
+                .values()
                 .stream()
                 .map(Cookie::toString)
                 .collect(Collectors.joining(COOKIE_DELIMITER));
