@@ -26,7 +26,7 @@ public class RequestHandler implements Runnable{
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             /* TODO
-            *  - in : 서버 -> 클라이언트로 응답을 보내는 데이터를 싣음
+            *   - in : 서버 -> 클라이언트로 응답을 보내는 데이터를 싣음
             * */
 
             HttpResponse httpResponse = ResponseHandler.controlRequestAndResponse(HttpRequest.of(in));

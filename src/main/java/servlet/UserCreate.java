@@ -5,6 +5,7 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.HttpRequest;
+import service.UserService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,26 +32,8 @@ public class UserCreate implements Servlet{
     @Override
     public void post(HttpRequest httpRequest) {
         logger.debug("DoPost");
-        Map<String, String> data = new HashMap<>();
-        String body = httpRequest.getBody();
-        logger.debug("body : {}", body);
-        String[] inputs = body.split("&");
-        for (String input : inputs) {
-            logger.debug("bodyParam : {}", input);
-            String[] keyAndValue = input.split("=");
-            if (keyAndValue.length < 2) {
-                return;
-            }
-            logger.debug("key : {}", keyAndValue[0]);
-            logger.debug("value : {}", keyAndValue[1]);
-            data.put(keyAndValue[0], keyAndValue[1]);
-        }
-        String userId = data.get("userId");
-        String password = data.get("password");
-        String name = data.get("name");
-        String email = data.get("email");
 
-        User user = new User(userId, password, name, email);
+        User user = UserService.postJoinService(httpRequest);
         logger.debug("[User Create] POST user data : {}", user);
 
         Database.addUser(user);
@@ -59,17 +42,8 @@ public class UserCreate implements Servlet{
     @Override
     public void get(HttpRequest httpRequest) {
         logger.debug("DoGet");
-        Map<String, String> parameters = httpRequest.getParameters();
-        String userId = parameters.get("userId");
-        String password = parameters.get("password");
-        String name = parameters.get("name");
-        String email = parameters.get("email");
 
-        if (userId.isEmpty() || password.isEmpty() || name.isEmpty() || email.isEmpty()) {
-            return;
-        }
-
-        User user = new User(userId, password, name, email);
+        User user = UserService.getJoinService(httpRequest);
         logger.debug("[User Create] GET user data : {}", user);
 
         Database.addUser(user);
