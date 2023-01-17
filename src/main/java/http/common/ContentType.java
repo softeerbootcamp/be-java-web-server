@@ -3,7 +3,7 @@ package http.common;
 import java.util.Arrays;
 import java.util.Optional;
 
-public enum MediaType {
+public enum ContentType {
     TEXT_PLAIN("text/plain", "text"),
     TEXT_HTML("text/html", "html"),
     TEXT_CSS("text/css", "css"),
@@ -17,7 +17,7 @@ public enum MediaType {
     private final String type;
     private final String extension;
 
-    MediaType(String type, String extension) {
+    ContentType(String type, String extension) {
         this.type = type;
         this.extension = extension;
     }
@@ -26,8 +26,8 @@ public enum MediaType {
         return this.type;
     }
 
-    public static Optional<MediaType> fromExtension(String extension) {
-        return Arrays.stream(MediaType.values())
+    public static Optional<ContentType> fromExtension(String extension) {
+        return Arrays.stream(ContentType.values())
                 .filter(type -> type.extension.equals(extension))
                 .findFirst();
     }

@@ -58,7 +58,7 @@ public class HttpRequest {
         return this.url.getQueries();
     }
 
-    public Map<String, String> getDatas() {
+    public Map<String, String> getData() {
         return this.data;
     }
 }

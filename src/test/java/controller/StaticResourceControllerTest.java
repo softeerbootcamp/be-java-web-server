@@ -42,7 +42,7 @@ public class StaticResourceControllerTest {
         HttpHeaders headers = response.getHeaders();
         assertAll(
                 () -> assertEquals(HttpStatus.OK, response.getStatus()),
-                () -> assertEquals(MediaType.TEXT_HTML.getType(), headers.getValue("Content-Type")),
+                () -> assertEquals(ContentType.TEXT_HTML.getType(), headers.getValue("Content-Type")),
                 () -> assertEquals(6902, response.getBody().length)
         );
     }

@@ -1,7 +1,7 @@
 package http.exception;
 
 import http.common.HttpStatus;
-import http.common.MediaType;
+import http.common.ContentType;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
@@ -33,7 +33,7 @@ public final class HttpExceptionHandler {
                 e.getMessage());
 
         response.setStatus(e.status);
-        response.addHeader("Content-Type", MediaType.TEXT_PLAIN.name());
+        response.addHeader("Content-Type", ContentType.TEXT_PLAIN.name());
         response.setBody(e.getMessage().getBytes());
     }
 
@@ -45,7 +45,7 @@ public final class HttpExceptionHandler {
 
         response.setStatus(HttpStatus.NOT_FOUND);
 
-        response.addHeader("Content-Type", MediaType.TEXT_HTML.name());
+        response.addHeader("Content-Type", ContentType.TEXT_HTML.name());
         response.setBody(ResourceUtils.loadFileFromClasspath("/not_found.html"));
     }
 }
