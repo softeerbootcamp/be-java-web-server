@@ -76,6 +76,7 @@ public class UserController implements Controller{
         try {
             User user = userService.login(loginInfo.get(USER_ID), loginInfo.get(PASSWORD));
             setLocation(Redirect.getRedirectLink(requestHeaderMessage.getRequestAttribute()));
+            
         } catch (IllegalStateException e){
             setLocation("/user/login_failed.html");
             logger.debug(e.getMessage());
