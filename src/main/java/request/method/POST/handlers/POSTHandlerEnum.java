@@ -3,6 +3,7 @@ package request.method.POST.handlers;
 
 public enum POSTHandlerEnum {
     FORM("/user/create", POSTUserRegisterHandler.getInstance()),
+    LOGIN("/user/login", POSTLoginHandler.getInstance()),
     NO_MATCH("", POSTNoMatchHandler.getInstance())
     ;
 
