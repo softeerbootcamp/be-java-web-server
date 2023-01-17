@@ -1,17 +1,15 @@
 package reader.fileReader;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import util.RequestDataType;
 import util.Url;
-import util.UrlType;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 class StaticFileReaderTest {
 
@@ -24,7 +22,7 @@ class StaticFileReaderTest {
     void readFile() throws IOException {
         String url = VALID_CSS_URL;
         FileReader fileReader = new StaticFileReader();
-        assertThat(fileReader.readFile(new Url(url, UrlType.STATIC_FILE))).isEqualTo(
+        assertThat(fileReader.readFile(new Url(url, RequestDataType.STATIC_FILE))).isEqualTo(
                 Files.readAllBytes(new File(RELATIVE_PATH + url).toPath())
         );
     }
@@ -34,7 +32,7 @@ class StaticFileReaderTest {
     void readFileThrowException()  {
         String url = NOT_VALID_CSS_URL;
         FileReader fileReader = new StaticFileReader();
-        assertThatThrownBy(() -> fileReader.readFile(new Url(url, UrlType.STATIC_FILE)))
+        assertThatThrownBy(() -> fileReader.readFile(new Url(url,RequestDataType.STATIC_FILE)))
                 .isInstanceOf(IOException.class);
     }
 }

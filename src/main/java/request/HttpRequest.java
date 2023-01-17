@@ -2,15 +2,14 @@ package request;
 
 import reader.RequestReader;
 import util.HttpMethod;
+import util.RequestDataType;
 import util.Url;
-import util.UrlType;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 
 public class HttpRequest {
     private final RequestHeader requestHeader;
@@ -24,7 +23,7 @@ public class HttpRequest {
         this.requestBody = requestBody;
         this.httpMethod = HttpMethod.findMethod(requestHeader);
         String urlContext = RequestReader.findPathInRequest(requestHeader);
-        this.url = new Url(urlContext, UrlType.getUrlType(urlContext));
+        this.url = new Url(urlContext, RequestDataType.getUrlType(urlContext));
     }
 
     public static HttpRequest getHttpRequest(InputStream inputStream) throws IOException {
@@ -49,4 +48,6 @@ public class HttpRequest {
     public RequestBody getRequestBody() {
         return requestBody;
     }
+
+
 }

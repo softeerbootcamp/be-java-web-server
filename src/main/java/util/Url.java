@@ -3,11 +3,11 @@ package util;
 public class Url {
     private final String url;
 
-    private final UrlType urlType;
+    private final RequestDataType requestDataType;
 
-    public Url(String url, UrlType urlType) {
+    public Url(String url, RequestDataType requestDataType) {
         this.url = url;
-        this.urlType = urlType;
+        this.requestDataType = requestDataType;
     }
 
 
@@ -15,7 +15,7 @@ public class Url {
         return url;
     }
 
-    public UrlType getUrlType() {
-        return urlType;
+    public RequestDataType getRequestDataType() {
+        return requestDataType;
     }
 }
