@@ -15,6 +15,7 @@ import webserver.Url;
 
 public class UserController extends AbstractController {
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+	public static final String PATH = "/user/create";
 	private static UserController instance;
 
 	public static UserController getInstance() {
@@ -24,18 +25,6 @@ public class UserController extends AbstractController {
 			}
 		}
 		return instance;
-	}
-
-	public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
-		Url url = httpRequest.getUrl();
-		User user = User.of(url.getQuery("userId"), url.getQuery("password"), url.getQuery("name"),
-			url.getQuery("email"));
-		Database.addUser(user);
-		logger.info(user + " 회원가입했습니다.");
-		// redirect
-		httpResponse.setHttpResponse(HttpStatus.FOUND,
-			"", ContentType.HTML,
-			"/index.html");
 	}
 
 	public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
