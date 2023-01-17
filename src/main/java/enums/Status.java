@@ -3,7 +3,7 @@ package enums;
 public enum Status {
     OK("200", "OK"),
     CREATED("201", "Created"),
-    REDIRECT("301", "Moved Permanently"),
+    FOUND("302", "Found"),
     NOT_FOUND("404", "Not Found");
 
     private String code;

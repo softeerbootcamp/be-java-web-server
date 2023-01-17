@@ -1,6 +1,6 @@
 package http.request;
 
-import enums.Method;
+import http.common.Method;
 import http.common.Protocol;
 
 public class RequestStartLine {
@@ -17,6 +17,10 @@ public class RequestStartLine {
 
     public String getUrl() {
         return url;
+    }
+
+    public Method getMethod() {
+        return method;
     }
 }
 

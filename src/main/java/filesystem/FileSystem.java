@@ -15,7 +15,7 @@ public class FileSystem {
     }
 
     public static FindResult findResource(String url) {
-        String resourcePath = PathParser.parse(url);
+        String resourcePath = PathResolver.parse(url);
         byte[] resource = readFile(new File(resourcePath));
 
         FindResult findResult = new FindResult(resourcePath, resource);

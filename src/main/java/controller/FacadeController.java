@@ -34,14 +34,14 @@ public class FacadeController implements Runnable {
             HttpRequest request = requestFactory.create(in);
             HttpResponse response = responseFactory.create(out);
             delegateRequest(request, response);
-        } catch (IOException e) {
+        } catch (IOException | ConnectionClosedException e) {
             logger.error(e.getMessage());
         }
     }
 
     private void delegateRequest(HttpRequest request, HttpResponse response) {
         Controller controller = findController(request.getUrl());
-        controller.handle(request, response);
+        controller.service(request, response);
     }
 
     private Controller findController(String url) {

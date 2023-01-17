@@ -7,10 +7,10 @@ public enum ContentType {
     CSS("text/css;charset=utf-8", ".css"),
     JS("text/javascript;charset=utf-8", ".js"),
     PLAIN("plaintext;charset=utf-8", "*"),
-    TTF("text/plain", ".ttf"),
-    OTF("text/plain", ".otf"),
-    WOFF("text/plain", ".woff"),
-    WOFF2("text/plain", ".woff2");
+    TTF("application/x-font-ttf", ".ttf"),
+    OTF("application/x-font-otf", ".otf"),
+    WOFF("application/font-woff", ".woff"),
+    WOFF2("application/font-woff2", ".woff2");
 
     private String type;
     private String extensions;

@@ -1,23 +1,24 @@
 package http.response;
 
+import controller.ConnectionClosedException;
 import enums.Status;
 import filesystem.FindResult;
 import http.common.Body;
-import http.request.Header;
+import http.common.Header;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import static http.response.enums.ResponseAttribute.*;
+import static http.common.HeaderAttribute.*;
 
 public class HttpResponse {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
     private ResponseStartLine startLine = new ResponseStartLine();
     private Header header = new Header();
-    private Body body = new Body();
+    private Body body = new Body(new byte[0]);
     private DataOutputStream out;
 
     public HttpResponse(DataOutputStream out) {
@@ -26,10 +27,10 @@ public class HttpResponse {
 
     public void send() {
         try {
-            assembleMessage();
+            writeMessage();
             out.flush();
         } catch (IOException e) {
-            logger.error("server error");
+            throw new ConnectionClosedException(e);
         }
     }
 
@@ -40,30 +41,18 @@ public class HttpResponse {
         body.setBody(findResult.getResource());
     }
 
-    private void assembleMessage() {
+    private void writeMessage() {
         try {
-            assembleStatusLine();
-            assembleHeader();
-            assembleBody();
+            out.writeBytes(startLine.toString());
+            out.writeBytes(header.toString());
+            out.writeBytes(body.toString());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void assembleStatusLine() throws IOException {
-        out.writeBytes(startLine.toString());
-    }
-
-    private void assembleHeader() throws IOException {
-        out.writeBytes(header.toString());
-    }
-
-    private void assembleBody() throws IOException {
-        out.write(body.getBody(), 0, body.getBody().length);
-    }
-
     public void redirect(String redirectUrl) {
-        startLine.setStatus(Status.REDIRECT);
+        startLine.setStatus(Status.FOUND);
         header.setAttribute(LOCATION, redirectUrl);
         body.clear();
         send();

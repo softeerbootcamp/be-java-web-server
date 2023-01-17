@@ -5,7 +5,7 @@ import enums.Extension;
 import java.util.List;
 import java.util.Map;
 
-public class PathParser {
+public class PathResolver {
 
     private static final String TEMPLATE_PATH = "src/main/resources/templates%s";
     private static final String STATIC_PATH = "src/main/resources/static%s";
@@ -13,9 +13,10 @@ public class PathParser {
     public static final String DOMAIN = "/";
     public static final String NOT_FOUND_HTML = "notfound.html";
 
-    private PathParser() {
+    private PathResolver() {
     }
 
+    // todo: String -> nio.Path로 변경
     private static final Map<List<String>, String> mappingInfo = Map.of(
             Extension.INDEX.getExtensions(), TEMPLATE_PATH + INDEX_HTML,
             Extension.TEMPLATE.getExtensions(), TEMPLATE_PATH,
