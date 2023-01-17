@@ -23,19 +23,19 @@ public class RequestFactory {
         return new HttpRequest(startLine, header, body);
     }
 
-    private byte[] getRawBodyMessage(Integer contentLength, BufferedReader bufferedReader) throws IOException {
-        byte[] bytes = new byte[contentLength];
+    private String getRawBodyMessage(Integer contentLength, BufferedReader bufferedReader) throws IOException {
+        String msg = "";
         for (int i = 0; i < contentLength; i++) {
-            bytes[i] = (byte) bufferedReader.read();
+            msg += (char) bufferedReader.read();
         }
-        return bytes;
+        return msg;
     }
 
     private String getRawHeaderMessage(BufferedReader bufferedReader) throws IOException {
         String msg = "";
         String line;
         while (!(line = bufferedReader.readLine()).isEmpty()) {
-            msg += line + "\n\r";
+            msg += line + "\n";
         }
         return msg;
     }
