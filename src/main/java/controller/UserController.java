@@ -48,7 +48,7 @@ public class UserController implements Controller {
                 userInfo.get("name"), userInfo.get("email"));
         userService.signUp(user);
 
-        Map<Header, String> headers = responseRedirectIndexHtmlHeader();
+        Map<Header, String> headers = responseCreateUserHeader();
 
         return Response.of(StatusLine.of(request.getRequestLine().getHttpVersion(), Status.FOUND), headers);
     }
@@ -83,7 +83,7 @@ public class UserController implements Controller {
         return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.FOUND), headers);
     }
 
-    private Map<Header, String> responseRedirectIndexHtmlHeader() {
+    private Map<Header, String> responseCreateUserHeader() {
         Map<Header, String> headers = new HashMap<>();
         headers.put(Header.from("Location"), "/index.html");
 
