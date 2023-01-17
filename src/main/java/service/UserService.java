@@ -21,8 +21,17 @@ public class UserService {
         Database.addUser(user);
     }
 
-    public void login() {
+    public boolean login(Map<String, String> userInfo) {
+        String userId = userInfo.get("userId");
+        String password = userInfo.get("password");
 
+        User findUser = Database.findUserById(userId);
+
+        if (findUser == null) {
+            return false;
+        }
+
+        return findUser.getPassword().equals(password);
     }
 
     private void validateDuplication(String userId) {
