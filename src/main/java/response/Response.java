@@ -12,31 +12,31 @@ public class Response {
     private Response(HttpResponseStatus httpResponseStatus) {
         this.body = httpResponseStatus.getMessage().getBytes();
         this.httpResponseStatus = httpResponseStatus.getCode();
-        this.header = ResponseHeader.of(httpResponseStatus, this.body);
+        this.header = ResponseHeader.of(this.body, httpResponseStatus);
     }
 
-    private Response(byte[] body, Request request, HttpResponseStatus httpResponseStatus) {
+    private Response(byte[] body, String contentType, HttpResponseStatus httpResponseStatus) {
         this.body = body;
         this.httpResponseStatus = httpResponseStatus.getCode();
-        this.header = ResponseHeader.of(httpResponseStatus, request, body);
+        this.header = ResponseHeader.of(body, contentType, httpResponseStatus);
     }
 
-    private Response(byte[] body, Request request, HttpResponseStatus httpResponseStatus, String optional) {
+    private Response(byte[] body, String contentType, HttpResponseStatus httpResponseStatus, String optional) {
         this.body = body;
         this.httpResponseStatus = httpResponseStatus.getCode();
-        this.header = ResponseHeader.of(httpResponseStatus, request, body, optional);
+        this.header = ResponseHeader.of(body, contentType, httpResponseStatus, optional);
     }
 
     public static Response of(HttpResponseStatus httpResponseStatus) {
         return new Response(httpResponseStatus);
     }
 
-    public static Response of(byte[] body, Request request, HttpResponseStatus httpResponseStatus) {
-        return new Response(body, request, httpResponseStatus);
+    public static Response of(byte[] body, String contentType, HttpResponseStatus httpResponseStatus) {
+        return new Response(body, contentType, httpResponseStatus);
     }
 
-    public static Response of(byte[] body, Request request, HttpResponseStatus httpResponseStatus, String optional) {
-        return new Response(body, request, httpResponseStatus, optional);
+    public static Response of(byte[] body, String contentType, HttpResponseStatus httpResponseStatus, String optional) {
+        return new Response(body, contentType, httpResponseStatus, optional);
     }
 
     public byte[] getBody() {

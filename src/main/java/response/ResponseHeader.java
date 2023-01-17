@@ -7,38 +7,38 @@ public class ResponseHeader {
 
     private String header;
 
-    private ResponseHeader(HttpResponseStatus httpResponseStatus, byte[] body) {
+    private ResponseHeader(byte[] body, HttpResponseStatus httpResponseStatus) {
         header = DEFAULT_HTTP_VERSION + " " + httpResponseStatus.getCode() + "\r\n";
         header += "Content-Type: text/plain;charset=utf-8\r\n";
         header += "Content-Length: " + body.length + "\r\n";
         header += "\r\n";
     }
 
-    private ResponseHeader(HttpResponseStatus httpResponseStatus, Request request, byte[] body) {
+    private ResponseHeader(byte[] body, String contentType, HttpResponseStatus httpResponseStatus) {
         header = DEFAULT_HTTP_VERSION  + " " +  httpResponseStatus.getCode() + "\r\n";
-        header += "Content-Type: " + request.getResourceFileContentType() + ";charset=utf-8\r\n";
+        header += "Content-Type: " + contentType + ";charset=utf-8\r\n";
         header += "Content-Length: " + body.length + "\r\n";
         header += "\r\n";
     }
 
-    private ResponseHeader(HttpResponseStatus httpResponseStatus, Request request, byte[] body, String optional) {
+    private ResponseHeader(byte[] body, String contentType, HttpResponseStatus httpResponseStatus, String optional) {
         header = DEFAULT_HTTP_VERSION + " " +  httpResponseStatus.getCode() + "\r\n";
-        header += "Content-Type: " + request.getResourceFileContentType() + ";charset=utf-8\r\n";
+        header += "Content-Type: " + contentType + ";charset=utf-8\r\n";
         header += "Content-Length: " + body.length + "\r\n";
         header += optional;
         header += "\r\n";
     }
 
-    public static ResponseHeader of(HttpResponseStatus httpResponseStatus, byte[] body) {
-        return new ResponseHeader(httpResponseStatus, body);
+    public static ResponseHeader of(byte[] body, HttpResponseStatus httpResponseStatus) {
+        return new ResponseHeader(body, httpResponseStatus);
     }
 
-    public static ResponseHeader of(HttpResponseStatus httpResponseStatus, Request request, byte[] body) {
-        return new ResponseHeader(httpResponseStatus, request, body);
+    public static ResponseHeader of(byte[] body, String contentType, HttpResponseStatus httpResponseStatus) {
+        return new ResponseHeader(body, contentType, httpResponseStatus);
     }
 
-    public static ResponseHeader of(HttpResponseStatus httpResponseStatus, Request request, byte[] body, String optional) {
-        return new ResponseHeader(httpResponseStatus, request, body, optional);
+    public static ResponseHeader of(byte[] body, String contentType, HttpResponseStatus httpResponseStatus, String optional) {
+        return new ResponseHeader(body, contentType, httpResponseStatus, optional);
     }
 
     public String getHeader() {
