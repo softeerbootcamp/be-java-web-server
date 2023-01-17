@@ -23,10 +23,6 @@ public class UserService {
             logger.debug("bodyParam : {}", input);
             String[] keyAndValue = input.split("=");
             if (keyAndValue.length < 2) {
-                /*
-                 * TODO
-                 *  빈 값 입력에 대한 redirect 처리 필요
-                 * */
                 throw new RuntimeException("[UserService] 잘못된 값이 들어왔습니다.");
             }
             logger.debug("key : {}", keyAndValue[0]);
@@ -51,10 +47,6 @@ public class UserService {
         String email = data.get("email");
 
         if (userId.isEmpty() || password.isEmpty() || name.isEmpty() || email.isEmpty()) {
-            /*
-             * TODO
-             *  빈 값 입력에 대한 redirect 처리 필요
-             * */
             throw new RuntimeException("[UserService] 모든 값을 입력해야 합니다");
         }
 

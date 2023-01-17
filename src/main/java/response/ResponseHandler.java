@@ -51,8 +51,6 @@ public class ResponseHandler {
         }
 
         if (httpRequest.isQueryContent()) {
-            Map<String, String> parameters = httpRequest.getParameters();
-
             logger.debug("[inQueryMethod]");
             logger.debug(httpRequest.getPath());
 
@@ -60,13 +58,21 @@ public class ResponseHandler {
             logger.debug("[ResponseHandler] path : {}",path);
             ServletController servletController = ServletController.of(path);
             Servlet servlet = servletController.newInstance();
-            servlet.service(httpRequest);
-
+            StatusLine status = servlet.service(httpRequest);
             Map<String, String > headerFields = new HashMap<>();
 
-            headerFields.put("Location", "/index.html");
-            ResponseHeader responseHeader = new ResponseHeader(headerFields);
-            return HttpResponse.of("302", responseHeader);
+            if(status == StatusLine.Found){
+                logger.debug("[ResponseHandler] Found");
+                headerFields.put("Location: ", "/index.html");
+                ResponseHeader responseHeader = new ResponseHeader(headerFields);
+                return HttpResponse.of("302", responseHeader);
+            }
+            if(status == StatusLine.NotFound){
+                logger.debug("[ResponseHandler] NotFound");
+                headerFields.put("Location: ", "/user/form.html");
+                ResponseHeader responseHeader = new ResponseHeader(headerFields);
+                return HttpResponse.of("303", responseHeader);
+            }
         }
 
         throw new RuntimeException("[ERROR] : HttpRequest는 정적 혹은 동적 컨텐츠 요청만 가능합니다.");

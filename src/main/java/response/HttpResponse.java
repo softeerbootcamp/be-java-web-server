@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class HttpResponse {
     private static final String lineSeparator = System.lineSeparator();
@@ -30,12 +31,43 @@ public class HttpResponse {
 
     public void respond(DataOutputStream dos) {
         try {
+            logger.debug("[HttpResponse] Do respond");
             dos.writeBytes(statusLine.getValue());
             dos.writeBytes(lineSeparator);
             dos.writeBytes(responseHeader.toValue());
             dos.writeBytes(lineSeparator);
+            logger.debug("body : {}" , new String(body));
+            logger.debug("body length : {}" , body.length);
             dos.write(body, 0, body.length);
             dos.flush();
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    public void respondJoin(DataOutputStream dos) {
+        try {
+            logger.debug("[HttpResponse] Do respondJoin");
+            dos.writeBytes(statusLine.getValue());
+            dos.writeBytes(lineSeparator);
+//            dos.writeBytes("Location: " + responseHeader.toValue());
+            dos.writeBytes("Location: " + "/user/form.html");
+            dos.writeBytes(lineSeparator);
+            logger.debug("body : {}" , new String(body));
+            logger.debug("body length : {}" , body.length);
+            dos.write(body, 0, body.length);
+            dos.flush();
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    public void respondHome(DataOutputStream dos) {
+        try {
+            logger.debug("do respondHome");
+            dos.writeBytes("HTTP/1.1 302 Found \r\n");
+            dos.writeBytes("Location: /index.html\r\n");
+            dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

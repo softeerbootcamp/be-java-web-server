@@ -25,7 +25,7 @@ public class RequestHeader {
         Map<String, String> fields = new HashMap<>();
         while (bufferedReader.ready()) {
 
-            String line = bufferedReader.readLine(); // 쿼리데이터
+            String line = bufferedReader.readLine();
             if (line.equals(BLANK)) break;
             logger.debug("[ Reqeust Header ] line : {}{}",lineSeparator,line);
 

@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import request.HttpRequest;
 import response.HttpResponse;
 import response.ResponseHandler;
+import response.StatusLine;
+import util.FileIoUtils;
 
 public class RequestHandler implements Runnable{
 
@@ -38,6 +40,14 @@ public class RequestHandler implements Runnable{
 
     private void respondToHttpRequest(OutputStream out, HttpResponse httpResponse) {
         DataOutputStream dos = new DataOutputStream(out);
-        httpResponse.respond(dos);
+        if(httpResponse.getStatusLine().equals(StatusLine.OK)){
+            httpResponse.respond(dos);
+        }
+        if(httpResponse.getStatusLine().equals(StatusLine.Found)){
+            httpResponse.respondHome(dos);
+        }
+        if(httpResponse.getStatusLine().equals(StatusLine.NotFound)){
+            httpResponse.respondJoin(dos);
+        }
     }
 }

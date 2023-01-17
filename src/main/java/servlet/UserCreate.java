@@ -5,28 +5,35 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.HttpRequest;
+import response.StatusLine;
 import service.UserService;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class UserCreate implements Servlet{
     
     private static Logger logger = LoggerFactory.getLogger(UserCreate.class);
     
     @Override
-    public void service(HttpRequest httpRequest) {
+    public StatusLine service(HttpRequest httpRequest) {
         if (httpRequest.isGet()) {
-            logger.debug("GET 수행");
-            get(httpRequest);
-            return;
+            try{
+                get(httpRequest);
+                return StatusLine.Found;
+            } catch (RuntimeException e){
+                logger.debug("[UserCreate] runtimeException");
+                return StatusLine.NotFound;
+            }
         }
 
         if (httpRequest.isPost()) {
-            logger.debug("POST 수행");
-            post(httpRequest);
-            return;
+            try{
+                post(httpRequest);
+                return StatusLine.Found;
+            } catch (RuntimeException e){
+                logger.debug("[UserCreate] runtimeException");
+                return StatusLine.NotFound;
+            }
         }
+        return null;
     }
 
     @Override

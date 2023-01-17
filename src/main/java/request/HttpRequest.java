@@ -34,9 +34,6 @@ public class HttpRequest {
             */
 
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-//        String br = bufferedReader.readLine();
-//        logger.debug("[HttpRequest] buffedReader : {}",bufferedReader.readLine());
-
         RequestStartLine requestStartLine = RequestStartLine.of(bufferedReader);
         RequestHeader requestHeader = RequestHeader.of(bufferedReader);
 
