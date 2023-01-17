@@ -2,9 +2,9 @@ package repository;
 
 import model.Session;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 public class SessionRepo {
@@ -21,20 +21,15 @@ public class SessionRepo {
         return sess;
     }
 
-    public static Session findBySSID(String ssid) {
-        if (sessionMap.containsKey(ssid)) return sessionMap.get(ssid);
-        return null;
-    }
-
-    public static boolean isExpired(String ssid) {
-        Session sess = findBySSID(ssid);
-        if (sess != null) return sess.getExpiredAt().isAfter(LocalDateTime.now());
-        return false;
+    public static Optional<Session> findBySSID(String ssid) {
+        return Optional.ofNullable(sessionMap.get(ssid));
     }
 
     public static void deleteSession(String ssid) {
-        Session session = findBySSID(ssid);
-        if (session == null) return;
-        session.expire();
+        Optional<Session> optionalSession = findBySSID(ssid);
+        optionalSession.ifPresent(session -> {
+            session.expire();
+            sessionMap.remove(ssid);
+        });
     }
 }
