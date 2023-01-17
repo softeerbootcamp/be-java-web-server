@@ -19,4 +19,8 @@ public class Sessions {
 
         return newSession;
     }
+
+    public boolean isExistSession(String sessionId) {
+        return Objects.nonNull(sessions.get(sessionId));
+    }
 }
