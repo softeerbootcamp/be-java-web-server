@@ -1,20 +1,46 @@
 package webserver.utils;
 
+import db.CookieDataBase;
+import model.HttpCookie;
+import webserver.domain.StatusCodes;
+import webserver.exception.HttpRequestException;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Random;
+import java.util.UUID;
 
 public class HttpCookieUtils {
 
-    private static byte[] byteToHex(byte[] cookieBytes){
-        StringBuilder cookie = new StringBuilder();
-        for(int i = 0; i < cookieBytes.length; i++){
-            cookie.append(String.format("%02x", cookieBytes[i]));
+
+
+    public static HttpCookie generateCookie(String userid){
+
+        String cookieStr = UUID.randomUUID().toString();
+        HttpCookie cookie = new HttpCookie(cookieStr,userid,LocalDateTime.now());
+        CookieDataBase.addCookie(cookie);
+        return cookie;
         }
-        return cookie.toString().getBytes();
+
+    public static Optional<HttpCookie> cookieValidation (String sessionId){
+        HttpCookie cookie = CookieDataBase.findCookieById(sessionId).orElse(null);
+        if(cookie != null){
+            LocalDateTime now = LocalDateTime.now();
+            if(cookie.isValid(now))  //available session
+                cookie.updateCookieTimeInfo(now);  //renew lastAccessTime, expireDate, and maxAge of the session
+            else   //expired session
+                cookieInvalidation(sessionId);
+        }
+        return Optional.of(cookie);
     }
 
-    public static byte[] generateCookie(){
-        byte[] cookieBytes = new byte[16];
-        new Random().nextBytes(cookieBytes);
-        return byteToHex(cookieBytes);
+
+    public static String cookieInvalidation(String sessionId){
+        StringBuilder newSession = new StringBuilder();
+        CookieDataBase.findCookieById(sessionId).ifPresent(cookie -> {
+            cookie.invalidateCookie();
+            newSession.append(cookie.toString());
+        });
+        return newSession.toString();
     }
 }
