@@ -30,9 +30,9 @@ public class HttpRequest {
         this.body = body;
 
         if(cookies.containsKey(SID_ATTR_KEY)){
-            System.out.println("request에서 쿠키 파싱을 통해 얻은 sid를 통해 얻은 유저 정보");
+            //System.out.println("request에서 쿠키 파싱을 통해 얻은 sid를 통해 얻은 유저 정보");
             httpSession = HttpSessionManager.getSession(cookies.get(SID_ATTR_KEY));
-            System.out.println(httpSession.getUserInfo());
+            //System.out.println(httpSession.getUserInfo());
         }
     }
 

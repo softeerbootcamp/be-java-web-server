@@ -1,10 +1,13 @@
 package webserver;
 
+import controller.NotFoundExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 public class RequestDispatcher {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -35,7 +38,7 @@ public class RequestDispatcher {
      * @param url
      * @param res
      */
-    private static void serveFile(String url, HttpResponse res) {
+    private static void serveFile(String url, HttpResponse res) throws IOException, URISyntaxException {
         try {
             byte[] body = FileIoUtils.loadFileFromClasspath(url);
             ContentType contentType = extractExtension(url);
@@ -45,7 +48,7 @@ public class RequestDispatcher {
             res.addToHeader(CONTENT_LENGTH_HEADER_KEY, String.valueOf(body.length));
             res.setBody(body);//body에는 요청한 파일 내용이 들어감
         } catch (FileNotFoundException e) {
-            logger.error("File not found for {}", url);
+            System.out.println("file not found");
         } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
         }

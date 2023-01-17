@@ -41,7 +41,7 @@ public class FrontController implements Controller {
             if(!url.contains(".")) controller = getControllerByUrl(url);
             controller.service(request,response);
         }catch(NullPointerException e){
-            System.out.println("요청에 해당되는 컨트롤러가 없습니다. ");
+            System.out.println("해당 url에 대한 응답이 없습니다");
         }
     }
 }
