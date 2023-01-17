@@ -31,7 +31,8 @@ public class POSTUserRegisterHandler implements POSTHandler{
             User user = new User(requestBody);
             Database.addUser(user);
             logger.debug("saved: {}", user);
-            return Response.of(HttpResponseStatus.FOUND);
+            return Response.of(HttpResponseStatus.FOUND.getMessage().getBytes(), request, HttpResponseStatus.FOUND,
+                    "Location: /index.html\r\n");
         } catch (IllegalArgumentException e) {
             logger.error("잘못된 입력값");
             return Response.of(HttpResponseStatus.BAD_REQUEST);

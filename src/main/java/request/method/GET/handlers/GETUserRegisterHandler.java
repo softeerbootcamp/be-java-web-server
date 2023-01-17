@@ -17,6 +17,6 @@ public class GETUserRegisterHandler implements GETHandler{
 
     @Override
     public Response handle(Request request) {
-        return Response.of(HttpResponseStatus.OK);
+        return Response.of(HttpResponseStatus.NOT_FOUND);
     }
 }
