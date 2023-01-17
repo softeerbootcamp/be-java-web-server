@@ -35,4 +35,8 @@ public class HttpSessionStorage {
         db.remove(session.sessionId());
         return !db.containsKey(session.sessionId());
     }
+
+    public static boolean existSession(String key) {
+        return db.containsKey(key);
+    }
 }
