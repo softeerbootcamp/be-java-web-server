@@ -2,16 +2,16 @@ package http;
 
 public class RequestLine {
 
-    private final Method method;
+    private final HttpMethod httpMethod;
     private final Uri uri;
     private final String version;
 
     private RequestLine(
-            Method method,
+            HttpMethod httpMethod,
             Uri uri,
             String version
     ) {
-        this.method = method;
+        this.httpMethod = httpMethod;
         this.uri = uri;
         this.version = version;
     }
@@ -19,14 +19,14 @@ public class RequestLine {
     public static RequestLine from(String requestLine) {
         String[] splitRequestLine = requestLine.split(" ");
         return new RequestLine(
-                Method.valueOf(splitRequestLine[0]),
+                HttpMethod.valueOf(splitRequestLine[0]),
                 Uri.from(splitRequestLine[1]),
                 splitRequestLine[2]
                 );
     }
 
-    public Method getMethod() {
-        return method;
+    public HttpMethod getHttpMethod() {
+        return httpMethod;
     }
 
     public Uri getUri() {
@@ -40,7 +40,7 @@ public class RequestLine {
     @Override
     public String toString() {
         return "RequestLine{" +
-                "method=" + method +
+                "method=" + httpMethod +
                 ", url='" + uri + '\'' +
                 ", version='" + version + '\'' +
                 '}';

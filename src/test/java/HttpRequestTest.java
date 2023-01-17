@@ -22,7 +22,7 @@ public class HttpRequestTest {
 
         RequestLine requestLine = request.getRequestLine();
         Uri uri = requestLine.getUri();
-        assertEquals(Method.GET, requestLine.getMethod());
+        assertEquals(HttpMethod.GET, requestLine.getHttpMethod());
         assertEquals("/", uri.getPath());
         assertEquals("HTTP/1.1", requestLine.getVersion());
 
@@ -43,7 +43,7 @@ public class HttpRequestTest {
 
         RequestLine requestLine = request.getRequestLine();
         Uri uri = requestLine.getUri();
-        assertEquals(Method.GET, requestLine.getMethod());
+        assertEquals(HttpMethod.GET, requestLine.getHttpMethod());
         assertEquals("/search", uri.getPath());
         assertEquals("HTTP/1.1", requestLine.getVersion());
 
@@ -72,7 +72,7 @@ public class HttpRequestTest {
         RequestLine requestLine = request.getRequestLine();
         Uri uri = requestLine.getUri();
 
-        assertEquals(Method.POST, requestLine.getMethod());
+        assertEquals(HttpMethod.POST, requestLine.getHttpMethod());
         assertEquals("/user/create", uri.getPath());
         assertEquals("HTTP/1.1", requestLine.getVersion());
 

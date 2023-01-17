@@ -1,4 +1,4 @@
-import http.Method;
+import http.HttpMethod;
 import http.QueryParameters;
 import http.RequestLine;
 import http.Uri;
@@ -29,7 +29,7 @@ public class RequestLineTest {
         QueryParameters queryParameters = uri.getQueryParameters();
 
         //then
-        assertThat(requestLine.getMethod()).isEqualTo(Method.GET);
+        assertThat(requestLine.getHttpMethod()).isEqualTo(HttpMethod.GET);
         assertThat(queryParameters.getParameter("userId")).isEqualTo(userId);
         assertThat(queryParameters.getParameter("password")).isEqualTo(password);
         assertThat(queryParameters.getParameter("name")).isEqualTo(name);
@@ -47,7 +47,7 @@ public class RequestLineTest {
         RequestLine requestLine = RequestLine.from(request);
 
         //then
-        assertThat(requestLine.getMethod()).isEqualTo(Method.GET);
+        assertThat(requestLine.getHttpMethod()).isEqualTo(HttpMethod.GET);
         assertThat(requestLine.getUri().getPath()).isEqualTo("/index.html");
         assertThat(requestLine.getVersion()).isEqualTo("HTTP/1.1");
 
