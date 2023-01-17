@@ -36,9 +36,10 @@ public class ResponseHandler {
             Map<String, String > headerFields = new HashMap<>();
 
             String mData = PathUtils.pathEndCheck(path);
-            headerFields.put("Content-Type", mData);
 
+            headerFields.put("Content-Type", mData);
             logger.debug("Content-Type : {}", headerFields.get("Content-Type"));
+
             headerFields.put("Content-Length", String.valueOf(body.length));
             ResponseHeader responseHeader = new ResponseHeader(headerFields);
             return HttpResponse.of("200", responseHeader, body);

@@ -19,9 +19,9 @@ public class HttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
     private final RequestStartLine requestStartLine;
     private final RequestHeader header;
-    private final String body;
+    private final RequestBody body;
 
-    public HttpRequest(RequestStartLine requestStartLine, RequestHeader requestHeader, String body) {
+    public HttpRequest(RequestStartLine requestStartLine, RequestHeader requestHeader, RequestBody body) {
         this.requestStartLine = requestStartLine;
         this.header = requestHeader;
         this.body = body;
@@ -30,24 +30,12 @@ public class HttpRequest {
     public static HttpRequest of(InputStream inputStream) throws IOException {
         /* TODO : PR Feedback 수행 - refactoring [ RequestHeader, RequestBody 분리 ]*/
 
-//        String line = br.readLine(); // Read StartLine
-//        RequestStartLine requestLine = RequestStartLine.of(line);
-
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         RequestStartLine requestStartLine = RequestStartLine.of(bufferedReader);
         RequestHeader requestHeader = RequestHeader.of(bufferedReader);
+        RequestBody requestBody = RequestBody.of(bufferedReader, requestHeader.getContentLength());
 
-        String contentLength = requestHeader.getContentLength();
-        logger.debug("contentLength : {}",contentLength);
-
-        if (Objects.isNull(contentLength)) {
-            return new HttpRequest(requestStartLine, requestHeader, "");
-        }
-
-        String body = IOUtils.readData(bufferedReader, Integer.parseInt(contentLength));
-        logger.debug("body : {}",body);
-
-        return new HttpRequest(requestStartLine, requestHeader, body);
+        return new HttpRequest(requestStartLine, requestHeader, requestBody);
     }
 
     public String getPath() {
@@ -83,6 +71,6 @@ public class HttpRequest {
     }
 
     public String getBody() {
-        return body;
+        return body.getBody();
     }
 }

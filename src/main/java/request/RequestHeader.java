@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class RequestHeader {
 
@@ -49,7 +50,7 @@ public class RequestHeader {
         return sb.toString();
     }
 
-    public String getContentLength() {
-        return fields.get("Content-Length");
+    public Optional<String> getContentLength() {
+        return Optional.ofNullable(fields.get("content-length"));
     }
 }

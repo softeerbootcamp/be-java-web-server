@@ -24,7 +24,7 @@ public class HttpResponse {
         return new HttpResponse(StatusLine.of(code), responseHeader, body);
     }
 
-    public static HttpResponse of(String code,  ResponseHeader responseHeader) {
+    public static HttpResponse of(String code,  ResponseHeader responseHeader) { // 리다이렉트
         return new HttpResponse(StatusLine.of(code), responseHeader, new byte[0]);
     }
 
