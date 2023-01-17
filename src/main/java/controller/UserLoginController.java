@@ -8,6 +8,7 @@ import service.UserService;
 import utils.FileIoUtils;
 import utils.HttpMethod;
 
+import javax.naming.AuthenticationException;
 import java.util.Map;
 
 public class UserLoginController implements Controller {
@@ -33,7 +34,7 @@ public class UserLoginController implements Controller {
             httpResponse.setCookie(params.get("userId").hashCode());
             httpResponse.redirectHome();
         }
-        catch (IllegalArgumentException e) {
+        catch (AuthenticationException e) {
             httpResponse.redirectLoginFailed();
         }
         return httpResponse;

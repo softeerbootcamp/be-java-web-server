@@ -2,6 +2,7 @@ package service;
 
 import model.User;
 
+import javax.naming.AuthenticationException;
 import java.util.Map;
 
 public interface UserService {
@@ -9,7 +10,7 @@ public interface UserService {
 
     User findUser(String userId);
 
-    void login(String userId, String password);
+    void login(String userId, String password) throws AuthenticationException;
 
     void createUser(Map<String, String> params);
 }
