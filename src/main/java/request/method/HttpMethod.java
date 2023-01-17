@@ -1,36 +1,39 @@
-package request;
+package request.method;
 
-import request.methodHandler.*;
+import request.method.DELETE.DELETEHandlerImpl;
+import request.method.GET.GETHandlerImpl;
+import request.method.POST.POSTHandlerImpl;
+import request.method.PUT.PUTHandlerImpl;
+import request.Request;
+import response.Response;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 public enum HttpMethod {
     GET("GET") {
         @Override
-        public byte[] handle(Request request) throws IOException {
-            HttpMethodHandler httpMethodHandler = new GETHandlerImpl();
+        public Response handle(Request request) throws IOException {
+            HttpMethodHandler httpMethodHandler = GETHandlerImpl.getInstance();
             return httpMethodHandler.handle(request);
         }
     },
     POST("POST") {
         @Override
-        public byte[] handle(Request request) throws IOException {
-            HttpMethodHandler httpMethodHandler = new POSTHandlerImpl();
+        public Response handle(Request request) throws IOException {
+            HttpMethodHandler httpMethodHandler = POSTHandlerImpl.getInstance();
             return httpMethodHandler.handle(request);
         }
     },
     PUT("PUT") {
         @Override
-        public byte[] handle(Request request) throws IOException {
+        public Response handle(Request request) throws IOException {
             HttpMethodHandler httpMethodHandler = new PUTHandlerImpl();
             return httpMethodHandler.handle(request);
         }
     },
     DELETE("DELETE") {
         @Override
-        public byte[] handle(Request request) throws IOException {
+        public Response handle(Request request) throws IOException {
             HttpMethodHandler httpMethodHandler = new DELETEHandlerImpl();
             return httpMethodHandler.handle(request);
         }
@@ -46,5 +49,5 @@ public enum HttpMethod {
         return method;
     }
 
-    public abstract byte[] handle(Request request) throws IOException;
+    public abstract Response handle(Request request) throws IOException;
 }

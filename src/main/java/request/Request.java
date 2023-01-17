@@ -1,40 +1,85 @@
 package request;
 
-import file.FilePostfix;
-
+import file.FileContentType;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class Request {
+    private final String method;
+
+    private final String resource;
+
+    private final String version;
+
     private final Map<String, String> requestHeader;
 
-    private Request(InputStream in) {
-        requestHeader = RequestParser.parse(in);
+    private final String requestBody;
+
+    private Request(String method, String resource, String version, List<String> requestHeaderList, String requestBody) {
+        this.method = method;
+        this.resource = resource;
+        this.version = version;
+        this.requestHeader = RequestParser.parseHeader(requestHeaderList);
+        this.requestBody = requestBody;
     }
 
-    public static Request of(InputStream in) {
-        return new Request(in);
+    public static Request from(InputStream in) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
+
+        String requestLine = bufferedReader.readLine();
+        String method = RequestParser.parseMethod(requestLine);
+        String resource = RequestParser.parseResource(requestLine);
+        String version = RequestParser.parseVersion(requestLine);
+
+        List<String> requestHeaderList = new ArrayList<>();
+
+        String line;
+        while(!(line = bufferedReader.readLine()).equals("")) {
+            requestHeaderList.add(line);
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        while(bufferedReader.ready()) {
+            stringBuilder.append((char) bufferedReader.read());
+        }
+
+        return new Request(method, resource, version, requestHeaderList, stringBuilder.toString());
     }
 
     public String getMethod() {
-        String[] tokens = requestHeader.get(RequestParser.REQUEST_LINE).split(" ");
-        return tokens[0];
+        return method;
     }
 
     public String getResource() {
-        String[] tokens = requestHeader.get(RequestParser.REQUEST_LINE).split(" ");
-        return tokens[1];
+        return resource;
+    }
+
+    public String getVersion() {
+        return version;
     }
 
     public String getResourceFileContentType() {
-        int index = requestHeader.get(RequestParser.REQUEST_LINE).indexOf(".");
-        String postfix = requestHeader.get(RequestParser.REQUEST_LINE).substring(index+1);
-        for(FilePostfix filePostfix : FilePostfix.values()) {
-            if(postfix.equals(filePostfix.getPostfix())) {
-                return filePostfix.getContentType();
+        int index = resource.indexOf(".");
+        String postfix = resource.substring(index+1);
+        for(FileContentType fileContentType : FileContentType.values()) {
+            if(postfix.equals(fileContentType.getPostfix())) {
+                return fileContentType.getContentType();
             }
         }
-        return FilePostfix.NO_MATCH.getContentType();
+        return FileContentType.NO_MATCH.getContentType();
+    }
+
+    public Map<String, String> getRequestHeader() {
+        return requestHeader;
+    }
+
+    public String getRequestBody() {
+        return requestBody;
     }
 
     @Override

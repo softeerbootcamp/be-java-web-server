@@ -1,31 +1,39 @@
 package request;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
 public class RequestParser{
-    public static String REQUEST_LINE = "Request-line";
+    public static String REQUEST_LINE = "Request-Line";
 
-    public static Map<String, String> parse(InputStream in) {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
-        Map<String, String> requestMap = new HashMap<>();
-        try {
-            while (bufferedReader.ready()) {
-                String line = bufferedReader.readLine();
-                split(line, requestMap);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return requestMap;
+    public static String parseMethod(String line) {
+        return splitRequestLine(line)[0];
     }
 
-    private static void split(String line, Map<String, String> map) {
+    public static String parseResource(String line) {
+        return splitRequestLine(line)[1];
+    }
+
+    public static String parseVersion(String line) {
+        return splitRequestLine(line)[2];
+    }
+
+    public static Map<String, String> parseHeader(List<String> requestHeaderList) {
+        Map<String, String> requestHeaderMap = new HashMap<>();
+        for(String line : requestHeaderList) {
+            splitHeader(line, requestHeaderMap);
+        }
+
+        return requestHeaderMap;
+    }
+
+    private static String[] splitRequestLine(String line) {
+        return line.split(" ");
+    }
+
+    private static void splitHeader(String line, Map<String, String> map) {
         int firstIndexOfDelim = line.indexOf(":");
         if(firstIndexOfDelim == -1 && line.length() >= 3) {
             map.put(REQUEST_LINE, line);

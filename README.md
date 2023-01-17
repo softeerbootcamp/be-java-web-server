@@ -7,6 +7,11 @@ Java Web Application Server 2022
 이 프로젝트는 우아한 테크코스 박재성님의 허가를 받아 https://github.com/woowacourse/jwp-was 
 를 참고하여 작성되었습니다.
 
+## 간략한 코드 구조
+1. webserver/WebServer에서 각 요청마다 Socket 객체 생성 및 ClientRequestThread 생성
+2. ClientRequestThread에서 Enum 객체인 HttpMethod를 통해 해당 메소드와 URL에 해당하는 handler 실행시켜 byte[] body 생성
+3. response handler에서 request와 body를 이용해 적절한 response 생성 후 전송 (구현 예정)
+
 ## 학습한 내용
 <details>
 <summary>DNS의 간략한 동작 방법</summary>
@@ -43,6 +48,26 @@ Java Web Application Server 2022
 * 웹 서버가 반환하는 response status에 따른 웹 브라우저는 동적으로 반응함
   * 예를 들어, response status 302 FOUND는 요청한 resource가 Location 헤더에 명시된 위치로 이동됐음을 의미함. 따라서 웹 브라우저는 자동으로 웹 서버에 Location에 명시된 위치로 다시 요청을 전송함
 
+</div>
+</details>
+
+<details>
+<summary>쿠키와 세션 + HTTP/1.1, HTTP/2.0</summary>
+<div markdown="1">
+
+* 쿠키는 클라이언트가 매 요청마다 서버로 전송해야 하는 정보를 파일의 형태로 기록한 것
+* 쿠키 생성의 주체는 서버로, response header에 Set-Cookie라는 항목에 key-value 값을 넣어 해당 값으로 쿠키를 생성하라고 클라이언트에게 지시함 
+    * 이후, 클라이언트는 생성한 쿠키를 매 요청마다 request header에 Cookie라는 항목에 첨부해 서버로 전송함
+    * 쿠키는 주로 브라우저에 의해 저장되고 관리됨(주로 SQLite 사용)
+* 세션의 경우, 클라이언트와 서버 간의 논리적 연결
+    * 세션은 서버와 연결된 클라이언트 수 만큼 생성됨 
+    * 세션을 이용해 stateless한 http 프로토콜을 stateful한 것처럼 보이게 할 수 있음
+    * 주로 쿠키를 세션과 함께 이용
+        * 주로 In-memory 기반 DB에 필요한 정보를 포함한 세션을 저장하고, 쿠키에 세션 ID를 담아 매 요청마다 클라이언트에 대한 세션이 존재하는지 확인하는 식으로 stateful한 동작 구조 
+* HTTP/1.1은 pipeline, HTTP/2.0은 병렬처리를 지원함
+    * HTTP/1.0은 모든 요소(html, css, js..)가 모여야 렌더링함
+    * pipeline은 모두 모이지 않아도 순차적으로 렌더링하기 때문에 더 효율적
+    * 병렬처리는 렌더링하기 위해 필요한 요소를 동시에 요청할 수 있음
 </div>
 </details>
 
