@@ -47,12 +47,12 @@ public class HttpResponse {
     }
 
     public void redirectHome() {
-        this.statusCode = StatusCode.FOUND;
+        this.statusCode = StatusCode.SEE_OTHER;
         headers.addHeader("Location", "/index.html");
     }
 
     public void redirectLoginFailed() {
-        this.statusCode = StatusCode.FOUND;
+        this.statusCode = StatusCode.SEE_OTHER;
         headers.addHeader("Location", "/user/login_failed.html");
     }
 }

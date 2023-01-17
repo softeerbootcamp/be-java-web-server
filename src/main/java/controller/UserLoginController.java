@@ -27,7 +27,6 @@ public class UserLoginController implements Controller {
     }
 
     public HttpResponse doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        logger.debug("hello");
         Map<String, String> params = FileIoUtils.parseQueryString(httpRequest.getRequestBody());
         try {
             userService.login(params.get("userId"), params.get("password"));
