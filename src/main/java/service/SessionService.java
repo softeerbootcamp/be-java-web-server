@@ -18,4 +18,10 @@ public class SessionService {
         }
         return null;
     }
+
+    public static Session expireSession(String ssid){
+        if(ssid != null)
+            SessionRepo.deleteSession(ssid);
+        return Session.EXPIRED;
+    }
 }

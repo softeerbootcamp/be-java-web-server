@@ -3,6 +3,10 @@ package model;
 import java.time.LocalDateTime;
 
 public class Session {
+    public static Session EXPIRED = new Session("", ""){{
+        expire();
+    }};
+
     public static final int TIMEOUT_MINUTE = 60;
     private final String ssid;
     private LocalDateTime expiredAt;
