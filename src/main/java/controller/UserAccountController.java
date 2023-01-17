@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class UserAccountController implements RequestController {
-    private static Logger logger = LoggerFactory.getLogger(UserAccountController.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserAccountController.class);
 
     static UserAccountController userAccountService;
 
@@ -81,7 +81,7 @@ public class UserAccountController implements RequestController {
 
         User customer = UserService.findUserById(userId);
         if (customer != null && customer.getPassword().equals(password)) {
-            logger.debug("User {} login success", customer.getName());
+            logger.info("User {} login success", customer.getName());
             CustomHttpResponse res = CustomHttpFactory.REDIRECT("/index.html");
             Session sess = SessionService.addUserToSession(customer);
             res.addToCookie(sess.toString());
@@ -98,6 +98,7 @@ public class UserAccountController implements RequestController {
             return CustomHttpFactory.METHOD_NOT_ALLOWED();
 
         Session expired = SessionService.expireSession(req.getSSID());
+        logger.info("SID {} logout success", req.getSSID());
         CustomHttpResponse res = CustomHttpFactory.REDIRECT("/user/login.html");
         res.addToCookie(expired.toString());
         return res;
