@@ -29,9 +29,9 @@ public class StaticFileController implements Controller {
         // 만들어진 body로 응답 객체를 만들어서 리턴
         return new HttpResponse.HttpResponseBuilder()
                 .setHttpStatusLine(new HttpStatusLine(HttpStatus.OK, httpRequest.getHttpVersion()))
-                .makeHeader()
                 .setBody(responseBody)
                 .setContentType(contentType)
+                .makeHeader()
                 .build();
     }
 }

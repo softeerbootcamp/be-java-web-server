@@ -29,8 +29,8 @@ public class UserController implements Controller {
             // 302 응답이라 location만 필요하기 때문에 body랑 contentType는 없음!
             return new HttpResponse.HttpResponseBuilder()
                     .setHttpStatusLine(new HttpStatusLine(HttpStatus.FOUND, httpRequest.getHttpVersion()))
-                    .makeHeader()
                     .setDestination("/index.html")
+                    .makeHeader()
                     .build();
         }
 
