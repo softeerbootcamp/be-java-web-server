@@ -54,7 +54,7 @@ public class Request {
     }
 
     public Map<String, String> getRequestParams() {
-        return requestParams;
+        return new HashMap<>(requestParams);
     }
 
     public String getUrl() {
