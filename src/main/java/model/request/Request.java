@@ -68,4 +68,9 @@ public class Request {
     public RequestBody getBody() {
         return body;
     }
+
+    public String getSessionId() {
+        String cookie = headers.get(Header.COOKIE);
+        return cookie.split("=")[1];
+    }
 }
