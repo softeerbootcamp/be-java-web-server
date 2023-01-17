@@ -18,17 +18,19 @@ public class HttpResponse {
     // TODO: 응답 기능 요청 메소드 및 url로 분리하기
     public static void handleHttpResponse(OutputStream outputStream, Request request, Response response) throws IOException {
         HttpResponse httpResponse = new HttpResponse(outputStream);
-        int contentLength = (response.getFile() == null ? response.getData().getBytes().length : response.getFile().length);
+        int contentLength = (response.getFile() == null ? response.getStatus().getMessage().getBytes().length : response.getFile().length);
         httpResponse.outputStream.writeBytes(DEFAULT_HTTP_VERSION
-                + " " + response.getCode());
+                + " " + response.getStatus().getCode());
         httpResponse.outputStream.writeBytes("Content-Type: " + request.getResourceFileContentType() + ";charset=utf-8\r\n");
         httpResponse.outputStream.writeBytes("Content-Length: " + contentLength + "\r\n");
-        if(response.getCode() == HttpResponseStatus.FOUND.getCode()) {
+        if(response.getStatus().getCode() == HttpResponseStatus.FOUND.getCode()) {
             httpResponse.outputStream.writeBytes("Location: /index.html");
+            httpResponse.outputStream.writeBytes("\r\n");
+            return;
         }
         httpResponse.outputStream.writeBytes("\r\n");
 
-        httpResponse.outputStream.write((response.getFile() == null ? response.getData().getBytes() : response.getFile()), 0, contentLength);
+        httpResponse.outputStream.write((response.getFile() == null ? response.getStatus().getMessage().getBytes() : response.getFile()), 0, contentLength);
         httpResponse.outputStream.flush();
     }
 }

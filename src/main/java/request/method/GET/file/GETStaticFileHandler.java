@@ -25,9 +25,9 @@ public class GETStaticFileHandler implements GETHandler {
     public Response handle(Request request) {
         try {
             byte[] file = Files.readAllBytes(new File("src/main/resources/static" + request.getResource()).toPath());
-            return Response.of(file, HttpResponseStatus.OK.getMessage(), HttpResponseStatus.OK.getCode());
+            return Response.of(file, HttpResponseStatus.OK);
         } catch (IOException e) {
-            return Response.of(HttpResponseStatus.NOT_FOUND.getMessage(), HttpResponseStatus.NOT_FOUND.getCode());
+            return Response.of(HttpResponseStatus.NOT_FOUND);
         }
     }
 }

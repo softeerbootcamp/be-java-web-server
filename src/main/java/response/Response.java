@@ -2,46 +2,40 @@ package response;
 
 public class Response {
     private byte[] file;
-    private String data;
+    private HttpResponseStatus httpResponseStatus;
 
     private int code;
 
-    private Response(byte[] file, String data, int code) {
+    private Response(byte[] file, HttpResponseStatus httpResponseStatus) {
         this.file = file;
-        this.data = data;
-        this.code = code;
+        this.httpResponseStatus = httpResponseStatus;
     }
 
-    private Response(String data, int code) {
+    private Response(HttpResponseStatus httpResponseStatus) {
         this.file = null;
-        this.data = data;
-        this.code = code;
+        this.httpResponseStatus = httpResponseStatus;
     }
 
-    public static Response of(byte[] file, String data, int code) {
-        return new Response(file, data, code);
+    public static Response of(byte[] file, HttpResponseStatus httpResponseStatus) {
+        return new Response(file, httpResponseStatus);
     }
 
-    public static Response of(String data, int code) {
-        return new Response(data, code);
+    public static Response of(HttpResponseStatus httpResponseStatus) {
+        return new Response(httpResponseStatus);
     }
 
     public byte[] getFile() {
         return file;
     }
 
-    public String getData() {
-        return data;
-    }
-
-    public int getCode() {
-        return code;
+    public HttpResponseStatus getStatus() {
+        return httpResponseStatus;
     }
 
     @Override
     public String toString() {
         return "Response{" +
-                "data='" + data + '\'' +
+                "status='" + httpResponseStatus.getMessage() + '\'' +
                 '}';
     }
 }

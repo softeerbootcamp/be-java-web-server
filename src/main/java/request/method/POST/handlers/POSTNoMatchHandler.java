@@ -17,6 +17,6 @@ public class POSTNoMatchHandler implements POSTHandler {
 
     @Override
     public Response handle(Request request) {
-        return Response.of(HttpResponseStatus.NOT_FOUND.getMessage(), HttpResponseStatus.NOT_FOUND.getCode());
+        return Response.of(HttpResponseStatus.NOT_FOUND);
     }
 }

@@ -17,6 +17,6 @@ public class GETNoMatchHandler implements GETHandler {
 
     @Override
     public Response handle(Request request) {
-        return Response.of(HttpResponseStatus.NOT_FOUND.getMessage(), HttpResponseStatus.FOUND.getCode());
+        return Response.of(HttpResponseStatus.NOT_FOUND);
     }
 }

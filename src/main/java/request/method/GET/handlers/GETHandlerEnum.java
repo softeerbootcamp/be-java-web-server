@@ -1,22 +1,25 @@
 package request.method.GET.handlers;
 
+import request.Request;
+import response.HttpResponseStatus;
+import response.Response;
+
 public enum GETHandlerEnum {
-    // TODO: 추후 각 enum 별 url 정규식으로 교체
-    FORM("/user/create?", GETUserRegisterHandler.getInstance()),
+    FORM("^/user/create\\?.*", GETUserRegisterHandler.getInstance()),
     NO_MATCH("", GETNoMatchHandler.getInstance())
     ;
 
-    private String url;
+    private String urlRegEx;
 
     private GETHandler handler;
 
-    private GETHandlerEnum(String url, GETHandler handler) {
-        this.url = url;
+    private GETHandlerEnum(String urlRegEx, GETHandler handler) {
+        this.urlRegEx = urlRegEx;
         this.handler = handler;
     }
 
-    public String getUrl() {
-        return this.url;
+    public String getUrlRegEx() {
+        return this.urlRegEx;
     }
 
     public GETHandler getHandler() {
