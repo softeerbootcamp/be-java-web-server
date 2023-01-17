@@ -2,7 +2,7 @@ package webserver.exception;
 
 import webserver.domain.StatusCodes;
 
-public class HttpRequestException extends RuntimeException{
+public class HttpRequestException extends Exception{
 
     private StatusCodes statusCode;
     private String msg;
