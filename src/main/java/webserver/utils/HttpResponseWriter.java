@@ -2,7 +2,6 @@ package webserver.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.RequestHandler;
 import webserver.domain.StatusCodes;
 import webserver.domain.response.Response;
 
@@ -12,15 +11,20 @@ import java.io.OutputStream;
 
 import static webserver.utils.CommonUtils.mapToStringSplitWithNewLine;
 
-public class HttpResponseUtils {
+public class HttpResponseWriter {
 
     private Response response;
     private DataOutputStream dos;
-    private static final Logger logger = LoggerFactory.getLogger(HttpResponseUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(HttpResponseWriter.class);
 
-    public HttpResponseUtils(Response response, OutputStream out){
+    public HttpResponseWriter(Response response, OutputStream out){
         this.response = response;
         this.dos = new DataOutputStream(out);
+        response();
+    }
+
+    public static HttpResponseWriter of(Response response, OutputStream out){
+        return new HttpResponseWriter(response, out);
     }
 
     public void writeRequestLine(StatusCodes code) throws IOException {
@@ -37,7 +41,7 @@ public class HttpResponseUtils {
         dos.flush();
     }
 
-    public void makeResponse()
+    public void response()
     {
         try {
             writeRequestLine(response.getStatusCode());
@@ -47,6 +51,7 @@ public class HttpResponseUtils {
             logger.debug(e.getMessage());
         }
     }
+
 
 
 

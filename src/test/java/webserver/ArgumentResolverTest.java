@@ -4,14 +4,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import webserver.Controller.AuthController;
 import webserver.exception.HttpRequestException;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ArgumentResolverTest {
 
@@ -47,9 +44,7 @@ class ArgumentResolverTest {
 
         //given
         Map<String, String> queryStrs = new HashMap<>();
-        queryStrs.put("password", "testPass");
-        queryStrs.put("name", "testName");
-        queryStrs.put("email", "test@email.com");
+        queryStrs.put("test", "test@email.com");
         List<String> listStr = List.of("userId", "password", "name", "email");
 
         //then

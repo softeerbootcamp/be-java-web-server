@@ -1,10 +1,11 @@
-package webserver.Controller;
+package webserver.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import webserver.domain.ContentType;
 import webserver.domain.StatusCodes;
+import webserver.domain.request.Request;
 import webserver.domain.response.Response;
 import webserver.utils.StaticResourceFinder;
 
@@ -17,10 +18,18 @@ import static org.mockito.Mockito.*;
 class StaticControllerTest {
 
     StaticController staticController;
+    Response res;
+    Request req;
 
     @BeforeEach
     void testSetUp(){
         staticController = new StaticController();
+        String requestLine = "GET /index.html /1.1";
+        String header = "";
+        String body = "";
+        req = Request.of(requestLine, header, body);
+        req = mock(Request.class);
+
     }
 
     @Test
@@ -29,7 +38,6 @@ class StaticControllerTest {
 
         //given
         StaticResourceFinder staticResourceFinder = mock(StaticResourceFinder.class);
-        Response res = mock(Response.class);
         Map<String, String> queryString = new HashMap<>();
         String path = "file.txt";
         byte[] fileAsBytes = "file content".getBytes();
@@ -38,8 +46,8 @@ class StaticControllerTest {
         when(staticResourceFinder.staticFileResolver(path)).thenReturn(Optional.of(fileAsBytes));
 
         //then
-        staticController.chain(path, queryString, res);
-        verify(staticResourceFinder).staticFileResolver(path);
+        staticController.chain(req, res);
+
         verify(res).ok(StatusCodes.OK, fileAsBytes, StaticResourceFinder.getExtension(path));
     }
 
@@ -48,17 +56,15 @@ class StaticControllerTest {
 
         //when
         StaticResourceFinder staticResourceFinder = mock(StaticResourceFinder.class);
-        Response res = mock(Response.class);
         Map<String, String> queryString = new HashMap<>();
         String path = "file.txt";
         byte[] fileAsBytes = "file content".getBytes();
 
         //when
         when(staticResourceFinder.staticFileResolver(path)).thenReturn(Optional.empty());
-        staticController.chain(path, queryString, res);
+        staticController.chain(req, res);
 
         //then
-        verify(staticResourceFinder).staticFileResolver(path);
-//        verify(res).error(StatusCodes.NOT_FOUND, e.getMsg().getBytes(), ContentType.TEXT_HTML);
+        verify(res).error(StatusCodes.NOT_FOUND, StatusCodes.NOT_FOUND.getStatusMsg().getBytes(), ContentType.TEXT_HTML);
     }
 }

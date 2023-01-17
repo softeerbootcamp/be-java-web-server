@@ -14,13 +14,16 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static webserver.utils.CommonUtils.parseValues;
+
 public class HttpRequestUtils {
 
-        private static final Logger logger = LoggerFactory.getLogger(HttpResponseUtils.class);
+        private static final Logger logger = LoggerFactory.getLogger(HttpRequestUtils.class);
         public static Request parseHttpRequest(InputStream in) throws IOException {
 
         String requestLine = "";
         String header = "";
+        String body = "";
 
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
@@ -28,63 +31,28 @@ public class HttpRequestUtils {
         requestLine = br.readLine();
         logger.info(requestLine);  //print out http request line
 
-        //Store Http Request header into HashMap
-        String line = br.readLine();
-        while(!line.equals("")){
-            header += line + '\n';
-            logger.info(line);  //print out http header
-            line = br.readLine();
+        //Store Http Request header
+        String tempLine = br.readLine();
+        while(!tempLine.equals("")){
+            header += tempLine + '\n';
+            logger.info(tempLine);  //print out http header
+            tempLine = br.readLine();
         }
 
-        Request request = Request.of(requestLine, header);  //make a Request instance using static factory method
-        return request;
+        //Store Http Request body
+        StringBuilder sb = new StringBuilder();
+        while(br.ready()){
+            int next= br.read();
+            sb.append((char)next);
+        }
+        body  = sb.toString();
+
+        return Request.of(requestLine, header, body);  //make a Request instance using static factory method
     }
 
     public static Map<String, String> parseQueryString(String queryString) {
         return parseValues(queryString, "&");
     }
 
-
-    private static Map<String, String> parseValues(String values, String separator) {
-        if (Strings.isNullOrEmpty(values)) {
-            return Maps.newHashMap();
-        }
-
-        String[] tokens = values.split(separator);
-
-        return Arrays.stream(tokens).map(t -> getKeyValue(t, "=")).filter(p -> p != null)
-                .collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
-    }
-
-    private static Pair getKeyValue(String keyValue, String regex) {
-        if (Strings.isNullOrEmpty(keyValue)) {
-            return null;
-        }
-
-        String[] tokens = keyValue.split(regex);
-        if (tokens.length != 2) {
-            return null;
-        }
-
-        return new Pair(tokens[0], tokens[1]);
-    }
-
-    public static class Pair {
-        String key;
-        String value;
-
-        Pair(String key, String value) {
-            this.key = key.trim();
-            this.value = value.trim();
-        }
-
-        public String getKey() {
-            return key;
-        }
-
-        public String getValue() {
-            return value;
-        }
-    }
 
 }
