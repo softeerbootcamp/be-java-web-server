@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
+import static model.response.HttpStatusCode.NOT_FOUND;
+
 public class UserFrontServlet {
     private static final Logger logger = LoggerFactory.getLogger(UserFrontServlet.class);
 
@@ -22,7 +24,8 @@ public class UserFrontServlet {
         logger.debug("process start url : {}", url);
         UserController userController = controllerMap.get(url);
         if (userController == null) {
-            //TODO 404 응답
+            logger.error("404 NOT FOUND");
+            response.setStatusCode(request.getHttpVersion(), NOT_FOUND);
             return;
         }
         userController.service(request, response);

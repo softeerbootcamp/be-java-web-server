@@ -1,4 +1,4 @@
-package webserver;
+package model.response;
 
 public enum HttpStatusCode {
 

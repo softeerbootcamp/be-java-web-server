@@ -57,6 +57,9 @@ public class Request {
         return new HashMap<>(requestParams);
     }
 
+    public String getHttpVersion() {
+        return this.requestLine.getVersion();
+    }
     public String getUrl() {
         return this.requestLine.getUrl();
     }
