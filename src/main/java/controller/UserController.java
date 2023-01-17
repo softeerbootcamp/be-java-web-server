@@ -7,7 +7,9 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.Request;
+import response.NewResponse;
 import response.Response;
+import response.ResponseSender;
 import webserver.RequestResponseHandler;
 
 import java.io.File;
@@ -34,9 +36,17 @@ public class UserController implements Controller {
 
         Database.addUser(user);
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + "/index.html").toPath());
-        response.responseMaker(ControllerTypeEnum.USER, ContentTypeEnum.HTML,body.length,"/index.html");
-        response.responseNewLineAdder();
-        response.responseBody(body);
+        NewResponse newResponse = new NewResponse.Builder()
+                .setResponseStatusLine(ControllerTypeEnum.STATIC)
+                .setResponseHeader(ContentTypeEnum.CSS,body.length)
+                .setResponseBody(body)
+                .addResponseHeader("Location : /index.html")
+                .build();
+        ResponseSender responseSender = new ResponseSender();
+        responseSender.send(newResponse);
+//        response.responseMaker(ControllerTypeEnum.USER, ContentTypeEnum.HTML,body.length,"/index.html");
+//        response.responseNewLineAdder();
+//        response.responseBody(body);
     }
 
     public List<String> parseUrlToGetUserInfo(List<String> requestBodyLine) {

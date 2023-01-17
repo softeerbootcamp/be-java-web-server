@@ -30,8 +30,6 @@ public class LoginController implements Controller{
         List<String> bodyLine = request.getRequestBody().getBodyLines();
         List<String> userInfos = parseUrlToGetUserInfo(bodyLine);
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + "/index.html").toPath());
-        response.responseMaker(ControllerTypeEnum.USER, ContentTypeEnum.HTML,body.length,"/index.html",
-                request.isRequestHaveCookie(),request.);
         // 로그인이 성공하면? session add
         if(checkIdPwdIsInDatabase(userInfos.get(USERID_INDEX),userInfos.get(USERPWD_INDEX))){
             HttpSessions.addHttpSession(userInfos.get(USERID_INDEX));

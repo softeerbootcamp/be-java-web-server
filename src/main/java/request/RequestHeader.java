@@ -19,6 +19,9 @@ public class RequestHeader {
     public void addHeaderMap(String key, String val){
         headerMap.put(key,val);
     }
+    public String getHeaderValueByKey(String key){
+        return headerMap.get(key);
+    }
     public void addHeaderLines(String oneLine){
         headerLines.add(oneLine);
     }

@@ -5,7 +5,9 @@ import enums.ControllerTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.Request;
+import response.NewResponse;
 import response.Response;
+import response.ResponseSender;
 import webserver.RequestResponseHandler;
 
 import java.io.File;
@@ -20,8 +22,16 @@ public class TemplateController implements Controller {
         String url = request.getRequestLine().getURL();
 
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + url).toPath());
-        response.responseMaker(ControllerTypeEnum.TEMPLATE, ContentTypeEnum.HTML, body.length, url);
-        response.responseNewLineAdder();
-        response.responseBody(body);
+        NewResponse newResponse = new NewResponse.Builder()
+                .setResponseStatusLine(ControllerTypeEnum.TEMPLATE)
+                .setResponseHeader(ContentTypeEnum.HTML,body.length)
+                .setResponseBody(body)
+                .addResponseHeader("").build();
+        ResponseSender responseSender = new ResponseSender();
+        responseSender.send(newResponse);
+
+//        response.responseMaker(ControllerTypeEnum.TEMPLATE, ContentTypeEnum.HTML, body.length, url);
+//        response.responseNewLineAdder();
+//        response.responseBody(body);
     }
 }

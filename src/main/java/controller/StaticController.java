@@ -2,6 +2,7 @@ package controller;
 
 import enums.ContentTypeEnum;
 import enums.ControllerTypeEnum;
+import enums.HeaderReferenceEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.Request;
@@ -23,11 +24,20 @@ public class StaticController implements Controller{
         }
         logger.debug("firstLine : "+ request.getRequestLine().getURL());
         byte[] body = Files.readAllBytes(new File("./src/main/resources/static"+url).toPath());
+        String addedLine="";
+        if(request.isRequestHaveCookie()){
+            addedLine += HeaderReferenceEnum.SET_COOKIE.getValueWithSpace()+
+                    "sid="+
+                    request.getRequestHeader().getHeaderValueByKey("Cookie")
+            +"; Path=/";
+        }
+
         NewResponse newResponse = new NewResponse.Builder()
                 .setResponseStatusLine(ControllerTypeEnum.STATIC)
-                .SetResponseHeader(ContentTypeEnum.CSS,body.length)
-                .SetResponseBody(body)
-                .responseAdder("").build();
+                .setResponseHeader(ContentTypeEnum.CSS,body.length)
+                .addResponseHeader(addedLine)
+                .setResponseBody(body)
+                .build();
         ResponseSender responseSender = new ResponseSender();
         responseSender.send(newResponse);
         //response.responseMaker(ControllerTypeEnum.STATIC, ContentTypeEnum.CSS,body.length,url);

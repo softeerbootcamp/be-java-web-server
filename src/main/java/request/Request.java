@@ -45,7 +45,6 @@ public class Request {
         }
 
     }
-
     public void setRequestBody(BufferedReader bufferedReader) throws IOException {
         requestBody = new RequestBody();
         String fullLine = "";

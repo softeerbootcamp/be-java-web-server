@@ -2,7 +2,6 @@ package response;
 
 import enums.ContentTypeEnum;
 import enums.ControllerTypeEnum;
-import session.HttpSession;
 
 import java.util.List;
 
@@ -22,14 +21,15 @@ public class NewResponse {
         return responseStatusLine.getResponseStatusLine()+NEW_LINE+
                 responseHeader.getHeaderLine()+NEW_LINE+
                 ResponseAdderListToString()+
-                responseBody.getBody()+NEW_LINE;
+                responseBody.getBody()+responseBody.getBody().length+NEW_LINE;
     }
+    // 추가된 명령들을 response에 적기 위해 하나의 string 문장으로 형성
     public String ResponseAdderListToString(){
         String result="";
         for(String line : responseAdder){
             result+=(line+NEW_LINE);
         }
-        return result
+        return result;
     }
     public static class Builder {
         private ResponseStatusLine responseStatusLine;
@@ -45,16 +45,16 @@ public class NewResponse {
             return this;
         }
 
-        public Builder SetResponseHeader(ContentTypeEnum contentTypeEnum, int lengthOfBodyContent) {
+        public Builder setResponseHeader(ContentTypeEnum contentTypeEnum, int lengthOfBodyContent) {
             this.responseHeader = new ResponseHeader(contentTypeEnum,lengthOfBodyContent);
             return this;
         }
 
-        public Builder SetResponseBody(byte[] body) {
+        public Builder setResponseBody(byte[] body) {
             this.responseBody = new ResponseBody(body);
             return this;
         }
-        public Builder responseAdder(String addedLine) {
+        public Builder addResponseHeader(String addedLine) {
             this.responseAdder.add(addedLine);
             return this;
         }
