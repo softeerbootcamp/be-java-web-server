@@ -1,7 +1,7 @@
 package controller;
 
 import Utility.UserValidation;
-import httpMock.CustomHttpErrorFactory;
+import httpMock.CustomHttpFactory;
 import httpMock.CustomHttpRequest;
 import httpMock.CustomHttpResponse;
 import httpMock.constants.ContentType;
@@ -36,13 +36,13 @@ public class UserAccountController implements RequestController {
                 return routingTable.get(path).handleRequest(req);
             }
         }
-        return CustomHttpErrorFactory.NOT_FOUND();
+        return CustomHttpFactory.NOT_FOUND();
     }
 
     public CustomHttpResponse makeAccount(CustomHttpRequest req) {
         Set<HttpMethod> allowedMethods = Set.of(HttpMethod.POST);
         if(!allowedMethods.contains(req.getHttpMethod()))
-            return CustomHttpErrorFactory.METHOD_NOT_ALLOWED();
+            return CustomHttpFactory.METHOD_NOT_ALLOWED();
 
         Map<String, String> bodyParams = req.parseBodyFromUrlEncoded();
         String userId = bodyParams.get("userId");
@@ -51,19 +51,24 @@ public class UserAccountController implements RequestController {
         String email = bodyParams.get("email");
 
         if (UserService.findUserById(userId) != null)
-            return CustomHttpErrorFactory.BAD_REQUEST("userID duplicated");
+            return CustomHttpFactory.BAD_REQUEST("userID duplicated");
 
         if (!UserValidation.isEmailValid(email))
-            return CustomHttpErrorFactory.BAD_REQUEST("email type invalid");
+            return CustomHttpFactory.BAD_REQUEST("email type invalid");
 
         if (!UserValidation.isPasswordValid(password))
-            return CustomHttpErrorFactory.BAD_REQUEST("password type invalid");
+            return CustomHttpFactory.BAD_REQUEST("password type invalid");
 
         UserService.addUser(new User(userId, password, name, email));
 
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Location", "/index.html");
+        return CustomHttpFactory.REDIRECT("/index.html");
+    }
 
-        return CustomHttpResponse.of(StatusCode.FOUND, ContentType.TEXT_PLAIN, headers, "".getBytes());
+    public CustomHttpResponse login(CustomHttpRequest req){
+        Set<HttpMethod> allowedMethods = Set.of(HttpMethod.POST);
+        if(!allowedMethods.contains(req.getHttpMethod()))
+            return CustomHttpFactory.METHOD_NOT_ALLOWED();
+
+
     }
 }

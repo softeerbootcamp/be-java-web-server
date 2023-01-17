@@ -1,6 +1,6 @@
 package controller;
 
-import httpMock.CustomHttpErrorFactory;
+import httpMock.CustomHttpFactory;
 import httpMock.CustomHttpRequest;
 import httpMock.CustomHttpResponse;
 import httpMock.constants.ContentType;
@@ -38,7 +38,7 @@ public class StaticFileController implements RequestController {
             byte[] data = Files.readAllBytes(file.toPath());
             return CustomHttpResponse.of(StatusCode.OK, contentType, new HashMap<>(), data);
         } catch (IOException e) {
-            return CustomHttpErrorFactory.NOT_FOUND();
+            return CustomHttpFactory.NOT_FOUND();
         }
     }
 

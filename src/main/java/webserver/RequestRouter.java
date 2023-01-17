@@ -4,7 +4,7 @@ package webserver;
 import controller.RequestController;
 import controller.StaticFileController;
 import controller.UserAccountController;
-import httpMock.CustomHttpErrorFactory;
+import httpMock.CustomHttpFactory;
 import httpMock.CustomHttpRequest;
 import httpMock.CustomHttpResponse;
 import org.slf4j.Logger;
@@ -41,6 +41,6 @@ public class RequestRouter {
             }
         }
 
-        return CustomHttpErrorFactory.NOT_FOUND();
+        return CustomHttpFactory.NOT_FOUND();
     }
 }

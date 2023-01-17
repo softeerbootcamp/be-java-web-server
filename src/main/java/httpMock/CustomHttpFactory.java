@@ -3,8 +3,18 @@ package httpMock;
 import httpMock.constants.ContentType;
 import httpMock.constants.StatusCode;
 
-public class CustomHttpErrorFactory {
+import java.util.HashMap;
 
+public class CustomHttpFactory {
+
+    public static CustomHttpResponse REDIRECT(String location){
+        return CustomHttpResponse.of(
+                StatusCode.FOUND,
+                ContentType.TEXT_PLAIN,
+                new HashMap<>(){{put("Location", location);}},
+                CustomHttpResponse.EMPTY_BODY
+        );
+    }
     public static CustomHttpResponse BAD_REQUEST(String reason) {
         return CustomHttpResponse.of(
                 StatusCode.BAD_REQUEST,

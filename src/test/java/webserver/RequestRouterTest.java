@@ -1,6 +1,6 @@
 package webserver;
 
-import httpMock.CustomHttpErrorFactory;
+import httpMock.CustomHttpFactory;
 import httpMock.CustomHttpRequest;
 import httpMock.CustomHttpResponse;
 import httpMock.constants.ContentType;
@@ -134,7 +134,7 @@ class RequestRouterTest {
         CustomHttpResponse res = requestRouter.handleRequest(req);
 
         //then
-        assertEquals(CustomHttpErrorFactory.NOT_FOUND().toString(), res.toString());
+        assertEquals(CustomHttpFactory.NOT_FOUND().toString(), res.toString());
     }
 
 }
