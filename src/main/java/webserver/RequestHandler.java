@@ -2,6 +2,7 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
+
 import Controller.*;
 import Request.HttpRequest;
 import org.slf4j.Logger;
@@ -23,10 +24,10 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            HttpRequest httpRequest = HttpRequest.createReqeust(br);
             DataOutputStream dos = new DataOutputStream(out);
-            Controller controller = Controller.matchController(dos, httpRequest);
-            controller.response();
+            HttpRequest httpRequest = HttpRequest.createReqeust(br);
+            Controller controller = MatchController.match(dos, httpRequest);
+            controller.response(dos);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

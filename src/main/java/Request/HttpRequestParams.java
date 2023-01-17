@@ -7,7 +7,6 @@ import util.HttpRequestUtil;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class HttpRequestParams {
     private Map<String, String> params = new HashMap<>();
@@ -18,13 +17,9 @@ public class HttpRequestParams {
         this.params = params;
     }
 
-    public static HttpRequestParams from(String path) {
-        String query = FileIoUtil.checkCreateUser(path);
-        if (Objects.nonNull(query)) {
-            Map<String, String> params = HttpRequestUtil.extractParams(query);
-            return new HttpRequestParams(params);
-        }
-        return null;
+    public static HttpRequestParams from(String query) {
+        Map<String, String> params = HttpRequestUtil.extractParams(query);
+        return new HttpRequestParams(params);
     }
 
     public Map<String, String> getParams() {
