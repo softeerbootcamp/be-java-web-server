@@ -32,7 +32,7 @@ public class StaticResourceController implements Controller {
             response.setBodyMessage(body);
         } catch (IOException e) {
             logger.error(e.getMessage());
-            logger.error("해당 파일이 존재하지 않습니다.");
+            logger.error("해당 경로에 파일이 존재하지 않습니다.");
 
             response.notFound(request);
         }
