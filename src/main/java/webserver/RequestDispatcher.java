@@ -38,7 +38,7 @@ public class RequestDispatcher {
      * @param url
      * @param res
      */
-    private static void serveFile(String url, HttpResponse res) throws IOException, URISyntaxException {
+    private static void serveFile(String url, HttpResponse res) throws FileNotFoundException, IOException, URISyntaxException {
         try {
             byte[] body = FileIoUtils.loadFileFromClasspath(url);
             ContentType contentType = extractExtension(url);
@@ -47,11 +47,13 @@ public class RequestDispatcher {
             res.setContentType(contentType);
             res.addToHeader(CONTENT_LENGTH_HEADER_KEY, String.valueOf(body.length));
             res.setBody(body);//body에는 요청한 파일 내용이 들어감
-        } catch (FileNotFoundException e) {
-            System.out.println("file not found");
-        } catch (Exception e) {
+        }catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
         }
+
+//        catch (FileNotFoundException e) {
+//            System.out.println("file not found");
+//        }
     }
 
     private static ContentType extractExtension(String url) {

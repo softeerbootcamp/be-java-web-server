@@ -41,6 +41,8 @@ public class RequestHandler implements Runnable {
             rw.write(request,response);
         } catch (IOException e) {
             logger.error(e.getMessage());
+        }catch(NullPointerException e){
+            System.out.println("todo - 에러 페이지 내려주기, not found exception handler 호출");
         }
     }
 }
