@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class HttpHeader {
 
-    private static final String COLON = ": ";
+    private static final String COLON = ":";
 
     private final Map<String, String> headers;
 
@@ -17,9 +17,10 @@ public class HttpHeader {
     }
 
     public static HttpHeader from(String[] lines) {
-        return new HttpHeader(Arrays.stream(Arrays.copyOfRange(lines, 0, lines.length))
+        return new HttpHeader(Arrays.stream(
+                Arrays.copyOfRange(lines, 0, lines.length))
                 .map(line -> line.split(COLON))
-                .collect(Collectors.toMap(pair -> pair[0], pair -> pair[1])
+                .collect(Collectors.toMap(pair -> pair[0].trim(), pair -> pair[1].trim())
                 ));
     }
 
