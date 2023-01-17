@@ -5,7 +5,6 @@ import http.session.Session;
 import http.session.SessionManager;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import http.response.HttpStatusCode;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

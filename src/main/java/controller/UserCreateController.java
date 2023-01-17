@@ -3,7 +3,6 @@ package controller;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.Uri;
-import http.response.HttpStatusCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
