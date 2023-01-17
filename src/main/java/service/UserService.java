@@ -1,9 +1,15 @@
 package service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import db.UserReposioryImpl;
 import db.UserRepository;
+import model.User;
 
 public class UserService {
+
+	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
 	private static UserService instance;
 	private final UserRepository userRepository;
@@ -23,5 +29,15 @@ public class UserService {
 
 	public boolean matchIdPassword(String userId, String password) {
 		return userRepository.findUserById(userId).matchPassword(password);
+	}
+
+	public boolean idExist(String userId) {
+		return userRepository.idExist(userId);
+	}
+
+	public void addUser(String userId, String password, String name, String email) {
+		User user = User.of(userId, password, name, email);
+		userRepository.addUser(user);
+		logger.info(user + " 회원가입했습니다.");
 	}
 }
