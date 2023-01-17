@@ -17,12 +17,13 @@ public class HttpResponse {
     private byte[] body;
 
     private String contentType;
+    private String destination;
 
     private HttpResponse(HttpResponseBuilder httpResponseBuilder){
         this.statusLine = httpResponseBuilder.httpStatusLine;
         this.body = httpResponseBuilder.body;
         this.contentType = httpResponseBuilder.contentType;
-
+        this.destination = httpResponseBuilder.destination;
         this.header = makeHeader();
     }
 
@@ -38,6 +39,7 @@ public class HttpResponse {
         private HttpStatusLine httpStatusLine;
         private byte[] body;
         private String contentType;
+        private String destination;
 
         public HttpResponseBuilder(){}
 
@@ -53,6 +55,11 @@ public class HttpResponse {
 
         public HttpResponseBuilder setContentType(String contentType){
             this.contentType = contentType;
+            return this;
+        }
+
+        public HttpResponseBuilder setDestination(String destination){
+            this.destination = destination;
             return this;
         }
 
@@ -73,7 +80,7 @@ public class HttpResponse {
     private HttpHeader makeResponse302Header() {
         List<String> headerLines = new ArrayList<>();
         // TODO 회원 가입에 대한 리다이렉트로 첫 페이지 띄워주게 하드 코딩 했는데 나중에 확장 해야 할듯
-        headerLines.add("Location: " + "/index.html" + System.lineSeparator());
+        headerLines.add("Location: " + destination + System.lineSeparator());
         return new HttpHeader(headerLines);
     }
 
