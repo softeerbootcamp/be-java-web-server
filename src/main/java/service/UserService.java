@@ -19,4 +19,11 @@ public class UserService {
     public void addUser(Map<String, String> parsedUserMap) {
         Database.addUser(new User(parsedUserMap.get("userId"), parsedUserMap.get("password"), parsedUserMap.get("name"), parsedUserMap.get("email")));
     }
+    public boolean login(User user) {
+        User dbUser = Database.findUserById(user.getUserId());
+        if (dbUser.getPassword().equals(user.getPassword())) {
+            return true;
+        }
+        return false;
+    }
 }
