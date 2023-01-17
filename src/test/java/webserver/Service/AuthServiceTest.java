@@ -1,15 +1,13 @@
 package webserver.Service;
 
-import db.Database;
+import db.UserDatabase;
 import model.User;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
-import webserver.domain.StatusCodes;
 import webserver.exception.HttpRequestException;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class AuthServiceTest {
@@ -25,7 +23,7 @@ public class AuthServiceTest {
     void userCreateWithValidParameter(){
 
         //given
-        Database database = mock(Database.class);
+        UserDatabase userDatabase = mock(UserDatabase.class);
         String userId = "lee";
         String password = "password";
         String email = "test@test.com";
@@ -34,10 +32,10 @@ public class AuthServiceTest {
 
         //when
         authService.join(userId, password, email, email);
-        when(database.findUserById(Mockito.anyString())).thenReturn(Optional.empty());
+        when(userDatabase.findUserById(Mockito.anyString())).thenReturn(Optional.empty());
 
         //then
-        verify(database, times(1)).addUser(user);
+        verify(userDatabase, times(1)).addUser(user);
 
     }
 
@@ -46,7 +44,7 @@ public class AuthServiceTest {
     void userCreateWithValidParameter_twoUser(){
 
         //given
-        Database database = mock(Database.class);
+        UserDatabase userDatabase = mock(UserDatabase.class);
         String userId = "lee";
         String password = "password";
         String email = "test@test.com";
@@ -54,14 +52,14 @@ public class AuthServiceTest {
         User user = new User(userId, password, email, name);
 
         //when
-        when(database.findUserById(Mockito.anyString())).thenReturn(Optional.empty());
+        when(userDatabase.findUserById(Mockito.anyString())).thenReturn(Optional.empty());
 
         authService.join(userId, password, email, name);
         authService.join("anotherID", password, email,name);
 
 
         //then
-        verify(database, times(2)).addUser(user);
+        verify(userDatabase, times(2)).addUser(user);
     }
 
     @Test
@@ -69,7 +67,7 @@ public class AuthServiceTest {
     void userCreateWithValidParameter_DuplicateUser(){
 
         //given
-        Database database = mock(Database.class);
+        UserDatabase userDatabase = mock(UserDatabase.class);
         String userId = "lee";
         String password = "password";
         String email = "test@test.com";
@@ -77,7 +75,7 @@ public class AuthServiceTest {
         User user = new User(userId, password, email, name);
 
         //when
-        when(database.findUserById(Mockito.anyString())).thenReturn(Optional.of(user));
+        when(userDatabase.findUserById(Mockito.anyString())).thenReturn(Optional.of(user));
 
         authService.join(userId, password, email, email);
 
