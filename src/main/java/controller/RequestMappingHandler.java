@@ -7,7 +7,8 @@ import request.HttpRequest;
 
 public enum RequestMappingHandler {
 
-	USER_CONTROLLER(UserController.PATH, UserController.getInstance());
+	USER_CONTROLLER(UserController.PATH, UserController.getInstance()),
+	LOGIN_CONTROLLER(LoginController.PATH, LoginController.getInstance());
 	private String path;
 	private Controller controller;
 
@@ -16,7 +17,6 @@ public enum RequestMappingHandler {
 	RequestMappingHandler(String path, Controller controller) {
 		this.path = path;
 		this.controller = controller;
-
 	}
 
 	public static Controller findController(HttpRequest httpRequest) {
