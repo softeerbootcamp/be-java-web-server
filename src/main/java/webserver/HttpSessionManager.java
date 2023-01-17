@@ -19,11 +19,11 @@ public class HttpSessionManager {
         }
     }
 
-    public static HttpSession createSession() {
-        return new HttpSession(UUID.randomUUID().toString(), new HashMap<>());
+    public static HttpSession createSession(Map<String,String> userInfo) {
+        return new HttpSession(UUID.randomUUID().toString(), userInfo);
     }
 
-    private static void addSession(HttpSession session) {
+    public static void addSession(HttpSession session) {
         sessions.put(session.getId(), session);
     }
 }
