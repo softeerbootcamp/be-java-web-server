@@ -1,5 +1,6 @@
 package http.request;
 
+import db.Session;
 import http.HttpHeader;
 import http.exception.NullHttpRequestException;
 import org.slf4j.Logger;
@@ -51,5 +52,21 @@ public class HttpRequest {
 
     public String getFileNameExtension() {
         return httpRequestLine.getHttpUri().getFileNameExtension();
+    }
+
+    public String checkLoginStatus() {
+        return Session.findUserIdBySessionId(getCookie());
+        // userId가 null 이 아닌 경우 login 상태임 !
+    }
+
+    public String getCookie(){
+        logger.debug("Cookie :  {}", httpHeader.getCookie());
+        String cookie = httpHeader.getCookie();
+        if(cookie == null) return null;
+        return HttpRequestUtils.parseQueryString(httpHeader.getCookie()).get("sid");
+    }
+
+    public boolean wantHtml() {
+        return getFileNameExtension().equals("html");
     }
 }

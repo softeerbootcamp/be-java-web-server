@@ -63,8 +63,7 @@ public class LogInService {
     }
 
     private static String addSessionAndGetSessionID(String userId) {
-        Session.addSession(userId);
-        return Session.findSessionIdByUserId(userId);
+        return Session.makeSessionIdAndAddUserId(userId);
     }
 
 

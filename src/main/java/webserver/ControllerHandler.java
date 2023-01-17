@@ -1,9 +1,12 @@
 package webserver;
 
 import controller.Controller;
+import controller.DynamicFileController;
 import controller.StaticFileController;
 import controller.UserController;
 import http.request.HttpRequest;
+
+import javax.annotation.Nonnull;
 
 public class ControllerHandler {
     public static Controller handleController(HttpRequest httpRequest) {
@@ -17,11 +20,21 @@ public class ControllerHandler {
             return whoWant(httpRequest.getUri());
         }
 
-        // 정적 파일만 원한다면? ex) index.html, /user/form.html
-        if (httpRequest.wantStatic()) return new StaticFileController();
+        // 파일을 원한다면? ex) index.html, /user/form.html, .css, .js
 
-        //TODO 아무것도 없으면 나중에 예외처리
-        return null;
+        // .html 파일을 원한다면 - 동적 처리
+        if(httpRequest.wantHtml()){
+            String userId = httpRequest.checkLoginStatus();
+            // 쿠키 체크 해서 쿠키에 맞는 user 있는지 확인
+            if(userId != null){
+                // 로그인 상태인 경우에 user 넘겨줘서 처리
+                return new DynamicFileController();
+            }
+        }
+
+        // 나머지 - 정적 처리
+        return new StaticFileController();
+        
     }
 
     // ControllerHandler Util을 빼줘야 하나?
