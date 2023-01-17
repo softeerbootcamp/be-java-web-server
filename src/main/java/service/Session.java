@@ -15,4 +15,8 @@ public class Session {
     private String generateId(String userId) {
         return userId + userId;
     }
+
+    public String getId() {
+        return id;
+    }
 }
