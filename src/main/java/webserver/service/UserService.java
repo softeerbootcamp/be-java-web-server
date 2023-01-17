@@ -1,4 +1,4 @@
-package webserver;
+package webserver.service;
 
 import db.Database;
 import exception.UserNotFoundException;

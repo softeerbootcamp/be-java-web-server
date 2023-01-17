@@ -10,12 +10,12 @@ import java.util.Map;
 
 import static model.response.HttpStatusCode.NOT_FOUND;
 
-public class UserFrontServlet {
-    private static final Logger logger = LoggerFactory.getLogger(UserFrontServlet.class);
+public class UserHandlerAdapter implements WasHandlerAdapter {
+    private static final Logger logger = LoggerFactory.getLogger(UserHandlerAdapter.class);
 
     private final Map<String, UserController> controllerMap = new HashMap<>();
 
-    public UserFrontServlet() {
+    public UserHandlerAdapter() {
         controllerMap.put("/user/create", new UserCreateController());
         controllerMap.put("/user/login", new UserLoginController());
     }
