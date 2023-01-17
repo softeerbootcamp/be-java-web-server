@@ -17,6 +17,10 @@ public class HttpHeader {
         }
     }
 
+    public void addHeader(String headerKey, String headerValue){
+        headers.put(headerKey, headerValue);
+    }
+
     public String toString() {
         String headerString = "";
         for (Map.Entry<String, String> header : headers.entrySet()) {

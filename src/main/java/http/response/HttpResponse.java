@@ -71,6 +71,10 @@ public class HttpResponse {
             return this;
         }
 
+        public void addCookie(String cookieValue){
+            this.header.addHeader("Set-Cookie", cookieValue);
+        }
+
         public HttpResponse build(){
             return new HttpResponse(this);
         }
