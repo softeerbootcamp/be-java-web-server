@@ -36,6 +36,8 @@ public class UserController implements Controller {
                 requestLine.getUri().startsWith("/user/create")) return createUserResponse(request);
         else if(requestLine.getMethod().equals(Method.POST) &&
                 requestLine.getUri().startsWith("/user/login")) return loginUserResponse(request);
+        else if(requestLine.getMethod().equals(Method.GET) &&
+                requestLine.getUri().startsWith("/user/list")) return userListResponse(request);
 
         return Response.of(request, Status.NOT_FOUND);
     }
@@ -53,16 +55,14 @@ public class UserController implements Controller {
 
     private Response loginUserResponse(Request request) {
         Map<String, String> userLoginInfo = request.getBody().getContent();
-        User user = User.of(userLoginInfo.get("userId"), userLoginInfo.get("password"),
-                userLoginInfo.get("name"), userLoginInfo.get("email"));
-        boolean isLoginSuccess = userService.logIn(user);
+        boolean isLoginSuccess = userService.logIn(userLoginInfo);
 
         Map<Header, String> headers;
         RequestLine requestLine = request.getRequestLine();
         if(isLoginSuccess) {
             headers = responseLoginSuccessHeader();
             Session session = Sessions.getSession(parseSessionIdFromHeaders(headers));
-            session.setSessionData("user", user);
+            session.setSessionData("user", userLoginInfo.get("userId"));
 
             return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.FOUND), headers);
         }
