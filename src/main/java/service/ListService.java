@@ -17,8 +17,7 @@ public class ListService {
         // not Login
         return new HttpResponse.HttpResponseBuilder()
                 .setHttpStatusLine(new HttpStatusLine(HttpStatus.FOUND, httpVersion))
-                .setDestination("/user/login.html")
-                .makeHeader()
+                .set302Header("/user/login.html")
                 .build();
     }
 
@@ -33,9 +32,7 @@ public class ListService {
         // 만들어진 body로 응답 객체를 만들어서 리턴
         return new HttpResponse.HttpResponseBuilder()
                 .setHttpStatusLine(new HttpStatusLine(HttpStatus.OK, httpVersion))
-                .setBody(responseBody)
-                .setContentType(contentType)
-                .makeHeader()
+                .set200Header(contentType, responseBody)
                 .build();
     }
 
