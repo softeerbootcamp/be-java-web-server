@@ -11,16 +11,8 @@ public class PathResolver {
     private static final String NOT_FOUND_HTML = "src/main/resources/templates/notfound.html";
     public static final String DOMAIN = "/";
     public static final String LOGIN_FAILED_HTML = "login_failed.html";
-    public static final List<String> dynamicHtmls = List.of(
-            "/",
-            "index.html"
-    );
+    public static final List<String> dynamicHtmls = List.of("/", "index.html");
 
-
-    private PathResolver() {
-    }
-
-    // todo: String -> nio.Path로 변경
     private static final Map<Extension, String> mappingInfo = Map.of(
             Extension.INDEX, TEMPLATE_PATH + INDEX_HTML,
             Extension.TEMPLATE, TEMPLATE_PATH,
@@ -28,10 +20,17 @@ public class PathResolver {
             Extension.ELSE, NOT_FOUND_HTML
     );
 
+    private PathResolver() {
+    }
+
+    // todo: String -> nio.Path로 변경
+
     public static String parse(String url) {
         Extension extension = mappingInfo.keySet().stream()
-                .filter(keys -> keys.getExtensions().stream().anyMatch(url::endsWith)
-                ).findAny()
+                .filter(keys -> keys.getExtensions()
+                        .stream()
+                        .anyMatch(url::endsWith))
+                .findAny()
                 .orElse(Extension.ELSE);
         return String.format(mappingInfo.get(extension), url);
     }
