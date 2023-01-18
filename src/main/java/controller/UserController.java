@@ -82,14 +82,17 @@ public class UserController implements Controller {
         RequestLine requestLine = request.getRequestLine();
 
         if(Sessions.isExistSession(request.getSessionId())) {
-            return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.OK, headers, body));
+            byte[] body = getUserListHtml(userService.getUserList());
+            // TODO: body에 빈 배열 넘어오는 경우 예외 처리
+            headers = HeaderUtils.response200Header(requestLine.getContentType(), body.length);
+            return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.OK), headers, body);
         }
 
         headers = HeaderUtils.responseRedirectLoginHtmlHeader();
         return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.FOUND), headers);
     }
 
-    private byte[] getUserListHtml(Collection<User> users) throws IOException {
+    private byte[] getUserListHtml(Collection<User> users) {
         StringBuilder userList = new StringBuilder();
         int row = 0;
 
@@ -104,7 +107,13 @@ public class UserController implements Controller {
                     .append("</td><td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td></tr>");
         }
 
-        byte[] body = Files.readAllBytes(new File("./src/main/resources/templates/user/list.html").toPath());
+        byte[] body;
+        try {
+            body = Files.readAllBytes(new File("./src/main/resources/templates/user/list.html").toPath());
+        } catch(IOException e) {
+            return new byte[0];
+        }
+
         String originalListHtml = new String(body);
         String[] splitListHtml = originalListHtml.split("<tbody>");
         String resultListHtml = splitListHtml[0] + "<tbody>" + userList + splitListHtml[1];
