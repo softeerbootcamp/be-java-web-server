@@ -11,7 +11,19 @@ public class UserService {
     private static final String NAME = "name";
     private static final String EMAIL = "email";
 
-    public static void create(Map<String, String> parameters) {
+    private UserService(){
+    }
+
+    private static class UserServiceHolder {
+        private static final UserService USER_SERVICE = new UserService();
+    }
+
+    public static UserService getInstance() {
+        return UserServiceHolder.USER_SERVICE;
+    }
+
+
+    public void create(Map<String, String> parameters) {
         User user = new User(
                 parameters.get(USER_ID),
                 parameters.get(PASSWORD),
