@@ -37,7 +37,7 @@ public class FrontServlet {
                 return indexController.service(request);
             }
 
-            if (request.getUrl().contains("user/list")) {
+            if (request.getUrl().contains("user/list.html")) {
                 UserListController userListController = new UserListController();
                 return userListController.service(request);
             }
