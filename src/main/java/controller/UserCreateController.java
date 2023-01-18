@@ -21,7 +21,7 @@ public class UserCreateController extends AbstractController {
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         Map<String, String> queryParams = httpRequest.getParameters();
-        userService.create(queryParams);
+        userService.addUser(queryParams);
 
         httpResponse.sendRedirect(REDIRECT_PATH);
     }
@@ -30,7 +30,7 @@ public class UserCreateController extends AbstractController {
     public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         Map<String, String> queryParams = httpRequest.getParameters();
         logger.debug("query params: {}", queryParams);
-        userService.create(queryParams);
+        userService.addUser(queryParams);
 
         logger.info("Create User Success");
         httpResponse.sendRedirect(REDIRECT_PATH);

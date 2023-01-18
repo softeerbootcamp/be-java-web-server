@@ -25,8 +25,8 @@ class UserServiceTest {
                 parameters.get("name"),
                 parameters.get("email")
         );
-        UserService userService = UserService.getInstance();
-        userService.create(parameters);
+        UserService userService = new UserService();
+        userService.addUser(parameters);
         assertThat(UserRepository.findUserById("kgstiger").toString()).isEqualTo(user.toString());
     }
 

@@ -14,7 +14,7 @@ public class UserService {
     private static final String NAME = "name";
     private static final String EMAIL = "email";
 
-    public void create(Map<String, String> parameters) {
+    public void addUser(Map<String, String> parameters) {
         User user = new User(
                 parameters.get(USER_ID),
                 parameters.get(PASSWORD),
