@@ -23,9 +23,9 @@ public class UserController implements Controller {
 
     @Override
     public void exec(Request req, Response res, OutputStream out) throws IOException {
-        Map<String, String> UserInfo;
         resHandler = new ResponseHandler(res);
 
+        Map<String, String> UserInfo;
         UserInfo = getUserInfoFromString(req.getReqBody());
 
         try{

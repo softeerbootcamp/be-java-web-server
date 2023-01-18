@@ -10,14 +10,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.net.URLDecoder;
 
-public class RequestParser {
+public class RequestGetter {
 
-    private static final Logger logger = LoggerFactory.getLogger(RequestParser.class);
+    private static final Logger logger = LoggerFactory.getLogger(RequestGetter.class);
     private String currentLine;
 
-    public RequestParser(){currentLine = new String();}
+    public RequestGetter(){ currentLine = new String(); }
 
-    public Request parseRequestFromInputStream(InputStream in) throws IOException
+    public Request getFromInputStream(InputStream in) throws IOException
     {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         currentLine = br.readLine();

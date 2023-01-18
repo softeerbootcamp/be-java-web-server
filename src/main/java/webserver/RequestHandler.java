@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import webserver.controller.Controller;
 import webserver.controller.ControllerMapper;
 import webserver.httpUtils.Request;
-import webserver.httpUtils.RequestParser;
+import webserver.httpUtils.RequestGetter;
 import webserver.httpUtils.Response;
 
 import java.io.*;
@@ -17,7 +17,7 @@ public class RequestHandler implements Runnable {
 
     private Request req;
     private Response res;
-    private static RequestParser reqParser = new RequestParser();
+    private static RequestGetter reqGetter = new RequestGetter();
     private ControllerMapper controllerMapper = ControllerMapper.getInstance();
 
     private Socket connection;
@@ -32,7 +32,7 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            req = reqParser.parseRequestFromInputStream(in);
+            req = reqGetter.getFromInputStream(in);
             res = new Response();
 
             Controller controller = controllerMapper.getController(req);
