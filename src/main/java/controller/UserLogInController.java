@@ -10,17 +10,16 @@ import service.SessionService;
 import service.UserService;
 
 import java.io.IOException;
-import java.util.Map;
 
 public class UserLogInController extends AbstractController {
 
     public static final String USER_ID = "userId";
     public static final String PASSWORD = "password";
-    public static final String COOKIE_SUFFIX = "; path=/";
     public static final String INDEX_PATH = "/index.html";
     public static final String LOGIN_FAILED_PATH = "/user/login_failed.html";
     public static final String DEFAULT_SESSION_ID = "JSESSIONID";
     private static final Logger logger = LoggerFactory.getLogger(UserLogInController.class);
+
     private final SessionService sessionService;
     private final UserService userService;
 
@@ -32,14 +31,10 @@ public class UserLogInController extends AbstractController {
     @Override
     public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         try {
-            Map<String, String> userInfo = httpRequest.getParameters();
-            String requestUserId = userInfo.get(USER_ID);
-            String requestPassword = userInfo.get(PASSWORD);
-
-            logger.info("id: " + requestUserId);
-            logger.info("id: " + requestPassword);
-
-            userService.validateUser(requestUserId, requestPassword);
+            userService.validateUser(
+                    httpRequest.getParameter(USER_ID),
+                    httpRequest.getParameter(PASSWORD)
+            );
 
             String sessionId = sessionService.makeSessionId();
             sessionService.makeSession(sessionId, "login");
@@ -48,7 +43,7 @@ public class UserLogInController extends AbstractController {
 
             httpResponse.sendRedirect(
                     INDEX_PATH,
-                    Cookie.of(DEFAULT_SESSION_ID, sessionId + COOKIE_SUFFIX)
+                    Cookie.of(DEFAULT_SESSION_ID, sessionId)
             );
 
         } catch (IllegalArgumentException e) {
@@ -56,5 +51,4 @@ public class UserLogInController extends AbstractController {
             httpResponse.sendRedirect(LOGIN_FAILED_PATH);
         }
     }
-
 }
