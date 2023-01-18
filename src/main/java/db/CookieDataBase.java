@@ -4,10 +4,8 @@ import com.google.common.collect.Maps;
 import model.HttpCookie;
 import model.User;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class CookieDataBase {
 
@@ -25,8 +23,10 @@ public class CookieDataBase {
         cookies.remove(sessionId);
     }
 
-    public static Collection<HttpCookie> findAll() {
-        return cookies.values();
+    public static ArrayList<HttpCookie> findAll() {
+        return cookies.values()
+                .stream()
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
 }
