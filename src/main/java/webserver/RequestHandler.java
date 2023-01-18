@@ -40,13 +40,15 @@ public class RequestHandler implements Runnable{
 
     private void respondToHttpRequest(OutputStream out, HttpResponse httpResponse) {
         DataOutputStream dos = new DataOutputStream(out);
-        if(httpResponse.getStatusLine().equals(StatusLine.OK)){
+        if(httpResponse.getStatusLine().equals(StatusLine.OK) ||
+                httpResponse.getStatusLine().equals(StatusLine.BadRequest)
+        ){
             httpResponse.respond(dos);
         }
 
         if(httpResponse.getStatusLine().equals(StatusLine.Found) ||
-                httpResponse.getStatusLine().equals(StatusLine.NotJoin) ||
-                httpResponse.getStatusLine().equals(StatusLine.BadRequest)
+                httpResponse.getStatusLine().equals(StatusLine.NotJoin)
+
         ){
             httpResponse.respondRedirect(dos);
         }

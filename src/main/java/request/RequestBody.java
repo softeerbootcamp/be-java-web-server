@@ -26,10 +26,7 @@ public class RequestBody {
             return EMPTY_REQUEST_BODY;
         }
 
-        logger.debug("[ Request Body ] contentLength : {}", Integer.parseInt(contentLength.get()));
-
         String body = IOUtils.readData(bufferedReader, Integer.parseInt(contentLength.get()));
-        logger.debug("[ Request Body ] body : {}",body);
 
         return new RequestBody(body);
     }

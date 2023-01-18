@@ -19,7 +19,6 @@ public class UserCreate implements Servlet{
                 get(httpRequest);
                 return StatusLine.Found;
             } catch (RuntimeException e){
-                logger.debug("[UserCreate] runtimeException");
                 return StatusLine.NotJoin;
             }
         }
@@ -29,7 +28,6 @@ public class UserCreate implements Servlet{
                 post(httpRequest);
                 return StatusLine.Found;
             } catch (RuntimeException e){
-                logger.debug("[UserCreate] runtimeException");
                 return StatusLine.NotJoin;
             }
         }
@@ -38,21 +36,13 @@ public class UserCreate implements Servlet{
 
     @Override
     public void post(HttpRequest httpRequest) {
-        logger.debug("DoPost");
-
         User user = UserService.postJoinService(httpRequest);
-        logger.debug("[User Create] POST user data : {}", user);
-
         Database.addUser(user);
     }
 
     @Override
     public void get(HttpRequest httpRequest) {
-        logger.debug("DoGet");
-
         User user = UserService.getJoinService(httpRequest);
-        logger.debug("[User Create] GET user data : {}", user);
-
         Database.addUser(user);
     }
 }

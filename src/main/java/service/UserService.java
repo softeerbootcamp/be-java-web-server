@@ -21,10 +21,8 @@ public class UserService {
         String body = httpRequest.getBody();
         Map<String, String> data = new HashMap<>();
 
-        logger.debug("body : {}", body);
         String[] inputs = body.split("&");
         for (String input : inputs) {
-            logger.debug("bodyParam : {}", input);
             String[] keyAndValue = input.split("=");
             if (keyAndValue.length < 2) {
                 throw new RuntimeException("모든 값을 입력해야합니다.");
@@ -61,12 +59,8 @@ public class UserService {
     public static void postlogin(HttpRequest httpRequest) {
         String body = httpRequest.getBody();
         Map<String, String> data = new HashMap<>();
-
-        logger.debug("body : {}", body);
-
         String[] inputs = body.split("&");
         for (String input : inputs) {
-            logger.debug("bodyParam : {}", input);
             String[] keyAndValue = input.split("=");
             if (keyAndValue.length < 2) {
                 throw new RuntimeException("로그인과 비밀번호를 모두 입력하셔야 합니다.");
@@ -81,8 +75,6 @@ public class UserService {
 
         User databaseuserId = Database.findUserById(userId);
         String databasePassword = databaseuserId.getPassword();
-
-        logger.debug("Input user : {}", userId);
 
         if(databaseuserId.getUserId().isEmpty()) throw new RuntimeException("가입되지 않은 회원입니다.");
         if(!password.equals(databasePassword)) throw new RuntimeException("비밀번호가 다릅니다.");

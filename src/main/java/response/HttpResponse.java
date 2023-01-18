@@ -31,7 +31,6 @@ public class HttpResponse {
 
     public void respond(DataOutputStream dos) {
         try {
-            logger.debug("[HttpResponse] Do respond");
             dos.writeBytes(statusLine.getValue());
             dos.writeBytes(lineSeparator);
             dos.writeBytes(responseHeader.toValue());
@@ -45,7 +44,6 @@ public class HttpResponse {
 
     public void respondRedirect(DataOutputStream dos) {
         try {
-            logger.debug("[HttpResponse] Do respondJoin");
             dos.writeBytes(statusLine.getValue());
             dos.writeBytes(lineSeparator);
             dos.writeBytes(responseHeader.toValue());

@@ -36,23 +36,15 @@ public class HttpRequest {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         RequestStartLine requestStartLine = RequestStartLine.of(bufferedReader);
         RequestHeader requestHeader = RequestHeader.of(bufferedReader);
-
-        logger.debug("[HttpRequest] RequestHeader Line : {}",requestHeader.getStringContentLength());
-        logger.debug("[HttpRequest] RequestHeader value : {}",requestHeader.toValue());
-
         RequestBody requestBody = RequestBody.of(bufferedReader, requestHeader.getContentLength());
-
-        logger.debug("[ HttpRequest ] requestHeader length : {}",requestHeader.getContentLength());
         return new HttpRequest(requestStartLine, requestHeader, requestBody);
     }
 
     public String getPath() {
         if (requestStartLine.isTemplatesResource()) {
-            logger.debug("templates request : {}" , String.format("./templates%s", requestStartLine.getPath()));
             return String.format("./templates%s", requestStartLine.getPath());
         }
         if (requestStartLine.isStaticResource()) {
-            logger.debug("static request : {}" , String.format("./static%s", requestStartLine.getPath()));
             return String.format("./static%s", requestStartLine.getPath());
         }
         return requestStartLine.getPath();

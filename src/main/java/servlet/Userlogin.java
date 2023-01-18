@@ -23,7 +23,6 @@ public class Userlogin implements Servlet{
                 get(httpRequest);
                 return StatusLine.Found;
             } catch (RuntimeException e){
-                logger.debug("[UserCreate] runtimeException");
                 return StatusLine.BadRequest;
             }
         }
@@ -33,7 +32,6 @@ public class Userlogin implements Servlet{
                 post(httpRequest);
                 return StatusLine.Found;
             } catch (RuntimeException e){
-                logger.debug("[UserCreate] runtimeException");
                 return StatusLine.BadRequest;
             }
         }
@@ -46,7 +44,6 @@ public class Userlogin implements Servlet{
 
     @Override
     public void post(HttpRequest httpRequest) {
-        logger.debug("DoPost");
         UserService.postlogin(httpRequest);
     }
 }

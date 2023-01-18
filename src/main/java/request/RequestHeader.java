@@ -31,13 +31,9 @@ public class RequestHeader {
 
             String[] headerTokens = line.split(":\\s");
             if (headerTokens.length >= 2) {
-                logger.debug("[ Reqeust Header ] headerToken : {}",headerTokens[0]);
-                logger.debug("[ Reqeust Header ] headerToken : {}",headerTokens[1]);
                 fields.put(headerTokens[0], headerTokens[1]);
             }
-
         }
-        logger.debug("[ Requset Header ] Content-Length : {}", fields.get("Content-Length"));
 
         return new RequestHeader(fields);
     }

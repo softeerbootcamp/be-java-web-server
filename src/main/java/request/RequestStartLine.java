@@ -27,17 +27,10 @@ public class RequestStartLine {
             throw new RuntimeException("HTTP 요청메시지의 요청라인이 비어있습니다.");
         }
         String source = bufferedReader.readLine();
-        logger.debug("[RequestStartLine] source : {}",source);
         String[] sources = source.split("\\s");
-        logger.debug("[RequestStartLine] sources : {}", sources[0]);
         Method method = Method.of(sources[0]);
         Uri uri = Uri.of(sources[1]);
         HttpVersion version = HttpVersion.of(sources[2]);
-
-        logger.debug("[RequestStartLine] method : {}",method.getMethodName());
-        logger.debug("[RequestStartLine] uri : {}",uri.getPath());
-        logger.debug("[RequestStartLine] version : {}",version.getVersion());
-
         return new RequestStartLine(method, uri, version);
     }
 
