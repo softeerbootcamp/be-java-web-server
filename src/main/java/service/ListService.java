@@ -10,9 +10,9 @@ import util.HttpResponseUtils;
 import java.util.Collection;
 
 public class ListService {
-    public static HttpResponse service(boolean isLogin, String fileNameExtension, String uri, String httpVersion, String contentType){
+    public static HttpResponse service(boolean isLogin, String filePath, String uri, String httpVersion, String contentType){
         // Login check
-        if(isLogin) return logInListService(fileNameExtension, uri, httpVersion, contentType);
+        if(isLogin) return logInListService(filePath, uri, httpVersion, contentType);
 
         // not Login
         return new HttpResponse.HttpResponseBuilder()
@@ -21,9 +21,8 @@ public class ListService {
                 .build();
     }
 
-    private static HttpResponse logInListService(String fileNameExtension, String uri, String httpVersion, String contentType){
+    private static HttpResponse logInListService(String filePath, String uri, String httpVersion, String contentType){
         StringBuilder stringBuilder = makeHtml();
-        String filePath = HttpResponseUtils.makeFilePath(fileNameExtension);
 
         // 파일 경로를 넘겨서 http response string 생성
         String responseString = new String(HttpResponseUtils.makeBody(uri, filePath));
