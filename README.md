@@ -128,3 +128,21 @@ Java Web Application Server 2022
 - 세션 DB 구축 방안
 - Mockito의 When() 메소드에서 발생하는 null pointer exception
 - java reflection의 invocationtargetexception 원인 및 해결 방안
+
+----
+## 3일차 학습 내용
+### pull request 피드백 반영
+- [ ] mvc 컴포넌트를 싱글톤으로 수정
+- [ ] 쿠키 관련 테스트 코드
+- [ ] HttpRequestException의 생성자 수정
+
+### 오늘 할 일
+- [ ] 동적 웹 생성
+- [ ] 로그인 여부를 판단하는 security 관련 로직
+
+### 공부한 것
+- Service 내 메소드의 네이밍 best practice
+- 자바 싱글톤 패턴 생성 방식
+   - synchronized 메소드 이용 
+   - static + 생성자
+- Spring Security의 동작 원리
