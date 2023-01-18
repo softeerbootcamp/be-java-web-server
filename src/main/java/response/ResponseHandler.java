@@ -43,8 +43,8 @@ public class ResponseHandler {
 
             headerFields.put("Content-Type", mData);
             headerFields.put("Content-Length", String.valueOf(body.length));
+            headerFields.put("set-Cookie", String.format("%s=%s; Path=%s", "logined", "true", "/"));
 
-//            headerFields.put("Set-Cookie", "JSESSIONID.3efa22de=node01sa18a9ohrv41p33gl1vk6mqn23.node0"; path="/");
             ResponseHeader responseHeader = new ResponseHeader(headerFields);
 
             return HttpResponse.of("200", responseHeader, body);

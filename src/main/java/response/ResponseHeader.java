@@ -26,4 +26,8 @@ public class ResponseHeader {
 
         return sb.toString();
     }
+
+    public String getCookie() {
+        return fields.get("set-Cookie");
+    }
 }

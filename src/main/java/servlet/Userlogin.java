@@ -48,6 +48,5 @@ public class Userlogin implements Servlet{
     public void post(HttpRequest httpRequest) {
         UserService.postlogin(httpRequest);
 
-
     }
 }
