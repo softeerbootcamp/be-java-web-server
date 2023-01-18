@@ -33,7 +33,6 @@ public class Response {
             ResponseHeader responseHeader = new ResponseHeader(contentTypeEnum, lengthOfBodyContent);
             dos.writeBytes(responseStatusLine.getResponseStatusLineInString() + NEW_LINE);
             responseHeader.addHeaderIfRedirect(redirectUrl,responseStatusLine.getStatusCodeWithMessage());
-            responseHeader.addHeaderIfCookie(isCookie,sid);
             dos.writeBytes(responseHeader.getHeaderLine() + NEW_LINE);
         } catch (IOException e) {
             logger.error(e.getMessage());
