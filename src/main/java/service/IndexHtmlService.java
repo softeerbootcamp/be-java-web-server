@@ -14,12 +14,9 @@ public class IndexHtmlService {
         String responseString = new String(HttpResponseUtils.makeBody(uri, filePath));
         byte[] responseBody = responseString.replace("로그인", loginUser.getName()).getBytes();
 
-        // 만들어진 body로 응답 객체를 만들어서 리턴
         return new HttpResponse.HttpResponseBuilder()
                 .setHttpStatusLine(new HttpStatusLine(HttpStatus.OK, httpVersion))
-                .setBody(responseBody)
-                .setContentType(contentType)
-                .makeHeader()
+                .set200Header(contentType, responseBody)
                 .build();
     }
 }
