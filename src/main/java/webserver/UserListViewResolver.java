@@ -23,6 +23,7 @@ public class UserListViewResolver {
 
         return sb.toString();
     }
+
     public static void makeUserListView(ModelAndView mv, Response res) throws IOException {
         String path = mv.getViewName();
         String userTableScript = getTableOfUser(mv.getViewModel().get("user"));

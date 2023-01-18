@@ -19,11 +19,12 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-public class AuthController implements Controller {
+public class UserController implements Controller {
 
     private AuthService authService;
-    
-    public AuthController(){
+
+    //TODO: 싱글톤으로 클래스 초기화
+    public UserController(){
         this.authService = new AuthService();
     }
 
@@ -66,6 +67,6 @@ public class AuthController implements Controller {
 
     @Override
     public void chain(Request req, Response res) throws HttpRequestException, IOException {
-        ControllerInterceptor.executeController(AuthController.class, req, res);
+        ControllerInterceptor.executeController(UserController.class, req, res);
     }
 }

@@ -1,16 +1,15 @@
 package webserver;
 
-import webserver.controller.AuthController;
+import webserver.controller.UserController;
 import webserver.controller.Controller;
 import webserver.controller.StaticController;
 import webserver.domain.request.Request;
-import webserver.domain.response.Response;
 
 import java.util.Map;
 
 public class HandlerMapping {
 
-    public static final Map<String, Controller> controllerMap = Map.of("/user", new AuthController());
+    public static final Map<String, Controller> controllerMap = Map.of("/user", new UserController());
 
     //find a proper controller to handle this request
     public Controller getHandler(Request req) {
