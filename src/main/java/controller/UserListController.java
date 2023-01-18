@@ -14,12 +14,15 @@ public class UserListController implements AuthController {
 
     @Override
     public void doGet(HttpRequest request, HttpResponse response) {
-        response.setBody(getTable(Database.findAll()).getBytes());
+        response.setBody(
+                        getTable(Database.findAll(),
+                        request.getSession().user()).getBytes()
+        );
         response.addHeader("Content-Type", ContentType.TEXT_HTML.getType());
 
     }
 
-    private String getTable(Collection<User> users) {
+    private String getTable(Collection<User> users, User requester) {
         int idx = 1;
 
         StringBuilder content = new StringBuilder();
@@ -33,7 +36,11 @@ public class UserListController implements AuthController {
                     .append(user.getName())
                     .append("</td> <td>")
                     .append(user.getEmail())
-                    .append("</td><td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td></tr>");
+                    .append("</td><td>");
+            if (user.getUserId().equals(requester.getUserId())) {
+                content.append("<a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a>");
+            }
+            content.append("</td></tr>");
         }
 
         byte[] bytes = ResourceUtils.loadFileFromClasspath("/user/list.html");
