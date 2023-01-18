@@ -14,6 +14,9 @@ public class MatchController {
     public static Controller match(HttpRequest httpRequest) {
         String requestPath = httpRequest.getPath();
         Path path = FileIoUtil.mappingDirectoryPath(requestPath);
+        if (requestPath.startsWith("/user/list")) {
+            return new UserListController();
+        }
         if (requestPath.startsWith("/user/login") && !requestPath.contains(".")) {
             return new LoginController();
         }
