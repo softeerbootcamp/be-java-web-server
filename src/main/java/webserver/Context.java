@@ -1,9 +1,6 @@
 package webserver;
 
-import controller.Controller;
-import controller.ResourceController;
-import controller.UserCreateController;
-import controller.UserLogInController;
+import controller.*;
 import service.SessionService;
 import service.UserService;
 
@@ -19,6 +16,7 @@ public class Context {
         controllers.put("file", new ResourceController());
         controllers.put("/user/create", new UserCreateController(userService));
         controllers.put("/user/login", new UserLogInController(sessionService));
+        controllers.put("/", new IndexController());
         return controllers;
     }
 }
