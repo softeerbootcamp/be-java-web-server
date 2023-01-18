@@ -30,8 +30,7 @@ public class ControllerMapper {
 
     public Controller getController(Request req)
     {
-        ReqLine reqLine = req.getReqLine();
-        String query = reqLine.getQuery();
+        // TODO dynamic과 static 구분해내기
 
         return new StaticFileController();
     }
