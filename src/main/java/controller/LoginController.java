@@ -1,5 +1,7 @@
 package controller;
 
+import model.domain.User;
+import model.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpStatus;
@@ -9,9 +11,13 @@ import view.Response;
 
 import java.io.DataOutputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class LoginController implements Controller{
     private static LoginController loginController;
+    private final UserService userService = UserService.getInstance();
 
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
     private static final String RELATIVE_PATH = "./src/main/resources";
@@ -35,14 +41,32 @@ public class LoginController implements Controller{
         logger.info("body with static page:\n"+body.toString());
         if (requestMessage.getRequestHeaderMessage().getHttpOnlyURL().startsWith("/index.html"))
             body = dynamicIndexPage(body, requestMessage);
+        else if (requestMessage.getRequestHeaderMessage().getHttpOnlyURL().startsWith("/user/list.html"))
+            body = dynamicListPage(body, requestMessage);
         logger.info("body after dynamic change:\n"+body.toString());
         Response response = new Response(new DataOutputStream(out));
         response.response(body,requestMessage.getRequestHeaderMessage(), HttpStatus.Success);
     }
 
     private byte[] dynamicIndexPage(byte[] body, RequestMessage requestMessage){
-        return (new String(body)).replace("<li><a href=\"user/login.html\" role=\"button\">로그인</a></li>", "<li><a role=\"button\">"+
-                Session.loginSession.get(requestMessage.getRequestHeaderMessage().getSessionId())+"</a></li>").getBytes();
+        String userID = Session.loginSession.get(requestMessage.getRequestHeaderMessage().getSessionId());
+        return (new String(body)).replace("<li><a href=\"user/login.html\" role=\"button\">로그인</a></li>",
+                "<li><a role=\"button\">"+ userID+"</a></li>").getBytes();
+    }
+
+    private byte[] dynamicListPage(byte[] body, RequestMessage requestMessage){
+        Collection<User> users = userService.findUsers();
+        String bodyStr = new String(body);
+        String bodyPrefix = bodyStr.substring(0,bodyStr.indexOf("<tbody>")+"<tbody>".length());
+        String bodyPostfix = bodyStr.substring(bodyStr.indexOf("</tbody>"));
+        StringBuilder result = new StringBuilder(bodyPrefix);
+        for (User user: users){
+            result.append("<tr>\n<th scope=\"row\">1</th> <td>")
+                    .append(user.getUserId()).append("</td> <td>").append(user.getName()).append("</td> <td>")
+                    .append(user.getEmail()).append("</td><td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td>\n</tr>\n");
+        }
+        result.append(bodyPostfix);
+        return result.toString().getBytes();
     }
 
     private byte[] getStaticBody(RequestMessage requestMessage){
