@@ -6,7 +6,6 @@ import model.request.Request;
 import model.response.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.HttpRequestUtils;
 import webserver.controller.FrontServlet;
 
 import java.io.IOException;
@@ -33,10 +32,11 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream()) {
             Request request = new Request(in);
 
+            //TODO 세션 유지 방법 고민
             if (request.getHeaders().containsKey("Cookie")) {
                 String cookie = request.getHeaders().get("Cookie");
                 logger.debug(">> 쿠키 있어요! {}", cookie);
-                User user = SessionStorage.findBySessionId(parseSid(cookie)).orElseThrow(() -> new RuntimeException("세션 없어요!"));
+                User user = SessionStorage.findBySessionId(parseSid(cookie)).orElse(User.of());
                 logger.debug(">> user id : {}", user.getUserId());
             }
 
