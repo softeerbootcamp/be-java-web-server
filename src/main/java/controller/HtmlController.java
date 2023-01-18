@@ -21,7 +21,6 @@ public class HtmlController implements Controller{
         //ContentType, 파일 확장자, uri를 받음
         User loginUser = Database.findUserById(Session.findUserIdBySessionId(httpRequest.getCookie()));
         String contentType = httpRequest.getContentType();
-        String fileNameExtension = httpRequest.getFileNameExtension();
         String uri = httpRequest.getUri();
         String httpVersion = httpRequest.getHttpVersion();
 
