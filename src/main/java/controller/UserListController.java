@@ -23,24 +23,24 @@ public class UserListController implements Controller {
     }
 
     @Override
-    public HttpResponse service(HttpRequest httpRequest, HttpResponse httpResponse) {
+    public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
         if (httpRequest.getHttpMethod().equals(HttpMethod.GET)) {
-            return doGet(httpRequest, httpResponse);
+            doGet(httpRequest, httpResponse);
+            return;
         }
         throw new IllegalArgumentException("존재하지 않는 Http 메서드입니다.");
     }
 
-    public HttpResponse doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         String cookie = httpRequest.getHeaderValue("Cookie");
         String sid = FileIoUtils.parseSId(cookie);
         try {
             if (SessionManager.getData(UUID.fromString(sid)) != null) {
                 httpResponse.setBody(FileIoUtils.writeUserList());
-                return httpResponse;
+                return;
             }
         } catch (NullPointerException e) {
             httpResponse.redirect(LOGIN_PATH);
         }
-        return httpResponse;
     }
 }

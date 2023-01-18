@@ -9,7 +9,7 @@ import utils.StatusCode;
 public class StaticFileController implements Controller {
     public final static String PATH = "/";
     @Override
-    public HttpResponse service(HttpRequest httpRequest, HttpResponse httpResponse) {
+    public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
         try {
             byte[] body = FileIoUtils.loadFile(httpRequest.getUri().getPath());
             httpResponse.setBody(body);
@@ -19,6 +19,5 @@ public class StaticFileController implements Controller {
         catch (IllegalArgumentException e) {
             httpResponse.setStatusCode(StatusCode.NOTFOUND);
         }
-        return httpResponse;
     }
 }

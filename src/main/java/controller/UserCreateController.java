@@ -22,17 +22,17 @@ public class UserCreateController implements Controller {
     }
 
     @Override
-    public HttpResponse service(HttpRequest httpRequest, HttpResponse httpResponse) {
+    public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
         if (httpRequest.getHttpMethod().equals(HttpMethod.POST)) {
-            return doPost(httpRequest, httpResponse);
+            doPost(httpRequest, httpResponse);
+            return;
         }
         throw new IllegalArgumentException("존재하지 않는 Http 메서드입니다.");
     }
 
-    private HttpResponse doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+    private void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         Map<String, String> bodyParams = httpRequest.getRequestBody();
         userService.createUser(bodyParams);
         httpResponse.redirect(HOME_PATH);
-        return httpResponse;
     }
 }
