@@ -3,10 +3,13 @@ package service;
 import db.Database;
 import http.HttpSession;
 import http.SessionHandler;
-import http.request.*;
+import http.request.HttpRequest;
+import http.request.RequestLine;
+import http.request.ResourceType;
 import http.response.HttpResponse;
 import http.response.HttpStatus;
 import model.User;
+import util.FileIoUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +17,6 @@ import java.nio.file.Files;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class UserService {
 
@@ -49,21 +51,30 @@ public class UserService {
         Map<String, String> headers = new HashMap<>();
         if (SessionHandler.validateSession(httpRequest.getSid())) {
             HttpSession httpSession = SessionHandler.getSession(httpRequest.getSid());
-            RequestHeader requestHeader = httpRequest.getRequestHeader();
-            String contentType = requestHeader.getContentType();
 
             Collection<User> userList = Database.findAll();
             StringBuilder sb = new StringBuilder();
             appendStringBuilder(sb, userList);
-            String fileData = new String(Files.readAllBytes(new File(
-                    "src/main/resources" + ResourceType.HTML.getPath() + "/user/list.html").toPath()));
-            fileData = fileData.replace("%userList%", sb.toString());
-            fileData = fileData.replace("로그인", httpSession.getUserName());
-            byte[] body = fileData.getBytes();
-            return HttpResponse.of(HttpStatus.OK, contentType, new HashMap<>(), body, requestLine.getVersion());
+
+            String fileData = new String(Files.readAllBytes(FileIoUtil.getFile(ResourceType.HTML, "/user/list.html").toPath()));
+            fileData = fileData.replace("%userList%", sb.toString()).replace("로그인", httpSession.getUserName());
+
+            return HttpResponse.of(
+                    HttpStatus.OK,
+                    "text/html",
+                    new HashMap<>(),
+                    fileData.getBytes(),
+                    requestLine.getVersion()
+            );
         }
         headers.put("Location", "/user/login.html");
-        return HttpResponse.of(HttpStatus.FOUND, "", headers, "".getBytes(), requestLine.getVersion());
+        return HttpResponse.of(
+                HttpStatus.FOUND,
+                "",
+                headers,
+                "".getBytes(),
+                requestLine.getVersion()
+        );
     }
 
     private boolean isExistUser(String id, String pw) {

@@ -6,17 +6,17 @@ import java.util.stream.Stream;
 
 public enum ResourceType {
 
-    HTML(".html", "/templates"),
-    ICO(".ico", "/templates"),
-    XML(".xml", "/templates"),
-    JS(".js", "/static"),
-    PNG(".png", "/static"),
-    WOFF2(".woff2", "/static"),
-    WOFF(".woff", "/static"),
-    TTF(".ttf", "/static"),
-    SVG(".svg", "/static"),
-    EOT(".eot", "/static"),
-    CSS(".css", "/static"),
+    HTML(".html", "./templates"),
+    ICO(".ico", "./templates"),
+    XML(".xml", "./templates"),
+    JS(".js", "./static"),
+    PNG(".png", "./static"),
+    WOFF2(".woff2", "./static"),
+    WOFF(".woff", "./static"),
+    TTF(".ttf", "./static"),
+    SVG(".svg", "./static"),
+    EOT(".eot", "./static"),
+    CSS(".css", "./static"),
     NONE("", "");
 
 

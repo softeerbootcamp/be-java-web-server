@@ -5,6 +5,7 @@ import http.SessionHandler;
 import http.request.*;
 import http.response.HttpResponse;
 import http.response.HttpStatus;
+import util.FileIoUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,19 +19,22 @@ public class ViewController implements Controller {
         RequestLine requestLine = httpRequest.getRequestLine();
         RequestHeader requestHeader = httpRequest.getRequestHeader();
         HttpUri httpUri = requestLine.getHttpUri();
-        ResourceType resourceType = httpUri.parseResourceType();
-        String contentType = requestHeader.getContentType();
-        File file = new File("src/main/resources" + resourceType.getPath() + httpUri.getPath());
+        File file = FileIoUtil.getFile(requestLine.getHttpUri());
         byte[] body = Files.readAllBytes(file.toPath());
+
         if(httpUri.getPath().endsWith(".html") && SessionHandler.validateSession(httpRequest.getSid())) {
             HttpSession httpSession = SessionHandler.getSession(httpRequest.getSid());
-            String fileData = new String(Files.readAllBytes(file.toPath()));
+            String fileData = new String(body);
             fileData = fileData.replace("로그인", httpSession.getUserName());
-
             body = fileData.getBytes();
         }
 
-        return HttpResponse.of(HttpStatus.OK, contentType, new HashMap<>(), body, requestLine.getVersion());
+        return HttpResponse.of(
+                HttpStatus.OK,
+                requestHeader.getContentType(),
+                new HashMap<>(),
+                body,
+                requestLine.getVersion());
     }
 
     @Override
