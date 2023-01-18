@@ -8,11 +8,7 @@ import org.slf4j.LoggerFactory;
 import util.MessageParser;
 import util.HttpStatus;
 import util.Redirect;
-
 import util.Session;
-
-import view.RequestBodyMessage;
-import view.RequestHeaderMessage;
 import view.RequestMessage;
 import view.Response;
 import java.io.DataOutputStream;
@@ -114,7 +110,6 @@ public class UserController implements Controller{
 
     private void setHeader(Map<String,String> headerKV, String key, String value){
         headerKV.put(key,value);
-
     }
 
 }

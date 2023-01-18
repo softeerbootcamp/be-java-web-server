@@ -28,10 +28,10 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             InputStreamReader reader = new InputStreamReader(in);
             BufferedReader br = new BufferedReader(reader);
-            RequestReader rr = new RequestReader(br);
-            String startLine = rr.readStartLine();
-            Map<String,String> header = rr.readHeader();
-            char[] body = rr.readBody(Integer.parseInt(header.getOrDefault("Content-Length","0")));
+            RequestReader requestReader = new RequestReader(br);
+            String startLine = requestReader.readStartLine();
+            Map<String,String> header = requestReader.readHeader();
+            char[] body = requestReader.readBody(Integer.parseInt(header.getOrDefault("Content-Length","0")));
             RequestMessage requestMessage = new RequestMessage(new RequestHeaderMessage(startLine, header), new RequestBodyMessage(body));
             setController(requestMessage);
             controller.control(requestMessage, out);
