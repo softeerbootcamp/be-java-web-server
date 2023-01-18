@@ -15,7 +15,7 @@ public class FrontController { // TODO 클래스명 변경 또는 메서드명 �
 
     private static final Logger logger = LoggerFactory.getLogger(FrontController.class);
 
-    public void process(HttpRequest httpRequest, HttpResponse httpResponse, DataOutputStream dos) {
+    public void service(HttpRequest httpRequest, HttpResponse httpResponse, DataOutputStream dos) {
         try {
             Controller controller = ControllerMapper.getController(httpRequest);
             controller.process(httpRequest, httpResponse);

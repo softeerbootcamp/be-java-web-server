@@ -32,7 +32,7 @@ public class RequestHandler implements Runnable {
 
             DataOutputStream dos = new DataOutputStream(out);
 
-            frontController.process(httpRequest, httpResponse, dos);
+            frontController.service(httpRequest, httpResponse, dos);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
