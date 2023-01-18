@@ -64,4 +64,10 @@ public class RequestHeaderMessage {
         return Session.loginSession.get(sessionId) != null;
     }
 
+    public String getSubPath(){
+        if (getFileExtension().contains("html"))
+            return "/templates";
+        return "/static";
+    }
+
 }

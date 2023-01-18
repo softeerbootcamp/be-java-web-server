@@ -15,8 +15,6 @@ public class LoginController implements Controller{
 
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
     private static final String RELATIVE_PATH = "./src/main/resources";
-    private static final String STATIC = "/static";
-    private static final String TEMPLATES = "/templates";
 
     private LoginController(){}
 
@@ -34,21 +32,23 @@ public class LoginController implements Controller{
     @Override
     public void control(RequestMessage requestMessage, OutputStream out) {
         byte[] body = getStaticBody(requestMessage);
+        logger.info("body with static page:\n"+body.toString());
         body = dynamicIndexPage(body, requestMessage);
+        logger.info("body after dynamic change:\n"+body.toString());
         Response response = new Response(new DataOutputStream(out));
         response.response(body,requestMessage.getRequestHeaderMessage(), HttpStatus.Success);
     }
 
     private byte[] dynamicIndexPage(byte[] body, RequestMessage requestMessage){
-        return (body.toString()).replace("로그인", Session.loginSession.get(requestMessage.getRequestHeaderMessage().getSessionId())).getBytes();
+        return (new String(body)).replace("로그인", Session.loginSession.get(requestMessage.getRequestHeaderMessage().getSessionId())).getBytes();
     }
 
     private byte[] getStaticBody(RequestMessage requestMessage){
         if (requestMessage.getRequestHeaderMessage().getHttpOnlyURL().contains(".")) {
-            return StaticController.getInstance().getResponseBody(requestMessage);
+            String fileURL = RELATIVE_PATH + requestMessage.getRequestHeaderMessage().getSubPath() + requestMessage.getRequestHeaderMessage().getHttpOnlyURL();
+            return getBodyFile(fileURL);
         }
         if (requestMessage.getRequestHeaderMessage().getHttpOnlyURL().startsWith("/user")) {
-            Controller controller = UserController.getInstance();
             //todo: 로그인 후 user에 대한 조작 명령이 있을 때 여기서 처리
         }
         return new byte[0];
