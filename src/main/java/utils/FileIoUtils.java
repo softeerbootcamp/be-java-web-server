@@ -18,7 +18,7 @@ public final class FileIoUtils {
             Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(filePath).toURI());
             return Files.readAllBytes(path);
         } catch (NullPointerException | URISyntaxException e) {
-            return getEmptyBody();
+            throw new IllegalArgumentException("파일이 존재하지 않습니다.");
         }
     }
 
@@ -26,10 +26,6 @@ public final class FileIoUtils {
         Path path = Paths.get(FileIoUtils.class.getClassLoader().getResource(ERROR_PATH).toURI());
         return Files.readAllBytes(path);
 
-    }
-
-    public static byte[] getEmptyBody() {
-        return "".getBytes();
     }
 
 }
