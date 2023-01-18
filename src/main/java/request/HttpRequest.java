@@ -1,12 +1,16 @@
 package request;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.IOUtils;
 
 public class HttpRequest {
     private static final String lineSeparator = System.lineSeparator();
@@ -14,33 +18,32 @@ public class HttpRequest {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
     private final RequestStartLine requestStartLine;
-    private final String header;
-    private final String body;
+    private final RequestHeader header;
+    private final RequestBody body;
 
-    public HttpRequest(RequestStartLine requestStartLine, String header) {
+    public HttpRequest(RequestStartLine requestStartLine, RequestHeader requestHeader, RequestBody body) {
         this.requestStartLine = requestStartLine;
-        this.header = header;
-        this.body = "";
+        this.header = requestHeader;
+        this.body = body;
     }
 
-    public static HttpRequest of(BufferedReader br) throws IOException {
-        String line = br.readLine(); // Read StartLine
-        RequestStartLine requestLine = RequestStartLine.of(line);
-        logger.debug("Request Line : {}{}{}", lineSeparator, line, lineSeparator);
-        StringBuilder header = new StringBuilder();
-        while (!line.equals("")) { // Read Header
-            line = br.readLine();
-            logger.debug("Input Header : {}",line);
-            header.append(line);
-            header.append(lineSeparator); // Read Header 후 구분 공백 라인
+    public static HttpRequest of(InputStream inputStream) throws IOException {
+        /* TODO :
+            1) PR Feedback 수행 - refactoring [ RequestHeader, RequestBody 분리 ]
+            2) BufferedReader  : InputStream을 읽기 위해 사용
+            */
 
-            if (line == null) {
-                break;
-            }
-        }
-        logger.debug("Header{}{}", lineSeparator, header);
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+        RequestStartLine requestStartLine = RequestStartLine.of(bufferedReader);
+        RequestHeader requestHeader = RequestHeader.of(bufferedReader);
 
-        return new HttpRequest(requestLine, header.toString());
+        logger.debug("[HttpRequest] RequestHeader Line : {}",requestHeader.getStringContentLength());
+        logger.debug("[HttpRequest] RequestHeader value : {}",requestHeader.toValue());
+
+        RequestBody requestBody = RequestBody.of(bufferedReader, requestHeader.getContentLength());
+
+        logger.debug("[ HttpRequest ] requestHeader length : {}",requestHeader.getContentLength());
+        return new HttpRequest(requestStartLine, requestHeader, requestBody);
     }
 
     public String getPath() {
@@ -76,6 +79,6 @@ public class HttpRequest {
     }
 
     public String getBody() {
-        return body;
+        return body.getBody();
     }
 }

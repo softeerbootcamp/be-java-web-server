@@ -2,43 +2,54 @@ package response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import request.Header;
-import request.HttpRequest;
-import util.FileIoUtils;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
+import java.util.Arrays;
 
 public class HttpResponse {
-    private static final String lineSeparator = System.getProperty("line.separator");
+    private static final String lineSeparator = System.lineSeparator();
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
     private final StatusLine statusLine;
-    private final Header header;
+    private final ResponseHeader responseHeader;
     private final byte[] body;
 
-    public HttpResponse(StatusLine statusLine, Header header, byte[] body) {
+    public HttpResponse(StatusLine statusLine,  ResponseHeader responseHeader, byte[] body) {
         this.statusLine = statusLine;
-        this.header = header;
+        this.responseHeader = responseHeader;
         this.body = body;
     }
 
-    public static HttpResponse of(String code, Header header, byte[] body) {
-        return new HttpResponse(StatusLine.of(code), header, body);
+    public static HttpResponse of(String code,  ResponseHeader responseHeader, byte[] body) {
+        return new HttpResponse(StatusLine.of(code), responseHeader, body);
     }
 
-    public static HttpResponse of(String code, Header header) {
-        return new HttpResponse(StatusLine.of(code), header, new byte[0]);
+    public static HttpResponse of(String code,  ResponseHeader responseHeader) { // 리다이렉트
+        return new HttpResponse(StatusLine.of(code), responseHeader, new byte[0]);
     }
 
     public void respond(DataOutputStream dos) {
         try {
+            logger.debug("[HttpResponse] Do respond");
             dos.writeBytes(statusLine.getValue());
             dos.writeBytes(lineSeparator);
-            dos.writeBytes(header.toValue());
+            dos.writeBytes(responseHeader.toValue());
             dos.writeBytes(lineSeparator);
             dos.write(body, 0, body.length);
+            dos.flush();
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    public void respondRedirect(DataOutputStream dos) {
+        try {
+            logger.debug("[HttpResponse] Do respondJoin");
+            dos.writeBytes(statusLine.getValue());
+            dos.writeBytes(lineSeparator);
+            dos.writeBytes(responseHeader.toValue());
+            dos.writeBytes(lineSeparator);
             dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -50,7 +61,7 @@ public class HttpResponse {
     }
 
     public String getHeader() {
-        return header.toValue();
+        return responseHeader.toValue();
     }
 
     public byte[] getBody() {

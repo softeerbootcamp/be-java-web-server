@@ -3,8 +3,8 @@ package response;
 import controller.ServletController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import request.Header;
 import request.HttpRequest;
+import request.RequestHeader;
 import servlet.Servlet;
 import util.FileIoUtils;
 import util.PathUtils;
@@ -12,6 +12,7 @@ import util.PathUtils;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +22,7 @@ public class ResponseHandler {
     *   Exception 을 이렇게 주렁주렁 작성하는 것이 맞는지
     * */
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
+    private static final String lineSeparator = System.lineSeparator();
 
     public static HttpResponse controlRequestAndResponse(HttpRequest httpRequest)
             throws IOException,
@@ -30,38 +32,53 @@ public class ResponseHandler {
             NoSuchMethodException,
             InvocationTargetException {
 
+        logger.debug("[inResponseHandler]");
         if (httpRequest.isForStaticContent()) {
             String path = httpRequest.getPath();
             byte[] body = FileIoUtils.loadFileFromClasspath(path);
             Map<String, String > headerFields = new HashMap<>();
 
-            String mData = PathUtils.pathEndCheck(path);
-            headerFields.put("Content-Type", mData);
+            logger.debug("[ Response Handler ] Content-Type : {}", headerFields.get("Content-Type"));
+            logger.debug("[ Response Handler ] Response_body : {}", String.valueOf(body.length));
 
-            logger.debug("Content-Type : {}", headerFields.get("Content-Type"));
+            String mData = PathUtils.pathEndCheck(path);
+
+            headerFields.put("Content-Type", mData);
             headerFields.put("Content-Length", String.valueOf(body.length));
-            Header header = new Header(headerFields);
-            return HttpResponse.of("200", header, body);
+            ResponseHeader responseHeader = new ResponseHeader(headerFields);
+
+            return HttpResponse.of("200", responseHeader, body);
         }
 
         if (httpRequest.isQueryContent()) {
-            Map<String, String> parameters = httpRequest.getParameters();
-            for (Map.Entry<String, String> entry : parameters.entrySet()) {
-                String key = entry.getKey();
-                String value = entry.getValue();
-                logger.debug("KeyData : {} ValueData : {}",key,value);
-            }
+            logger.debug("[inQueryMethod]");
+            logger.debug(httpRequest.getPath());
 
             String path = httpRequest.getPath();
+            logger.debug("[ResponseHandler] path : {}",path);
             ServletController servletController = ServletController.of(path);
             Servlet servlet = servletController.newInstance();
-            servlet.service(httpRequest);
-
+            StatusLine status = servlet.service(httpRequest);
             Map<String, String > headerFields = new HashMap<>();
 
-            headerFields.put("Location", "/index.html");
-            Header header = new Header(headerFields);
-            return HttpResponse.of("302", header);
+            if(status == StatusLine.Found){
+                logger.debug("[ResponseHandler] Found");
+                headerFields.put("Location", "/index.html");
+                ResponseHeader responseHeader = new ResponseHeader(headerFields);
+                return HttpResponse.of("302", responseHeader);
+            }
+            if(status == StatusLine.NotJoin){
+                logger.debug("[ResponseHandler] NotJoin");
+                headerFields.put("Location", "/user/form.html");
+                ResponseHeader responseHeader = new ResponseHeader(headerFields);
+                return HttpResponse.of("303", responseHeader);
+            }
+            if(status == StatusLine.BadRequest){
+                logger.debug("[ResponseHandler] NotFound");
+                headerFields.put("Location", "/user/login_failed.html");
+                ResponseHeader responseHeader = new ResponseHeader(headerFields);
+                return HttpResponse.of("401", responseHeader);
+            }
         }
 
         throw new RuntimeException("[ERROR] : HttpRequest는 정적 혹은 동적 컨텐츠 요청만 가능합니다.");

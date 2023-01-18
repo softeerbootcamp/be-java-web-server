@@ -19,6 +19,7 @@ public class StringParser {
                 map.put(userValues[0],"");
             }
         }
+
         return map;
     }
 }

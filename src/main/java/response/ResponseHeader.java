@@ -1,18 +1,18 @@
-package request;
+package response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.RequestHandler;
 
 import java.util.Map;
 
-public class Header {
-    private static final String lineSeparator = System.getProperty("line.separator");
-    private static final Logger logger = LoggerFactory.getLogger(Header.class);
+public class ResponseHeader {
+    private static final String lineSeparator = System.lineSeparator();
+    private static final Logger logger = LoggerFactory.getLogger(ResponseHeader.class);
 
-    private Map<String, String> fields;
 
-    public Header(Map<String, String> fields) {
+    private final Map<String, String> fields;
+
+    public ResponseHeader(Map<String, String> fields) {
         this.fields = fields;
     }
 
@@ -28,4 +28,3 @@ public class Header {
         return sb.toString();
     }
 }
-
