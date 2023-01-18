@@ -15,9 +15,9 @@ import java.util.Map;
 
 public class SignUpController implements Controller {
     private static final String USER_ID = "userId";
-    private static final String USER_PassWord = "password";
-    private static final String USER_Name = "name";
-    private static final String USER_Email = "email";
+    private static final String USER_PASS_WORD = "password";
+    private static final String USER_NAME = "name";
+    private static final String USER_EMAIL = "email";
 
     private ResponseHandler resHandler;
 
@@ -30,7 +30,7 @@ public class SignUpController implements Controller {
 
         try{
             checkDuplicateID(UserInfo);
-            User newUser = new User(UserInfo.get(USER_ID), UserInfo.get(USER_PassWord), UserInfo.get(USER_Name), UserInfo.get(USER_Email));
+            User newUser = new User(UserInfo.get(USER_ID), UserInfo.get(USER_PASS_WORD), UserInfo.get(USER_NAME), UserInfo.get(USER_EMAIL));
             Database.addUser(newUser);
         } catch(AlreadyHasSameIdException e) {
             req.getReqLine().put(Request.QUERY, Paths.ENROLL_FAIL_PATH);

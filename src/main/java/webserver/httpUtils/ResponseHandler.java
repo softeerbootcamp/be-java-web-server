@@ -95,7 +95,7 @@ class Byte {
     public static byte[] urlToByte(String url) throws IOException {
         if (url.contains("html") || url.contains("favicon"))
             return Files.readAllBytes(new File(Paths.TEMPLATE_PATH + url).toPath());
-        else
+
             return Files.readAllBytes(new File(Paths.STATIC_PATH + url).toPath());
     }
 }
