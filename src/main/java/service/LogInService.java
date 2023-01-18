@@ -25,8 +25,7 @@ public class LogInService {
             String cookie = addSessionAndGetSessionID(params.get("userId"));
             return new HttpResponse.HttpResponseBuilder()
                     .setHttpStatusLine(new HttpStatusLine(HttpStatus.FOUND, httpVersion))
-                    .setDestination("/index.html")
-                    .makeHeader()
+                    .set302Header("/index.html")
                     .addCookie(cookie)
                     .build();
         }
@@ -35,8 +34,7 @@ public class LogInService {
         // /user/login_failed.html로 이동
         return new HttpResponse.HttpResponseBuilder()
                 .setHttpStatusLine(new HttpStatusLine(HttpStatus.FOUND, httpVersion))
-                .setDestination("/user/login_failed.html")
-                .makeHeader()
+                .set302Header("/user/login_failed.html")
                 .build();
     }
 
