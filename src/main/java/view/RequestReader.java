@@ -26,6 +26,7 @@ public class RequestReader {
         while(!(brStr=br.readLine()).equals("")){
             MessageParser.parseKeyValue(header,brStr);
         }
+        //test for git conflict
         return header;
     }
 
