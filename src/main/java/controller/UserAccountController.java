@@ -19,7 +19,7 @@ import java.util.Set;
 public class UserAccountController implements RequestController {
     private static final Logger logger = LoggerFactory.getLogger(UserAccountController.class);
 
-    static UserAccountController userAccountService;
+    static UserAccountController userAccountController;
 
     private final Map<String, RequestController> routingTable = new HashMap<>() {{
         put("/user/create", (req) -> makeAccount(req));
@@ -29,10 +29,12 @@ public class UserAccountController implements RequestController {
 
 
     public static UserAccountController get() {
-        if (userAccountService == null) {
-            userAccountService = new UserAccountController();
+        if (userAccountController == null) {
+            synchronized (UserAccountController.class){
+                userAccountController = new UserAccountController();
+            }
         }
-        return userAccountService;
+        return userAccountController;
     }
 
     @Override
