@@ -1,6 +1,7 @@
 package utils;
 
 
+import model.SessionData;
 import model.User;
 
 import java.io.File;
@@ -45,21 +46,28 @@ public class FileIoUtils {
         return map;
     }
 
-    public static byte[] writeUserList() {
-        String userListPage = new String(loadFile(PathManager.USER_LIST_PATH));
-        return userListPage.getBytes();
-    }
-
     public static String getLoggedInHome(String username) {
         String homePage = new String(loadFile(PathManager.HOME_PATH));
         return homePage.replace("<!--username-->", String.format("<p>%s</p>", username));
     }
 
-    public static String getUserListPage(Collection<User> users) {
+    public static byte[] makeUserListPage(Collection<User> users, SessionData sessionData) {
         StringBuilder sb = new StringBuilder();
+        String userListPage = new String(loadFile(PathManager.USER_LIST_PATH));
+        sb.append("<tr>");
+        sb.append(String.format("<th scope=\"row\">1</th> <td>%s</td> <td>%s</td> <td>%s</td>",
+                sessionData.getUserId(), sessionData.getName(), sessionData.getEmail()
+        ));
+        sb.append("<td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td>");
+        sb.append("</tr>");
         for (User user : users) {
-
+            if (user.getUserId().equals(sessionData.getUserId()))
+                continue;
+            sb.append("<tr>");
+            sb.append(String.format("<th scope=\"row\">2</th> <td>%s</td> <td>%s</td> <td>%s</td>",
+                    user.getUserId(), user.getName(), user.getEmail()));
+            sb.append("</tr>");
         }
-        return null;
+        return userListPage.replace("<!--userList-->", sb.toString()).getBytes();
     }
 }

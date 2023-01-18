@@ -2,9 +2,9 @@ package model;
 
 public class SessionData {
     private final long timeStamp;
-    private String userId;
-    private String name;
-    private String email;
+    private final String userId;
+    private final String name;
+    private final String email;
 
 
     private SessionData(String userId, String name, String email) {
@@ -20,5 +20,17 @@ public class SessionData {
 
     public long getTimeStamp() {
         return timeStamp;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
     }
 }
