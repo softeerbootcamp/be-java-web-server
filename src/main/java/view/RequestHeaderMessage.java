@@ -19,7 +19,8 @@ public class RequestHeaderMessage {
     private String contentType;
     private Map<String, String> header;
     private Map<String, String> cookie;
-    private String sessionId;
+    private String sessionId = "";
+
     public String getHttpOnlyURL() {
         return httpOnlyURL;
     }
