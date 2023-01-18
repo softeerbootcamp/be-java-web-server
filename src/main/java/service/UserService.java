@@ -11,7 +11,6 @@ import http.response.HttpStatus;
 import model.User;
 import util.FileIoUtil;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Collection;
@@ -26,7 +25,7 @@ public class UserService {
 
         Map<String, String> headers = new HashMap<>();
         headers.put("Location", "/index.html");
-        return HttpResponse.of(HttpStatus.FOUND, "", headers, "".getBytes(), requestLine.getVersion());
+        return HttpResponse.of(HttpStatus.FOUND, "", headers, "".getBytes());
     }
 
     public HttpResponse login(HttpRequest httpRequest) {
@@ -40,10 +39,10 @@ public class UserService {
             HttpSession httpSession = SessionHandler.createSession(user);
             headers.put("Location", "/index.html");
             headers.put("Set-Cookie", "sid=" + httpSession.getSid() + ";" + " Path=/");
-            return HttpResponse.of(HttpStatus.FOUND, "", headers, "".getBytes(), requestLine.getVersion());
+            return HttpResponse.of(HttpStatus.FOUND, "", headers, "".getBytes());
         }
         headers.put("Location", "/user/login_failed.html");
-        return HttpResponse.of(HttpStatus.FOUND, "", headers, "".getBytes(), requestLine.getVersion());
+        return HttpResponse.of(HttpStatus.FOUND, "", headers, "".getBytes());
     }
 
     public HttpResponse list(HttpRequest httpRequest) throws IOException {
@@ -63,8 +62,7 @@ public class UserService {
                     HttpStatus.OK,
                     "text/html",
                     headers,
-                    fileData.getBytes(),
-                    requestLine.getVersion()
+                    fileData.getBytes()
             );
         }
         headers.put("Location", "/user/login.html");
@@ -72,8 +70,7 @@ public class UserService {
                 HttpStatus.FOUND,
                 "",
                 headers,
-                "".getBytes(),
-                requestLine.getVersion()
+                "".getBytes()
         );
     }
 
@@ -84,10 +81,10 @@ public class UserService {
             HttpSession httpSession = SessionHandler.getSession(httpRequest.getSid());
             httpSession.expire();
             headers.put("Location", "/index.html");
-            return HttpResponse.of(HttpStatus.FOUND, "", headers, "".getBytes(), requestLine.getVersion());
+            return HttpResponse.of(HttpStatus.FOUND, "", headers, "".getBytes());
         }
         headers.put("Location", "/user/login.html");
-        return HttpResponse.of(HttpStatus.FOUND, "", headers, "".getBytes(), requestLine.getVersion());
+        return HttpResponse.of(HttpStatus.FOUND, "", headers, "".getBytes());
     }
 
     private boolean isExistUser(String id, String pw) {

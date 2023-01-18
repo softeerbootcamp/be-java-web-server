@@ -80,9 +80,13 @@ public class HttpRequest {
 
     public String getSid() {
         String cookie = requestHeader.getHeader("Cookie");
-        if(Objects.nonNull(cookie)) {
+        if (Objects.nonNull(cookie)) {
             return cookie.split("=")[1];
         }
         return "";
+    }
+
+    public String getHttpVersion() {
+        return requestLine.getVersion();
     }
 }

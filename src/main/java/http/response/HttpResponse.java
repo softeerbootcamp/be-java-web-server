@@ -11,7 +11,6 @@ public class HttpResponse {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
-    private final String httpVersion;
     private final HttpStatus httpStatus;
     private final String contentType;
     private final Map<String, String> headers;
@@ -21,27 +20,24 @@ public class HttpResponse {
             HttpStatus httpStatus,
             String contentType,
             Map<String, String> headers,
-            byte[] body,
-            String httpVersion
+            byte[] body
     ) {
         this.httpStatus = httpStatus;
         this.contentType = contentType;
         this.headers = headers;
         this.body = body;
-        this.httpVersion = httpVersion;
     }
 
     public static HttpResponse of(
             HttpStatus httpStatus,
             String  contentType,
             Map<String, String> headers,
-            byte[] body,
-            String httpVersion
+            byte[] body
     ) {
-        return new HttpResponse(httpStatus, contentType, headers, body, httpVersion);
+        return new HttpResponse(httpStatus, contentType, headers, body);
     }
 
-    public void sendResponse(DataOutputStream dos) {
+    public void sendResponse(DataOutputStream dos, String httpVersion) {
         try {
             dos.writeBytes(httpVersion + " " + httpStatus.getCode() + System.lineSeparator());
             dos.writeBytes("Content-Type: " + contentType + ";charset=utf-8" + System.lineSeparator());
@@ -56,10 +52,6 @@ public class HttpResponse {
         } catch (IOException e) {
             logger.error("While writing response " + e.getMessage());
         }
-    }
-
-    public String getHttpVersion() {
-        return httpVersion;
     }
 
     public HttpStatus getHttpStatus() {

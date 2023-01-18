@@ -2,7 +2,10 @@ package controller;
 
 import http.HttpSession;
 import http.SessionHandler;
-import http.request.*;
+import http.request.HttpRequest;
+import http.request.HttpUri;
+import http.request.RequestHeader;
+import http.request.RequestLine;
 import http.response.HttpResponse;
 import http.response.HttpStatus;
 import util.FileIoUtil;
@@ -33,8 +36,8 @@ public class ViewController implements Controller {
                 HttpStatus.OK,
                 requestHeader.getContentType(),
                 new HashMap<>(),
-                body,
-                requestLine.getVersion());
+                body
+        );
     }
 
     @Override
