@@ -7,10 +7,9 @@ import http.response.HttpResponse;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import service.IndexHtmlService;
+import service.HtmlService;
 import service.ListService;
 import service.StaticFileService;
-import util.HttpResponseUtils;
 
 public class HtmlController implements Controller{
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -31,7 +30,7 @@ public class HtmlController implements Controller{
 
         // index.html service 로그인 O
         if(httpRequest.isLogin())
-            return IndexHtmlService.service(
+            return HtmlService.service(
                     filePath, loginUser, httpVersion, contentType);
 
         // index.html service 로그인 X

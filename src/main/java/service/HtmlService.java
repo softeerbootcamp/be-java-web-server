@@ -6,7 +6,7 @@ import http.response.HttpStatusLine;
 import model.User;
 import util.HttpResponseUtils;
 
-public class IndexHtmlService {
+public class HtmlService {
     public static HttpResponse service(String filePath, User logInUser, String httpVersion, String contentType) {
 
         // 파일 경로를 넘겨서 http response string 생성
