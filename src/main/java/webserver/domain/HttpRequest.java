@@ -1,10 +1,14 @@
 package webserver.domain;
 
 import enums.HttpMethod;
+import util.HttpParser;
 
 import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 import static util.HttpParser.REQUEST_LINE;
+import static util.HttpParser.parseSessionId;
 
 public class HttpRequest {
     private RequestLine requestLine;
@@ -48,5 +52,13 @@ public class HttpRequest {
 
     public String getRequestURL() {
         return requestLine.getUrl();
+    }
+
+    public Optional<UUID> getSessionId() {
+        if (headers.containsKey("Cookie")) {
+            String sid = parseSessionId(headers.get("Cookie"));
+            return Optional.of(UUID.fromString(sid));
+        }
+        return Optional.empty();
     }
 }

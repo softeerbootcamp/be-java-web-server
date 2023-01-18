@@ -18,7 +18,7 @@ class UserServiceTest {
         map.put("password", "password");
         map.put("name", "박원종");
         map.put("email", "wonjong1030@naver.com");
-        UserService userService = new UserService();
+        UserService userService = UserService.getInstance();
         userService.addUser(map);
 
         User user = Database.findUserById(map.get("userId"));

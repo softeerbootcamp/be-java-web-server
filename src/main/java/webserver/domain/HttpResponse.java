@@ -1,9 +1,12 @@
 package webserver.domain;
 
+import enums.UserEnum;
+import model.User;
 import util.FileFinder;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class HttpResponse {
 
@@ -13,6 +16,16 @@ public class HttpResponse {
     private static final String HTML = "text/html";
     private static final String CSS = "text/css";
     private static final String JS = "text/javascript";
+
+    public String unauthorized() {
+        sendRedirect("/user/login_failed.html");
+        return "HTTP/1.1 302 Found\r\n" + processHeaders();
+    }
+
+    public String sendCookieWithRedirect(UUID sid, String url) {
+        addHeader("Set-Cookie", "SID=" + sid + "; Path=/");
+        return sendRedirect(url);
+    }
 
     public String sendRedirect(String url) {
         addHeader("Location", url);

@@ -3,24 +3,23 @@ package was.dispatcher;
 import was.annotation.PostMapping;
 import was.controller.Controller;
 import was.controller.ControllerFactory;
-import was.controller.UserController;
 import webserver.handler.ControllerHandler;
 import webserver.domain.HttpRequest;
 import webserver.domain.HttpResponseMessage;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-public class Dispatcher implements ControllerHandler{
-    private static Dispatcher dispatcher;
+public class PostDispatcher implements ControllerHandler{
+    private static PostDispatcher postDispatcher;
 
-    private Dispatcher() {
+    private PostDispatcher() {
     }
 
-    public static Dispatcher getInstance() {
-        if (dispatcher != null) {
-            return dispatcher;
+    public static PostDispatcher getInstance() {
+        if (postDispatcher != null) {
+            return postDispatcher;
         }
-        return dispatcher = new Dispatcher();
+        return postDispatcher = new PostDispatcher();
     }
     @Override
     public HttpResponseMessage handle(HttpRequest httpRequest) {

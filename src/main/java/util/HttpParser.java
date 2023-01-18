@@ -12,9 +12,11 @@ import java.io.InputStreamReader;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
+
 public class HttpParser {
     public static final String REQUEST_LINE = "Request Line";
     private static final Logger logger = LoggerFactory.getLogger(HttpParser.class);
+
     public static HttpRequestMessage parseHttpRequest(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
         Map<String, String> header = parseHeader(br);
@@ -22,7 +24,8 @@ public class HttpParser {
 
         return new HttpRequestMessage(header, body);
     }
-    private static Map<String, String> parseHeader(BufferedReader br) throws IOException{
+
+    private static Map<String, String> parseHeader(BufferedReader br) throws IOException {
         Map<String, String> header = new HashMap<>();
         String nextLine = br.readLine();
         header.put(REQUEST_LINE, nextLine);
@@ -32,7 +35,7 @@ public class HttpParser {
             if (!nextLine.contains(": ")) {
                 continue;
             }
-            logger.debug("{}",  nextLine);
+            logger.debug("{}", nextLine);
             String[] line = nextLine.split(": ");
             String key = line[0];
             String value = line[1];
@@ -40,7 +43,8 @@ public class HttpParser {
         }
         return header;
     }
-    private static Map<String, String> parseBody(Map<String, String> header, BufferedReader br) throws IOException{
+
+    private static Map<String, String> parseBody(Map<String, String> header, BufferedReader br) throws IOException {
         Map<String, String> body = new HashMap<>();
         if (header.get(REQUEST_LINE).contains("POST")) {
             int contentLength = Integer.valueOf(header.get("Content-Length"));
@@ -49,11 +53,12 @@ public class HttpParser {
             String line = String.valueOf(data);
             body = parseQueryString(URLDecoder.decode(line, "UTF-8"));
             for (String s : body.keySet()) {
-                logger.debug("{}: {}",  s, body.get(s));
+                logger.debug("{}: {}", s, body.get(s));
             }
         }
         return body;
     }
+
     public static Map<String, String> parseQueryString(String query) {
         String[] param = query.split("&");
         Map<String, String> map = new HashMap<>();
@@ -62,5 +67,9 @@ public class HttpParser {
             map.put(attributes[0], attributes[1]);
         }
         return map;
+    }
+
+    public static String parseSessionId(String query) {
+        return query.substring(query.indexOf("=") + 1);
     }
 }

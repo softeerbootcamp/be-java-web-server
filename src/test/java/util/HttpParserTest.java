@@ -26,4 +26,10 @@ class HttpParserTest {
             assertThat(map.get(key)).isEqualTo(expectedMap.get(key));
         }
     }
+    @Test
+    void 세션ID_파싱_테스트() {
+        String sid = HttpParser.parseSessionId("SID=e72040da-00a6-47d7-8ac9-78f17dbb7b4d");
+
+        assertThat(sid).isEqualTo("e72040da-00a6-47d7-8ac9-78f17dbb7b4d");
+    }
 }

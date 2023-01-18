@@ -93,3 +93,21 @@ Java Web Application Server 2022
   - 인자로 받은 HttpServletResponse 객체에 페이지 생성한 것을 전달해 준다.
   - 스레드 작업이 끝나면 HttpServletResponse 객체를 HTTP response로 전환하고 브라우저로 반환.
   - HttpServletResponse 객체가 소멸된다.
+
+### 01/17 TUE
+- 로이 필딩이 말하는 오늘날 restful이 지켜지지 않는 이유
+  - Uniform Interface
+    - self descriptive
+      - Media type 재정의
+      - Link 헤더로 명세 확인할 수 있는 링크 포함
+    - HATEOS
+      - 어플리케이션의 상태는 하이퍼링크로 전이 되어야한다.
+      - 하나의 상태에서 접근가능한 모든 정보를 제공해야한다.
+      - HTML은 잘 지켜지고 있음
+      - json은 Link나 location 헤더로 표현해주어야함
+      - 이렇게 되면 같은 요청에 대한 uri 가 변경되어도 클라이언트에서는 변경할 것이 없다.
+- 톰캣의 session timeout
+  - maxInactiveInterval 이란 비활성 최대주기를 저장해놓는다.
+  - 쿠키를 통해 요청한 사용자의 request가 이전 request 와의 시간 차이를 파악한다.
+  - 이게 최대 주기를 넘었다면, session을 expire 시키고 사용자에겐 세션 만료를 안내한다.
+  - 다시 로그인을 하고 세션을 쿠키로 받는다.
