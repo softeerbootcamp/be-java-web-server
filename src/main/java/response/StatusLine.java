@@ -9,7 +9,7 @@ public enum StatusLine {
     OK("200", "HTTP/1.1 200 OK"),
     Found("302", "HTTP/1.1 302 Found"),
     NotJoin("303", "HTTP/1.1 303 Not Join"),
-    NotFound("304", "HTTP/1.1 304 Not Found"),
+    BadRequest("401", "HTTP/1.1 401 Bad Request"),
     ELSE("", "");
 
     private final String code;

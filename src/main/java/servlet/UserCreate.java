@@ -20,7 +20,7 @@ public class UserCreate implements Servlet{
                 return StatusLine.Found;
             } catch (RuntimeException e){
                 logger.debug("[UserCreate] runtimeException");
-                return StatusLine.NotFound;
+                return StatusLine.NotJoin;
             }
         }
 
@@ -30,7 +30,7 @@ public class UserCreate implements Servlet{
                 return StatusLine.Found;
             } catch (RuntimeException e){
                 logger.debug("[UserCreate] runtimeException");
-                return StatusLine.NotFound;
+                return StatusLine.NotJoin;
             }
         }
         return null;

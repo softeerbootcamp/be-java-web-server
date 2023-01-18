@@ -24,7 +24,7 @@ public class Userlogin implements Servlet{
                 return StatusLine.Found;
             } catch (RuntimeException e){
                 logger.debug("[UserCreate] runtimeException");
-                return StatusLine.NotFound;
+                return StatusLine.BadRequest;
             }
         }
 
@@ -34,7 +34,7 @@ public class Userlogin implements Servlet{
                 return StatusLine.Found;
             } catch (RuntimeException e){
                 logger.debug("[UserCreate] runtimeException");
-                return StatusLine.NotFound;
+                return StatusLine.BadRequest;
             }
         }
         return null;    }

@@ -36,8 +36,6 @@ public class HttpResponse {
             dos.writeBytes(lineSeparator);
             dos.writeBytes(responseHeader.toValue());
             dos.writeBytes(lineSeparator);
-            logger.debug("body : {}" , new String(body));
-            logger.debug("body length : {}" , body.length);
             dos.write(body, 0, body.length);
             dos.flush();
         } catch (IOException e) {

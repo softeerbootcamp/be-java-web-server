@@ -73,11 +73,11 @@ public class ResponseHandler {
                 ResponseHeader responseHeader = new ResponseHeader(headerFields);
                 return HttpResponse.of("303", responseHeader);
             }
-            if(status == StatusLine.NotFound){
+            if(status == StatusLine.BadRequest){
                 logger.debug("[ResponseHandler] NotFound");
-                headerFields.put("Location", "/user/login.html");
+                headerFields.put("Location", "/user/login_failed.html");
                 ResponseHeader responseHeader = new ResponseHeader(headerFields);
-                return HttpResponse.of("304", responseHeader);
+                return HttpResponse.of("401", responseHeader);
             }
         }
 
