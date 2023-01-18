@@ -1,44 +1,43 @@
 package request.method.POST.handlers;
 
-import db.Database;
 import file.FileContentType;
+import model.Session;
 import model.User;
 import request.Request;
 import request.RequestParser;
 import response.HttpResponseStatus;
 import response.Response;
-import session.Session;
 
 import java.util.Map;
 import java.util.UUID;
 
-public class POSTLoginHandler implements POSTHandler {
-    private static final POSTLoginHandler POST_LOGIN_HANDLER;
+public class POSTLoginHandler extends POSTHandler {
+    private static final POSTLoginHandler instance;
 
     static {
-        POST_LOGIN_HANDLER = new POSTLoginHandler();
+        instance = new POSTLoginHandler();
     }
 
     public static POSTLoginHandler getInstance() {
-        return POST_LOGIN_HANDLER;
+        return instance;
     }
 
     @Override
     public Response handle(Request request) {
         try {
-            Map<String, String> requestBody = RequestParser.parseBody(request);
-            User user = Database.findUserById(requestBody.get("userId"));
+            Map<String, String> requestBody = RequestParser.parseFormEncodedBody(request);
+            User user = userService.findUser(requestBody.get("userId")).orElseThrow(()->{ throw new IllegalArgumentException(); });
             if (user.getPassword().equals(requestBody.get("password"))) {
-                String uuid = String.valueOf(UUID.randomUUID());
-                Session.add(uuid, user);
+                String sid = String.valueOf(UUID.randomUUID());
+                sessionService.addSession(Session.of(sid, user));
                 return Response.of(HttpResponseStatus.FOUND.getMessage().getBytes(), request.getResourceFileContentType(), HttpResponseStatus.FOUND,
-                        "Set-Cookie: sid=" + uuid + ";Path=/\r\n" +
+                        "Set-Cookie: sid=" + sid + ";Path=/\r\n" +
                                 "Location: /index.html\r\n");
             }
             throw new IllegalArgumentException();
         } catch (IllegalArgumentException e) {
             return Response.of("<script>alert('login failed'); window.location.href = 'http://localhost:8080/user/login_failed.html';</script>".getBytes(),
-                    FileContentType.HTML.getContentType(), HttpResponseStatus.UNAUTHORIZED);
+                    FileContentType.HTML.getContentType(), HttpResponseStatus.BAD_REQUEST);
         }
     }
 }

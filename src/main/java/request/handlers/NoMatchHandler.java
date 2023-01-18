@@ -4,15 +4,15 @@ import request.Request;
 import response.HttpResponseStatus;
 import response.Response;
 
-public class POSTNoMatchHandler implements POSTHandler {
-    private static final POSTNoMatchHandler POST_NO_MATCH_HANDLER;
+public class POSTNoMatchHandler extends POSTHandler {
+    private static final POSTNoMatchHandler instance;
 
     static {
-        POST_NO_MATCH_HANDLER = new POSTNoMatchHandler();
+        instance = new POSTNoMatchHandler();
     }
 
     public static POSTHandler getInstance() {
-        return POST_NO_MATCH_HANDLER;
+        return instance;
     }
 
     @Override
