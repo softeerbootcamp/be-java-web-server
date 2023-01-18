@@ -35,7 +35,7 @@ public class RequestHeaderMessage {
     public String getRequestAttribute() {return requestAttribute;}
 
     public String getContentType() {return contentType;}
-
+    public String getSessionId() {return sessionId;}
     public RequestHeaderMessage(String startLine, Map<String,String> header){
         this.startLine = startLine;
         String[] headers = startLine.split(" ");
