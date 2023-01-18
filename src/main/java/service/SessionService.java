@@ -2,6 +2,8 @@ package service;
 
 import db.Database;
 import db.SessionDatabase;
+import model.Session;
+import model.User;
 import util.Cookie;
 
 import java.util.Optional;
@@ -17,6 +19,13 @@ public class SessionService {
         }
         return true;
 
+    }
+
+    public Cookie persistUser(User validUser) {
+        Session session = new Session(validUser);
+        sessionDatabase.addData(session);
+        Cookie cookie = new Cookie(Session.SESSION_ID, session.getUuid());
+        return cookie;
     }
 
 }
