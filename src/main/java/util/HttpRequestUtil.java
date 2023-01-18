@@ -27,6 +27,8 @@ public class HttpRequestUtil {
                 logger.debug("param: " + URLDecoder.decode(temp[0], "UTF-8") + ' ' + URLDecoder.decode(temp[1], "UTF-8"));
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                return params;
             }
         }
         return params;
@@ -38,7 +40,7 @@ public class HttpRequestUtil {
         while (Objects.nonNull(line) && !line.equals("")) {
             logger.debug("header: " + line);
             String[] header = line.split(COLON);
-            if(header[0] == "Cookie"){
+            if(header[0].equals("Cookie")){
                 header[1] = extractCookie(header[1]);
             }
             if (header.length == 2) headers.put(header[0], header[1]);
