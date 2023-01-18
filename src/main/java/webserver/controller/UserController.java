@@ -13,7 +13,7 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SignUpController implements Controller {
+public class UserController implements Controller {
     private static final String USER_ID = "userId";
     private static final String USER_PASS_WORD = "password";
     private static final String USER_NAME = "name";

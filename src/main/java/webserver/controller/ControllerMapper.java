@@ -1,8 +1,6 @@
 package webserver.controller;
 
-import org.checkerframework.checker.units.qual.C;
 import webserver.httpUtils.Request;
-import webserver.httpUtils.RequestParser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +14,7 @@ public class ControllerMapper {
     private ControllerMapper()
     {
         controllerMap = new HashMap<>();
-        controllerMap.put(SIGNUP, new SignUpController());
+        controllerMap.put(SIGNUP, new UserController());
         controllerMap.put(STATIC, new StaticFileController());
     }
 
@@ -34,9 +32,9 @@ public class ControllerMapper {
         Map<String, String> reqLine = req.getReqLine();
         String query = reqLine.get(Request.QUERY);
 
-        if(query.contains("create"))
+        if(query.contains("user/"))
         {
-            return new SignUpController();
+            return new UserController();
         }
         return new StaticFileController();
     }

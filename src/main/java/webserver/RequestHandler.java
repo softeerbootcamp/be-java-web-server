@@ -4,11 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.controller.Controller;
 import webserver.controller.ControllerMapper;
-import webserver.controller.SignUpController;
 import webserver.httpUtils.Request;
 import webserver.httpUtils.RequestParser;
 import webserver.httpUtils.Response;
-import webserver.httpUtils.ResponseHandler;
 
 import java.io.*;
 import java.net.Socket;
