@@ -5,6 +5,7 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import repository.SessionRepo;
+import repository.UserRepo;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -16,10 +17,13 @@ public class SessionService {
         return SessionRepo.createSession(user.getUserId());
     }
 
-    public static User getUserBySessionId(String ssid) {
-        if (isValidSSID(ssid))
-            SessionRepo.findBySSID(ssid);
-        return null;
+    public static Optional<User> getUserBySessionId(String ssid) {
+        if (isValidSSID(ssid)) {
+            Session session = SessionRepo.findBySSID(ssid).get();
+            User user = UserRepo.findUserById(session.getUserId());
+            return Optional.ofNullable(user);
+        }
+        return Optional.empty();
     }
 
     public static boolean isValidSSID(String ssid) {
