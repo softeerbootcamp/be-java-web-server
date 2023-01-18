@@ -48,4 +48,14 @@ public class MessageParser {
         }
     }
 
+    public static Map<String, String> parseCookie(String cookieMsg){
+        Map<String, String> cookies = new HashMap<>();
+        try{
+            String[] cookieSet = cookieMsg.split("; ");
+            cookies = Stream.of(cookieSet).map(s->s.split("=")).collect(Collectors.toMap(a->a[0],a->a[1]));
+        }catch (ArrayIndexOutOfBoundsException e){
+        }
+        return cookies;
+    }
+
 }

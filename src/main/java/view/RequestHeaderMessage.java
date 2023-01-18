@@ -17,6 +17,7 @@ public class RequestHeaderMessage {
     private String requestAttribute;
     private String contentType;
     private Map<String, String> header;
+    private Map<String, String> cookie;
     private String sessionId = "";
     public String getHttpOnlyURL() {
         return httpOnlyURL;
@@ -42,6 +43,7 @@ public class RequestHeaderMessage {
         parseHttpReqURL(httpReqURL);
         httpVersion = headers[2];
         this.header = header;
+        this.cookie = getCookies();
     }
 
     private void parseHttpReqURL(String httpReqURL){
@@ -50,6 +52,10 @@ public class RequestHeaderMessage {
         this.fileExtension = Files.getFileExtension(httpOnlyURL);
         this.requestAttribute = MessageParser.getRequestAttribute(httpOnlyURL);
         this.contentType = "text/" + (fileExtension.equals("js")?"javascript":fileExtension);
+    }
+
+    private Map<String,String> getCookies(){
+        return MessageParser.parseCookie(header.get("Cookie"));
     }
 
 }
