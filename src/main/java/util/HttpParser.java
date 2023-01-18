@@ -63,4 +63,8 @@ public class HttpParser {
         }
         return map;
     }
+
+    public static String parseSessionId(String query) {
+        return query.substring(query.indexOf("=") + 1);
+    }
 }
