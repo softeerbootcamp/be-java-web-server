@@ -11,16 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Context {
-
-    private static final Context instance = new Context();
-
-    private Context() {
-    }
-
-    public static Context getInstance() {
-        return instance;
-    }
-
     public Map<String, Controller> createController() {
         Map<String, Controller> controllers = new HashMap<>();
         UserService userService = UserService.getInstance();
