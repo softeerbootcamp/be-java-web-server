@@ -86,20 +86,20 @@ public class HttpRequest {
         return startLine.getMethod();
     }
 
-    public HttpRequestBody getRequestBody() {
-        return requestBody;
-    }
-
     public Map<String, String> getParameters() {
         return requestBody.getParameters();
     }
 
     public String getParameter(String key) {
-        return requestBody.getParameters().get(key);
+        return getParameters().get(key);
     }
 
     public Uri getUri() {
         return startLine.getUri();
+    }
+
+    public String getPath() {
+        return getUri().getPath();
     }
 
     public Map<String, String> getHttpHeaders() {

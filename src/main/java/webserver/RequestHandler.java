@@ -33,7 +33,7 @@ public class RequestHandler implements Runnable {
 
             HttpResponse httpResponse = HttpResponse.createDefaultHttpResponse(out);
 
-            Controller controller = controllers.getOrDefault(httpRequest.getUri().getPath(), controllers.get("file"));
+            Controller controller = controllers.getOrDefault(httpRequest.getPath(), controllers.get("file"));
             logger.info(controller.toString());
 
             controller.service(httpRequest, httpResponse);

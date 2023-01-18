@@ -22,7 +22,7 @@ public class ResourceController extends AbstractController {
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         try {
-            String path = httpRequest.getUri().getPath();
+            String path = httpRequest.getPath();
             ContentType contentType = ContentType.from(path);
             String filePath = contentType.getDirectory() + path;
 
