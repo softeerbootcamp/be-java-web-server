@@ -4,6 +4,7 @@ import http.HttpHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpRequestUtils;
+import webserver.session.SessionManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -77,8 +78,7 @@ public class HttpRequest {
 
     public boolean isLogin() {
         String sessionId = httpHeader.getHeader("Cookie");
-        // TODO 세션매니저를 사용하여 로그인 여부 반환
-        return true;
+        return sessionId != null && SessionManager.hasSession(sessionId);
     }
 
     public HttpMethod getMethod() {

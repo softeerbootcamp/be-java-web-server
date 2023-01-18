@@ -15,4 +15,8 @@ public class SessionManager {
         sessionStore.put(sessionId, userId);
         return sessionId;
     }
+
+    public static boolean hasSession(String sessionId) {
+        return sessionStore.containsKey(sessionId);
+    }
 }
