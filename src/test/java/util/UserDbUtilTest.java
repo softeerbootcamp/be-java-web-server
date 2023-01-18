@@ -8,11 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
 
-public class ManageDBTest {
-    private final Logger logger = LoggerFactory.getLogger(ManageDBTest.class);
+public class UserDbUtilTest {
+    private final Logger logger = LoggerFactory.getLogger(UserDbUtilTest.class);
     @Test
     public void saveUserTest(){
         //given
@@ -23,10 +21,10 @@ public class ManageDBTest {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
             HttpRequest httpRequest = HttpRequest.createReqeust(br);
         //when
-            ManageDB.saveUser(httpRequest);
+            UserDbUtil.saveUser(httpRequest);
 
         //then
-            User result = ManageDB.findUserById("jieon");
+            User result = UserDbUtil.findUserById("jieon");
             logger.debug("test: "+result.toString());
             Assertions.assertThat(result.getUserId()).isEqualTo(user.getUserId());
             Assertions.assertThat(result.getName()).isEqualTo(user.getName());
