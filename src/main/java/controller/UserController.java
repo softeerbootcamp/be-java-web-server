@@ -1,6 +1,7 @@
 package controller;
 
 import model.domain.User;
+import model.general.ContentType;
 import model.general.Header;
 import model.general.Method;
 import model.general.Status;
@@ -84,7 +85,7 @@ public class UserController implements Controller {
         if(Sessions.isExistSession(request.getSessionId())) {
             byte[] body = getUserListHtml(userService.getUserList());
             // TODO: body에 빈 배열 넘어오는 경우 예외 처리
-            headers = HeaderUtils.response200Header(requestLine.getContentType(), body.length);
+            headers = HeaderUtils.response200Header(ContentType.HTML, body.length);
             return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.OK), headers, body);
         }
 
@@ -98,7 +99,7 @@ public class UserController implements Controller {
 
         for(User user : users) {
             userList.append("<tr><th scope=\"row\">")
-                    .append(row++)
+                    .append(++row)
                     .append("</th><td>")
                     .append(user.getUserId()).append("</td><td>")
                     .append(user.getName())
