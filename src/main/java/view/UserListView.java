@@ -14,15 +14,27 @@ public class UserListView implements View {
 
     @Override
     public void render(HttpRequest request, HttpResponse response, Model data) {
+        String page = new String(ResourceUtils.loadFileFromClasspath("/user/list.html"));
         User authUser = (User) data.getAttribute("authUser");
-        List<User> users = new ArrayList<>();
 
+        String name = "<!--<li>name</li>-->";
+        String replaceName = "<li>" + authUser.getName() + "</li>";
+        page = page.replace(name, replaceName);
+
+        List<User> users = new ArrayList<>();
         for (Object o : (Collection<?>) data.getAttribute("users")) {
             users.add((User) o);
         }
+        String contentOfUsers = contentOfUsers(users, authUser);
+        String target = "<!--userList-->";
+        page = page.replace(target, contentOfUsers);
 
+        response.setBody(page.getBytes());
+        response.addHeader("Content-Type", ContentType.TEXT_HTML.getType());
+    }
+
+    private String contentOfUsers(List<User> users, User authUser) {
         int idx = 1;
-
         StringBuilder content = new StringBuilder();
 
         for (User user: users) {
@@ -41,10 +53,6 @@ public class UserListView implements View {
             content.append("</td></tr>");
         }
 
-        byte[] bytes = ResourceUtils.loadFileFromClasspath("/user/list.html");
-        String html = new String(bytes);
-        String[] split = html.split("<tbody>", 2);
-        response.setBody((split[0] + "<tbody>" + content + split[1]).getBytes());
-        response.addHeader("Content-Type", ContentType.TEXT_HTML.getType());
+        return content.toString();
     }
 }
