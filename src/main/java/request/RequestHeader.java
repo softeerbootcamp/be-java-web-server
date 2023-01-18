@@ -53,8 +53,8 @@ public class RequestHeader {
     public Optional<String> getContentLength() {
         return Optional.ofNullable(fields.get("Content-Length"));
     }
-
-    public String getStringContentLength() {
-        return fields.get("Content-Length");
+    public Optional<String> getCookie() {
+        return Optional.ofNullable(fields.get("Cookie"));
     }
+
 }

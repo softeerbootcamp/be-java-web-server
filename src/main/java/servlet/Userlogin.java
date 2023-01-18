@@ -23,7 +23,8 @@ public class Userlogin implements Servlet{
                 get(httpRequest);
                 return StatusLine.Found;
             } catch (RuntimeException e){
-                return StatusLine.BadRequest;
+                return StatusLine.TemporaryRedirect
+                ;
             }
         }
 
@@ -32,7 +33,8 @@ public class Userlogin implements Servlet{
                 post(httpRequest);
                 return StatusLine.Found;
             } catch (RuntimeException e){
-                return StatusLine.BadRequest;
+                return StatusLine.TemporaryRedirect
+                ;
             }
         }
         return null;    }
@@ -45,5 +47,7 @@ public class Userlogin implements Servlet{
     @Override
     public void post(HttpRequest httpRequest) {
         UserService.postlogin(httpRequest);
+
+
     }
 }

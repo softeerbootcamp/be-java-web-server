@@ -9,7 +9,6 @@ public class ResponseHeader {
     private static final String lineSeparator = System.lineSeparator();
     private static final Logger logger = LoggerFactory.getLogger(ResponseHeader.class);
 
-
     private final Map<String, String> fields;
 
     public ResponseHeader(Map<String, String> fields) {

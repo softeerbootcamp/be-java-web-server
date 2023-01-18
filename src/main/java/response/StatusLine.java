@@ -8,8 +8,9 @@ import java.util.Arrays;
 public enum StatusLine {
     OK("200", "HTTP/1.1 200 OK"),
     Found("302", "HTTP/1.1 302 Found"),
-    NotJoin("303", "HTTP/1.1 303 Not Join"),
-    BadRequest("401", "HTTP/1.1 401 Bad Request"),
+    SeeOther("303", "HTTP/1.1 303 See Other"),
+    TemporaryRedirect("307", "HTTP/1.1 303 Temporary Redirect"),
+    Unauthorized("401", "HTTP/1.1 401 Unauthorized"),
     ELSE("", "");
 
     private final String code;

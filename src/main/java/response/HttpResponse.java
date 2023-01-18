@@ -14,6 +14,7 @@ public class HttpResponse {
     private final StatusLine statusLine;
     private final ResponseHeader responseHeader;
     private final byte[] body;
+//    private final String cookie;
 
     public HttpResponse(StatusLine statusLine,  ResponseHeader responseHeader, byte[] body) {
         this.statusLine = statusLine;
@@ -29,10 +30,15 @@ public class HttpResponse {
         return new HttpResponse(StatusLine.of(code), responseHeader, new byte[0]);
     }
 
-    public void respond(DataOutputStream dos) {
+//    public static HttpResponse of(String code,  ResponseHeader responseHeader) { // 리다이렉트
+//        return new HttpResponse(StatusLine.of(code), responseHeader, new byte[0]);
+//    }
+
+    public void respond(DataOutputStream dos) { //body 담음
         try {
             dos.writeBytes(statusLine.getValue());
             dos.writeBytes(lineSeparator);
+            logger.debug("lineSucSS : {}",responseHeader.toValue());
             dos.writeBytes(responseHeader.toValue());
             dos.writeBytes(lineSeparator);
             dos.write(body, 0, body.length);
@@ -42,10 +48,11 @@ public class HttpResponse {
         }
     }
 
-    public void respondRedirect(DataOutputStream dos) {
+    public void respondRedirect(DataOutputStream dos) { // body 안담음
         try {
             dos.writeBytes(statusLine.getValue());
             dos.writeBytes(lineSeparator);
+            logger.debug("lineRedirectSS : {}",responseHeader.toValue());
             dos.writeBytes(responseHeader.toValue());
             dos.writeBytes(lineSeparator);
             dos.flush();

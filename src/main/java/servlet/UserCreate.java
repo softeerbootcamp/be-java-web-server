@@ -19,7 +19,7 @@ public class UserCreate implements Servlet{
                 get(httpRequest);
                 return StatusLine.Found;
             } catch (RuntimeException e){
-                return StatusLine.NotJoin;
+                return StatusLine.SeeOther;
             }
         }
 
@@ -28,7 +28,7 @@ public class UserCreate implements Servlet{
                 post(httpRequest);
                 return StatusLine.Found;
             } catch (RuntimeException e){
-                return StatusLine.NotJoin;
+                return StatusLine.SeeOther;
             }
         }
         return null;

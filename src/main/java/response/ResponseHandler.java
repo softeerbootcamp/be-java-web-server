@@ -31,8 +31,6 @@ public class ResponseHandler {
             IllegalAccessException,
             NoSuchMethodException,
             InvocationTargetException {
-
-        logger.debug("[inResponseHandler]");
         if (httpRequest.isForStaticContent()) {
             String path = httpRequest.getPath();
             byte[] body = FileIoUtils.loadFileFromClasspath(path);
@@ -45,13 +43,13 @@ public class ResponseHandler {
 
             headerFields.put("Content-Type", mData);
             headerFields.put("Content-Length", String.valueOf(body.length));
+            headerFields.put("Set-Cookie", "");
             ResponseHeader responseHeader = new ResponseHeader(headerFields);
 
             return HttpResponse.of("200", responseHeader, body);
         }
 
         if (httpRequest.isQueryContent()) {
-            logger.debug("[inQueryMethod]");
             logger.debug(httpRequest.getPath());
 
             String path = httpRequest.getPath();
@@ -67,18 +65,19 @@ public class ResponseHandler {
                 ResponseHeader responseHeader = new ResponseHeader(headerFields);
                 return HttpResponse.of("302", responseHeader);
             }
-            if(status == StatusLine.NotJoin){
-                logger.debug("[ResponseHandler] NotJoin");
+            if(status == StatusLine.SeeOther){
+                logger.debug("[ResponseHandler] SeeOther");
                 headerFields.put("Location", "/user/form.html");
                 ResponseHeader responseHeader = new ResponseHeader(headerFields);
                 return HttpResponse.of("303", responseHeader);
             }
-            if(status == StatusLine.BadRequest){
-                logger.debug("[ResponseHandler] NotFound");
+            if(status == StatusLine.TemporaryRedirect){
+                logger.debug("[ResponseHandler] TemporaryRedirect");
                 headerFields.put("Location", "/user/login_failed.html");
                 ResponseHeader responseHeader = new ResponseHeader(headerFields);
-                return HttpResponse.of("401", responseHeader);
+                return HttpResponse.of("307", responseHeader);
             }
+
         }
 
         throw new RuntimeException("[ERROR] : HttpRequest는 정적 혹은 동적 컨텐츠 요청만 가능합니다.");
