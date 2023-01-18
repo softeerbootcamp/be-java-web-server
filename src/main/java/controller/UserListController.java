@@ -4,13 +4,7 @@ import db.Database;
 import model.User;
 import utils.FileIoUtils;
 import webserver.*;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 public class UserListController implements Controller{
 
