@@ -44,11 +44,7 @@ public class UserController implements Controller {
         User user = (User) userService.createModel(userMap);
         userDatabase.addData(user);
 
-        Session session = new Session(user);
-        sessionDataBase.addData(session);
-
-        Cookie cookie = new Cookie(Session.SESSION_ID, session.getUuid());
-
+        Cookie cookie = processSignUp(user);
 
         HttpResponse httpResponse = new HttpResponse(new response.Data(dataOutputStream), FileType.HTML, HttpStatus.RE_DIRECT
                 , cookie);
@@ -57,6 +53,13 @@ public class UserController implements Controller {
         logger.debug("생성된 Cookie-sid:{}", cookie.getValue());
 
         return httpResponse;
+    }
+
+    private Cookie processSignUp(User user) {
+        Session session = new Session(user);
+        sessionDataBase.addData(session);
+        Cookie cookie = new Cookie(Session.SESSION_ID, session.getUuid());
+        return cookie;
     }
 
     @ControllerMethodInfo(path = "/user/form.html", type = RequestDataType.TEMPLATES_FILE, method = HttpMethod.GET)
