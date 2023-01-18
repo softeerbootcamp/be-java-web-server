@@ -56,6 +56,16 @@ public class HttpResponse {
             return null;
         }
 
+        public HttpResponseBuilder set200Header(String contentType, int bodyLength){
+            this.header = HttpResponseUtils.makeResponse200Header(contentType, body.length);
+            return this;
+        }
+
+        public HttpResponseBuilder set300Header(String destination){
+            this.header = HttpResponseUtils.makeResponse302Header(destination);
+            return this;
+        }
+
         public HttpResponseBuilder setBody(byte[] body){
             this.body = body;
             return this;
