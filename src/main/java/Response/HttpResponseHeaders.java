@@ -1,5 +1,7 @@
 package Response;
 
+import util.HttpResponseUtil;
+
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -10,6 +12,9 @@ public class HttpResponseHeaders {
 
     public HttpResponseHeaders(Map<String, String> headers) {
         this.headers = headers;
+    }
+    public HttpResponseHeaders(String requestPath, int length){
+        headers = HttpResponseUtil.generateHeaders(requestPath,length);
     }
 
     public Map<String, String> getHeaders() {
