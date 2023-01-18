@@ -1,9 +1,11 @@
 package controller;
 
 import db.Database;
+import db.SessionStorage;
 import model.User;
 import model.request.Request;
 import model.response.Response;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -11,6 +13,12 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 public class UserListControllerTest {
+
+    @BeforeEach
+    void cleanDb() {
+        Database.cleanAll();
+        SessionStorage.cleanAll();
+    }
 
     @Test
     @DisplayName("유저 리스트 표시 기능")

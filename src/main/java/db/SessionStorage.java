@@ -24,4 +24,8 @@ public class SessionStorage {
     public static boolean isValidate(String sid) {
         return sessionUsers.containsKey(sid);
     }
+
+    public static void cleanAll() {
+        sessionUsers.clear();
+    }
 }
