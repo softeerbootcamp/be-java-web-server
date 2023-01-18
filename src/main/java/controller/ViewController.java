@@ -7,6 +7,7 @@ import model.request.Request;
 import model.request.RequestLine;
 import model.response.Response;
 import model.response.StatusLine;
+import model.session.Sessions;
 import util.HeaderUtils;
 
 import org.slf4j.Logger;
@@ -37,6 +38,10 @@ public class ViewController implements Controller {
     private Response getStaticFileResponse(Request request) {
         RequestLine requestLine = request.getRequestLine();
 
+        if(Sessions.isExistSession(request.getSessionId()) && requestLine.getUri().equals("/index.html")) {
+
+        }
+
         byte[] body;
         try {
             body = Files.readAllBytes(new File(generatePath(requestLine.getContentType()) +
@@ -53,5 +58,18 @@ public class ViewController implements Controller {
     private String generatePath(ContentType contentType) {
         if(HTML.equals(contentType) || ICO.equals(contentType)) return templatePath;
         else return staticPath;
+    }
+
+    private byte[] getIndexHtmlWhenLogin(String userId) {
+        byte[] body;
+        try {
+            body = Files.readAllBytes(new File("./src/main/resources/templates/index.html").toPath());
+        } catch(IOException e) {
+            return new byte[0];
+        }
+
+        String originalIndexHtml = new String(body);
+        String resultIndexHtml = originalIndexHtml.replace("로그인", userId);
+        return resultIndexHtml.getBytes();
     }
 }
