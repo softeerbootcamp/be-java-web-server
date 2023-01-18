@@ -6,7 +6,9 @@ import service.SignUpService;
 import webserver.HttpRequest;
 import webserver.HttpResponse;
 
-public class SignUpController extends BaseController{
+import java.io.UnsupportedEncodingException;
+
+public class SignUpController implements Controller{
     private static final String SIGN_UP_PATH_URL = "/user/create";
     // service는 BaseController에서 더 건들이지 않아도 되므로 오버라이딩 하지 않음
 
@@ -20,18 +22,23 @@ public class SignUpController extends BaseController{
 
     @Override
     public void doGet(HttpRequest request, HttpResponse response) {
-        signUpService.signUp(request);
-        redirect(REDIRECT_URL,response);
+        try{
+            signUpService.signUp(request);
+        }catch(UnsupportedEncodingException e){
+            System.out.println(e.getMessage());
+        }
+        response.redirect(REDIRECT_URL);
     }
 
     @Override
     public void doPost(HttpRequest request, HttpResponse response) {
-        signUpService.singUpByPost(request);
-        redirect(REDIRECT_URL,response);
-    }
-
-    public void redirect(String redirectUrl,HttpResponse response ){
-        response.redirect(redirectUrl);
+        try{
+            signUpService.singUpByPost(request);
+        }catch(UnsupportedEncodingException e){
+            System.out.println(e.getMessage());
+        }
+        System.out.println(Database.findAll());
+        response.redirect(REDIRECT_URL);
     }
 
     public String getPathUrl() {

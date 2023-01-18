@@ -6,6 +6,7 @@ import model.User;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 
 public class Database {
     private static Map<String, User> users = Maps.newHashMap();

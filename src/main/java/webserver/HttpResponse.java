@@ -37,6 +37,22 @@ public class HttpResponse {
         this.contentType = contentType;
     }
 
+    public Set<String> getCookieKeys() {
+        return cookies.keySet();
+    }
+
+    public Map<String,String> getCookies(){
+        return cookies;
+    }
+
+    public String getCookieByKey(String key) {
+        return cookies.get(key);
+    }
+
+    public void addCookie(String key, String value) {
+        cookies.put(key, value);
+    }
+
     public void setBody(byte[] body) {
         this.body = body;
     }
