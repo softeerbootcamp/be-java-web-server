@@ -8,6 +8,7 @@ import request.HttpRequest;
 import response.StatusLine;
 import servlet.UserCreate;
 
+import javax.naming.AuthenticationException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -48,15 +49,15 @@ public class UserService {
         return new User(userId, password, name, email);
     }
 
-    public void postlogin() {
+    public void postlogin() throws AuthenticationException{
         String userId = data.get("userId");
         String password = data.get("password");
 
         User databaseuserId = Database.findUserById(userId);
         String databasePassword = databaseuserId.getPassword();
 
-        if(databaseuserId.getUserId().isEmpty()) throw new RuntimeException("가입되지 않은 회원입니다.");
-        if(!password.equals(databasePassword)) throw new RuntimeException("비밀번호가 다릅니다.");
+        if(databaseuserId.getUserId().isEmpty()) throw new AuthenticationException("가입되지 않은 회원입니다.");
+        if(!password.equals(databasePassword)) throw new AuthenticationException("비밀번호가 다릅니다.");
     }
 
     public static void showUserList() {

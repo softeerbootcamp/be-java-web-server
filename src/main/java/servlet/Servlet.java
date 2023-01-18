@@ -8,5 +8,5 @@ public interface Servlet {
 
     void get(HttpRequest httpRequest);
 
-    void post(HttpRequest httpRequest);
+    StatusLine post(HttpRequest httpRequest);
 }

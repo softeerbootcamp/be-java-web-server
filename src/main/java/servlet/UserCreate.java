@@ -15,30 +15,24 @@ public class UserCreate implements Servlet{
     @Override
     public StatusLine service(HttpRequest httpRequest) {
         if (httpRequest.isGet()) {
-            try{
-                get(httpRequest);
-                return StatusLine.Found;
-            } catch (RuntimeException e){
-                return StatusLine.SeeOther;
-            }
+            get(httpRequest);
         }
-
         if (httpRequest.isPost()) {
-            try{
-                post(httpRequest);
-                return StatusLine.Found;
-            } catch (RuntimeException e){
-                logger.debug("회원가입란을 모두 입력하셔야 합니다.");
-                return StatusLine.SeeOther;
-            }
+            return post(httpRequest);
         }
         return null;
     }
 
     @Override
-    public void post(HttpRequest httpRequest) {
-        User user = UserService.from(httpRequest).postJoinService();
-        Database.addUser(user);
+    public StatusLine post(HttpRequest httpRequest) {
+        try {
+            User user = UserService.from(httpRequest).postJoinService();
+            Database.addUser(user);
+            return StatusLine.Found;
+        } catch (RuntimeException e) {
+            logger.debug("회원가입란을 모두 입력하셔야 합니다.");
+            return StatusLine.SeeOther;
+        }
     }
 
     @Override

@@ -21,8 +21,9 @@ public class ResponseHandler {
     /*TODO
     *   Exception 을 이렇게 주렁주렁 작성하는 것이 맞는지
     * */
-    private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
+    private static final Logger logger = LoggerFactory.getLogger(ResponseHandler.class);
     private static final String lineSeparator = System.lineSeparator();
+    private static ResponseHeader responseHeader;
 
     public static HttpResponse controlRequestAndResponse(HttpRequest httpRequest)
             throws IOException,
@@ -31,19 +32,15 @@ public class ResponseHandler {
             IllegalAccessException,
             NoSuchMethodException,
             InvocationTargetException {
+
         if (httpRequest.isForStaticContent()) {
             String path = httpRequest.getPath();
             byte[] body = FileIoUtils.loadFileFromClasspath(path);
             Map<String, String > headerFields = new HashMap<>();
-
-            logger.debug("[ Response Handler ] Content-Type : {}", headerFields.get("Content-Type"));
-            logger.debug("[ Response Handler ] Response_body : {}", String.valueOf(body.length));
-
             String mData = PathUtils.pathEndCheck(path);
 
             headerFields.put("Content-Type", mData);
             headerFields.put("Content-Length", String.valueOf(body.length));
-            headerFields.put("set-Cookie", String.format("%s=%s; Path=%s", "logined", "true", "/"));
 
             ResponseHeader responseHeader = new ResponseHeader(headerFields);
 
@@ -60,25 +57,26 @@ public class ResponseHandler {
             StatusLine status = servlet.service(httpRequest);
             Map<String, String > headerFields = new HashMap<>();
 
-            if(status == StatusLine.Found){
+            if(status == StatusLine.Found){ // 회원가입/로그인 성공시
                 logger.debug("[ResponseHandler] Found");
                 headerFields.put("Location", "/index.html");
+                headerFields.put("Set-Cookie", String.format("%s=%s; Path=%s", "logined", "true", "/"));
                 ResponseHeader responseHeader = new ResponseHeader(headerFields);
                 return HttpResponse.of("302", responseHeader);
             }
-            if(status == StatusLine.SeeOther){
+            if(status == StatusLine.SeeOther){ // 잘못된 회원가입
                 logger.debug("[ResponseHandler] SeeOther");
                 headerFields.put("Location", "/user/form.html");
                 ResponseHeader responseHeader = new ResponseHeader(headerFields);
                 return HttpResponse.of("303", responseHeader);
             }
-            if(status == StatusLine.TemporaryRedirect){
+            if(status == StatusLine.TemporaryRedirect){ // 잘못된 로그인
                 logger.debug("[ResponseHandler] TemporaryRedirect");
                 headerFields.put("Location", "/user/login_failed.html");
+                headerFields.put("Set-Cookie", String.format("%s=%s", "logined", "false"));
                 ResponseHeader responseHeader = new ResponseHeader(headerFields);
                 return HttpResponse.of("307", responseHeader);
             }
-
         }
 
         throw new RuntimeException("[ERROR] : HttpRequest는 정적 혹은 동적 컨텐츠 요청만 가능합니다.");

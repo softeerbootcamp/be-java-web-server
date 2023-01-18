@@ -1,12 +1,15 @@
 package servlet;
 
-import db.Database;
-import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.HttpRequest;
+import response.ResponseHeader;
 import response.StatusLine;
 import service.UserService;
+
+import javax.naming.AuthenticationException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Userlogin implements Servlet{
     /*
@@ -19,22 +22,11 @@ public class Userlogin implements Servlet{
     @Override
     public StatusLine service(HttpRequest httpRequest) {
         if (httpRequest.isGet()) {
-            try{
-                get(httpRequest);
-                return StatusLine.Found;
-            } catch (RuntimeException e){
-                return StatusLine.TemporaryRedirect;
-            }
+            get(httpRequest);
         }
 
         if (httpRequest.isPost()) {
-            try{
-                post(httpRequest);
-                return StatusLine.Found;
-            } catch (RuntimeException e){
-                logger.debug("잘못된 회원정보를 입력하셨습니다.");
-                return StatusLine.TemporaryRedirect;
-            }
+            return post(httpRequest);
         }
         return null;
     }
@@ -45,7 +37,13 @@ public class Userlogin implements Servlet{
     }
 
     @Override
-    public void post(HttpRequest httpRequest) {
-        UserService.from(httpRequest).postlogin();
+    public StatusLine post(HttpRequest httpRequest) {
+        try {
+            UserService.from(httpRequest).postlogin();
+            return StatusLine.Found;
+        } catch (AuthenticationException e) {
+            e.printStackTrace();
+            return StatusLine.TemporaryRedirect;
+        }
     }
 }

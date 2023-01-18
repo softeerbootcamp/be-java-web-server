@@ -15,6 +15,7 @@ import util.FileIoUtils;
 
 public class RequestHandler implements Runnable{
 
+    private static final String lineSeparate = System.lineSeparator();
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private final Socket connection; // Client
     public RequestHandler(Socket connectionSocket) {
@@ -56,6 +57,10 @@ public class RequestHandler implements Runnable{
                 httpResponse.getStatusLine().equals(StatusLine.SeeOther) ||
                 httpResponse.getStatusLine().equals(StatusLine.TemporaryRedirect)
         ){
+            logger.debug("httpResponse : {}{}{}{}{}",
+                    httpResponse.getHeader(),
+                    lineSeparate,httpResponse.getCookie(),
+                    lineSeparate,httpResponse.getBody());
             httpResponse.respondRedirect(dos);
         }
     }
