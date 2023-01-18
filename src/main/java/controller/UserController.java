@@ -83,7 +83,7 @@ public class UserController implements Controller {
         RequestLine requestLine = request.getRequestLine();
 
         if(Sessions.isExistSession(request.getSessionId())) {
-            byte[] body = getUserListHtml(userService.getUserList());
+            byte[] body = getUserListHtmlWhenLogin(userService.getUserList());
             // TODO: body에 빈 배열 넘어오는 경우 예외 처리
             headers = HeaderUtils.response200Header(ContentType.HTML, body.length);
             return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.OK), headers, body);
@@ -93,7 +93,7 @@ public class UserController implements Controller {
         return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.FOUND), headers);
     }
 
-    private byte[] getUserListHtml(Collection<User> users) {
+    private byte[] getUserListHtmlWhenLogin(Collection<User> users) {
         StringBuilder userList = new StringBuilder();
         int row = 0;
 
