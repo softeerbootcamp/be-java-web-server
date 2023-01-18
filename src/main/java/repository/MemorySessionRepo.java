@@ -5,27 +5,34 @@ import model.Session;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
-public class SessionRepo {
-    private static final Map<String, Session> sessionMap;
+public class MemorySessionRepo implements SessionRepo{
 
-    static {
-        sessionMap = new HashMap<>();
+    private static MemorySessionRepo instance;
+    private final Map<String, Session> sessionMap;
+
+    public static MemorySessionRepo getInstance(){
+        if(instance == null){
+            synchronized (MemorySessionRepo.class){
+                instance = new MemorySessionRepo();
+            }
+        }
+        return instance;
     }
 
-    public static Session createSession(String userId) {
-        String SSID = UUID.randomUUID().toString();
-        Session sess = new Session(SSID, userId);
-        sessionMap.put(SSID, sess);
-        return sess;
+    public MemorySessionRepo(){
+        this.sessionMap = new HashMap<>();
     }
 
-    public static Optional<Session> findBySSID(String ssid) {
+    public void addSession(Session session) {
+        sessionMap.put(session.getSSID(), session);
+    }
+
+    public Optional<Session> findBySSID(String ssid) {
         return Optional.ofNullable(sessionMap.get(ssid));
     }
 
-    public static void deleteSession(String ssid) {
+    public void deleteBySSID(String ssid) {
         Optional<Session> optionalSession = findBySSID(ssid);
         optionalSession.ifPresent(session -> {
             session.expire();
