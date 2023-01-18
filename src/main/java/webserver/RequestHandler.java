@@ -11,16 +11,17 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URISyntaxException;
-
-import static utils.FileIoUtils.load404ErrorFile;
+import java.util.Map;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private final Socket connection;
+    private final Map<String, Controller> controllers;
 
-    public RequestHandler(Socket connectionSocket) {
+    public RequestHandler(Socket connectionSocket,  Map<String, Controller> controllers) {
         this.connection = connectionSocket;
+        this.controllers = controllers;
     }
 
     public void run() {
@@ -32,13 +33,8 @@ public class RequestHandler implements Runnable {
 
             HttpResponse httpResponse = HttpResponse.createDefaultHttpResponse(out);
 
-            Controller controller = ControllerMapper.findController(httpRequest);
-
-            if(controller == null) {
-                byte[] error = load404ErrorFile();
-                httpResponse.do404(error);
-                return;
-            }
+            Controller controller = controllers.getOrDefault(httpRequest.getUri().getPath(), controllers.get("file"));
+            logger.info(controller.toString());
 
             controller.service(httpRequest, httpResponse);
 
