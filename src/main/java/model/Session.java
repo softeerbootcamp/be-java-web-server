@@ -13,8 +13,8 @@ public class Session {
         this.sessionId = generateSessionId();
     }
 
-    public String getUserId() {
-        return this.user.getUserId();
+    public User getUser() {
+        return user;
     }
 
     public String getSessionId() {
