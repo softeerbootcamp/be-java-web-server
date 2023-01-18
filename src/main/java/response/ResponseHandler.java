@@ -63,13 +63,13 @@ public class ResponseHandler {
 
             if(status == StatusLine.Found){
                 logger.debug("[ResponseHandler] Found");
-                headerFields.put("Location: ", "/index.html");
+                headerFields.put("Location", "/index.html");
                 ResponseHeader responseHeader = new ResponseHeader(headerFields);
                 return HttpResponse.of("302", responseHeader);
             }
             if(status == StatusLine.NotFound){
                 logger.debug("[ResponseHandler] NotFound");
-                headerFields.put("Location: ", "/user/form.html");
+                headerFields.put("Location", "/user/form.html");
                 ResponseHeader responseHeader = new ResponseHeader(headerFields);
                 return HttpResponse.of("303", responseHeader);
             }

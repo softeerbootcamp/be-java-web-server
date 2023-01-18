@@ -43,11 +43,10 @@ public class RequestHandler implements Runnable{
         if(httpResponse.getStatusLine().equals(StatusLine.OK)){
             httpResponse.respond(dos);
         }
-        if(httpResponse.getStatusLine().equals(StatusLine.Found)){
-            httpResponse.respondHome(dos);
-        }
-        if(httpResponse.getStatusLine().equals(StatusLine.NotFound)){
-            httpResponse.respondJoin(dos);
+
+        if(httpResponse.getStatusLine().equals(StatusLine.Found) ||
+                httpResponse.getStatusLine().equals(StatusLine.NotFound) ){
+            httpResponse.respondredirect(dos);
         }
     }
 }

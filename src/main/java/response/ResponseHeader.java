@@ -22,7 +22,7 @@ public class ResponseHeader {
         for (Map.Entry<String, String> field : fields.entrySet()) {
             logger.debug("getKey : {}" , field.getKey());
             logger.debug("getValue : {}" , field.getValue());
-            sb.append(String.format("[ ResponseHeader.class ] %s: %s%s", field.getKey(), field.getValue(), lineSeparator));
+            sb.append(String.format("%s: %s%s", field.getKey(), field.getValue(), lineSeparator));
         }
 
         return sb.toString();
