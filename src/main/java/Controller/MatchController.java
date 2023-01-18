@@ -11,7 +11,9 @@ public class MatchController {
     public static Controller match(DataOutputStream dos, HttpRequest httpRequest) {
         String requestPath = httpRequest.getPath();
         Path path = FileIoUtil.mappingDirectoryPath(requestPath);
-
+        if (requestPath.startsWith("/user/login") && !requestPath.contains(".")) {
+            return new LoginController(httpRequest, dos);
+        }
         if (requestPath.startsWith("/user/create")) {
             return new JoinController(httpRequest, dos);
         }
