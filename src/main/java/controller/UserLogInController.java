@@ -1,10 +1,10 @@
 package controller;
 
 import http.cookie.Cookie;
-import http.session.Session;
-import http.session.SessionManager;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import http.session.Session;
+import http.session.SessionService;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,11 +38,15 @@ public class UserLogInController extends AbstractController {
 
             validateUser(requestUserId, requestPassword);
 
-            Session session = SessionManager.create();
-            session.setAttribute(USER_ID, requestUserId);
+            Session session = new Session();
 
+            //Todo SessionService 를 주입받는 방식으로 변경 필요
+            SessionService.getInstance().addSession(session);
             String id = session.getId();
             Cookie cookie = Cookie.of(Session.DEFAULT_SESSION_ID, id + COOKIE_SUFFIX);
+
+            session.setAttribute(cookie.toString(), "login");
+            SessionService.getInstance().addSession(session);
 
             logger.info("Login Success");
             logger.info("Session ID: " + id);
