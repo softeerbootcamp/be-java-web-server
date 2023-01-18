@@ -1,21 +1,23 @@
 package webserver.domain;
 
+import db.SessionStorage;
 import enums.UserEnum;
 import model.User;
 import util.FileFinder;
+import was.view.ViewResolver;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public class HttpResponse {
-
-    private byte[] body = "".getBytes();
-    private String statusLine;
-    private Map<String, String> headers = new HashMap<>();
+    public static final String FILEPATH = "./src/main/resources/";
     private static final String HTML = "text/html";
     private static final String CSS = "text/css";
     private static final String JS = "text/javascript";
+    private byte[] body = "".getBytes();
+    private String statusLine;
+    private Map<String, String> headers = new HashMap<>();
 
     public String unauthorized() {
         sendRedirect("/user/login_failed.html");
@@ -76,9 +78,9 @@ public class HttpResponse {
 
     public String findPath(String uri) {
         if (uri.contains(".html") || uri.contains(".ico")) {
-            return "/templates" + uri;
+            return FILEPATH + "/templates" + uri;
         }
-        return "/static" + uri;
+        return FILEPATH + "/static" + uri;
     }
 
     public String forward(String uri) {
