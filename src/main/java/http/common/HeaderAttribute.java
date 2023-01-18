@@ -4,7 +4,8 @@ public enum HeaderAttribute {
     CONTENT_TYPE("Content-type", "text/plain"),
     CONTENT_LENGTH("Content-Length", "0"),
     LOCATION("Location", "index.html"),
-    SET_COOKIE("Set-Cookie", "");
+    SET_COOKIE("Set-Cookie", ""),
+    COOKIE("Cookie", "");
 
     private String value;
     private String defaultValue;
