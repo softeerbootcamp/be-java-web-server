@@ -65,9 +65,12 @@ public class UserAccountController implements RequestController {
         if(!UserValidation.isUserCreationFormValid(userId, password, name, email))
             return CustomHttpFactory.BAD_REQUEST("email, password, name을 올바르게 입력해 주세요.");
 
-        UserRepo.addUser(new User(userId, password, name, email));
-
-        return CustomHttpFactory.REDIRECT("/index.html");
+        User user = new User(userId, password, name, email);
+        UserRepo.addUser(user);
+        CustomHttpResponse res = CustomHttpFactory.REDIRECT("/index.html");
+        Session sess = SessionService.addUserToSession(user);
+        res.addToCookie(sess.toString());
+        return res;
     }
 
     public CustomHttpResponse loginAccount(CustomHttpRequest req) {
