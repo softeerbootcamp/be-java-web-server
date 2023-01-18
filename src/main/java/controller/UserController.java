@@ -8,6 +8,8 @@ import model.request.Request;
 import model.request.RequestLine;
 import model.response.Response;
 import model.response.StatusLine;
+import model.session.Session;
+import model.session.Sessions;
 import service.UserService;
 import util.SessionUtils;
 
@@ -30,10 +32,12 @@ public class UserController implements Controller {
     public Response getResponse(Request request) {
         RequestLine requestLine = request.getRequestLine();
 
-        if(requestLine.getMethod().equals(Method.from("POST")) &&
+        if(requestLine.getMethod().equals(Method.POST) &&
                 requestLine.getUri().startsWith("/user/create")) return createUserResponse(request);
-        else if(requestLine.getMethod().equals(Method.from("POST")) &&
+        else if(requestLine.getMethod().equals(Method.POST) &&
                 requestLine.getUri().startsWith("/user/login")) return loginUserResponse(request);
+        else if(requestLine.getMethod().equals(Method.GET) &&
+                requestLine.getUri().startsWith("/user/list")) return userListResponse(request);
 
         return Response.of(request, Status.NOT_FOUND);
     }
@@ -57,10 +61,25 @@ public class UserController implements Controller {
         RequestLine requestLine = request.getRequestLine();
         if(isLoginSuccess) {
             headers = responseLoginSuccessHeader();
+            Session session = Sessions.getSession(parseSessionIdFromHeaders(headers));
+            session.setSessionData("user", userLoginInfo.get("userId"));
+
             return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.FOUND), headers);
         }
 
         headers = responseLoginFailHeader();
+        return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.FOUND), headers);
+    }
+
+    private Response userListResponse(Request request) {
+        Map<Header, String> headers;
+        RequestLine requestLine = request.getRequestLine();
+
+        if(Sessions.isExistSession(request.getSessionId())) {
+            // TODO: 로그인되어 있는 경우 유저 리스트 불러올 수 있도경 구현
+        }
+
+        headers = responseRedirectLoginHtmlHeader();
         return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.FOUND), headers);
     }
 
@@ -84,5 +103,19 @@ public class UserController implements Controller {
         headers.put(Header.from("Location"), " /user/login_failed.html");
 
         return headers;
+    }
+
+    private Map<Header, String> responseRedirectLoginHtmlHeader() {
+        Map<Header, String> headers = new HashMap<>();
+        headers.put(Header.from("Location"), " /user/login.html");
+
+        return headers;
+    }
+
+    private String parseSessionIdFromHeaders(Map<Header, String> headers) {
+        String cookie = headers.get(Header.SET_COOKIE);
+        String sessionId = cookie.split(" ")[0].split("=")[1];
+
+        return sessionId.substring(0, sessionId.length() - 1);
     }
 }
