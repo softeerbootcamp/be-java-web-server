@@ -5,13 +5,12 @@ import webserver.ContentType;
 import webserver.HttpResponse;
 import webserver.HttpStatus;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URISyntaxException;
 
 public class NotFoundExceptionHandler implements Controller {
 
     private static final String TEMPLATES_DIR = "./templates";
+    private static final String CONTENT_LENGTH_HEADER_KEY = "Content-Length";
+
 
 
     public void writeErrorPage(HttpResponse response){
@@ -21,11 +20,12 @@ public class NotFoundExceptionHandler implements Controller {
 
     public static void showErrorPage(HttpResponse res) {
         try{
-            byte[] body = FileIoUtils.loadFileFromClasspath("/notFound.html");
+            byte[] body = FileIoUtils.loadFileFromClasspath(TEMPLATES_DIR +"/notFound.html");
             ContentType contentType = ContentType.HTML;
-            res.setStatus(HttpStatus.NOT_FOUND);
+
+            res.setStatus(HttpStatus.OK);
             res.setContentType(contentType);
-            res.addToHeader("Content-Length", String.valueOf(body.length));
+            res.addToHeader(CONTENT_LENGTH_HEADER_KEY, String.valueOf(body.length));
             res.setBody(body);//body에는 요청한 파일 내용이 들어감
         }catch(Exception e){
             System.out.println(e.getMessage());

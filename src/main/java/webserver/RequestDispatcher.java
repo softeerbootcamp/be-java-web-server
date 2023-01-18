@@ -18,19 +18,13 @@ public class RequestDispatcher {
     private static final String EXTENSION_DELIMITER = "\\.";
 
 
-    public static void handle(HttpRequest request, HttpResponse response) {
-        try {
-            String url = request.getUrl();
-            ContentType type = extractExtension(url);
-            boolean isTemplate = type.isTemplateDir(); //template 디렉토리 하위인지 확인
-            if(!isTemplate) serveFile(STATIC_DIR + url, response);
-            else if (isTemplate) serveFile(TEMPLATES_DIR + url, response);
-        } catch (Exception e) {
-            logger.error("Error is occurred while processing request", e);
-        }
-        if (response.getStatus() == null) {
-            response.setStatus(HttpStatus.NOT_FOUND);
-        }
+    public static void handle(HttpRequest request, HttpResponse response) throws NullPointerException, IOException, URISyntaxException {
+
+        String url = request.getUrl();
+        ContentType type = extractExtension(url);
+        boolean isTemplate = type.isTemplateDir(); //template 디렉토리 하위인지 확인
+        if(!isTemplate) serveFile(STATIC_DIR + url, response);
+        else if (isTemplate) serveFile(TEMPLATES_DIR + url, response);
     }
 
     /**
@@ -38,22 +32,15 @@ public class RequestDispatcher {
      * @param url
      * @param res
      */
-    private static void serveFile(String url, HttpResponse res) throws FileNotFoundException, IOException, URISyntaxException {
-        try {
-            byte[] body = FileIoUtils.loadFileFromClasspath(url);
-            ContentType contentType = extractExtension(url);
+    private static void serveFile(String url, HttpResponse res) throws NullPointerException, IOException, URISyntaxException {
 
-            res.setStatus(HttpStatus.OK);
-            res.setContentType(contentType);
-            res.addToHeader(CONTENT_LENGTH_HEADER_KEY, String.valueOf(body.length));
-            res.setBody(body);//body에는 요청한 파일 내용이 들어감
-        }catch (Exception e) {
-            logger.error("Error: {}", e.getMessage());
-        }
+        byte[] body = FileIoUtils.loadFileFromClasspath(url);
+        ContentType contentType = extractExtension(url);
 
-//        catch (FileNotFoundException e) {
-//            System.out.println("file not found");
-//        }
+        res.setStatus(HttpStatus.OK);
+        res.setContentType(contentType);
+        res.addToHeader(CONTENT_LENGTH_HEADER_KEY, String.valueOf(body.length));
+        res.setBody(body);//body에는 요청한 파일 내용이 들어감
     }
 
     private static ContentType extractExtension(String url) {

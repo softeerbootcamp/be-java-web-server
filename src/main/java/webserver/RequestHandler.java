@@ -5,10 +5,8 @@ import java.net.Socket;
 import java.nio.file.Files;
 import java.util.Map;
 
+import controller.*;
 import controller.Controller;
-import controller.Controller;
-import controller.FrontController;
-import controller.SignUpController;
 import db.Database;
 import model.User;
 import org.slf4j.Logger;
@@ -41,8 +39,6 @@ public class RequestHandler implements Runnable {
             rw.write(request,response);
         } catch (IOException e) {
             logger.error(e.getMessage());
-        }catch(NullPointerException e){
-            System.out.println("todo - 에러 페이지 내려주기, not found exception handler 호출");
         }
     }
 }
