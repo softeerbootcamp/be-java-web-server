@@ -1,4 +1,6 @@
-package http;
+package http.request;
+
+import exception.ResourceTypeNotFoundException;
 
 import java.util.stream.Stream;
 

@@ -1,6 +1,8 @@
 package controller;
 
-import http.*;
+import http.request.*;
+import http.response.HttpResponse;
+import http.response.HttpStatus;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,10 +15,10 @@ public class ViewController implements Controller {
     public HttpResponse doService(HttpRequest httpRequest) throws IOException {
         RequestLine requestLine = httpRequest.getRequestLine();
         RequestHeader requestHeader = httpRequest.getRequestHeader();
-        Uri uri = requestLine.getUri();
-        ResourceType resourceType = uri.parseResourceType();
+        HttpUri httpUri = requestLine.getHttpUri();
+        ResourceType resourceType = httpUri.parseResourceType();
         String contentType = requestHeader.getContentType();
-        byte[] body = Files.readAllBytes(new File("src/main/resources" + resourceType.getPath() + uri.getPath()).toPath());
+        byte[] body = Files.readAllBytes(new File("src/main/resources" + resourceType.getPath() + httpUri.getPath()).toPath());
         return HttpResponse.of(HttpStatus.OK, contentType, new HashMap<>(), body, requestLine.getVersion());
     }
 

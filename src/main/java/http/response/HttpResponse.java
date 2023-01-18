@@ -1,8 +1,7 @@
-package http;
+package http.response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.RequestHandler;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -11,6 +10,7 @@ import java.util.Map;
 public class HttpResponse {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
+
     private final String httpVersion;
     private final HttpStatus httpStatus;
     private final String contentType;
@@ -56,5 +56,25 @@ public class HttpResponse {
         } catch (IOException e) {
             logger.error("While writing response " + e.getMessage());
         }
+    }
+
+    public String getHttpVersion() {
+        return httpVersion;
+    }
+
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public Map<String, String> getHeaders() {
+        return headers;
+    }
+
+    public byte[] getBody() {
+        return body;
     }
 }

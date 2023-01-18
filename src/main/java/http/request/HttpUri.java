@@ -1,11 +1,11 @@
-package http;
+package http.request;
 
-public class Uri {
+public class HttpUri {
 
     private final String path;
     private final QueryParameters queryParameters;
 
-    private Uri(
+    private HttpUri(
             String path,
             QueryParameters queryParameters
     ) {
@@ -13,12 +13,12 @@ public class Uri {
         this.queryParameters = queryParameters;
     }
 
-    public static Uri from(String uri) {
+    public static HttpUri from(String uri) {
         String[] splitUri = uri.split("\\?");
         if (splitUri.length == 2) {
-            return new Uri(splitUri[0], QueryParameters.from(splitUri[1]));
+            return new HttpUri(splitUri[0], QueryParameters.from(splitUri[1]));
         }
-        return new Uri(splitUri[0], null);
+        return new HttpUri(splitUri[0], null);
     }
 
     public boolean isQueryParameterExist() {
@@ -32,6 +32,11 @@ public class Uri {
     public String getDetachControllerPath() {
         String[] split = path.split("/");
         return split[1];
+    }
+
+    public String getDetachServicePath() {
+        String[] split = path.split("/");
+        return split[2];
     }
 
     public ResourceType parseResourceType() {

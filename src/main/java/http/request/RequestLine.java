@@ -1,36 +1,36 @@
-package http;
+package http.request;
 
 public class RequestLine {
 
-    private final Method method;
-    private final Uri uri;
+    private final HttpMethod httpMethod;
+    private final HttpUri httpUri;
     private final String version;
 
     private RequestLine(
-            Method method,
-            Uri uri,
+            HttpMethod httpMethod,
+            HttpUri httpUri,
             String version
     ) {
-        this.method = method;
-        this.uri = uri;
+        this.httpMethod = httpMethod;
+        this.httpUri = httpUri;
         this.version = version;
     }
 
     public static RequestLine from(String requestLine) {
         String[] splitRequestLine = requestLine.split(" ");
         return new RequestLine(
-                Method.valueOf(splitRequestLine[0]),
-                Uri.from(splitRequestLine[1]),
+                HttpMethod.valueOf(splitRequestLine[0]),
+                HttpUri.from(splitRequestLine[1]),
                 splitRequestLine[2]
                 );
     }
 
-    public Method getMethod() {
-        return method;
+    public HttpMethod getHttpMethod() {
+        return httpMethod;
     }
 
-    public Uri getUri() {
-        return uri;
+    public HttpUri getHttpUri() {
+        return httpUri;
     }
 
     public String getVersion() {
@@ -40,8 +40,8 @@ public class RequestLine {
     @Override
     public String toString() {
         return "RequestLine{" +
-                "method=" + method +
-                ", url='" + uri + '\'' +
+                "method=" + httpMethod +
+                ", url='" + httpUri + '\'' +
                 ", version='" + version + '\'' +
                 '}';
     }

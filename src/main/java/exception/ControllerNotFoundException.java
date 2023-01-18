@@ -1,4 +1,4 @@
-package controller;
+package exception;
 
 public class ControllerNotFoundException extends RuntimeException {
 
@@ -6,7 +6,7 @@ public class ControllerNotFoundException extends RuntimeException {
 
     }
 
-    ControllerNotFoundException(String message) {
+    public ControllerNotFoundException(String message) {
         super(message);
     }
 }

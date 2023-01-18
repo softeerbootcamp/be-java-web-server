@@ -1,15 +1,13 @@
 package controller;
 
-import http.HttpRequest;
-import http.HttpResponse;
-import http.RequestLine;
-import http.Uri;
+import exception.ControllerNotFoundException;
+import http.request.HttpRequest;
+import http.request.HttpUri;
+import http.request.RequestLine;
+import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.RequestHandler;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,15 +20,15 @@ public class ControllerHandler {
         controllers.add(new UserController());
     }
 
-    public static HttpResponse handle(HttpRequest httpRequest) throws IOException, URISyntaxException {
+    public static HttpResponse handle(HttpRequest httpRequest) throws Exception {
         Controller controller = findController(httpRequest);
         return controller.doService(httpRequest);
     }
 
     public static Controller findController(HttpRequest httpRequest) {
         RequestLine requestLine = httpRequest.getRequestLine();
-        Uri uri = requestLine.getUri();
-        if (!uri.isQueryParameterExist() && uri.isEndWithResourceType()) {
+        HttpUri httpUri = requestLine.getHttpUri();
+        if (!httpUri.isQueryParameterExist() && httpUri.isEndWithResourceType()) {
             return new ViewController();
         }
         return controllers

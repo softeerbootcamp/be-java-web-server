@@ -1,32 +1,32 @@
 package controller;
 
-import db.Database;
-import http.*;
-import model.User;
+import http.request.HttpRequest;
+import http.request.HttpUri;
+import http.request.RequestLine;
+import http.response.HttpResponse;
+import service.UserService;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.reflect.Method;
 
-public class UserController implements Controller{
+public class UserController implements Controller {
 
     private static final String path = "user";
+    private static final UserService userService = new UserService();
+
     @Override
-    public HttpResponse doService(HttpRequest httpRequest) {
+    public HttpResponse doService(HttpRequest httpRequest) throws Exception {
         RequestLine requestLine = httpRequest.getRequestLine();
-        Uri uri = requestLine.getUri();
-        QueryParameters queryParameters = uri.getQueryParameters();
+        HttpUri httpUri = requestLine.getHttpUri();
 
-        Database.addUser(User.from(httpRequest.getRequestBody()));
+        Method method = UserService.class.getDeclaredMethod(httpUri.getDetachServicePath(), HttpRequest.class);
+        return (HttpResponse) method.invoke(userService, httpRequest);
 
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Location", "/index.html");
-        return HttpResponse.of(HttpStatus.FOUND, "", headers, "".getBytes(), requestLine.getVersion());
     }
 
     @Override
     public boolean isMatch(HttpRequest httpRequest) {
         RequestLine requestLine = httpRequest.getRequestLine();
-        Uri uri = requestLine.getUri();
-        return path.equals(uri.getDetachControllerPath());
+        HttpUri httpUri = requestLine.getHttpUri();
+        return path.equals(httpUri.getDetachControllerPath());
     }
 }
