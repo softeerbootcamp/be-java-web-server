@@ -1,6 +1,7 @@
 package controller;
 
 import exception.ConnectionClosedException;
+import exception.FileSystemException;
 import http.request.HttpRequest;
 import http.request.RequestFactory;
 import http.response.HttpResponse;
@@ -35,7 +36,7 @@ public class FacadeController implements Runnable {
             HttpRequest request = requestFactory.create(in);
             HttpResponse response = responseFactory.create(out);
             delegateRequest(request, response);
-        } catch (IOException | ConnectionClosedException e) {
+        } catch (IOException | ConnectionClosedException | FileSystemException e) {
             logger.error(e.getMessage());
         }
     }
