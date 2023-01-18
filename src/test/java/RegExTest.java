@@ -21,8 +21,10 @@ public class RegExTest {
     public void 요청정규식() {
         String loginUrl = "/user/login";
         String registerUrl = "/user/create";
+        String registerUrl2 = "/user/create/";
 
         assertThat(loginUrl.matches(HandlerEnum.LOGIN.getUrlRegEx())).isEqualTo(true);
         assertThat(registerUrl.matches(HandlerEnum.REGISTER.getUrlRegEx())).isEqualTo(true);
+        assertThat(registerUrl2.matches(HandlerEnum.REGISTER.getUrlRegEx())).isEqualTo(false);
     }
 }
