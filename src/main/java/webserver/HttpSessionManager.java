@@ -1,5 +1,7 @@
 package webserver;
 
+import model.User;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -19,8 +21,8 @@ public class HttpSessionManager {
         }
     }
 
-    public static HttpSession createSession(Map<String,String> userInfo) {
-        return new HttpSession(UUID.randomUUID().toString(), userInfo);
+    public static HttpSession createSession(User user) {
+        return new HttpSession(UUID.randomUUID().toString(), user);
     }
 
     public static void addSession(HttpSession session) {
