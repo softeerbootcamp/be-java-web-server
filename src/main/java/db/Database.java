@@ -1,8 +1,8 @@
 package db;
 
 import com.google.common.collect.Maps;
-import model.User;
 import http.common.Session;
+import model.User;
 
 import java.util.Collection;
 import java.util.Map;
@@ -29,5 +29,9 @@ public class Database {
 
     public static void addSession(Session session) {
         sessions.put(session.getId(), session);
+    }
+
+    public static Session getSession(String sid) {
+        return sessions.get(sid);
     }
 }
