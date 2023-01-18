@@ -7,6 +7,7 @@ import model.request.Request;
 import model.request.RequestLine;
 import model.response.Response;
 import model.response.StatusLine;
+import util.HeaderUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -45,17 +45,9 @@ public class ViewController implements Controller {
             return Response.of(request, Status.NOT_FOUND);
         }
 
-        Map<Header, String> headers = response200Header(requestLine.getContentType(), body.length);
+        Map<Header, String> headers = HeaderUtils.response200Header(requestLine.getContentType(), body.length);
 
         return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.OK), headers, body);
-    }
-
-    private Map<Header, String> response200Header(ContentType contentType, int messageBodyLength) {
-        Map<Header, String> headers = new HashMap<>();
-        headers.put(Header.from("Content-Type"), contentType.getContentTypeValue() + ";charset=utf-8");
-        headers.put(Header.from("Content-Length"), Integer.toString(messageBodyLength));
-
-        return headers;
     }
 
     private String generatePath(ContentType contentType) {
