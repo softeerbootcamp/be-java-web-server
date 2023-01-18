@@ -25,8 +25,8 @@ public class HttpCookie {
         return sessionId;
     }
 
-    public boolean isValid(LocalDateTime accessTime){
-        return this.expireDate.isBefore(accessTime);
+    public boolean isValid(){
+        return maxAge > 0;
     }
 
     public void invalidateCookie(){
