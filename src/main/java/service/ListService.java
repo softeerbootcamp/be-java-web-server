@@ -1,18 +1,23 @@
 package service;
 
+import controller.UserController;
 import db.Database;
 import http.HttpStatus;
 import http.response.HttpResponse;
 import http.response.HttpStatusLine;
 import model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.HttpResponseUtils;
 
 import java.util.Collection;
 
 public class ListService {
-    public static HttpResponse service(boolean isLogin, String filePath, String httpVersion, String contentType){
+    private static final Logger logger = LoggerFactory.getLogger(ListService.class);
+    public static HttpResponse service(User logInUser, String filePath, String httpVersion, String contentType){
+        logger.debug("logInUser : {}", logInUser);
         // Login check
-        if(isLogin) return logInListService(filePath, httpVersion, contentType);
+        if(logInUser != null) return logInListService(logInUser, filePath, httpVersion, contentType);
 
         // not Login
         return new HttpResponse.HttpResponseBuilder()
@@ -21,12 +26,13 @@ public class ListService {
                 .build();
     }
 
-    private static HttpResponse logInListService(String filePath, String httpVersion, String contentType){
+    private static HttpResponse logInListService(User logInUser, String filePath, String httpVersion, String contentType){
         StringBuilder stringBuilder = makeHtml();
 
         // 파일 경로를 넘겨서 http response string 생성
         String responseString = new String(HttpResponseUtils.makeBody(filePath));
-        byte[] responseBody = responseString.replace("%userList%", stringBuilder.toString()).getBytes();
+        String addedUserListToresponseString = responseString.replace("%userList%", stringBuilder.toString());
+        byte[] responseBody = HtmlService.banLogInAndSignUpWhenUserLogInState(addedUserListToresponseString, logInUser);
 
         // 만들어진 body로 응답 객체를 만들어서 리턴
         return new HttpResponse.HttpResponseBuilder()

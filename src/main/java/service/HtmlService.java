@@ -20,9 +20,14 @@ public class HtmlService {
     }
 
     public static byte[] banLogInAndSignUpWhenUserLogInState(String responseString, User logInUser){
-        return responseString.replace(
-                "<li><a href=\"user/login.html\" role=\"button\">로그인</a></li>\n" +
-                        "                <li><a href=\"user/form.html\" role=\"button\">회원가입</a></li>",
+        return replaceHyperLinkLikeIndexHtml(responseString).replace(
+                        "<li><a href=\"user/login.html\" role=\"button\">로그인</a></li>\n" +
+                "                <li><a href=\"user/form.html\" role=\"button\">회원가입</a></li>",
                 "<li><a role=\"button\">" + logInUser.getName() + "</a></li>").getBytes();
+    }
+    public static String replaceHyperLinkLikeIndexHtml(String responseString){
+        return responseString.replace(
+                "../user/login.html", "user/login.html").replace(
+                        "../user/form.html", "user/form.html");
     }
 }
