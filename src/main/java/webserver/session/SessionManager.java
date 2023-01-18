@@ -20,4 +20,8 @@ public class SessionManager {
     public static boolean hasSession(String sessionId) {
         return sessionStore.containsKey(sessionId);
     }
+
+    public static Session getSession(String sessionId) {
+        return sessionStore.get(sessionId);
+    }
 }
