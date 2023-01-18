@@ -8,19 +8,36 @@ public class Session {
 
     public static final String DEFAULT_SESSION_ID = "JSESSIONID";
 
-    private final Map<String, String> attributes = new HashMap<>();
-    private final UUID id = UUID.randomUUID();
+    private final String id;
+    private final Map<String, Object> attributes;
 
-    public String getId() {
-        return this.id.toString();
+    public Session() {
+        this.id = UUID.randomUUID().toString();
+        this.attributes = new HashMap<>();
     }
 
-    public void setAttribute(String name, String value) {
-        this.attributes.put(name, value);
+    public void setAttribute(String name, Object value) {
+        attributes.put(name, value);
     }
 
     public Object getAttribute(String name) {
-        return this.attributes.get(name);
+        return attributes.get(name);
+    }
+
+    public void removeAttribute(String name) {
+        attributes.remove(name);
+    }
+
+    public void invalidate() {
+        attributes.clear();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public Map<String, Object> getAttributes() {
+        return attributes;
     }
 
 }
