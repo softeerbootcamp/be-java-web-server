@@ -60,7 +60,8 @@ public class ViewController implements Controller {
                         requestLine.getUri()).toPath());
 
                 String originalIndexHtml = new String(body);
-                String resultIndexHtml = originalIndexHtml.replace("로그인", Sessions.getSession(request.getSessionId()).getSessionData().get("user"));
+                String resultIndexHtml = originalIndexHtml.replace("로그인",
+                        Sessions.getSession(request.getSessionId()).getSessionData().get("user"));
                 return resultIndexHtml.getBytes();
             } catch (IOException e) {
                 return new byte[0];
