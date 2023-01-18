@@ -1,7 +1,7 @@
 package db;
 
 import Request.HttpRequest;
-import Session.Session;
+import model.Session;
 import model.User;
 import util.ManageDB;
 

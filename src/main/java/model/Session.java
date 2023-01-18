@@ -1,4 +1,4 @@
-package Session;
+package model;
 
 import model.User;
 
