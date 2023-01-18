@@ -15,6 +15,9 @@ public class ViewResolver {
                 if (line.contains("로그인") || line.contains("회원가입")) {
                     continue;
                 }
+                if (line.contains("class=\"dropdown-toggle\"")) {
+                    sb.append("<a>" + userId + "님</a></li><li>");
+                }
                 sb.append(line);
             }
             return sb.toString().getBytes();
