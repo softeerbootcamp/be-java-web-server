@@ -9,7 +9,8 @@ import java.util.Map;
 
 public class UserRepository {
 
-    private UserRepository() {}
+    private UserRepository() {
+    }
 
     private static final Map<String, User> users = Maps.newHashMap();
 
