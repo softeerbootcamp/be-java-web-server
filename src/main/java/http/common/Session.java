@@ -20,4 +20,12 @@ public class Session {
     public String getId() {
         return id;
     }
+
+    public User getUser() {
+        return user;
+    }
+    // todo: expiration date 추가해서 유효성 검사
+    public boolean isValid() {
+        return true;
+    }
 }
