@@ -18,8 +18,8 @@ public class ResponseHandler {
     private static final Logger logger = LoggerFactory.getLogger(ResponseHandler.class);
 
     private Response res;
-    public ResponseHandler(Response res) {
-        this.res = res;
+    public ResponseHandler() {
+        this.res = new Response();
     }
 
     public void makeAndSendRes(OutputStream out, ReqLine reqLine) throws IOException {

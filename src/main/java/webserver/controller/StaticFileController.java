@@ -16,8 +16,8 @@ public class StaticFileController implements Controller{
     private ResponseHandler resHandler;
 
     @Override
-    public void exec(Request req, Response res, OutputStream out) throws IOException {
-        resHandler = new ResponseHandler(res);
+    public void exec(Request req, OutputStream out) throws IOException {
+        resHandler = new ResponseHandler();
 
         String query = req.getReqLine().getQuery();
         Service service = new Service() {};

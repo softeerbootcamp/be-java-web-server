@@ -8,7 +8,7 @@ import java.io.OutputStream;
 
 public class DynamicFileController implements Controller{
     @Override
-    public void exec(Request req, Response res, OutputStream out) throws IOException {
+    public void exec(Request req, OutputStream out) throws IOException {
 
     }
 }

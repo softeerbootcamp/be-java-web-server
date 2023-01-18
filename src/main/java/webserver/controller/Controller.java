@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public interface Controller {
-    public void exec(Request req, Response res, OutputStream out) throws IOException;
+    public void exec(Request req, OutputStream out) throws IOException;
 
     ResponseHandler resHandler = null;
 }
