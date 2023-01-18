@@ -17,8 +17,6 @@ public class StaticFileController implements Controller{
 
     @Override
     public void exec(Request req, OutputStream out) throws IOException {
-        resHandler = new ResponseHandler();
-
         String query = req.getReqLine().getQuery();
         Service service = new Service() {};
         if(query.contains("user/create"))
@@ -30,9 +28,8 @@ public class StaticFileController implements Controller{
             service = new LogInService();
         }
 
-        service.exec(req);
-
-
-        resHandler.makeAndSendRes(out, req.getReqLine());
+        Response res = service.exec(req);
+        resHandler = new ResponseHandler(res);
+        resHandler.sendRes(out);
     }
 }

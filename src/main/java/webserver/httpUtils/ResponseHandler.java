@@ -18,18 +18,10 @@ public class ResponseHandler {
     private static final Logger logger = LoggerFactory.getLogger(ResponseHandler.class);
 
     private Response res;
-    public ResponseHandler() {
-        this.res = new Response();
+    public ResponseHandler(Response res) {
+        this.res = res;
     }
 
-    public void makeAndSendRes(OutputStream out, ReqLine reqLine) throws IOException {
-        DataOutputStream dos = new DataOutputStream(out);
-
-        makeResponseLine(reqLine);
-        makeHeaderAndBody(reqLine);
-
-        sendRes(dos);
-    }
 
     private void makeResponseLine(ReqLine reqLine) {
         res.getResLine().setVersion(reqLine.getVersion());
@@ -53,7 +45,7 @@ public class ResponseHandler {
         }
 
         String reqQuery = reqLine.getQuery();
-        res.setResBody(Byte.urlToByte(reqQuery));
+        //res.setResBody(Byte.urlToByte(reqQuery));
 
         String contentType = Files.probeContentType(new File(reqQuery).toPath());
         header.put("Content-Type: ", contentType + ";charset=utf-8");
@@ -61,9 +53,11 @@ public class ResponseHandler {
         res.setResHeader(header);
     }
 
-    private void sendRes(DataOutputStream dos) throws IOException
+    public void sendRes(OutputStream out) throws IOException
     {
-        // resline
+        DataOutputStream dos = new DataOutputStream(out);
+
+        // resLine
         dos.writeBytes(res.getResLine().getVersion() + " " +
                 res.getResLine().getStatCode() + " " +
                 res.getResLine().getStatText() + "\r\n");
@@ -72,7 +66,7 @@ public class ResponseHandler {
                 {
                     logger.debug(elem.getKey() + elem.getValue());
                     try {
-                        dos.writeBytes(elem.getKey() + elem.getValue() + "\r\n");
+                        dos.writeBytes(elem.getKey() +": "+ elem.getValue() + "\r\n");
                     } catch (IOException e) {
                         logger.error(e.getMessage());
                     }
@@ -89,14 +83,5 @@ public class ResponseHandler {
     private boolean isSignUp(String query) {
         if (query.contains("create")) return true;
         return false;
-    }
-}
-
-class Byte {
-    public static byte[] urlToByte(String url) throws IOException {
-        if (url.contains("html") || url.contains("favicon"))
-            return Files.readAllBytes(new File(Paths.TEMPLATE_PATH + url).toPath());
-
-            return Files.readAllBytes(new File(Paths.STATIC_PATH + url).toPath());
     }
 }
