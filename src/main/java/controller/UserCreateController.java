@@ -9,6 +9,8 @@ import utils.HttpMethod;
 
 import java.util.Map;
 
+import static utils.PathManager.HOME_PATH;
+
 public class UserCreateController implements Controller {
     public static final String PATH = "/user/create";
     private static final Logger logger = LoggerFactory.getLogger(UserCreateController.class);
@@ -30,7 +32,7 @@ public class UserCreateController implements Controller {
     private HttpResponse doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         Map<String, String> bodyParams = httpRequest.getRequestBody();
         userService.createUser(bodyParams);
-        httpResponse.redirectHome();
+        httpResponse.redirect(HOME_PATH);
         return httpResponse;
     }
 }

@@ -11,6 +11,9 @@ import utils.SessionManager;
 import javax.naming.AuthenticationException;
 import java.util.Map;
 
+import static utils.PathManager.HOME_PATH;
+import static utils.PathManager.LOGIN_FAILED_PATH;
+
 public class UserLoginController implements Controller {
     public static final String PATH = "/user/login";
     private static final Logger logger = LoggerFactory.getLogger(UserLoginController.class);
@@ -32,9 +35,9 @@ public class UserLoginController implements Controller {
         try {
             userService.login(bodyParams.get("userId"), bodyParams.get("password"));
             httpResponse.setCookie(SessionManager.createSession(userService.findUser(bodyParams.get("userId"))));
-            httpResponse.redirectHome();
+            httpResponse.redirect(HOME_PATH);
         } catch (AuthenticationException e) {
-            httpResponse.redirectLoginFailed();
+            httpResponse.redirect(LOGIN_FAILED_PATH);
         }
         return httpResponse;
     }

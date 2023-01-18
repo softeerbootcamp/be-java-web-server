@@ -11,6 +11,8 @@ import utils.SessionManager;
 
 import java.util.UUID;
 
+import static utils.PathManager.LOGIN_PATH;
+
 public class UserListController implements Controller {
     public static final String PATH = "/user/list";
     private static Logger logger = LoggerFactory.getLogger(UserListController.class);
@@ -37,7 +39,7 @@ public class UserListController implements Controller {
                 return httpResponse;
             }
         } catch (NullPointerException e) {
-            httpResponse.redirectLogin();
+            httpResponse.redirect(LOGIN_PATH);
         }
         return httpResponse;
     }
