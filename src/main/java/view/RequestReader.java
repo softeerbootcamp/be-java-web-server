@@ -25,7 +25,6 @@ public class RequestReader {
             MessageParser.parseKeyValue(header,brStr);
             logger.info(brStr);
         }
-        //test for git conflict
         return header;
     }
 
