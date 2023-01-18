@@ -27,12 +27,10 @@ public class Uri {
     }
 
     public boolean isTemplatesResource() {
-        logger.debug("[ Uri ] isTemplateResource : {}",path);
         return path.endsWith("html") || path.equals("/favicon.ico");
     }
 
     public boolean isStaticResource() {
-        logger.debug("[ Uri ] isStaticResource : {}",path);
         return !isTemplatesResource() && path.contains(".");
     }
 

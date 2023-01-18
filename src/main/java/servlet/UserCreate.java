@@ -28,6 +28,7 @@ public class UserCreate implements Servlet{
                 post(httpRequest);
                 return StatusLine.Found;
             } catch (RuntimeException e){
+                logger.debug("회원가입란을 모두 입력하셔야 합니다.");
                 return StatusLine.SeeOther;
             }
         }

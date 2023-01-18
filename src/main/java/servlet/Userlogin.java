@@ -32,10 +32,12 @@ public class Userlogin implements Servlet{
                 post(httpRequest);
                 return StatusLine.Found;
             } catch (RuntimeException e){
+                logger.debug("잘못된 회원정보를 입력하셨습니다.");
                 return StatusLine.TemporaryRedirect;
             }
         }
-        return null;    }
+        return null;
+    }
 
     @Override
     public void get(HttpRequest httpRequest) {

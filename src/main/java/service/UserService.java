@@ -17,7 +17,7 @@ public class UserService {
 
     private static Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    Map<String, String> data = new HashMap<>();
+    Map<String, String> data;
 
     public UserService(Map<String, String> data) {
         this.data = data;
@@ -46,10 +46,6 @@ public class UserService {
         String email = data.get("email");
 
         return new User(userId, password, name, email);
-    }
-
-    public void getJoinService() {
-
     }
 
     public void postlogin() {
