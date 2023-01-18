@@ -1,5 +1,7 @@
 package view;
 
+import java.net.URLDecoder;
+
 public class RequestBodyMessage {
 
 
@@ -9,6 +11,6 @@ public class RequestBodyMessage {
         return bodyParams;
     }
     public RequestBodyMessage(char[] body){
-        this.bodyParams = new String(body);
+        this.bodyParams = URLDecoder.decode(new String(body));
     }
 }
