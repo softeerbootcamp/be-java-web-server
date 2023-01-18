@@ -57,12 +57,18 @@ public class ResponseHandler {
             StatusLine status = servlet.service(httpRequest);
             Map<String, String > headerFields = new HashMap<>();
 
-            if(status == StatusLine.Found){ // 회원가입/로그인 성공시
+            if(status == StatusLine.Found){ // 회원가입 성공시
                 logger.debug("[ResponseHandler] Found");
                 headerFields.put("Location", "/index.html");
-                headerFields.put("Set-Cookie", String.format("%s=%s; Path=%s", "logined", "true", "/"));
                 ResponseHeader responseHeader = new ResponseHeader(headerFields);
                 return HttpResponse.of("302", responseHeader);
+            }
+            if(status == StatusLine.CustomLogin){ // 로그인 성공시
+                logger.debug("[ResponseHandler] CREATE");
+                headerFields.put("Location", "/index.html");
+                headerFields.put("Set-Cookie", String.format("%s=%s; Path=%s", "sid", "123456", "/"));
+                ResponseHeader responseHeader = new ResponseHeader(headerFields);
+                return HttpResponse.of("304", responseHeader);
             }
             if(status == StatusLine.SeeOther){ // 잘못된 회원가입
                 logger.debug("[ResponseHandler] SeeOther");

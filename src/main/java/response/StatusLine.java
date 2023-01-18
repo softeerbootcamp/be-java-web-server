@@ -9,6 +9,7 @@ public enum StatusLine {
     OK("200", "HTTP/1.1 200 OK"),
     Found("302", "HTTP/1.1 302 Found"),
     SeeOther("303", "HTTP/1.1 303 See Other"),
+    CustomLogin("304","HTTP/1.1 304 Login Success"),
     TemporaryRedirect("307", "HTTP/1.1 303 Temporary Redirect"),
     Unauthorized("401", "HTTP/1.1 401 Unauthorized"),
     ELSE("", "");

@@ -55,7 +55,8 @@ public class RequestHandler implements Runnable{
     public void redirect(DataOutputStream dos, HttpResponse httpResponse) {
         if(httpResponse.getStatusLine().equals(StatusLine.Found) ||
                 httpResponse.getStatusLine().equals(StatusLine.SeeOther) ||
-                httpResponse.getStatusLine().equals(StatusLine.TemporaryRedirect)
+                httpResponse.getStatusLine().equals(StatusLine.TemporaryRedirect) ||
+                httpResponse.getStatusLine().equals(StatusLine.CustomLogin)
         ){
             logger.debug("httpResponse : {}{}{}{}{}",
                     httpResponse.getHeader(),

@@ -40,7 +40,7 @@ public class Userlogin implements Servlet{
     public StatusLine post(HttpRequest httpRequest) {
         try {
             UserService.from(httpRequest).postlogin();
-            return StatusLine.Found;
+            return StatusLine.CustomLogin;
         } catch (AuthenticationException e) {
             e.printStackTrace();
             return StatusLine.TemporaryRedirect;
