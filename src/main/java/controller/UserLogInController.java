@@ -23,8 +23,11 @@ public class UserLogInController extends AbstractController {
     public static final String INDEX_PATH = "/index.html";
     public static final String LOGIN_FAILED_PATH = "/user/login_failed.html";
 
-    public UserLogInController() {
+    private final SessionService sessionService;
+
+    public UserLogInController(SessionService sessionService) {
         this.paths = Collections.singletonList("/user/login");
+        this.sessionService = sessionService;
     }
 
     private static final Logger logger = LoggerFactory.getLogger(UserLogInController.class);
@@ -36,20 +39,20 @@ public class UserLogInController extends AbstractController {
             String requestUserId = userInfo.get(USER_ID);
             String requestPassword = userInfo.get(PASSWORD);
 
+            logger.info("id: " + requestUserId);
+            logger.info("id: " + requestPassword);
+
             validateUser(requestUserId, requestPassword);
 
             Session session = new Session();
+            sessionService.addSession(session);
 
-            //Todo SessionService 를 주입받는 방식으로 변경 필요
-            SessionService.getInstance().addSession(session);
-            String id = session.getId();
-            Cookie cookie = Cookie.of(Session.DEFAULT_SESSION_ID, id + COOKIE_SUFFIX);
+            Cookie cookie = Cookie.of(Session.DEFAULT_SESSION_ID, session.getId() + COOKIE_SUFFIX);
 
             session.setAttribute(cookie.toString(), "login");
-            SessionService.getInstance().addSession(session);
+            sessionService.addSession(session);
 
             logger.info("Login Success");
-            logger.info("Session ID: " + id);
 
             httpResponse.sendRedirect(INDEX_PATH, cookie);
 
