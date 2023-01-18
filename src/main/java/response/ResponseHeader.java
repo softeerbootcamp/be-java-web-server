@@ -1,7 +1,6 @@
 package response;
 
 import enums.ContentTypeEnum;
-import enums.ControllerTypeEnum;
 import enums.HeaderReferenceEnum;
 
 public class ResponseHeader {
@@ -29,10 +28,8 @@ public class ResponseHeader {
             headerLine += HeaderReferenceEnum.LOCATION.getValueWithSpace() + redirectUrl + NEW_LINE;
         }
     }
-    public void addHeaderIfCookie(boolean isCookie,String sid){
-        if(isCookie){
-            headerLine += HeaderReferenceEnum.SET_COOKIE.getValueWithSpace() +
-                    "sid="+sid+"; Path=/"+NEW_LINE;
-        }
+    public void addCookieLine(String sid){
+        headerLine += HeaderReferenceEnum.SET_COOKIE.getValueWithSpace() +
+                "sid="+sid+"; Path=/"+NEW_LINE;
     }
 }

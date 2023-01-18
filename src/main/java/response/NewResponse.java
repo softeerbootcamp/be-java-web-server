@@ -67,6 +67,10 @@ public class NewResponse {
             this.responseAdder.add(addedLine);
             return this;
         }
+        public Builder addCookieHeader(String sid){
+            this.responseHeader.addCookieLine(sid);
+            return this;
+        }
 
         public NewResponse build(){
             return new NewResponse(this);
