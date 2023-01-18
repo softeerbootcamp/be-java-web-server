@@ -1,10 +1,9 @@
 package http.request;
 
-import http.common.Body;
-import http.common.Header;
-import http.common.Method;
+import http.common.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class HttpRequest {
@@ -27,6 +26,17 @@ public class HttpRequest {
 
     public Method getMethod() {
         return startLine.getMethod();
+    }
+
+    public List<Cookie> getCookies() {
+        return Cookie.cookify(header.getAttribute(HeaderAttribute.COOKIE));
+    }
+
+    public Cookie getCookie(String key) {
+        return getCookies().stream()
+                .filter(c -> c.getKey().equals(key))
+                .findAny()
+                .orElse(null);
     }
 
     public Map<String, String> getParameters(String... args) {
