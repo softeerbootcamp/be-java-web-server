@@ -23,12 +23,6 @@ public class ResponseHeader {
         ;
     }
 
-    public void addHeaderIfRedirect(String redirectUrl, String statusCodeWithMessage) {
-        if (statusCodeWithMessage.contains("302")) {
-            headerLine += HeaderReferenceEnum.LOCATION.getValueWithSpace() + redirectUrl + NEW_LINE;
-        }
-    }
-
     public void addCookieLine(String sid) {
         headerLine += HeaderReferenceEnum.SET_COOKIE.getValueWithSpace() +
                 "sid=" + sid + "; Path=/" + NEW_LINE;

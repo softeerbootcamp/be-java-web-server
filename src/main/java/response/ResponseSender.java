@@ -15,11 +15,12 @@ public class ResponseSender {
     public ResponseSender(OutputStream outputStream) {
         this.dos = new DataOutputStream(outputStream);
     }
-    public void send(ResponseFactory responseFactory){
+
+    public void send(ResponseFactory responseFactory) {
         try {
             ResponseAssembler responseAssembler = new ResponseAssembler(responseFactory);
-            dos.writeBytes(responseAssembler.getAssembled()+System.lineSeparator());
-            dos.write(responseAssembler.getBody(),0,responseAssembler.getBody().length);
+            dos.writeBytes(responseAssembler.getAssembled() + System.lineSeparator());
+            dos.write(responseAssembler.getBody(), 0, responseAssembler.getBody().length);
             dos.flush();
         } catch (IOException e) {
             logger.error(e.getMessage());

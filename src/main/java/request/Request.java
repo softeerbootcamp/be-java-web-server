@@ -21,7 +21,7 @@ public class Request {
         setRequestLine(bufferedReader);
         setRequestHeader(bufferedReader);
         setRequestBody(bufferedReader);
-        if(requestLine.getMETHOD().equals(null)){
+        if (requestLine.getMETHOD().equals(null)) {
             throw new NullPointerException("아무런 요청이 없습니다!!");
         }
     }
@@ -41,11 +41,12 @@ public class Request {
             }
             String[] headerMap = oneLine.split(":");
             //todo map 만 사용가능하게 바꾸자.
-            requestHeader.addHeaderMap(headerMap[0],headerMap[1]);
+            requestHeader.addHeaderMap(headerMap[0], headerMap[1]);
             requestHeader.addHeaderLines(oneLine);
         }
 
     }
+
     public void setRequestBody(BufferedReader bufferedReader) throws IOException {
         requestBody = new RequestBody();
         String fullLine = "";
@@ -58,11 +59,13 @@ public class Request {
     }
 
 
-    public boolean isRequestHaveCookie(){
-        if(requestHeader.isHeaderMapContains("Cookie")){
+    public boolean isRequestHaveCookie() {
+        if (requestHeader.isHeaderMapContains("Cookie")) {
             return true;
-        }return false;
+        }
+        return false;
     }
+
     public boolean isBodyExistsOrEOL(String oneLine) throws IOException {
         if (oneLine.equals("")) {
             return true;

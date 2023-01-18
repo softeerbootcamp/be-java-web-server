@@ -34,17 +34,14 @@ public class UserController implements Controller {
 
         Database.addUser(user);
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + "/index.html").toPath());
-        String addedLine="Location : /index.html";
+        String addedLine = "Location : /index.html";
         ResponseFactory responseFactory = new ResponseFactory.Builder()
                 .setResponseStatusLine(ControllerTypeEnum.USER)
-                .setResponseHeader(ContentTypeEnum.CSS,body.length)
+                .setResponseHeader(ContentTypeEnum.CSS, body.length)
                 .addResponseHeader(addedLine)
                 .setResponseBody(body)
                 .build();
         return responseFactory;
-//        response.responseMaker(ControllerTypeEnum.USER, ContentTypeEnum.HTML,body.length,"/index.html");
-//        response.responseNewLineAdder();
-//        response.responseBody(body);
     }
 
     public List<String> parseUrlToGetUserInfo(List<String> requestBodyLine) {
@@ -56,9 +53,10 @@ public class UserController implements Controller {
         }
         return parsedUserInfo;
     }
-    public String getUserInfoFromBodyLines(List<String> lines){
-        for (String line:lines
-             ) {
+
+    public String getUserInfoFromBodyLines(List<String> lines) {
+        for (String line : lines
+        ) {
             if (line.contains("user")) return line;
         }
         return null;

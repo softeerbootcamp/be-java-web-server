@@ -7,7 +7,8 @@ public class ResponseAssembler {
 
     public ResponseAssembler(ResponseFactory responseFactory) {
         assembled =
-                responseFactory.getResponseStatusLine().getResponseStatusLineInString() + NEW_LINE +
+                responseFactory.getResponseStatusLine().getResponseStatusLineInString() +
+                        NEW_LINE +
                         responseFactory.getResponseHeader().getHeaderLine();
         body = responseFactory.getResponseBody().getBody();
 

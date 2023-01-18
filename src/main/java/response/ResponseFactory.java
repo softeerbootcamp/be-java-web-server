@@ -11,7 +11,7 @@ public class ResponseFactory {
     private ResponseBody responseBody;
     private static final String NEW_LINE = "\r\n";
 
-    public ResponseFactory(Builder builder){
+    public ResponseFactory(Builder builder) {
         this.responseStatusLine = builder.responseStatusLine;
         this.responseHeader = builder.responseHeader;
         this.responseBody = builder.responseBody;
@@ -35,7 +35,8 @@ public class ResponseFactory {
         private ResponseStatusLine responseStatusLine;
         private ResponseHeader responseHeader;
         private ResponseBody responseBody;
-        public Builder builder(){
+
+        public Builder builder() {
             return this;
         }
 
@@ -45,7 +46,7 @@ public class ResponseFactory {
         }
 
         public Builder setResponseHeader(ContentTypeEnum contentTypeEnum, int lengthOfBodyContent) {
-            this.responseHeader = new ResponseHeader(contentTypeEnum,lengthOfBodyContent);
+            this.responseHeader = new ResponseHeader(contentTypeEnum, lengthOfBodyContent);
             return this;
         }
 
@@ -53,16 +54,18 @@ public class ResponseFactory {
             this.responseBody = new ResponseBody(body);
             return this;
         }
+
         public Builder addResponseHeader(String addedLine) {
             this.responseHeader.addHeaderLine(addedLine);
             return this;
         }
-        public Builder addCookieHeader(String sid){
+
+        public Builder addCookieHeader(String sid) {
             this.responseHeader.addCookieLine(sid);
             return this;
         }
 
-        public ResponseFactory build(){
+        public ResponseFactory build() {
             return new ResponseFactory(this);
         }
     }

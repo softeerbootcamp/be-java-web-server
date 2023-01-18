@@ -14,6 +14,7 @@ import java.nio.file.Files;
 
 public class TemplateController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(RequestResponseHandler.class);
+
     @Override
     public ResponseFactory controllerService(Request request) throws IOException {
         logger.debug("firstLine : " + request.getRequestLine().getURL());
@@ -22,14 +23,9 @@ public class TemplateController implements Controller {
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + url).toPath());
         ResponseFactory responseFactory = new ResponseFactory.Builder()
                 .setResponseStatusLine(ControllerTypeEnum.TEMPLATE)
-                .setResponseHeader(ContentTypeEnum.HTML,body.length)
+                .setResponseHeader(ContentTypeEnum.HTML, body.length)
                 .setResponseBody(body)
                 .build();
         return responseFactory;
-
-
-//        response.responseMaker(ControllerTypeEnum.TEMPLATE, ContentTypeEnum.HTML, body.length, url);
-//        response.responseNewLineAdder();
-//        response.responseBody(body);
     }
 }

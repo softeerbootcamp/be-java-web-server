@@ -25,15 +25,14 @@ public class RequestResponseHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            //Response response = new Response(out);
             BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
             Request request = new Request(br);
             // todo : 만약 쿠키가 들어오면 룩업해줘야하는데, 요구사항에 아직 없다. 조금 있다가 추가하자.
-            if(request.isRequestHaveCookie()){
+            if (request.isRequestHaveCookie()) {
                 //lookup();
             }
             Controller controller = ControllerSelector.setController(request);
-            logger.debug("request cookie : "+request.getRequestHeader().getHeaderValueByKey("Cookie"));
+            logger.debug("request cookie : " + request.getRequestHeader().getHeaderValueByKey("Cookie"));
             ResponseFactory responseFactory = controller.controllerService(request);
             ResponseSender responseSender = new ResponseSender(out);
             responseSender.send(responseFactory);
@@ -41,7 +40,7 @@ public class RequestResponseHandler implements Runnable {
 
         } catch (IOException e) {
             logger.error(e.getMessage());
-        }catch (NullPointerException nullPointerException){
+        } catch (NullPointerException nullPointerException) {
             logger.error("아무런 요청이 없습니다!!~!");
         }
     }

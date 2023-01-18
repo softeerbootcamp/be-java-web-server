@@ -29,7 +29,7 @@ public class ControllerSelector {
             if (url.contains("/login")) {
                 return loginController;
             }
-            if(url.contains("/create")){
+            if (url.contains("/create")) {
 
                 return userController;
             }

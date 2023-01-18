@@ -58,6 +58,7 @@ public class LoginController implements Controller{
             return true;
         }else return false;
     }
+
     // todo : 해당 메소드 2번 사용되는데 받는 형태도 비슷하다. 어디 묶어볼까?
     public List<String> parseUrlToGetUserInfo(List<String> requestBodyLine) {
         String result = getUserInfoFromBodyLines(requestBodyLine);
