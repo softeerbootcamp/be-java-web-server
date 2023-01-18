@@ -1,5 +1,6 @@
 package filesystem;
 
+import java.util.List;
 import java.util.Map;
 
 public class PathResolver {
@@ -10,6 +11,11 @@ public class PathResolver {
     private static final String NOT_FOUND_HTML = "src/main/resources/templates/notfound.html";
     public static final String DOMAIN = "/";
     public static final String LOGIN_FAILED_HTML = "login_failed.html";
+    public static final List<String> dynamicHtmls = List.of(
+            "/",
+            "index.html"
+    );
+
 
     private PathResolver() {
     }
