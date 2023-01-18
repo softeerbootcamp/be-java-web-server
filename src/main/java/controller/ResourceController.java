@@ -15,7 +15,6 @@ import static utils.FileIoUtils.loadFile;
 
 public class ResourceController extends AbstractController {
 
-    public static final int EMPTY_LENGTH = 0;
 
     private static final Logger logger = LoggerFactory.getLogger(ResourceController.class);
 
@@ -25,19 +24,17 @@ public class ResourceController extends AbstractController {
 
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
-        String path = httpRequest.getUri().getPath();
-        ContentType contentType = ContentType.from(path);
-        String filePath = contentType.getDirectory() + path;
-        logger.debug("filePath: {}",  filePath);
-        byte[] body = loadFile(filePath);
-
-        if (body.length == EMPTY_LENGTH) {
+        try {
+            String path = httpRequest.getUri().getPath();
+            ContentType contentType = ContentType.from(path);
+            String filePath = contentType.getDirectory() + path;
+            logger.debug("filePath: {}", filePath);
+            byte[] body = loadFile(filePath);
+            httpResponse.forward(contentType, body);
+        } catch (IllegalArgumentException e) {
             byte[] errorBody = load404ErrorFile();
             httpResponse.do404(errorBody);
-            return;
         }
-
-        httpResponse.forward(contentType, body);
     }
 
 }
