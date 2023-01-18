@@ -4,6 +4,8 @@ import controller.*;
 import http.exception.NotFoundException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import view.Model;
+import view.ViewHandler;
 
 import java.util.Map;
 import java.util.Objects;
@@ -22,13 +24,16 @@ public class Dispatcher {
 
     public static void handle(HttpRequest request, HttpResponse response) {
         Controller controller = controllers.get(request.getUrl().getPath());
+        Model model = new Model();
         if (Objects.nonNull(controller)) {
-            controller.execute(request, response);
+            String path = controller.execute(request, response, model);
+            ViewHandler.handle(path, request, response, model);
             return;
         }
 
         Controller staticResourcesController = controllers.get(StaticResourceController.PATH);
-        staticResourcesController.execute(request, response);
+        String path = staticResourcesController.execute(request, response, model);
+        ViewHandler.handle(path, request, response, model);
 
         if (response.getBody().length == 0) {
             throw new NotFoundException("페이지를 찾을 수 없습니다.");

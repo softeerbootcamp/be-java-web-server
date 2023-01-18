@@ -6,12 +6,13 @@ import http.exception.MethodNotAllowException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import util.ResourceUtils;
+import view.Model;
 
 public class StaticResourceController implements Controller {
     public static final String PATH = "resources";
 
     @Override
-    public void doGet(HttpRequest request, HttpResponse response) {
+    public String doGet(HttpRequest request, HttpResponse response, Model model) {
         URL url = request.getUrl();
         response.setBody(ResourceUtils.loadFileFromClasspath(url.getPath()));
 
@@ -20,10 +21,11 @@ public class StaticResourceController implements Controller {
         ContentType contentType = ContentType.fromExtension(extension).orElse(ContentType.TEXT_PLAIN);
 
         response.addHeader("Content-Type", contentType.getType());
+        return url.getPath();
     }
 
     @Override
-    public void doPost(HttpRequest request, HttpResponse response) {
+    public String doPost(HttpRequest request, HttpResponse response, Model model) {
         throw new MethodNotAllowException();
     }
 }

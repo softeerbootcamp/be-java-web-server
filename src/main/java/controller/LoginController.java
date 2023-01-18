@@ -6,6 +6,7 @@ import http.request.HttpRequest;
 import http.request.HttpSession;
 import http.response.HttpResponse;
 import model.User;
+import view.Model;
 
 import java.util.Map;
 
@@ -14,14 +15,14 @@ public class LoginController implements Controller {
     public static final String PATH = "/user/login";
 
     @Override
-    public void doPost(HttpRequest request, HttpResponse response) {
+    public String doPost(HttpRequest request, HttpResponse response, Model model) {
         Map<String, String> data = request.getData();
 
         try {
             User user = Database.findUserById(data.get("userId"));
             if (!user.getPassword().equals(data.get("password"))) {
                 response.redirect(LOGIN_FAIL_PATH);
-                return;
+                return "";
             }
 
             HttpSession session = new HttpSession(user);
@@ -31,5 +32,6 @@ public class LoginController implements Controller {
         } catch (NullPointerException e) {
             response.redirect(LOGIN_FAIL_PATH);
         }
+        return "";
     }
 }

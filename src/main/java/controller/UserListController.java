@@ -4,49 +4,16 @@ import db.Database;
 import http.common.ContentType;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import model.User;
-import util.ResourceUtils;
-
-import java.util.Collection;
+import view.Model;
 
 public class UserListController implements AuthController {
     public static final String PATH = "/user/list";
 
     @Override
-    public void doGet(HttpRequest request, HttpResponse response) {
-        response.setBody(
-                        getTable(Database.findAll(),
-                        request.getSession().user()).getBytes()
-        );
+    public String doGet(HttpRequest request, HttpResponse response, Model model) {
+        model.addAttribute("authUser", request.getSession().user());
+        model.addAttribute("users", Database.findAll());
         response.addHeader("Content-Type", ContentType.TEXT_HTML.getType());
-
+        return "/user/list.html";
     }
-
-    private String getTable(Collection<User> users, User requester) {
-        int idx = 1;
-
-        StringBuilder content = new StringBuilder();
-
-        for (User user: users) {
-            content.append("<tr><th scope=\"row\">")
-                    .append(idx++)
-                    .append("</th> <td>")
-                    .append(user.getUserId())
-                    .append("</td> <td>")
-                    .append(user.getName())
-                    .append("</td> <td>")
-                    .append(user.getEmail())
-                    .append("</td><td>");
-            if (user.getUserId().equals(requester.getUserId())) {
-                content.append("<a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a>");
-            }
-            content.append("</td></tr>");
-        }
-
-        byte[] bytes = ResourceUtils.loadFileFromClasspath("/user/list.html");
-        String html = new String(bytes);
-        String[] split = html.split("<tbody>", 2);
-        return split[0] + "<tbody>" + content + split[1];
-    }
-
 }
