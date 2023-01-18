@@ -11,12 +11,6 @@ public class Redirect {
     }};
 
     public static String getRedirectLink(String reqAttribute){
-        /*
-        for (String key: redirectLink.keySet()){
-            if (reqURL.contains(key))
-                return redirectLink.get(key);
-        }
-         */
         return redirectLink.getOrDefault(reqAttribute,"");
     }
 }

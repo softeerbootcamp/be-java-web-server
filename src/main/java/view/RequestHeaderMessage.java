@@ -3,8 +3,11 @@ package view;
 import com.google.common.io.Files;
 import util.MessageParser;
 
+import java.util.Map;
+
+
 public class RequestHeaderMessage {
-    private String httpFirstHeader;
+    private String startLine;
     private String httpReqMethod;
     private String httpReqURL;
     private String httpReqParams;
@@ -13,6 +16,8 @@ public class RequestHeaderMessage {
     private String fileExtension;
     private String requestAttribute;
     private String contentType;
+    private Map<String, String> header;
+    private String sessionId = "";
     public String getHttpOnlyURL() {
         return httpOnlyURL;
     }
@@ -29,13 +34,14 @@ public class RequestHeaderMessage {
 
     public String getContentType() {return contentType;}
 
-    public RequestHeaderMessage(String httpFirstHeader){
-        this.httpFirstHeader = httpFirstHeader;
-        String[] headers = httpFirstHeader.split(" ");
+    public RequestHeaderMessage(String startLine, Map<String,String> header){
+        this.startLine = startLine;
+        String[] headers = startLine.split(" ");
         this.httpReqMethod = headers[0];
         httpReqURL = headers[1].equals("/")?"/index.html":headers[1];
         parseHttpReqURL(httpReqURL);
         httpVersion = headers[2];
+        this.header = header;
     }
 
     private void parseHttpReqURL(String httpReqURL){

@@ -16,6 +16,14 @@ public class MessageParser {
         return info;
     }
 
+
+    public static Map<String,String> parseKeyValue(Map<String,String> header, String headerMessage){
+        String[] keyValue = headerMessage.split(":");
+        header.put(keyValue[0],keyValue[1].substring(1));
+        return header;
+    }
+
+
     public static String getOnlyURL(String reqURL){
         try {
             return reqURL.substring(0,reqURL.indexOf("?"));

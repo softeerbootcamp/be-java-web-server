@@ -2,12 +2,13 @@ package view;
 
 public class RequestBodyMessage {
 
-    private String queryString = "";
 
-    public String getQueryString() {
-        return queryString;
+    private String bodyParams = "";
+
+    public String getBodyParams() {
+        return bodyParams;
     }
     public RequestBodyMessage(char[] body){
-        this.queryString = new String(body);
+        this.bodyParams = new String(body);
     }
 }

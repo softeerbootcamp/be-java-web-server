@@ -34,7 +34,7 @@ public class Response {
             dos.writeBytes("Content-Type: "+requestHeaderMessage.getContentType()+";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + body.length + "\r\n");
             for (Map.Entry<String,String> entry: header.entrySet()){
-                dos.writeBytes(entry.getKey()+": "+entry.getValue());
+                dos.writeBytes(entry.getKey()+": "+entry.getValue()+"\r\n");
             }
             dos.writeBytes("\r\n");
         } catch (IOException e) {
