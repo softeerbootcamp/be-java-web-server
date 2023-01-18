@@ -8,7 +8,8 @@ import java.util.Arrays;
 public enum StatusLine {
     OK("200", "HTTP/1.1 200 OK"),
     Found("302", "HTTP/1.1 302 Found"),
-    NotFound("303", "HTTP/1.1 303 Not Found"),
+    NotJoin("303", "HTTP/1.1 303 Not Join"),
+    NotFound("304", "HTTP/1.1 304 Not Found"),
     ELSE("", "");
 
     private final String code;

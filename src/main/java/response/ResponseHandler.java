@@ -67,11 +67,17 @@ public class ResponseHandler {
                 ResponseHeader responseHeader = new ResponseHeader(headerFields);
                 return HttpResponse.of("302", responseHeader);
             }
-            if(status == StatusLine.NotFound){
-                logger.debug("[ResponseHandler] NotFound");
+            if(status == StatusLine.NotJoin){
+                logger.debug("[ResponseHandler] NotJoin");
                 headerFields.put("Location", "/user/form.html");
                 ResponseHeader responseHeader = new ResponseHeader(headerFields);
                 return HttpResponse.of("303", responseHeader);
+            }
+            if(status == StatusLine.NotFound){
+                logger.debug("[ResponseHandler] NotFound");
+                headerFields.put("Location", "/user/login.html");
+                ResponseHeader responseHeader = new ResponseHeader(headerFields);
+                return HttpResponse.of("304", responseHeader);
             }
         }
 

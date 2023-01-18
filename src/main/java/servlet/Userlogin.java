@@ -47,10 +47,6 @@ public class Userlogin implements Servlet{
     @Override
     public void post(HttpRequest httpRequest) {
         logger.debug("DoPost");
-
-//        User user = UserService.postJoinService(httpRequest);
-//        logger.debug("[User Create] POST user data : {}", user);
-//
-//        Database.addUser(user);
+        UserService.postlogin(httpRequest);
     }
 }
