@@ -63,7 +63,7 @@ public class RequestParser {
     {
         String parsedBody = new String();
         try{
-            StringBuilder sb = new StringBuilder();
+            StringBuffer sb = new StringBuffer();
             while(br.ready())
             {
                 sb.append(((char) br.read()));
