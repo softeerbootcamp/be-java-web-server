@@ -2,12 +2,17 @@ package controller;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.reflect.ClassPath;
+import controller.annotation.Auth;
 import controller.annotation.ControllerInfo;
 import controller.annotation.ControllerMethodInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.HttpRequest;
 import request.Url;
+import service.SessionService;
+import util.Cookie;
+import util.error.HttpsErrorMessage;
+import util.error.erroclass.NotLoggedException;
 import webserver.RequestHandler;
 
 import java.io.DataOutputStream;
@@ -20,6 +25,7 @@ import java.util.Optional;
 public class ControllerFinder {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static SessionService sessionService = new SessionService();
 
 
     public static Controller findController(Url url) {
@@ -43,20 +49,21 @@ public class ControllerFinder {
         return new FileController();
     }
 
-    public static void handleControllerInfoAnnotation(Controller controller, HttpRequest httpRequest, DataOutputStream dataOutputStream) throws IllegalAccessException, NoSuchFileException, InvocationTargetException {
+    public static void handleControllerInfoAnnotation(Controller controller, HttpRequest httpRequest, DataOutputStream dataOutputStream) throws IllegalAccessException, NoSuchFileException, NoSuchMethodException, InvocationTargetException, NotLoggedException {
         Method[] methods = controller.getClass().getMethods();
-        Optional<Method> matchedMethod = Arrays.stream(methods)
+
+        Method method = Arrays.stream(methods)
                 .filter(m -> m.isAnnotationPresent(ControllerMethodInfo.class))
                 .filter(m -> isMatchControllerMethodWithRequest(m.getAnnotation(ControllerMethodInfo.class), httpRequest))
-                .findAny();
+                .findAny()
+                .orElseThrow(() -> new NoSuchMethodException(HttpsErrorMessage.NOT_VALID_MATCHING_METHOD));
 
-        if (matchedMethod.isPresent()) {
-            matchedMethod.get().invoke(controller, dataOutputStream, httpRequest);
-        } else {
-            throw new InvocationTargetException(new Exception("Method not found"), "method not found");
+        if (method.isAnnotationPresent(Auth.class)&&!sessionService.isUserLoggedIn(Cookie.extractCookie(httpRequest.getRequestHeader()))) {
+            throw new NotLoggedException(HttpsErrorMessage.NOT_LOGGED);
         }
-
+        method.invoke(controller, dataOutputStream, httpRequest);
     }
+
 
     private static boolean isMatchControllerMethodWithRequest(ControllerMethodInfo controllerMethodInfo, HttpRequest httpRequest) {
         return httpRequest.getUrl().getRequestDataType().equals(controllerMethodInfo.type())
