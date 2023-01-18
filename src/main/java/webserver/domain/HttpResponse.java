@@ -91,4 +91,13 @@ public class HttpResponse {
         addHeader("Content-Type", mime(uri) + ";charset=utf-8");
         return createForwardMessage();
     }
+
+    public String forward(String uri, UUID sessionId) {
+        if (!FileFinder.isFind(uri)) {
+            return create404Message();
+        }
+        this.body = ViewResolver.makeDynamicHtml(SessionStorage.findSessionBy(sessionId).getUserId(), uri);
+        addHeader("Content-Type", mime(uri) + ";charset=utf-8");
+        return createForwardMessage();
+    }
 }
