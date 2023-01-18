@@ -7,9 +7,9 @@ import java.io.DataOutputStream;
 
 public interface Controller {
 
-    public abstract HttpResponse createResponse();
+    HttpResponse createResponse();
 
-    public default void response(DataOutputStream dos) {
+    default void response(DataOutputStream dos) {
         HttpResponse httpResponse = createResponse();
         HttpResponseUtil.sendResponse(dos, httpResponse);
     }
