@@ -39,19 +39,22 @@ public class LoginController implements Controller{
     public void control(RequestMessage requestMessage, OutputStream out) {
         byte[] body = getStaticBody(requestMessage);
         logger.info("body with static page:\n"+body.toString());
-        if (requestMessage.getRequestHeaderMessage().getHttpOnlyURL().startsWith("/index.html"))
-            body = dynamicIndexPage(body, requestMessage);
-        else if (requestMessage.getRequestHeaderMessage().getHttpOnlyURL().startsWith("/user/list.html"))
+        if (requestMessage.getRequestHeaderMessage().getHttpOnlyURL().contains("html"))
+            body = changeLoginToID(body, requestMessage);
+        if (requestMessage.getRequestHeaderMessage().getHttpOnlyURL().startsWith("/user/list.html"))
             body = dynamicListPage(body, requestMessage);
         logger.info("body after dynamic change:\n"+body.toString());
         Response response = new Response(new DataOutputStream(out));
         response.response(body,requestMessage.getRequestHeaderMessage(), HttpStatus.Success);
     }
 
-    private byte[] dynamicIndexPage(byte[] body, RequestMessage requestMessage){
+    private byte[] changeLoginToID(byte[] body, RequestMessage requestMessage){
         String userID = Session.loginSession.get(requestMessage.getRequestHeaderMessage().getSessionId());
-        return (new String(body)).replace("<li><a href=\"user/login.html\" role=\"button\">로그인</a></li>",
-                "<li><a role=\"button\">"+ userID+"</a></li>").getBytes();
+        String bodyStr =  (new String(body)).replace("<li><a href=\"user/login.html\" role=\"button\">로그인</a></li>",
+                "<li><a role=\"button\">"+ userID+"</a></li>");
+        bodyStr = bodyStr.replace("<li><a href=\"../user/login.html\" role=\"button\">로그인</a></li>",
+                "<li><a role=\"button\">"+ userID+"</a></li>");
+        return bodyStr.getBytes();
     }
 
     private byte[] dynamicListPage(byte[] body, RequestMessage requestMessage){
