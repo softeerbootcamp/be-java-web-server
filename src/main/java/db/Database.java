@@ -10,6 +10,10 @@ import java.util.Map;
 public class Database {
     private static Map<String, User> users = Maps.newHashMap();
 
+    static {
+        users.put("test", new User("test", "123", "123", "123@123"));
+    }
+
     public static void addUser(User user) {
         users.put(user.getUserId(), user);
     }

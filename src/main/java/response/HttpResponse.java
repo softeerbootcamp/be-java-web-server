@@ -46,7 +46,6 @@ public class HttpResponse {
         try {
             dos.writeBytes(statusLine.getValue());
             dos.writeBytes(lineSeparator);
-            logger.debug("lineRedirectSS : {}",responseHeader.toValue());
             dos.writeBytes(responseHeader.toValue());
             dos.writeBytes(lineSeparator);
             dos.flush();

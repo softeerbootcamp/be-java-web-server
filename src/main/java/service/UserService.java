@@ -17,21 +17,29 @@ public class UserService {
 
     private static Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    public static User postJoinService(HttpRequest httpRequest) {
+    Map<String, String> data = new HashMap<>();
+
+    public UserService(Map<String, String> data) {
+        this.data = data;
+    }
+
+    public static UserService from(HttpRequest httpRequest) {
         String body = httpRequest.getBody();
         Map<String, String> data = new HashMap<>();
-
         String[] inputs = body.split("&");
         for (String input : inputs) {
             String[] keyAndValue = input.split("=");
             if (keyAndValue.length < 2) {
-                throw new RuntimeException("모든 값을 입력해야합니다.");
+                throw new RuntimeException("빈 칸이 없어야합니다.");
             }
             logger.debug("key : {}", keyAndValue[0]);
             logger.debug("value : {}", keyAndValue[1]);
             data.put(keyAndValue[0], keyAndValue[1]);
         }
+        return new UserService(data);
+    }
 
+    public User postJoinService() {
         String userId = data.get("userId");
         String password = data.get("password");
         String name = data.get("name");
@@ -40,36 +48,11 @@ public class UserService {
         return new User(userId, password, name, email);
     }
 
-    public static User getJoinService(HttpRequest httpRequest) {
-        Map<String, String> data = httpRequest.getParameters();
+    public void getJoinService() {
 
-        String userId = data.get("userId");
-        String password = data.get("password");
-        String name = data.get("name");
-        String email = data.get("email");
-
-        if (userId.isEmpty() || password.isEmpty() || name.isEmpty() || email.isEmpty()) {
-            throw new RuntimeException("[UserService] 모든 값을 입력해야 합니다");
-        }
-
-
-        return new User(userId, password, name, email);
     }
 
-    public static void postlogin(HttpRequest httpRequest) {
-        String body = httpRequest.getBody();
-        Map<String, String> data = new HashMap<>();
-        String[] inputs = body.split("&");
-        for (String input : inputs) {
-            String[] keyAndValue = input.split("=");
-            if (keyAndValue.length < 2) {
-                throw new RuntimeException("로그인과 비밀번호를 모두 입력하셔야 합니다.");
-            }
-            logger.debug("key : {}", keyAndValue[0]);
-            logger.debug("value : {}", keyAndValue[1]);
-            data.put(keyAndValue[0], keyAndValue[1]);
-        }
-
+    public void postlogin() {
         String userId = data.get("userId");
         String password = data.get("password");
 

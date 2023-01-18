@@ -36,13 +36,12 @@ public class UserCreate implements Servlet{
 
     @Override
     public void post(HttpRequest httpRequest) {
-        User user = UserService.postJoinService(httpRequest);
+        User user = UserService.from(httpRequest).postJoinService();
         Database.addUser(user);
     }
 
     @Override
     public void get(HttpRequest httpRequest) {
-        User user = UserService.getJoinService(httpRequest);
-        Database.addUser(user);
+
     }
 }
