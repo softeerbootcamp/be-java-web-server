@@ -8,11 +8,11 @@ import java.util.Map;
 
 public class URI {
     private final String path;
-    private final Map<String, String> query;
+    private final Map<String, String> params;
 
-    private URI(String path, Map<String, String> query) {
+    private URI(String path, Map<String, String> params) {
         this.path = path;
-        this.query = query;
+        this.params = params;
     }
 
     public static URI create(String target) {
@@ -33,7 +33,7 @@ public class URI {
     public String toString() {
         return "URI{" +
                 "path='" + path + '\'' +
-                ", query=" + query +
+                ", params=" + params +
                 '}';
     }
 
@@ -41,7 +41,7 @@ public class URI {
         return path;
     }
 
-    public Map<String, String> getQuery() {
-        return query;
+    public Map<String, String> getParams() {
+        return params;
     }
 }

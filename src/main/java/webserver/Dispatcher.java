@@ -1,9 +1,6 @@
 package webserver;
 
-import controller.Controller;
-import controller.UserLoginController;
-import controller.StaticFileController;
-import controller.UserCreateController;
+import controller.*;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
@@ -20,7 +17,8 @@ public class Dispatcher {
         controllers = Map.of(
                 UserCreateController.PATH, new UserCreateController(appConfig.userService()),
                 StaticFileController.PATH, new StaticFileController(),
-                UserLoginController.PATH, new UserLoginController(appConfig.userService())
+                UserLoginController.PATH, new UserLoginController(appConfig.userService()),
+                UserListController.PATH, new UserListController(appConfig.userService())
         );
     }
 

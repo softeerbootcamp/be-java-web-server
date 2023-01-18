@@ -36,7 +36,7 @@ public class HttpRequestGenerator {
         while (true) {
             String line = br.readLine();
             if (line.equals("")) break;
-            String[] datas = line.split(": ");
+            String[] datas = line.split(":");
             httpHeader.addHeader(datas[0].trim(), datas[1].trim());
         }
         return httpHeader;

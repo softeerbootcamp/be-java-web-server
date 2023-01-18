@@ -7,7 +7,9 @@ import org.slf4j.LoggerFactory;
 import service.UserService;
 import utils.FileIoUtils;
 import utils.HttpMethod;
+import utils.SessionManager;
 
+import javax.naming.AuthenticationException;
 import java.util.Map;
 
 public class UserLoginController implements Controller {
@@ -26,16 +28,15 @@ public class UserLoginController implements Controller {
         throw new IllegalArgumentException("Login Controller에 존재하지 않는 Http 메서드입니다.");
     }
 
-    public HttpResponse doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        logger.debug("hello");
+    private HttpResponse doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         Map<String, String> params = FileIoUtils.parseQueryString(httpRequest.getRequestBody());
         try {
             userService.login(params.get("userId"), params.get("password"));
-            httpResponse.setCookie(params.get("userId").hashCode());
+            httpResponse.setCookie(SessionManager.createSession(userService.findUser(params.get("userId"))));
             httpResponse.redirectHome();
         }
-        catch (IllegalArgumentException e) {
-            httpResponse.redirectLogin();
+        catch (AuthenticationException e) {
+            httpResponse.redirectLoginFailed();
         }
         return httpResponse;
     }

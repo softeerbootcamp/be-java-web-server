@@ -19,7 +19,7 @@ public class URITest {
     @DisplayName("URI 생성 및 query 테스트")
     void test_URI_QUERY() {
         URI uri = URI.create("/user/create?id=mino&password=1234");
-        assertThat(uri.getQuery().get("id")).isEqualTo("mino");
-        assertThat(uri.getQuery().get("password")).isEqualTo("1234");
+        assertThat(uri.getParams().get("id")).isEqualTo("mino");
+        assertThat(uri.getParams().get("password")).isEqualTo("1234");
     }
 }

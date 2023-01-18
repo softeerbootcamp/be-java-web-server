@@ -21,7 +21,7 @@ public enum HttpMethod {
         try {
             return valueOf(method.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("존재하지 않는 메서드입니다.");
+            throw new IllegalArgumentException(method + "는 존재하지 않는 메서드입니다.");
         }
     }
 

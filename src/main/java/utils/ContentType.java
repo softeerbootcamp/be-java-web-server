@@ -6,7 +6,7 @@ public enum ContentType {
     JS("js", "text/javascript"),
     JPEG("jpeg", "image/jpeg"),
     PNG("png", "image/png"),
-    FAVICON("ico", "image/ico"),
+    ICO("ico", "image/ico"),
     TTF("ttf", "font/ttf"),
     WOFF("woff", "font/woff");
 
@@ -18,15 +18,15 @@ public enum ContentType {
         this.type = type;
     }
 
-    public String getType() {
-        return this.type;
-    }
-
     public static ContentType getContentType(String type) {
         try {
             return valueOf(type.toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("존재하지 않는 타입입니다.");
         }
+    }
+
+    public String getType() {
+        return this.type;
     }
 }

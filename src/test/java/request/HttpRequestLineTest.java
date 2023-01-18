@@ -22,7 +22,7 @@ public class HttpRequestLineTest {
         //then
         assertThat(version).isEqualTo("HTTP/1.1");
         assertThat(uri.getPath()).isEqualTo("/user/create");
-        assertThat(uri.getQuery().get("id")).isEqualTo("mino");
-        assertThat(uri.getQuery().get("password")).isEqualTo("1234");
+        assertThat(uri.getParams().get("id")).isEqualTo("mino");
+        assertThat(uri.getParams().get("password")).isEqualTo("1234");
     }
 }

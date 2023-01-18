@@ -1,5 +1,6 @@
 package http;
 
+import java.util.Collections;
 import java.util.Map;
 
 
@@ -32,5 +33,9 @@ public class HttpHeader {
             sb.append(String.format("%s: %s \r\n", header, headers.get(header)));
         }
         return sb.toString();
+    }
+
+    public Map<String, String> getHeaders() {
+        return Collections.unmodifiableMap(headers);
     }
 }
