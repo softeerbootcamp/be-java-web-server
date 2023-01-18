@@ -1,7 +1,7 @@
 package webserver;
 
 import controller.Controller;
-import controller.DynamicHtmlController;
+import controller.HtmlController;
 import controller.StaticFileController;
 import controller.UserController;
 import http.request.HttpRequest;
@@ -25,7 +25,7 @@ public class ControllerHandler {
             // 로그인을 하지 않은 index.html인 경우 정적 html 처리
             if(httpRequest.getUri().equals("/index.html") && !httpRequest.isLogin())
                 return new StaticFileController();
-            return new DynamicHtmlController();
+            return new HtmlController();
         }
 
         // 나머지 - 정적 처리

@@ -2,20 +2,15 @@ package controller;
 
 import db.Database;
 import db.Session;
-import http.HttpStatus;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import http.response.HttpStatusLine;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.IndexHtmlService;
 import service.ListService;
-import util.HttpResponseUtils;
 
-import java.util.Collection;
-
-public class DynamicHtmlController implements Controller{
+public class HtmlController implements Controller{
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Override
@@ -33,5 +28,6 @@ public class DynamicHtmlController implements Controller{
 
         // /index.html 로그인 O
         return IndexHtmlService.service(fileNameExtension, uri, loginUser, httpVersion, contentType);
+
     }
 }
