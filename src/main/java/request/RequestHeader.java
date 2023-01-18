@@ -1,5 +1,7 @@
 package request;
 
+import util.Cookie;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,10 +13,18 @@ import java.util.regex.Pattern;
 
 public class RequestHeader {
     private final HashMap<String, String> headerContents;
+    private final Cookie cookie;
     public static final String REQUEST_LINE = "Request Line";
 
     public RequestHeader(HashMap<String, String> headerContents) {
         this.headerContents = headerContents;
+        this.cookie = readCookie();
+    }
+
+    private Cookie readCookie() {
+        String cookieSet = headerContents.get("Cookie");
+        String[] splitCookie = cookieSet.split("=");
+        return new Cookie(splitCookie[0], splitCookie[1]);
     }
 
     protected static RequestHeader makeRequestHeader(BufferedReader bufferedReader) throws IOException {
@@ -39,5 +49,9 @@ public class RequestHeader {
 
     public HashMap<String, String> getHeaderContents() {
         return headerContents;
+    }
+
+    public Cookie getCookie() {
+        return cookie;
     }
 }
