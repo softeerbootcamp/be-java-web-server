@@ -1,30 +1,28 @@
-package util;
+package request;
 
-import util.error.HttpsErrorMessage;
-
-import java.net.ProtocolException;
 import java.util.Arrays;
-import java.util.Optional;
 
-public enum UrlType {
+public enum RequestDataType {
     QUERY_STRING(".*\\?(.*)"),
     TEMPLATES_FILE(".*\\.(html|ico)$"),
     STATIC_FILE(".*\\.(css|js|tff|woff)$"),
-    NOTHING(""),
+    IN_BODY(""),
+
     ;
 
 
     private String regex;
 
-    UrlType(String regex) {
+    RequestDataType(String regex) {
         this.regex = regex;
     }
 
-    public static UrlType getUrlType(String url){
+    public static RequestDataType getUrlType(String url){
         return Arrays.stream(values())
                 .filter(value -> url.matches(value.regex))
                 .findAny()
-                .orElse(NOTHING);
+                .orElse(IN_BODY);
     }
+
 
 }

@@ -2,8 +2,7 @@ package reader.fileReader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.Url;
-import util.error.HttpsErrorMessage;
+import request.Url;
 
 import java.io.File;
 import java.io.IOException;

@@ -2,6 +2,7 @@ package response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.Cookie;
 import util.FileType;
 import util.HttpStatus;
 
@@ -20,27 +21,66 @@ public class HttpResponse {
         this.data = data;
         this.fileType = fileType;
         this.httpStatus = httpStatus;
-        makeResponse();
-    }
-
-    private void makeResponse() {
-        responseHeader(httpStatus);
+        responseHeader();
         responseBody();
+    }
 
+    public HttpResponse(Data data,FileType fileType,HttpStatus httpStatus,Cookie cookie) {
+        this.data = data;
+        this.fileType = fileType;
+        this.httpStatus = httpStatus;
+        responseHeader(cookie);
+        responseBody();
     }
 
 
 
-    private void responseHeader(HttpStatus httpStatus) {
+    private void responseHeader() {
+
         try {
-            data.getClientOutputStream().writeBytes("HTTP/1.1 " + httpStatus.getCode() + " " + httpStatus.getMessage() + " \r\n");
-            data.getClientOutputStream().writeBytes("Content-Type: "+fileType.getType() + ";charset=utf-8\r\n");
-            data.getClientOutputStream().writeBytes("Content-Length: " + data.getData().length + "\r\n");
-            data.getClientOutputStream().writeBytes("Location: " + "/index.html" + " \r\n");
+            responseStatus();
+            responseContentType();
+            responseContentLength();
+            responseLocationIndexHtml();
             data.getClientOutputStream().writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private void responseHeader(Cookie cookie) {
+
+        try {
+            responseStatus();
+            responseContentType();
+            responseContentLength();
+            responseLocationIndexHtml();
+            responseCookie(cookie);
+            data.getClientOutputStream().writeBytes("\r\n");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+
+
+    private void responseStatus() throws IOException {
+        data.getClientOutputStream().writeBytes("HTTP/1.1 " + httpStatus.getCode() + " " + httpStatus.getMessage() + " \r\n");
+    }
+
+    private void responseContentType() throws IOException {
+        data.getClientOutputStream().writeBytes("Content-Type: "+fileType.getType() + ";charset=utf-8\r\n");
+    }
+    private void responseContentLength() throws IOException {
+        data.getClientOutputStream().writeBytes("Content-Length: " + data.getData().length + "\r\n");
+    }
+
+    private void responseLocationIndexHtml() throws IOException {
+        data.getClientOutputStream().writeBytes("Location: " + "/index.html" + " \r\n");
+    }
+
+    private void responseCookie(Cookie cookie) throws IOException {
+        data.getClientOutputStream().writeBytes("Set-Cookie: "+cookie.getKey()+"="+cookie.getValue()+"; Path=/"+ " \r\n");
     }
 
 

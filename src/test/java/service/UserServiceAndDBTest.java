@@ -8,8 +8,11 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserServiceAndDBTest {
     final String[] userValue = {"test", "1234", "testName", "test@naver.com"};
@@ -28,12 +31,15 @@ class UserServiceAndDBTest {
         //given
         saveUser(userValue);
         //when
-        User user = (User) userDataBase.findObjectById(userValue[0]);
+        Optional<User> objectById = userDataBase.findObjectById(userValue[0]);
+        User user = objectById.get();
         //then
-        assertThat(user.getUserId()).isEqualTo(userValue[0]);
-        assertThat(user.getPassword()).isEqualTo(userValue[1]);
-        assertThat(user.getName()).isEqualTo(userValue[2]);
-        assertThat(user.getEmail()).isEqualTo(userValue[3]);
+        assertAll(
+                () -> assertEquals(user.getUserId(), userValue[0]),
+                () -> assertEquals(user.getPassword(), userValue[1]),
+                () -> assertEquals(user.getName(), userValue[2]),
+                () -> assertEquals(user.getEmail(), userValue[3])
+        );
     }
 
     private void saveUser(String[] userValue) {

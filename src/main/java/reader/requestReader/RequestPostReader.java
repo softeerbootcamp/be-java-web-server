@@ -1,10 +1,11 @@
-package reader;
+package reader.requestReader;
 
+import reader.requestReader.RequestReader;
 import request.HttpRequest;
 
 import java.util.HashMap;
 
-public class RequestPostReader implements RequestReader{
+public class RequestPostReader implements RequestReader {
 
     private final String REGEX_FORM = "&";
     private final String REGEX_FORM_DATA = "=";

@@ -1,15 +1,15 @@
 package reader;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import reader.requestReader.RequestPostReader;
+import reader.requestReader.RequestReader;
 import request.HttpRequest;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RequestPostReaderTest {
@@ -33,9 +33,12 @@ class RequestPostReaderTest {
         RequestReader requestReader = new RequestPostReader();
         HashMap<String, String> usermap = requestReader.readData(httpRequest);
         //then
-        assertThat(usermap.get("userId")).isEqualTo("test");
-        assertThat(usermap.get("password")).isEqualTo("testPW");
-        assertThat(usermap.get("name")).isEqualTo("test");
-        assertThat(usermap.get("email")).isEqualTo("test@naver.com");
+        assertAll(
+                () -> assertEquals(usermap.get("userId"), "test"),
+                () -> assertEquals(usermap.get("password"), "testPW"),
+                () -> assertEquals(usermap.get("name"), "test"),
+                () -> assertEquals(usermap.get("email"), "test@naver.com")
+        );
+
     }
 }

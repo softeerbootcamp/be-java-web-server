@@ -1,20 +1,15 @@
 package controller.annotation;
 
 
-import util.HttpMethod;
-import util.UrlType;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import java.lang.annotation.*;
-
-@Target(ElementType.METHOD)
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ControllerInfo {
-    String path();
-
-    UrlType u();
-
-    HttpMethod method();
-
+    String regex();
 
 
 }
