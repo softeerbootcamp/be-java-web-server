@@ -22,9 +22,9 @@ import java.util.Map;
 
 public class UserController implements Controller{
 
-    static UserController userController;
+    private static UserController userController;
 
-
+    private final UserService userService = UserService.getInstance();
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private static final String USER_ID = "userId";
     private static final String PASSWORD = "password";
@@ -49,7 +49,6 @@ public class UserController implements Controller{
 
     @Override
     public void control(RequestMessage requestMessage, OutputStream out) {
-        UserService userService = new UserService(new MemoryUserRepository());
         byte[] body = new byte[0];
         Map<String,String> headerKV= new HashMap<>();
         httpStatus = HttpStatus.ClientError;

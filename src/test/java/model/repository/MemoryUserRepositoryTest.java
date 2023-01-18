@@ -10,7 +10,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MemoryUserRepositoryTest {
-    MemoryUserRepository memoryUserRepository = new MemoryUserRepository();
+    MemoryUserRepository memoryUserRepository = (MemoryUserRepository) MemoryUserRepository.getInstance();
 
     @AfterEach
     public void afterEach(){

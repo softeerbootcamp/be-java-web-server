@@ -18,8 +18,8 @@ class UserServiceTest {
 
     @BeforeEach
     public void beforeEach(){
-        memoryUserRepository = new MemoryUserRepository();
-        userService = new UserService(memoryUserRepository);
+        memoryUserRepository = (MemoryUserRepository) MemoryUserRepository.getInstance();
+        userService = UserService.getInstance();
     }
 
     @AfterEach

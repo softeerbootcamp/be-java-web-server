@@ -1,17 +1,30 @@
 package model.service;
 
+import controller.StaticController;
 import model.domain.User;
+import model.repository.MemoryUserRepository;
 import model.repository.UserRepository;
 
 import java.util.Collection;
 import java.util.Optional;
 
 public class UserService {
-    private final UserRepository userRepository;
+    private final UserRepository userRepository = MemoryUserRepository.getInstance();
+    private static UserService userService;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    private UserService(){}
+
+    public static UserService getInstance(){
+        if (userService == null){
+            synchronized (StaticController.class){
+                if (userService == null){
+                    userService = new UserService();
+                }
+            }
+        }
+        return userService;
     }
+
 
     public String join(User user){
         try {
