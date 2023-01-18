@@ -31,14 +31,16 @@ public class LoginController implements Controller{
         List<String> bodyLine = request.getRequestBody().getBodyLines();
         List<String> userInfos = parseUrlToGetUserInfo(bodyLine);
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + "/index.html").toPath());
+        String addedLine="Location : /index.html";
         // 로그인이 성공하면? session add
         if(checkIdPwdIsInDatabase(userInfos.get(USERID_INDEX),userInfos.get(USERPWD_INDEX))){
             HttpSessions.addHttpSession(userInfos.get(USERID_INDEX));
             sid = HttpSessions.findSessionById(userInfos.get(USERID_INDEX));
         }else{
             logger.debug("login failed!");
+            addedLine="Location : /user/login_failed.html";
         }
-        String addedLine="Location : /index.html";
+
         ResponseFactory responseFactory = new ResponseFactory.Builder()
                 .setResponseStatusLine(ControllerTypeEnum.LOGIN)
                 .setResponseHeader(ContentTypeEnum.CSS,body.length)

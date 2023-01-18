@@ -6,47 +6,55 @@ Java Web Application Server 2022
 1. 로그인을 GET에서 POST로 수정 후 정상 동작하도록 구현한다.[x]
 2. 가입을 완료하면 /index.html 페이지로 이동한다.[x]
 3. http://localhost:8080/user/form.html 파일의 form태그 method를 get에서 post로 수정한다.[x]
-4. 나머지 회원가입 기능이 정상적으로 동작하도록 구현한다.[ ]
+4. 나머지 회원가입 기능이 정상적으로 동작하도록 구현한다.[x]
 5. 가입 후 페이지 이동을 위해 HTTP redirection 기능을 구현한다.[x]
 6. todo 처리 [ ]
-7. 가입한 회원 정보로 로그인을 할 수 있다. [ ]
+7. 가입한 회원 정보로 로그인을 할 수 있다. [x]
 8. [로그인] 메뉴를 클릭하면 http://localhost:8080/user/login.html 으로 이동해 로그인할 수 있다. [x]
-9. 로그인이 성공하면 index.html로 이동한다. [ ]
-10. 로그인이 실패하면 /user/login_failed.html로 이동한다. [ ]
+9. 로그인이 성공하면 index.html로 이동한다. [x]
+10. 로그인이 실패하면 /user/login_failed.html로 이동한다. [x]
 
 ## 프로젝트 구조
-    ├── java
-    │   ├── controller
-    │   │   ├── Controller.java
-    │   │   ├── ControllerSelector.java
-    │   │   ├── StaticController.java
-    │   │   ├── TemplateController.java
-    │   │   └── UserController.java
-    │   ├── db
-    │   │   └── Database.java
-    │   ├── enums
-    │   │   ├── ContentTypeEnum.java
-    │   │   ├── ControllerTypeEnum.java
-    │   │   ├── HeaderReferenceEnum.java
-    │   │   ├── HttpVersionTypeEnum.java
-    │   │   └── StatusCodeWithMessageEnum.java
-    │   ├── model
-    │   │   └── User.java
-    │   ├── request
-    │   │   ├── Request.java
-    │   │   ├── RequestHeader.java
-    │   │   ├── RequestLine.java
-    │   │   └── RequestURL.java
-    │   ├── response
-    │   │   ├── Response.java
-    │   │   ├── ResponseHeader.java
-    │   │   └── ResponseStatusLine.java
-    │   └── webserver
-    │       ├── RequestResponseHandler.java
-    │       └── WebServer.java
+    ├── controller
+    │   ├── Controller.java
+    │   ├── ControllerSelector.java
+    │   ├── LoginController.java
+    │   ├── StaticController.java
+    │   ├── TemplateController.java
+    │   └── UserController.java
+    ├── db
+    │   └── Database.java
+    ├── enums
+    │   ├── ContentTypeEnum.java
+    │   ├── ControllerTypeEnum.java
+    │   ├── HeaderReferenceEnum.java
+    │   ├── HttpVersionTypeEnum.java
+    │   ├── MethodEnums.java
+    │   └── StatusCodeWithMessageEnum.java
+    ├── model
+    │   └── User.java
+    ├── request
+    │   ├── Request.java
+    │   ├── RequestBody.java
+    │   ├── RequestHeader.java
+    │   └── RequestLine.java
+    ├── response
+    │   ├── ResponseAssembler.java
+    │   ├── ResponseBody.java
+    │   ├── ResponseFactory.java
+    │   ├── ResponseHeader.java
+    │   ├── ResponseSender.java
+    │   └── ResponseStatusLine.java
+    ├── session
+    │   ├── HttpSession.java
+    │   └── HttpSessions.java
+    └── webserver
+    ├── RequestResponseHandler.java
+    └── WebServer.java
 
 
 # 기능 설명
+## update 필요.
 ## webserver
     WebServer.java
 socket을 형성하고, 스레드를 형성하는, 서버 시작점.
