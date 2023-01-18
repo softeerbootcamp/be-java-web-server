@@ -60,13 +60,14 @@ public class FileIoUtils {
         ));
         sb.append("<td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td>");
         sb.append("</tr>");
+        int cnt = 2;
         for (User user : users) {
             if (user.getUserId().equals(sessionData.getUserId()))
                 continue;
             sb.append("<tr>");
-            sb.append(String.format("<th scope=\"row\">2</th> <td>%s</td> <td>%s</td> <td>%s</td>",
-                    user.getUserId(), user.getName(), user.getEmail()));
-            sb.append("</tr>");
+            sb.append(String.format("<th scope=\"row\">%d</th> <td>%s</td> <td>%s</td> <td>%s</td> <td>",
+                    cnt++, user.getUserId(), user.getName(), user.getEmail()));
+            sb.append("</td> </tr>");
         }
         return userListPage.replace("<!--userList-->", sb.toString()).getBytes();
     }
