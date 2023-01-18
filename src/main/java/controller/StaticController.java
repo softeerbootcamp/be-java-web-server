@@ -41,11 +41,15 @@ public class StaticController implements Controller{
     }
     @Override
     public void control(RequestMessage requestMessage, OutputStream out) {
-        String fileURL = RELATIVE_PATH + getSubPath(requestMessage) + requestMessage.getRequestHeaderMessage().getHttpOnlyURL();
-        byte[] body = getBodyFile(fileURL);
+        byte[] body = getResponseBody(requestMessage);
         HttpStatus httpStatus = setHttpStatus(body);
         Response response = new Response(new DataOutputStream(out));
         response.response(body,requestMessage.getRequestHeaderMessage(), httpStatus);
+    }
+
+    public byte[] getResponseBody(RequestMessage requestMessage){
+        String fileURL = RELATIVE_PATH + getSubPath(requestMessage) + requestMessage.getRequestHeaderMessage().getHttpOnlyURL();
+        return getBodyFile(fileURL);
     }
 
 

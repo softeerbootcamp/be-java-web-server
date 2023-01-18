@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.util.Map;
 
 import controller.Controller;
+import controller.LoginController;
 import controller.StaticController;
 import controller.UserController;
 import org.slf4j.Logger;
@@ -42,6 +43,10 @@ public class RequestHandler implements Runnable {
 
     private void setController(RequestMessage requestMessage){
         RequestHeaderMessage requestHeaderMessage = requestMessage.getRequestHeaderMessage();
+        if (requestHeaderMessage.isLogin()){
+            controller = LoginController.getInstance();
+            return;
+        }
         if (requestHeaderMessage.getHttpOnlyURL().contains(".")) {
             controller = StaticController.getInstance();
             return;

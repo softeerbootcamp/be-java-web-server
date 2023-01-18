@@ -2,6 +2,7 @@ package view;
 
 import com.google.common.io.Files;
 import util.MessageParser;
+import util.Session;
 
 import java.util.Map;
 
@@ -18,7 +19,7 @@ public class RequestHeaderMessage {
     private String contentType;
     private Map<String, String> header;
     private Map<String, String> cookie;
-    private String sessionId = "";
+    private String sessionId;
     public String getHttpOnlyURL() {
         return httpOnlyURL;
     }
@@ -44,6 +45,7 @@ public class RequestHeaderMessage {
         httpVersion = headers[2];
         this.header = header;
         this.cookie = getCookies();
+        sessionId = cookie.getOrDefault("sid","");
     }
 
     private void parseHttpReqURL(String httpReqURL){
@@ -56,6 +58,10 @@ public class RequestHeaderMessage {
 
     private Map<String,String> getCookies(){
         return MessageParser.parseCookie(header.get("Cookie"));
+    }
+
+    public boolean isLogin(){
+        return Session.loginSession.get(sessionId) != null;
     }
 
 }
