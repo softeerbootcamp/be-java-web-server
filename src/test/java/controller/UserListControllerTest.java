@@ -3,6 +3,7 @@ package controller;
 import db.Database;
 import model.User;
 import model.request.Request;
+import model.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -28,7 +29,7 @@ public class UserListControllerTest {
 
         //when
         webserver.controller.UserListController userListController = new webserver.controller.UserListController();
-        userListController.service(request);
+        Response service = userListController.service(request);
         //then
 
     }

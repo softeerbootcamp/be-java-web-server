@@ -20,4 +20,8 @@ public class SessionStorage {
     public static Optional<User> findBySessionId(String sid) {
         return Optional.ofNullable(sessionUsers.get(sid));
     }
+
+    public static boolean isValidate(String sid) {
+        return sessionUsers.containsKey(sid);
+    }
 }
