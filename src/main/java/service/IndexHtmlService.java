@@ -7,10 +7,10 @@ import model.User;
 import util.HttpResponseUtils;
 
 public class IndexHtmlService {
-    public static HttpResponse service(String filePath, String uri, User loginUser, String httpVersion, String contentType) {
+    public static HttpResponse service(String filePath, User loginUser, String httpVersion, String contentType) {
 
         // 파일 경로를 넘겨서 http response string 생성
-        String responseString = new String(HttpResponseUtils.makeBody(uri, filePath));
+        String responseString = new String(HttpResponseUtils.makeBody(filePath));
         byte[] responseBody = responseString.replace("로그인", loginUser.getName()).getBytes();
 
         return new HttpResponse.HttpResponseBuilder()

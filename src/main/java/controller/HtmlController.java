@@ -27,15 +27,15 @@ public class HtmlController implements Controller{
         // list service
         if(uri.equals("/user/list.html"))
             return ListService.service(
-                    httpRequest.isLogin(), htmlFilePath, uri, httpVersion, contentType);
+                    httpRequest.isLogin(), htmlFilePath + uri, httpVersion, contentType);
 
         // index.html service 로그인 O
         if(httpRequest.isLogin())
             return IndexHtmlService.service(
-                    htmlFilePath, uri, loginUser, httpVersion, contentType);
+                    htmlFilePath + uri, loginUser, httpVersion, contentType);
 
         // index.html service 로그인 X
         return StaticFileService.service(
-                uri, htmlFilePath, httpVersion, contentType);
+                uri + htmlFilePath, httpVersion, contentType);
     }
 }

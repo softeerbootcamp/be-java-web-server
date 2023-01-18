@@ -13,10 +13,10 @@ import java.util.List;
 public class HttpResponseUtils {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponseUtils.class);
 
-    public static byte[] makeBody(String httpUri, String filePath) {
-        logger.debug("filePath get : {}", filePath + httpUri);
+    public static byte[] makeBody(String filePath) {
+        logger.debug("filePath get : {}", filePath);
         try {
-            return Files.readAllBytes(new File(filePath + httpUri).toPath());
+            return Files.readAllBytes(new File(filePath).toPath());
         } catch (IOException e) {
             return " 파일을 찾지 못함 !".getBytes();
         }

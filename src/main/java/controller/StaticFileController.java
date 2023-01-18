@@ -16,7 +16,6 @@ public class StaticFileController implements Controller {
     public HttpResponse makeResponse(HttpRequest httpRequest) {
 
         return StaticFileService.service(
-                httpRequest.getUri(),
                 staticFilePath,
                 httpRequest.getHttpVersion(),
                 httpRequest.getContentType());
