@@ -14,7 +14,7 @@ import java.io.IOException;
 public class ErrorController implements Controller{
     private final static String ERROR_404_ROUTE = "/error404.html";
     private final static String ERROR_403_ROUTE = "/error403.html";
-    private final static String ERROR_401_ROUTE = "/error401.html";
+    private final static String ERROR_401_ROUTE = "/user/login_failed.html";
     private final static String ERROR_500_ROUTE = "/error500.html";
 
     public static HttpResponse getErrorResponse(DataOutputStream dataOutputStream, HttpStatus httpStatus) throws IOException {
