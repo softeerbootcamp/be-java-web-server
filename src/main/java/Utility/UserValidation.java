@@ -12,7 +12,7 @@ public class UserValidation {
     }
 
     public static boolean isIdValid(String userIdOrNull){
-        return Objects.isNull(userIdOrNull);
+        return !Objects.isNull(userIdOrNull);
     }
 
     public static boolean isEmailValid(String emailOrNull) {
@@ -32,6 +32,6 @@ public class UserValidation {
     }
 
     public static boolean isNameValid(String nameOrNull) {
-        return Objects.isNull(nameOrNull);
+        return !Objects.isNull(nameOrNull);
     }
 }
