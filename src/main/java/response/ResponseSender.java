@@ -18,7 +18,7 @@ public class ResponseSender {
     public void send(NewResponse newResponse){
         try {
             ResponseAssembler responseAssembler = new ResponseAssembler(newResponse);
-            dos.writeBytes(responseAssembler.getAssembled());
+            dos.writeBytes(responseAssembler.getAssembled()+System.lineSeparator());
             dos.write(responseAssembler.getBody(),0,responseAssembler.getBody().length);
             dos.flush();
         } catch (IOException e) {
