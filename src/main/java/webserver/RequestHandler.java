@@ -37,10 +37,10 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void sendResponse(CustomHttpResponse response, OutputStream out, String protocolVersion) {
+    public void sendResponse(CustomHttpResponse response, OutputStream out, String protocolVersion) {
         try {
             DataOutputStream dos = new DataOutputStream(out);
-            dos.writeBytes( response.getStatusLine(protocolVersion) + CRLF);
+            dos.writeBytes(response.getStatusLine(protocolVersion) + CRLF);
             dos.writeBytes(response.getContentTypeLine() + CRLF);
             for (String key : response.getHeaders().keySet()) {
                 dos.writeBytes(key + ": " + response.getHeaders().get(key) + CRLF);

@@ -3,7 +3,20 @@ package httpMock;
 import httpMock.constants.ContentType;
 import httpMock.constants.StatusCode;
 
-public class CustomHttpErrorFactory {
+import java.util.HashMap;
+
+public class CustomHttpFactory {
+
+    public static CustomHttpResponse REDIRECT(String location) {
+        return CustomHttpResponse.of(
+                StatusCode.FOUND,
+                ContentType.TEXT_PLAIN,
+                new HashMap<>() {{
+                    put("Location", location);
+                }},
+                CustomHttpResponse.EMPTY_BODY
+        );
+    }
 
     public static CustomHttpResponse BAD_REQUEST(String reason) {
         return CustomHttpResponse.of(
@@ -23,7 +36,7 @@ public class CustomHttpErrorFactory {
         );
     }
 
-    public static CustomHttpResponse METHOD_NOT_ALLOWED(){
+    public static CustomHttpResponse METHOD_NOT_ALLOWED() {
         return CustomHttpResponse.of(
                 StatusCode.METHOD_NOT_ALLOWED,
                 ContentType.TEXT_PLAIN,

@@ -18,14 +18,14 @@ public class CustomHttpRequest {
     private String protocolVersion;
     private Map<String, String> urlParams;
     private Map<String, List<String>> requestHeaders;
-    private List<String> requestBody;
+    private final List<String> requestBody;
 
     private CustomHttpRequest(String firstLine, List<String> headers, List<String> bodies) {
         setFirstLineHeaders(firstLine);
         setRequestHeaders(headers);
         setUrlParams(this.url);
         requestBody = bodies;
-        if(this.httpMethod == HttpMethod.GET)
+        if (this.httpMethod == HttpMethod.GET)
             logger.debug("url : " + this.url + ", method : " + this.httpMethod + ", urlParams : " + this.urlParams + ", body : " + this.requestBody);
         else
             logger.info("url : " + this.url + ", method : " + this.httpMethod + ", urlParams : " + this.urlParams + ", body : " + this.requestBody);
@@ -48,7 +48,7 @@ public class CustomHttpRequest {
                 if (nextLine.equals(""))
                     break;
                 headers.add(nextLine);
-                logger.debug(nextLine);
+                logger.trace(nextLine);
             }
             StringBuilder sb = new StringBuilder();
             while (br.ready()) {
@@ -56,8 +56,7 @@ public class CustomHttpRequest {
                 sb.append((char) next);
             }
             return of(firstLine, headers, List.of(sb.toString().split(System.lineSeparator())));
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             logger.error(e.getMessage());
             throw new RuntimeException();
         }
@@ -77,7 +76,7 @@ public class CustomHttpRequest {
         this.protocolVersion = firstLineDatas[2];
     }
 
-    private void setRequestHeaders(List<String> headers){
+    private void setRequestHeaders(List<String> headers) {
         requestHeaders = new HashMap<>();
         headers.forEach(this::addToRequestHeader);
     }
@@ -119,11 +118,19 @@ public class CustomHttpRequest {
         if (split1.length < 2) {
             return;
         }
-        String[] itemString = Arrays.stream(split1[1].split(",")).map(String::trim).toArray(String[]::new);
+        String[] itemString = Arrays.stream(split1[1].split(";")).map(String::trim).toArray(String[]::new);
         List<String> itemList = new ArrayList<>(List.of(itemString));
         this.requestHeaders.put(itemName, itemList);
     }
 
+    public String getSSID(){
+        if (requestHeaders.get("Cookie") == null)
+            return null;
+        String sidLine = requestHeaders.get("Cookie").stream().filter(s -> s.startsWith("SID=")).findFirst().orElse(null);
+        if (sidLine == null)
+            return null;
+        return sidLine.substring(sidLine.indexOf("=") + 1);
+    }
     public String getUrl() {
         return url;
     }
@@ -136,7 +143,7 @@ public class CustomHttpRequest {
         return protocolVersion;
     }
 
-    public HttpMethod getHttpMethod(){
+    public HttpMethod getHttpMethod() {
         return httpMethod;
     }
 }

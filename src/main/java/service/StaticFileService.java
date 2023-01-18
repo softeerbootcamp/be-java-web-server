@@ -17,7 +17,7 @@ public class StaticFileService {
         return url.substring(index + 1);
     }
 
-    public static File getFile(String url){
+    public static File getFile(String url) {
         String filePath = STATIC_PATH + url;
         String fileType = getFileTypeFromUrl(url);
         if (TEMPLATE_FILES.contains(fileType)) {
