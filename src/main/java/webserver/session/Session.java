@@ -60,4 +60,8 @@ public class Session {
     public void expire() {
         SessionStorage.remove(this);
     }
+
+    public void invalidate() {
+        expire();
+    }
 }
