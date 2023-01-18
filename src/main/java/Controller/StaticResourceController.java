@@ -20,8 +20,13 @@ public class StaticResourceController implements Controller {
     @Override
     public void process(HttpRequest request, HttpResponse response) {
         String url = request.getUrl();
-        if (url.equals("/")) {
+        if (url.equals("/") || url.equals("/index.html")) {
             url = "/index.html";
+
+            if (request.isLogin()) {
+                HomeLoginController.getInstance().process(request, response);
+                return;
+            }
         }
 
         try {
