@@ -7,6 +7,8 @@ import java.util.UUID;
 
 public class SessionService {
 
+    public static final String LOGIN = "login";
+
     public String makeSessionId() {
         return UUID.randomUUID().toString();
     }
@@ -14,15 +16,13 @@ public class SessionService {
     public void makeSession(String sessionId, String value) {
         Session session = new Session(sessionId);
         session.setAttribute(sessionId, value);
-        addSession(session);
-    }
-
-    public void addSession(Session session) {
         SessionRepository.addSession(session.getId(), session);
     }
 
-    public Session findById(String id) {
-        return SessionRepository.findById(id);
+    public void validateLogin(String id) {
+        Session session = SessionRepository.findById(id);
+        if (session == null || session.getAttribute(id) != LOGIN)
+            throw new NullPointerException("Session not found");
     }
 
 }
