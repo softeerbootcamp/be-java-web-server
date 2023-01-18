@@ -1,14 +1,13 @@
 package webserver.service;
 
 import db.Database;
-import db.SessionDb;
+import db.SessionStorage;
 import exception.UserNotFoundException;
 import model.User;
 import model.request.Request;
 import model.response.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.controller.UserLoginController;
 
 import java.util.Map;
 import java.util.UUID;
@@ -34,7 +33,7 @@ public class UserService {
         boolean isValid = byUser.getPassword().equals(request.getRequestParams().get("password"));
         if (isValid) {
             String sid = String.valueOf(UUID.randomUUID());
-            SessionDb.addSession(sid, byUser);
+            SessionStorage.addSession(sid, byUser);
             logger.debug("로그인 성공 (세션 저장) user id : {}, sid : {}", byUser.getUserId(), sid);
 
             return Response.of(request.getHttpVersion(), FOUND, Map.of("Set-Cookie", "sid=" + sid + "; Path=/",

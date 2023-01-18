@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 import java.util.Optional;
 
-public class SessionDb {
-    private static final Logger logger = LoggerFactory.getLogger(SessionDb.class);
+public class SessionStorage {
+    private static final Logger logger = LoggerFactory.getLogger(SessionStorage.class);
 
     private static Map<String, User> sessionUsers = Maps.newHashMap();
 

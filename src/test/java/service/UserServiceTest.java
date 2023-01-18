@@ -1,7 +1,7 @@
 package service;
 
 import db.Database;
-import db.SessionDb;
+import db.SessionStorage;
 import exception.DuplicateUserIdException;
 import exception.UserNotFoundException;
 import model.User;
@@ -10,6 +10,7 @@ import model.response.Response;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import util.HttpRequestUtils;
 import webserver.service.UserService;
 
 import java.io.ByteArrayInputStream;
@@ -107,7 +108,8 @@ public class UserServiceTest {
 
         //then
         String setCookieHeader = response.getHeaders().get("Set-Cookie");
-        User bySession = SessionDb.findBySessionId(response.getHeaders().get("Set-Cookie")).orElseThrow(UserNotFoundException::new);
+        String s = HttpRequestUtils.parseSid(setCookieHeader);
+        User bySession = SessionStorage.findBySessionId(s).orElseThrow(UserNotFoundException::new);
 
         assertThat(bySession.getUserId()).isEqualTo("javajigi");
     }
