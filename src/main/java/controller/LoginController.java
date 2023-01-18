@@ -32,8 +32,9 @@ public class LoginController implements Controller{
             HttpSessionManager.addSession(session);
             response.addCookie(LOGINED_ATTR_KEY, session.getId());
             response.redirect(REDIRECT_URL);
+        } else {
+            response.redirect(FAILED_REDIRECT_URL);
         }
-        else response.redirect(FAILED_REDIRECT_URL);
     }
 
 }
