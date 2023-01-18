@@ -46,7 +46,8 @@ public class ControllerInterceptor {
                     //hand over the session to controller only if it is valid
                     //TODO : 해당 사항을 별도의 클래스로 분리해서 Security 관련 기능을 다룰 것
                     String sessionId = req.getRequestHeader().get("Cookie");
-                    HttpCookieUtils.cookieValidation(sessionId).ifPresent(cookie -> contentMap.put("Cookie", cookie.getSessionId()));
+                    if(sessionId != null)
+                        HttpCookieUtils.cookieValidation(sessionId).ifPresent(cookie -> contentMap.put("Cookie", cookie.getSessionId()));
 
                     //invoke method
                     method.invoke(clazz.newInstance(), contentMap, res);
