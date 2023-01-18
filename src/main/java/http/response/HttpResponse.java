@@ -61,7 +61,7 @@ public class HttpResponse {
             return this;
         }
 
-        public HttpResponseBuilder set300Header(String destination){
+        public HttpResponseBuilder set302Header(String destination){
             this.header = HttpResponseUtils.makeResponse302Header(destination);
             return this;
         }
