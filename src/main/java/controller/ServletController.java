@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import request.HttpRequest;
 import servlet.Servlet;
 import servlet.UserCreate;
+import servlet.Userlogin;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -29,6 +30,7 @@ public class ServletController {
 
     public static ServletController of(String path) {
         controller.put("/user/create", UserCreate.class);
+        controller.put("/user/login", Userlogin.class);
 
         return new ServletController(controller.get(path));
     }

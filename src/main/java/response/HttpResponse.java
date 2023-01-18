@@ -45,7 +45,7 @@ public class HttpResponse {
         }
     }
 
-    public void respondredirect(DataOutputStream dos) {
+    public void respondRedirect(DataOutputStream dos) {
         try {
             logger.debug("[HttpResponse] Do respondJoin");
             dos.writeBytes(statusLine.getValue());
