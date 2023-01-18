@@ -1,6 +1,6 @@
 package webserver;
 
-import model.Request.Request;
+import model.response.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,42 +8,34 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
-import static webserver.HttpStatusCode.*;
+import static model.response.HttpStatusCode.*;
 
 public class ResponseHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(ResponseHandler.class);
-    private final ViewResolver viewResolver;
 
     private final Socket connection;
 
     public ResponseHandler(Socket connection) {
         this.connection = connection;
-        this.viewResolver = new ViewResolver();
     }
 
-    public void response(Request request) {
+    public void response(Response response) {
         try (OutputStream out = connection.getOutputStream()) {
             DataOutputStream dos = new DataOutputStream(out);
 
-            if (request.getRequestParams().size() != 0) {
-                response302Header(dos);
-                return;
-            }
-
-            try {
-                Path path = viewResolver.findFilePath(request.getUrl());
-                String contentType = Files.probeContentType(path);
-                byte[] body = viewResolver.findActualFile(path);
-
-                response200Header(dos, body.length, contentType);
-                responseBody(dos, body);
-            } catch (IOException e) {
-                response404Header(dos);
-                logger.error("404 NOT FOUND : " + e.getMessage());
+            switch (response.getStatusLine().getHttpStatusCode()) {
+                case OK:
+                    response200Header(dos, response.getBody().length, response.getHeaders().get("Content-Type"));
+                    responseBody(dos, response.getBody());
+                    break;
+                case FOUND:
+                    response302Header(dos, response);
+                    break;
+                case NOT_FOUND:
+                    response404Header(dos);
+                    break;
             }
 
         } catch (IOException e) {
@@ -62,10 +54,14 @@ public class ResponseHandler {
         }
     }
 
-    private void response302Header(DataOutputStream dos) {
+    private void response302Header(DataOutputStream dos, Response response) {
         try {
             dos.writeBytes("HTTP/1.1 " + FOUND);
-            dos.writeBytes("Location: /index.html\r\n");
+            dos.writeBytes("Location: " + response.getHeaders().get("Location")+"\r\n");
+            //TODO 리팩토링 고민
+            if (response.getHeaders().containsKey("Set-Cookie")) {
+                dos.writeBytes("Set-Cookie: "+ response.getHeaders().get("Set-Cookie"));
+            }
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());

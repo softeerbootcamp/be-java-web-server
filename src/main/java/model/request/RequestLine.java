@@ -1,4 +1,4 @@
-package model.Request;
+package model.request;
 
 public class RequestLine {
     private final String version;
@@ -15,6 +15,10 @@ public class RequestLine {
         }
         this.url = url;
         this.version = tokens[2];
+    }
+
+    public String getVersion() {
+        return version;
     }
 
     public String getUrl() {

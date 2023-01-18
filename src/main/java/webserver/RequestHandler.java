@@ -1,23 +1,29 @@
 package webserver;
 
-import model.Request.Request;
+import db.SessionStorage;
+import model.User;
+import model.request.Request;
+import model.response.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.HttpRequestUtils;
+import webserver.controller.FrontServlet;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 
+import static util.HttpRequestUtils.parseSid;
+
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     private final Socket connection;
-    private final UserController userController;
+    private final FrontServlet frontServlet = new FrontServlet();
 
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
-        this.userController = new UserController();
     }
 
     public void run() {
@@ -27,13 +33,17 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream()) {
             Request request = new Request(in);
 
-            //TODO Controller 고민, 조건에 맞게 처리될 수 있도록
-            if (request.getRequestParams().size() != 0) {
-                userController.signUp(request);
+            if (request.getHeaders().containsKey("Cookie")) {
+                String cookie = request.getHeaders().get("Cookie");
+                logger.debug(">> 쿠키 있어요! {}", cookie);
+                User user = SessionStorage.findBySessionId(parseSid(cookie)).orElseThrow(() -> new RuntimeException("세션 없어요!"));
+                logger.debug(">> user id : {}", user.getUserId());
             }
 
+            Response response = frontServlet.process(request);
+
             ResponseHandler responseHandler = new ResponseHandler(connection);
-            responseHandler.response(request);
+            responseHandler.response(response);
 
         } catch (IOException e) {
             logger.error(e.getMessage());

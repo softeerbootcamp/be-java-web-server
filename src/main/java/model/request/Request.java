@@ -1,4 +1,4 @@
-package model.Request;
+package model.request;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -57,6 +57,13 @@ public class Request {
         return requestParams;
     }
 
+    public Map<String, String> getHeaders() {
+        return headers;
+    }
+
+    public String getHttpVersion() {
+        return this.requestLine.getVersion();
+    }
     public String getUrl() {
         return this.requestLine.getUrl();
     }
