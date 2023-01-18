@@ -5,15 +5,19 @@ import httpMock.CustomHttpRequest;
 import httpMock.CustomHttpResponse;
 import httpMock.constants.ContentType;
 import httpMock.constants.StatusCode;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import service.SessionService;
 import service.StaticFileService;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static service.StaticFileService.getFileTypeFromUrl;
 
@@ -38,9 +42,23 @@ public class StaticFileController implements RequestController {
         File file = StaticFileService.getFile(req.getUrl());
         String fileType = StaticFileService.getFileTypeFromUrl(req.getUrl());
         ContentType contentType = ContentType.getContentTypeByFileType(fileType);
+
+        User user = SessionService.getUserBySessionId(req.getSSID()).orElse(User.GUEST);
+
+        if(!StaticFileService.isTemplateFile(req.getUrl())){
+            try {
+                return CustomHttpResponse.of(StatusCode.OK, contentType, new HashMap<>(), Files.readAllBytes(Path.of(file.getPath())));
+            }catch (IOException e) {
+                return CustomHttpFactory.NOT_FOUND();
+            }
+
+        }
         try {
-            byte[] data = Files.readAllBytes(file.toPath());
-            return CustomHttpResponse.of(StatusCode.OK, contentType, new HashMap<>(), data);
+            FileReader fr = new FileReader(file);
+            BufferedReader br = new BufferedReader(fr);
+            String lines = br.lines().collect(Collectors.joining("\n"));
+            lines = StaticFileService.renderFile(lines, new HashMap<>(){{put("name", user.getName());}});
+            return CustomHttpResponse.of(StatusCode.OK, contentType, new HashMap<>(), lines.getBytes());
         } catch (IOException e) {
             return CustomHttpFactory.NOT_FOUND();
         }
