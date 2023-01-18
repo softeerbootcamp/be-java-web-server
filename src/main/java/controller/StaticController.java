@@ -21,6 +21,8 @@ public class StaticController implements Controller{
 
     private StaticController(){}
 
+    private StaticController(){}
+
     public static StaticController getInstance(){
         if (staticController == null){
             synchronized (StaticController.class){
