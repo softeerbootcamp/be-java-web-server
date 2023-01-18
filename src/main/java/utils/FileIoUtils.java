@@ -10,12 +10,19 @@ import java.nio.file.Paths;
 
 public class FileIoUtils {
 
-    public static byte[] loadFileFromClasspath(String filePath) throws NullPointerException, IOException, URISyntaxException, URISyntaxException, IOException {
-        URL fileUrl = FileIoUtils.class.getClassLoader().getResource(filePath);
-//        if (fileUrl == null) {
-//            throw new FileNotFoundException();
-//        }
-        Path path = Paths.get(fileUrl.toURI());
-        return Files.readAllBytes(path);
+    public static byte[] loadFileFromClasspath(String filePath) throws NullPointerException {
+        byte[] res = new byte[0];
+        try {
+            URL fileUrl = FileIoUtils.class.getClassLoader().getResource(filePath);
+            Path path = Paths.get(fileUrl.toURI());
+            res = Files.readAllBytes(path);
+        } catch (URISyntaxException e) {
+            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return res;
+
     }
 }
