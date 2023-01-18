@@ -37,7 +37,6 @@ public class SignUpController implements Controller{
         }catch(UnsupportedEncodingException e){
             System.out.println(e.getMessage());
         }
-        System.out.println(Database.findAll());
         response.redirect(REDIRECT_URL);
     }
 
