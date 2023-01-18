@@ -32,6 +32,7 @@ public class ResponseHandler {
             NoSuchMethodException,
             InvocationTargetException {
 
+        logger.debug("[inResponseHandler]");
         if (httpRequest.isForStaticContent()) {
             String path = httpRequest.getPath();
             byte[] body = FileIoUtils.loadFileFromClasspath(path);
