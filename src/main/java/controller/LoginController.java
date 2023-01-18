@@ -33,7 +33,8 @@ public class LoginController implements Controller{
     public void control(RequestMessage requestMessage, OutputStream out) {
         byte[] body = getStaticBody(requestMessage);
         logger.info("body with static page:\n"+body.toString());
-        body = dynamicIndexPage(body, requestMessage);
+        if (requestMessage.getRequestHeaderMessage().getHttpOnlyURL().startsWith("/index.html"))
+            body = dynamicIndexPage(body, requestMessage);
         logger.info("body after dynamic change:\n"+body.toString());
         Response response = new Response(new DataOutputStream(out));
         response.response(body,requestMessage.getRequestHeaderMessage(), HttpStatus.Success);
