@@ -7,13 +7,13 @@ import org.slf4j.LoggerFactory;
 import Request.StatusCode;
 import util.HttpResponseUtil;
 
-import java.io.DataOutputStream;
 
 public class NonController implements Controller {
     private final Logger logger = LoggerFactory.getLogger(NonController.class);
     public static final String INDEX_HTML = "/index.html";
 
     HttpRequest httpRequest;
+
     public NonController(HttpRequest httpRequest) {
         logger.debug("select NonController");
         this.httpRequest = httpRequest;

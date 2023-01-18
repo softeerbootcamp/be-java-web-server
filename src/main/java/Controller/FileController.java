@@ -10,8 +10,6 @@ import org.slf4j.LoggerFactory;
 import Request.StatusCode;
 import util.HttpResponseUtil;
 
-import java.io.DataOutputStream;
-
 public class FileController implements Controller {
     private final Logger logger = LoggerFactory.getLogger(FileController.class);
     HttpRequest httpRequest;
@@ -25,8 +23,8 @@ public class FileController implements Controller {
     public HttpResponse createResponse() {
         byte[] body = HttpResponseUtil.generateBody(httpRequest.getPath());
         HttpResponse httpResponse = new HttpResponse().startLine(new HttpResponseStartLine(StatusCode.OK, httpRequest.getProtocol()))
-                                        .headers(new HttpResponseHeaders(httpRequest.getPath(), body.length))
-                                        .body(new HttpResponseBody(body));
+                .headers(new HttpResponseHeaders(httpRequest.getPath(), body.length))
+                .body(new HttpResponseBody(body));
         return httpResponse;
     }
 }

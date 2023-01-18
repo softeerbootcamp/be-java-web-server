@@ -12,8 +12,6 @@ import org.slf4j.LoggerFactory;
 import util.HttpResponseUtil;
 import util.LoginUtil;
 
-import java.io.DataOutputStream;
-
 public class LoginController implements Controller {
     public static final String INDEX_HTML = "/index.html";
     public static final String USER_LOGIN_FAILED_HTML = "/user/login_failed.html";
