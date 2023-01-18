@@ -1,4 +1,4 @@
-package http.session;
+package model;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,7 @@
-package http.session;
+package service;
+
+import db.SessionRepository;
+import model.Session;
 
 public class SessionService {
 

@@ -1,4 +1,6 @@
-package http.session;
+package db;
+
+import model.Session;
 
 import java.util.HashMap;
 import java.util.Map;

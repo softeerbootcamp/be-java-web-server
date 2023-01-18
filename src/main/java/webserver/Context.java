@@ -4,7 +4,7 @@ import controller.Controller;
 import controller.ResourceController;
 import controller.UserCreateController;
 import controller.UserLogInController;
-import http.session.SessionService;
+import service.SessionService;
 import service.UserService;
 
 import java.util.HashMap;
