@@ -45,4 +45,9 @@ public class FileIoUtils {
         }
         return map;
     }
+
+    public static byte[] writeUserList() {
+        String temp = "hello there";
+        return temp.getBytes();
+    }
 }
