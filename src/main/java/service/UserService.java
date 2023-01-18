@@ -6,6 +6,7 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
 import java.util.Map;
 
 public class UserService {
@@ -36,6 +37,10 @@ public class UserService {
         }
 
         return findUser;
+    }
+
+    public Collection<User> findUserList() {
+        return Database.findAll();
     }
 
     private void validateDuplication(String userId) {
