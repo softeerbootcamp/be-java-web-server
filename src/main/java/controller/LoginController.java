@@ -41,7 +41,8 @@ public class LoginController implements Controller{
     }
 
     private byte[] dynamicIndexPage(byte[] body, RequestMessage requestMessage){
-        return (new String(body)).replace("로그인", Session.loginSession.get(requestMessage.getRequestHeaderMessage().getSessionId())).getBytes();
+        return (new String(body)).replace("<li><a href=\"user/login.html\" role=\"button\">로그인</a></li>", "<li><a role=\"button\">"+
+                Session.loginSession.get(requestMessage.getRequestHeaderMessage().getSessionId())+"</a></li>").getBytes();
     }
 
     private byte[] getStaticBody(RequestMessage requestMessage){
