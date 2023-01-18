@@ -7,9 +7,9 @@ import model.User;
 import java.util.Collection;
 import java.util.Map;
 
-public class Database {
+public class UserRepository {
 
-    private Database() {}
+    private UserRepository() {}
 
     private static Map<String, User> users = Maps.newHashMap();
 

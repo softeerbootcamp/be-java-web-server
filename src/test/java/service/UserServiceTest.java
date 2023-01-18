@@ -1,6 +1,6 @@
 package service;
 
-import db.Database;
+import db.UserRepository;
 import model.User;
 import org.junit.jupiter.api.Test;
 
@@ -25,9 +25,9 @@ class UserServiceTest {
                 parameters.get("name"),
                 parameters.get("email")
         );
-
-        UserService.create(parameters);
-        assertThat(Database.findUserById("kgstiger").toString()).isEqualTo(user.toString());
+        UserService userService = UserService.getInstance();
+        userService.create(parameters);
+        assertThat(UserRepository.findUserById("kgstiger").toString()).isEqualTo(user.toString());
     }
 
 }

@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
 
-import static db.Database.findUserById;
+import static db.UserRepository.findUserById;
 
 public class UserLogInController extends AbstractController {
 

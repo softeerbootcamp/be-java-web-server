@@ -1,6 +1,6 @@
 package service;
 
-import db.Database;
+import db.UserRepository;
 import model.User;
 
 import java.util.Map;
@@ -30,6 +30,6 @@ public class UserService {
                 parameters.get(NAME),
                 parameters.get(EMAIL)
         );
-        Database.addUser(user);
+        UserRepository.addUser(user);
     }
 }
