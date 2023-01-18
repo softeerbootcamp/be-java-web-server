@@ -5,6 +5,7 @@ import db.Database;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.Paths;
 import webserver.httpUtils.Request;
 import webserver.httpUtils.Response;
 
@@ -30,11 +31,17 @@ public class SignUpService implements Service{
             Database.addUser(newUser);
         }catch (AlreadyHasSameIdException e)
         {
-            // TODO 같은아이디 회원가입 예외처리
             logger.error(e.getMessage());
+            return new Response()
+                .withVersion(req.getReqLine().getVersion())
+                .withStatCodeAndText(302, "FOUND")
+                .withHeaderKeyVal("Location", Paths.ENROLL_FAIL_PATH);
         }
 
-        return null;
+        return new Response()
+                .withVersion(req.getReqLine().getVersion())
+                .withStatCodeAndText(302, "FOUND")
+                .withHeaderKeyVal("Location", Paths.HOME_PATH);
     }
 
     private Map<String, String> getUserInfo(Request req)
