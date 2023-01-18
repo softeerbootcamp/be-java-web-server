@@ -2,6 +2,7 @@ package http.request;
 
 import http.common.HttpHeaders;
 import http.common.HttpMethod;
+import http.common.HttpSessionStorage;
 import http.common.URL;
 
 import java.util.Map;
@@ -11,7 +12,7 @@ public class HttpRequest {
     private URL url;
     private HttpHeaders headers;
     private Map<String, String> data;
-    private HttpSession session = null;
+    private HttpSession session;
 
     // TODO: 정적 생성자로 처리 가능하나 다른 객체들 또한 함께 변경 필요.
     // TODO: 따라서 나중에 시간 남을 때 진행 예정
@@ -24,6 +25,7 @@ public class HttpRequest {
         this.method = method;
         this.url = url;
         this.headers = headers;
+        this.session = HttpSessionStorage.getSession(headers.getCookie("session")).orElse(null);
     }
 
     public HttpRequest(
@@ -37,10 +39,7 @@ public class HttpRequest {
         this.url = url;
         this.headers = headers;
         this.data = data;
-    }
-
-    public void setSession(HttpSession session) {
-        this.session = session;
+        this.session = HttpSessionStorage.getSession(headers.getCookie("session")).orElse(null);
     }
 
     public HttpSession getSession() {
