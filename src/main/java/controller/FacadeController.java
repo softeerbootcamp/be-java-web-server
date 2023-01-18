@@ -1,5 +1,6 @@
 package controller;
 
+import exception.ConnectionClosedException;
 import http.request.HttpRequest;
 import http.request.RequestFactory;
 import http.response.HttpResponse;

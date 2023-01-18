@@ -1,5 +1,6 @@
 package http.request;
 
+import com.google.common.collect.Maps;
 import http.common.Body;
 
 import java.util.HashMap;
@@ -17,28 +18,28 @@ public class RequestParameter {
 
     // todo: handling exception
     private Map<String, String> parseBody(Body body) {
-        byte[] data = body.getData();
-        String msg = "";
-        for (byte datum : data) {
-            msg += (char) datum;
+        if (body.isEmpty()) {
+            return Maps.newHashMap();
         }
-        return parseQueryString(msg);
+        return parse(body.toString());
     }
 
     // todo: handling exception
     private Map<String, String> parseQueryString(String url) {
-        Map<String, String> parameters = new HashMap<>();
         if (!url.contains("?")) {
-            return parameters;
+            return Maps.newHashMap();
         }
-
         String queryString = url.split("\\?", 2)[1];
+        return parse(queryString);
+    }
+
+    private Map<String, String> parse(String queryString) {
+        Map<String, String> parameters = Maps.newHashMap();
         String[] chunks = queryString.split("&");
         for (String chunk : chunks) {
             String[] pair = chunk.split("=");
             parameters.put(pair[0], pair[1]);
         }
-
         return parameters;
     }
 

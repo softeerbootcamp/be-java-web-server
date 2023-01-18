@@ -4,8 +4,20 @@ public class Body {
 
     private byte[] data;
 
-    public Body(byte[] data) {
-        this.data = data;
+    public Body() {
+        this.data = new byte[0];
+    }
+
+    public Body(String data) {
+        this.data = toByteArray(data);
+    }
+
+    private byte[] toByteArray(String data) {
+        byte[] bytes = new byte[data.length()];
+        for (int i = 0; i < data.length(); i++) {
+            bytes[i] = (byte) data.charAt(i);
+        }
+        return bytes;
     }
 
     public byte[] getData() {
@@ -18,6 +30,10 @@ public class Body {
 
     public void clear() {
         data = new byte[0];
+    }
+
+    public boolean isEmpty() {
+        return data.length == 0;
     }
 
     @Override

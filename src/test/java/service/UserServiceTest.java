@@ -1,7 +1,7 @@
 package service;
 
 import db.Database;
-import dto.UserInfoDTO;
+import dto.SignUpDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,9 +30,9 @@ class UserServiceTest {
     @DisplayName("회원가입 성공")
     void success_signup() {
         // given
-        UserInfoDTO userInfoDTO = getUserInfoDTO(1);
+        SignUpDTO userInfoDTO = getUserInfoDTO(1);
         // when
-        String userId = userService.signIn(userInfoDTO);
+        String userId = userService.signUp(userInfoDTO);
         userIds.add(userId);
         // then
         assertThat(userInfoDTO.getUserId()).isEqualTo(userId);
@@ -42,24 +42,24 @@ class UserServiceTest {
     @DisplayName("회원가입 실패: 이미 가입한 아이디")
     void fail_signup_duplicated_id() {
         // given
-        List<UserInfoDTO> userInfoDTOs = List.of(getUserInfoDTO(1), getUserInfoDTO(1));
+        List<SignUpDTO> userInfoDTOs = List.of(getUserInfoDTO(1), getUserInfoDTO(1));
 
         // when
-        for (UserInfoDTO userInfoDTO : userInfoDTOs) {
-            String userId = userService.signIn(userInfoDTO);
+        for (SignUpDTO userInfoDTO : userInfoDTOs) {
+            String userId = userService.signUp(userInfoDTO);
             userIds.add(userId);
         }
         // then
         assertThat(userIds.lastElement()).isNull();
     }
 
-    private UserInfoDTO getUserInfoDTO(Integer postFix) {
+    private SignUpDTO getUserInfoDTO(Integer postFix) {
         Map<String, String> userInfo = Map.of(
                 "userId", "id" + postFix,
                 "password", "pw" + postFix,
                 "name", "n" + postFix,
                 "email", "e" + postFix
         );
-        return UserInfoDTO.of(userInfo);
+        return SignUpDTO.of(userInfo);
     }
 }

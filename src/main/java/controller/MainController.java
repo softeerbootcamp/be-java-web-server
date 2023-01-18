@@ -1,7 +1,7 @@
 package controller;
 
 import filesystem.FileSystem;
-import filesystem.FindResult;
+import filesystem.FindResource;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
@@ -14,7 +14,7 @@ public class MainController implements Controller {
     @Override
     public void service(HttpRequest request, HttpResponse response) {
         logger.debug("main controller called");
-        FindResult findResult = FileSystem.findResource(request.getUrl());
+        FindResource findResult = FileSystem.findResource(request.getUrl());
         response.update(findResult);
         response.send();
     }

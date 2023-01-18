@@ -1,9 +1,10 @@
 package http.response;
 
-import controller.ConnectionClosedException;
 import enums.Status;
-import filesystem.FindResult;
+import exception.ConnectionClosedException;
+import filesystem.FindResource;
 import http.common.Body;
+import http.common.Cookie;
 import http.common.Header;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +19,7 @@ public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
     private ResponseStartLine startLine = new ResponseStartLine();
     private Header header = new Header();
-    private Body body = new Body(new byte[0]);
+    private Body body = new Body();
     private DataOutputStream out;
 
     public HttpResponse(DataOutputStream out) {
@@ -34,7 +35,7 @@ public class HttpResponse {
         }
     }
 
-    public void update(FindResult findResult) {
+    public void update(FindResource findResult) {
         startLine.setStatus(findResult.getStatus());
         header.setAttribute(CONTENT_TYPE, findResult.getContentType().getType());
         header.setAttribute(CONTENT_LENGTH, findResult.getResource().length);
@@ -56,5 +57,9 @@ public class HttpResponse {
         header.setAttribute(LOCATION, redirectUrl);
         body.clear();
         send();
+    }
+
+    public void setCookie(Cookie newCookie) {
+        header.setAttribute(SET_COOKIE, newCookie.toString());
     }
 }
