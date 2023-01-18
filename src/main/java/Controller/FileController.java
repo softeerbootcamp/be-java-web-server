@@ -3,6 +3,7 @@ package Controller;
 import Request.HttpRequest;
 import Response.HttpResponse;
 import Response.HttpResponseBody;
+import Response.HttpResponseHeaders;
 import Response.HttpResponseStartLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +27,8 @@ public class FileController implements Controller {
     public HttpResponse createResponse() {
         byte[] body = HttpResponseUtil.generateBody(httpRequest.getPath());
         HttpResponse httpResponse = new HttpResponse().startLine(new HttpResponseStartLine(StatusCode.OK, httpRequest.getProtocol()))
-                .headers(HttpResponseUtil.generateHeaders(httpRequest.getPath(), StatusCode.OK, body.length))
-                .body(new HttpResponseBody(body));
+                                        .headers(new HttpResponseHeaders(httpRequest.getPath(), body.length))
+                                        .body(new HttpResponseBody(body));
         return httpResponse;
     }
 }
