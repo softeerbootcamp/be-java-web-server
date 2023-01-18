@@ -9,6 +9,10 @@ Java Web Application Server 2022
 4. 나머지 회원가입 기능이 정상적으로 동작하도록 구현한다.[ ]
 5. 가입 후 페이지 이동을 위해 HTTP redirection 기능을 구현한다.[x]
 6. todo 처리 [ ]
+7. 가입한 회원 정보로 로그인을 할 수 있다. [ ]
+8. [로그인] 메뉴를 클릭하면 http://localhost:8080/user/login.html 으로 이동해 로그인할 수 있다. [x]
+9. 로그인이 성공하면 index.html로 이동한다. [ ]
+10. 로그인이 실패하면 /user/login_failed.html로 이동한다. [ ]
 
 ## 프로젝트 구조
     ├── java

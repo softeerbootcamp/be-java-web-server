@@ -3,5 +3,6 @@ package enums;
 public enum ControllerTypeEnum {
     STATIC,
     TEMPLATE,
-    USER
+    USER,
+    LOGIN
 }

@@ -4,16 +4,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.RequestResponseHandler;
 
-import javax.sound.sampled.Line;
 import java.io.BufferedReader;
 import java.io.IOException;
 
 public class Request {
 
 
-    private static RequestLine requestLine = new RequestLine();
-    private static RequestHeader requestHeader = new RequestHeader();
-    private static RequestBody requestBody = new RequestBody();
+    private RequestLine requestLine;
+    private RequestHeader requestHeader;
+    private RequestBody requestBody;
     private static final Logger logger = LoggerFactory.getLogger(RequestResponseHandler.class);
     private static final String NEW_LINE = "\r\n";
 
@@ -22,6 +21,9 @@ public class Request {
         setRequestLine(bufferedReader);
         setRequestHeader(bufferedReader);
         setRequestBody(bufferedReader);
+        if(requestLine.getMETHOD().equals(null)){
+            throw new NullPointerException("아무런 요청이 없습니다!!");
+        }
     }
 
     public void setRequestLine(BufferedReader bufferedReader) throws IOException {
@@ -37,11 +39,13 @@ public class Request {
             if (isBodyExistsOrEOL(oneLine)) {
                 break;
             }
+            String[] headerMap = oneLine.split(":");
+            //todo map 만 사용가능하게 바꾸자.
+            requestHeader.addHeaderMap(headerMap[0],headerMap[1]);
             requestHeader.addHeaderLines(oneLine);
         }
 
     }
-
     public void setRequestBody(BufferedReader bufferedReader) throws IOException {
         requestBody = new RequestBody();
         String fullLine = "";
@@ -54,7 +58,11 @@ public class Request {
     }
 
 
-
+    public boolean isRequestHaveCookie(){
+        if(requestHeader.isHeaderMapContains("Cookie")){
+            return true;
+        }return false;
+    }
     public boolean isBodyExistsOrEOL(String oneLine) throws IOException {
         if (oneLine.equals("")) {
             return true;
@@ -67,11 +75,11 @@ public class Request {
         return this.requestLine;
     }
 
-    public static RequestHeader getRequestHeader() {
+    public RequestHeader getRequestHeader() {
         return requestHeader;
     }
 
-    public static RequestBody getRequestBody() {
+    public RequestBody getRequestBody() {
         return requestBody;
     }
 }

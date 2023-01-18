@@ -23,13 +23,13 @@ public class ResponseStatusLine {
             this.statusCodeWithMessage =
                     StatusCodeWithMessageEnum.CODE_200.getKey() + " " + StatusCodeWithMessageEnum.CODE_200.getValue();
         }
-        if (controllerTypeEnum == USER) {
+        if (controllerTypeEnum == USER||controllerTypeEnum==LOGIN) {
             this.statusCodeWithMessage =
                     StatusCodeWithMessageEnum.CODE_302.getKey() + " " + StatusCodeWithMessageEnum.CODE_302.getValue();
         }
     }
 
-    public String getResponseStatusLine() {
+    public String getResponseStatusLineInString() {
         return protocol + " " + statusCodeWithMessage;
     }
 
