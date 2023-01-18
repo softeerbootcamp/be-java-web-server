@@ -61,4 +61,10 @@ public class HttpRequest {
         }
         return Optional.empty();
     }
+    public boolean isContainsCookie() {
+        if (headers.containsKey("Cookie")) {
+            return true;
+        }
+        return false;
+    }
 }
