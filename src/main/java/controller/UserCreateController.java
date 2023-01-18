@@ -5,7 +5,6 @@ import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
-import utils.FileIoUtils;
 import utils.HttpMethod;
 
 import java.util.Map;
@@ -29,8 +28,8 @@ public class UserCreateController implements Controller {
     }
 
     private HttpResponse doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        Map<String, String> params = FileIoUtils.parseQueryString(httpRequest.getRequestBody());
-        userService.createUser(params);
+        Map<String, String> bodyParams = httpRequest.getRequestBody();
+        userService.createUser(bodyParams);
         httpResponse.redirectHome();
         return httpResponse;
     }

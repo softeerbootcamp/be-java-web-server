@@ -24,8 +24,8 @@ public class HttpRequest {
         return new HttpRequest(startLine, requestHeader, null);
     }
 
-    public String getRequestBody() {
-        return requestBody.getContent();
+    public Map<String, String> getRequestBody() {
+        return requestBody.getParams();
     }
 
     public HttpMethod getHttpMethod() {

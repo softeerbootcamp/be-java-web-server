@@ -5,7 +5,6 @@ import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
-import utils.FileIoUtils;
 import utils.HttpMethod;
 import utils.SessionManager;
 
@@ -29,13 +28,12 @@ public class UserLoginController implements Controller {
     }
 
     private HttpResponse doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        Map<String, String> params = FileIoUtils.parseQueryString(httpRequest.getRequestBody());
+        Map<String, String> bodyParams = httpRequest.getRequestBody();
         try {
-            userService.login(params.get("userId"), params.get("password"));
-            httpResponse.setCookie(SessionManager.createSession(userService.findUser(params.get("userId"))));
+            userService.login(bodyParams.get("userId"), bodyParams.get("password"));
+            httpResponse.setCookie(SessionManager.createSession(userService.findUser(bodyParams.get("userId"))));
             httpResponse.redirectHome();
-        }
-        catch (AuthenticationException e) {
+        } catch (AuthenticationException e) {
             httpResponse.redirectLoginFailed();
         }
         return httpResponse;
