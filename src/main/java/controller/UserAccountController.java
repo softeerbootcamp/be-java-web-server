@@ -9,8 +9,8 @@ import model.Session;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import repository.UserRepo;
 import service.SessionService;
-import service.UserService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,7 +56,7 @@ public class UserAccountController implements RequestController {
         String name = bodyParams.get("name");
         String email = bodyParams.get("email");
 
-        if (UserService.findUserById(userId) != null)
+        if (UserRepo.findUserById(userId) != null)
             return CustomHttpFactory.BAD_REQUEST("userID duplicated");
 
         if (!UserValidation.isEmailValid(email))
@@ -65,7 +65,7 @@ public class UserAccountController implements RequestController {
         if (!UserValidation.isPasswordValid(password))
             return CustomHttpFactory.BAD_REQUEST("password type invalid");
 
-        UserService.addUser(new User(userId, password, name, email));
+        UserRepo.addUser(new User(userId, password, name, email));
 
         return CustomHttpFactory.REDIRECT("/index.html");
     }
@@ -79,7 +79,7 @@ public class UserAccountController implements RequestController {
         String userId = bodyParams.get("userId");
         String password = bodyParams.get("password");
 
-        User customer = UserService.findUserById(userId);
+        User customer = UserRepo.findUserById(userId);
         if (customer != null && customer.getPassword().equals(password)) {
             logger.info("User {} login success", customer.getName());
             CustomHttpResponse res = CustomHttpFactory.REDIRECT("/index.html");
