@@ -57,9 +57,8 @@ public class HttpRequest {
         return HttpRequestUtils.parseQueryString(httpHeader.getCookie()).get("sid");
     }
 
-    public boolean wantDynamicHtml() {
-        // TODO 동적으로 작동하는 html 리스트를 따로 빼야 할까
-        return getUri().equals("/index.html") || getUri().equals("/user/list.html");
+    public boolean wantHtml() {
+        return getFileNameExtension().equals("html");
     }
 
     public boolean isLogin() {
