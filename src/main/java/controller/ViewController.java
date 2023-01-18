@@ -30,7 +30,7 @@ public class ViewController implements Controller {
 
     @Override
     public Response getResponse(Request request) {
-        if(Objects.nonNull(request.getRequestLine().getContentType())) return getStaticFileResponse(request);
+        if (Objects.nonNull(request.getRequestLine().getContentType())) return getStaticFileResponse(request);
 
         return Response.of(request, Status.NOT_FOUND);
     }
@@ -38,17 +38,7 @@ public class ViewController implements Controller {
     private Response getStaticFileResponse(Request request) {
         RequestLine requestLine = request.getRequestLine();
 
-        if(Sessions.isExistSession(request.getSessionId()) && requestLine.getUri().equals("/index.html")) {
-
-        }
-
-        byte[] body;
-        try {
-            body = Files.readAllBytes(new File(generatePath(requestLine.getContentType()) +
-                    requestLine.getUri()).toPath());
-        } catch (IOException e) {
-            return Response.of(request, Status.NOT_FOUND);
-        }
+        byte[] body = makeResponseBody(Sessions.isExistSession(request.getSessionId()), request);
 
         Map<Header, String> headers = HeaderUtils.response200Header(requestLine.getContentType(), body.length);
 
@@ -56,20 +46,34 @@ public class ViewController implements Controller {
     }
 
     private String generatePath(ContentType contentType) {
-        if(HTML.equals(contentType) || ICO.equals(contentType)) return templatePath;
+        if (HTML.equals(contentType) || ICO.equals(contentType)) return templatePath;
         else return staticPath;
     }
 
-    private byte[] getIndexHtmlWhenLogin(String userId) {
+    private byte[] makeResponseBody(boolean isLogin, Request request) {
+        RequestLine requestLine = request.getRequestLine();
         byte[] body;
+
+        if (isLogin && requestLine.getContentType().equals(HTML)) {
+            try {
+                body = Files.readAllBytes(new File(generatePath(requestLine.getContentType()) +
+                        requestLine.getUri()).toPath());
+
+                String originalIndexHtml = new String(body);
+                String resultIndexHtml = originalIndexHtml.replace("로그인", Sessions.getSession(request.getSessionId()).getSessionData().get("user"));
+                return resultIndexHtml.getBytes();
+            } catch (IOException e) {
+                return new byte[0];
+            }
+        }
+
         try {
-            body = Files.readAllBytes(new File("./src/main/resources/templates/index.html").toPath());
-        } catch(IOException e) {
+            body = Files.readAllBytes(new File(generatePath(requestLine.getContentType()) +
+                    requestLine.getUri()).toPath());
+        } catch (IOException e) {
             return new byte[0];
         }
 
-        String originalIndexHtml = new String(body);
-        String resultIndexHtml = originalIndexHtml.replace("로그인", userId);
-        return resultIndexHtml.getBytes();
+        return body;
     }
 }
