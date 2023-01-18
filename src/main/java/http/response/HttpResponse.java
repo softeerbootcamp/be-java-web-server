@@ -61,6 +61,10 @@ public class HttpResponse {
         this.headers.addHeader("Location", path);
     }
 
+    public void setCookie(String value, String path) {
+        headers.addHeader("Set-Cookie", value + "; Path=" + path);
+    }
+
     public void send() throws IOException {
         String statusLine = HTTP_VERSION + " " + status.code() + " " + status.name() + "\r\n";
         dos.writeBytes(statusLine);

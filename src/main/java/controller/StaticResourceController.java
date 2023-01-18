@@ -1,6 +1,6 @@
 package controller;
 
-import http.common.MediaType;
+import http.common.ContentType;
 import http.common.URL;
 import http.exception.MethodNotAllowException;
 import http.request.HttpRequest;
@@ -17,9 +17,9 @@ public class StaticResourceController implements Controller {
 
         int idxOfDot = url.getPath().lastIndexOf(".");
         String extension = url.getPath().substring(idxOfDot + 1);
-        MediaType mediaType = MediaType.fromExtension(extension).orElse(MediaType.TEXT_PLAIN);
+        ContentType contentType = ContentType.fromExtension(extension).orElse(ContentType.TEXT_PLAIN);
 
-        response.addHeader("Content-Type", mediaType.getType());
+        response.addHeader("Content-Type", contentType.getType());
     }
 
     @Override

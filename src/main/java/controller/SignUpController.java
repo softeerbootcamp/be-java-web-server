@@ -13,7 +13,7 @@ public class SignUpController implements Controller{
 
     @Override
     public void doPost(HttpRequest request, HttpResponse response) {
-        Map<String, String> data = request.getDatas();
+        Map<String, String> data = request.getData();
 
         User user = new User(
                 data.get("userId"),

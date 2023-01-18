@@ -88,7 +88,7 @@ public class HttpRequestParserTest {
 
         // when
         HttpRequest httpRequest = HttpRequestParser.parse(in);
-        Map<String, String> data = httpRequest.getDatas();
+        Map<String, String> data = httpRequest.getData();
 
         assertAll(
                 () -> assertEquals("password", data.get("password")),
