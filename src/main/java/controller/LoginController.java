@@ -3,14 +3,10 @@ package controller;
 import db.Database;
 import enums.ContentTypeEnum;
 import enums.ControllerTypeEnum;
-import enums.HeaderReferenceEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.Request;
 import response.NewResponse;
-import response.Response;
-import response.ResponseSender;
-import session.HttpSession;
 import session.HttpSessions;
 import webserver.RequestResponseHandler;
 import java.io.File;
@@ -18,8 +14,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-
-import static session.HttpSessions.httpSessions;
 
 public class LoginController implements Controller{
     private String sid;

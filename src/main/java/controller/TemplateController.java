@@ -6,8 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.Request;
 import response.NewResponse;
-import response.Response;
-import response.ResponseSender;
 import webserver.RequestResponseHandler;
 
 import java.io.File;
