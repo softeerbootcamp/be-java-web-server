@@ -1,7 +1,7 @@
-package request.method.GET.file;
+package request.handlers;
 
 import request.Request;
-import request.method.GET.handlers.GETHandler;
+import request.RequestHandler;
 import response.HttpResponseStatus;
 import response.Response;
 
@@ -9,25 +9,27 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-public class GETTemplateFileHandler implements GETHandler {
+public class TemplateFileHandler implements RequestHandler {
 
-    private static final GETHandler GETTemplateFileHandler;
+    private static final TemplateFileHandler instance;
 
     static {
-        GETTemplateFileHandler = new GETTemplateFileHandler();
+        instance = new TemplateFileHandler();
     }
 
-    public static GETHandler getInstance() {
-        return GETTemplateFileHandler;
+    private TemplateFileHandler() {}
+
+    public static TemplateFileHandler getInstance() {
+        return instance;
     }
 
     @Override
-    public Response handle(Request request) {
+    public Response doGet(Request request) {
         try {
             byte[] file = Files.readAllBytes(new File("src/main/resources/templates" + request.getResource()).toPath());
-            return Response.of(file, request.getResourceFileContentType(), HttpResponseStatus.OK);
+            return Response.createSimpleResponse(file, request.getResourceFileContentType(), HttpResponseStatus.OK);
         } catch (IOException e) {
-            return Response.of(HttpResponseStatus.NOT_FOUND);
+            return Response.from(HttpResponseStatus.NOT_FOUND);
         }
     }
 }

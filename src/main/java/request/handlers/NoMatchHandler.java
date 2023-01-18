@@ -1,22 +1,41 @@
-package request.method.POST.handlers;
+package request.handlers;
 
 import request.Request;
+import request.RequestHandler;
 import response.HttpResponseStatus;
 import response.Response;
 
-public class POSTNoMatchHandler extends POSTHandler {
-    private static final POSTNoMatchHandler instance;
+public class NoMatchHandler implements RequestHandler {
+    private static final NoMatchHandler instance;
 
     static {
-        instance = new POSTNoMatchHandler();
+        instance = new NoMatchHandler();
     }
 
-    public static POSTHandler getInstance() {
+    private NoMatchHandler() {}
+
+    public static NoMatchHandler getInstance() {
         return instance;
     }
 
+    // TODO: 코드의 반복을 없앨 수 있게 리팩토링
     @Override
-    public Response handle(Request request) {
-        return Response.of(HttpResponseStatus.NOT_FOUND);
+    public Response doGet(Request request) {
+        return Response.from(HttpResponseStatus.NOT_FOUND);
+    }
+
+    @Override
+    public Response doPost(Request request) {
+        return Response.from(HttpResponseStatus.NOT_FOUND);
+    }
+
+    @Override
+    public Response doPut(Request request) {
+        return Response.from(HttpResponseStatus.NOT_FOUND);
+    }
+
+    @Override
+    public Response doDelete(Request request) {
+        return Response.from(HttpResponseStatus.NOT_FOUND);
     }
 }
