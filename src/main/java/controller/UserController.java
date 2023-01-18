@@ -11,12 +11,12 @@ import model.response.StatusLine;
 import model.session.Session;
 import model.session.Sessions;
 import service.UserService;
+import util.HeaderUtils;
 import util.SessionUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class UserController implements Controller {
@@ -48,7 +48,7 @@ public class UserController implements Controller {
                 userInfo.get("name"), userInfo.get("email"));
         userService.signUp(user);
 
-        Map<Header, String> headers = responseCreateUserHeader();
+        Map<Header, String> headers = HeaderUtils.responseCreateUserHeader();
 
         return Response.of(StatusLine.of(request.getRequestLine().getHttpVersion(), Status.FOUND), headers);
     }
@@ -64,12 +64,12 @@ public class UserController implements Controller {
             Session session = Sessions.getSession(sessionId);
             session.setSessionData("user", userLoginInfo.get("userId"));
 
-            headers = responseLoginSuccessHeader(sessionId);
+            headers = HeaderUtils.responseLoginSuccessHeader(sessionId);
 
             return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.FOUND), headers);
         }
 
-        headers = responseLoginFailHeader();
+        headers = HeaderUtils.responseLoginFailHeader();
         return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.FOUND), headers);
     }
 
@@ -78,39 +78,10 @@ public class UserController implements Controller {
         RequestLine requestLine = request.getRequestLine();
 
         if(Sessions.isExistSession(request.getSessionId())) {
-            // TODO: 로그인되어 있는 경우 유저 리스트 불러올 수 있도경 구현
+            return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.OK, headers, body));
         }
 
-        headers = responseRedirectLoginHtmlHeader();
+        headers = HeaderUtils.responseRedirectLoginHtmlHeader();
         return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.FOUND), headers);
-    }
-
-    private Map<Header, String> responseCreateUserHeader() {
-        Map<Header, String> headers = new HashMap<>();
-        headers.put(Header.from("Location"), "/index.html");
-
-        return headers;
-    }
-
-    private Map<Header, String> responseLoginSuccessHeader(String sessionId) {
-        Map<Header, String> headers = new HashMap<>();
-        headers.put(Header.from("Location"), "/index.html");
-        headers.put(Header.from("Set-Cookie"), "sid=" + sessionId + "; Path=/");
-
-        return headers;
-    }
-
-    private Map<Header, String> responseLoginFailHeader() {
-        Map<Header, String> headers = new HashMap<>();
-        headers.put(Header.from("Location"), " /user/login_failed.html");
-
-        return headers;
-    }
-
-    private Map<Header, String> responseRedirectLoginHtmlHeader() {
-        Map<Header, String> headers = new HashMap<>();
-        headers.put(Header.from("Location"), " /user/login.html");
-
-        return headers;
     }
 }
