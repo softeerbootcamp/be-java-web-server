@@ -13,4 +13,10 @@ public class Header {
     public Map<String, String> getAll() {
         return context;
     }
+
+    public boolean keySetContainsCookie()
+    {
+        if(context.keySet().contains("Cookie")) return true;
+        return false;
+    }
 }
