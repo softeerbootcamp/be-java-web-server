@@ -62,7 +62,7 @@ public class UserService {
             return HttpResponse.of(
                     HttpStatus.OK,
                     "text/html",
-                    new HashMap<>(),
+                    headers,
                     fileData.getBytes(),
                     requestLine.getVersion()
             );
@@ -75,6 +75,19 @@ public class UserService {
                 "".getBytes(),
                 requestLine.getVersion()
         );
+    }
+
+    public HttpResponse logout(HttpRequest httpRequest) {
+        RequestLine requestLine = httpRequest.getRequestLine();
+        Map<String, String> headers = new HashMap<>();
+        if (SessionHandler.validateSession(httpRequest.getSid())) {
+            HttpSession httpSession = SessionHandler.getSession(httpRequest.getSid());
+            httpSession.expire();
+            headers.put("Location", "/index.html");
+            return HttpResponse.of(HttpStatus.FOUND, "", headers, "".getBytes(), requestLine.getVersion());
+        }
+        headers.put("Location", "/user/login.html");
+        return HttpResponse.of(HttpStatus.FOUND, "", headers, "".getBytes(), requestLine.getVersion());
     }
 
     private boolean isExistUser(String id, String pw) {
