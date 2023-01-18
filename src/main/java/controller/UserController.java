@@ -34,10 +34,17 @@ public class UserController implements Controller{
 
     private HttpStatus httpStatus = HttpStatus.ClientError;
 
+    private UserController(){}
+
     public static UserController getInstance(){
-        if (userController != null)
-            return userController;
-        return userController = new UserController();
+        if (userController == null){
+            synchronized (UserController.class){
+                if (userController == null){
+                    userController = new UserController();
+                }
+            }
+        }
+        return userController;
     }
 
     @Override
@@ -58,7 +65,6 @@ public class UserController implements Controller{
         }
         if (requestMessage.getRequestHeaderMessage().getRequestAttribute().equals("/login")){
             userLogin(requestMessage, userService, headerKV);
-
             return;
         }
     }

@@ -21,10 +21,17 @@ public class StaticController implements Controller{
     private static final String STATIC = "/static";
     private static final String TEMPLATES = "/templates";
 
+    private StaticController(){}
+
     public static StaticController getInstance(){
-        if (staticController != null)
-            return staticController;
-        return staticController = new StaticController();
+        if (staticController == null){
+            synchronized (StaticController.class){
+                if (staticController == null){
+                    staticController = new StaticController();
+                }
+            }
+        }
+        return staticController;
     }
 
     private String getSubPath(RequestMessage requestMessage){
