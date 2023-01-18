@@ -12,18 +12,7 @@ public class UserService {
     private static final String NAME = "name";
     private static final String EMAIL = "email";
 
-    private UserService(){
-    }
-
-    private static class UserServiceHolder {
-        private static final UserService USER_SERVICE = new UserService();
-    }
-
-    public static UserService getInstance() {
-        return UserServiceHolder.USER_SERVICE;
-    }
-
-    public static User findUserById (String id) {
+    public static User findUserById(String id) {
         return UserRepository.findUserById(id);
     }
 
@@ -40,4 +29,12 @@ public class UserService {
         );
         UserRepository.addUser(user);
     }
+
+    public void validateUser(String requestUserId, String requestPassword) {
+        User user = findUserById(requestUserId);
+        if (user == null || !requestPassword.equals(user.getPassword())) {
+            throw new IllegalArgumentException("로그인 실패");
+        }
+    }
+
 }
