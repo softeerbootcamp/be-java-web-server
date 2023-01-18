@@ -13,17 +13,6 @@ import java.util.List;
 public class HttpResponseUtils {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponseUtils.class);
 
-    private static final String basePath = "./src/main/resources";
-    private static final String htmlFilePath = "/templates";
-    private static final String staticFilePath = "/static";
-
-    public static String makeFilePath(String fileNameExtension) {
-        if (fileNameExtension.equals("html")) {
-            return basePath + htmlFilePath;
-        }
-        return basePath + staticFilePath;
-    }
-
     public static byte[] makeBody(String httpUri, String filePath) {
         logger.debug("filePath get : {}", filePath + httpUri);
         try {

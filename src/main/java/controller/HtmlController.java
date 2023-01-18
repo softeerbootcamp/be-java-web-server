@@ -14,6 +14,7 @@ import util.HttpResponseUtils;
 
 public class HtmlController implements Controller{
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final String htmlFilePath = "./src/main/resources/templates";
 
     @Override
     public HttpResponse makeResponse(HttpRequest httpRequest){
@@ -36,6 +37,6 @@ public class HtmlController implements Controller{
 
         // index.html service 로그인 X
         return StaticFileService.service(
-                uri, HttpResponseUtils.makeFilePath(fileNameExtension), httpVersion, contentType);
+                uri, htmlFilePath, httpVersion, contentType);
     }
 }

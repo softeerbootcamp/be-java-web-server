@@ -10,13 +10,14 @@ import util.HttpResponseUtils;
 import java.io.IOException;
 
 public class StaticFileController implements Controller {
+    private static final String staticFilePath = "./src/main/resources/static";
 
     @Override
     public HttpResponse makeResponse(HttpRequest httpRequest) {
 
         return StaticFileService.service(
                 httpRequest.getUri(),
-                HttpResponseUtils.makeFilePath(httpRequest.getFileNameExtension()),
+                staticFilePath,
                 httpRequest.getHttpVersion(),
                 httpRequest.getContentType());
 
