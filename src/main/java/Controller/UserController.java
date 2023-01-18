@@ -11,9 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
 import util.HttpRequestUtils;
+import view.UserListView;
 import webserver.session.SessionConst;
 import webserver.session.SessionManager;
 
+import java.util.Collection;
 import java.util.Map;
 
 public class UserController implements Controller {
@@ -75,7 +77,8 @@ public class UserController implements Controller {
             User loginUser = userService.login(userInfo);
 
             String sessionId = SessionManager.createSession(loginUser.getUserId());
-            response.addHttpHeader("Set-Cookie", SessionConst.SESSION_COOKIE_NAME + "=" + sessionId+ "; Path=/");
+            logger.debug("sessionId: {}", sessionId);
+            response.addHttpHeader("Set-Cookie", SessionConst.SESSION_COOKIE_NAME + "=" + sessionId + "; Path=/");
 
             response.redirect(request, "/index.html");
         } catch (UserValidationException e) {
@@ -91,6 +94,12 @@ public class UserController implements Controller {
             return;
         }
 
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = UserListView.front();
+        Collection<User> users = userService.findUserList();
+        sb.append(UserListView.render(users));
+        sb.append(UserListView.back());
+
+        response.ok(request);
+        response.setBodyMessage(sb.toString());
     }
 }
