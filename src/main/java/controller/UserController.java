@@ -60,9 +60,11 @@ public class UserController implements Controller {
         Map<Header, String> headers;
         RequestLine requestLine = request.getRequestLine();
         if(isLoginSuccess) {
-            headers = responseLoginSuccessHeader();
-            Session session = Sessions.getSession(parseSessionIdFromHeaders(headers));
+            String sessionId = SessionUtils.generateSessionId();
+            Session session = Sessions.getSession(sessionId);
             session.setSessionData("user", userLoginInfo.get("userId"));
+
+            headers = responseLoginSuccessHeader(sessionId);
 
             return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.FOUND), headers);
         }
@@ -90,10 +92,10 @@ public class UserController implements Controller {
         return headers;
     }
 
-    private Map<Header, String> responseLoginSuccessHeader() {
+    private Map<Header, String> responseLoginSuccessHeader(String sessionId) {
         Map<Header, String> headers = new HashMap<>();
         headers.put(Header.from("Location"), "/index.html");
-        headers.put(Header.from("Set-Cookie"), "sid=" + SessionUtils.generateSessionId() + "; Path=/");
+        headers.put(Header.from("Set-Cookie"), "sid=" + sessionId + "; Path=/");
 
         return headers;
     }
@@ -110,12 +112,5 @@ public class UserController implements Controller {
         headers.put(Header.from("Location"), " /user/login.html");
 
         return headers;
-    }
-
-    private String parseSessionIdFromHeaders(Map<Header, String> headers) {
-        String cookie = headers.get(Header.SET_COOKIE);
-        String sessionId = cookie.split(" ")[0].split("=")[1];
-
-        return sessionId.substring(0, sessionId.length() - 1);
     }
 }
