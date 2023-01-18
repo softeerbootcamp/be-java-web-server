@@ -1,6 +1,7 @@
 package util;
 
 import db.SessionStorage;
+import exception.UserNotFoundException;
 import model.User;
 import model.request.Request;
 import org.slf4j.Logger;
@@ -21,5 +22,14 @@ public class AuthInterceptor {
             return SessionStorage.isValidate(parseSid(cookie));
         }
         return false;
+    }
+
+    public static User findUser(Request request) {
+        if (isAuthUser(request)) {
+            Map<String, String> headers = request.getHeaders();
+            String cookie = headers.get("Cookie");
+            return SessionStorage.findBySessionId(parseSid(cookie)).orElseThrow(UserNotFoundException::new);
+        }
+        throw new UserNotFoundException();
     }
 }

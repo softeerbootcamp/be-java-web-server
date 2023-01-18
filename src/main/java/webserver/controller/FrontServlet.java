@@ -4,6 +4,7 @@ import model.request.Request;
 import model.response.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.AuthInterceptor;
 import webserver.RequestHandler;
 
 import java.io.IOException;
@@ -29,6 +30,12 @@ public class FrontServlet {
     public Response process(Request request) {
         try {
             Path path = findFilePath(request.getUrl());
+
+            //TODO 인덱스.html마저 여기서...?
+            if (request.getUrl().contains("index.html")) {
+                IndexController indexController = new IndexController();
+                return indexController.service(request);
+            }
 
             //TODO 컨트롤러 구조 고민
             if (request.getUrl().contains("user/list")) {
