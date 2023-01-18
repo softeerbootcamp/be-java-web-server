@@ -3,6 +3,7 @@ package service;
 import db.UserRepository;
 import model.User;
 
+import java.util.Collection;
 import java.util.Map;
 
 public class UserService {
@@ -22,6 +23,13 @@ public class UserService {
         return UserServiceHolder.USER_SERVICE;
     }
 
+    public static User findUserById (String id) {
+        return UserRepository.findUserById(id);
+    }
+
+    public static Collection<User> findAll() {
+        return UserRepository.findAll();
+    }
 
     public void create(Map<String, String> parameters) {
         User user = new User(
