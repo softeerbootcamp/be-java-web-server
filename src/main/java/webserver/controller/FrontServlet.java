@@ -31,29 +31,23 @@ public class FrontServlet {
         try {
             Path path = findFilePath(request.getUrl());
 
-            //TODO 인덱스.html마저 여기서...?
+            //TODO 인덱스.html마저 여기서...? 이거 너무 쓰레기같다. 컨트롤러 구조 고민필요.
             if (request.getUrl().contains("index.html")) {
                 IndexController indexController = new IndexController();
                 return indexController.service(request);
             }
 
-            //TODO 컨트롤러 구조 고민
             if (request.getUrl().contains("user/list")) {
                 UserListController userListController = new UserListController();
                 return userListController.service(request);
             }
-
-            return Response.of(request.getHttpVersion(), OK, Map.of("Content-Type", Files.probeContentType(path)), findActualFile(path));
+            String contentType = Files.probeContentType(path)==null ? "*/*" : Files.probeContentType(path);
+            return Response.of(request.getHttpVersion(), OK, Map.of("Content-Type", contentType), findActualFile(path));
 
         } catch (IOException e) {
             String[] split = request.getUrl().split("/");
             WasHandlerAdapter wasHandlerAdapter = adapterMap.get(split[1]);
             return wasHandlerAdapter.process(request);
-        } catch (NullPointerException exception) {
-            //TODO Header Map에 content-type 넣을 때 NullPointerException 발생해서 임시방편으로 처리해둠.
-            logger.error("null pointer exception이 발생해유 : {}", request.getUrl());
-
-            return Response.of(request.getHttpVersion(), OK, Map.of(),new byte[0]);
         }
     }
 }
