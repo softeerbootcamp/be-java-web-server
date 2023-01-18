@@ -74,15 +74,6 @@ public class Request {
         return FileContentType.NO_MATCH.getContentType();
     }
 
-    public String getResourceFilePostfix() {
-        String postfix = "";
-        int start = resource.lastIndexOf(".");
-        if(start != -1) {
-            postfix = resource.substring(resource.lastIndexOf("."));
-        }
-        return postfix;
-    }
-
     public Map<String, String> getRequestHeader() {
         return requestHeader;
     }
