@@ -13,19 +13,13 @@ import java.util.regex.Pattern;
 
 public class RequestHeader {
     private final HashMap<String, String> headerContents;
-    private final Cookie cookie;
     public static final String REQUEST_LINE = "Request Line";
 
     public RequestHeader(HashMap<String, String> headerContents) {
         this.headerContents = headerContents;
-        this.cookie = readCookie();
     }
 
-    private Cookie readCookie() {
-        String cookieSet = headerContents.get("Cookie");
-        String[] splitCookie = cookieSet.split("=");
-        return new Cookie(splitCookie[0], splitCookie[1]);
-    }
+
 
     protected static RequestHeader makeRequestHeader(BufferedReader bufferedReader) throws IOException {
         HashMap<String, String> headerContents = new HashMap<>();
@@ -51,7 +45,4 @@ public class RequestHeader {
         return headerContents;
     }
 
-    public Cookie getCookie() {
-        return cookie;
-    }
 }
