@@ -1,13 +1,15 @@
 package webserver.httpUtils.entity;
 
 public class Body{
-    String context;
+    byte[] context;
 
-    public String getContext() {
+    public byte[] getContext() {
         return context;
     }
 
-    public void setContext(String context) {
+    public void setContext(byte[] context) {
         this.context = context;
     }
+
+    public void setContext(String context){this.context = context.getBytes();}
 }

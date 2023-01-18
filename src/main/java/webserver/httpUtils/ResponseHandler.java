@@ -32,20 +32,20 @@ public class ResponseHandler {
     }
 
     private void makeResponseLine(ReqLine reqLine) {
-        res.getResLine().put(Response.VERSION, reqLine.getVersion());
+        res.getResLine().setVersion(reqLine.getVersion());
 
         if (isSignUp(reqLine.getQuery())) {
-            res.getResLine().put(Response.CODE, "302");
-            res.getResLine().put(Response.TEXT, "FOUND");
+            res.getResLine().setStatCode(302);
+            res.getResLine().setStatText("FOUND");
             return;
         }
-        res.getResLine().put(Response.CODE, "200");
-        res.getResLine().put(Response.TEXT, "OK");
+        res.getResLine().setStatCode(200);
+        res.getResLine().setStatText("OK");
     }
 
     private void makeHeaderAndBody(ReqLine reqLine) throws IOException {
         Map<String, String> header = new HashMap<>();
-        if(res.getResLine().get(Response.CODE).equals("302"))
+        if(res.getResLine().getStatCode() == 302)
         {
             header.put("Location: ", Paths.HOME_PATH);
             res.setResHeader(header);
@@ -64,11 +64,11 @@ public class ResponseHandler {
     private void sendRes(DataOutputStream dos) throws IOException
     {
         // resline
-        dos.writeBytes(res.getResLine().get(Response.VERSION) + " " +
-                res.getResLine().get(Response.CODE) + " " +
-                res.getResLine().get(Response.TEXT) + "\r\n");
+        dos.writeBytes(res.getResLine().getVersion() + " " +
+                res.getResLine().getStatCode() + " " +
+                res.getResLine().getStatText() + "\r\n");
         // header
-        res.getResHeader().entrySet().forEach(elem ->
+        res.getResHeader().getAll().entrySet().forEach(elem ->
                 {
                     logger.debug(elem.getKey() + elem.getValue());
                     try {

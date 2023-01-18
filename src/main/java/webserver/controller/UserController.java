@@ -26,6 +26,7 @@ public class UserController implements Controller {
         resHandler = new ResponseHandler(res);
 
         // TODO : create 등과 같은 키워드가 있을 때마다 알맞은 서비스 실행
+        // 위 키워드가 없는 것들을 static file controller로 변경
 
         Map<String, String> UserInfo;
         UserInfo = getUserInfoFromString(req.getReqBody().getContext());
@@ -41,8 +42,9 @@ public class UserController implements Controller {
         resHandler.makeAndSendRes(out, req.getReqLine());
     }
 
-    private static HashMap<String, String> getUserInfoFromString(String str)
+    private static HashMap<String, String> getUserInfoFromString(byte[] bt)
     {
+        String str = bt.toString();
         String token[] = str.split("&");
         HashMap<String, String> userInfo = new HashMap<String, String>();
         for(int i = 0; i < token.length; i++)

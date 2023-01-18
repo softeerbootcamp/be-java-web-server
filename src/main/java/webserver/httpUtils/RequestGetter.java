@@ -6,7 +6,6 @@ import webserver.Paths;
 import webserver.httpUtils.entity.ReqLine;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,11 +24,17 @@ public class RequestGetter {
         currentLine = br.readLine();
 
         Request req = new Request();
-        ReqLine parsedLine = parseRequestLine(br);
+        try{
 
-        req.setReqLine(parsedLine.getMethod(), parsedLine.getQuery(), parsedLine.getVersion());
-        req.setReqHeader(getHeaderKeyValues(br));
-        req.setReqBody(getBody(br));
+            ReqLine parsedLine = parseRequestLine(br);
+
+            req.setReqLine(parsedLine.getMethod(), parsedLine.getQuery(), parsedLine.getVersion());
+            req.setReqHeader(getHeaderKeyValues(br));
+            req.setReqBody(getBody(br));
+        } catch (NullPointerException e)
+        {
+            logger.error("Request가 널임");
+        }
 
         return req;
     }
