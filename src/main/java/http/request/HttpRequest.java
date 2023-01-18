@@ -7,10 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toMap;
@@ -79,5 +76,13 @@ public class HttpRequest {
 
     public Map<String, String> getRequestBody() {
         return requestBody;
+    }
+
+    public String getSid() {
+        String cookie = requestHeader.getHeader("Cookie");
+        if(Objects.nonNull(cookie)) {
+            return cookie.split("=")[1];
+        }
+        return "";
     }
 }

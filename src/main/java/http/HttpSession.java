@@ -1,24 +1,45 @@
 package http;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.time.LocalDateTime;
 
 public class HttpSession {
 
-    private static List<String> sessions = new ArrayList<>();
+    private final String sid;
+    private final String userName;
+    private LocalDateTime expiredAt;
 
-    public static void addSession(String sessionId) {
-        sessions.add(sessionId);
+    private HttpSession(
+            String sid,
+            String userName,
+            LocalDateTime expiredAt
+    ) {
+        this.sid = sid;
+        this.userName = userName;
+        this.expiredAt = expiredAt;
     }
 
-    public static String parseSession(String cookie) {
-        if(Objects.nonNull(cookie)) {
-            return cookie.split("=")[1];
-        }
-        return "";
+    public static HttpSession of(String sid, String userName) {
+        return new HttpSession(
+                sid,
+                userName,
+                LocalDateTime.now().plusHours(1)
+        );
     }
-    public static boolean validateSession(String sessionId) {
-        return sessions.contains(sessionId);
+
+    public String getSid() {
+        return sid;
     }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public LocalDateTime getExpiredAt() {
+        return expiredAt;
+    }
+
+    public void expire() {
+        expiredAt = LocalDateTime.now();
+    }
+
 }
