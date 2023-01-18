@@ -4,6 +4,8 @@ import http.HttpHeader;
 import http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.HttpRequestUtils;
+import util.HttpResponseUtils;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -17,33 +19,41 @@ public class HttpResponse {
     private byte[] body;
 
     private String contentType;
+    private String destination;
 
     private HttpResponse(HttpResponseBuilder httpResponseBuilder){
         this.statusLine = httpResponseBuilder.httpStatusLine;
         this.body = httpResponseBuilder.body;
         this.contentType = httpResponseBuilder.contentType;
-
-        this.header = makeHeader();
-    }
-
-    private HttpHeader makeHeader() {
-        if (statusLine.checkStatus(HttpStatus.OK)) return makeResponse200Header();
-        if (statusLine.checkStatus(HttpStatus.FOUND)) return makeResponse302Header();
-
-        // 200 302 응답 둘다 아니면?
-        return null;
+        this.destination = httpResponseBuilder.destination;
+        this.header = httpResponseBuilder.header;
     }
 
     public static class HttpResponseBuilder{
         private HttpStatusLine httpStatusLine;
         private byte[] body;
         private String contentType;
+        private String destination;
+        private HttpHeader header;
 
         public HttpResponseBuilder(){}
 
         public HttpResponseBuilder setHttpStatusLine(HttpStatusLine httpStatusLine){
             this.httpStatusLine = httpStatusLine;
             return this;
+        }
+
+        public HttpResponseBuilder makeHeader() {
+            if (this.httpStatusLine.checkStatus(HttpStatus.OK)) {
+                this.header = HttpResponseUtils.makeResponse200Header(contentType, body.length);
+                return this;
+            }
+            if (this.httpStatusLine.checkStatus(HttpStatus.FOUND)) {
+                this.header = HttpResponseUtils.makeResponse302Header(destination);
+                return this;
+            }
+            // 200 302 응답 둘다 아니면?
+            return null;
         }
 
         public HttpResponseBuilder setBody(byte[] body){
@@ -56,25 +66,20 @@ public class HttpResponse {
             return this;
         }
 
+        public HttpResponseBuilder setDestination(String destination){
+            this.destination = destination;
+            return this;
+        }
+
+        public HttpResponseBuilder addCookie(String cookieValue){
+            this.header.addHeader("Set-Cookie", "sid=" + cookieValue + "; Path=/");
+            return this;
+        }
+
         public HttpResponse build(){
             return new HttpResponse(this);
         }
 
-    }
-
-    private HttpHeader makeResponse200Header() {
-        List<String> headerLines = new ArrayList<>();
-        logger.debug("contentType: {}", contentType);
-        headerLines.add("Content-Type: " + contentType + ";charset=utf-8" + System.lineSeparator());
-        headerLines.add("Content-Length: " + body.length + System.lineSeparator());
-        return new HttpHeader(headerLines);
-    }
-
-    private HttpHeader makeResponse302Header() {
-        List<String> headerLines = new ArrayList<>();
-        // TODO 회원 가입에 대한 리다이렉트로 첫 페이지 띄워주게 하드 코딩 했는데 나중에 확장 해야 할듯
-        headerLines.add("Location: " + "/index.html" + System.lineSeparator());
-        return new HttpHeader(headerLines);
     }
 
     public void send(DataOutputStream dos) throws IOException {

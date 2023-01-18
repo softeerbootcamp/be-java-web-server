@@ -17,6 +17,10 @@ public class HttpHeader {
         }
     }
 
+    public void addHeader(String headerKey, String headerValue){
+        headers.put(headerKey, headerValue);
+    }
+
     public String toString() {
         String headerString = "";
         for (Map.Entry<String, String> header : headers.entrySet()) {
@@ -34,4 +38,6 @@ public class HttpHeader {
     public String getContentLength() {
         return headers.get("Content-Length");
     }
+
+    public String getCookie() { return headers.get("Cookie"); }
 }

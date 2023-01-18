@@ -1,6 +1,7 @@
 package webserver;
 
 import controller.Controller;
+import controller.DynamicHtmlController;
 import controller.StaticFileController;
 import controller.UserController;
 import http.request.HttpRequest;
@@ -17,11 +18,19 @@ public class ControllerHandler {
             return whoWant(httpRequest.getUri());
         }
 
-        // 정적 파일만 원한다면? ex) index.html, /user/form.html
-        if (httpRequest.wantStatic()) return new StaticFileController();
+        // 파일을 원한다면? ex) index.html, /user/form.html, .css, .js
+        // /index.html, /user/list.html
+        // Login 정보가 필요한 파일들을 원한다면 - 동적 html 처리
+        if(httpRequest.wantDynamicHtml()){
+            // 로그인을 하지 않은 index.html인 경우 정적 html 처리
+            if(httpRequest.getUri().equals("/index.html") && !httpRequest.isLogin())
+                return new StaticFileController();
+            return new DynamicHtmlController();
+        }
 
-        //TODO 아무것도 없으면 나중에 예외처리
-        return null;
+        // 나머지 - 정적 처리
+        return new StaticFileController();
+
     }
 
     // ControllerHandler Util을 빼줘야 하나?

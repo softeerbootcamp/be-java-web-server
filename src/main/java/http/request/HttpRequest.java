@@ -1,5 +1,6 @@
 package http.request;
 
+import db.Session;
 import http.HttpHeader;
 import http.exception.NullHttpRequestException;
 import org.slf4j.Logger;
@@ -27,10 +28,6 @@ public class HttpRequest {
         return this.httpRequestLine.getHttpUri().getUri();
     }
 
-    public boolean wantStatic() {
-        return httpRequestLine.getHttpUri().isStaticUri();
-    }
-
     public String getContentType() {
         logger.debug("Accept : {}", httpHeader.getAccept());
         return httpHeader.getAccept().split(",")[0];
@@ -41,11 +38,32 @@ public class HttpRequest {
     }
 
     public boolean isPost() {
-        logger.debug("HTTP method : {}", httpRequestLine.getHttpMethod());
+        //logger.debug("HTTP method : {}", httpRequestLine.getHttpMethod());
         return this.httpRequestLine.getHttpMethod().equals("POST");
     }
 
     public String getBody(){
         return this.body;
+    }
+
+    public String getFileNameExtension() {
+        return httpRequestLine.getHttpUri().getFileNameExtension();
+    }
+
+    public String getCookie(){
+        logger.debug("Cookie :  {}", httpHeader.getCookie());
+        String cookie = httpHeader.getCookie();
+        if(cookie == null) return null;
+        return HttpRequestUtils.parseQueryString(httpHeader.getCookie()).get("sid");
+    }
+
+    public boolean wantDynamicHtml() {
+        // TODO 동적으로 작동하는 html 리스트를 따로 빼야 할까
+        return getUri().equals("/index.html") || getUri().equals("/user/list.html");
+    }
+
+    public boolean isLogin() {
+        // userId가 null 이 아닌 경우 login 상태임 !
+        return Session.findUserIdBySessionId(getCookie()) != null;
     }
 }

@@ -20,4 +20,8 @@ public class HttpUri {
     public boolean isStaticUri() {
         return uri.contains(".");
     }
+
+    public String getFileNameExtension() {
+        return uri.substring(uri.lastIndexOf(".") + 1);
+    }
 }

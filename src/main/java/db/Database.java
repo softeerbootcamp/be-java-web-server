@@ -1,15 +1,20 @@
 package db;
 
 import com.google.common.collect.Maps;
+import http.response.HttpResponse;
 import model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Map;
 
 public class Database {
+    private static final Logger logger = LoggerFactory.getLogger(Database.class);
     private static Map<String, User> users = Maps.newHashMap();
 
     public static void addUser(User user) {
+        logger.debug("Database User input : {}", user);
         users.put(user.getUserId(), user);
     }
 
