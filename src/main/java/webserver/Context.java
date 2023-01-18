@@ -17,6 +17,7 @@ public class Context {
         controllers.put("/user/create", new UserCreateController(userService));
         controllers.put("/user/login", new UserLogInController(sessionService, userService));
         controllers.put("/", new IndexController());
+        controllers.put("/user/list.html", new UserListController(sessionService, userService));
         return controllers;
     }
 }
