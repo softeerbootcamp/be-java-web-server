@@ -21,21 +21,21 @@ public class HtmlController implements Controller{
         //ContentType, 파일 확장자, uri를 받음
         User loginUser = Database.findUserById(Session.findUserIdBySessionId(httpRequest.getCookie()));
         String contentType = httpRequest.getContentType();
-        String uri = httpRequest.getUri();
+        String filePath = htmlFilePath + httpRequest.getUri();
         String httpVersion = httpRequest.getHttpVersion();
 
         // list service
-        if(uri.equals("/user/list.html"))
+        if(httpRequest.getUri().equals("/user/list.html"))
             return ListService.service(
-                    httpRequest.isLogin(), htmlFilePath + uri, httpVersion, contentType);
+                    httpRequest.isLogin(), filePath, httpVersion, contentType);
 
         // index.html service 로그인 O
         if(httpRequest.isLogin())
             return IndexHtmlService.service(
-                    htmlFilePath + uri, loginUser, httpVersion, contentType);
+                    filePath, loginUser, httpVersion, contentType);
 
         // index.html service 로그인 X
         return StaticFileService.service(
-                uri + htmlFilePath, httpVersion, contentType);
+                filePath, httpVersion, contentType);
     }
 }

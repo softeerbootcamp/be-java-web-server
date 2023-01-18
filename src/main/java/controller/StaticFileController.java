@@ -14,9 +14,9 @@ public class StaticFileController implements Controller {
 
     @Override
     public HttpResponse makeResponse(HttpRequest httpRequest) {
-
+        String filePath = staticFilePath + httpRequest.getUri();
         return StaticFileService.service(
-                staticFilePath,
+                filePath,
                 httpRequest.getHttpVersion(),
                 httpRequest.getContentType());
 
