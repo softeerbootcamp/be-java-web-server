@@ -26,7 +26,7 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
             DataOutputStream dos = new DataOutputStream(out);
             HttpRequest httpRequest = HttpRequest.createReqeust(br);
-            Controller controller = MatchController.match(dos, httpRequest);
+            Controller controller = MatchController.match(httpRequest);
             controller.response(dos);
         } catch (IOException e) {
             logger.error(e.getMessage());

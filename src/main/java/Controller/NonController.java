@@ -14,12 +14,9 @@ public class NonController implements Controller {
     public static final String INDEX_HTML = "/index.html";
 
     HttpRequest httpRequest;
-    DataOutputStream dos;
-
-    public NonController(HttpRequest httpRequest, DataOutputStream dos) {
+    public NonController(HttpRequest httpRequest) {
         logger.debug("select NonController");
         this.httpRequest = httpRequest;
-        this.dos = dos;
     }
 
     @Override

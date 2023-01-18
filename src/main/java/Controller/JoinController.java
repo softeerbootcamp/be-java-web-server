@@ -16,12 +16,9 @@ import java.io.DataOutputStream;
 public class JoinController implements Controller {
     private final Logger logger = LoggerFactory.getLogger(JoinController.class);
     HttpRequest httpRequest;
-    DataOutputStream dos;
-
-    public JoinController(HttpRequest httpRequest, DataOutputStream dos) {
+    public JoinController(HttpRequest httpRequest) {
         logger.debug("select joinController");
         this.httpRequest = httpRequest;
-        this.dos = dos;
     }
 
     @Override

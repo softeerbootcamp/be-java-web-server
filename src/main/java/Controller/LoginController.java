@@ -19,12 +19,10 @@ public class LoginController implements Controller {
     public static final String USER_LOGIN_FAILED_HTML = "/user/login_failed.html";
     private final Logger logger = LoggerFactory.getLogger(LoginController.class);
     HttpRequest httpRequest;
-    DataOutputStream dos;
 
-    public LoginController(HttpRequest httpRequest, DataOutputStream dos) {
+    public LoginController(HttpRequest httpRequest) {
         logger.debug("select LoginController");
         this.httpRequest = httpRequest;
-        this.dos = dos;
     }
 
     @Override

@@ -15,12 +15,10 @@ import java.io.DataOutputStream;
 public class FileController implements Controller {
     private final Logger logger = LoggerFactory.getLogger(FileController.class);
     HttpRequest httpRequest;
-    DataOutputStream dos;
 
-    public FileController(HttpRequest httpRequest, DataOutputStream dos) {
+    public FileController(HttpRequest httpRequest) {
         logger.debug("select fileController");
         this.httpRequest = httpRequest;
-        this.dos = dos;
     }
 
     @Override
