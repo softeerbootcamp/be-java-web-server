@@ -53,8 +53,6 @@ public class FrontController implements Controller {
                 }
             }
 
-            System.out.println("dynamicUrl:"+dynamicUrl);
-
             Controller controller = new NotFoundExceptionHandler();
             //일반 정적 파일 요청시
             if(url.contains(".")&&(dynamicUrl.isEmpty())) {

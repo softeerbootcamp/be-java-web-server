@@ -20,7 +20,7 @@ public class HttpSession { // 각 사용자마다 해당되는 고유한 세션�
         return sessionId;
     }
 
-    public User getUserInfo() {
+    public User getUser() {
         return user;
     }
 
