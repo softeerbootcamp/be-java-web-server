@@ -39,27 +39,32 @@ public class StaticFileController implements RequestController {
     }
 
     public CustomHttpResponse getFile(CustomHttpRequest req) {
+        if(StaticFileService.isTemplateFile(req.getUrl()))
+            return handleTemplateFile(req);
+        return handleStaticFile(req);
+    }
+
+    public CustomHttpResponse handleTemplateFile(CustomHttpRequest req){
         File file = StaticFileService.getFile(req.getUrl());
-        String fileType = StaticFileService.getFileTypeFromUrl(req.getUrl());
-        ContentType contentType = ContentType.getContentTypeByFileType(fileType);
-
         User user = SessionService.getUserBySessionId(req.getSSID()).orElse(User.GUEST);
-
-        if(!StaticFileService.isTemplateFile(req.getUrl())){
-            try {
-                return CustomHttpResponse.of(StatusCode.OK, contentType, new HashMap<>(), Files.readAllBytes(Path.of(file.getPath())));
-            }catch (IOException e) {
-                return CustomHttpFactory.NOT_FOUND();
-            }
-
-        }
         try {
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
             String lines = br.lines().collect(Collectors.joining("\n"));
             lines = StaticFileService.renderFile(lines, new HashMap<>(){{put("name", user.getName());}});
-            return CustomHttpResponse.of(StatusCode.OK, contentType, new HashMap<>(), lines.getBytes());
+            return CustomHttpResponse.of(StatusCode.OK, ContentType.TEXT_HTML, new HashMap<>(), lines.getBytes());
         } catch (IOException e) {
+            return CustomHttpFactory.NOT_FOUND();
+        }
+    }
+
+    public CustomHttpResponse handleStaticFile(CustomHttpRequest req){
+        File file = StaticFileService.getFile(req.getUrl());
+        String fileType = StaticFileService.getFileTypeFromUrl(req.getUrl());
+        ContentType contentType = ContentType.getContentTypeByFileType(fileType);
+        try {
+            return CustomHttpResponse.of(StatusCode.OK, contentType, new HashMap<>(), Files.readAllBytes(Path.of(file.getPath())));
+        }catch (IOException e) {
             return CustomHttpFactory.NOT_FOUND();
         }
     }
