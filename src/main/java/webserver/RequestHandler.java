@@ -8,8 +8,8 @@ import webserver.controller.Controller;
 import webserver.domain.StatusCodes;
 import webserver.domain.request.Request;
 import webserver.domain.response.Response;
+import webserver.utils.HttpRequestUtils;
 import webserver.utils.HttpResponseWriter;
-import static webserver.utils.HttpRequestUtils.parseHttpRequest;
 
 public class RequestHandler implements Runnable {
 
@@ -18,20 +18,16 @@ public class RequestHandler implements Runnable {
     private HandlerMapping handlerMapping;
 
     public RequestHandler(Socket connectionSocket) {
-
         this.connection = connectionSocket;
         this.handlerMapping = new HandlerMapping();
-
     }
-
-
 
     public void run() {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
 
-            Request req = parseHttpRequest(in);
+            Request req = HttpRequestUtils.parseHttpRequest(in);
             Response res = new Response();
 
             handlerMapping.getStaticHandler().chain(req, res);  //get static controller to handle this request

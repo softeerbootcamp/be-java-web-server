@@ -104,3 +104,27 @@ Java Web Application Server 2022
 - Redis를 이용한 세션 DB 관리 방안
 - CRDT
 - 다양한 타입의 Request의 body를 파싱하는 시점, 방안
+
+----
+## 2일차 학습 내용
+### pull request 피드백 반영
+- [x] 정적 스태틱 메소드 중복 수정
+- [ ] HttpRequestException의 의존 관계 수정 (RuntimeEx -> Exception)
+
+### 오늘 할 일
+- [x] HttpCookie 클래스 구조화
+- [x] 세션 관련 로직 구현
+   - 세션 생성, 만료 기한 정의
+   - request 시 세션 핸들링
+   - response에 쿠키 정보를 담아 전송
+- [x] 쿠키와 세션을 이용하여 약간의 security 기능
+- [x] logout 구현
+- [ ] HttpCookie 기능 관련 테스트코드 작성
+
+### 공부한 것
+- 로그아웃 시 세션 핸들링
+ - max-age를 0 / -1 로
+- JWT와 쿠키/세션의 차이
+- 세션 DB 구축 방안
+- Mockito의 When() 메소드에서 발생하는 null pointer exception
+- java reflection의 invocationtargetexception 원인 및 해결 방안
