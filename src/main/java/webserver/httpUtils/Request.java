@@ -1,46 +1,55 @@
 package webserver.httpUtils;
 
+import webserver.httpUtils.entity.Body;
+import webserver.httpUtils.entity.Header;
+import webserver.httpUtils.entity.ReqLine;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Request {
-
-    public final static String METHOD = "method";
-    public final static String QUERY = "query";
-    public final static String VERSION = "version";
-
-    private Map<String, String> reqLine;
-    private Map<String, String> reqHeader;
-    private String reqBody;
+    private ReqLine reqLine;
+    private Header header;
+    private Body body;
 
     Request(){
-        reqLine = new HashMap<String, String>();
+        reqLine = new ReqLine();
+        header = new Header();
+        body = new Body();
     }
 
     // region GetterSetter
-    public Map<String, String> getReqLine() {
+    public ReqLine getReqLine() {
         return reqLine;
     }
 
-    public void setReqLine(Map<String, String> reqLine) {
-        this.reqLine = reqLine;
+    public void setReqLine(String method, String query, String version) {
+        reqLine.setMethod(method);
+        reqLine.setQuery(query);
+        reqLine.setVersion(version);
     }
 
-    public Map<String, String> getReqHeader() {
-        return reqHeader;
+    public Header getReqHeader() {
+        return header;
     }
 
     public void setReqHeader(Map<String, String> reqHeader) {
-        this.reqHeader = reqHeader;
+        reqHeader.entrySet().forEach(
+                elem -> {
+                    header.insertKeyVal(elem.getKey(), elem.getValue());
+                }
+        );
     }
 
-    public String getReqBody() {
-        return reqBody;
+    public Body getReqBody() {
+        return body;
     }
 
     public void setReqBody(String reqBody) {
-        this.reqBody = reqBody;
+        body.setContext(reqBody);
     }
     // endregion
+
+
 }

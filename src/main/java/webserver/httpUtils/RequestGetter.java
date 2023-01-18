@@ -3,8 +3,10 @@ package webserver.httpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.Paths;
+import webserver.httpUtils.entity.ReqLine;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,23 +25,26 @@ public class RequestGetter {
         currentLine = br.readLine();
 
         Request req = new Request();
-        req.setReqLine(parseRequestLine(br));
+        ReqLine parsedLine = parseRequestLine(br);
+
+        req.setReqLine(parsedLine.getMethod(), parsedLine.getQuery(), parsedLine.getVersion());
         req.setReqHeader(getHeaderKeyValues(br));
         req.setReqBody(getBody(br));
 
         return req;
     }
 
-    private Map<String, String> parseRequestLine(BufferedReader br) throws IOException
+    private ReqLine parseRequestLine(BufferedReader br) throws IOException
     {
-        Map<String, String> parsedRequestLine = new HashMap<String, String>();
+        ReqLine parsedRequestLine = new ReqLine();
 
         String tokens[] = currentLine.split(" ");
-        parsedRequestLine.put(Request.METHOD, tokens[0]);
-        parsedRequestLine.put(Request.QUERY, tokens[1].equals("/") ?
+        parsedRequestLine.setMethod(tokens[0]);
+        parsedRequestLine.setQuery(tokens[1].equals("/") ?
                 Paths.HOME_PATH :
                 URLDecoder.decode(tokens[1]));
-        parsedRequestLine.put(Request.VERSION, tokens[2]);
+        parsedRequestLine.setVersion(tokens[2]);
+
         currentLine = br.readLine();
         return parsedRequestLine;
     }
@@ -50,10 +55,15 @@ public class RequestGetter {
 
         while(!currentLine.isBlank())
         {
-            String keyVal[] = new String[2];
-            keyVal = currentLine.split(": ");
-            parsedHeader.put(keyVal[0], keyVal[1]);
+            try{
 
+                String keyVal[] = new String[2];
+                keyVal = currentLine.split(": ");
+                parsedHeader.put(keyVal[0], keyVal[1]);
+            } catch(ArrayIndexOutOfBoundsException e)
+            {
+                logger.error(currentLine);
+            }
             currentLine = br.readLine();
         }
         return parsedHeader;

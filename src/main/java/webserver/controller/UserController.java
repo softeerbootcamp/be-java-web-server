@@ -25,15 +25,17 @@ public class UserController implements Controller {
     public void exec(Request req, Response res, OutputStream out) throws IOException {
         resHandler = new ResponseHandler(res);
 
+        // TODO : create 등과 같은 키워드가 있을 때마다 알맞은 서비스 실행
+
         Map<String, String> UserInfo;
-        UserInfo = getUserInfoFromString(req.getReqBody());
+        UserInfo = getUserInfoFromString(req.getReqBody().getContext());
 
         try{
             checkDuplicateID(UserInfo);
             User newUser = new User(UserInfo.get(USER_ID), UserInfo.get(USER_PASS_WORD), UserInfo.get(USER_NAME), UserInfo.get(USER_EMAIL));
             Database.addUser(newUser);
         } catch(AlreadyHasSameIdException e) {
-            req.getReqLine().put(Request.QUERY, Paths.ENROLL_FAIL_PATH);
+            req.getReqLine().setQuery(Paths.ENROLL_FAIL_PATH);
         }
 
         resHandler.makeAndSendRes(out, req.getReqLine());

@@ -1,6 +1,7 @@
 package webserver.controller;
 
 import webserver.httpUtils.Request;
+import webserver.httpUtils.entity.ReqLine;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,8 +30,8 @@ public class ControllerMapper {
 
     public Controller getController(Request req)
     {
-        Map<String, String> reqLine = req.getReqLine();
-        String query = reqLine.get(Request.QUERY);
+        ReqLine reqLine = req.getReqLine();
+        String query = reqLine.getQuery();
 
         if(query.contains("user/"))
         {

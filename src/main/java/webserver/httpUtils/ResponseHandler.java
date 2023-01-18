@@ -3,6 +3,7 @@ package webserver.httpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.Paths;
+import webserver.httpUtils.entity.ReqLine;
 
 import java.io.DataOutputStream;
 import java.io.File;
@@ -21,7 +22,7 @@ public class ResponseHandler {
         this.res = res;
     }
 
-    public void makeAndSendRes(OutputStream out, Map<String, String> reqLine) throws IOException {
+    public void makeAndSendRes(OutputStream out, ReqLine reqLine) throws IOException {
         DataOutputStream dos = new DataOutputStream(out);
 
         makeResponseLine(reqLine);
@@ -30,10 +31,10 @@ public class ResponseHandler {
         sendRes(dos);
     }
 
-    private void makeResponseLine(Map<String, String> reqLine) {
-        res.getResLine().put(Response.VERSION, reqLine.get(Request.VERSION));
+    private void makeResponseLine(ReqLine reqLine) {
+        res.getResLine().put(Response.VERSION, reqLine.getVersion());
 
-        if (isSignUp(reqLine.get(Request.QUERY))) {
+        if (isSignUp(reqLine.getQuery())) {
             res.getResLine().put(Response.CODE, "302");
             res.getResLine().put(Response.TEXT, "FOUND");
             return;
@@ -42,7 +43,7 @@ public class ResponseHandler {
         res.getResLine().put(Response.TEXT, "OK");
     }
 
-    private void makeHeaderAndBody(Map<String, String> reqLine) throws IOException {
+    private void makeHeaderAndBody(ReqLine reqLine) throws IOException {
         Map<String, String> header = new HashMap<>();
         if(res.getResLine().get(Response.CODE).equals("302"))
         {
@@ -51,7 +52,7 @@ public class ResponseHandler {
             return;
         }
 
-        String reqQuery = reqLine.get(Request.QUERY);
+        String reqQuery = reqLine.getQuery();
         res.setResBody(Byte.urlToByte(reqQuery));
 
         String contentType = Files.probeContentType(new File(reqQuery).toPath());
