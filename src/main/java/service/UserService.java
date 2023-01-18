@@ -3,6 +3,7 @@ package service;
 import model.User;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class UserService implements Service<User> {
 
@@ -10,9 +11,8 @@ public class UserService implements Service<User> {
 
 
     @Override
-    public User createModel(HashMap<String,String> userMap) {
+    public User createModel(Map<String, String> userMap) {
         return new User(userMap.get(userKey[0]), userMap.get(userKey[1]), userMap.get(userKey[2]), userMap.get(userKey[3]));
     }
-
 
 }
