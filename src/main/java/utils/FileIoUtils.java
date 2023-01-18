@@ -45,15 +45,9 @@ public class FileIoUtils {
         return map;
     }
 
-    public static String parseSId(String sidString) {
-        if (sidString == null || !sidString.contains("sid"))
-            return null;
-        return sidString.split("=")[1].trim();
-    }
-
     public static byte[] writeUserList() {
-        String temp = "hello there";
-        return temp.getBytes();
+        String userListPage = new String(loadFile(PathManager.USER_LIST_PATH));
+        return userListPage.getBytes();
     }
 
     public static String getLoggedInHome(String username) {

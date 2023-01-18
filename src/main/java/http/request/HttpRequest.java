@@ -1,9 +1,12 @@
 package http.request;
 
 import http.HttpHeader;
+import org.slf4j.LoggerFactory;
 import utils.HttpMethod;
 
+import java.util.Arrays;
 import java.util.Map;
+import java.util.Optional;
 
 public class HttpRequest {
     private final HttpRequestLine startLine;
@@ -46,5 +49,16 @@ public class HttpRequest {
 
     public Map<String, String> getQueryParams() {
         return this.getUri().getParams();
+    }
+
+    public String getSession() {
+        String cookie = getHeaderValue("Cookie");
+        if (cookie == null)
+            return null;
+        if (!cookie.contains("sid"))
+            return null;
+        String[] cookies = cookie.split(";");
+        String sid = Arrays.stream(cookies).filter(c -> c.contains("sid")).findFirst().orElse("");
+        return sid.split("=")[1];
     }
 }

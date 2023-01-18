@@ -35,6 +35,5 @@ public class SessionManager {
                 removeSession(sessionId);
             }
         });
-        logger.debug(String.format("session store의 사이즈는 %d입니다", sessions.size()));
     }
 }

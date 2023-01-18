@@ -32,8 +32,7 @@ public class UserListController implements Controller {
     }
 
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        String cookie = httpRequest.getHeaderValue("Cookie");
-        String sid = FileIoUtils.parseSId(cookie);
+        String sid = httpRequest.getSession();
         try {
             if (SessionManager.getData(UUID.fromString(sid)) != null) {
                 httpResponse.setBody(FileIoUtils.writeUserList());
