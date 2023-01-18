@@ -3,6 +3,7 @@ package controller;
 import db.Database;
 import filesystem.FileSystem;
 import filesystem.FindResource;
+import filesystem.PathResolver;
 import http.common.Cookie;
 import http.common.Session;
 import http.request.HttpRequest;
@@ -10,7 +11,8 @@ import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static filesystem.PathResolver.dynamicHtmls;
+import static filesystem.PathResolver.authenticatedUrl;
+import static filesystem.PathResolver.indexRequestUrl;
 
 public class MainController implements Controller {
 
@@ -26,8 +28,18 @@ public class MainController implements Controller {
     }
 
     private FindResource getResource(HttpRequest request) {
-        if (isAuthenticated(request) && dynamicHtmls.contains(request.getUrl())) {
-            return FileSystem.findDynamicResource(request);
+        // todo: 리팩토링,,,,
+        if (indexRequestUrl.contains(request.getUrl())) {
+            if (isAuthenticated(request)) {
+                return FileSystem.getIndexPage(request);
+            }
+            return FileSystem.findStaticResource(request);
+        }
+        if (authenticatedUrl.contains(request.getUrl())) {
+            if (isAuthenticated(request)) {
+                return FileSystem.getUserListPage(request);
+            }
+            return new FindResource(PathResolver.LOGIN_HTML, FileSystem.readFile(PathResolver.parse(PathResolver.LOGIN_HTML)));
         }
         return FileSystem.findStaticResource(request);
     }

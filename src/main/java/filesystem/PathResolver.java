@@ -11,7 +11,10 @@ public class PathResolver {
     private static final String NOT_FOUND_HTML = "src/main/resources/templates/notfound.html";
     public static final String DOMAIN = "/";
     public static final String LOGIN_FAILED_HTML = "login_failed.html";
-    public static final List<String> dynamicHtmls = List.of("/", "index.html");
+    public static final String LOGIN_HTML = "/user/login.html";
+    public static final List<String> indexRequestUrl = List.of("/", DOMAIN + INDEX_HTML);
+    public static final List<String> authenticatedUrl = List.of("/user/list.html");
+
 
     private static final Map<Extension, String> mappingInfo = Map.of(
             Extension.INDEX, TEMPLATE_PATH + INDEX_HTML,
