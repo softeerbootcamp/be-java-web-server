@@ -7,9 +7,8 @@ import Response.HttpResponseHeaders;
 import Response.HttpResponseStartLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.FileIoUtil;
 import util.HttpResponseUtil;
-import util.ManageDB;
+import util.UserDbUtil;
 import Request.StatusCode;
 
 
@@ -24,10 +23,10 @@ public class JoinController implements Controller {
 
     @Override
     public HttpResponse createResponse() {
-        if (ManageDB.alreadyExist(this.httpRequest)) {
+        if (UserDbUtil.alreadyExist(this.httpRequest)) {
             return responseUserForm();
         }
-        ManageDB.saveUser(this.httpRequest);
+        UserDbUtil.saveUser(this.httpRequest);
         return responseRedirectIndex();
     }
 
