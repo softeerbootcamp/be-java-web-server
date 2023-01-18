@@ -37,7 +37,6 @@ public class UserListController implements Controller {
         try {
             if (SessionManager.getData(UUID.fromString(sid)) != null) {
                 httpResponse.setBody(FileIoUtils.writeUserList());
-                return;
             }
         } catch (NullPointerException e) {
             httpResponse.redirect(LOGIN_PATH);

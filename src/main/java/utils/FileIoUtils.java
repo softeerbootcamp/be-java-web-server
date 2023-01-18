@@ -1,14 +1,13 @@
 package utils;
 
 
+import model.User;
+
 import java.io.File;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class FileIoUtils {
     private static final String STATIC_RESOURCE_PATH = FileIoUtils.class.getClassLoader().getResource("./static").getPath();
@@ -55,5 +54,18 @@ public class FileIoUtils {
     public static byte[] writeUserList() {
         String temp = "hello there";
         return temp.getBytes();
+    }
+
+    public static String getLoggedInHome(String username) {
+        String homePage = new String(loadFile(PathManager.HOME_PATH));
+        return homePage.replace("<!--username-->", String.format("<p>%s</p>", username));
+    }
+
+    public static String getUserListPage(Collection<User> users) {
+        StringBuilder sb = new StringBuilder();
+        for (User user : users) {
+
+        }
+        return null;
     }
 }
