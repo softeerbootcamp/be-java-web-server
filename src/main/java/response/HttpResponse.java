@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import session.Session;
 import webserver.HttpStatus;
 
 public class HttpResponse {
@@ -20,29 +21,33 @@ public class HttpResponse {
 
 	}
 
-	public HttpResponse(final HttpStatus httpStatus, final String responseBody,
-		final ContentType contentType, final String redirectUrl) {
+	public HttpResponse(HttpStatus httpStatus, String responseBody,
+		ContentType contentType, String redirectUrl) {
 		this.line = new HttpResponseLine(httpStatus);
 		this.header = new HashMap<>();
 		initHeader(contentType, responseBody, redirectUrl);
 		this.responseBody = responseBody;
 	}
 
-	public HttpResponse(final HttpStatus httpStatus, final String responseBody, final ContentType contentType) {
+	public HttpResponse(HttpStatus httpStatus, String responseBody, ContentType contentType) {
 		this.line = new HttpResponseLine(httpStatus);
 		this.header = new HashMap<>();
 		initHeader(contentType, responseBody);
 		this.responseBody = responseBody;
 	}
 
-	private void initHeader(final ContentType contentType, final String responseBody) {
+	private void initHeader(ContentType contentType, String responseBody) {
 		header.put("Content-Type", contentType.getContentType() + ";charset-utf-8");
 		header.put("Content-Length", String.valueOf(responseBody.getBytes(StandardCharsets.UTF_8).length));
 	}
 
-	private void initHeader(final ContentType contentType, final String responseBody, final String redirectUrl) {
+	private void initHeader(ContentType contentType, String responseBody, String redirectUrl) {
 		initHeader(contentType, responseBody);
 		header.put("Location", redirectUrl);
+	}
+
+	public void addSessionId(Session session) {
+		header.put("Set-Cookie", "SID=" + session.getSessionId());
 	}
 
 	public void setHttpResponse(HttpStatus httpStatus, String responseBody, ContentType contentType) {
