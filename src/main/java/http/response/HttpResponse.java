@@ -6,11 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 
 public class HttpResponse {
 
@@ -55,21 +52,14 @@ public class HttpResponse {
         this.body = new byte[0];
         addHttpHeader("Content-Length", String.valueOf(body.length));
     }
+
     public void setBodyMessage(String message) {
         this.body = message.getBytes(StandardCharsets.UTF_8);
         addHttpHeader("Content-Length", String.valueOf(body.length));
     }
 
-    public void makeBodyMessageWithFile(String viewPath) throws IOException {
-        File file = new File(viewPath);
-        if (file.exists() && file.isFile()) {
-            this.body = Files.readAllBytes(file.toPath());
-        }
-
-        if (this.body == null) {
-            throw new FileNotFoundException("해당 경로에 파일이 존재하지 않습니다.");
-        }
-
+    public void setBodyMessage(byte[] body) {
+        this.body = body;
         addHttpHeader("Content-Length", String.valueOf(body.length));
     }
 

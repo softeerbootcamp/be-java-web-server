@@ -5,5 +5,5 @@ import http.response.HttpResponse;
 
 public interface Controller {
 
-    String process(HttpRequest request, HttpResponse httpResponse);
+    void process(HttpRequest request, HttpResponse httpResponse);
 }
