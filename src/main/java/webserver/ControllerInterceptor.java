@@ -47,10 +47,8 @@ public class ControllerInterceptor {
                     ArgumentResolver.checkParameters(contentMap, Arrays.asList(controllerInfo.queryStr()));
 
                     //hand over the session to controller only if it is valid
-                    //TODO : 해당 사항을 별도의 클래스로 분리해서 Security 관련 기능을 다룰 것
-
                     String sessionId = HttpCookieUtils.getSessionIdFromRequest(req).orElse(null);
-                    SecurityFilter.checkAuthorization(reqPath, sessionId);
+                    SecurityFilter.checkAuthorization(reqPath, sessionId);  //login checkup
                     if (sessionId != null){
                         HttpCookieUtils.cookieValidation(sessionId).ifPresent(cookie -> {
                             contentMap.put("Cookie", cookie.getSessionId());
