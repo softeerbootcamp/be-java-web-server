@@ -1,25 +1,21 @@
 package controller;
 
+import http.Uri;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import http.Uri;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Map;
 
 public class UserCreateController extends AbstractController {
+    public static final String REDIRECT_PATH = "/index.html";
+    private static final Logger logger = LoggerFactory.getLogger(UserCreateController.class);
     private final UserService userService;
 
-    public static final String REDIRECT_PATH = "/index.html";
-
-    private static final Logger logger = LoggerFactory.getLogger(UserCreateController.class);
-
     public UserCreateController(UserService userService) {
-        this.paths = Collections.singletonList("/user/create");
         this.userService = userService;
     }
 

@@ -1,25 +1,22 @@
 package controller;
 
-import http.request.HttpRequest;
 import http.ContentType;
+import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Arrays;
 
 import static utils.FileIoUtils.load404ErrorFile;
 import static utils.FileIoUtils.loadFile;
 
 public class ResourceController extends AbstractController {
 
-
     private static final Logger logger = LoggerFactory.getLogger(ResourceController.class);
 
     public ResourceController() {
-        this.paths = Arrays.asList(".html", ".ico", ".css", ".js", "woff", "ttf", "png");
     }
 
     @Override

@@ -4,13 +4,12 @@ import http.cookie.Cookie;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.Session;
-import service.SessionService;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import service.SessionService;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Map;
 
 import static db.UserRepository.findUserById;
@@ -22,15 +21,12 @@ public class UserLogInController extends AbstractController {
     public static final String COOKIE_SUFFIX = "; path=/";
     public static final String INDEX_PATH = "/index.html";
     public static final String LOGIN_FAILED_PATH = "/user/login_failed.html";
-
+    private static final Logger logger = LoggerFactory.getLogger(UserLogInController.class);
     private final SessionService sessionService;
 
     public UserLogInController(SessionService sessionService) {
-        this.paths = Collections.singletonList("/user/login");
         this.sessionService = sessionService;
     }
-
-    private static final Logger logger = LoggerFactory.getLogger(UserLogInController.class);
 
     @Override
     public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {

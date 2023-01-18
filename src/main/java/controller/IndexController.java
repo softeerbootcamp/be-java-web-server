@@ -1,11 +1,10 @@
 package controller;
 
-import http.request.HttpRequest;
 import http.ContentType;
+import http.request.HttpRequest;
 import http.response.HttpResponse;
 
 import java.io.IOException;
-import java.util.Collections;
 
 import static utils.FileIoUtils.loadFile;
 
@@ -14,7 +13,6 @@ public class IndexController extends AbstractController {
     private static final String INDEX_PATH = "/index.html";
 
     public IndexController() {
-        this.paths = Collections.singletonList("/");
     }
 
     @Override
