@@ -48,6 +48,7 @@ public class UserService {
         RequestLine requestLine = httpRequest.getRequestLine();
         Map<String, String> headers = new HashMap<>();
         if (SessionHandler.validateSession(httpRequest.getSid())) {
+            HttpSession httpSession = SessionHandler.getSession(httpRequest.getSid());
             RequestHeader requestHeader = httpRequest.getRequestHeader();
             String contentType = requestHeader.getContentType();
 
@@ -57,7 +58,7 @@ public class UserService {
             String fileData = new String(Files.readAllBytes(new File(
                     "src/main/resources" + ResourceType.HTML.getPath() + "/user/list.html").toPath()));
             fileData = fileData.replace("%userList%", sb.toString());
-
+            fileData = fileData.replace("로그인", httpSession.getUserName());
             byte[] body = fileData.getBytes();
             return HttpResponse.of(HttpStatus.OK, contentType, new HashMap<>(), body, requestLine.getVersion());
         }

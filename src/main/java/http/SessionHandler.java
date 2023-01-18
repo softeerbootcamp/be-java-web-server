@@ -23,4 +23,8 @@ public class SessionHandler {
         return Objects.nonNull(session) && session.getExpiredAt().isAfter(LocalDateTime.now());
     }
 
+    public static HttpSession getSession(String sid) {
+        return httpSessionMap.get(sid);
+    }
+
 }
