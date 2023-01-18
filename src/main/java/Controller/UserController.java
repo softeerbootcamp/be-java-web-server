@@ -11,11 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
 import util.HttpRequestUtils;
+import webserver.session.SessionConst;
 import webserver.session.SessionManager;
 
 import java.util.Map;
-
-import static webserver.session.SessionManager.SESSION_COOKIE_NAME;
 
 public class UserController implements Controller {
 
@@ -76,7 +75,7 @@ public class UserController implements Controller {
             User loginUser = userService.login(userInfo);
 
             String sessionId = SessionManager.createSession(loginUser.getUserId());
-            response.addHttpHeader("Set-Cookie", SESSION_COOKIE_NAME + "=" + sessionId+ "; Path=/");
+            response.addHttpHeader("Set-Cookie", SessionConst.SESSION_COOKIE_NAME + "=" + sessionId+ "; Path=/");
 
             response.redirect(request, "/index.html");
         } catch (UserValidationException e) {
