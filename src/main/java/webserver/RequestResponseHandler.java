@@ -8,7 +8,7 @@ import controller.ControllerSelector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.Request;
-import response.NewResponse;
+import response.ResponseFactory;
 import response.ResponseSender;
 
 public class RequestResponseHandler implements Runnable {
@@ -34,9 +34,9 @@ public class RequestResponseHandler implements Runnable {
             }
             Controller controller = ControllerSelector.setController(request);
             logger.debug("request cookie : "+request.getRequestHeader().getHeaderValueByKey("Cookie"));
-            NewResponse newResponse = controller.controllerService(request);
+            ResponseFactory responseFactory = controller.controllerService(request);
             ResponseSender responseSender = new ResponseSender(out);
-            responseSender.send(newResponse);
+            responseSender.send(responseFactory);
 
 
         } catch (IOException e) {

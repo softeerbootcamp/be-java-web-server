@@ -6,7 +6,7 @@ import enums.ControllerTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.Request;
-import response.NewResponse;
+import response.ResponseFactory;
 import session.HttpSessions;
 import webserver.RequestResponseHandler;
 import java.io.File;
@@ -23,7 +23,7 @@ public class LoginController implements Controller{
     private static final int USERPWD_INDEX = 1;
 
     @Override
-    public NewResponse controllerService(Request request) throws IOException {
+    public ResponseFactory controllerService(Request request) throws IOException {
         logger.debug("login request : "+request.getRequestLine().getMETHOD());
         logger.debug("login request : "+request.getRequestLine().getURL());
         logger.debug("login request : "+request.getRequestLine().getVERSION());
@@ -39,14 +39,14 @@ public class LoginController implements Controller{
             logger.debug("login failed!");
         }
         String addedLine="Location : /index.html";
-        NewResponse newResponse = new NewResponse.Builder()
+        ResponseFactory responseFactory = new ResponseFactory.Builder()
                 .setResponseStatusLine(ControllerTypeEnum.LOGIN)
                 .setResponseHeader(ContentTypeEnum.CSS,body.length)
                 .addCookieHeader(sid)
                 .addResponseHeader(addedLine)
                 .setResponseBody(body)
                 .build();
-        return newResponse;
+        return responseFactory;
 
     }
     // util 로 빼주자

@@ -3,10 +3,7 @@ package response;
 import enums.ContentTypeEnum;
 import enums.ControllerTypeEnum;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class NewResponse {
+public class ResponseFactory {
 
 
     private ResponseStatusLine responseStatusLine;
@@ -14,7 +11,7 @@ public class NewResponse {
     private ResponseBody responseBody;
     private static final String NEW_LINE = "\r\n";
 
-    public NewResponse(Builder builder){
+    public ResponseFactory(Builder builder){
         this.responseStatusLine = builder.responseStatusLine;
         this.responseHeader = builder.responseHeader;
         this.responseBody = builder.responseBody;
@@ -65,8 +62,8 @@ public class NewResponse {
             return this;
         }
 
-        public NewResponse build(){
-            return new NewResponse(this);
+        public ResponseFactory build(){
+            return new ResponseFactory(this);
         }
     }
 

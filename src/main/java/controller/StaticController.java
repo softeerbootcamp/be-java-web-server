@@ -2,7 +2,6 @@ package controller;
 
 import enums.ContentTypeEnum;
 import enums.ControllerTypeEnum;
-import enums.HeaderReferenceEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.Request;
@@ -18,7 +17,7 @@ public class StaticController implements Controller{
     private static final Logger logger = LoggerFactory.getLogger(RequestResponseHandler.class);
 
     @Override
-    public NewResponse controllerService(Request request) throws IOException {
+    public ResponseFactory controllerService(Request request) throws IOException {
         String url =  request.getRequestLine().getURL();
         if(url.contains("/user/css")||url.contains("/user/js")){
             url = url.substring(5);
@@ -26,12 +25,12 @@ public class StaticController implements Controller{
         logger.debug("firstLine : "+ request.getRequestLine().getURL());
         byte[] body = Files.readAllBytes(new File("./src/main/resources/static"+url).toPath());
 
-        NewResponse newResponse = new NewResponse.Builder()
+        ResponseFactory responseFactory = new ResponseFactory.Builder()
                 .setResponseStatusLine(ControllerTypeEnum.STATIC)
                 .setResponseHeader(ContentTypeEnum.CSS,body.length)
                 .setResponseBody(body)
                 .build();
-        return newResponse;
+        return responseFactory;
         //response.responseMaker(ControllerTypeEnum.STATIC, ContentTypeEnum.CSS,body.length,url);
 //        response.responseNewLineAdder();
 //        response.responseBody(body);

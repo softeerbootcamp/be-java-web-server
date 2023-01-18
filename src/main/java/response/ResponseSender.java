@@ -15,9 +15,9 @@ public class ResponseSender {
     public ResponseSender(OutputStream outputStream) {
         this.dos = new DataOutputStream(outputStream);
     }
-    public void send(NewResponse newResponse){
+    public void send(ResponseFactory responseFactory){
         try {
-            ResponseAssembler responseAssembler = new ResponseAssembler(newResponse);
+            ResponseAssembler responseAssembler = new ResponseAssembler(responseFactory);
             dos.writeBytes(responseAssembler.getAssembled()+System.lineSeparator());
             dos.write(responseAssembler.getBody(),0,responseAssembler.getBody().length);
             dos.flush();
