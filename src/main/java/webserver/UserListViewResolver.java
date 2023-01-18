@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class UserListViewResolver {
 
 
-    public static String getTableOfUser(Object userObjList){
+    private static String getTableOfUser(Object userObjList){
         String rawStr = "<tr> <th scope=\"row\">%d</th> <td>%s</td> <td>%s</td> <td>%s</td><td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td>\n </tr>";
         AtomicInteger count = new AtomicInteger(0);
         StringBuilder sb = new StringBuilder();
