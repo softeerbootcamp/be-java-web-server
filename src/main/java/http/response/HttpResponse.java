@@ -1,7 +1,8 @@
 package http.response;
 
 import http.ContentType;
-import http.HttpHeaders;
+import http.cookie.Cookie;
+import http.HttpHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,13 +16,13 @@ public class HttpResponse {
 
     private final DataOutputStream dos;
     private final HttpStatusLine statusLine;
-    private final HttpHeaders headers;
+    private final HttpHeader headers;
     private final HttpResponseBody responseBody;
 
     private HttpResponse(
             OutputStream out,
             HttpStatusLine httpStatusLine,
-            HttpHeaders headers,
+            HttpHeader headers,
             HttpResponseBody responseBody
     ) {
         this.dos = new DataOutputStream(out);
@@ -34,7 +35,7 @@ public class HttpResponse {
         return new HttpResponse(
                 out,
                 HttpStatusLine.createDefaultStatusLine(),
-                HttpHeaders.createDefaultHeaders(),
+                HttpHeader.createDefaultHeaders(),
                 HttpResponseBody.createDefaultBody()
         );
     }
@@ -52,17 +53,27 @@ public class HttpResponse {
         send();
     }
 
+    public void sendRedirect(String location, Cookie cookie) throws IOException {
+        setStatusCode(HttpStatusCode.FOUND);
+        set302Headers(location, cookie);
+        send();
+    }
+
     public void do404(byte[] body) throws IOException {
         setStatusCode(HttpStatusCode.NOT_FOUND);
         dos.writeBytes(statusLine.toString());
         dos.writeBytes(System.lineSeparator());
         dos.write(body, 0, body.length);
         dos.flush();
-        logger.error("Http statusLine: " + statusLine);
+        logger.error("Http statusLine: {}", statusLine);
     }
 
     public String getStatusCode() {
         return statusLine.getHttpStatusCode().getCode();
+    }
+
+    private void setStatusCode(HttpStatusCode statusCode) {
+        statusLine.setHttpStatusCode(statusCode);
     }
 
     public Map<String, String> getHeaders() {
@@ -74,7 +85,7 @@ public class HttpResponse {
         dos.writeBytes(headers.toString());
         dos.writeBytes(System.lineSeparator());
 
-        logger.debug("HttpResponse statusLine: " + statusLine);
+        logger.debug("HttpResponse statusLine: {}", statusLine);
 
         if (responseBody.hasBody()) {
             byte[] body = responseBody.getBody();
@@ -93,8 +104,9 @@ public class HttpResponse {
         headers.addHeader("Location", location);
     }
 
-    private void setStatusCode(HttpStatusCode statusCode) {
-        statusLine.setHttpStatusCode(statusCode);
+    private void set302Headers(String location, Cookie cookie) {
+        headers.addHeader("Location", location);
+        headers.addHeader("Set-Cookie", cookie.toString());
     }
 
     private void setResponseBody(byte[] body) {

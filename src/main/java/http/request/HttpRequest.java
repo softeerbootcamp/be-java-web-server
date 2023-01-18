@@ -1,7 +1,7 @@
 package http.request;
 
-import http.HttpHeaders;
-import http.Uri;
+import http.*;
+import http.cookie.CookieManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,47 +19,54 @@ public class HttpRequest {
     private static final String ENTER = "\n";
 
     private final HttpStartLine startLine;
-    private final HttpHeaders httpHeaders;
+    private final HttpHeader httpHeaders;
     private final HttpRequestBody requestBody;
+    private final CookieManager cookies;
 
     private HttpRequest(
             HttpStartLine startLine,
-            HttpHeaders headers,
-            HttpRequestBody requestBody
+            HttpHeader headers,
+            HttpRequestBody requestBody,
+            CookieManager cookies
     ) {
         this.startLine = startLine;
         this.httpHeaders = headers;
         this.requestBody = requestBody;
-
-        logger.debug(startLine.getMethod().toString());
+        this.cookies = cookies;
     }
 
     public static HttpRequest from(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         String startLine = br.readLine();
-        logger.debug(startLine);
         String extracted = extractHeaders(br);
         String[] headers = extracted.split(ENTER);
 
-        return of(HttpStartLine.from(startLine), HttpHeaders.from(headers), br);
+        return of(HttpStartLine.from(startLine), HttpHeader.from(headers), br);
     }
 
     public static HttpRequest of(
             HttpStartLine startLine,
-            HttpHeaders headers,
+            HttpHeader headers,
             BufferedReader br
     ) throws IOException {
         HttpMethod httpMethod = startLine.getMethod();
+        CookieManager cookies = new CookieManager(headers.getHeaders().get("Cookie"));
+        logger.info("HttpStartLine: {} {} {}", startLine.getMethod(), startLine.getUri().getPath(), startLine.getHttpVersion());
+        logger.debug("Headers: {}", headers);
 
         if (httpMethod.equals(HttpMethod.GET)) {
             HttpRequestBody httpRequestBody = HttpRequestBody.createEmptyRequestBody();
-            return new HttpRequest(startLine, headers, httpRequestBody);
+            return new HttpRequest(startLine, headers, httpRequestBody, cookies);
         }
 
-        int contentLength = Integer.parseInt(headers.getValue("Content-Length"));
-        String queryString = readData(br, contentLength);
-        HttpRequestBody httpRequestBody = HttpRequestBody.createRequestBody(queryString);
-        return new HttpRequest(startLine, headers, httpRequestBody);
+        if (httpMethod.equals(HttpMethod.POST)) {
+            int contentLength = Integer.parseInt(headers.getValue("Content-Length"));
+            String queryString = readData(br, contentLength);
+            HttpRequestBody httpRequestBody = HttpRequestBody.createRequestBody(queryString);
+            return new HttpRequest(startLine, headers, httpRequestBody, cookies);
+        }
+
+        return null;
     }
 
     private static String extractHeaders(BufferedReader br) throws IOException {
@@ -95,6 +102,10 @@ public class HttpRequest {
 
     public Map<String, String> getHttpHeaders() {
         return httpHeaders.getHeaders();
+    }
+
+    public CookieManager getCookies() {
+        return cookies;
     }
 
     public static String readData(BufferedReader br, int contentLength) throws IOException {

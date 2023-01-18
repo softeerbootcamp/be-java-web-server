@@ -9,7 +9,7 @@ public class HttpHeadersTest {
     @Test
     public void testFrom() {
         String[] lines = {"Content-Type: text/html", "Content-Length: 1024"};
-        HttpHeaders headers = HttpHeaders.from(lines);
+        HttpHeader headers = HttpHeader.from(lines);
 
         assertThat(headers.getValue("Content-Type")).isEqualTo("text/html");
         assertThat(headers.getValue("Content-Length")).isEqualTo("1024");
@@ -17,7 +17,7 @@ public class HttpHeadersTest {
 
     @Test
     public void testAddHeader() {
-        HttpHeaders headers = HttpHeaders.createDefaultHeaders();
+        HttpHeader headers = HttpHeader.createDefaultHeaders();
 
         headers.addHeader("Content-Type", "text/html");
         headers.addHeader("Content-Length", "1024");
@@ -28,7 +28,7 @@ public class HttpHeadersTest {
 
     @Test
     public void testGetHeaders() {
-        HttpHeaders headers = HttpHeaders.createDefaultHeaders();
+        HttpHeader headers = HttpHeader.createDefaultHeaders();
 
         headers.addHeader("Content-Type", "text/html");
         headers.addHeader("Content-Length", "1024");

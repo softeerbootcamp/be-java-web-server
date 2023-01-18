@@ -6,25 +6,26 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class HttpHeaders {
+public class HttpHeader {
 
-    private static final String COLON = ": ";
+    private static final String COLON = ":";
 
     private final Map<String, String> headers;
 
-    private HttpHeaders(Map<String, String> headers) {
+    private HttpHeader(Map<String, String> headers) {
         this.headers = headers;
     }
 
-    public static HttpHeaders from(String[] lines) {
-        return new HttpHeaders(Arrays.stream(Arrays.copyOfRange(lines, 0, lines.length))
+    public static HttpHeader from(String[] lines) {
+        return new HttpHeader(Arrays.stream(
+                Arrays.copyOfRange(lines, 0, lines.length))
                 .map(line -> line.split(COLON))
-                .collect(Collectors.toMap(pair -> pair[0], pair -> pair[1])
+                .collect(Collectors.toMap(pair -> pair[0].trim(), pair -> pair[1].trim())
                 ));
     }
 
-    public static HttpHeaders createDefaultHeaders() {
-        return new HttpHeaders(new HashMap<>());
+    public static HttpHeader createDefaultHeaders() {
+        return new HttpHeader(new HashMap<>());
     }
 
     public void addHeader(String key, String value) {
