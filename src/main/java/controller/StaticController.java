@@ -9,6 +9,8 @@ import view.Response;
 
 import java.io.DataOutputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class StaticController implements Controller{
 
@@ -32,15 +34,28 @@ public class StaticController implements Controller{
 
     @Override
     public void control(RequestMessage requestMessage, OutputStream out) {
-        byte[] body = getResponseBody(requestMessage);
-        HttpStatus httpStatus = setHttpStatus(body);
         Response response = new Response(new DataOutputStream(out));
+        byte[] body = getResponseBody(requestMessage);
+        Map<String,String> headerKV = new HashMap<>();
+        if (forbiddenAccess(requestMessage,headerKV)){
+            response.response(body,requestMessage.getRequestHeaderMessage(),HttpStatus.Redirection,headerKV);
+            return;
+        }
+        HttpStatus httpStatus = setHttpStatus(body);
         response.response(body,requestMessage.getRequestHeaderMessage(), httpStatus);
     }
 
     public byte[] getResponseBody(RequestMessage requestMessage){
         String fileURL = RELATIVE_PATH + requestMessage.getRequestHeaderMessage().getSubPath() + requestMessage.getRequestHeaderMessage().getHttpOnlyURL();
         return getBodyFile(fileURL);
+    }
+
+    private boolean forbiddenAccess(RequestMessage requestMessage, Map<String,String> headerKV){
+        if (requestMessage.getRequestHeaderMessage().getHttpOnlyURL().startsWith("/user/list")){
+            headerKV.put("Location","/user/login.html");
+            return true;
+        }
+        return false;
     }
 
 
