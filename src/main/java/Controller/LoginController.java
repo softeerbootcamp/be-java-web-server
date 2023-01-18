@@ -32,10 +32,7 @@ public class LoginController implements Controller {
     }
 
     private HttpResponse responseRedirectIndex(HttpRequest httpRequest, String sessionId) {
-        HttpResponse response = new HttpResponse().startLine(new HttpResponseStartLine(StatusCode.FOUND, httpRequest.getProtocol()))
-                .headers(new HttpResponseHeaders("", 0))
-                .body(new HttpResponseBody("".getBytes()));
-        response.putHeader("Location", INDEX_HTML);
+        HttpResponse response = redirect(INDEX_HTML, httpRequest);
         response.putHeader("Set-Cookie", "sid=" + sessionId + "; Path=/");
 
         return response;

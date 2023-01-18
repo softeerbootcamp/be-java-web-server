@@ -25,15 +25,7 @@ public class JoinController implements Controller {
             return responseUserForm(httpRequest);
         }
         UserDbUtil.saveUser(httpRequest);
-        return responseRedirectIndex(httpRequest);
-    }
-
-    private HttpResponse responseRedirectIndex(HttpRequest httpRequest) {
-        HttpResponse response = new HttpResponse().startLine(new HttpResponseStartLine(StatusCode.FOUND, httpRequest.getProtocol()))
-                .headers(new HttpResponseHeaders("", 0))
-                .body(new HttpResponseBody("".getBytes()));
-        response.putHeader("Location", "/index.html");
-        return response;
+        return redirect("/index.html", httpRequest);
     }
 
     private HttpResponse responseUserForm(HttpRequest httpRequest) {
