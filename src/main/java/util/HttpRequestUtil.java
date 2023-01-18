@@ -38,9 +38,17 @@ public class HttpRequestUtil {
         while (Objects.nonNull(line) && !line.equals("")) {
             logger.debug("header: " + line);
             String[] header = line.split(COLON);
+            if(header[0] == "Cookie"){
+                header[1] = extractCookie(header[1]);
+            }
             if (header.length == 2) headers.put(header[0], header[1]);
             line = br.readLine();
         }
         return headers;
+    }
+
+    private static String extractCookie(String value) {
+        String[] split = value.split(EQUAL);
+        return split[1];
     }
 }
