@@ -25,9 +25,13 @@ public class ResourceController extends AbstractController {
             String path = httpRequest.getUri().getPath();
             ContentType contentType = ContentType.from(path);
             String filePath = contentType.getDirectory() + path;
+
             logger.debug("filePath: {}", filePath);
+
             byte[] body = loadFile(filePath);
+
             httpResponse.forward(contentType, body);
+
         } catch (IllegalArgumentException e) {
             byte[] errorBody = load404ErrorFile();
             httpResponse.do404(errorBody);

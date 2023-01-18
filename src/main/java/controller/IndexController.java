@@ -20,6 +20,7 @@ public class IndexController extends AbstractController {
         String path = INDEX_PATH;
         ContentType contentType = ContentType.from(path);
         String filePath = contentType.getDirectory() + path;
+
         byte[] body = loadFile(filePath);
 
         httpResponse.forward(contentType, body);
