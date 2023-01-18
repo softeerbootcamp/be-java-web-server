@@ -28,8 +28,8 @@ public class ErrorController implements Controller{
                 data=fileReader.readFile(new Url(ERROR_403_ROUTE, RequestDataType.TEMPLATES_FILE));
                 return new HttpResponse(new response.Data(dataOutputStream, data), FileType.HTML, HttpStatus.METHOD_NOT_ALLOWED);
             case UN_AUTHORIZED:
-                data=fileReader.readFile(new Url(ERROR_403_ROUTE, RequestDataType.TEMPLATES_FILE));
-                return new HttpResponse(new response.Data(dataOutputStream, data), FileType.HTML, HttpStatus.METHOD_NOT_ALLOWED);
+                data=fileReader.readFile(new Url(ERROR_401_ROUTE, RequestDataType.TEMPLATES_FILE));
+                return new HttpResponse(new response.Data(dataOutputStream, data), FileType.HTML, HttpStatus.UN_AUTHORIZED);
             default :
                 data=fileReader.readFile(new Url(ERROR_500_ROUTE,RequestDataType.TEMPLATES_FILE));
                 return new HttpResponse(new response.Data(dataOutputStream, data), FileType.HTML, HttpStatus.INTERNAL_SERVER_ERROR);
