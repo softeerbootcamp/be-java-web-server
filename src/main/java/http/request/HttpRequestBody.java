@@ -1,24 +1,22 @@
 package http.request;
 
-public class HttpRequestBody {
-    private final String content;
+import utils.FileIoUtils;
 
-    private HttpRequestBody(String content) {
-        this.content = content;
+import java.util.Map;
+
+public class HttpRequestBody {
+    private final Map<String, String> params;
+
+    private HttpRequestBody(Map<String, String> params) {
+        this.params = params;
     }
 
     public static HttpRequestBody from(String content) {
-        return new HttpRequestBody(content);
+        Map<String, String> params = FileIoUtils.parseQueryString(content);
+        return new HttpRequestBody(params);
     }
 
-    public String getContent() {
-        return content;
-    }
-
-    @Override
-    public String toString() {
-        return "HttpRequestBody{" +
-                "content='" + content + '\'' +
-                '}';
+    public Map<String, String> getParams() {
+        return params;
     }
 }
