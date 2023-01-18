@@ -12,20 +12,22 @@ import java.util.Collections;
 import java.util.Map;
 
 public class UserCreateController extends AbstractController {
+    private final UserService userService;
 
     public static final String REDIRECT_PATH = "/index.html";
 
     private static final Logger logger = LoggerFactory.getLogger(UserCreateController.class);
 
-    public UserCreateController() {
+    public UserCreateController(UserService userService) {
         this.paths = Collections.singletonList("/user/create");
+        this.userService = userService;
     }
 
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         Uri uri = httpRequest.getUri();
         Map<String, String> queryParams = uri.getParameters();
-        UserService.create(queryParams);
+        userService.create(queryParams);
 
         httpResponse.sendRedirect(REDIRECT_PATH);
     }
@@ -34,11 +36,10 @@ public class UserCreateController extends AbstractController {
     public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         Map<String, String> queryParams = httpRequest.getParameters();
         logger.debug("query params: {}", queryParams);
-        UserService.create(queryParams);
+        userService.create(queryParams);
 
         logger.info("Create User Success");
         httpResponse.sendRedirect(REDIRECT_PATH);
-
     }
 
 }
