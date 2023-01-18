@@ -8,6 +8,7 @@ import webserver.HttpResponse;
 import webserver.HttpSession;
 import webserver.HttpSessionManager;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public class LoginController implements Controller{
@@ -25,15 +26,19 @@ public class LoginController implements Controller{
     }
 
     private void doLogin(String userId, String password,HttpResponse response){
-        boolean alreadyUser = service.checkRightUser(userId,password);
-        if(alreadyUser){
-            User user = Database.findUserById(userId);
-            HttpSession session = HttpSessionManager.createSession(user);
-            HttpSessionManager.addSession(session);
-            response.addCookie(LOGINED_ATTR_KEY, session.getId());
-            response.redirect(REDIRECT_URL);
-        } else {
-            response.redirect(FAILED_REDIRECT_URL);
+        try{
+            boolean alreadyUser = service.checkRightUser(userId,password);
+            if(alreadyUser){
+                User user = Database.findUserById(userId);
+                HttpSession session = HttpSessionManager.createSession(user);
+                HttpSessionManager.addSession(session);
+                response.addCookie(LOGINED_ATTR_KEY, session.getId());
+                response.redirect(REDIRECT_URL);
+            } else {
+                response.redirect(FAILED_REDIRECT_URL);
+            }
+        }catch(NullPointerException e){
+            System.out.println("no user exist");
         }
     }
 
