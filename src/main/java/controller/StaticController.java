@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 public class StaticController implements Controller{
+    private String sid;
     private static final Logger logger = LoggerFactory.getLogger(RequestResponseHandler.class);
 
     @Override
@@ -24,18 +25,10 @@ public class StaticController implements Controller{
         }
         logger.debug("firstLine : "+ request.getRequestLine().getURL());
         byte[] body = Files.readAllBytes(new File("./src/main/resources/static"+url).toPath());
-        String addedLine="";
-        if(request.isRequestHaveCookie()){
-            addedLine += HeaderReferenceEnum.SET_COOKIE.getValueWithSpace()+
-                    "sid="+
-                    request.getRequestHeader().getHeaderValueByKey("Cookie")
-            +"; Path=/";
-        }
 
         NewResponse newResponse = new NewResponse.Builder()
                 .setResponseStatusLine(ControllerTypeEnum.STATIC)
                 .setResponseHeader(ContentTypeEnum.CSS,body.length)
-                .addResponseHeader(addedLine)
                 .setResponseBody(body)
                 .build();
         return newResponse;
