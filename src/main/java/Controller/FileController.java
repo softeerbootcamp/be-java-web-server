@@ -12,15 +12,13 @@ import util.HttpResponseUtil;
 
 public class FileController implements Controller {
     private final Logger logger = LoggerFactory.getLogger(FileController.class);
-    HttpRequest httpRequest;
 
-    public FileController(HttpRequest httpRequest) {
+    public FileController() {
         logger.debug("select fileController");
-        this.httpRequest = httpRequest;
     }
 
     @Override
-    public HttpResponse createResponse() {
+    public HttpResponse createResponse(HttpRequest httpRequest) {
         byte[] body = HttpResponseUtil.generateBody(httpRequest.getPath());
         HttpResponse httpResponse = new HttpResponse().startLine(new HttpResponseStartLine(StatusCode.OK, httpRequest.getProtocol()))
                 .headers(new HttpResponseHeaders(httpRequest.getPath(), body.length))

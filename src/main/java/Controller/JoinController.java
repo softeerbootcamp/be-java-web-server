@@ -14,33 +14,31 @@ import Request.StatusCode;
 
 public class JoinController implements Controller {
     private final Logger logger = LoggerFactory.getLogger(JoinController.class);
-    HttpRequest httpRequest;
 
-    public JoinController(HttpRequest httpRequest) {
+    public JoinController() {
         logger.debug("select joinController");
-        this.httpRequest = httpRequest;
     }
 
     @Override
-    public HttpResponse createResponse() {
-        if (UserDbUtil.alreadyExist(this.httpRequest)) {
-            return responseUserForm();
+    public HttpResponse createResponse(HttpRequest httpRequest) {
+        if (UserDbUtil.alreadyExist(httpRequest)) {
+            return responseUserForm(httpRequest);
         }
-        UserDbUtil.saveUser(this.httpRequest);
-        return responseRedirectIndex();
+        UserDbUtil.saveUser(httpRequest);
+        return responseRedirectIndex(httpRequest);
     }
 
-    private HttpResponse responseRedirectIndex() {
-        HttpResponse response = new HttpResponse().startLine(new HttpResponseStartLine(StatusCode.FOUND, this.httpRequest.getProtocol()))
+    private HttpResponse responseRedirectIndex(HttpRequest httpRequest) {
+        HttpResponse response = new HttpResponse().startLine(new HttpResponseStartLine(StatusCode.FOUND, httpRequest.getProtocol()))
                 .headers(new HttpResponseHeaders("", 0))
                 .body(new HttpResponseBody("".getBytes()));
         response.putHeader("Location", "/index.html");
         return response;
     }
 
-    private HttpResponse responseUserForm() {
+    private HttpResponse responseUserForm(HttpRequest httpRequest) {
         byte[] body = HttpResponseUtil.generateBody("/user/form.html");
-        HttpResponse response = new HttpResponse().startLine(new HttpResponseStartLine(StatusCode.OK, this.httpRequest.getProtocol()))
+        HttpResponse response = new HttpResponse().startLine(new HttpResponseStartLine(StatusCode.OK, httpRequest.getProtocol()))
                 .headers(new HttpResponseHeaders("/user/form.html", body.length))
                 .body(new HttpResponseBody(body));
         return response;
