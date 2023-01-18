@@ -3,12 +3,16 @@ package db;
 import com.google.common.collect.Maps;
 
 import model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 
 public class UserDatabase {
+    private static final Logger logger = LoggerFactory.getLogger(UserDatabase.class);
+
     private static final UserDatabase instance;
 
     private static final Map<String, User> users;
@@ -28,6 +32,7 @@ public class UserDatabase {
         if(users.containsKey(user.getUserId())) {
             throw new IllegalArgumentException();
         }
+        logger.debug("user {} added", user.getUserId());
         users.put(user.getUserId(), user);
     }
 
