@@ -94,6 +94,10 @@ public class HttpRequest {
         return requestBody.getParameters();
     }
 
+    public String getParameter(String key) {
+        return requestBody.getParameters().get(key);
+    }
+
     public Uri getUri() {
         return startLine.getUri();
     }
@@ -104,7 +108,7 @@ public class HttpRequest {
 
     public String getSessionId() {
         String cookies = httpHeaders.getValue("Cookie");
-        if(cookies == null)
+        if (cookies == null)
             return null;
 
         return extractSessionId(cookies);
