@@ -9,14 +9,14 @@ public class ControllerMapper {
     private static ControllerMapper instance;
     private Map<String, Controller> controllerMap;
 
-    public static final String SIGNUP = "SignUp";
+    public static final String DYNAMIC = "Dynamic";
     public static final String STATIC = "Static";
 
     private ControllerMapper()
     {
         controllerMap = new HashMap<>();
-        controllerMap.put(SIGNUP, new UserController());
         controllerMap.put(STATIC, new StaticFileController());
+        controllerMap.put(DYNAMIC, new DynamicFileController());
     }
 
     public static ControllerMapper getInstance()
@@ -33,10 +33,6 @@ public class ControllerMapper {
         ReqLine reqLine = req.getReqLine();
         String query = reqLine.getQuery();
 
-        if(query.contains("user/"))
-        {
-            return new UserController();
-        }
         return new StaticFileController();
     }
 }

@@ -1,6 +1,7 @@
 package webserver.service;
 
-public interface Service {
+import webserver.httpUtils.Request;
 
-    void exec();
+public interface Service {
+    default void exec(Request req){};
 }
