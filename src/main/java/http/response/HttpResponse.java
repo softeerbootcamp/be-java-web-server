@@ -27,17 +27,17 @@ public class HttpResponse {
         return body.getBody();
     }
 
+    public void setBody(byte[] body) {
+        this.headers.addHeader("Content-Length", String.valueOf(body.length));
+        this.body.setBody(body);
+    }
+
     public void setStatusCode(StatusCode statusCode) {
         this.statusCode = statusCode;
     }
 
     public void setContentType(ContentType contentType) {
         this.headers.addHeader("Content-Type", contentType.getType());
-    }
-
-    public void setBody(byte[] body) {
-        this.headers.addHeader("Content-Length", String.valueOf(body.length));
-        this.body.setBody(body);
     }
 
     public void setCookie(UUID sid) {
@@ -51,18 +51,8 @@ public class HttpResponse {
                 "\r\n";
     }
 
-    public void redirectHome() {
+    public void redirect(String path) {
         this.statusCode = StatusCode.SEE_OTHER;
-        headers.addHeader("Location", "/index.html");
-    }
-
-    public void redirectLogin() {
-        this.statusCode = StatusCode.SEE_OTHER;
-        headers.addHeader("Location", "/user/login.html");
-    }
-
-    public void redirectLoginFailed() {
-        this.statusCode = StatusCode.SEE_OTHER;
-        headers.addHeader("Location", "/user/login_failed.html");
+        headers.addHeader("Location", path);
     }
 }
