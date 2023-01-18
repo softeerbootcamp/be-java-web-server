@@ -5,7 +5,7 @@ import utils.SessionIdGenerator;
 import java.util.Map;
 
 public class UserIdSession {
-    private Map<String, String> sessions;
+    private static Map<String, String> sessions;
 
     public String getUserId(String sessionId)
     {
