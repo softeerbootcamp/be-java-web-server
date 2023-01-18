@@ -2,17 +2,14 @@ package model;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class Session {
-
-    public static final String DEFAULT_SESSION_ID = "JSESSIONID";
 
     private final String id;
     private final Map<String, Object> attributes;
 
-    public Session() {
-        this.id = UUID.randomUUID().toString();
+    public Session(String id) {
+        this.id = id;
         this.attributes = new HashMap<>();
     }
 
