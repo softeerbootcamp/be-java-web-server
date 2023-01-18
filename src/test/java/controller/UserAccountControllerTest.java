@@ -28,7 +28,7 @@ class UserAccountControllerTest {
         //given
 
         CustomHttpRequest req = CustomHttpRequest.of(
-                "GET /user/create HTTP/1.1",
+                "POST /user/create HTTP/1.1",
                 Collections.EMPTY_LIST,
                 List.of("userId=asdf&password=123123&email=asdfasdf@asdf.com")
         );
