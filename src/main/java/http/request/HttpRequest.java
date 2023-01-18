@@ -4,6 +4,7 @@ import http.HttpHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpRequestUtils;
+import webserver.session.SessionConst;
 import webserver.session.SessionManager;
 
 import java.io.BufferedReader;
@@ -77,7 +78,7 @@ public class HttpRequest {
     }
 
     public boolean isLogin() {
-        String sessionId = httpHeader.getHeader("Cookie");
+        String sessionId = httpHeader.getHeader("Cookie").split(SessionConst.SESSION_COOKIE_NAME + "=")[1];
         return sessionId != null && SessionManager.hasSession(sessionId);
     }
 
