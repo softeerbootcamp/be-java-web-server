@@ -4,10 +4,11 @@ import db.UserDatabase;
 import model.User;
 import webserver.domain.StatusCodes;
 import webserver.exception.HttpRequestException;
+import java.util.List;
 
 public class AuthService {
 
-    public byte[] join(String userId, String password, String name, String email) {
+    public byte[] addUser(String userId, String password, String name, String email) {
         UserDatabase.findUserById(userId).ifPresent(m -> {
             throw new HttpRequestException(StatusCodes.BAD_REQUEST, "<script>alert('사용자가 이미 존재합니다'); history.go(-1);</script>");
         });
