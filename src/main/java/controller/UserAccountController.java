@@ -56,14 +56,12 @@ public class UserAccountController implements RequestController {
         String name = bodyParams.get("name");
         String email = bodyParams.get("email");
 
+
         if (UserRepo.findUserById(userId) != null)
             return CustomHttpFactory.BAD_REQUEST("userID duplicated");
 
-        if (!UserValidation.isEmailValid(email))
-            return CustomHttpFactory.BAD_REQUEST("email type invalid");
-
-        if (!UserValidation.isPasswordValid(password))
-            return CustomHttpFactory.BAD_REQUEST("password type invalid");
+        if(!UserValidation.isUserCreationFormValid(userId, password, name, email))
+            return CustomHttpFactory.BAD_REQUEST("email, password, name을 올바르게 입력해 주세요.");
 
         UserRepo.addUser(new User(userId, password, name, email));
 
