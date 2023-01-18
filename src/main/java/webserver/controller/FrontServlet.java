@@ -30,6 +30,7 @@ public class FrontServlet {
         try {
             Path path = findFilePath(request.getUrl());
 
+            //TODO 컨트롤러 구조 고민
             if (request.getUrl().contains("user/list")) {
                 UserListController userListController = new UserListController();
                 return userListController.service(request);

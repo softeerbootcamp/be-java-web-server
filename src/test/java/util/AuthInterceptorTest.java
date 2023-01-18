@@ -1,6 +1,7 @@
-package controller;
+package util;
 
 import db.Database;
+import db.SessionStorage;
 import model.User;
 import model.request.Request;
 import org.junit.jupiter.api.DisplayName;
@@ -8,26 +9,33 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.UUID;
 
-public class UserListController {
+public class AuthInterceptorTest {
+
     @Test
-    void userList() throws Exception {
+    @DisplayName("Auth Interceptor 기능 테스트")
+    void authInterceptorTest() throws Exception {
         //given
         User user = new User("aa", "bb", "cc", "test@test");
         Database.addUser(user);
+        String sid = String.valueOf(UUID.randomUUID());
+        SessionStorage.addSession(sid, user);
 
         //when
         String requestMessage = "GET /user/list.html HTTP/1.1\n"
                 + "Host: localhost:8080\n"
                 + "Connection: keep-alive\n"
-                + "Accept: */*\n";
+                + "Accept: 음*/*\n"
+                + "Cookie: sid=" + sid;
         InputStream inputStream = new ByteArrayInputStream(requestMessage.getBytes());
         Request request = new Request(inputStream);
 
+
         //when
-        webserver.controller.UserListController userListController = new webserver.controller.UserListController();
-        userListController.service(request);
+
         //then
+        assert AuthInterceptor.isAuthUser(request);
 
     }
 }

@@ -36,7 +36,7 @@ public class RequestHandler implements Runnable {
             if (request.getHeaders().containsKey("Cookie")) {
                 String cookie = request.getHeaders().get("Cookie");
                 logger.debug(">> 쿠키 있어요! {}", cookie);
-                User user = SessionStorage.findBySessionId(parseSid(cookie)).orElse(User.of());
+                User user = SessionStorage.findBySessionId(parseSid(cookie)).orElseThrow(() -> new RuntimeException());
                 logger.debug(">> user id : {}", user.getUserId());
             }
 

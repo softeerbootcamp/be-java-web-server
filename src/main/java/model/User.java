@@ -13,10 +13,6 @@ public class User {
         this.email = email;
     }
 
-    public static User of() {
-        return new User("", "", "", "");
-    }
-
     public String getUserId() {
         return userId;
     }
