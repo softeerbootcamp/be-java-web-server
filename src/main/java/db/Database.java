@@ -17,7 +17,10 @@ public class Database {
         users.put(user.getUserId(), user);
     }
 
-    public static User findUserById(String userId) {
+    public static User findUserById(String userId) throws IllegalArgumentException {
+        if(!users.containsKey(userId)) {
+            throw new IllegalArgumentException();
+        }
         return users.get(userId);
     }
 

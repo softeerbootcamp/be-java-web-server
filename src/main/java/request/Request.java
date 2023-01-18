@@ -64,7 +64,7 @@ public class Request {
     }
 
     public String getResourceFileContentType() {
-        int index = resource.indexOf(".");
+        int index = resource.lastIndexOf(".");
         String postfix = resource.substring(index+1);
         for(FileContentType fileContentType : FileContentType.values()) {
             if(postfix.equals(fileContentType.getPostfix())) {
@@ -72,6 +72,15 @@ public class Request {
             }
         }
         return FileContentType.NO_MATCH.getContentType();
+    }
+
+    public String getResourceFilePostfix() {
+        String postfix = "";
+        int start = resource.lastIndexOf(".");
+        if(start != -1) {
+            postfix = resource.substring(resource.lastIndexOf("."));
+        }
+        return postfix;
     }
 
     public Map<String, String> getRequestHeader() {

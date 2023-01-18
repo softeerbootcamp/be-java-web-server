@@ -5,6 +5,7 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.Request;
+import request.RequestParser;
 import response.HttpResponseStatus;
 import response.Response;
 
@@ -27,27 +28,15 @@ public class POSTUserRegisterHandler implements POSTHandler{
     @Override
     public Response handle(Request request) {
         try {
-            Map<String, String> requestBody = parseBody(request);
+            Map<String, String> requestBody = RequestParser.parseBody(request);
             User user = new User(requestBody);
             Database.addUser(user);
             logger.debug("saved: {}", user);
-            return Response.of(HttpResponseStatus.FOUND.getMessage(), HttpResponseStatus.FOUND.getCode());
+            return Response.of(HttpResponseStatus.FOUND.getMessage().getBytes(), request.getResourceFileContentType(), HttpResponseStatus.FOUND,
+                    "Location: /index.html\r\n");
         } catch (IllegalArgumentException e) {
             logger.error("잘못된 입력값");
-            return Response.of(HttpResponseStatus.BAD_REQUEST.getMessage(), HttpResponseStatus.BAD_REQUEST.getCode());
+            return Response.of(HttpResponseStatus.BAD_REQUEST);
         }
-    }
-
-    private Map<String, String> parseBody(Request request) throws IllegalArgumentException{
-        Map<String, String> map = new HashMap<>();
-        String[] tokens = request.getRequestBody().split("&");
-        for(String token : tokens) {
-            String[] subTokens = token.split("=");
-            if(subTokens.length != 2) {
-                throw new IllegalArgumentException();
-            }
-            map.put(subTokens[0], subTokens[1]);
-        }
-        return map;
     }
 }

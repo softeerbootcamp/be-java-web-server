@@ -5,24 +5,13 @@ import org.slf4j.LoggerFactory;
 import request.method.HttpMethod;
 import response.Response;
 
-import java.io.IOException;
-
 public class RequestHandlerImpl implements RequestHandler {
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandlerImpl.class);
     @Override
-    public Response handleRequest(Request request, int port) {
-        try {
-            for (HttpMethod method : HttpMethod.values()) {
-                if (request.getMethod().equals(method.getMethod())) {
-                    logger.debug("handle request {} of port {}, request header {}", request.getMethod(), port, request);
-                    logger.debug("{} {} {}", request.getMethod(), request.getResource(), request.getVersion());
-                    logger.debug("headers: {}", request.getRequestHeader());
-                    logger.debug("body: {}", request.getRequestBody());
-                    return method.handle(request);
-                }
+    public Response handle(Request request) {
+        for (HttpMethod method : HttpMethod.values()) {
+            if (request.getMethod().equals(method.getMethod())) {
+                return method.handleRequest(request);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
         return null;

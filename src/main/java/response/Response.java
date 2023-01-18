@@ -1,47 +1,56 @@
 package response;
 
+import request.Request;
+
 public class Response {
-    private byte[] file;
-    private String data;
+    private final byte[] body;
 
-    private int code;
+    private final int httpResponseStatus;
 
-    private Response(byte[] file, String data, int code) {
-        this.file = file;
-        this.data = data;
-        this.code = code;
+    private final ResponseHeader header;
+
+    private Response(HttpResponseStatus httpResponseStatus) {
+        this.body = httpResponseStatus.getMessage().getBytes();
+        this.httpResponseStatus = httpResponseStatus.getCode();
+        this.header = ResponseHeader.of(this.body, httpResponseStatus);
     }
 
-    private Response(String data, int code) {
-        this.file = null;
-        this.data = data;
-        this.code = code;
+    private Response(byte[] body, String contentType, HttpResponseStatus httpResponseStatus) {
+        this.body = body;
+        this.httpResponseStatus = httpResponseStatus.getCode();
+        this.header = ResponseHeader.of(body, contentType, httpResponseStatus);
     }
 
-    public static Response of(byte[] file, String data, int code) {
-        return new Response(file, data, code);
+    private Response(byte[] body, String contentType, HttpResponseStatus httpResponseStatus, String optional) {
+        this.body = body;
+        this.httpResponseStatus = httpResponseStatus.getCode();
+        this.header = ResponseHeader.of(body, contentType, httpResponseStatus, optional);
     }
 
-    public static Response of(String data, int code) {
-        return new Response(data, code);
+    public static Response of(HttpResponseStatus httpResponseStatus) {
+        return new Response(httpResponseStatus);
     }
 
-    public byte[] getFile() {
-        return file;
+    public static Response of(byte[] body, String contentType, HttpResponseStatus httpResponseStatus) {
+        return new Response(body, contentType, httpResponseStatus);
     }
 
-    public String getData() {
-        return data;
+    public static Response of(byte[] body, String contentType, HttpResponseStatus httpResponseStatus, String optional) {
+        return new Response(body, contentType, httpResponseStatus, optional);
     }
 
-    public int getCode() {
-        return code;
+    public byte[] getBody() {
+        return body;
+    }
+
+    public String getHeader() {
+        return header.getHeader();
     }
 
     @Override
     public String toString() {
         return "Response{" +
-                "data='" + data + '\'' +
+                "status='" + httpResponseStatus + '\'' +
                 '}';
     }
 }

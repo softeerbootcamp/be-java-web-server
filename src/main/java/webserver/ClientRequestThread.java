@@ -25,20 +25,27 @@ public class ClientRequestThread implements Runnable {
     }
 
     public void run() {
-        logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
-                connection.getPort());
-
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             if(in.available() == 0) {
                 return;
             }
 
             this.request = Request.from(in);
-            Response response = requestHandler.handleRequest(request, connection.getPort());
 
-            HttpResponse.handleHttpResponse(out, request, response);
+            log();
+
+            Response response = requestHandler.handle(request);
+
+            HttpResponse.handleHttpResponse(out, response);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private void log() {
+        logger.debug("\nhandle request of port {}\n{} {} {}\nheaders: {}\nbody: {}", connection.getPort(),
+                request.getMethod(), request.getResource(), request.getVersion(),
+                request.getRequestHeader(),
+                request.getRequestBody());
     }
 }
