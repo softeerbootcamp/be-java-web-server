@@ -18,6 +18,10 @@ public class SessionDb {
         return session.getSessionId();
     }
 
+    public static void putSession(Session s) {
+        sessionDb.put(s.getSessionId(), s);
+    }
+
     public static Session getSession(String id) {
         return sessionDb.get(id);
     }
