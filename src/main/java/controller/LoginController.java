@@ -1,5 +1,7 @@
 package controller;
 
+import db.Database;
+import model.User;
 import service.LoginService;
 import webserver.HttpRequest;
 import webserver.HttpResponse;
@@ -17,12 +19,16 @@ public class LoginController implements Controller{
 
     @Override
     public void doPost(HttpRequest request, HttpResponse response) {
-        //System.out.println(request.parseBody().entrySet());
         String userId = request.parseBody().get("userId");
         String password = request.parseBody().get("password");
+        doLogin(userId,password,response);
+    }
+
+    private void doLogin(String userId, String password,HttpResponse response){
         boolean alreadyUser = service.checkRightUser(userId,password);
         if(alreadyUser){
-            HttpSession session = HttpSessionManager.createSession(request.parseBody());
+            User user = Database.findUserById(userId);
+            HttpSession session = HttpSessionManager.createSession(user);
             HttpSessionManager.addSession(session);
             response.addCookie(LOGINED_ATTR_KEY, session.getId());
             response.redirect(REDIRECT_URL);
