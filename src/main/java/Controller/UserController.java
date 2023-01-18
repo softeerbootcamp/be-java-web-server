@@ -32,17 +32,17 @@ public class UserController implements Controller {
         String url = request.getUrl();
         String path = url.split(PREFIX)[1];
 
-        if (path.startsWith("/create") && request.getMethod() == HttpMethod.POST) {
+        if (path.equals("/create") && request.getMethod() == HttpMethod.POST) {
             createUser(request, response);
             return;
         }
 
-        if (path.startsWith("/login") && request.getMethod() == HttpMethod.POST) {
+        if (path.equals("/login") && request.getMethod() == HttpMethod.POST) {
             login(request, response);
             return;
         }
 
-        if (path.startsWith("/list") && request.getMethod() == HttpMethod.GET) {
+        if (path.equals("/list") && request.getMethod() == HttpMethod.GET) {
             showUserList(request, response);
             return;
         }
