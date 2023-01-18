@@ -94,12 +94,10 @@ public class UserController implements Controller {
             return;
         }
 
-        StringBuilder sb = UserListView.front();
         Collection<User> users = userService.findUserList();
-        sb.append(UserListView.render(users));
-        sb.append(UserListView.back());
+        String body = UserListView.render(users);
 
         response.ok(request);
-        response.setBodyMessage(sb.toString());
+        response.setBodyMessage(body);
     }
 }
