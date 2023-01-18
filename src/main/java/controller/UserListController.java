@@ -8,7 +8,6 @@ import service.UserService;
 import utils.FileIoUtils;
 import utils.HttpMethod;
 import utils.SessionManager;
-import utils.StatusCode;
 
 import java.util.UUID;
 
@@ -24,20 +23,22 @@ public class UserListController implements Controller {
     @Override
     public HttpResponse service(HttpRequest httpRequest, HttpResponse httpResponse) {
         if (httpRequest.getHttpMethod().equals(HttpMethod.GET)) {
-            String cookie = httpRequest.getHeaderValue("Cookie");
-            if (cookie == null) {
-                httpResponse.redirectLogin();
-                return httpResponse;
-            }
-            String sid = cookie.split("=")[1].trim();
+            return doGet(httpRequest, httpResponse);
+        }
+        throw new IllegalArgumentException("존재하지 않는 Http 메서드입니다.");
+    }
+
+    public HttpResponse doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+        String cookie = httpRequest.getHeaderValue("Cookie");
+        String sid = FileIoUtils.parseSId(cookie);
+        try {
             if (SessionManager.getData(UUID.fromString(sid)) != null) {
                 httpResponse.setBody(FileIoUtils.writeUserList());
                 return httpResponse;
             }
+        } catch (NullPointerException e) {
             httpResponse.redirectLogin();
-            return httpResponse;
         }
-        httpResponse.setStatusCode(StatusCode.NOTFOUND);
         return httpResponse;
     }
 }
