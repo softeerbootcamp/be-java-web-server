@@ -5,12 +5,12 @@ public class SessionService {
     private SessionService() {
     }
 
-    private static class SessionHolder {
-        private static final SessionService SESSION = new SessionService();
+    private static class SessionServiceHolder {
+        private static final SessionService SESSION_SERVICE = new SessionService();
     }
 
     public static SessionService getInstance() {
-        return SessionHolder.SESSION;
+        return SessionServiceHolder.SESSION_SERVICE;
     }
 
     public void addSession(Session session) {
