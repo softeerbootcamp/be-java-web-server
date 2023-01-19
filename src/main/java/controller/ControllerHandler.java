@@ -2,6 +2,7 @@ package controller;
 
 import exception.ControllerNotFoundException;
 import exception.ResourceTypeNotFoundException;
+import http.SessionHandler;
 import http.request.HttpRequest;
 import http.request.HttpUri;
 import http.request.RequestLine;
@@ -35,8 +36,11 @@ public class ControllerHandler {
     public static Controller findController(HttpRequest httpRequest) {
         RequestLine requestLine = httpRequest.getRequestLine();
         HttpUri httpUri = requestLine.getHttpUri();
-        if (!httpUri.isQueryParameterExist() && httpUri.isEndWithResourceType()) {
+        if (httpUri.isEndWithResourceType() && !httpUri.isEndWithHtml()) {
             return new ViewController();
+        }
+        if (httpUri.isEndWithHtml()) {
+            return new DynamicController();
         }
 
         return controllers

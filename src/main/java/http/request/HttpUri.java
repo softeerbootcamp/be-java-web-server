@@ -59,4 +59,8 @@ public class HttpUri {
     public QueryParameters getQueryParameters() {
         return queryParameters;
     }
+
+    public boolean isEndWithHtml() {
+        return path.endsWith(".html");
+    }
 }

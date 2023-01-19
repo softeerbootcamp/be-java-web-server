@@ -104,4 +104,8 @@ public class HttpRequest {
     public String getContentType() {
         return requestHeader.getContentType();
     }
+
+    public HttpMethod getHttpMethod() {
+        return requestLine.getHttpMethod();
+    }
 }
