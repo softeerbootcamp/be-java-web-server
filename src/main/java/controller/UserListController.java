@@ -33,7 +33,7 @@ public class UserListController implements Controller {
         throw new IllegalArgumentException("존재하지 않는 Http 메서드입니다.");
     }
 
-    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+    private void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         String sid = httpRequest.getSession();
         try {
             Session session = SessionManager.getSession(UUID.fromString(sid)).orElseThrow(AuthenticationException::new);

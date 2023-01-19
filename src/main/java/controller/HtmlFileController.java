@@ -18,7 +18,7 @@ public class HtmlFileController implements Controller {
         doGet(httpRequest, httpResponse);
     }
 
-    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+    private void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         String path = httpRequest.getUri().getPath();
         try {
             Session session = SessionManager.getSession(UUID.fromString(httpRequest.getSession())).orElse(null);

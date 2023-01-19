@@ -19,7 +19,7 @@ public class StaticFileController implements Controller {
         doGet(httpRequest, httpResponse);
     }
 
-    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+    private void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         String path = httpRequest.getUri().getPath();
         try {
             httpResponse.setBody(FileIoUtils.loadFile(path));
