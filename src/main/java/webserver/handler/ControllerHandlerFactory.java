@@ -7,7 +7,8 @@ import webserver.domain.HttpRequest;
 public class ControllerHandlerFactory {
     public static ControllerHandler getHandler(HttpRequest httpRequest) {
         HttpMethod httpMethod =  httpRequest.getRequestLine().getHttpMethod();
-        if (httpMethod == HttpMethod.POST) {
+        String url = httpRequest.getRequestLine().getUrl();
+        if (!url.contains(".")) {
             return PostDispatcher.getInstance();
         }
         return StaticHandler.getInstance();
