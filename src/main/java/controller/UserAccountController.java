@@ -131,7 +131,7 @@ public class UserAccountController implements RequestController {
             return CustomHttpFactory.OK_HTML(listPageStr);
         } catch (IOException e) {
             logger.error("error while reading {}", file.getPath());
-            return CustomHttpFactory.INTERNAL_ERROR("error while readling " + file.getPath());
+            return CustomHttpFactory.INTERNAL_ERROR("error while reading " + file.getPath());
         }
     }
 
