@@ -8,6 +8,65 @@ Java Web Application Server 2022
 를 참고하여 작성되었습니다.
 
 ## 프로젝트 구조
+├── controller  
+│   ├── Controller.java  
+│   ├── HtmlController.java  
+│   ├── StaticFileController.java  
+│   └── UserController.java  
+├── db  
+│   ├── Database.java  
+│   └── Session.java  
+├── http  
+│   ├── HttpHeader.java  
+│   ├── HttpStatus.java  
+│   ├── HttpUri.java  
+│   ├── exception  
+│   │   └── NullHttpRequestException.java  
+│   ├── request  
+│   │   ├── HttpRequest.java  
+│   │   └── HttpRequestLine.java  
+│   └── response  
+│       ├── HttpResponse.java  
+│       └── HttpStatusLine.java  
+├── model  
+│   └── User.java  
+├── service  
+│   ├── HtmlService.java  
+│   ├── ListService.java  
+│   ├── LogInService.java  
+│   ├── SignUpService.java  
+│   └── StaticFileService.java  
+├── util  
+│   ├── HttpRequestUtils.java  
+│   └── HttpResponseUtils.java  
+└── webserver  
+├── ControllerHandler.java  
+├── RequestHandler.java  
+└── WebServer.java  
+
++ RequestHandler
+  + HttpRequest 클래스에 입력을 받고 받은 URI로 알맞는 컨트롤러를 골라준다. 고른 컨트롤러로 응답을 만들고 응답을 출력해준다.
++ ControllerHandler
+  + Post 요청인 경우를 먼저 확인 - 회원 가입과 로그인을 처리하는 UserController를 리턴  
+  + Html 파일 요청인 경우인지 확인 - Html파일을 처리하는 HtmlController를 리턴
+  + 나머지인 경우 (정적 파일) - 정적 파일을 처리하는 StaticFileController를 리턴
++ UserController
+  + HttpRequest 객체로부터 uri와 httpVersion을 받아온다.
+  + HttpRequest body의 query string을 파싱해서 Map 객체인 params에 넣어준다.
+  + 회원 가입 요청인 경우와 로그인 요청인 경우를 나누어 준다.
+  + 각각 params와 httpVersion을 나누어 주며 회원가입일 경우 SignUpService, 로그인일 경우 LogInService를 통해 응답을 생성해 준다.
+  + 생성된 응답 HttpResponse 객체를 리턴한다.
++ HtmlController
+  + HttpRequest 객체로부터 로그인 유저 정보, ContentType, 파일 경로, uri를 받는다.
+  + 유저 리스트 출력 html일 경우 ListService를 통해 응답 생성
+  + index.html 로그인 상태일 경우 HtmlService를 통해 응답 생성
+  + index.html 로그인 상태가 아닐 경우 정적 파일 요청이므로 StaticFileService를 통해 응답을 생성한다.
+  + 생성된 응답 HttpResponse 객체를 리턴한다.
++ StaticFileController
+  + 정적 파일들은 모두 /static 폴더 내에 있으므로 기본 파일 경로를 설정해준다.
+  + 설정해준 파일 경로에 HttpResquest객체로부터 받은 uri를 더해서 정적 파일 경로를 만들어준다.
+  + 만들어진 파일 경로로 StaticFileService를 통해 응답을 생성한다.
+  + 생성된 응답 HttpResponse 객체를 리턴한다.
 
 
 ## 프로젝트 학습 내용
