@@ -3,22 +3,14 @@ package controller;
 import http.HttpSession;
 import http.SessionHandler;
 import http.request.HttpRequest;
-import http.request.HttpUri;
-import http.request.RequestHeader;
-import http.request.RequestLine;
 import http.response.DynamicResolver;
 import http.response.HttpResponse;
 import http.response.HttpResponseFactory;
-import http.response.HttpStatus;
 import util.FileIoUtil;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.HashMap;
 
 public class ViewController implements Controller {
 
@@ -31,6 +23,10 @@ public class ViewController implements Controller {
         if (url.endsWith(".html") && SessionHandler.validateSession(httpRequest.getSid())) {
             HttpSession httpSession = SessionHandler.getSession(httpRequest.getSid());
             body = DynamicResolver.showUserName(file, httpSession.getUserName());
+        }
+
+        if (url.endsWith(".html") && !SessionHandler.validateSession(httpRequest.getSid())) {
+            body = DynamicResolver.hideLogoutButton(file);
         }
 
         return HttpResponseFactory.OK(httpRequest.getContentType(), body);

@@ -46,6 +46,19 @@ public class DynamicResolver {
         return sb.toString().getBytes();
     }
 
+    public static byte[] hideLogoutButton(File file) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        String line;
+        StringBuilder sb = new StringBuilder();
+        while ((line = br.readLine()) != null) {
+            if (line.contains("로그아웃")) {
+                continue;
+            }
+            sb.append(line).append(System.lineSeparator());
+        }
+        return sb.toString().getBytes();
+    }
+
     private static void appendUserList(StringBuilder sb, Collection<User> users) {
         int idx = 1;
         for (User user : users) {
