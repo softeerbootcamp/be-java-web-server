@@ -1,24 +1,27 @@
 package request;
 
-import request.handlers.LoginHandler;
-import request.handlers.StaticFileHandler;
-import request.handlers.TemplateFileHandler;
-import request.handlers.UserRegisterHandler;
+import request.handlers.*;
 
 public enum HandlerEnum {
-    STATIC(".*\\.(css|js|eot|svg|ttf|woff|woff2)", StaticFileHandler.getInstance()),
-    TEMPLATE(".*\\.(html|ico)$", TemplateFileHandler.getInstance()),
-    REGISTER("^/user/create$", UserRegisterHandler.getInstance()),
-    LOGIN("^/user/login$", LoginHandler.getInstance())
-    ;
+    STATIC(".*\\.(css|js|eot|svg|ttf|woff|woff2|ico)", StaticFileHandler.getInstance()),
+    INDEX("^/index", IndexHandler.getInstance()),
+    REGISTER("^/user/create", UserCreateHandler.getInstance()),
+    LOGIN("^/user/login", LoginHandler.getInstance()),
+    LOGOUT("^/user/logout", LogoutHandler.getInstance()),
+    LIST("^/user/list", UserListHandler.getInstance());
 
-    private String urlRegEx;
+    private final String urlRegEx;
 
-    private RequestHandler handler;
+    private final RequestHandler handler;
 
-    private HandlerEnum(String urlRegEx, RequestHandler handler) {
-        this.urlRegEx = urlRegEx;
+    HandlerEnum(String urlRegEx, RequestHandler handler) {
         this.handler = handler;
+        if(this.getHandler() != StaticFileHandler.getInstance()) {
+            this.urlRegEx = urlRegEx + "(\\.html)?$";
+        }
+        else {
+            this.urlRegEx = urlRegEx;
+        }
     }
 
     public String getUrlRegEx() {
