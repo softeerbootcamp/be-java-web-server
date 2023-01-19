@@ -11,6 +11,9 @@ import http.response.HttpStatus;
 import model.User;
 import util.FileIoUtil;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Collection;
@@ -53,16 +56,29 @@ public class UserService {
 
             Collection<User> userList = Database.findAll();
             StringBuilder sb = new StringBuilder();
-            appendStringBuilder(sb, userList);
+            File file = FileIoUtil.getFile(ResourceType.HTML, "/user/list.html");
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+            while ((line = br.readLine()) != null) {
+                if(line.contains("로그인") || line.contains("회원가입")) {
+                    continue;
+                }
+                if(line.contains("Posts")) {
+                    sb.append("<li><a>").append(httpSession.getUserName()).append("</a></li>").append(System.lineSeparator());
+                }
+                if(line.contains("%userList%")) {
+                    appendUserList(sb, userList);
+                    continue;
+                }
+                sb.append(line).append(System.lineSeparator());
+            }
 
-            String fileData = new String(Files.readAllBytes(FileIoUtil.getFile(ResourceType.HTML, "/user/list.html").toPath()));
-            fileData = fileData.replace("%userList%", sb.toString()).replace("로그인", httpSession.getUserName());
 
             return HttpResponse.of(
                     HttpStatus.OK,
                     "text/html",
                     headers,
-                    fileData.getBytes()
+                    sb.toString().getBytes()
             );
         }
         headers.put("Location", "/user/login.html");
@@ -92,7 +108,7 @@ public class UserService {
         return user != null && user.getPassword().equals(pw);
     }
 
-    private void appendStringBuilder(StringBuilder sb, Collection<User> users) {
+    private void appendUserList(StringBuilder sb, Collection<User> users) {
         int idx = 1;
         for (User user : users) {
             sb.append("<tr>");
@@ -102,7 +118,7 @@ public class UserService {
             sb.append("<td>" + user.getEmail() + "</td>");
             sb.append("<td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td>");
             sb.append("<tr>");
+            idx++;
         }
     }
-
 }

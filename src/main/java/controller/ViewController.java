@@ -10,9 +10,12 @@ import http.response.HttpResponse;
 import http.response.HttpStatus;
 import util.FileIoUtil;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 
 public class ViewController implements Controller {
@@ -27,9 +30,19 @@ public class ViewController implements Controller {
 
         if(httpUri.getPath().endsWith(".html") && SessionHandler.validateSession(httpRequest.getSid())) {
             HttpSession httpSession = SessionHandler.getSession(httpRequest.getSid());
-            String fileData = new String(body);
-            fileData = fileData.replace("로그인", httpSession.getUserName());
-            body = fileData.getBytes();
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+            StringBuilder sb = new StringBuilder();
+            while ((line = br.readLine()) != null) {
+                if(line.contains("로그인") || line.contains("회원가입")) {
+                    continue;
+                }
+                if(line.contains("Posts")) {
+                    sb.append("<li><a>").append(httpSession.getUserName()).append("</a></li>").append(System.lineSeparator());
+                }
+                sb.append(line).append(System.lineSeparator());
+            }
+            body = sb.toString().getBytes();
         }
 
         return HttpResponse.of(
