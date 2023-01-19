@@ -64,6 +64,8 @@ public class FrontController {
             throw new RuntimeException(e);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
+        }catch(Exception e){
+            NotFoundExceptionHandler.showErrorPage(response);
         }
     }
 }
