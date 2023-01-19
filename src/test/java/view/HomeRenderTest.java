@@ -23,10 +23,22 @@ class HomeRenderTest {
     @DisplayName("로그인 회원가입 태그 추가 테스트")
     void addSignInAndUpTag() throws IOException {
         //given
-        String indexString = new String(fileReader.readFile(new Url("/index.html", RequestDataType.TEMPLATES_FILE)));
+        byte[] index = fileReader.readFile(new Url("/index.html", RequestDataType.TEMPLATES_FILE));
         //when
-        byte[] fixedHtmlData = homeRender.addSignInAndUpTag(indexString);
+        byte[] fixedHtmlData = homeRender.addSignInAndUpTag(index);
         //then
-        assertThat(new String(fixedHtmlData)).isNotEqualTo(indexString);
+        assertThat(new String(fixedHtmlData)).isNotEqualTo(index);
+    }
+
+    @Test
+    @DisplayName("홈 화면에서 사용자 이름 추가")
+    void addUserName() throws IOException {
+        //given
+        String userName = "test";
+        byte[] indexData = fileReader.readFile(new Url("/index.html", RequestDataType.TEMPLATES_FILE));
+        //when
+        byte[] fixedData = homeRender.addUserName(indexData, userName);
+        //then
+        assertThat(new String(fixedData).contains(userName)).isTrue();
     }
 }
