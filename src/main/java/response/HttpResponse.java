@@ -21,18 +21,12 @@ public class HttpResponse {
         this.body = body;
     }
 
-    public static CreateResponse ok() {
-        return new CreateResponse(StatusCode.OK);
+    public static ResponseBuilder ok() {
+        return new ResponseBuilder(StatusCode.OK);
     }
-
-
-//    public static HttpResponse of(String code,  ResponseHeader responseHeader, byte[] body) {
-//        return new HttpResponse(StatusCode.of(code), responseHeader, body);
-//    }
-//
-//    public static HttpResponse of(String code,  ResponseHeader responseHeader) { // 리다이렉트
-//        return new HttpResponse(StatusCode.of(code), responseHeader, new byte[0]);
-//    }
+    public static ResponseBuilder found(String location) {
+        return new ResponseBuilder(StatusCode.Found).location(location);
+    }
 
     public void respond(DataOutputStream dos) { //body 담음
         try {

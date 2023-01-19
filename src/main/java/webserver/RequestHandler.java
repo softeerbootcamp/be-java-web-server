@@ -1,15 +1,15 @@
 package webserver;
 
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.net.URISyntaxException;
 
+import controller.Controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.HttpRequest;
+import request.HttpRequestMapper;
 import response.HttpResponse;
-import response.ResponseHandler;
 import response.StatusCode;
 
 public class RequestHandler implements Runnable{
@@ -17,8 +17,11 @@ public class RequestHandler implements Runnable{
     private static final String lineSeparate = System.lineSeparator();
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private final Socket connection; // Client
-    public RequestHandler(Socket connectionSocket) {
+    private final HttpRequestMapper httpRequestMapper;
+
+    public RequestHandler(Socket connectionSocket, HttpRequestMapper httpRequestMapper) {
         this.connection = connectionSocket;
+        this.httpRequestMapper = httpRequestMapper;
     }
 
     public void run() {
@@ -28,40 +31,28 @@ public class RequestHandler implements Runnable{
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             /* TODO
-            *   - in : 서버 -> 클라이언트로 응답을 보내는 데이터를 싣음
-            * */
-
-            HttpResponse httpResponse = ResponseHandler.controlRequestAndResponse(HttpRequest.of(in));
+            *   - in : 서버 -> 클라이언트로 응답을 보내는 데이터를 싣음 */
+            HttpResponse httpResponse = controlRequestAndResponse(HttpRequest.of(in));
             respondToHttpRequest(out, httpResponse);
-        } catch (IOException | URISyntaxException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
+    public HttpResponse controlRequestAndResponse(HttpRequest httpRequest) {
+        try{
+            Controller controller = httpRequestMapper.getController(httpRequest);
+            return controller.service(httpRequest);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        throw new RuntimeException("control Req/Res error");
+    }
+
     private void respondToHttpRequest(OutputStream out, HttpResponse httpResponse) {
         DataOutputStream dos = new DataOutputStream(out);
-        success(dos,httpResponse);
-        redirect(dos,httpResponse);
-    }
-
-    public void success(DataOutputStream dos, HttpResponse httpResponse) {
-        if(httpResponse.getStatusLine().equals(StatusCode.OK)
-        ){
-            httpResponse.respond(dos);
-        }
-    }
-
-    public void redirect(DataOutputStream dos, HttpResponse httpResponse) {
-        if(httpResponse.getStatusLine().equals(StatusCode.Found) ||
-                httpResponse.getStatusLine().equals(StatusCode.SeeOther) ||
-                httpResponse.getStatusLine().equals(StatusCode.TemporaryRedirect) ||
-                httpResponse.getStatusLine().equals(StatusCode.CustomLogin)
-        ){
-            logger.debug("httpResponse : {}{}{}{}{}",
-                    httpResponse.getHeader(),
-                    lineSeparate,httpResponse.getCookie(),
-                    lineSeparate,httpResponse.getBody());
-            httpResponse.respondRedirect(dos);
-        }
+        httpResponse.respond(dos);
     }
 }

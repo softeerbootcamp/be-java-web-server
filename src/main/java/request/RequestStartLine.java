@@ -22,10 +22,10 @@ public class RequestStartLine {
     }
 
     public static RequestStartLine of(BufferedReader bufferedReader) throws IOException {
-//        if (!bufferedReader.ready()) {
-//            logger.debug("[RequestStartLine] Not ready : {}", bufferedReader.readLine());
-//            throw new RuntimeException("HTTP 요청메시지의 요청라인이 비어있습니다.");
-//        }
+        if (!bufferedReader.ready()) {
+            logger.debug("[RequestStartLine] Not ready : {}", bufferedReader.readLine());
+            throw new RuntimeException("HTTP 요청메시지의 요청라인이 비어있습니다.");
+        }
         String source = bufferedReader.readLine();
         logger.debug("requestStartLine : {}", source);
 

@@ -12,9 +12,9 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CreateResponse {
+public class ResponseBuilder {
 
-    private static final Logger logger = LoggerFactory.getLogger(CreateResponse.class);
+    private static final Logger logger = LoggerFactory.getLogger(ResponseBuilder.class);
 
     private static final String DELIMITER = "\\.";
 
@@ -22,32 +22,23 @@ public class CreateResponse {
     private Map<String, String> fields;
     private byte[] body;
 
-    public CreateResponse(StatusCode statusCode) {
+    public ResponseBuilder(StatusCode statusCode) {
         this.statusLine = new StatusLine(HttpVersion.ONE_POINT_ONE, statusCode);
         this.fields = new HashMap<>();
         this.body = new byte[0];
     }
 
-    public static CreateResponse ok(){
-        return new CreateResponse(StatusCode.OK);
-    }
-
-    public static CreateResponse found(String location){
-        return new CreateResponse(StatusCode.Found).location(location);
-
-    }
-
-    public CreateResponse contentLength(int contentLength) {
+    public ResponseBuilder contentLength(int contentLength) {
         fields.put("Content-Length", String.valueOf(contentLength));
         return this;
     }
 
-    public CreateResponse contentType(String contentType) {
+    public ResponseBuilder contentType(String contentType) {
         fields.put("Content-Type", contentType);
         return this;
     }
 
-    public CreateResponse bodyByPath(String path) throws IOException, URISyntaxException {
+    public ResponseBuilder bodyByPath(String path) throws IOException, URISyntaxException {
         byte[] body = FileIoUtils.loadFileFromClasspath(path);
         String[] splitPath = path.split(DELIMITER);
         String extension = splitPath[splitPath.length-1];
@@ -60,12 +51,12 @@ public class CreateResponse {
         return this;
     }
 
-    public CreateResponse setCookie(String cookieName, String cookieValue, String path) {
+    public ResponseBuilder setCookie(String cookieName, String cookieValue, String path) {
         fields.put("Set-Cookie", String.format("%s=%s; Path=%s", cookieName, cookieValue, path));
         return this;
     }
 
-    public CreateResponse location(String location) {
+    public ResponseBuilder location(String location) {
         fields.put("Location", location);
         return this;
     }

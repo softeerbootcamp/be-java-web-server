@@ -77,4 +77,7 @@ public class HttpRequest {
 //    public String getCookieValue(String cookieName) {
 //        return requestHeader.getCookieValue(cookieName);
 //    }
+    public String getDefaultPath() {
+        return requestStartLine.getPath();
+    }
 }

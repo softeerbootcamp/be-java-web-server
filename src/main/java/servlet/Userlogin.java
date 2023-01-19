@@ -3,9 +3,7 @@ package servlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.HttpRequest;
-import response.CreateResponse;
 import response.HttpResponse;
-import response.StatusCode;
 import service.UserService;
 
 import javax.naming.AuthenticationException;
@@ -33,8 +31,9 @@ public class Userlogin implements Servlet{
     }
 
     @Override
-    public void get(HttpRequest httpRequest) {
+    public HttpResponse get(HttpRequest httpRequest) {
 
+        return null;
     }
 
     @Override
@@ -42,12 +41,12 @@ public class Userlogin implements Servlet{
         try {
             UserService.from(httpRequest).postlogin();
 //            return StatusCode.CustomLogin;
-            return CreateResponse.ok()
+            return HttpResponse.ok()
                     .bodyByPath("./templates/index.html").
                     setCookie("JSESSIONID", "1234", "/").
                     build();
         } catch (AuthenticationException e) {
-            return CreateResponse.ok()
+            return HttpResponse.ok()
                     .bodyByPath("./templates/user/login_failed.html")
                     .setCookie("JSESSIONID", "1234", "/")
                     .build();

@@ -1,16 +1,11 @@
-package servlet;
+package controller;
 
 import request.HttpRequest;
 import response.HttpResponse;
-import response.StatusCode;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-public interface Servlet {
+public interface Controller {
     HttpResponse service(HttpRequest httpRequest) throws IOException, URISyntaxException;
-
-    HttpResponse get(HttpRequest httpRequest);
-
-    HttpResponse post(HttpRequest httpRequest) throws IOException, URISyntaxException;
 }
