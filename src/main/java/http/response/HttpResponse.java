@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Map;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
@@ -47,14 +46,14 @@ public class HttpResponse {
         send();
     }
 
-    public void sendRedirect(String location) throws IOException {
-        setStatusCode(HttpStatusCode.FOUND);
+    public void sendRedirect(HttpStatusCode statusCode, String location) throws IOException {
+        setStatusCode(statusCode);
         set302Headers(location);
         send();
     }
 
-    public void sendRedirect(String location, Cookie cookie) throws IOException {
-        setStatusCode(HttpStatusCode.FOUND);
+    public void sendRedirect(HttpStatusCode statusCode, String location, Cookie cookie) throws IOException {
+        setStatusCode(statusCode);
         set302Headers(location, cookie);
         send();
     }
@@ -68,16 +67,8 @@ public class HttpResponse {
         logger.error("Http statusLine: {}", statusLine);
     }
 
-    public String getStatusCode() {
-        return statusLine.getHttpStatusCode().getCode();
-    }
-
     private void setStatusCode(HttpStatusCode statusCode) {
         statusLine.setHttpStatusCode(statusCode);
-    }
-
-    public Map<String, String> getHeaders() {
-        return headers.getHeaders();
     }
 
     private void send() throws IOException {

@@ -40,7 +40,7 @@ public class UserListController extends AbstractController {
             httpResponse.forward(HttpStatusCode.OK, contentType, body);
 
         } catch (NullPointerException e) {
-            httpResponse.sendRedirect(LOGIN_FORM_PATH);
+            httpResponse.sendRedirect(HttpStatusCode.FOUND, LOGIN_FORM_PATH);
         }
     }
 

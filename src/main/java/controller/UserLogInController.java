@@ -4,6 +4,7 @@ import http.cookie.Cookie;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 
+import http.response.HttpStatusCode;
 import model.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,13 +43,14 @@ public class UserLogInController extends AbstractController {
             logger.info("Login Success");
 
             httpResponse.sendRedirect(
+                    HttpStatusCode.FOUND,
                     INDEX_PATH,
                     Cookie.of(DEFAULT_SESSION_ID, session.getSessionId())
             );
 
         } catch (IllegalArgumentException e) {
             logger.info("Login Failed");
-            httpResponse.sendRedirect(LOGIN_FAILED_PATH);
+            httpResponse.sendRedirect(HttpStatusCode.FOUND, LOGIN_FAILED_PATH);
         }
     }
 }

@@ -2,6 +2,7 @@ package controller;
 
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import http.response.HttpStatusCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
@@ -23,7 +24,7 @@ public class UserCreateController extends AbstractController {
         Map<String, String> queryParams = httpRequest.getParameters();
         userService.addUser(queryParams);
 
-        httpResponse.sendRedirect(REDIRECT_PATH);
+        httpResponse.sendRedirect(HttpStatusCode.FOUND, REDIRECT_PATH);
     }
 
     @Override
@@ -33,7 +34,7 @@ public class UserCreateController extends AbstractController {
         userService.addUser(queryParams);
 
         logger.info("Create User Success");
-        httpResponse.sendRedirect(REDIRECT_PATH);
+        httpResponse.sendRedirect(HttpStatusCode.FOUND, REDIRECT_PATH);
     }
 
 }
