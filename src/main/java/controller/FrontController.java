@@ -19,6 +19,7 @@ public class FrontController {
     private static final String SIGN_UP_PATH_URL = "/user/create";
     private static final String LOGIN_PATH_URL ="/user/login";
     private static final String USER_LIST_PATH_URL ="/user/list";
+    private static final String GENERAL_FILE_PATH ="/file";
 
     //객체 캐싱
     static{
@@ -26,10 +27,12 @@ public class FrontController {
         SignUpController signUpController = new SignUpController(signUpService);
         LoginController loginInController = new LoginController();
         UserListController userListController = new UserListController();
+        FileController fileController = new FileController();
         controllers = Map.of(
                 SIGN_UP_PATH_URL,signUpController,
                 LOGIN_PATH_URL,loginInController,
-                USER_LIST_PATH_URL,userListController
+                USER_LIST_PATH_URL,userListController,
+                GENERAL_FILE_PATH,fileController
         );
     }
 
@@ -46,39 +49,14 @@ public class FrontController {
         try{
             String url = request.getUrl();
             Model model = new Model();
-
-            String dynamicUrl ="";
-            //get이면 파일 요청
-            if(request.getMethod().equals(HttpMethod.GET)){
-                if(!(url.contains("."))){
-                    dynamicUrl = url+".html";
-                    request.setUrl(dynamicUrl);
-                }
+            Controller controller = controllers.get(url);
+            if(controller == null){
+                controller = new FileController();
             }
-
-            Controller controller = new NotFoundExceptionHandler();
-            //일반 정적 파일 요청시
-            if(url.contains(".")&&(dynamicUrl.isEmpty())) {
-                System.out.println("static controller");
-                controller = new ReturnFileController();
-            }
-            //동적 파일 요청이라면 - 현재는 유저 리스트 요청만
-            if(!(dynamicUrl.isEmpty())) {
-                System.out.println("dynamic controller");
-                controller = getControllerByUrl(url);
-                String path = controller.service(request,response,model);
+            String path = controller.service(request,response,model);
+            if(path.startsWith("./templates")){// ./templates/index.html ,템플릿 하위에 있는 애들은 뷰로 그려줘야 함
                 ViewHandler.handle(path,request,response,model);
-                return;
             }
-            //만약 파일 요청이 아니라 그 외 요청이라면 (post등)
-            if(!url.contains(".") && (dynamicUrl.isEmpty())) {
-                System.out.println("etc controller");
-                controller = getControllerByUrl(url);
-//                String path = controller.service(request,response,model);
-//                ViewHandler.handle(path,request,response,model);
-//                return;
-            }
-            controller.service(request,response,model);
         }catch(NullPointerException e){
             NotFoundExceptionHandler.showErrorPage(response);
              e.printStackTrace();
