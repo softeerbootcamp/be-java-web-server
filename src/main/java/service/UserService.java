@@ -21,6 +21,9 @@ public class UserService {
     }
     public boolean login(User user) {
         User dbUser = Database.findUserById(user.getUserId());
+        if (dbUser == null) {
+            return false;
+        }
         if (dbUser.getPassword().equals(user.getPassword())) {
             return true;
         }
