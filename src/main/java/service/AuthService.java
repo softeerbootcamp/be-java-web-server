@@ -17,4 +17,9 @@ public class AuthService {
         }
         return session.isValid();
     }
+
+    public Session getSession(HttpRequest request) {
+        Cookie sessionCookie = request.getCookie(Session.SESSION_FIELD_NAME);
+        return Database.getSession(sessionCookie.getValue());
+    }
 }
