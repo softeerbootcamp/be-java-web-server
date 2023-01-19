@@ -10,6 +10,7 @@ import utils.FileIoUtils;
 import utils.HttpMethod;
 import utils.SessionManager;
 
+import javax.naming.AuthenticationException;
 import java.util.UUID;
 
 import static utils.PathManager.LOGIN_PATH;
@@ -35,13 +36,9 @@ public class UserListController implements Controller {
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         String sid = httpRequest.getSession();
         try {
-            Session session = SessionManager.getSession(UUID.fromString(sid));
-            if (session != null) {
-                httpResponse.setBody(FileIoUtils.makeUserListPage(userService.findAllUsers(), session));
-            }
-            if (session == null)
-                httpResponse.redirect(LOGIN_PATH);
-        } catch (NullPointerException e) {
+            Session session = SessionManager.getSession(UUID.fromString(sid)).orElseThrow(AuthenticationException::new);
+            httpResponse.setBody(FileIoUtils.makeUserListPage(userService.findAllUsers(), session));
+        } catch (NullPointerException |AuthenticationException e) {
             httpResponse.redirect(LOGIN_PATH);
         }
     }
