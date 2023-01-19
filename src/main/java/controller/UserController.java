@@ -36,13 +36,15 @@ public class UserController implements Controller {
     @Override
     public Response getResponse(Request request) {
         RequestLine requestLine = request.getRequestLine();
+        Method requestMethod = requestLine.getMethod();
+        String requestUri = requestLine.getUri();
 
-        if(requestLine.getMethod().equals(Method.POST) &&
-                requestLine.getUri().startsWith("/user/create")) return createUserResponse(request);
-        else if(requestLine.getMethod().equals(Method.POST) &&
-                requestLine.getUri().startsWith("/user/login")) return loginUserResponse(request);
-        else if(requestLine.getMethod().equals(Method.GET) &&
-                requestLine.getUri().startsWith("/user/list")) return userListResponse(request);
+        if(requestMethod.equals(Method.POST) &&
+                requestUri.startsWith("/user/create")) return createUserResponse(request);
+        else if(requestMethod.equals(Method.POST) &&
+                requestUri.startsWith("/user/login")) return loginUserResponse(request);
+        else if(requestMethod.equals(Method.GET) &&
+                requestUri.startsWith("/user/list")) return userListResponse(request);
 
         return Response.from(StatusLine.of(requestLine.getHttpVersion(), Status.NOT_FOUND));
     }
