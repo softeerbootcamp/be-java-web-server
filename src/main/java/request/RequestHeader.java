@@ -39,10 +39,10 @@ public class RequestHeader {
             if (headerTokens.length >= 2) {
                 String key = headerTokens[0];
                 String value = headerTokens[1];
-                if (key.equals(COOKIE)) {
-                    parseCookie(value, cookies);
-                    break;
-                }
+//                if (key.equals(COOKIE)) {
+//                    parseCookie(value, cookies);
+//                    break;
+//                }
                 fields.put(key,value);
             }
         }
