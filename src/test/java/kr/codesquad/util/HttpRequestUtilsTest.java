@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class HttpRequestUtilsTest {
 
@@ -18,9 +19,11 @@ public class HttpRequestUtilsTest {
 
         Map<String, String> result = HttpRequestUtils.parseRequestHeader(headers);
 
-        assertThat(result.get("Host")).isEqualTo("localhost:8080");
-        assertThat(result.get("Connection")).isEqualTo("keep-alive");
-        assertThat(result.get("Accept")).isEqualTo("text/html");
+        assertAll(
+                () -> assertThat(result.get("Host")).isEqualTo("localhost:8080"),
+                () -> assertThat(result.get("Connection")).isEqualTo("keep-alive"),
+                () -> assertThat(result.get("Accept")).isEqualTo("text/html")
+        );
     }
 
     @Test
@@ -41,10 +44,12 @@ public class HttpRequestUtilsTest {
 
         Map<String, String> result = HttpRequestUtils.parseBodyMessage(queryString);
 
-        assertThat(result.get("userId")).isEqualTo("abc");
-        assertThat(result.get("password")).isEqualTo("aaa@@@");
-        assertThat(result.get("name")).isEqualTo("임수민");
-        assertThat(result.get("email")).isEqualTo("a@a");
+        assertAll(
+                () -> assertThat(result.get("userId")).isEqualTo("abc"),
+                () -> assertThat(result.get("password")).isEqualTo("aaa@@@"),
+                () -> assertThat(result.get("name")).isEqualTo("임수민"),
+                () -> assertThat(result.get("email")).isEqualTo("a@a")
+        );
     }
 
 }
