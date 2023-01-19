@@ -20,11 +20,11 @@ public class FileController implements Controller{
         ContentType type = ExtensionUtils.extractExtension(url);
         boolean isTemplate = type.isTemplateDir(); //template 디렉토리 하위인지 확인
         if(!isTemplate) {
-            FileService.serveFile(STATIC_DIR + url,request,response);
+            FileService.serveFile(STATIC_DIR + url,response);
             return STATIC_DIR + url;
         }
         else if (isTemplate) {
-            if(type == ContentType.ICO) FileService.serveFile(TEMPLATES_DIR + url,request,response);
+            if(type == ContentType.ICO) FileService.serveFile(TEMPLATES_DIR + url,response);
             return TEMPLATES_DIR + url;
         }
         return url;

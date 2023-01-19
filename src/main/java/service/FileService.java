@@ -15,7 +15,7 @@ public class FileService {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private static final String CONTENT_LENGTH_HEADER_KEY = "Content-Length";
 
-    public static void serveFile(String url, HttpRequest req, HttpResponse res) throws NullPointerException {
+    public static void serveFile(String url, HttpResponse res) throws NullPointerException {
         ContentType contentType = ExtensionUtils.extractExtension(url);
         res.setStatus(HttpStatus.OK);
         res.setContentType(contentType);
