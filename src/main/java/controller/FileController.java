@@ -15,21 +15,20 @@ import java.net.URISyntaxException;
 
 public class FileController implements Controller{
 
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(FileController.class);
     private static final String TEMPLATES_DIR = "./templates";
     private static final String STATIC_DIR = "./static";
-    private FileService fileService = new FileService();
     @Override
-    public String doGet(HttpRequest request, HttpResponse response, Model model) throws IOException, URISyntaxException {
+    public String doGet(HttpRequest request, HttpResponse response, Model model) {
         String url = request.getUrl();
         ContentType type = ExtensionUtils.extractExtension(url);
         boolean isTemplate = type.isTemplateDir(); //template 디렉토리 하위인지 확인
         if(!isTemplate) {
-            fileService.serveFile(STATIC_DIR + url,request,response);
+            FileService.serveFile(STATIC_DIR + url,request,response);
             return STATIC_DIR + url;
         }
         else if (isTemplate) {
-            if(type == ContentType.ICO) fileService.serveFile(TEMPLATES_DIR + url,request,response);
+            if(type == ContentType.ICO) FileService.serveFile(TEMPLATES_DIR + url,request,response);
             return TEMPLATES_DIR + url;
         }
         return url;
