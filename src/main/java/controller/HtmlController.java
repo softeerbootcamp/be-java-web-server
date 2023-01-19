@@ -17,7 +17,7 @@ public class HtmlController implements Controller {
 
     @Override
     public HttpResponse makeResponse(HttpRequest httpRequest) {
-        //ContentType, 파일 확장자, uri를 받음
+        //로그인한 유저 ContentType, 파일 경로, uri를 받음
         User logInUser = Database.findUserById(Session.findUserIdBySessionId(httpRequest.getCookie()));
         String contentType = httpRequest.getContentType();
         String filePath = htmlFilePath + httpRequest.getUri();
