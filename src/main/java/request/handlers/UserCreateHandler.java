@@ -9,6 +9,9 @@ import request.RequestParser;
 import response.HttpResponseStatus;
 import response.Response;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Map;
 
 public class UserRegisterHandler implements RequestHandler {
@@ -24,6 +27,16 @@ public class UserRegisterHandler implements RequestHandler {
 
     public static UserRegisterHandler getInstance() {
         return instance;
+    }
+
+    @Override
+    public Response doGet(Request request) {
+        try {
+            byte[] file = generateDynamicHeader(request.getCookie(), Files.readAllBytes(new File("src/main/resources/templates" + request.getResource()).toPath()));
+            return Response.createSimpleResponse(file, request.getResourceFileContentType(), HttpResponseStatus.OK);
+        } catch (IOException e) {
+            return Response.from(HttpResponseStatus.NOT_FOUND);
+        }
     }
 
     @Override

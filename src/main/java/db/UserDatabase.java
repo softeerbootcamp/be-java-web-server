@@ -38,7 +38,7 @@ public class UserDatabase {
     }
 
     public Optional<User> findUserById(String userId) throws IllegalArgumentException {
-        return Optional.of(users.get(userId));
+        return Optional.ofNullable(users.get(userId));
     }
 
     public Collection<User> findAll() {

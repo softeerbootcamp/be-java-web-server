@@ -33,7 +33,7 @@ public class SessionDatabase {
     }
 
     public Optional<Session> findById(String sid) {
-        return Optional.of(sessions.get(sid));
+        return Optional.ofNullable(sessions.get(sid));
     }
 
     public boolean existsBySessionId(String sessionId) {
