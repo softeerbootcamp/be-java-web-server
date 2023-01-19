@@ -10,7 +10,11 @@ public class ViewHandler {
 
     static {
         views = Map.of(
-                "/user/list.html", new UserListView()
+                "./templates/index.html", new IndexView(),
+                "/user/list.html", new UserListView(),
+                "./templates/user/login.html", new LoginView(),
+                "./templates/user/login_failed.html", new LoginFailView(),
+                "./templates/user/form.html", new SignUpView()
         );
     }
 
