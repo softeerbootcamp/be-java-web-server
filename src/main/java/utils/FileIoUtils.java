@@ -65,7 +65,7 @@ public class FileIoUtils {
     }
 
     private static String removeLogoutButton(String page) {
-        String target = "<li><a href=\"#\" role=\"button\">로그아웃</a></li>\n";
+        String target = "<li><a href=\"/user/logout\" role=\"button\">로그아웃</a></li>";
         return page.replace(target, "");
     }
 

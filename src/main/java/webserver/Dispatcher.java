@@ -16,6 +16,7 @@ public class Dispatcher {
         AppConfig appConfig = new AppConfig();
         controllers = Map.of(
                 UserCreateController.PATH, new UserCreateController(appConfig.userService()),
+                UserLogoutController.PATH, new UserLogoutController(),
                 StaticFileController.PATH, new StaticFileController(),
                 UserLoginController.PATH, new UserLoginController(appConfig.userService()),
                 UserListController.PATH, new UserListController(appConfig.userService()),
