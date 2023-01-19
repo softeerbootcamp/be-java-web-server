@@ -30,15 +30,16 @@ public class RequestRouter {
     }
 
     public CustomHttpResponse handleRequest(CustomHttpRequest req) {
-        if (StaticFileController.ifFileTypeRequested(req.getUrl())) {
-            return StaticFileController.get().handleRequest(req);
-        }
 
         for (String keys : requestMap.keySet()) {
             if (req.getUrl().startsWith(keys)) {
                 logger.info(keys + " matches " + req.getUrl());
                 return requestMap.get(keys).handleRequest(req);
             }
+        }
+
+        if (StaticFileController.ifFileTypeRequested(req.getUrl())) {
+            return StaticFileController.get().handleRequest(req);
         }
 
         return CustomHttpFactory.NOT_FOUND();

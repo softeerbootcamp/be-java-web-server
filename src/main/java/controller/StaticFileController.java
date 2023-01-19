@@ -18,8 +18,6 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static service.StaticFileService.getFileTypeFromUrl;
 
@@ -37,23 +35,26 @@ public class StaticFileController implements RequestController {
 
     @Override
     public CustomHttpResponse handleRequest(CustomHttpRequest req) {
+        if(!ifFileTypeRequested(req.getUrl()))
+            req.setUrl(req.getUrl()+".html");
+        logger.debug("req {} comes static handler", req.getUrl());
         return getFile(req);
     }
 
-    public CustomHttpResponse getFile(CustomHttpRequest req) {
+    private CustomHttpResponse getFile(CustomHttpRequest req) {
         if(StaticFileService.isTemplateFile(req.getUrl()))
             return handleTemplateFile(req);
         return handleStaticFile(req);
     }
 
-    public CustomHttpResponse handleTemplateFile(CustomHttpRequest req){
+    private CustomHttpResponse handleTemplateFile(CustomHttpRequest req){
         File file = StaticFileService.getFile(req.getUrl());
         User user = SessionService.getUserBySessionId(req.getSSID()).orElse(User.GUEST);
-        try {
-            Map<String, String> matchings = HtmlMakerUtility.getLoginLogoutTemplate(user != User.GUEST);
-            matchings.put("name", user.getName());
 
-            String lines = StaticFileService.renderFile(file, matchings);
+        try {
+            Map<String, String> matching = HtmlMakerUtility.getDefaultTemplate(user.getName());
+            String lines = StaticFileService.renderFile(file, matching);
+
             return CustomHttpResponse.of(StatusCode.OK, ContentType.TEXT_HTML, new HashMap<>(), lines.getBytes());
         } catch (IOException e) {
             return CustomHttpFactory.NOT_FOUND();
