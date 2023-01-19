@@ -11,11 +11,12 @@ import java.util.List;
 
 public class DynamicController {
     // byte 를 받아와서 byte 반환하는 형태가 괜찮은가?
-    public static byte[] dynamicIndexHtml(byte[] body){
+    public static byte[] dynamicIndexHtml(byte[] body,String sid){
         byte[] manualBody;
         String stringBody;
         stringBody = StringBuilderUtils.byteArrayToString(body);
-        stringBody = stringBody.replace("role=\"button\">로그인"," role=\"button\" style=\"display:none;\">로그인");
+        User user = Database.findUserById(HttpSessions.findUserIdBySid(sid));
+        stringBody = stringBody.replace("role=\"button\">로그인",StringBuilderUtils.userNameButtonBuilder(user));
         manualBody = StringBuilderUtils.stringToByteArray(stringBody);
         return manualBody;
     }

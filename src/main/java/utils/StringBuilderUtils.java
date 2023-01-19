@@ -37,4 +37,10 @@ public class StringBuilderUtils {
         }
         return stringBuilder.toString();
     }
+    public static String userNameButtonBuilder(User user){
+        stringBuilder = new StringBuilder();
+        stringBuilder.append("role=\"button\" disabled>");
+        stringBuilder.append(user.getName());
+        return stringBuilder.toString();
+    }
 }

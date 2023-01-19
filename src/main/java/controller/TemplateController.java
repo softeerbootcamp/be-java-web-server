@@ -23,7 +23,7 @@ public class TemplateController implements Controller {
         boolean isDynamic = request.isRequestHaveCookie();
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + url).toPath());
         if(isDynamic){
-            body = DynamicController.dynamicIndexHtml(body);
+            body = DynamicController.dynamicIndexHtml(body,request.getRequestHeader().getHeaderValueByKey("Cookie").split("=")[1]);
         }
         if(url.contains("list.html")){
             body = DynamicController.dynamicListHtml(body);
