@@ -8,15 +8,15 @@ import view.HomeLoginView;
 import webserver.session.Session;
 import webserver.session.SessionConst;
 
-public class HomeLoginController implements Controller {
+public class DynamicResourceController implements Controller {
 
-    private static final HomeLoginController instance = new HomeLoginController();
+    private static final DynamicResourceController instance = new DynamicResourceController();
 
-    public static HomeLoginController getInstance() {
+    public static DynamicResourceController getInstance() {
         return instance;
     }
 
-    private HomeLoginController() {
+    private DynamicResourceController() {
     }
 
     @Override

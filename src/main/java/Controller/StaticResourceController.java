@@ -25,7 +25,7 @@ public class StaticResourceController implements Controller {
 
             // TODO: index.html 파일 외의 html 파일일 때도 로그인 상태일 때 사용자 이름을 표시하도록 구현 예정
             if (request.isLogin()) {
-                HomeLoginController.getInstance().process(request, response);
+                DynamicResourceController.getInstance().process(request, response);
                 return;
             }
         }
