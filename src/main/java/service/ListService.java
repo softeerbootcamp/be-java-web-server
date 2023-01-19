@@ -42,7 +42,7 @@ public class ListService {
     }
 
     private static StringBuilder makeHtml() {
-        int index = 3; // 이미 두개 들어 있음
+        int index = 1;
         Collection<User> userList = Database.findAll();
         StringBuilder stringBuilder = new StringBuilder();
 
