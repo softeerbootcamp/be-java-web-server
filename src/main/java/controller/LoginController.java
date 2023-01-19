@@ -4,6 +4,7 @@ import model.domain.User;
 import model.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.HtmlEditor;
 import util.HttpStatus;
 import util.Session;
 import view.RequestMessage;
@@ -11,9 +12,7 @@ import view.Response;
 
 import java.io.DataOutputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 public class LoginController implements Controller{
     private static LoginController loginController;
@@ -40,7 +39,7 @@ public class LoginController implements Controller{
         byte[] body = getStaticBody(requestMessage);
         logger.info("body with static page:\n"+body.toString());
         if (requestMessage.getRequestHeaderMessage().getHttpOnlyURL().contains("html"))
-            body = changeLoginToID(body, requestMessage);
+            body = changeNavbar(body, requestMessage);
         if (requestMessage.getRequestHeaderMessage().getHttpOnlyURL().startsWith("/user/list.html"))
             body = dynamicListPage(body, requestMessage);
         logger.info("body after dynamic change:\n"+body.toString());
@@ -48,13 +47,11 @@ public class LoginController implements Controller{
         response.response(body,requestMessage.getRequestHeaderMessage(), HttpStatus.Success);
     }
 
-    private byte[] changeLoginToID(byte[] body, RequestMessage requestMessage){
+    private byte[] changeNavbar(byte[] body, RequestMessage requestMessage){
         String userID = Session.loginSession.get(requestMessage.getRequestHeaderMessage().getSessionId());
-        String bodyStr =  (new String(body)).replace("<li><a href=\"user/login.html\" role=\"button\">로그인</a></li>",
-                "<li><a role=\"button\">"+ userID+"</a></li>");
-        bodyStr = bodyStr.replace("<li><a href=\"../user/login.html\" role=\"button\">로그인</a></li>",
-                "<li><a role=\"button\">"+ userID+"</a></li>");
-        return bodyStr.getBytes();
+        body = HtmlEditor.removeHref(body);
+        body = HtmlEditor.editNavbar(body,userID);
+        return body;
     }
 
     private byte[] dynamicListPage(byte[] body, RequestMessage requestMessage){

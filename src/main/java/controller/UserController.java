@@ -75,7 +75,6 @@ public class UserController implements Controller{
             setLocation(Redirect.getRedirectLink(requestMessage.getRequestHeaderMessage().getRequestAttribute()), headerKV);
         } catch (IllegalStateException e){
             setLocation("/user/form_failed.html", headerKV);
-
             logger.debug(e.getMessage());
         }
     }
