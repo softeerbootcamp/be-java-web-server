@@ -13,13 +13,14 @@ public class SessionDatabase {
 
     private static final SessionDatabase instance;
 
-    private static final Map<String, Session> sessionMap;
+    private final Map<String, Session> sessions;
 
-    private SessionDatabase() {}
+    private SessionDatabase() {
+        sessions = new HashMap<>();
+    }
 
     static {
         instance = new SessionDatabase();
-        sessionMap = new HashMap<>();
     }
 
     public static SessionDatabase getInstance() {
@@ -28,18 +29,18 @@ public class SessionDatabase {
 
     public void add(Session session) {
         logger.debug("sid {} added, expires at {}", session.getSid(), session.getExpirationTime());
-        sessionMap.put(session.getSid(), session);
+        sessions.put(session.getSid(), session);
     }
 
     public Optional<Session> findById(String sid) {
-        return Optional.of(sessionMap.get(sid));
+        return Optional.of(sessions.get(sid));
     }
 
     public boolean existsBySessionId(String sessionId) {
-        return sessionMap.containsKey(sessionId);
+        return sessions.containsKey(sessionId);
     }
 
     public void deleteSession(String sid) {
-        sessionMap.remove(sid);
+        sessions.remove(sid);
     }
 }

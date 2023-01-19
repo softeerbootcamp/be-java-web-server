@@ -15,13 +15,14 @@ public class UserDatabase {
 
     private static final UserDatabase instance;
 
-    private static final Map<String, User> users;
+    private final Map<String, User> users;
 
-    private UserDatabase() {}
+    private UserDatabase() {
+        users = Maps.newHashMap();
+    }
 
     static {
         instance = new UserDatabase();
-        users = Maps.newHashMap();
     }
 
     public static UserDatabase getInstance() {

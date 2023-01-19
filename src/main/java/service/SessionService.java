@@ -8,13 +8,15 @@ import java.util.Optional;
 public class SessionService {
     private static final SessionService instance;
 
-    private final SessionDatabase sessionDatabase = SessionDatabase.getInstance();
+    private final SessionDatabase sessionDatabase;
 
     static {
         instance = new SessionService();
     }
 
-    private SessionService() {}
+    private SessionService() {
+        sessionDatabase = SessionDatabase.getInstance();
+    }
 
     public static SessionService getInstance() {
         return instance;

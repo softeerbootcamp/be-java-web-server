@@ -8,13 +8,15 @@ import java.util.Optional;
 public class UserService {
     private static final UserService instance;
 
-    private final UserDatabase userDatabase = UserDatabase.getInstance();
+    private final UserDatabase userDatabase;
 
     static {
         instance = new UserService();
     }
 
-    private UserService() {}
+    private UserService() {
+        userDatabase = UserDatabase.getInstance();
+    }
 
     public static UserService getInstance() {
         return instance;
