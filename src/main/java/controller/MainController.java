@@ -2,6 +2,7 @@ package controller;
 
 import filesystem.FileSystem;
 import filesystem.FindResource;
+import filesystem.HtmlGenerator;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
@@ -11,12 +12,11 @@ import service.UserService;
 
 import java.util.List;
 
-import static filesystem.PathResolver.DOMAIN;
 import static filesystem.PathResolver.INDEX_HTML;
 
 public class MainController implements Controller {
 
-    public static final List<String> optionalAuthUrls = List.of("/", DOMAIN + INDEX_HTML);
+    public static final List<String> optionalAuthUrls = List.of("/", INDEX_HTML);
     public static final List<String> mustNotAuthUrls = List.of("/user/login.html", "/user/form.html");
     public static final List<String> mustAuthUrls = List.of("/user/list.html");
 
