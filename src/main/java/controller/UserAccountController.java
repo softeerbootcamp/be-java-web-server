@@ -2,6 +2,7 @@ package controller;
 
 import Utility.HtmlMakerUtility;
 import Utility.UserValidation;
+import exceptions.CustomException;
 import httpMock.CustomHttpFactory;
 import httpMock.CustomHttpRequest;
 import httpMock.CustomHttpResponse;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import repository.UserRepo;
 import service.SessionService;
 import service.StaticFileService;
+import service.UserService;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +33,7 @@ public class UserAccountController implements RequestController {
         put("/user/login", (req) -> loginAccount(req));
         put("/user/logout", (req) -> logoutAccount(req));
         put("/user/list", (req)-> userList(req));
+        put("/user/form", (req) -> userCreateForm(req));
     }};
 
 
@@ -54,51 +57,47 @@ public class UserAccountController implements RequestController {
     }
 
     public CustomHttpResponse makeAccount(CustomHttpRequest req) {
-        Set<HttpMethod> allowedMethods = Set.of(HttpMethod.POST);
+        Set<HttpMethod> allowedMethods = Set.of(HttpMethod.POST, HttpMethod.GET);
         if (!allowedMethods.contains(req.getHttpMethod()))
             return CustomHttpFactory.METHOD_NOT_ALLOWED();
 
+        if(req.getHttpMethod() == HttpMethod.GET)
+            return StaticFileController.get().handleRequest(req);
+
         Map<String, String> bodyParams = req.parseBodyFromUrlEncoded();
-        String userId = bodyParams.get("userId");
-        String password = bodyParams.get("password");
-        String name = bodyParams.get("name");
-        String email = bodyParams.get("email");
 
-
-        if (UserRepo.findUserById(userId) != null)
-            return CustomHttpFactory.BAD_REQUEST("userID duplicated");
-
-        if(!UserValidation.isUserCreationFormValid(userId, password, name, email))
-            return CustomHttpFactory.BAD_REQUEST("email, password, name을 올바르게 입력해 주세요.");
-
-        User user = new User(userId, password, name, email);
-        UserRepo.addUser(user);
-        CustomHttpResponse res = CustomHttpFactory.REDIRECT("/index.html");
-        Session sess = SessionService.addUserToSession(user);
-        res.addToCookie(sess.toString());
-        return res;
+        try{
+            User user = UserService.addUser(bodyParams);
+            CustomHttpResponse res = CustomHttpFactory.REDIRECT("/index.html");
+            Session sess = SessionService.addUserToSession(user);
+            res.addToCookie(sess.toString());
+            return res;
+        }catch (CustomException e){
+            return CustomHttpFactory.BAD_REQUEST(e.getMessage());
+        }
     }
 
     public CustomHttpResponse loginAccount(CustomHttpRequest req) {
-        Set<HttpMethod> allowedMethods = Set.of(HttpMethod.POST);
+        Set<HttpMethod> allowedMethods = Set.of(HttpMethod.POST, HttpMethod.GET);
         if (!allowedMethods.contains(req.getHttpMethod()))
             return CustomHttpFactory.METHOD_NOT_ALLOWED();
 
-        Map<String, String> bodyParams = req.parseBodyFromUrlEncoded();
-        String userId = bodyParams.get("userId");
-        String password = bodyParams.get("password");
+        logger.info("http method is {}", req.getHttpMethod());
+        if(req.getHttpMethod() == HttpMethod.GET)
+            return StaticFileController.get().handleRequest(req);
 
-        User customer = UserRepo.findUserById(userId);
-        if (customer != null && customer.getPassword().equals(password)) {
-            logger.info("User {} login success", customer.getName());
-            CustomHttpResponse res = CustomHttpFactory.REDIRECT("/index.html");
-            Session sess = SessionService.addUserToSession(customer);
-            res.addToCookie(sess.toString());
-            return res;
+        Map<String, String> bodyParams = req.parseBodyFromUrlEncoded();
+        User customer = UserService.getUserByReqbody(bodyParams);
+
+        if (customer == User.GUEST) {
+            logger.debug("User login failed");
+            return CustomHttpFactory.REDIRECT("/user/login_failed.html");
         }
 
-        logger.debug("User login failed");
-        return CustomHttpFactory.REDIRECT("/user/login_failed.html");
+        CustomHttpResponse res = CustomHttpFactory.REDIRECT("/index.html");
+        Session sess = SessionService.addUserToSession(customer);
+        res.addToCookie(sess.toString());
+        return res;
     }
 
     public CustomHttpResponse logoutAccount(CustomHttpRequest req){
@@ -140,5 +139,9 @@ public class UserAccountController implements RequestController {
             logger.error("error while reading {}", file.getPath());
             return CustomHttpFactory.INTERNAL_ERROR("error while readling " + file.getPath());
         }
+    }
+
+    public CustomHttpResponse userCreateForm(CustomHttpRequest req){
+        return StaticFileController.get().handleRequest(req);
     }
 }
