@@ -44,46 +44,14 @@ public class UserService {
     }
 
     public byte[] makeUserListBody(String filepath) throws IOException {
-
-        String fileData = new String(FileIoUtils.loadFile(filepath));
-
-        fileData = fileData.replace("<!--userlist-->", userListToString());
-
-        return fileData.getBytes();
-    }
-
-    private String userListToString() {
         Collection<User> userList = userRepository.findAll();
-        StringBuilder sb = new StringBuilder();
-
-        int idx = 3;
-
-        for (User user : userList) {
-            sb.append("<tr>");
-            sb.append("<th scope=\"row\">").append(idx).append("</th>");
-            sb.append("<td>").append(user.getUserId()).append("</td>");
-            sb.append("<td>").append(user.getName()).append("</td>");
-            sb.append("<td>").append(user.getEmail()).append("</td>");
-            sb.append("<td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td>");
-            sb.append("<tr>");
-            idx++;
-        }
-
-        return sb.toString();
+        return FileIoUtils.userListToString(userList, filepath);
     }
+
 
     public byte[] makeUserNameIndexBody(String id, String filepath) throws IOException {
         User user = userRepository.findUserById(id);
-        logger.info(user.getUserId());
-
-        String fileData = new String(FileIoUtils.loadFile(filepath));
-        String target_index = "<li><a href=\"user/login.html\" role=\"button\">로그인</a></li>";
-        String target_others = "<li><a href=\"../user/login.html\" role=\"button\">로그인</a></li>";
-        return fileData
-                .replace("<!--username-->", String.format("<li><a>%s</a></li>", user.getName()))
-                .replace(target_index, "")
-                .replace(target_others, "")
-                .getBytes();
+        return FileIoUtils.replaceLoginBtnToUserName(user, filepath);
     }
 
 }
