@@ -23,6 +23,10 @@ public class ViewResolver {
                     sb.append("<a>" + userId + "님</a></li><li>");
                 }
                 sb.append(line);
+                if (line.contains("Posts")) {
+                    sb.append("<li><a href=\"#\" role=\"button\">개인정보수정</a></li>");
+                    sb.append("<li><a href=\"#\" role=\"button\">로그아웃</a></li>");
+                }
             }
             return sb.toString().getBytes();
         } catch (FileNotFoundException e) {
@@ -54,6 +58,10 @@ public class ViewResolver {
                                 "</td> <td>" + user.getEmail() +
                                 "</td><td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td></tr>");
                     }
+                }
+                if (line.contains("Posts")) {
+                    sb.append("<li><a href=\"#\" role=\"button\">개인정보수정</a></li>");
+                    sb.append("<li><a href=\"#\" role=\"button\">로그아웃</a></li>");
                 }
             }
             return sb.toString().getBytes();
