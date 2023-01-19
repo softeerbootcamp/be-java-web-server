@@ -37,17 +37,8 @@ public class HttpRequest {
         RequestStartLine requestStartLine = RequestStartLine.of(bufferedReader);
         RequestHeader requestHeader = RequestHeader.of(bufferedReader);
         RequestBody requestBody = RequestBody.of(bufferedReader, requestHeader.getContentLength());
-        return new HttpRequest(requestStartLine, requestHeader, requestBody);
-    }
 
-    public String getPath() {
-        if (requestStartLine.isTemplatesResource()) {
-            return String.format("./templates%s", requestStartLine.getPath());
-        }
-        if (requestStartLine.isStaticResource()) {
-            return String.format("./static%s", requestStartLine.getPath());
-        }
-        return requestStartLine.getPath();
+        return new HttpRequest(requestStartLine, requestHeader, requestBody);
     }
 
     public Map<String, String> getParameters() {
@@ -62,21 +53,14 @@ public class HttpRequest {
         return requestStartLine.getMethod() == Method.POST;
     }
 
-    public boolean isForStaticContent() {
-        return requestStartLine.isTemplatesResource() || requestStartLine.isStaticResource();
-    }
-
-    public boolean isQueryContent() {
-        return !isForStaticContent();
-    }
-
     public String getBody() {
         return body.getBody();
     }
 
-//    public String getCookieValue(String cookieName) {
-//        return requestHeader.getCookieValue(cookieName);
-//    }
+    public String getCookieValue(String cookieName) {
+        return requestHeader.getCookieValue(cookieName);
+    }
+
     public String getDefaultPath() {
         return requestStartLine.getPath();
     }

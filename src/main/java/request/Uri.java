@@ -20,18 +20,30 @@ public class Uri {
     }
 
     public static Uri of(String uri) {
-        String[] uriSources =  uri.split("\\?");
+        String[] uriSources = uri.split("\\?");
         String path = uriSources[0];
-        Map<String, String> parameters = StringParser.dataParsing(uri);
+        Map<String, String> parameters = new HashMap<>();
+
+        if (existParameters(uriSources)) {
+            extractParameter(uriSources[1], parameters);
+        }
+
         return new Uri(path, parameters);
     }
 
-    public boolean isTemplatesResource() {
-        return path.endsWith("html") || path.equals("/favicon.ico");
+    private static boolean existParameters(String[] uriSources) {
+        return uriSources.length > 1;
     }
 
-    public boolean isStaticResource() {
-        return !isTemplatesResource() && path.contains(".");
+    private static void extractParameter(String uriSource, Map<String, String> parameters) {
+        for (String parameter : uriSource.split("[&;]")) {
+            String[] keyAndValue = parameter.split("=");
+            if (keyAndValue.length >= 2) {
+                parameters.put(keyAndValue[0], keyAndValue[1]);
+                continue;
+            }
+            parameters.put(keyAndValue[0], "");
+        }
     }
 
     public String getPath() {

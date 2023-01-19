@@ -40,6 +40,9 @@ public class RequestHandler implements Runnable{
     }
 
     public HttpResponse controlRequestAndResponse(HttpRequest httpRequest) {
+        /*
+        * HttpRequestMapper의 getController를 통해
+        * */
         try{
             Controller controller = httpRequestMapper.getController(httpRequest);
             return controller.service(httpRequest);

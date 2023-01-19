@@ -39,10 +39,10 @@ public class RequestHeader {
             if (headerTokens.length >= 2) {
                 String key = headerTokens[0];
                 String value = headerTokens[1];
-//                if (key.equals(COOKIE)) {
-//                    parseCookie(value, cookies);
-//                    break;
-//                }
+                if (key.equals(COOKIE)) {
+                    parseCookie(value, cookies);
+                    break;
+                }
                 fields.put(key,value);
             }
         }
@@ -50,22 +50,22 @@ public class RequestHeader {
         return new RequestHeader(fields, cookies);
     }
 
-//    private static void parseCookie(String value, Set<Map<String, String>> cookies) {
-//        String[] splitValues = value.split(COOKIE_DELIMETER);
-//
-//        Map<String, String> cookie = Arrays.stream(splitValues)
-//                .map(splitValue -> splitValue.split("="))
-//                .collect(Collectors.toMap(v -> v[0], v -> v[1]));
-//        cookies.add(cookie);
-//    }
-//
-//    public String getCookieValue(String cookieName) {
-//        return cookies.stream()
-//                .map(cookie -> cookie.get(cookieName))
-//                .filter(Objects::nonNull)
-//                .findAny()
-//                .orElseGet(() -> "");
-//    }
+    private static void parseCookie(String value, Set<Map<String, String>> cookies) {
+        String[] splitValues = value.split(COOKIE_DELIMETER);
+
+        Map<String, String> cookie = Arrays.stream(splitValues)
+                .map(splitValue -> splitValue.split("="))
+                .collect(Collectors.toMap(v -> v[0], v -> v[1]));
+        cookies.add(cookie);
+    }
+
+    public String getCookieValue(String cookieName) {
+        return cookies.stream()
+                .map(cookie -> cookie.get(cookieName))
+                .filter(Objects::nonNull)
+                .findAny()
+                .orElseGet(() -> "");
+    }
 
     public String toValue() {
         StringBuilder sb = new StringBuilder();

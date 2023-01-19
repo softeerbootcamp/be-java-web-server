@@ -41,19 +41,6 @@ public class HttpResponse {
         }
     }
 
-    public void respondRedirect(DataOutputStream dos) { // body 안담음
-        try {
-            dos.writeBytes(statusLine.getValue());
-            dos.writeBytes(lineSeparator);
-            logger.debug("redirectResponse: {}",responseHeader.toValue());
-            dos.writeBytes(responseHeader.toValue());
-            dos.writeBytes(lineSeparator);
-            dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
     public StatusLine getStatusLine() {
         return statusLine;
     }
