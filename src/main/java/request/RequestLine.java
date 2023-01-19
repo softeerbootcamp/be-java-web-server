@@ -3,26 +3,16 @@ package request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.RequestResponseHandler;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
 public class RequestLine {
     private String requestLine;
-    private String METHOD;
-    private String URL;
-    private String VERSION;
-    private boolean userRequest;
-    private static final int METHOD_TOKEN_INDEX = 0;
-    private static final int URL_TOKEN_INDEX = 1;
-    private static final int VERSION_TOKEN_INDEX = 2;
     private static final Logger logger = LoggerFactory.getLogger(RequestResponseHandler.class);
-    private static Map<String, String> requestLineMap;
+    private Map<String, String> requestLineMap;
 
     public RequestLine() {
+        requestLineMap = new HashMap<>();
     }
 
     public void addRequestLine(String oneLine) {
@@ -30,20 +20,20 @@ public class RequestLine {
         this.requestLine = oneLine;
         //todo : map 사용에 대한 고민이 필요하다.
         String[] lineArr = requestLine.split(" ");
-        this.METHOD = lineArr[METHOD_TOKEN_INDEX];
-        this.URL = lineArr[URL_TOKEN_INDEX];
-        this.VERSION = lineArr[VERSION_TOKEN_INDEX];
+        requestLineMap.put("method",lineArr[0]);
+        requestLineMap.put("url",lineArr[1]);
+        requestLineMap.put("version",lineArr[2]);
     }
 
     public String getURL() {
-        return URL;
+        return requestLineMap.get("url");
     }
 
     public String getMETHOD() {
-        return METHOD;
+        return requestLineMap.get("method");
     }
 
     public String getVERSION() {
-        return VERSION;
+        return requestLineMap.get("version");
     }
 }
