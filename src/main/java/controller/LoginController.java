@@ -38,6 +38,7 @@ public class LoginController implements Controller{
             HttpSessions.addHttpSession(userInfos.get(USERID_INDEX));
             sid = HttpSessions.findSessionById(userInfos.get(USERID_INDEX));
         }else{
+            // 실패하면?
             logger.debug("login failed!");
             addedLine="Location : /user/login_failed.html";
         }
@@ -45,8 +46,8 @@ public class LoginController implements Controller{
         ResponseFactory responseFactory = new ResponseFactory.Builder()
                 .setResponseStatusLine(ControllerTypeEnum.LOGIN)
                 .setResponseHeader(ContentTypeEnum.CSS,body.length)
-                .addCookieHeader(sid)
                 .addResponseHeader(addedLine)
+                .addCookieHeader(sid)
                 .setResponseBody(body)
                 .build();
         return responseFactory;
@@ -54,7 +55,7 @@ public class LoginController implements Controller{
     }
     // util 로 빼주자
     public boolean checkIdPwdIsInDatabase(String id, String pwd){
-        if(Database.findUserById(id).equals(null)){
+        if(Database.findUserById(id)==null){
             return false;
         }
         if(Database.findUserById(id).getPassword().equals(pwd)){
