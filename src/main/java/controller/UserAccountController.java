@@ -124,17 +124,15 @@ public class UserAccountController implements RequestController {
 
         File file = StaticFileService.getFile("/user/list.html");
         try{
+            User user = SessionService.getUserBySessionId(req.getSSID()).orElse(User.GUEST);
             List<User> userList = new ArrayList<>(UserRepo.findAll());
-            String listPageStr = StaticFileService.renderFile(file, new HashMap<>() {{
-                put("userTable", HtmlMakerUtility.userListRows(userList));
-            }});
-            return CustomHttpResponse.of(
-                    StatusCode.OK,
-                    ContentType.TEXT_HTML,
-                    CustomHttpResponse.EMPTY_HEADER,
-                    listPageStr.getBytes()
-                    );
 
+            Map<String, String> defaultTemplate = HtmlMakerUtility.getDefaultTemplate(user.getName());
+            defaultTemplate.put("userTable", HtmlMakerUtility.userListRows(userList));
+
+            String listPageStr = StaticFileService.renderFile(file,defaultTemplate);
+
+            return CustomHttpFactory.OK_HTML(listPageStr);
         } catch (IOException e) {
             logger.error("error while reading {}", file.getPath());
             return CustomHttpFactory.INTERNAL_ERROR("error while readling " + file.getPath());

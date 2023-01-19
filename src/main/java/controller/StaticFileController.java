@@ -55,7 +55,7 @@ public class StaticFileController implements RequestController {
             Map<String, String> matching = HtmlMakerUtility.getDefaultTemplate(user.getName());
             String lines = StaticFileService.renderFile(file, matching);
 
-            return CustomHttpResponse.of(StatusCode.OK, ContentType.TEXT_HTML, new HashMap<>(), lines.getBytes());
+            return CustomHttpFactory.OK_HTML(lines);
         } catch (IOException e) {
             return CustomHttpFactory.NOT_FOUND();
         }

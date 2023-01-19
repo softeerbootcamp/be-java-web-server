@@ -7,6 +7,15 @@ import java.util.HashMap;
 
 public class CustomHttpFactory {
 
+    public static CustomHttpResponse OK_HTML(String htmlFile){
+        return CustomHttpResponse.of(
+                StatusCode.OK,
+                ContentType.TEXT_HTML,
+                CustomHttpResponse.EMPTY_HEADER,
+                htmlFile.getBytes()
+        );
+    }
+
     public static CustomHttpResponse REDIRECT(String location) {
         return CustomHttpResponse.of(
                 StatusCode.FOUND,
