@@ -29,7 +29,7 @@ public class SignUpServiceTest {
     }
 
     @Test
-    void 회원가입_서비스_테스트(){
+    void 회원가입_서비스_테스트() {
         // given
         String body = "userId=jhchoi57&" +
                 "password=12349865&" +

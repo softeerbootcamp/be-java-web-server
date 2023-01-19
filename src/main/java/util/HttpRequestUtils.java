@@ -1,8 +1,8 @@
 package util;
 
 import http.HttpHeader;
-import http.request.HttpRequestLine;
 import http.HttpUri;
+import http.request.HttpRequestLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +29,7 @@ public class HttpRequestUtils {
 
     private static String checkUriNothing(String uri) {
         // http://localhost:8080/ input 들어올 경우 uri는 "/"
-        if(uri.equals("/")) return "/index.html";
+        if (uri.equals("/")) return "/index.html";
         return uri;
     }
 
@@ -54,9 +54,9 @@ public class HttpRequestUtils {
         return requestParamsMap;
     }
 
-    public static String takeValueRequestParam(String[] requestParam){
+    public static String takeValueRequestParam(String[] requestParam) {
         // 정보가 알맞게 들어왔는지, 빈칸은 아닌지 확인
-        if(requestParam.length != 2) return null;
+        if (requestParam.length != 2) return null;
         return URLDecoder.decode(requestParam[1], StandardCharsets.UTF_8);
     }
 
@@ -67,7 +67,7 @@ public class HttpRequestUtils {
         return requestBody;
     }
 
-    public static String readData(BufferedReader br, int contentLength) throws IOException{
+    public static String readData(BufferedReader br, int contentLength) throws IOException {
         char[] body = new char[contentLength];
         br.read(body, 0, contentLength);
         return String.copyValueOf(body);

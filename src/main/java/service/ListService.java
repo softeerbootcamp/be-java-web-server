@@ -1,6 +1,5 @@
 package service;
 
-import controller.UserController;
 import db.Database;
 import http.HttpStatus;
 import http.response.HttpResponse;
@@ -14,10 +13,11 @@ import java.util.Collection;
 
 public class ListService {
     private static final Logger logger = LoggerFactory.getLogger(ListService.class);
-    public static HttpResponse service(User logInUser, String filePath, String httpVersion, String contentType){
+
+    public static HttpResponse service(User logInUser, String filePath, String httpVersion, String contentType) {
         logger.debug("logInUser : {}", logInUser);
         // Login check
-        if(logInUser != null) return logInListService(logInUser, filePath, httpVersion, contentType);
+        if (logInUser != null) return logInListService(logInUser, filePath, httpVersion, contentType);
 
         // not Login
         return new HttpResponse.HttpResponseBuilder()
@@ -26,7 +26,7 @@ public class ListService {
                 .build();
     }
 
-    public static HttpResponse logInListService(User logInUser, String filePath, String httpVersion, String contentType){
+    public static HttpResponse logInListService(User logInUser, String filePath, String httpVersion, String contentType) {
         StringBuilder stringBuilder = makeHtml();
 
         // 파일 경로를 넘겨서 http response string 생성

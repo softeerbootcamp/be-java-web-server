@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 public class HttpUri {
     private static final Logger logger = LoggerFactory.getLogger(HttpUri.class);
-    private String uri;
+    private final String uri;
 
     public HttpUri(String uri) {
         this.uri = uri;

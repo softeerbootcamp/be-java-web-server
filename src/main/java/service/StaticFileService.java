@@ -6,7 +6,7 @@ import http.response.HttpStatusLine;
 import util.HttpResponseUtils;
 
 public class StaticFileService {
-    public static HttpResponse service(String filePath, String httpVersion, String contentType){
+    public static HttpResponse service(String filePath, String httpVersion, String contentType) {
         // 파일 경로를 넘겨서 http response body 생성
         byte[] responseBody = HttpResponseUtils.makeBody(filePath);
 

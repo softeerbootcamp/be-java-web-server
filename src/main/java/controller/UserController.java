@@ -1,20 +1,13 @@
 package controller;
 
-import db.Database;
-import db.Session;
-import http.HttpStatus;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import http.response.HttpStatusLine;
-import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.LogInService;
 import service.SignUpService;
 import util.HttpRequestUtils;
-import util.HttpResponseUtils;
 
-import java.io.IOException;
 import java.util.Map;
 
 public class UserController implements Controller {
@@ -34,7 +27,7 @@ public class UserController implements Controller {
         }
 
         // 로그인일 때
-        if(isLoginService(uri)){
+        if (isLoginService(uri)) {
             return LogInService.service(params, httpVersion);
         }
 
@@ -42,11 +35,11 @@ public class UserController implements Controller {
         return null;
     }
 
-    public boolean isSignUpService(String uri){
+    public boolean isSignUpService(String uri) {
         return uri.equals("/user/create");
     }
 
-    public boolean isLoginService(String uri){
+    public boolean isLoginService(String uri) {
         return uri.equals("/user/login");
     }
 

@@ -11,12 +11,10 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
-import static java.util.Objects.isNull;
-
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
-    private Socket connection;
+    private final Socket connection;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -41,7 +39,7 @@ public class RequestHandler implements Runnable {
 
         } catch (IOException e) {
             logger.error("ERROR :  {}", e.getMessage());
-        } catch (NullHttpRequestException nullHttpRequestException){
+        } catch (NullHttpRequestException nullHttpRequestException) {
             logger.error(nullHttpRequestException.getMessage());
         }
     }

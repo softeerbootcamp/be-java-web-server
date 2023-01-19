@@ -12,8 +12,8 @@ import java.io.IOException;
 
 public class HttpRequest {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
-    private HttpRequestLine httpRequestLine;
-    private HttpHeader httpHeader;
+    private final HttpRequestLine httpRequestLine;
+    private final HttpHeader httpHeader;
     private String body;
 
     public HttpRequest(BufferedReader br) throws IOException {
@@ -21,7 +21,7 @@ public class HttpRequest {
         if (line == null) throw new NullHttpRequestException("빈 http request !!================");
         this.httpRequestLine = HttpRequestUtils.readRequestLine(line);
         this.httpHeader = HttpRequestUtils.readHeaders(br);
-        if(httpRequestLine.getHttpMethod().equals("POST")) this.body = HttpRequestUtils.readBody(br, httpHeader);
+        if (httpRequestLine.getHttpMethod().equals("POST")) this.body = HttpRequestUtils.readBody(br, httpHeader);
     }
 
     public String getUri() {
@@ -42,7 +42,7 @@ public class HttpRequest {
         return this.httpRequestLine.getHttpMethod().equals("POST");
     }
 
-    public String getBody(){
+    public String getBody() {
         return this.body;
     }
 
@@ -50,10 +50,10 @@ public class HttpRequest {
         return httpRequestLine.getHttpUri().getFileNameExtension();
     }
 
-    public String getCookie(){
+    public String getCookie() {
         logger.debug("Cookie :  {}", httpHeader.getCookie());
         String cookie = httpHeader.getCookie();
-        if(cookie == null) return null;
+        if (cookie == null) return null;
         return HttpRequestUtils.parseQueryString(httpHeader.getCookie()).get("sid");
     }
 

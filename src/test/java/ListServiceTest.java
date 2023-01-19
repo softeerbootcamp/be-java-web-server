@@ -1,10 +1,9 @@
-import static org.assertj.core.api.Assertions.assertThat;
-
-import http.HttpStatus;
 import http.response.HttpResponse;
 import model.User;
 import org.junit.jupiter.api.Test;
 import service.ListService;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ListServiceTest {
     // Given

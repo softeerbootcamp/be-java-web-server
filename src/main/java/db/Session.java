@@ -1,7 +1,6 @@
 package db;
 
 import com.google.common.collect.Maps;
-import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +10,7 @@ import java.util.UUID;
 
 public class Session {
     private static final Logger logger = LoggerFactory.getLogger(Session.class);
-    private static Map<String, String> sessions = Maps.newHashMap();
+    private static final Map<String, String> sessions = Maps.newHashMap();
 
     public static String makeSessionIdAndAddUserId(String userId) {
         String sessionId = UUID.randomUUID().toString();
@@ -20,7 +19,9 @@ public class Session {
         return sessionId;
     }
 
-    public static String findUserIdBySessionId(String sessionId){ return sessions.get(sessionId); }
+    public static String findUserIdBySessionId(String sessionId) {
+        return sessions.get(sessionId);
+    }
 
     public static Collection<String> findAll() {
         return sessions.values();

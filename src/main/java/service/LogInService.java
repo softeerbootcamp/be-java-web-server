@@ -8,7 +8,6 @@ import http.response.HttpStatusLine;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.HttpRequestUtils;
 
 import java.util.Map;
 
@@ -17,7 +16,7 @@ public class LogInService {
 
     public static HttpResponse service(Map<String, String> params, String httpVersion) {
         // 성공
-        if(isLoginSuccess(params)){
+        if (isLoginSuccess(params)) {
             // index.html로 이동
             // HTTP 헤더의 쿠키 값을 SID = 세션 ID로 응답
             // 세션 ID는 적당한 크기의 무작위 숫자 또는 문자열
@@ -43,13 +42,13 @@ public class LogInService {
         logger.debug("User : {}", tryLoginUser);
 
         // id가 없을 때
-        if(tryLoginUser == null) {
+        if (tryLoginUser == null) {
             logger.debug("User not Found !!");
             return false;
         }
 
         // 비밀번호가 맞아서 로그인 성공
-        if(tryLoginUser.getPassword().equals(params.get("password"))){
+        if (tryLoginUser.getPassword().equals(params.get("password"))) {
             logger.debug("Login success !!");
             return true;
         }

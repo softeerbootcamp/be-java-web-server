@@ -11,12 +11,12 @@ import service.HtmlService;
 import service.ListService;
 import service.StaticFileService;
 
-public class HtmlController implements Controller{
+public class HtmlController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(HtmlController.class);
     private static final String htmlFilePath = "./src/main/resources/templates";
 
     @Override
-    public HttpResponse makeResponse(HttpRequest httpRequest){
+    public HttpResponse makeResponse(HttpRequest httpRequest) {
         //ContentType, 파일 확장자, uri를 받음
         User logInUser = Database.findUserById(Session.findUserIdBySessionId(httpRequest.getCookie()));
         String contentType = httpRequest.getContentType();
@@ -24,12 +24,12 @@ public class HtmlController implements Controller{
         String httpVersion = httpRequest.getHttpVersion();
 
         // list service
-        if(httpRequest.getUri().equals("/user/list.html"))
+        if (httpRequest.getUri().equals("/user/list.html"))
             return ListService.service(
                     logInUser, filePath, httpVersion, contentType);
 
         // index.html service 로그인 O
-        if(httpRequest.isLogin())
+        if (httpRequest.isLogin())
             return HtmlService.service(
                     filePath, logInUser, httpVersion, contentType);
 
