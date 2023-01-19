@@ -3,6 +3,7 @@ package service;
 import db.UserDatabase;
 import model.User;
 
+import java.util.Collection;
 import java.util.Optional;
 
 public class UserService {
@@ -28,5 +29,10 @@ public class UserService {
 
     public void addUser(User user) {
         userDatabase.addUser(user);
+    }
+
+    public Collection<User> findAllUsers() {
+
+        return userDatabase.findAll();
     }
 }
