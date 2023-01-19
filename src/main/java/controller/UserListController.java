@@ -39,7 +39,8 @@ public class UserListController implements Controller{
         StringBuilder content = new StringBuilder();
 
         for (User user: users) {
-            content.append("<tr><th scope=\"row\">")
+            content.append("<tbody>")
+                    .append("<tr><th scope=\"row\">")
                     .append(idx++)
                     .append("</th> <td>")
                     .append(user.getUserId())
@@ -52,7 +53,7 @@ public class UserListController implements Controller{
 
         byte[] bytes = FileIoUtils.loadFileFromClasspath("./templates/user/list.html");
         String html = new String(bytes);
-        String[] split = html.split("<tbody>", 2);
-        return split[0] + "<tbody>" + content + split[1];
+        html = html.replace("<tbody>",content);
+        return html;
     }
 }
