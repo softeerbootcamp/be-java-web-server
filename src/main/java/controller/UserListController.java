@@ -29,7 +29,7 @@ public class UserListController extends AbstractController {
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         try {
-            sessionService.validateLogin(httpRequest.getSessionId());
+            sessionService.validateHasSession(httpRequest.getSessionId());
 
             ContentType contentType = ContentType.from(USER_LIST_PATH);
             String filePath = contentType.getDirectory() + USER_LIST_PATH;

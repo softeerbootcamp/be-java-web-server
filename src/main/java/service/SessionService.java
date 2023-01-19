@@ -19,7 +19,7 @@ public class SessionService {
         SessionRepository.addSession(session.getId(), session);
     }
 
-    public void validateLogin(String id) {
+    public void validateHasSession(String id) {
         Session session = SessionRepository.findById(id);
         if (session == null || session.getAttribute(id) != LOGIN)
             throw new NullPointerException("Session not found");
