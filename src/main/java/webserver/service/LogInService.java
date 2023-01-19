@@ -8,9 +8,7 @@ import db.UserIdSession;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.SessionIdGenerator;
 import webserver.Paths;
-import webserver.WebServer;
 import webserver.httpUtils.Request;
 import webserver.httpUtils.Response;
 

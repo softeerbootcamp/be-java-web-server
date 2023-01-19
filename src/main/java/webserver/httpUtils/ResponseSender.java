@@ -16,26 +16,6 @@ public class ResponseSender {
         this.res = res;
     }
 
-
-//    private void makeResponseLine(ReqLine reqLine) {
-//        res.getResLine().setVersion(reqLine.getVersion());
-//
-//        if (isSignUp(reqLine.getQuery())) {
-//            res.getResLine().setStatCode(302);
-//            res.getResLine().setStatText("FOUND");
-//            return;
-//    }
-
-//    private void makeHeaderAndBody(ReqLine reqLine) throws IOException {
-//        Map<String, String> header = new HashMap<>();
-//        if(res.getResLine().getStatCode() == 302)
-//        {
-//            header.put("Location: ", Paths.HOME_PATH);
-//            res.setResHeader(header);
-//            return;
-//        }
-//    }
-
     public void sendRes(OutputStream out) throws IOException
     {
         DataOutputStream dos = new DataOutputStream(out);
