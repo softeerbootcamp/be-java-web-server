@@ -8,11 +8,9 @@ import controller.annotation.ControllerMethodInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.HttpRequest;
-import request.RequestHeader;
-import request.Url;
 import service.SessionService;
-import util.Cookie;
 import util.error.HttpsErrorMessage;
+import util.error.erroclass.FailLoggedException;
 import util.error.erroclass.NotLoggedException;
 import webserver.RequestHandler;
 
@@ -30,7 +28,7 @@ public class ControllerFinder {
     private static SessionService sessionService = new SessionService();
 
 
-    public static void findController(HttpRequest httpRequest, DataOutputStream dataOutputStream) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, NotLoggedException, InvocationTargetException, NoSuchMethodException {
+    public static void findController(HttpRequest httpRequest, DataOutputStream dataOutputStream) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, FailLoggedException, InvocationTargetException, NoSuchMethodException, NotLoggedException {
         String packageName = "controller";
         ClassPath classpath = ClassPath.from(Thread.currentThread().getContextClassLoader());
         ImmutableSet<ClassPath.ClassInfo> havingControllerInfoClasses = classpath.getTopLevelClassesRecursive(packageName);
@@ -43,7 +41,7 @@ public class ControllerFinder {
 
     }
 
-    public static void handleControllerInfoAnnotation(Controller controller, HttpRequest httpRequest, DataOutputStream dataOutputStream) throws IllegalAccessException, NoSuchFileException, NoSuchMethodException, InvocationTargetException, NotLoggedException {
+    public static void handleControllerInfoAnnotation(Controller controller, HttpRequest httpRequest, DataOutputStream dataOutputStream) throws IllegalAccessException, InvocationTargetException, NotLoggedException {
         Method[] methods = controller.getClass().getMethods();
 
         Optional<Method> method = Arrays.stream(methods)
@@ -55,13 +53,11 @@ public class ControllerFinder {
             return;
         }
 
-        if (method.get().isAnnotationPresent(Auth.class) && sessionService.cookieValidInSession(httpRequest.getRequestHeader())) {
+        if (method.get().isAnnotationPresent(Auth.class) && !sessionService.cookieValidInSession(httpRequest.getRequestHeader())) {
             throw new NotLoggedException(HttpsErrorMessage.NOT_LOGGED);
         }
         method.get().invoke(controller, dataOutputStream, httpRequest);
     }
-
-
 
 
     private static boolean isMatchControllerMethodWithRequest(ControllerMethodInfo controllerMethodInfo, HttpRequest httpRequest) {

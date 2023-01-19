@@ -14,8 +14,8 @@ import java.io.IOException;
 
 public class ErrorController implements Controller{
     private final static String ERROR_404_ROUTE = "/error404.html";
-    private final static String ERROR_403_ROUTE = "/error403.html";
-    private final static String ERROR_401_ROUTE = "/user/login_failed.html";
+    private final static String UN_AUTHORIZED_ROUTE = "/user/login_failed.html";
+    private final static String FORBIDDEN_ROUTE = "/user/login.html";
     private final static String ERROR_500_ROUTE = "/error500.html";
 
     public static HttpResponse getErrorResponse(DataOutputStream dataOutputStream, HttpStatus httpStatus) throws IOException {
@@ -29,19 +29,20 @@ public class ErrorController implements Controller{
                         .setFileType(FileType.HTML)
                         .setHttpStatus(HttpStatus.NOT_FOUND)
                         .build();
-            case METHOD_NOT_ALLOWED:
-                data=fileReader.readFile(new Url(ERROR_403_ROUTE, RequestDataType.TEMPLATES_FILE));
+            case FORBIDDEN:
                 return new HttpResponse.Builder()
-                        .setData(new Data(dataOutputStream,data))
+                        .setData(new Data(dataOutputStream))
                         .setFileType(FileType.HTML)
-                        .setHttpStatus(HttpStatus.METHOD_NOT_ALLOWED)
+                        .setRedirectUrl(new Url(FORBIDDEN_ROUTE, RequestDataType.TEMPLATES_FILE))
+                        .setHttpStatus(HttpStatus.RE_DIRECT)
                         .build();
+
             case UN_AUTHORIZED:
-                data=fileReader.readFile(new Url(ERROR_401_ROUTE, RequestDataType.TEMPLATES_FILE));
                 return new HttpResponse.Builder()
-                        .setData(new Data(dataOutputStream,data))
+                        .setData(new Data(dataOutputStream))
+                        .setRedirectUrl(new Url(UN_AUTHORIZED_ROUTE, RequestDataType.TEMPLATES_FILE))
                         .setFileType(FileType.HTML)
-                        .setHttpStatus(HttpStatus.NOT_FOUND)
+                        .setHttpStatus(HttpStatus.RE_DIRECT)
                         .build();
             default :
                 data=fileReader.readFile(new Url(ERROR_500_ROUTE,RequestDataType.TEMPLATES_FILE));
