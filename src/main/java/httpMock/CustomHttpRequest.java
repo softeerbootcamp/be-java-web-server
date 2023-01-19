@@ -131,6 +131,10 @@ public class CustomHttpRequest {
             return null;
         return sidLine.substring(sidLine.indexOf("=") + 1);
     }
+
+    public void setUrl(String url){
+        this.url = url;
+    }
     public String getUrl() {
         return url;
     }
