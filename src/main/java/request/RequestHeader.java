@@ -56,6 +56,7 @@ public class RequestHeader {
         Map<String, String> cookie = Arrays.stream(splitValues)
                 .map(splitValue -> splitValue.split("="))
                 .collect(Collectors.toMap(v -> v[0], v -> v[1]));
+
         cookies.add(cookie);
     }
 
@@ -83,8 +84,7 @@ public class RequestHeader {
 
         return Optional.ofNullable(fields.get("Content-Length"));
     }
-//    public Optional<String> getCookie() {
-//        return Optional.ofNullable(fields.get("Cookie"));
-//    }
-
+    public Optional<String> getCookie() {
+        return Optional.ofNullable(fields.get("Cookie"));
+    }
 }

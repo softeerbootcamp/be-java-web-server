@@ -3,13 +3,14 @@ package controller;
 import request.HttpRequest;
 import response.HttpResponse;
 
+import javax.naming.AuthenticationException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
 abstract class AbstractController implements Controller {
 
     @Override
-    public final HttpResponse service(HttpRequest httpRequest) throws IOException, URISyntaxException {
+    public final HttpResponse service(HttpRequest httpRequest) throws IOException, URISyntaxException, AuthenticationException {
         if (httpRequest.isGet()) {
             return get(httpRequest);
         }
@@ -25,7 +26,7 @@ abstract class AbstractController implements Controller {
         throw new RuntimeException("get method error");
     }
 
-    public HttpResponse post(HttpRequest httpRequest) throws IOException, URISyntaxException {
+    public HttpResponse post(HttpRequest httpRequest) throws IOException, URISyntaxException, AuthenticationException {
         throw new RuntimeException("post method error");
     }
 }

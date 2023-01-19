@@ -3,9 +3,6 @@ package controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.HttpRequest;
-import servlet.Servlet;
-import servlet.UserCreate;
-import servlet.Userlogin;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -27,11 +24,9 @@ public class ServletContainer {
         servletContainer = new HashMap<>();
         servletNameMapper.put("/user/create", "controller.UserCreateController");
         servletNameMapper.put("/user/login", "controller.LoginController");
-        logger.info("ServletContainer has loaded.");
     }
 
     public boolean hasMappingServlet(HttpRequest httpRequest) {
-        logger.debug("hasMapping: {}",httpRequest.getDefaultPath());
         return servletNameMapper.containsKey(httpRequest.getDefaultPath());
     }
 

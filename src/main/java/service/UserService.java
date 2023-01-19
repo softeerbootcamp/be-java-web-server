@@ -1,12 +1,17 @@
 package service;
 
 import db.Database;
+import db.SessionDatabase;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.HttpRequest;
+import request.HttpSession;
+import response.HttpResponse;
 
 import javax.naming.AuthenticationException;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -17,25 +22,28 @@ public class UserService {
     private static Logger logger = LoggerFactory.getLogger(UserService.class);
 
     Map<String, String> data;
+    HttpRequest httpRequest;
 
-    public UserService(Map<String, String> data) {
+    public UserService(Map<String, String> data, HttpRequest httpRequest) {
         this.data = data;
+        this.httpRequest = httpRequest;
     }
 
     public static UserService from(HttpRequest httpRequest) {
+        HttpRequest inhttpRequest = httpRequest;
         String body = httpRequest.getBody();
         Map<String, String> data = new HashMap<>();
         String[] inputs = body.split("&");
         for (String input : inputs) {
             String[] keyAndValue = input.split("=");
             if (keyAndValue.length < 2) {
-                throw new RuntimeException("빈 칸이 없어야합니다.");
+                continue;
             }
             logger.debug("key : {}", keyAndValue[0]);
             logger.debug("value : {}", keyAndValue[1]);
             data.put(keyAndValue[0], keyAndValue[1]);
         }
-        return new UserService(data);
+        return new UserService(data,inhttpRequest);
     }
 
     public User postJoinService() {
@@ -47,15 +55,25 @@ public class UserService {
         return new User(userId, password, name, email);
     }
 
-    public void postlogin() throws AuthenticationException{
+    public HttpResponse postloginService() throws IOException, URISyntaxException {
         String userId = data.get("userId");
         String password = data.get("password");
 
-        User databaseuserId = Database.findUserById(userId);
-        String databasePassword = databaseuserId.getPassword();
+        User user = Database.findUserById(userId);
+        HttpSession httpSession = httpRequest.getHttpSession();
+        httpSession.setAttribute("user", user);
+        SessionDatabase.addHttpSession(httpSession);
 
-        if(databaseuserId.getUserId().isEmpty()) throw new AuthenticationException("가입되지 않은 회원입니다.");
-        if(!password.equals(databasePassword)) throw new AuthenticationException("비밀번호가 다릅니다.");
+        if (user != null && password.equals(user.getPassword())) {
+            return HttpResponse.ok()
+                    .bodyByPath("./templates/index.html")
+                    .setCookie("JSESSIONID",  httpRequest.getSessionId(),"/")
+                    .build();
+        }
+        return HttpResponse.ok()
+                .bodyByPath("./templates/user/login_failed.html")
+                .setCookie("JSESSIONID",  httpRequest.getSessionId(), "/")
+                .build();
     }
 
     public static void showUserList() {

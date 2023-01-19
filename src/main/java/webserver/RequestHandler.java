@@ -12,6 +12,8 @@ import request.HttpRequestMapper;
 import response.HttpResponse;
 import response.StatusCode;
 
+import javax.naming.AuthenticationException;
+
 public class RequestHandler implements Runnable{
 
     private static final String lineSeparate = System.lineSeparator();
@@ -49,6 +51,8 @@ public class RequestHandler implements Runnable{
         } catch (IOException e) {
             e.printStackTrace();
         } catch (URISyntaxException e) {
+            e.printStackTrace();
+        } catch (AuthenticationException e) {
             e.printStackTrace();
         }
         throw new RuntimeException("control Req/Res error");

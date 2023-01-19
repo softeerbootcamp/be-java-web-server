@@ -4,13 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
+import db.SessionDatabase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.IOUtils;
 
 public class HttpRequest {
     private static final String lineSeparator = System.lineSeparator();
@@ -20,11 +18,13 @@ public class HttpRequest {
     private final RequestStartLine requestStartLine;
     private final RequestHeader requestHeader;
     private final RequestBody body;
+    private final HttpSession httpSession;
 
-    public HttpRequest(RequestStartLine requestStartLine, RequestHeader requestHeader, RequestBody body) {
+    public HttpRequest(RequestStartLine requestStartLine, RequestHeader requestHeader, RequestBody body, HttpSession httpSession) {
         this.requestStartLine = requestStartLine;
         this.requestHeader = requestHeader;
         this.body = body;
+        this.httpSession = httpSession;
     }
 
     public static HttpRequest of(InputStream inputStream) throws IOException {
@@ -37,8 +37,19 @@ public class HttpRequest {
         RequestStartLine requestStartLine = RequestStartLine.of(bufferedReader);
         RequestHeader requestHeader = RequestHeader.of(bufferedReader);
         RequestBody requestBody = RequestBody.of(bufferedReader, requestHeader.getContentLength());
+        HttpSession httpSession = getHttpSession(requestHeader);
 
-        return new HttpRequest(requestStartLine, requestHeader, requestBody);
+        return new HttpRequest(requestStartLine, requestHeader, requestBody, httpSession);
+    }
+
+    private static HttpSession getHttpSession(RequestHeader requestHeader) {
+        String jSessionId = requestHeader.getCookieValue("JSESSIONID");
+        if (jSessionId.isEmpty()) {
+            HttpSession httpSession = HttpSession.create();
+            SessionDatabase.addHttpSession(httpSession);
+            return httpSession;
+        }
+        return SessionDatabase.findHttpSessionById(jSessionId);
     }
 
     public Map<String, String> getParameters() {
@@ -63,5 +74,13 @@ public class HttpRequest {
 
     public String getDefaultPath() {
         return requestStartLine.getPath();
+    }
+
+    public String getSessionId() {
+        return httpSession.getId();
+    }
+
+    public HttpSession getHttpSession() {
+        return httpSession;
     }
 }
