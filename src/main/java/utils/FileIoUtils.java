@@ -1,5 +1,6 @@
 package utils;
 
+import exception.FileNotFoundException;
 import model.User;
 
 import java.io.IOException;
@@ -22,7 +23,7 @@ public final class FileIoUtils {
             Path path = Paths.get(Objects.requireNonNull(FileIoUtils.class.getClassLoader().getResource(filePath)).toURI());
             return Files.readAllBytes(path);
         } catch (NullPointerException | URISyntaxException e) {
-            throw new IllegalArgumentException("파일이 존재하지 않습니다.");
+            throw new FileNotFoundException("파일이 존재하지 않습니다.");
         }
     }
 

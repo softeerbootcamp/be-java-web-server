@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import service.SessionService;
 import utils.FileIoUtils;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -42,7 +43,8 @@ public class ResourceController extends AbstractController {
             byte[] body = loadFile(filePath);
             httpResponse.forward(HttpStatusCode.OK, contentType, body);
 
-        } catch (IllegalArgumentException ex) {
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
             byte[] errorBody = load404ErrorFile();
             httpResponse.do404(errorBody);
         }
@@ -63,8 +65,8 @@ public class ResourceController extends AbstractController {
             byte[] body = FileIoUtils.replaceLoginBtnToUserName(sessionService.getUserName(sessionId), filePath);
             httpResponse.forward(HttpStatusCode.OK, contentType, body);
 
-        } catch (IllegalArgumentException ex) {
-
+        } catch (exception.FileNotFoundException ex) {
+            ex.printStackTrace();
             byte[] body = FileIoUtils.load404ErrorFile();
             httpResponse.do404(body);
 
