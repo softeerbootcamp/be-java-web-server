@@ -16,6 +16,7 @@ public class StaticController extends AbstractController{
         String defaultPath = httpRequest.getDefaultPath();
         String path = defaultPath;
 
+        logger.debug("getPath : {}",path);
         if (isTemplatesResource(defaultPath)) {
             path = String.format("./templates%s", defaultPath);
         }

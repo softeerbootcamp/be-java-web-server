@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class RequestBody {
 
-    private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
+    private static final Logger logger = LoggerFactory.getLogger(RequestBody.class);
 
     private final static RequestBody EMPTY_REQUEST_BODY = new RequestBody("");
 
@@ -26,12 +26,15 @@ public class RequestBody {
             return EMPTY_REQUEST_BODY;
         }
 
+        logger.debug("BodyContent-Length:{}",contentLength.get());
         String body = IOUtils.readData(bufferedReader, Integer.parseInt(contentLength.get()));
 
+        logger.debug("requestOfBody : {}",body);
         return new RequestBody(body);
     }
 
     public String getBody() {
+        logger.debug("getBody : {}",body);
         return body;
     }
 }

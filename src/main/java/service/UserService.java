@@ -24,17 +24,23 @@ public class UserService {
     Map<String, String> data;
     HttpRequest httpRequest;
 
+    public UserService(HttpRequest httpRequest) {
+        data = new HashMap<>();
+        this.httpRequest = httpRequest;
+    }
+
     public UserService(Map<String, String> data, HttpRequest httpRequest) {
         this.data = data;
         this.httpRequest = httpRequest;
     }
 
     public static UserService from(HttpRequest httpRequest) {
-        HttpRequest inhttpRequest = httpRequest;
         String body = httpRequest.getBody();
+        logger.debug("body : {}", body);
         Map<String, String> data = new HashMap<>();
         String[] inputs = body.split("&");
         for (String input : inputs) {
+            logger.debug("bodyParam : {}", input);
             String[] keyAndValue = input.split("=");
             if (keyAndValue.length < 2) {
                 continue;
@@ -43,7 +49,7 @@ public class UserService {
             logger.debug("value : {}", keyAndValue[1]);
             data.put(keyAndValue[0], keyAndValue[1]);
         }
-        return new UserService(data,inhttpRequest);
+        return new UserService(data,httpRequest);
     }
 
     public User postJoinService() {
@@ -59,7 +65,9 @@ public class UserService {
         String userId = data.get("userId");
         String password = data.get("password");
 
+        User test = Database.findUserById("test");
         User user = Database.findUserById(userId);
+
         HttpSession httpSession = httpRequest.getHttpSession();
         httpSession.setAttribute("user", user);
         SessionDatabase.addHttpSession(httpSession);

@@ -2,9 +2,6 @@ package request;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import parser.StringParser;
-
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +20,11 @@ public class Uri {
         String[] uriSources = uri.split("\\?");
         String path = uriSources[0];
         Map<String, String> parameters = new HashMap<>();
+
+        path = path.replaceAll("/user/js", "/js");
+        path = path.replaceAll("/user/images", "/images");
+        path = path.replaceAll("/user/css", "/css");
+        path = path.replaceAll("/user/fonts", "/fonts");
 
         if (existParameters(uriSources)) {
             extractParameter(uriSources[1], parameters);

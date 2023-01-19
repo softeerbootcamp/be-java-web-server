@@ -39,6 +39,8 @@ public class RequestHeader {
             if (headerTokens.length >= 2) {
                 String key = headerTokens[0];
                 String value = headerTokens[1];
+                logger.debug("headerTokenKey : {}",key);
+                logger.debug("headerTokenValue : {}",value);
                 if (key.equals(COOKIE)) {
                     parseCookie(value, cookies);
                     break;
@@ -81,10 +83,6 @@ public class RequestHeader {
     }
 
     public Optional<String> getContentLength() {
-
         return Optional.ofNullable(fields.get("Content-Length"));
-    }
-    public Optional<String> getCookie() {
-        return Optional.ofNullable(fields.get("Cookie"));
     }
 }

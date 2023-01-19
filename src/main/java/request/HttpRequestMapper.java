@@ -26,7 +26,6 @@ public class HttpRequestMapper {
         if (staticController.isForStaticContent(httpRequest)) {
             return staticController;
         }
-
         throw new RuntimeException(httpRequest.getDefaultPath());
     }
 }
