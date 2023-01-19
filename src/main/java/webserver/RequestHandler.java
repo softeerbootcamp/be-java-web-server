@@ -10,8 +10,7 @@ import org.slf4j.LoggerFactory;
 import request.HttpRequest;
 import response.HttpResponse;
 import response.ResponseHandler;
-import response.StatusLine;
-import util.FileIoUtils;
+import response.StatusCode;
 
 public class RequestHandler implements Runnable{
 
@@ -46,17 +45,17 @@ public class RequestHandler implements Runnable{
     }
 
     public void success(DataOutputStream dos, HttpResponse httpResponse) {
-        if(httpResponse.getStatusLine().equals(StatusLine.OK)
+        if(httpResponse.getStatusLine().equals(StatusCode.OK)
         ){
             httpResponse.respond(dos);
         }
     }
 
     public void redirect(DataOutputStream dos, HttpResponse httpResponse) {
-        if(httpResponse.getStatusLine().equals(StatusLine.Found) ||
-                httpResponse.getStatusLine().equals(StatusLine.SeeOther) ||
-                httpResponse.getStatusLine().equals(StatusLine.TemporaryRedirect) ||
-                httpResponse.getStatusLine().equals(StatusLine.CustomLogin)
+        if(httpResponse.getStatusLine().equals(StatusCode.Found) ||
+                httpResponse.getStatusLine().equals(StatusCode.SeeOther) ||
+                httpResponse.getStatusLine().equals(StatusCode.TemporaryRedirect) ||
+                httpResponse.getStatusLine().equals(StatusCode.CustomLogin)
         ){
             logger.debug("httpResponse : {}{}{}{}{}",
                     httpResponse.getHeader(),

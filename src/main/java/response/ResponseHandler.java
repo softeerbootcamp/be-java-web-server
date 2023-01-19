@@ -4,7 +4,6 @@ import controller.ServletController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.HttpRequest;
-import request.RequestHeader;
 import servlet.Servlet;
 import util.FileIoUtils;
 import util.PathUtils;
@@ -12,7 +11,6 @@ import util.PathUtils;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,29 +52,29 @@ public class ResponseHandler {
             logger.debug("[ResponseHandler] path : {}",path);
             ServletController servletController = ServletController.of(path);
             Servlet servlet = servletController.newInstance();
-            StatusLine status = servlet.service(httpRequest);
+            StatusCode status = servlet.service(httpRequest);
             Map<String, String > headerFields = new HashMap<>();
 
-            if(status == StatusLine.Found){ // 회원가입 성공시
+            if(status == StatusCode.Found){ // 회원가입 성공시
                 logger.debug("[ResponseHandler] Found");
                 headerFields.put("Location", "/index.html");
                 ResponseHeader responseHeader = new ResponseHeader(headerFields);
                 return HttpResponse.of("302", responseHeader);
             }
-            if(status == StatusLine.CustomLogin){ // 로그인 성공시
+            if(status == StatusCode.CustomLogin){ // 로그인 성공시
                 logger.debug("[ResponseHandler] CREATE");
                 headerFields.put("Location", "/index.html");
                 headerFields.put("Set-Cookie", String.format("%s=%s; Path=%s", "sid", "123456", "/"));
                 ResponseHeader responseHeader = new ResponseHeader(headerFields);
                 return HttpResponse.of("304", responseHeader);
             }
-            if(status == StatusLine.SeeOther){ // 잘못된 회원가입
+            if(status == StatusCode.SeeOther){ // 잘못된 회원가입
                 logger.debug("[ResponseHandler] SeeOther");
                 headerFields.put("Location", "/user/form.html");
                 ResponseHeader responseHeader = new ResponseHeader(headerFields);
                 return HttpResponse.of("303", responseHeader);
             }
-            if(status == StatusLine.TemporaryRedirect){ // 잘못된 로그인
+            if(status == StatusCode.TemporaryRedirect){ // 잘못된 로그인
                 logger.debug("[ResponseHandler] TemporaryRedirect");
                 headerFields.put("Location", "/user/login_failed.html");
                 headerFields.put("Set-Cookie", String.format("%s=%s", "logined", "false"));

@@ -15,6 +15,7 @@ public class RequestHeader {
     private static final String lineSeparator = System.lineSeparator();
     private static final String COOKIE = "Cookie";
     private static final String COOKIE_DELIMETER = ";";
+    private static final String HEADER_DELIMITER = ":\\s";
 
     private final Map<String, String> fields;
     private final Set<Map<String, String>> cookies;
@@ -34,14 +35,14 @@ public class RequestHeader {
             if (line.equals(BLANK)) break;
             logger.debug("[ Reqeust Header ] line : {}{}",lineSeparator,line);
 
-            String[] headerTokens = line.split(":\\s");
+            String[] headerTokens = line.split(HEADER_DELIMITER);
             if (headerTokens.length >= 2) {
                 String key = headerTokens[0];
                 String value = headerTokens[1];
-//                if (key.equals(COOKIE)) {
-//                    parseCookie(value, cookies);
-//                    break;
-//                }
+                if (key.equals(COOKIE)) {
+                    parseCookie(value, cookies);
+                    break;
+                }
                 fields.put(key,value);
             }
         }
@@ -79,6 +80,7 @@ public class RequestHeader {
     }
 
     public Optional<String> getContentLength() {
+
         return Optional.ofNullable(fields.get("Content-Length"));
     }
 //    public Optional<String> getCookie() {

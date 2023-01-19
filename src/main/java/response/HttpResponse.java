@@ -5,29 +5,34 @@ import org.slf4j.LoggerFactory;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class HttpResponse {
     private static final String lineSeparator = System.lineSeparator();
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
+//    private final StatusCode statusCode;
     private final StatusLine statusLine;
     private final ResponseHeader responseHeader;
     private final byte[] body;
 
-    public HttpResponse(StatusLine statusLine,  ResponseHeader responseHeader, byte[] body) {
+    public HttpResponse(StatusLine statusLine, ResponseHeader responseHeader, byte[] body) {
         this.statusLine = statusLine;
         this.responseHeader = responseHeader;
         this.body = body;
     }
 
-    public static HttpResponse of(String code,  ResponseHeader responseHeader, byte[] body) {
-        return new HttpResponse(StatusLine.of(code), responseHeader, body);
+    public static CreateResponse ok() {
+        return new CreateResponse(StatusCode.OK);
     }
 
-    public static HttpResponse of(String code,  ResponseHeader responseHeader) { // 리다이렉트
-        return new HttpResponse(StatusLine.of(code), responseHeader, new byte[0]);
-    }
+
+//    public static HttpResponse of(String code,  ResponseHeader responseHeader, byte[] body) {
+//        return new HttpResponse(StatusCode.of(code), responseHeader, body);
+//    }
+//
+//    public static HttpResponse of(String code,  ResponseHeader responseHeader) { // 리다이렉트
+//        return new HttpResponse(StatusCode.of(code), responseHeader, new byte[0]);
+//    }
 
     public void respond(DataOutputStream dos) { //body 담음
         try {

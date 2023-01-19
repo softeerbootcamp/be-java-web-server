@@ -1,12 +1,12 @@
 package servlet;
 
 import request.HttpRequest;
-import response.StatusLine;
+import response.StatusCode;
 
 public interface Servlet {
-    StatusLine service(HttpRequest httpRequest);
+    StatusCode service(HttpRequest httpRequest);
 
     void get(HttpRequest httpRequest);
 
-    StatusLine post(HttpRequest httpRequest);
+    StatusCode post(HttpRequest httpRequest);
 }

@@ -18,12 +18,12 @@ public class HttpRequest {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
     private final RequestStartLine requestStartLine;
-    private final RequestHeader header;
+    private final RequestHeader requestHeader;
     private final RequestBody body;
 
     public HttpRequest(RequestStartLine requestStartLine, RequestHeader requestHeader, RequestBody body) {
         this.requestStartLine = requestStartLine;
-        this.header = requestHeader;
+        this.requestHeader = requestHeader;
         this.body = body;
     }
 
@@ -72,5 +72,9 @@ public class HttpRequest {
 
     public String getBody() {
         return body.getBody();
+    }
+
+    public String getCookieValue(String cookieName) {
+        return requestHeader.getCookieValue(cookieName);
     }
 }

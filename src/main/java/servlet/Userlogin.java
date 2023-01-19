@@ -3,13 +3,10 @@ package servlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.HttpRequest;
-import response.ResponseHeader;
-import response.StatusLine;
+import response.StatusCode;
 import service.UserService;
 
 import javax.naming.AuthenticationException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Userlogin implements Servlet{
     /*
@@ -20,7 +17,7 @@ public class Userlogin implements Servlet{
     private static Logger logger = LoggerFactory.getLogger(UserCreate.class);
 
     @Override
-    public StatusLine service(HttpRequest httpRequest) {
+    public StatusCode service(HttpRequest httpRequest) {
         if (httpRequest.isGet()) {
             get(httpRequest);
         }
@@ -37,13 +34,13 @@ public class Userlogin implements Servlet{
     }
 
     @Override
-    public StatusLine post(HttpRequest httpRequest) {
+    public StatusCode post(HttpRequest httpRequest) {
         try {
             UserService.from(httpRequest).postlogin();
-            return StatusLine.CustomLogin;
+            return StatusCode.CustomLogin;
         } catch (AuthenticationException e) {
             e.printStackTrace();
-            return StatusLine.TemporaryRedirect;
+            return StatusCode.TemporaryRedirect;
         }
     }
 }

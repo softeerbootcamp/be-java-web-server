@@ -5,8 +5,6 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.HttpRequest;
-import response.StatusLine;
-import servlet.UserCreate;
 
 import javax.naming.AuthenticationException;
 import java.util.Collection;
