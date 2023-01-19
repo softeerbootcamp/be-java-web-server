@@ -17,7 +17,6 @@ public class UserLogoutController implements UserController{
     private final UserService userService = new UserService();
     @Override
     public Response service(Request request) {
-
         try {
             return userService.logoutUser(request);
         } catch (SessionNotFoundException | SessionExpiredException e) {
