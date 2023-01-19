@@ -30,17 +30,20 @@ public class LogInService implements Service{
             if(!userInfo.get(User.PASS_WORD).equals(whoIsTryingLogIn.getPassword()))
                 throw new PasswordMismatchException("비밀번호를 다시 입력하세요");
 
-            sid = UserIdSession.addUserId(whoIsTryingLogIn.getUserId());
         } catch(CannotLogInException e)
         {
-
+            return new Response()
+                    .withVersion(req.getReqLine().getVersion())
+                    .withStatCodeAndText(302, "REDIR")
+                    .withHeaderKeyVal("Location", Paths.LOGIN_FAIL_PATH);
         }
 
+        sid = UserIdSession.addUserId(userInfo.get(User.ID));
         logger.debug("id : " + userInfo.get(User.ID) + ", passw : " + userInfo.get(User.PASS_WORD));
         return new Response()
                 .withVersion(req.getReqLine().getVersion())
                 .withStatCodeAndText(302, "FOUND")
-                .withHeaderKeyVal("Location", Paths.HOME_PATH)
-                .withHeaderKeyVal("Set-Cookie", "sid=" + sid + "; Path=/");
+                .withHeaderKeyVal("Set-Cookie", "sid=" + sid + "; Path=/")
+                .withHeaderKeyVal("Location", Paths.HOME_PATH);
     }
 }

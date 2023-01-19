@@ -27,12 +27,10 @@ public class AlreadyLoggedInService implements Service{
         byte bodyByte[] = Service.urlToByte(reqQuery);
         String bodyString = new String(bodyByte);
 
-        String userName = Database.findUserById(UserIdSession.getUserId(sid_usrid)).getName();
-        bodyString.replace(
-                "<li><a href=\"user/login.html\" role=\"button\">로그인</a></li>\n",
-                "<li>" + userName + "</li>\n"
-        );
-        // 얘 왜 실행 안됨???
+        if(reqQuery.endsWith("html"))
+        {
+            bodyString = replaceLoginTextToUsername(bodyString);
+        }
 
         bodyByte = bodyString.getBytes();
 
@@ -42,5 +40,18 @@ public class AlreadyLoggedInService implements Service{
                 .withHeaderKeyVal("Content-Type", contentType + ";charset=utf-8")
                 .withHeaderKeyVal("Content-Length", Integer.toString(bodyByte.length))
                 .withBodyBytes(bodyByte);
+    }
+
+    private String replaceLoginTextToUsername(String body)
+    {
+        String userName = Database.findUserById(UserIdSession.getUserId(sid_usrid)).getName();
+
+        body = body.replace(
+                "<li><a href=\"../user/login.html\" role=\"button\">로그인</a></li>",
+                "<li><a role=\"button\">"+userName+"</a></li>");
+        body = body.replace(
+                "<li><a href=\"user/login.html\" role=\"button\">로그인</a></li>",
+                "<li role=\"button\"><a>"+userName+"</a></li>");
+        return body;
     }
 }
