@@ -63,8 +63,9 @@ public class LoginController implements Controller{
         String bodyPrefix = bodyStr.substring(0,bodyStr.indexOf("<tbody>")+"<tbody>".length());
         String bodyPostfix = bodyStr.substring(bodyStr.indexOf("</tbody>"));
         StringBuilder result = new StringBuilder(bodyPrefix);
+        int row = 1;
         for (User user: users){
-            result.append("<tr>\n<th scope=\"row\">1</th> <td>")
+            result.append("<tr>\n<th scope=\"row\">").append(row++).append("</th> <td>")
                     .append(user.getUserId()).append("</td> <td>").append(user.getName()).append("</td> <td>")
                     .append(user.getEmail()).append("</td><td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td>\n</tr>\n");
         }
