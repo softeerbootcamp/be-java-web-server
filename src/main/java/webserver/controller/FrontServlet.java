@@ -37,10 +37,6 @@ public class FrontServlet {
                 return indexController.service(request);
             }
 
-            if (request.getUrl().contains("user/list.html")) {
-                UserListController userListController = new UserListController();
-                return userListController.service(request);
-            }
             String contentType = Files.probeContentType(path)==null ? "*/*" : Files.probeContentType(path);
             return Response.of(request.getHttpVersion(), OK, Map.of("Content-Type", contentType), findActualFile(path));
 
