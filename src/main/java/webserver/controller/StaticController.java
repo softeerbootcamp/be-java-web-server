@@ -7,10 +7,18 @@ import webserver.exception.HttpRequestException;
 import webserver.utils.StaticResourceFinder;
 
 import java.io.IOException;
-import java.util.Map;
 
 public class StaticController implements Controller {
 
+    private StaticController (){}
+
+    public static StaticController getInstance(){
+        return LazyHolder.INSTANCE;
+    }
+
+    private static class LazyHolder{
+        private static final StaticController INSTANCE = new StaticController();
+    }
     @Override
     public void chain(Request req, Response res) throws HttpRequestException, IOException {
 

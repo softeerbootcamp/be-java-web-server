@@ -3,7 +3,7 @@ package webserver.controller;
 import db.UserDatabase;
 import model.User;
 import webserver.ControllerInterceptor;
-import webserver.Service.AuthService;
+import webserver.Service.UserService;
 import webserver.UserListViewResolver;
 import webserver.annotation.ControllerInfo;
 import webserver.domain.ContentType;
@@ -21,25 +21,30 @@ import java.util.Map;
 
 public class UserController implements Controller {
 
-    private AuthService authService;
+    private UserController (){}
 
-    //TODO: 싱글톤으로 클래스 초기화
-    public UserController(){
-        this.authService = new AuthService();
+    public static UserController getInstance(){
+        return UserController.LazyHolder.INSTANCE;
     }
+
+    private static class LazyHolder{
+        private static final UserController INSTANCE = new UserController();
+    }
+
+    private UserService userService = UserService.getInstance();
 
 
     @ControllerInfo(path = "/user/create", methodName = "userCreate", queryStr = {"userId", "password", "name", "email"}, method = RequestMethod.POST)
     public void userCreate(Map<String, String> queryStrs, Response response) {
         //TODO: authService.join의 리턴값 핸들링, javascript 문법 하드 코딩 개선
-        byte[] result = authService.addUser(queryStrs.get("userId"), queryStrs.get("password"), queryStrs.get("name"), queryStrs.get("email"));
+        byte[] result = userService.addUser(queryStrs.get("userId"), queryStrs.get("password"), queryStrs.get("name"), queryStrs.get("email"));
         response.ok(StatusCodes.OK, ("<script>alert('계정 생성이 완료되었습니다.'); window.location.href = 'http://localhost:8080/index.html';</script>").getBytes(), ContentType.TEXT_HTML);
     }
 
     @ControllerInfo(path = "/user/login", methodName = "userLogout", queryStr = {"userId", "password"}, method = RequestMethod.POST)
     public void userLogin(Map<String, String> queryStrs, Response response){
         try{
-            String userId = authService.login(queryStrs.get("userId"), queryStrs.get("password"));
+            String userId = userService.login(queryStrs.get("userId"), queryStrs.get("password"));
             if(queryStrs.get("Cookie") == null)     //when client got no session for now, generate a new cookie and add it on response header
                 response.addCookieOnHeader(HttpCookieUtils.generateCookie(userId).toString());
             response.redirect(StatusCodes.SEE_OTHER, ("<script>alert('로그인이 완료되었습니다.');</script>").getBytes(), ContentType.TEXT_HTML,"/index.html");

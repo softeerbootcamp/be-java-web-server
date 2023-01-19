@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class HandlerMapping {
 
-    public static final Map<String, Controller> controllerMap = Map.of("/user", new UserController());
+    public static final Map<String, Controller> controllerMap = Map.of("/user", UserController.getInstance());
 
     //find a proper controller to handle this request
     public Controller getHandler(Request req) {
@@ -18,13 +18,13 @@ public class HandlerMapping {
             if(path.startsWith(key))
                 return controllerMap.get(key);
         }
-        return new StaticController();
+        return StaticController.getInstance();
     }
 
 
     //return an instance of static controller
     public Controller getStaticHandler(){
-        return new StaticController();
+        return StaticController.getInstance();
     }
 
 }

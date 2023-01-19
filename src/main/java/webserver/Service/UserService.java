@@ -2,10 +2,21 @@ package webserver.Service;
 
 import db.UserDatabase;
 import model.User;
+import webserver.controller.UserController;
 import webserver.domain.StatusCodes;
 import webserver.exception.HttpRequestException;
 
 public class UserService {
+
+    private UserService (){}
+
+    public static UserService getInstance(){
+        return UserService.LazyHolder.INSTANCE;
+    }
+
+    private static class LazyHolder{
+        private static final UserService INSTANCE = new UserService();
+    }
 
     public byte[] addUser(String userId, String password, String name, String email) {
         UserDatabase.findUserById(userId).ifPresent(m -> {
