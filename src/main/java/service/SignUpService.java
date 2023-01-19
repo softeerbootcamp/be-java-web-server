@@ -2,14 +2,10 @@ package service;
 
 import db.Database;
 import model.User;
-import webserver.HttpRequest;
-import webserver.HttpResponse;
+import request.HttpRequest;
 
 import java.io.UnsupportedEncodingException;
-import java.io.IOException;
 import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Map;
 
 public class SignUpService {

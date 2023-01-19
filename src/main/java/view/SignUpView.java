@@ -1,8 +1,10 @@
 package view;
 
-import model.User;
+import enums.ContentType;
+import enums.HttpStatus;
+import request.HttpRequest;
+import response.HttpResponse;
 import utils.FileIoUtils;
-import webserver.*;
 
 public class SignUpView implements View{
     private static final String CONTENT_LENGTH_HEADER_KEY = "Content-Length";

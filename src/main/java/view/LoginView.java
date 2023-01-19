@@ -1,10 +1,10 @@
 package view;
 
 import utils.FileIoUtils;
-import webserver.ContentType;
-import webserver.HttpRequest;
-import webserver.HttpResponse;
-import webserver.HttpStatus;
+import enums.ContentType;
+import request.HttpRequest;
+import response.HttpResponse;
+import enums.HttpStatus;
 
 public class LoginView implements View{
     private static final String CONTENT_LENGTH_HEADER_KEY = "Content-Length";

@@ -1,7 +1,7 @@
 package view;
 
-import webserver.HttpRequest;
-import webserver.HttpResponse;
+import request.HttpRequest;
+import response.HttpResponse;
 
 import java.util.Map;
 

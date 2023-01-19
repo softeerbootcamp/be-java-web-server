@@ -1,9 +1,9 @@
 package controller;
 
 import utils.FileIoUtils;
-import webserver.ContentType;
-import webserver.HttpResponse;
-import webserver.HttpStatus;
+import enums.ContentType;
+import response.HttpResponse;
+import enums.HttpStatus;
 
 
 public class NotFoundExceptionHandler implements Controller {

@@ -1,6 +1,6 @@
 package utils;
 
-import webserver.ContentType;
+import enums.ContentType;
 
 public class ExtensionUtils {
 

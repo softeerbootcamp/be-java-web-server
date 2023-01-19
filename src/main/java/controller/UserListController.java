@@ -1,11 +1,9 @@
 package controller;
 
 import db.Database;
-import model.User;
-import utils.FileIoUtils;
+import request.HttpRequest;
+import response.HttpResponse;
 import view.Model;
-import webserver.*;
-import java.util.Collection;
 
 public class UserListController implements Controller{
 

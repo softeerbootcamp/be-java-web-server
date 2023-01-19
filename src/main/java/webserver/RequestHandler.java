@@ -2,18 +2,14 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.file.Files;
-import java.util.Map;
 
 import controller.*;
-import controller.Controller;
-import db.Database;
-import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.HttpRequestUtils;
-
-import javax.xml.crypto.dom.DOMCryptoContext;
+import request.HttpRequest;
+import request.RequestParser;
+import response.HttpResponse;
+import response.ResponseWriter;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);

@@ -1,8 +1,9 @@
-package webserver;
+package response;
 
+import enums.ContentType;
+import enums.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
 
 import java.util.HashMap;
 import java.util.Map;

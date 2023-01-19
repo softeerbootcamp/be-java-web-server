@@ -1,8 +1,12 @@
 package view;
 
+import enums.ContentType;
+import enums.HttpStatus;
 import model.User;
+import request.HttpRequest;
+import response.HttpResponse;
+import session.HttpSessionManager;
 import utils.FileIoUtils;
-import webserver.*;
 
 
 public class IndexView implements View{

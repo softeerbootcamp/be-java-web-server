@@ -1,7 +1,11 @@
 package controller;
 
+import enums.ContentType;
+import enums.HttpMethod;
+import enums.HttpStatus;
+import request.HttpRequest;
+import response.HttpResponse;
 import view.Model;
-import webserver.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,7 +13,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 
 public interface Controller {
-    default String service(HttpRequest request, HttpResponse response,Model model) throws NullPointerException,IOException, URISyntaxException {
+    default String service(HttpRequest request, HttpResponse response, Model model) throws NullPointerException,IOException, URISyntaxException {
 
         if(request.getMethod().equals(HttpMethod.GET)) return doGet(request,response,model);
         if(request.getMethod().equals(HttpMethod.POST)) return doPost(request,response,model);

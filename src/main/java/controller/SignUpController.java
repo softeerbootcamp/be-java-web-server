@@ -1,11 +1,9 @@
 package controller;
 
-import db.Database;
-import model.User;
 import service.SignUpService;
 import view.Model;
-import webserver.HttpRequest;
-import webserver.HttpResponse;
+import request.HttpRequest;
+import response.HttpResponse;
 
 import java.io.UnsupportedEncodingException;
 

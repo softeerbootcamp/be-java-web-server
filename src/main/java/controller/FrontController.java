@@ -1,17 +1,14 @@
 package controller;
 
-import model.User;
 import service.SignUpService;
 import view.Model;
 import view.ViewHandler;
-import webserver.HttpMethod;
-import webserver.HttpRequest;
-import webserver.HttpResponse;
+import request.HttpRequest;
+import response.HttpResponse;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.HashMap;
 import java.util.Map;
 
 public class FrontController {

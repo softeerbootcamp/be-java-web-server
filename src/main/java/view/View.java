@@ -1,7 +1,7 @@
 package view;
 
-import webserver.HttpRequest;
-import webserver.HttpResponse;
+import request.HttpRequest;
+import response.HttpResponse;
 
 public interface View {
     void render(HttpRequest request, HttpResponse response, Model data);

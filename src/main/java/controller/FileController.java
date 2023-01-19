@@ -5,13 +5,9 @@ import org.slf4j.LoggerFactory;
 import service.FileService;
 import utils.ExtensionUtils;
 import view.Model;
-import webserver.ContentType;
-import webserver.HttpRequest;
-import webserver.HttpResponse;
-import webserver.RequestHandler;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
+import enums.ContentType;
+import request.HttpRequest;
+import response.HttpResponse;
 
 public class FileController implements Controller{
 
