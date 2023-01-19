@@ -5,9 +5,9 @@ import model.response.Response;
 import util.AuthInterceptor;
 import util.ViewResolver;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
@@ -17,18 +17,25 @@ import static model.response.HttpStatusCode.OK;
 public class IndexController {
 
     public Response service(Request request) throws IOException {
-        String data;
-        if (AuthInterceptor.isAuthUser(request)) {
-            String name = AuthInterceptor.findUser(request).getName();
-            data = "<li ><a href = \"index.html#\" role = \"button\" >" + name + " </a ></li >";
-
-        } else {
-            data = "<li ><a href = \"user/login.html\" role = \"button\" > 로그인 </a ></li >";
-        }
         Path filePath = ViewResolver.findFilePath("index.html");
-        String fileData = new String(ViewResolver.findActualFile(filePath));
-        fileData = fileData.replace("%login%", URLDecoder.decode(data, StandardCharsets.UTF_8));
+        if (AuthInterceptor.isAuthUser(request)) {
+            BufferedReader br = new BufferedReader(new FileReader(filePath.toFile()));
 
-        return Response.of(request.getHttpVersion(), OK, Map.of("Content-Type", Files.probeContentType(filePath)), fileData.getBytes());
+            String line;
+            StringBuilder sb = new StringBuilder();
+
+            while ((line = br.readLine()) != null) {
+                if (line.contains("로그인") || line.contains("회원가입")) {
+                    continue;
+                }
+                if (line.contains("class=\"dropdown-toggle\"")) {
+                    String name = AuthInterceptor.findUser(request).getName();
+                    sb.append("<a>").append(name).append("님</a></li><li>");
+                }
+                sb.append(line);
+            }
+            return Response.of(request.getHttpVersion(), OK, Map.of("Content-Type", Files.probeContentType(filePath)), sb.toString().getBytes());
+        }
+        return Response.of(request.getHttpVersion(), OK, Map.of("Content-Type", Files.probeContentType(filePath)), ViewResolver.findActualFile(filePath));
     }
 }
