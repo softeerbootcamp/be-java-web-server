@@ -35,13 +35,6 @@ public class RequestLine {
         this.VERSION = lineArr[VERSION_TOKEN_INDEX];
     }
 
-    // todo : 헤당 메소드 나중에 쓸일 있는지 확인해보자. requestline 에 요청이 담길 가능성이 있을까?
-    private boolean isUserRequest(String url) {
-        if (url.contains("/create")) {
-            return true;
-        } else return false;
-    }
-
     public String getURL() {
         return URL;
     }

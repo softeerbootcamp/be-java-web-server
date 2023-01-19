@@ -25,8 +25,6 @@ public class UserController implements Controller {
     private static final int USERNAME_INDEX = 2;
     private static final int USEREMAIL_INDEX = 3;
     private static final Logger logger = LoggerFactory.getLogger(RequestResponseHandler.class);
-
-    // todo: user 정보들을 parse 하는 것은 좋지만, 추후 Validation Check 등에서 불편할 수 있으므로, Map 형태로 바꾸어 보자.
     @Override
     public ResponseFactory controllerService(Request request) throws IOException {
         logger.debug("firstLine : " + request.getRequestLine().getURL());
