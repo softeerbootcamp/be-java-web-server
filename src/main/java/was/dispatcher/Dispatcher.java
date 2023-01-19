@@ -1,7 +1,6 @@
 package was.dispatcher;
 
 import enums.HttpMethod;
-import was.annotation.PostMapping;
 import was.annotation.RequestMapping;
 import was.controller.Controller;
 import was.controller.ControllerFactory;
@@ -11,17 +10,17 @@ import webserver.domain.HttpResponseMessage;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-public class PostDispatcher implements ControllerHandler{
-    private static PostDispatcher postDispatcher;
+public class Dispatcher implements ControllerHandler{
+    private static Dispatcher dispatcher;
 
-    private PostDispatcher() {
+    private Dispatcher() {
     }
 
-    public static PostDispatcher getInstance() {
-        if (postDispatcher != null) {
-            return postDispatcher;
+    public static Dispatcher getInstance() {
+        if (dispatcher != null) {
+            return dispatcher;
         }
-        return postDispatcher = new PostDispatcher();
+        return dispatcher = new Dispatcher();
     }
     @Override
     public HttpResponseMessage handle(HttpRequest httpRequest) {

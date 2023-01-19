@@ -1,7 +1,7 @@
 package webserver.handler;
 
 import enums.HttpMethod;
-import was.dispatcher.PostDispatcher;
+import was.dispatcher.Dispatcher;
 import webserver.domain.HttpRequest;
 
 public class ControllerHandlerFactory {
@@ -9,7 +9,7 @@ public class ControllerHandlerFactory {
         HttpMethod httpMethod =  httpRequest.getRequestLine().getHttpMethod();
         String url = httpRequest.getRequestLine().getUrl();
         if (!url.contains(".")) {
-            return PostDispatcher.getInstance();
+            return Dispatcher.getInstance();
         }
         return StaticHandler.getInstance();
     }
