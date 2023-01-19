@@ -1,5 +1,6 @@
 package controller;
 
+import model.domain.User;
 import model.general.ContentType;
 import model.general.Header;
 import model.general.Status;
@@ -61,10 +62,12 @@ public class ViewController implements Controller {
                 body = Files.readAllBytes(new File(generatePath(requestLine.getContentType()) +
                         requestLine.getUri()).toPath());
 
+                User user = (User) Sessions.getSession(request.getSessionId()).getSessionData().get("user");
                 String originalIndexHtml = new String(body);
-                String resultIndexHtml = originalIndexHtml.replace("로그인",
-                        Sessions.getSession(request.getSessionId()).getSessionData().get("user"));
+                String resultIndexHtml = originalIndexHtml.replace("로그인", user.getName());
                 resultIndexHtml = resultIndexHtml.replace("user/login.html", "user/profile.html");
+                resultIndexHtml = resultIndexHtml.replace("자바지기", user.getName());
+                resultIndexHtml = resultIndexHtml.replace("javajigi@slipp.net", user.getEmail());
                 return resultIndexHtml.getBytes();
             } catch (IOException e) {
                 return new byte[0];
