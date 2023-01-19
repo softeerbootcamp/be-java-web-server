@@ -2,25 +2,20 @@ package db;
 
 import model.Session;
 import model.User;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import service.Service;
 import service.UserService;
 import util.Cookie;
 
 import java.util.HashMap;
-import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SessionDatabaseTest {
     private final String sid = "sid";
     private Database sessionDatabase = new SessionDatabase();
 
-    private Service userService = new UserService();
+    private UserService userService = new UserService();
 
     final String[] userValue = {"test", "1234", "testName", "test@naver.com"};
     final String[] userKey = {"userId", "password", "name", "email"};

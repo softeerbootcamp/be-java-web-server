@@ -20,7 +20,7 @@ class UserServiceAndDBTest {
     final String[] userKey = {"userId", "password", "name", "email"};
 
     Database<User> userDataBase = new UserDatabase();
-    Service userService = new UserService();
+    UserService userService = new UserService();
 
 
 
