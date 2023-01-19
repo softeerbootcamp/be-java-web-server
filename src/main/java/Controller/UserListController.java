@@ -11,6 +11,7 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HtmlBuildUtil;
+import util.LoginUtil;
 
 import java.util.Collection;
 
@@ -24,7 +25,8 @@ public class UserListController implements AuthController {
     @Override
     public HttpResponse createResponse(HttpRequest httpRequest) {
         String html = HtmlBuildUtil.userList(Database.findAll());
-        byte[] body = html.getBytes();
+        User user = LoginUtil.checkSession(httpRequest);
+        byte[] body = HtmlBuildUtil.withoutLogoutWithUserName(html, "/user/list.html", user);
         HttpResponse response = new HttpResponse().startLine(new HttpResponseStartLine(StatusCode.OK, httpRequest.getProtocol()))
                 .headers(new HttpResponseHeaders("/user/list.html", body.length))
                 .body(new HttpResponseBody(body));
