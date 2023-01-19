@@ -69,4 +69,8 @@ public class HttpResponse {
     public byte[] getBody() {
         return body;
     }
+
+    public void addHeader(String key, String value) {
+        this.headers.put(key, value);
+    }
 }

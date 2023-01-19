@@ -7,6 +7,7 @@ import http.request.HttpUri;
 import http.request.RequestHeader;
 import http.request.RequestLine;
 import http.response.HttpResponse;
+import http.response.HttpResponseFactory;
 import http.response.HttpStatus;
 import util.FileIoUtil;
 
@@ -28,16 +29,16 @@ public class ViewController implements Controller {
         File file = FileIoUtil.getFile(requestLine.getHttpUri());
         byte[] body = Files.readAllBytes(file.toPath());
 
-        if(httpUri.getPath().endsWith(".html") && SessionHandler.validateSession(httpRequest.getSid())) {
+        if (httpUri.getPath().endsWith(".html") && SessionHandler.validateSession(httpRequest.getSid())) {
             HttpSession httpSession = SessionHandler.getSession(httpRequest.getSid());
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line;
             StringBuilder sb = new StringBuilder();
             while ((line = br.readLine()) != null) {
-                if(line.contains("로그인") || line.contains("회원가입")) {
+                if (line.contains("로그인") || line.contains("회원가입")) {
                     continue;
                 }
-                if(line.contains("Posts")) {
+                if (line.contains("Posts")) {
                     sb.append("<li><a>").append(httpSession.getUserName()).append("</a></li>").append(System.lineSeparator());
                 }
                 sb.append(line).append(System.lineSeparator());
@@ -45,12 +46,7 @@ public class ViewController implements Controller {
             body = sb.toString().getBytes();
         }
 
-        return HttpResponse.of(
-                HttpStatus.OK,
-                requestHeader.getContentType(),
-                new HashMap<>(),
-                body
-        );
+        return HttpResponseFactory.OK(requestHeader.getContentType(), new HashMap<>(), body);
     }
 
     @Override
