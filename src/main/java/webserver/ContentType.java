@@ -35,7 +35,7 @@ public enum ContentType {
 
     public String getExtension(){return extension;}
 
-    boolean isTemplateDir(){
+    public boolean isTemplateDir(){
         if(this.getExtension() == "html" ||this.getExtension() == "ico") return true;
         return false;
     }
