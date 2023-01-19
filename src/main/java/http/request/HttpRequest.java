@@ -79,7 +79,10 @@ public class HttpRequest {
     }
 
     public boolean isLogin() {
-        String sessionId = httpHeader.getHeader("Cookie").split(SessionConst.SESSION_COOKIE_NAME + "=")[1];
+        String value = httpHeader.getHeader("Cookie");
+        if (value == null) return false;
+
+        String sessionId = value.split(SessionConst.SESSION_COOKIE_NAME + "=")[1];
         return sessionId != null && SessionManager.hasSession(sessionId);
     }
 
