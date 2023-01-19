@@ -14,7 +14,7 @@ public class ListServiceTest {
     String contentType = "text/html";
 
     @Test
-    public void testLogInListService() {
+    public void 로그인상태_ListService_테스트() {
         // When
         HttpResponse response = ListService.logInListService(logInUser, filePath, httpVersion, contentType);
 
@@ -23,15 +23,9 @@ public class ListServiceTest {
     }
 
     @Test
-    public void testService() {
+    public void 로그인상태가아닐때_ListService_테스트() {
         // When
-        HttpResponse response = ListService.service(logInUser, filePath, httpVersion, contentType);
-
-        // Then
-        assertThat(response.getBody()).isNotEmpty();
-
-        // When
-        response = ListService.service(null, filePath, httpVersion, contentType);
+        HttpResponse response = ListService.service(null, filePath, httpVersion, contentType);
 
         // Then
         assertThat(response.getHeaders().getLocation()).isEqualTo("/user/login.html");
