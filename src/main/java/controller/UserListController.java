@@ -35,7 +35,7 @@ public class UserListController implements Controller {
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         String sid = httpRequest.getSession();
         try {
-            Session session = SessionManager.getData(UUID.fromString(sid));
+            Session session = SessionManager.getSession(UUID.fromString(sid));
             if (session != null) {
                 httpResponse.setBody(FileIoUtils.makeUserListPage(userService.findAllUsers(), session));
             }
