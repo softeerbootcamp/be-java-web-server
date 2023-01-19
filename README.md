@@ -9,8 +9,8 @@ Java Web Application Server 2022
 flowchart LR 
 A[HTTP 요청 메시지] --> B; 
 B[FrontServlet] --> C;
-C[정적리소스 or API] -->|API:HandlerAdapter| E; 
-C -->|ViewResolver| G; 
+C[정적리소스 or API] -->|API: HandlerAdapter| E; 
+C -->|Resource: ViewResolver| G; 
 E[Controller] --> G; 
 G(Response객체 응답) --> I; 
 I[ResponseHandler];
