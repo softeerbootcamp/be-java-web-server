@@ -1,7 +1,5 @@
 package session;
 
-import java.util.Random;
-
 public class HttpSession {
     private String sessionId;
 
@@ -9,7 +7,7 @@ public class HttpSession {
         this.sessionId = sessionId;
     }
 
-    public String getSessionIdById() {
+    public String getSessionId() {
         return sessionId;
     }
 

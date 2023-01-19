@@ -12,6 +12,8 @@ import webserver.RequestResponseHandler;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +31,10 @@ public class UserController implements Controller {
         logger.debug("firstLine : " + request.getRequestLine().getURL());
         List<String> requestRequestBody = request.getRequestBody().getBodyLines();
         List<String> userInfos = parseUrlToGetUserInfo(requestRequestBody);
-        User user = new User(userInfos.get(USERID_INDEX), userInfos.get(USERPWD_INDEX),
-                userInfos.get(USERNAME_INDEX), userInfos.get(USEREMAIL_INDEX));
+
+        List<String> decodedUserInfos = decoder(userInfos);
+        User user = new User(decodedUserInfos.get(USERID_INDEX), decodedUserInfos.get(USERPWD_INDEX),
+                decodedUserInfos.get(USERNAME_INDEX), decodedUserInfos.get(USEREMAIL_INDEX));
 
         Database.addUser(user);
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + "/index.html").toPath());
@@ -42,6 +46,14 @@ public class UserController implements Controller {
                 .setResponseBody(body)
                 .build();
         return responseFactory;
+    }
+
+    public static List<String> decoder(List<String> userInfos) {
+        List<String> decodedInfos = new ArrayList<>();
+        for(String info : userInfos){
+            decodedInfos.add(URLDecoder.decode(info, StandardCharsets.UTF_8));
+        }
+        return decodedInfos;
     }
 
     public List<String> parseUrlToGetUserInfo(List<String> requestBodyLine) {

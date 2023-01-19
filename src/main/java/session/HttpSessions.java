@@ -15,9 +15,16 @@ public class HttpSessions {
 
     // todo : 적절한 이름 찾자..
     public static String findSessionById(String userId) {
-        return httpSessions.get(userId).getSessionIdById();
+        return httpSessions.get(userId).getSessionId();
     }
-
+    public static String findUserIdBySid(String sid) {
+        for (String userId : httpSessions.keySet()) {
+            HttpSession oneUserSession = httpSessions.get(userId);
+            if (oneUserSession.getSessionId().equals(sid)) return userId;
+        }
+        // return 못찾았을때 처리..
+        return "";
+    }
     public static String getRandStringForSessionId() {
         int leftLimit = 48; // digit '0'
         int rightLimit = 122; // letter 'z'

@@ -1,5 +1,6 @@
 package controller;
 
+import db.Database;
 import enums.ContentTypeEnum;
 import enums.ControllerTypeEnum;
 import org.slf4j.Logger;
@@ -22,7 +23,10 @@ public class TemplateController implements Controller {
         boolean isDynamic = request.isRequestHaveCookie();
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + url).toPath());
         if(isDynamic){
-            body = DynamicController.runDynamicFactory(body);
+            body = DynamicController.dynamicIndexHtml(body);
+        }
+        if(url.contains("list.html")){
+            body = DynamicController.dynamicListHtml(body);
         }
         ResponseFactory responseFactory = new ResponseFactory.Builder()
                 .setResponseStatusLine(ControllerTypeEnum.TEMPLATE)
