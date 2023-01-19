@@ -74,7 +74,7 @@ public class HttpRequest {
         return body.getBody();
     }
 
-    public String getCookieValue(String cookieName) {
-        return requestHeader.getCookieValue(cookieName);
-    }
+//    public String getCookieValue(String cookieName) {
+//        return requestHeader.getCookieValue(cookieName);
+//    }
 }

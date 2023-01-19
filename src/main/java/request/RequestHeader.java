@@ -50,22 +50,22 @@ public class RequestHeader {
         return new RequestHeader(fields, cookies);
     }
 
-    private static void parseCookie(String value, Set<Map<String, String>> cookies) {
-        String[] splitValues = value.split(COOKIE_DELIMETER);
-
-        Map<String, String> cookie = Arrays.stream(splitValues)
-                .map(splitValue -> splitValue.split("="))
-                .collect(Collectors.toMap(v -> v[0], v -> v[1]));
-        cookies.add(cookie);
-    }
-
-    public String getCookieValue(String cookieName) {
-        return cookies.stream()
-                .map(cookie -> cookie.get(cookieName))
-                .filter(Objects::nonNull)
-                .findAny()
-                .orElseGet(() -> "");
-    }
+//    private static void parseCookie(String value, Set<Map<String, String>> cookies) {
+//        String[] splitValues = value.split(COOKIE_DELIMETER);
+//
+//        Map<String, String> cookie = Arrays.stream(splitValues)
+//                .map(splitValue -> splitValue.split("="))
+//                .collect(Collectors.toMap(v -> v[0], v -> v[1]));
+//        cookies.add(cookie);
+//    }
+//
+//    public String getCookieValue(String cookieName) {
+//        return cookies.stream()
+//                .map(cookie -> cookie.get(cookieName))
+//                .filter(Objects::nonNull)
+//                .findAny()
+//                .orElseGet(() -> "");
+//    }
 
     public String toValue() {
         StringBuilder sb = new StringBuilder();
