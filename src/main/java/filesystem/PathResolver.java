@@ -1,23 +1,18 @@
 package filesystem;
 
-import java.util.List;
 import java.util.Map;
 
 public class PathResolver {
 
     private static final String TEMPLATE_PATH = "src/main/resources/templates%s";
     private static final String STATIC_PATH = "src/main/resources/static%s";
-    private static final String INDEX_HTML = "index.html";
     private static final String NOT_FOUND_HTML = "src/main/resources/templates/notfound.html";
+    public static final String INDEX_HTML = "/index.html";
     public static final String DOMAIN = "/";
     public static final String LOGIN_FAILED_HTML = "login_failed.html";
-    public static final String LOGIN_HTML = "/user/login.html";
-    public static final List<String> indexRequestUrl = List.of("/", DOMAIN + INDEX_HTML);
-    public static final List<String> authenticatedUrl = List.of("/user/list.html");
-
 
     private static final Map<Extension, String> mappingInfo = Map.of(
-            Extension.INDEX, TEMPLATE_PATH + INDEX_HTML,
+            Extension.INDEX, TEMPLATE_PATH.substring(0, TEMPLATE_PATH.length() - 2) + INDEX_HTML,
             Extension.TEMPLATE, TEMPLATE_PATH,
             Extension.STATIC, STATIC_PATH,
             Extension.ELSE, NOT_FOUND_HTML
