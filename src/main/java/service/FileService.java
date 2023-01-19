@@ -8,7 +8,6 @@ import webserver.*;
 
 
 public class FileService {
-
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private static final String CONTENT_LENGTH_HEADER_KEY = "Content-Length";
 
