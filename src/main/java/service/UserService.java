@@ -2,6 +2,8 @@ package service;
 
 import db.UserRepository;
 import model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.FileIoUtils;
 
 import java.io.IOException;
@@ -14,9 +16,13 @@ public class UserService {
     private static final String NAME = "name";
     private static final String EMAIL = "email";
 
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+
+
     private final UserRepository userRepository;
 
-    public UserService (UserRepository userRepository) {
+
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -41,7 +47,7 @@ public class UserService {
 
         String fileData = new String(FileIoUtils.loadFile(filepath));
 
-        fileData = fileData.replace("%user_list", userListToString());
+        fileData = fileData.replace("<!--userlist-->", userListToString());
 
         return fileData.getBytes();
     }
@@ -64,6 +70,20 @@ public class UserService {
         }
 
         return sb.toString();
+    }
+
+    public byte[] makeUserNameIndexBody(String id, String filepath) throws IOException {
+        User user = userRepository.findUserById(id);
+        logger.info(user.getUserId());
+
+        String fileData = new String(FileIoUtils.loadFile(filepath));
+        String target_index = "<li><a href=\"user/login.html\" role=\"button\">로그인</a></li>";
+        String target_others = "<li><a href=\"../user/login.html\" role=\"button\">로그인</a></li>";
+        return fileData
+                .replace("<!--username-->", String.format("<li><a>%s</a></li>", user.getName()))
+                .replace(target_index, "")
+                .replace(target_others, "")
+                .getBytes();
     }
 
 }
