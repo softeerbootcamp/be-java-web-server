@@ -1,6 +1,11 @@
 package model;
 
 public class User {
+    public static final String ID = "userId";
+    public static final String PASS_WORD = "password";
+    public static final String NAME = "name";
+    public static final String EMAIL = "email";
+
     private String userId;
     private String password;
     private String name;

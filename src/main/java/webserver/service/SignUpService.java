@@ -16,14 +16,10 @@ import java.util.Map;
 public class SignUpService implements Service{
 
     private static final Logger logger = LoggerFactory.getLogger(SignUpService.class);
-    static final String USER_ID = "userId";
-    static final String USER_PASS_WORD = "password";
-    static final String USER_NAME = "name";
-    static final String USER_EMAIL = "email";
     @Override
     public Response exec(Request req) {
         Map<String, String> userInfo = getUserInfo(req);
-        User newUser = new User(userInfo.get(USER_ID), userInfo.get(USER_PASS_WORD), userInfo.get(USER_NAME), userInfo.get(USER_EMAIL));
+        User newUser = new User(userInfo.get(User.ID), userInfo.get(User.PASS_WORD), userInfo.get(User.NAME), userInfo.get(User.EMAIL));
         try
         {
             if(null != Database.findUserById(newUser.getUserId()))
