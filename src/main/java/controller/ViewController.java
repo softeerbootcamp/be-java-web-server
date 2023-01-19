@@ -30,9 +30,11 @@ public class ViewController implements Controller {
 
     @Override
     public Response getResponse(Request request) {
-        if (Objects.nonNull(request.getRequestLine().getContentType())) return getStaticFileResponse(request);
+        RequestLine requestLine = request.getRequestLine();
 
-        return Response.of(request, Status.NOT_FOUND);
+        if (Objects.nonNull(requestLine.getContentType())) return getStaticFileResponse(request);
+
+        return Response.from(StatusLine.of(requestLine.getHttpVersion(), Status.NOT_FOUND));
     }
 
     private Response getStaticFileResponse(Request request) {
