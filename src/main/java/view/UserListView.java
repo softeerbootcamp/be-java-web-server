@@ -7,7 +7,7 @@ import java.util.Collection;
 
 public class UserListView {
 
-    public static String render(Collection<User> users) {
+    public static String render(Collection<User> users, String name) {
         byte[] file = FileUtils.loadFile("/user/list.html");
 
         StringBuilder sb = new StringBuilder();
@@ -18,7 +18,11 @@ public class UserListView {
             sb.append("</tr>\n");
         }
 
+        String userName = "<li><a role=\"button\">사용자 이름: " + name + "</a></li>";
+
         String htmlFile = new String(file);
+        htmlFile = htmlFile.replace("<li><a href=\"../user/login.html\" role=\"button\">로그인</a></li>\n" +
+                "                <li><a href=\"../user/form.html\" role=\"button\">회원가입</a></li>", userName);
 
         String[] split = htmlFile.split("<tbody>", 2);
         return split[0] + "<tbody>" + sb + split[1];

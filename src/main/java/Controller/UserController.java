@@ -1,5 +1,6 @@
 package Controller;
 
+import db.Database;
 import exception.NullValueException;
 import exception.UrlNotFoundException;
 import exception.UserValidationException;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import service.UserService;
 import util.HttpRequestUtils;
 import view.UserListView;
+import webserver.session.Session;
 import webserver.session.SessionConst;
 import webserver.session.SessionManager;
 
@@ -94,8 +96,12 @@ public class UserController implements Controller {
             return;
         }
 
+        Session session = request.getSession();
+        String userId = session.getAttribute(SessionConst.USER_ID);
+        User loginUser = Database.findUserById(userId);
+
         Collection<User> users = userService.findUserList();
-        String body = UserListView.render(users);
+        String body = UserListView.render(users, loginUser.getUserId());
 
         response.ok(request);
         response.setBodyMessage(body);
