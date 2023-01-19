@@ -24,4 +24,7 @@ public class SessionStorage {
             sessions.remove(session.getSessionId());
         }
     }
+    public static boolean isExist(UUID uuid) {
+        return sessions.containsKey(uuid);
+    }
 }
