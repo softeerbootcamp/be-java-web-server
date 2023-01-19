@@ -4,9 +4,8 @@ import db.UserDatabase;
 import model.User;
 import webserver.domain.StatusCodes;
 import webserver.exception.HttpRequestException;
-import java.util.List;
 
-public class AuthService {
+public class UserService {
 
     public byte[] addUser(String userId, String password, String name, String email) {
         UserDatabase.findUserById(userId).ifPresent(m -> {
