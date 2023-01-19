@@ -1,6 +1,6 @@
 package utils;
 
-import model.SessionData;
+import model.Session;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,16 +11,16 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class SessionManager {
     private static final Logger logger = LoggerFactory.getLogger(SessionManager.class);
-    private static final Map<UUID, SessionData> sessions = new ConcurrentHashMap<>();
+    private static final Map<UUID, Session> sessions = new ConcurrentHashMap<>();
     private static final long SESSION_LIFE_TIME_MS = 300000L;
 
     public static UUID createSession(User data) {
         UUID sessionID = UUID.randomUUID();
-        sessions.put(sessionID, SessionData.from(data));
+        sessions.put(sessionID, Session.from(data));
         return sessionID;
     }
 
-    public static SessionData getData(UUID sessionId) {
+    public static Session getData(UUID sessionId) {
         return sessions.get(sessionId);
     }
 

@@ -1,21 +1,21 @@
 package model;
 
-public class SessionData {
+public class Session {
     private final long timeStamp;
     private final String userId;
     private final String name;
     private final String email;
 
 
-    private SessionData(String userId, String name, String email) {
+    private Session(String userId, String name, String email) {
         this.userId = userId;
         this.name = name;
         this.email = email;
         this.timeStamp = System.currentTimeMillis();
     }
 
-    public static SessionData from(User user) {
-        return new SessionData(user.getUserId(), user.getName(), user.getEmail());
+    public static Session from(User user) {
+        return new Session(user.getUserId(), user.getName(), user.getEmail());
     }
 
     public long getTimeStamp() {

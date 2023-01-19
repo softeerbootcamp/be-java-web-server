@@ -2,7 +2,7 @@ package controller;
 
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import model.SessionData;
+import model.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
@@ -35,11 +35,11 @@ public class UserListController implements Controller {
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         String sid = httpRequest.getSession();
         try {
-            SessionData sessionData = SessionManager.getData(UUID.fromString(sid));
-            if (sessionData != null) {
-                httpResponse.setBody(FileIoUtils.makeUserListPage(userService.findAllUsers(), sessionData));
+            Session session = SessionManager.getData(UUID.fromString(sid));
+            if (session != null) {
+                httpResponse.setBody(FileIoUtils.makeUserListPage(userService.findAllUsers(), session));
             }
-            if (sessionData == null)
+            if (session == null)
                 httpResponse.redirect(LOGIN_PATH);
         } catch (NullPointerException e) {
             httpResponse.redirect(LOGIN_PATH);

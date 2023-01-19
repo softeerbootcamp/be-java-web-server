@@ -1,7 +1,7 @@
 package utils;
 
 
-import model.SessionData;
+import model.Session;
 import model.User;
 
 import java.io.File;
@@ -51,18 +51,18 @@ public class FileIoUtils {
         return homePage.replace("<!--username-->", String.format("<p>%s</p>", username));
     }
 
-    public static byte[] makeUserListPage(Collection<User> users, SessionData sessionData) {
+    public static byte[] makeUserListPage(Collection<User> users, Session session) {
         StringBuilder sb = new StringBuilder();
         String userListPage = new String(loadFile(PathManager.USER_LIST_PATH));
         sb.append("<tr>");
         sb.append(String.format("<th scope=\"row\">1</th> <td>%s</td> <td>%s</td> <td>%s</td>",
-                sessionData.getUserId(), sessionData.getName(), sessionData.getEmail()
+                session.getUserId(), session.getName(), session.getEmail()
         ));
         sb.append("<td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td>");
         sb.append("</tr>");
         int cnt = 2;
         for (User user : users) {
-            if (user.getUserId().equals(sessionData.getUserId()))
+            if (user.getUserId().equals(session.getUserId()))
                 continue;
             sb.append("<tr>");
             sb.append(String.format("<th scope=\"row\">%d</th> <td>%s</td> <td>%s</td> <td>%s</td> <td>",
