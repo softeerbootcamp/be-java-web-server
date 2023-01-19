@@ -7,7 +7,6 @@ import java.util.UUID;
 
 public class SessionService {
 
-    public static final String LOGIN = "login";
     private final SessionRepository sessionRepository;
 
     public SessionService(SessionRepository sessionRepository) {
@@ -26,7 +25,7 @@ public class SessionService {
 
     public void validateHasSession(String id) {
         Session session = sessionRepository.findById(id);
-        if (session == null || session.getAttribute(id) != LOGIN)
+        if (session == null)
             throw new NullPointerException("Session not found");
     }
 
