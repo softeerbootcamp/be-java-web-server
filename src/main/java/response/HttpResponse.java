@@ -2,6 +2,7 @@ package response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import request.Url;
 import util.Cookie;
 import util.FileType;
 import util.HttpStatus;
@@ -15,52 +16,81 @@ public class HttpResponse {
 
     private final HttpStatus httpStatus;
 
+    private final Url redirectUrl;
+    private final Cookie cookie;
+
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
-    public HttpResponse(Data data,FileType fileType,HttpStatus httpStatus) {
-        this.data = data;
-        this.fileType = fileType;
-        this.httpStatus = httpStatus;
-        responseHeader();
-        responseBody();
+    public static class Builder {
+        private Data data;
+        private FileType fileType;
+        private HttpStatus httpStatus;
+        private Cookie cookie;
+
+        private Url redirectUrl;
+
+        public Builder setData(Data data) {
+            this.data = data;
+            return this;
+        }
+
+        public Builder setFileType(FileType fileType) {
+            this.fileType = fileType;
+            return this;
+        }
+
+        public Builder setHttpStatus(HttpStatus httpStatus) {
+            this.httpStatus = httpStatus;
+            return this;
+        }
+
+        public Builder setCookie(Cookie cookie) {
+            this.cookie = cookie;
+            return this;
+        }
+
+        public Builder setRedirectUrl(Url redirectUrl) {
+            this.redirectUrl = redirectUrl;
+            return this;
+        }
+
+        public HttpResponse build() {
+            return new HttpResponse(data, fileType, httpStatus, cookie,redirectUrl);
+        }
     }
 
-    public HttpResponse(Data data,FileType fileType,HttpStatus httpStatus,Cookie cookie) {
+
+
+
+    public HttpResponse(Data data,FileType fileType,HttpStatus httpStatus,Cookie cookie,Url redirectUrl) {
         this.data = data;
         this.fileType = fileType;
         this.httpStatus = httpStatus;
-        responseHeader(cookie);
+        this.cookie = cookie;
+        this.redirectUrl = redirectUrl;
+        responseHeader();
         responseBody();
     }
 
 
 
     private void responseHeader() {
-
         try {
             responseStatus();
             responseContentType();
             responseContentLength();
-            responseLocationIndexHtml();
+            if(cookie != null)
+                responseCookie(cookie);
+            if(redirectUrl != null)
+                responseLocationIndexHtml(redirectUrl);
             data.getClientOutputStream().writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void responseHeader(Cookie cookie) {
 
-        try {
-            responseStatus();
-            responseContentType();
-            responseContentLength();
-            responseLocationIndexHtml();
-            responseCookie(cookie);
-            data.getClientOutputStream().writeBytes("\r\n");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
+
 
 
 
@@ -75,8 +105,8 @@ public class HttpResponse {
         data.getClientOutputStream().writeBytes("Content-Length: " + data.getData().length + "\r\n");
     }
 
-    private void responseLocationIndexHtml() throws IOException {
-        data.getClientOutputStream().writeBytes("Location: " + "/index.html" + " \r\n");
+    private void responseLocationIndexHtml(Url redirectUrl) throws IOException {
+        data.getClientOutputStream().writeBytes("Location: " + redirectUrl.getUrl() + " \r\n");
     }
 
     private void responseCookie(Cookie cookie) throws IOException {
