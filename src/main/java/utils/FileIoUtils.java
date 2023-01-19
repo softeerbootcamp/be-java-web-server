@@ -46,9 +46,14 @@ public class FileIoUtils {
         return map;
     }
 
-    public static String getLoggedInHome(String username) {
-        String homePage = new String(loadFile(PathManager.HOME_PATH));
-        return homePage.replace("<!--username-->", String.format("<p>%s</p>", username));
+    public static byte[] makeLoggedInPage(String path, Session session) {
+        String page = new String(loadFile(path));
+        if (path.contains("index.html")) {
+            page = page.replace("<!--username-->", String.format("<li><a>%s</a></li>", session.getName()));
+        }
+        String target_index = "<li><a href=\"user/login.html\" role=\"button\">로그인</a></li>";
+        String target_others = "<li><a href=\"../user/login.html\" role=\"button\">로그인</a></li>";
+        return page.replace(target_index, "").replace(target_others, "").getBytes();
     }
 
     public static byte[] makeUserListPage(Collection<User> users, Session session) {
