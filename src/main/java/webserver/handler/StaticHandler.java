@@ -24,12 +24,12 @@ public class StaticHandler implements ControllerHandler {
         }
         return staticHandler = new StaticHandler();
     }
+
     @Override
     public HttpResponseMessage handle(HttpRequest httpRequest) {
         String uri = httpRequest.getRequestLine().getUrl();
         HttpResponse httpResponse = new HttpResponse();
         String path = httpResponse.findPath(uri);
-
 
         if (httpRequest.isContainsCookie() && uri.contains(".html")) {
             UUID sessionId = httpRequest.getSessionId().get();
