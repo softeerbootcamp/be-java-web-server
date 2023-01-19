@@ -3,6 +3,7 @@ package util;
 import request.RequestHeader;
 
 import java.net.http.HttpHeaders;
+import java.util.Optional;
 
 public class Cookie {
     private static final String COOKIE = "Cookie";
@@ -22,9 +23,14 @@ public class Cookie {
         return value;
     }
 
-    public static Cookie extractCookie(RequestHeader requestHeader) {
+    public static Optional<Cookie> extractCookie(RequestHeader requestHeader) {
         String cookieSet = requestHeader.getHeaderContents().get(COOKIE);
+
+        if (cookieSet == null) {
+            return Optional.empty();
+        }
+
         String[] splitCookie = cookieSet.split("=");
-        return new Cookie(splitCookie[0], splitCookie[1]);
+        return Optional.of(new Cookie(splitCookie[0], splitCookie[1]));
     }
 }
