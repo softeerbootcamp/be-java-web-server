@@ -15,14 +15,9 @@ public class HttpResponse {
     private final HttpHeader header;
     private final byte[] body;
 
-    private final String contentType;
-    private final String destination;
-
     private HttpResponse(HttpResponseBuilder httpResponseBuilder) {
         this.statusLine = httpResponseBuilder.httpStatusLine;
         this.body = httpResponseBuilder.body;
-        this.contentType = httpResponseBuilder.contentType;
-        this.destination = httpResponseBuilder.destination;
         this.header = httpResponseBuilder.header;
     }
 
@@ -62,8 +57,6 @@ public class HttpResponse {
     public static class HttpResponseBuilder {
         private HttpStatusLine httpStatusLine;
         private byte[] body;
-        private String contentType;
-        private String destination;
         private HttpHeader header;
 
         public HttpResponseBuilder() {
@@ -72,19 +65,6 @@ public class HttpResponse {
         public HttpResponseBuilder setHttpStatusLine(HttpStatusLine httpStatusLine) {
             this.httpStatusLine = httpStatusLine;
             return this;
-        }
-
-        public HttpResponseBuilder makeHeader() {
-            if (this.httpStatusLine.checkStatus(HttpStatus.OK)) {
-                this.header = HttpResponseUtils.makeResponse200Header(contentType, body.length);
-                return this;
-            }
-            if (this.httpStatusLine.checkStatus(HttpStatus.FOUND)) {
-                this.header = HttpResponseUtils.makeResponse302Header(destination);
-                return this;
-            }
-            // 200 302 응답 둘다 아니면?
-            return null;
         }
 
         public HttpResponseBuilder set200Header(String contentType, byte[] body) {
@@ -100,16 +80,6 @@ public class HttpResponse {
 
         public HttpResponseBuilder setBody(byte[] body) {
             this.body = body;
-            return this;
-        }
-
-        public HttpResponseBuilder setContentType(String contentType) {
-            this.contentType = contentType;
-            return this;
-        }
-
-        public HttpResponseBuilder setDestination(String destination) {
-            this.destination = destination;
             return this;
         }
 
