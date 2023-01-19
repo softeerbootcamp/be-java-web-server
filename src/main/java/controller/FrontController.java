@@ -2,6 +2,8 @@ package controller;
 
 import model.User;
 import service.SignUpService;
+import view.Model;
+import view.ViewHandler;
 import webserver.HttpMethod;
 import webserver.HttpRequest;
 import webserver.HttpResponse;
@@ -12,7 +14,7 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FrontController implements Controller {
+public class FrontController {
     private static final Map<String,Controller> controllers;
     private static final String SIGN_UP_PATH_URL = "/user/create";
     private static final String LOGIN_PATH_URL ="/user/login";
@@ -40,10 +42,10 @@ public class FrontController implements Controller {
      * @param request
      * @param response
      */
-    @Override
-    public void service(HttpRequest request, HttpResponse response) {
+    public void handle(HttpRequest request, HttpResponse response) {
         try{
             String url = request.getUrl();
+            Model model = new Model();
 
             String dynamicUrl ="";
             //get이면 파일 요청
@@ -64,13 +66,19 @@ public class FrontController implements Controller {
             if(!(dynamicUrl.isEmpty())) {
                 System.out.println("dynamic controller");
                 controller = getControllerByUrl(url);
+                String path = controller.service(request,response,model);
+                ViewHandler.handle(path,request,response,model);
+                return;
             }
             //만약 파일 요청이 아니라 그 외 요청이라면 (post등)
             if(!url.contains(".") && (dynamicUrl.isEmpty())) {
                 System.out.println("etc controller");
                 controller = getControllerByUrl(url);
+//                String path = controller.service(request,response,model);
+//                ViewHandler.handle(path,request,response,model);
+//                return;
             }
-            controller.service(request,response);
+            controller.service(request,response,model);
         }catch(NullPointerException e){
             NotFoundExceptionHandler.showErrorPage(response);
              e.printStackTrace();

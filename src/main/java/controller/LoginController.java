@@ -3,6 +3,7 @@ package controller;
 import db.Database;
 import model.User;
 import service.LoginService;
+import view.Model;
 import webserver.*;
 
 import java.util.Optional;
@@ -16,7 +17,7 @@ public class LoginController implements Controller{
     private LoginService service= new LoginService();
 
     @Override
-    public String doPost(HttpRequest request, HttpResponse response) {
+    public String doPost(HttpRequest request, HttpResponse response, Model model) {
         String userId = request.parseBody().get("userId");
         String password = request.parseBody().get("password");
         doLogin(userId,password,response);

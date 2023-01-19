@@ -1,21 +1,23 @@
 package controller;
 
+import view.Model;
 import webserver.*;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 
 public interface Controller {
-    default void service(HttpRequest request, HttpResponse response) throws NullPointerException,IOException, URISyntaxException {
+    default String service(HttpRequest request, HttpResponse response,Model model) throws NullPointerException,IOException, URISyntaxException {
 
-        if(request.getMethod().equals(HttpMethod.GET)) doGet(request,response);
-        if(request.getMethod().equals(HttpMethod.POST)) doPost(request,response);
+        if(request.getMethod().equals(HttpMethod.GET)) return doGet(request,response,model);
+        if(request.getMethod().equals(HttpMethod.POST)) return doPost(request,response,model);
+
+        return "";
     }
 
-    default String doGet(HttpRequest request,HttpResponse response) throws IOException, URISyntaxException {
+    default String doGet(HttpRequest request, HttpResponse response, Model model) throws IOException, URISyntaxException {
         File file = new File("./templates/notFound.html");
         try{
             response.setStatus(HttpStatus.NOT_FOUND);
@@ -28,7 +30,7 @@ public interface Controller {
         return "";
     }
 
-    default String doPost(HttpRequest request,HttpResponse response){
+    default String doPost(HttpRequest request,HttpResponse response,Model model){
         File file = new File("./templates/notFound.html");
         try{
             response.setStatus(HttpStatus.NOT_FOUND);

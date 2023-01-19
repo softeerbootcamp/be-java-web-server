@@ -3,6 +3,7 @@ package controller;
 import db.Database;
 import model.User;
 import service.SignUpService;
+import view.Model;
 import webserver.HttpRequest;
 import webserver.HttpResponse;
 
@@ -21,7 +22,7 @@ public class SignUpController implements Controller{
     }
 
     @Override
-    public String doGet(HttpRequest request, HttpResponse response) {
+    public String doGet(HttpRequest request, HttpResponse response, Model model) {
         try{
             signUpService.signUp(request);
         }catch(UnsupportedEncodingException e){
@@ -33,7 +34,7 @@ public class SignUpController implements Controller{
     }
 
     @Override
-    public String doPost(HttpRequest request, HttpResponse response) {
+    public String doPost(HttpRequest request, HttpResponse response,Model model) {
         try{
             signUpService.singUpByPost(request);
         }catch(UnsupportedEncodingException e){

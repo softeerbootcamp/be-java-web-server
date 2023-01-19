@@ -34,7 +34,7 @@ public class RequestHandler implements Runnable {
             //브라우저에서 서버로 들어오는 모든 요청은 Inputstream 안에 담겨져 있음, outputstream은 서버에서 브라우저로 보내는 응답
             HttpRequest request = RequestParser.parseInputStreamToHttpRequest(in);
             HttpResponse response = new HttpResponse();
-            frontController.service(request,response);
+            frontController.handle(request,response);
             ResponseWriter rw = new ResponseWriter(out);
             rw.write(request,response);
         } catch (IOException e) {
