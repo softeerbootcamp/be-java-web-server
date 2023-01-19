@@ -13,9 +13,9 @@ public class SessionService {
         this.sessionRepository = sessionRepository;
     }
 
-    public Session makeSession(String userId) {
+    public Session makeSession(String userId, String userName) {
         String sessionId = UUID.randomUUID().toString();
-        Session session = new Session(sessionId, userId);
+        Session session = new Session(sessionId, userId, userName);
         sessionRepository.addSession(sessionId, session);
 
         return session;
@@ -31,6 +31,12 @@ public class SessionService {
         return sessionRepository
                 .findById(sessionId)
                 .getUserId();
+    }
+
+    public String getUserName(String sessionId) {
+        return sessionRepository
+                .findById(sessionId)
+                .getUserName();
     }
 
 }

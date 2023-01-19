@@ -33,12 +33,11 @@ public class UserLogInController extends AbstractController {
     @Override
     public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         try {
-            userService.validateUser(
-                    httpRequest.getParameter(USER_ID),
-                    httpRequest.getParameter(PASSWORD)
-            );
+            String id = httpRequest.getParameter(USER_ID);
+            String pw = httpRequest.getParameter(PASSWORD);
+            userService.validateUser(id, pw);
 
-            Session session = sessionService.makeSession(httpRequest.getParameter(USER_ID));
+            Session session = sessionService.makeSession(id, userService.getUserName(id));
 
             logger.info("Login Success");
 
