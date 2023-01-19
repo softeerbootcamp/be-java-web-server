@@ -44,7 +44,7 @@ public class UserController implements Controller {
         else if(requestLine.getMethod().equals(Method.GET) &&
                 requestLine.getUri().startsWith("/user/list")) return userListResponse(request);
 
-        return Response.of(request, Status.NOT_FOUND);
+        return Response.from(StatusLine.of(requestLine.getHttpVersion(), Status.NOT_FOUND));
     }
 
     private Response createUserResponse(Request request) {
@@ -84,8 +84,9 @@ public class UserController implements Controller {
 
         if(Sessions.isExistSession(request.getSessionId())) {
             byte[] body = getUserListHtmlWhenLogin(userService.getUserList());
-            // TODO: body에 빈 배열 넘어오는 경우 예외 처리
+
             headers = HeaderUtils.response200Header(ContentType.HTML, body.length);
+
             return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.OK), headers, body);
         }
 
