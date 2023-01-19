@@ -15,7 +15,7 @@ public interface Controller {
         if(request.getMethod().equals(HttpMethod.POST)) doPost(request,response);
     }
 
-    default void doGet(HttpRequest request,HttpResponse response) throws IOException, URISyntaxException {
+    default String doGet(HttpRequest request,HttpResponse response) throws IOException, URISyntaxException {
         File file = new File("./templates/notFound.html");
         try{
             response.setStatus(HttpStatus.NOT_FOUND);
@@ -24,9 +24,11 @@ public interface Controller {
         }catch(Exception e){
             System.out.println("error");
         }
+
+        return "";
     }
 
-    default void doPost(HttpRequest request,HttpResponse response){
+    default String doPost(HttpRequest request,HttpResponse response){
         File file = new File("./templates/notFound.html");
         try{
             response.setStatus(HttpStatus.NOT_FOUND);
@@ -35,6 +37,8 @@ public interface Controller {
         }catch(Exception e){
             System.out.println("error");
         }
+
+        return "";
     }
 
 }

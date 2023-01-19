@@ -21,23 +21,27 @@ public class SignUpController implements Controller{
     }
 
     @Override
-    public void doGet(HttpRequest request, HttpResponse response) {
+    public String doGet(HttpRequest request, HttpResponse response) {
         try{
             signUpService.signUp(request);
         }catch(UnsupportedEncodingException e){
             System.out.println(e.getMessage());
         }
         response.redirect(REDIRECT_URL);
+
+        return "";
     }
 
     @Override
-    public void doPost(HttpRequest request, HttpResponse response) {
+    public String doPost(HttpRequest request, HttpResponse response) {
         try{
             signUpService.singUpByPost(request);
         }catch(UnsupportedEncodingException e){
             System.out.println(e.getMessage());
         }
         response.redirect(REDIRECT_URL);
+
+        return "";
     }
 
     public String getPathUrl() {

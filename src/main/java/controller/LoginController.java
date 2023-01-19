@@ -16,10 +16,12 @@ public class LoginController implements Controller{
     private LoginService service= new LoginService();
 
     @Override
-    public void doPost(HttpRequest request, HttpResponse response) {
+    public String doPost(HttpRequest request, HttpResponse response) {
         String userId = request.parseBody().get("userId");
         String password = request.parseBody().get("password");
         doLogin(userId,password,response);
+
+        return "";
     }
 
     private void doLogin(String userId, String password,HttpResponse response){

@@ -11,7 +11,9 @@ import java.net.URISyntaxException;
 public class ReturnFileController implements Controller{
 
     @Override
-    public void doGet(HttpRequest request, HttpResponse response) throws NullPointerException,IOException, URISyntaxException {
+    public String doGet(HttpRequest request, HttpResponse response) throws NullPointerException,IOException, URISyntaxException {
         RequestDispatcher.handle(request,response);
+
+        return "";
     }
 }

@@ -1,5 +1,6 @@
 package controller;
 
+import model.User;
 import service.SignUpService;
 import webserver.HttpMethod;
 import webserver.HttpRequest;
@@ -59,7 +60,7 @@ public class FrontController implements Controller {
                 System.out.println("static controller");
                 controller = new ReturnFileController();
             }
-            //동적 파일 요청이라면
+            //동적 파일 요청이라면 - 현재는 유저 리스트 요청만
             if(!(dynamicUrl.isEmpty())) {
                 System.out.println("dynamic controller");
                 controller = getControllerByUrl(url);
