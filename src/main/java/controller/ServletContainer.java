@@ -24,6 +24,7 @@ public class ServletContainer {
         servletContainer = new HashMap<>();
         servletNameMapper.put("/user/create", "controller.UserCreateController");
         servletNameMapper.put("/user/login", "controller.LoginController");
+        servletNameMapper.put("/user/list", "controller.UserLoginListController");
     }
 
     public boolean hasMappingServlet(HttpRequest httpRequest) {

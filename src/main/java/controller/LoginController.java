@@ -24,8 +24,8 @@ public class LoginController extends AbstractController{
     }
 
     @Override
-    public HttpResponse post(HttpRequest httpRequest) throws IOException, URISyntaxException, AuthenticationException {
+    protected HttpResponse post(HttpRequest httpRequest) throws IOException, URISyntaxException {
         UserService userService = UserService.from(httpRequest);
-        return userService.postloginService();
+        return userService.postLoginService();
     }
 }

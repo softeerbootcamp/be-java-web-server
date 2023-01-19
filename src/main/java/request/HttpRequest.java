@@ -83,4 +83,8 @@ public class HttpRequest {
     public HttpSession getHttpSession() {
         return httpSession;
     }
+
+    public String getMethod() {
+        return requestStartLine.getMethod().getMethodName();
+    }
 }

@@ -23,7 +23,7 @@ public class RequestStartLine {
 
     public static RequestStartLine of(BufferedReader bufferedReader) throws IOException {
         String source = bufferedReader.readLine();
-
+        logger.debug("startLineSource : {}",source);
         String[] sources = source.split("\\s");
         Method method = Method.of(sources[0]);
         Uri uri = Uri.of(sources[1]);

@@ -34,7 +34,6 @@ public class RequestBody {
     }
 
     public String getBody() {
-        logger.debug("getBody : {}",body);
         return body;
     }
 }

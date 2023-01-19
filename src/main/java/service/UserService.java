@@ -47,7 +47,7 @@ public class UserService {
             }
             logger.debug("key : {}", keyAndValue[0]);
             logger.debug("value : {}", keyAndValue[1]);
-            data.put(keyAndValue[0], keyAndValue[1]);
+            data.put(keyAndValue[0].trim(), keyAndValue[1].trim());
         }
         return new UserService(data,httpRequest);
     }
@@ -61,11 +61,13 @@ public class UserService {
         return new User(userId, password, name, email);
     }
 
-    public HttpResponse postloginService() throws IOException, URISyntaxException {
+    public HttpResponse postLoginService() throws IOException, URISyntaxException {
         String userId = data.get("userId");
         String password = data.get("password");
 
-        User test = Database.findUserById("test");
+        logger.debug("PostuserId:{}",userId);
+        logger.debug("Postuserpwd:{}",password);
+
         User user = Database.findUserById(userId);
 
         HttpSession httpSession = httpRequest.getHttpSession();
@@ -73,6 +75,7 @@ public class UserService {
         SessionDatabase.addHttpSession(httpSession);
 
         if (user != null && password.equals(user.getPassword())) {
+            logger.debug("ddododo");
             return HttpResponse.ok()
                     .bodyByPath("./templates/index.html")
                     .setCookie("JSESSIONID",  httpRequest.getSessionId(),"/")

@@ -2,15 +2,23 @@ package response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import request.HttpVersion;
+import util.FileIoUtils;
+import webserver.ContentType;
+import webserver.ContentTypeMapper;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HttpResponse {
     private static final String lineSeparator = System.lineSeparator();
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
-//    private final StatusCode statusCode;
+    //    private final StatusCode statusCode;
     private final StatusLine statusLine;
     private final ResponseHeader responseHeader;
     private final byte[] body;

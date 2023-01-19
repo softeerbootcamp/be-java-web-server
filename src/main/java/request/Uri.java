@@ -21,10 +21,11 @@ public class Uri {
         String path = uriSources[0];
         Map<String, String> parameters = new HashMap<>();
 
-        path = path.replaceAll("/user/js", "/js");
-        path = path.replaceAll("/user/images", "/images");
-        path = path.replaceAll("/user/css", "/css");
-        path = path.replaceAll("/user/fonts", "/fonts");
+//        path = path.replaceAll("/user/js", "/js");
+//        path = path.replaceAll("/user/user", "/user");
+//        path = path.replaceAll("/user/images", "/images");
+//        path = path.replaceAll("/user/css", "/css");
+//        path = path.replaceAll("/user/fonts", "/fonts");
 
         if (existParameters(uriSources)) {
             extractParameter(uriSources[1], parameters);

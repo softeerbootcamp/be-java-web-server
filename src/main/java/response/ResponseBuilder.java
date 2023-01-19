@@ -60,6 +60,15 @@ public class ResponseBuilder {
         fields.put("Location", location);
         return this;
     }
+
+    public ResponseBuilder body(String body) {
+        byte[] bodyInBytes = body.getBytes();
+        this.contentType(ContentType.HTML.value())
+                .contentLength(bodyInBytes.length);
+        this.body = bodyInBytes;
+        return this;
+    }
+
     public HttpResponse build() {
         return new HttpResponse(this.statusLine, new ResponseHeader(this.fields), this.body);
     }
