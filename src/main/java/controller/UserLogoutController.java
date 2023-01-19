@@ -1,7 +1,9 @@
 package controller;
 
+import exception.HttpMethodException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import utils.HttpMethod;
 import utils.PathManager;
 import utils.SessionManager;
 
@@ -12,7 +14,12 @@ public class UserLogoutController implements Controller {
 
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
-        doGet(httpRequest, httpResponse);
+        HttpMethod requestHttpMethod = httpRequest.getHttpMethod();
+        if (HttpMethod.GET.equals(requestHttpMethod)) {
+            doGet(httpRequest, httpResponse);
+            return;
+        }
+        throw new HttpMethodException(requestHttpMethod);
     }
 
     private void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {

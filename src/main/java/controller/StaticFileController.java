@@ -1,5 +1,6 @@
 package controller;
 
+import exception.HttpMethodException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import utils.ContentType;
@@ -13,10 +14,11 @@ public class StaticFileController implements Controller {
 
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
-        if (!HttpMethod.GET.equals(httpRequest.getHttpMethod())) {
-            throw new IllegalArgumentException("Invalid HTTP Method");
+        HttpMethod requestHttpMethod = httpRequest.getHttpMethod();
+        if (HttpMethod.GET.equals(requestHttpMethod)) {
+            doGet(httpRequest, httpResponse);
         }
-        doGet(httpRequest, httpResponse);
+        throw new HttpMethodException(requestHttpMethod);
     }
 
     private void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {

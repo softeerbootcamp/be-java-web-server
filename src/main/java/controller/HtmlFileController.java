@@ -1,12 +1,10 @@
 package controller;
 
+import exception.HttpMethodException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.Session;
-import utils.ContentType;
-import utils.FileIoUtils;
-import utils.SessionManager;
-import utils.StatusCode;
+import utils.*;
 
 import java.util.UUID;
 
@@ -15,7 +13,11 @@ public class HtmlFileController implements Controller {
 
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
-        doGet(httpRequest, httpResponse);
+        HttpMethod requestHttpMethod = httpRequest.getHttpMethod();
+        if (HttpMethod.GET.equals(requestHttpMethod)) {
+            doGet(httpRequest, httpResponse);
+        }
+        throw new HttpMethodException(requestHttpMethod);
     }
 
     private void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {

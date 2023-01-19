@@ -1,5 +1,6 @@
 package controller;
 
+import exception.HttpMethodException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
@@ -25,11 +26,12 @@ public class UserLoginController implements Controller {
 
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
-        if (httpRequest.getHttpMethod().equals(HttpMethod.POST)) {
+        HttpMethod requestHttpMethod = httpRequest.getHttpMethod();
+        if (HttpMethod.POST.equals(requestHttpMethod)) {
             doPost(httpRequest, httpResponse);
             return;
         }
-        throw new IllegalArgumentException("Login Controller에 존재하지 않는 Http 메서드입니다.");
+        throw new HttpMethodException(requestHttpMethod);
     }
 
     private void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {

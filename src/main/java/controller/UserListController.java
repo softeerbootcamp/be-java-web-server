@@ -1,5 +1,6 @@
 package controller;
 
+import exception.HttpMethodException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.Session;
@@ -17,7 +18,7 @@ import static utils.PathManager.LOGIN_PATH;
 
 public class UserListController implements Controller {
     public static final String PATH = "/user/list";
-    private static Logger logger = LoggerFactory.getLogger(UserListController.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserListController.class);
     private final UserService userService;
 
     public UserListController(UserService userService) {
@@ -26,11 +27,12 @@ public class UserListController implements Controller {
 
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
-        if (httpRequest.getHttpMethod().equals(HttpMethod.GET)) {
+        HttpMethod requestHttpMethod = httpRequest.getHttpMethod();
+        if (HttpMethod.GET.equals(requestHttpMethod)) {
             doGet(httpRequest, httpResponse);
             return;
         }
-        throw new IllegalArgumentException("존재하지 않는 Http 메서드입니다.");
+        throw new HttpMethodException(requestHttpMethod);
     }
 
     private void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
@@ -38,7 +40,7 @@ public class UserListController implements Controller {
         try {
             Session session = SessionManager.getSession(UUID.fromString(sid)).orElseThrow(AuthenticationException::new);
             httpResponse.setBody(FileIoUtils.makeUserListPage(userService.findAllUsers(), session));
-        } catch (NullPointerException |AuthenticationException e) {
+        } catch (NullPointerException | AuthenticationException e) {
             httpResponse.redirect(LOGIN_PATH);
         }
     }
