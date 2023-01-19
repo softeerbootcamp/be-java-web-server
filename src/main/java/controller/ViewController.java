@@ -6,6 +6,7 @@ import http.request.HttpRequest;
 import http.request.HttpUri;
 import http.request.RequestHeader;
 import http.request.RequestLine;
+import http.response.DynamicResolver;
 import http.response.HttpResponse;
 import http.response.HttpResponseFactory;
 import http.response.HttpStatus;
@@ -31,22 +32,10 @@ public class ViewController implements Controller {
 
         if (httpUri.getPath().endsWith(".html") && SessionHandler.validateSession(httpRequest.getSid())) {
             HttpSession httpSession = SessionHandler.getSession(httpRequest.getSid());
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String line;
-            StringBuilder sb = new StringBuilder();
-            while ((line = br.readLine()) != null) {
-                if (line.contains("로그인") || line.contains("회원가입")) {
-                    continue;
-                }
-                if (line.contains("Posts")) {
-                    sb.append("<li><a>").append(httpSession.getUserName()).append("</a></li>").append(System.lineSeparator());
-                }
-                sb.append(line).append(System.lineSeparator());
-            }
-            body = sb.toString().getBytes();
+            body = DynamicResolver.showUserName(file, httpSession.getUserName());
         }
 
-        return HttpResponseFactory.OK(requestHeader.getContentType(), new HashMap<>(), body);
+        return HttpResponseFactory.OK(requestHeader.getContentType(), body);
     }
 
     @Override

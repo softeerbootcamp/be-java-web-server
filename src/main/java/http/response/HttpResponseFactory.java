@@ -14,6 +14,15 @@ public class HttpResponseFactory {
         );
     }
 
+    public static HttpResponse OK(String contentType, byte[] body) {
+        return HttpResponse.of(
+                HttpStatus.OK,
+                contentType,
+                new HashMap<>(),
+                body
+        );
+    }
+
     public static HttpResponse FOUND(String location) {
         return HttpResponse.of(
                 HttpStatus.FOUND,
