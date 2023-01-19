@@ -21,14 +21,6 @@ public enum HttpStatus {
                 .orElseThrow();
     }
 
-    public int getStatusCode() {
-        return statusCode;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
     public String toString() {
         return statusCode + " " + status;
     }
