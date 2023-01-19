@@ -6,7 +6,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class StaticFileServiceTest {
     @Test
-    void 정적_파일_서비스_테스트(){
+    void 정적_파일_서비스_테스트() {
         // Given
         String filePath = "src/main/resources/templates/index.html";
         String httpVersion = "HTTP/1.1";
