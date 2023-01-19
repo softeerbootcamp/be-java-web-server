@@ -19,8 +19,11 @@ public class TemplateController implements Controller {
     public ResponseFactory controllerService(Request request) throws IOException {
         logger.debug("firstLine : " + request.getRequestLine().getURL());
         String url = request.getRequestLine().getURL();
-
+        boolean isDynamic = request.isRequestHaveCookie();
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + url).toPath());
+        if(isDynamic){
+            body = DynamicController.runDynamicFactory(body);
+        }
         ResponseFactory responseFactory = new ResponseFactory.Builder()
                 .setResponseStatusLine(ControllerTypeEnum.TEMPLATE)
                 .setResponseHeader(ContentTypeEnum.HTML, body.length)
