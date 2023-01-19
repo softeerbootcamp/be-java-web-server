@@ -20,7 +20,7 @@ public class ControllerMapper {
     public static Controller getController(HttpRequest request) {
         String url = request.getUrl();
         if (url.equals("/") || StaticResourceController.isSupported(url)) {
-            return new StaticResourceController();
+            return StaticResourceController.getInstance();
         }
 
         for (String key : controllerMap.keySet()) {
