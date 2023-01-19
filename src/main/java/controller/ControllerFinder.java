@@ -16,6 +16,7 @@ import util.error.erroclass.NotLoggedException;
 import webserver.RequestHandler;
 
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.NoSuchFileException;
@@ -28,40 +29,35 @@ public class ControllerFinder {
     private static SessionService sessionService = new SessionService();
 
 
-    public static Controller findController(Url url) {
-        try {
-            String packageName = "controller";
-            ClassPath classpath = ClassPath.from(Thread.currentThread().getContextClassLoader());
-            ImmutableSet<ClassPath.ClassInfo> havingControllerInfoClasses = classpath.getTopLevelClassesRecursive(packageName);
-            for (ClassPath.ClassInfo classInfo : havingControllerInfoClasses) {
-                Class<Controller> clazz = (Class<Controller>) Class.forName(classInfo.getName());
-                if (clazz.isAnnotationPresent(ControllerInfo.class)) {
-                    ControllerInfo controllerInfo = clazz.getAnnotation(ControllerInfo.class);
-                    if (url.getUrl().matches(controllerInfo.regex())) {
-                        return clazz.newInstance();
-                    }
-                }
+    public static void findController(HttpRequest httpRequest, DataOutputStream dataOutputStream) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, NotLoggedException, InvocationTargetException, NoSuchMethodException {
+        String packageName = "controller";
+        ClassPath classpath = ClassPath.from(Thread.currentThread().getContextClassLoader());
+        ImmutableSet<ClassPath.ClassInfo> havingControllerInfoClasses = classpath.getTopLevelClassesRecursive(packageName);
+        for (ClassPath.ClassInfo classInfo : havingControllerInfoClasses) {
+            Class<Controller> clazz = (Class<Controller>) Class.forName(classInfo.getName());
+            if (clazz.isAnnotationPresent(ControllerInfo.class)) {
+                handleControllerInfoAnnotation(clazz.newInstance(), httpRequest, dataOutputStream);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
-        return new FileController();
     }
 
     public static void handleControllerInfoAnnotation(Controller controller, HttpRequest httpRequest, DataOutputStream dataOutputStream) throws IllegalAccessException, NoSuchFileException, NoSuchMethodException, InvocationTargetException, NotLoggedException {
         Method[] methods = controller.getClass().getMethods();
 
-        Method method = Arrays.stream(methods)
+        Optional<Method> method = Arrays.stream(methods)
                 .filter(m -> m.isAnnotationPresent(ControllerMethodInfo.class))
                 .filter(m -> isMatchControllerMethodWithRequest(m.getAnnotation(ControllerMethodInfo.class), httpRequest))
-                .findAny()
-                .orElseThrow(() -> new NoSuchMethodException(HttpsErrorMessage.NOT_VALID_MATCHING_METHOD));
+                .findAny();
 
-        if (method.isAnnotationPresent(Auth.class)&&!sessionService.isUserLoggedIn(Cookie.extractCookie(httpRequest.getRequestHeader()))) {
+        if (method.isEmpty()) {
+            return;
+        }
+
+        if (method.get().isAnnotationPresent(Auth.class) && !sessionService.isUserLoggedIn(Cookie.extractCookie(httpRequest.getRequestHeader()))) {
             throw new NotLoggedException(HttpsErrorMessage.NOT_LOGGED);
         }
-        method.invoke(controller, dataOutputStream, httpRequest);
+        method.get().invoke(controller, dataOutputStream, httpRequest);
     }
 
 
