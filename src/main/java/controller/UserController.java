@@ -65,9 +65,10 @@ public class UserController implements Controller {
         Map<Header, String> headers;
         RequestLine requestLine = request.getRequestLine();
         if(isLoginSuccess) {
+            User user = userService.getUser(userLoginInfo.get("userId"));
             String sessionId = SessionUtils.generateSessionId();
             Session session = Sessions.getSession(sessionId);
-            session.setSessionData("user", userLoginInfo.get("userId"));
+            session.setSessionData("user", user);
 
             headers = HeaderUtils.responseLoginSuccessHeader(sessionId);
 
@@ -116,11 +117,12 @@ public class UserController implements Controller {
             return new byte[0];
         }
 
+        User user = (User) Sessions.getSession(request.getSessionId()).getSessionData().get("user");
         String originalListHtml = new String(body);
         String[] splitListHtml = originalListHtml.split("<tbody>");
         String resultListHtml = splitListHtml[0] + "<tbody>" + userList + splitListHtml[1];
-        resultListHtml = resultListHtml.replace("로그인",
-                Sessions.getSession(request.getSessionId()).getSessionData().get("user"));
+        resultListHtml = resultListHtml.replace("로그인", user.getName());
+        resultListHtml = resultListHtml.replace("user/login.html", "user/profile.html");
         return resultListHtml.getBytes();
     }
 }
