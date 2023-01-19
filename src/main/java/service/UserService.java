@@ -1,6 +1,7 @@
 package service;
 
 import db.UserRepository;
+import exception.LogInFailedException;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +40,7 @@ public class UserService {
     public void validateUser(String requestUserId, String requestPassword) {
         User user = userRepository.findUserById(requestUserId);
         if (user == null || !requestPassword.equals(user.getPassword())) {
-            throw new IllegalArgumentException("로그인 실패");
+            throw new LogInFailedException("로그인 실패");
         }
     }
 

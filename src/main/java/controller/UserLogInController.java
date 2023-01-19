@@ -1,5 +1,6 @@
 package controller;
 
+import exception.LogInFailedException;
 import http.cookie.Cookie;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -47,8 +48,9 @@ public class UserLogInController extends AbstractController {
                     Cookie.of(DEFAULT_SESSION_ID, session.getSessionId())
             );
 
-        } catch (IllegalArgumentException e) {
+        } catch (LogInFailedException e) {
             logger.info("Login Failed");
+            e.printStackTrace();
             httpResponse.sendRedirect(HttpStatusCode.FOUND, LOGIN_FAILED_PATH);
         }
     }
