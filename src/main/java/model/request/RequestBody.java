@@ -30,9 +30,17 @@ public class RequestBody {
     }
 
     public static Map<String, String> parseRequestBody(String body) {
-        return Arrays.stream(body.split("&"))
-                .map(b -> b.split("="))
-                .collect(Collectors.toMap(a -> a[0], a -> a[1]));
+        if (body == null || body.isEmpty()) {
+            throw new IllegalArgumentException("Request body cannot be null or empty");
+        }
+
+        try {
+            return Arrays.stream(body.split("&"))
+                    .map(b -> b.split("="))
+                    .collect(Collectors.toMap(a -> a[0], a -> a[1]));
+        } catch (ArrayIndexOutOfBoundsException | IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid format for request body: " + body);
+        }
     }
 
     public Map<String, String> getContent() {
