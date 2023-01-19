@@ -19,4 +19,13 @@ public class SessionTest {
         service.addSession(session);
         assertThat(db.existsBySessionId("uuid")).isEqualTo(true);
     }
+
+    @Test
+    public void 세션_유효() {
+        Session session1 = Session.of("123", User.of("jin","jin","jin","jin"));
+        SessionService.getInstance().addSession(session1);
+
+        assertThat(SessionService.getInstance().isValid("123")).isEqualTo(true);
+        assertThat(SessionService.getInstance().isValid("")).isEqualTo(false);
+    }
 }
