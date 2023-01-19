@@ -1,5 +1,6 @@
 package controller;
 
+import Utility.HtmlMakerUtility;
 import httpMock.CustomHttpFactory;
 import httpMock.CustomHttpRequest;
 import httpMock.CustomHttpResponse;
@@ -16,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -48,10 +50,10 @@ public class StaticFileController implements RequestController {
         File file = StaticFileService.getFile(req.getUrl());
         User user = SessionService.getUserBySessionId(req.getSSID()).orElse(User.GUEST);
         try {
-            FileReader fr = new FileReader(file);
-            BufferedReader br = new BufferedReader(fr);
-            String lines = br.lines().collect(Collectors.joining("\n"));
-            lines = StaticFileService.renderFile(lines, new HashMap<>(){{put("name", user.getName());}});
+            Map<String, String> matchings = HtmlMakerUtility.getLoginLogoutTemplate(user != User.GUEST);
+            matchings.put("name", user.getName());
+
+            String lines = StaticFileService.renderFile(file, matchings);
             return CustomHttpResponse.of(StatusCode.OK, ContentType.TEXT_HTML, new HashMap<>(), lines.getBytes());
         } catch (IOException e) {
             return CustomHttpFactory.NOT_FOUND();
