@@ -24,10 +24,12 @@ public class LogInService implements Service{
 
         try{
             User whoIsTryingLogIn = Database.findUserById(userInfo.get(User.ID));
+
             if(whoIsTryingLogIn == Database.NOT_FOUND_USER)
                 throw new NotFoundUserException("가입하지 않은 아이디입니다.");
             if(!userInfo.get(User.PASS_WORD).equals(whoIsTryingLogIn.getPassword()))
                 throw new PasswordMismatchException("비밀번호를 다시 입력하세요");
+
             sid = UserIdSession.addUserId(whoIsTryingLogIn.getUserId());
         } catch(CannotLogInException e)
         {

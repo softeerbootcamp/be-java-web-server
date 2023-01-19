@@ -1,6 +1,10 @@
 package webserver.service;
 
 import db.Database;
+import db.UserIdSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import webserver.WebServer;
 import webserver.httpUtils.Request;
 import webserver.httpUtils.Response;
 
@@ -9,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 public class AlreadyLoggedInService implements Service{
+    private static final Logger logger = LoggerFactory.getLogger(AlreadyLoggedInService.class);
     private String sid_usrid;
     public AlreadyLoggedInService(String sid_usrid){
         this.sid_usrid = sid_usrid;
@@ -19,14 +24,16 @@ public class AlreadyLoggedInService implements Service{
     {
         String reqQuery = req.getReqLine().getQuery();
         String contentType = Files.probeContentType(new File(reqQuery).toPath());
-        byte[] bodyByte = Service.urlToByte(reqQuery);
+        byte bodyByte[] = Service.urlToByte(reqQuery);
         String bodyString = new String(bodyByte);
 
-        String userName = Database.findUserById(sid_usrid).getName();
+        String userName = Database.findUserById(UserIdSession.getUserId(sid_usrid)).getName();
         bodyString.replace(
-                "<li><a href=\"../user/login.html\" role=\"button\">로그인</a></li>",
-                "<li>" + userName + "</li>"
+                "<li><a href=\"user/login.html\" role=\"button\">로그인</a></li>\n",
+                "<li>" + userName + "</li>\n"
         );
+        // 얘 왜 실행 안됨???
+
         bodyByte = bodyString.getBytes();
 
         return new Response()
