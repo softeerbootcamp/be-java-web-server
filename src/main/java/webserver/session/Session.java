@@ -25,4 +25,8 @@ public class Session {
     public String getAttribute(String key) {
         return attributes.get(key);
     }
+
+    public String getSessionId() {
+        return sessionId;
+    }
 }
