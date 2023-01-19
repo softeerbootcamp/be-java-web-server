@@ -15,7 +15,14 @@ E[Controller] --> G;
 G(Response객체 응답) --> I; 
 I[ResponseHandler];
 ```
-
+1. 모든 HTTP 요청 메시지는 Request객체로 반환되어 FrontServlet의 인자로 들어간다.
+2. FrontServlet은 정적 리소스인지 API인지 여부를 확인하여 resources에 존재하면 바로 내려주고, 없다면 HandlerAdapter로 들어간다.
+3. HandlerAdapter는 API를 도메인별로 분류하여 알맞은 컨트롤러를 매핑해준다. 현재는 User 도메인만 존재하기 때문에 어댑터는 하나만 있으나 확장성을 고려하였다.
+4. UserHandlerAdapter는 각 API별로 나누어진 컨트롤러 (UserCreate, UserLogin, UserLogoutController ...) 중 요청 URL을 보고 알맞은 컨트롤러를 매핑해준다.
+5. 컨트롤러와 서비스는 로직을 수행한다.
+6. 정적 리소스는 어댑터 대신 ViewResolver를 통해 알맞은 리소스를 찾는다.
+7. 모든 컨트롤러 혹은 뷰 리졸버는 반드시 알맞은 응답에 필요한 데이터를 가지고 있는 Response 객체로 응답한다.
+8. Response객체는 ResponseHandler의 인자로 들어가 클라이언트로 응답한다.
 ## 프로젝트 수행 과정
 ### Step 1 - index.html 응답
 최초의 상태는 localhost:8080으로 접속 시에 "Hello World"를 출력해준다. 이는 구현되어 있는 responseBody 메서드에 해당 문구를 byte[]로 변환하여 응답해주기 때문이다.
