@@ -7,7 +7,7 @@ import exception.UserNotFoundException;
 import model.User;
 import model.request.Request;
 import model.response.Response;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import util.HttpRequestUtils;
@@ -22,9 +22,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UserServiceTest {
 
-    @AfterEach
-    void clean() {
+    @BeforeEach
+    void cleanDb() {
         Database.cleanAll();
+        SessionStorage.cleanAll();
     }
 
     @Test

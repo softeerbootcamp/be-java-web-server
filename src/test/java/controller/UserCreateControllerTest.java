@@ -1,11 +1,13 @@
 package controller;
 
 import db.Database;
+import db.SessionStorage;
 import exception.UserNotFoundException;
 import model.User;
 import model.request.Request;
 import model.response.Response;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import webserver.controller.UserCreateController;
@@ -17,6 +19,13 @@ import static model.response.HttpStatusCode.FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserCreateControllerTest {
+
+    @BeforeEach
+    void cleanDb() {
+        Database.cleanAll();
+        SessionStorage.cleanAll();
+    }
+
     @Test
     @DisplayName("유저 회원가입 테스트")
     void signUp() throws Exception {
