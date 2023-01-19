@@ -101,7 +101,7 @@ public class UserController implements Controller {
         User loginUser = Database.findUserById(userId);
 
         Collection<User> users = userService.findUserList();
-        String body = UserListView.render(users, loginUser.getUserId());
+        String body = UserListView.render(users, loginUser.getName());
 
         response.ok(request);
         response.setBodyMessage(body);
