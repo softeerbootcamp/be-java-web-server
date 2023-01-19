@@ -45,6 +45,7 @@ public class ViewResolver {
                     sb.append("<a>" + userId + "님</a></li><li>");
                 }
                 int no = 0;
+                sb.append(line);
                 if (line.contains("<tbody>")) {
                     for (User user : Database.findAll()) {
                         sb.append("<tr><th scope=\"row\">" + (++no) +
@@ -54,7 +55,6 @@ public class ViewResolver {
                                 "</td><td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td></tr>");
                     }
                 }
-                sb.append(line);
             }
             return sb.toString().getBytes();
         } catch (FileNotFoundException e) {
