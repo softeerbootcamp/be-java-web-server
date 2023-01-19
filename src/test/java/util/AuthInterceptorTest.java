@@ -59,4 +59,25 @@ public class AuthInterceptorTest {
         //then
         assert !AuthInterceptor.isAuthUser(request);
     }
+
+    @Test
+    @DisplayName("Auth Interceptor 복수 쿠키 요청 테스트")
+    void authInterceptor_multiCookie() throws Exception {
+        //given
+        User user = new User("aa", "bb", "cc", "test@test");
+        Database.addUser(user);
+        String sid = String.valueOf(UUID.randomUUID());
+        SessionStorage.addSession(sid, user);
+
+        //when
+        String requestMessage = "GET /user/list.html HTTP/1.1\n"
+                + "Host: localhost:8080\n"
+                + "Connection: keep-alive\n"
+                + "Accept: */*\n"
+                + "Cookie: trash=wrongCookie; sid=" + sid;
+        InputStream inputStream = new ByteArrayInputStream(requestMessage.getBytes());
+        Request request = new Request(inputStream);
+        //then
+        assert AuthInterceptor.isAuthUser(request);
+    }
 }
