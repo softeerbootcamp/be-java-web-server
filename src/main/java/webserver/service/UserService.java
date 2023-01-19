@@ -4,10 +4,12 @@ import db.Database;
 import db.SessionStorage;
 import exception.UserNotFoundException;
 import model.User;
+import model.UserSession;
 import model.request.Request;
 import model.response.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.HttpRequestUtils;
 
 import java.util.Map;
 import java.util.UUID;
@@ -40,6 +42,13 @@ public class UserService {
                     "Location", "/index.html"), new byte[0]);
         }
         return Response.of(request.getHttpVersion(), FOUND, Map.of("Location", "/user/login_failed.html"), new byte[0]);
+    }
+
+    public Response logoutUser(Request request) {
+        String sid = HttpRequestUtils.parseSid(request.getHeaders().get("Cookie"));
+        UserSession bySessionId = SessionStorage.findBySessionId(sid);
+        bySessionId.expire();
+        return Response.of(request.getHttpVersion(), FOUND, Map.of("Location", "/index.html"), new byte[0]);
     }
 
 }

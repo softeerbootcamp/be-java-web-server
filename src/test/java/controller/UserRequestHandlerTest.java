@@ -11,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import webserver.controller.IndexController;
-import webserver.repository.SessionRepository;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -85,8 +84,7 @@ public class UserRequestHandlerTest {
         //expected
         assertThat(response.getStatusLine().getHttpStatusCode()).isEqualTo(OK);
 
-        SessionRepository sessionRepository = new SessionRepository();
-        Assertions.assertThrows(SessionNotFoundException.class, () -> sessionRepository.findBySessionId(sid));
+        Assertions.assertThrows(SessionNotFoundException.class, () -> SessionStorage.findBySessionId(sid));
     }
 
 }

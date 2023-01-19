@@ -1,5 +1,7 @@
 package webserver.controller;
 
+import exception.SessionExpiredException;
+import exception.SessionNotFoundException;
 import model.request.Request;
 import model.response.Response;
 import util.AuthInterceptor;
@@ -29,8 +31,13 @@ public class IndexController {
                     continue;
                 }
                 if (line.contains("class=\"dropdown-toggle\"")) {
-                    String name = AuthInterceptor.findUser(request).getName();
-                    sb.append("<a>").append(name).append("님</a></li><li>");
+                    try {
+                        String name = AuthInterceptor.findUserSession(request).getName();
+                        sb.append("<a>").append(name).append("님</a></li><li>");
+
+                    } catch (SessionExpiredException | SessionNotFoundException e) {
+                        sb.append(line);
+                    }
                 }
                 sb.append(line);
             }

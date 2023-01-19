@@ -2,8 +2,8 @@ package controller;
 
 import db.Database;
 import db.SessionStorage;
-import exception.UserNotFoundException;
 import model.User;
+import model.UserSession;
 import model.request.Request;
 import model.response.Response;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,7 +54,7 @@ public class UserLoginControllerTest {
         String sid = HttpRequestUtils.parseSid(response.getHeaders().get("Set-Cookie"));
         assert SessionStorage.isValidate(sid);
 
-        User bySession = SessionStorage.findBySessionId(sid).orElseThrow(UserNotFoundException::new);
+        UserSession bySession = SessionStorage.findBySessionId(sid);
         assertThat(bySession.getUserId()).isEqualTo("javajigi");
     }
 
