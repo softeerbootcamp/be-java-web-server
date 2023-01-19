@@ -19,18 +19,18 @@ public class FrontController implements Controller {
 
     //객체 캐싱
     static{
-        controllers = new HashMap<>();
         SignUpService signUpService = new SignUpService();
         SignUpController signUpController = new SignUpController(signUpService);
         LoginController loginInController = new LoginController();
         UserListController userListController = new UserListController();
-        controllers.put(SIGN_UP_PATH_URL,signUpController);
-        controllers.put(LOGIN_PATH_URL,loginInController);
-        controllers.put(USER_LIST_PATH_URL,userListController);
+        controllers = Map.of(
+                SIGN_UP_PATH_URL,signUpController,
+                LOGIN_PATH_URL,loginInController,
+                USER_LIST_PATH_URL,userListController
+        );
     }
 
     public Controller getControllerByUrl(String pathUrl){
-        System.out.println("getControllerByUrl: "+pathUrl);
         return controllers.get(pathUrl);
     }
 
