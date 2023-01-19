@@ -1,3 +1,4 @@
+import db.Database;
 import http.response.HttpResponse;
 import model.User;
 import org.junit.jupiter.api.DisplayName;
@@ -41,6 +42,7 @@ public class SignUpServiceTest {
 
         // then
         assertThat(response.getHeaders().getLocation()).isEqualTo("/index.html");
+        assertThat(Database.findUserById("jhchoi57").getUserId()).isNotEmpty();
     }
 
 }
