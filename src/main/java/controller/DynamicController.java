@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class DynamicController {
-    // byte 를 받아와서 byte 반환하는 형태가 괜찮은가?
     public static byte[] dynamicIndexHtml(byte[] body,String sid){
         byte[] manualBody;
         String stringBody;

@@ -40,9 +40,7 @@ public class Request {
                 break;
             }
             String[] headerMap = oneLine.split(":");
-            //todo map 만 사용가능하게 바꾸자.
             requestHeader.addHeaderMap(headerMap[0], headerMap[1]);
-            requestHeader.addHeaderLines(oneLine);
         }
 
     }
