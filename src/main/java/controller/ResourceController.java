@@ -1,5 +1,6 @@
 package controller;
 
+import exception.NonLogInException;
 import http.ContentType;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -70,8 +71,7 @@ public class ResourceController extends AbstractController {
             byte[] body = FileIoUtils.load404ErrorFile();
             httpResponse.do404(body);
 
-        } catch (NullPointerException e) {
-
+        } catch (NonLogInException e) {
             byte[] body = FileIoUtils.loadFile(filePath);
             httpResponse.forward(HttpStatusCode.OK, contentType, body);
 

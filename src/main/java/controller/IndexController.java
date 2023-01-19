@@ -1,5 +1,6 @@
 package controller;
 
+import exception.NonLogInException;
 import http.ContentType;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -36,8 +37,7 @@ public class IndexController extends AbstractController {
             byte[] body = FileIoUtils.replaceLoginBtnToUserName(sessionService.getUserName(sessionId), filePath);
             httpResponse.forward(HttpStatusCode.OK, contentType, body);
 
-        } catch (NullPointerException e) {
-
+        } catch (NonLogInException e) {
             byte[] body = FileIoUtils.loadFile(filePath);
             httpResponse.forward(HttpStatusCode.OK, contentType, body);
 

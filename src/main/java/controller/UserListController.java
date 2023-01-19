@@ -1,5 +1,6 @@
 package controller;
 
+import exception.NonLogInException;
 import http.ContentType;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -40,7 +41,8 @@ public class UserListController extends AbstractController {
             byte[] body = userService.makeUserListBody(filePath, sessionService.getUserName(sessionId));
             httpResponse.forward(HttpStatusCode.OK, contentType, body);
 
-        } catch (NullPointerException e) {
+        } catch (NonLogInException e) {
+            e.printStackTrace();
             httpResponse.sendRedirect(HttpStatusCode.FOUND, LOGIN_FORM_PATH);
         }
     }

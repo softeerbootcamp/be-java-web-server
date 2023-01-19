@@ -1,6 +1,7 @@
 package service;
 
 import db.SessionRepository;
+import exception.NonLogInException;
 import model.Session;
 
 import java.util.UUID;
@@ -24,7 +25,7 @@ public class SessionService {
     public void validateHasSession(String id) {
         Session session = sessionRepository.findById(id);
         if (session == null)
-            throw new NullPointerException("Session not found");
+            throw new NonLogInException("Session not found");
     }
 
     public String getUserId(String sessionId) {
