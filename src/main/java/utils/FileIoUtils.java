@@ -46,23 +46,41 @@ public class FileIoUtils {
         return map;
     }
 
-    public static byte[] makeLoggedInPage(String path, Session session) {
-        String page = new String(loadFile(path));
-        if (path.contains("index.html")) {
-            page = page.replace("<!--username-->", String.format("<li><a>%s</a></li>", session.getName()));
+    public static byte[] makePage(String path, Session session) {
+        try {
+            String page = new String(loadFile(path));
+            if (path.contains("index.html") && session != null) {
+                page = page.replace("<!--username-->", String.format("<li><a>%s</a></li>", session.getName()));
+            }
+            return removeUselessButton(page, session != null).getBytes();
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("해당하는 파일이 존재하지 않습니다.");
         }
+    }
+
+    private static String removeLoginButton(String page) {
         String target_index = "<li><a href=\"user/login.html\" role=\"button\">로그인</a></li>";
         String target_others = "<li><a href=\"../user/login.html\" role=\"button\">로그인</a></li>";
-        return page.replace(target_index, "").replace(target_others, "").getBytes();
+        return page.replace(target_index, "").replace(target_others, "");
+    }
+
+    private static String removeLogoutButton(String page) {
+        String target = "<li><a href=\"#\" role=\"button\">로그아웃</a></li>\n";
+        return page.replace(target, "");
+    }
+
+    private static String removeUselessButton(String page, boolean loggedIn) {
+        if (loggedIn)
+            return removeLoginButton(page);
+        return removeLogoutButton(page);
     }
 
     public static byte[] makeUserListPage(Collection<User> users, Session session) {
         StringBuilder sb = new StringBuilder();
-        String userListPage = new String(loadFile(PathManager.USER_LIST_PATH));
+        String userListPage = removeUselessButton(new String(loadFile(PathManager.USER_LIST_PATH)), session != null);
         sb.append("<tr>");
         sb.append(String.format("<th scope=\"row\">1</th> <td>%s</td> <td>%s</td> <td>%s</td>",
-                session.getUserId(), session.getName(), session.getEmail()
-        ));
+                session.getUserId(), session.getName(), session.getEmail()));
         sb.append("<td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td>");
         sb.append("</tr>");
         int cnt = 2;
