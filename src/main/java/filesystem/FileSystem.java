@@ -24,15 +24,15 @@ public class FileSystem {
     private static byte[] trimSpecialSymbol(byte[] resource) {
         try {
             BufferedReader bf = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(resource)));
-            String html = "";
+            StringBuilder html = new StringBuilder();
             String line = bf.readLine();
             while (line != null) {
                 if (!line.trim().equals("<%") && !line.trim().equals("%>")) {
-                    html += line + System.lineSeparator();
+                    html.append(line).append(System.lineSeparator());
                 }
                 line = bf.readLine();
             }
-            return html.getBytes();
+            return html.toString().getBytes();
         } catch (IOException e) {
             throw new FileSystemException(e);
         }
@@ -56,20 +56,20 @@ public class FileSystem {
     private static byte[] personalize(byte[] resource, String chunkHtml) {
         try {
             BufferedReader bf = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(resource)));
-            String html = "";
+            StringBuilder html = new StringBuilder();
             String line = bf.readLine();
             while (line != null) {
                 if (line.trim().equals("<%")) {
                     while (!line.trim().equals("%>")) {
                         line = bf.readLine();
                     }
-                    html += chunkHtml;
+                    html.append(chunkHtml);
                     line = bf.readLine();
                 }
-                html += line;
+                html.append(line);
                 line = bf.readLine();
             }
-            return html.getBytes();
+            return html.toString().getBytes();
         } catch (IOException e) {
             throw new FileSystemException(e);
         }

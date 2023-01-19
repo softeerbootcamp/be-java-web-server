@@ -39,16 +39,13 @@ public class MainController implements Controller {
             if (authService.isAuthenticated(request)) {
                 return FileSystem.getStaticResource(INDEX_HTML);
             }
-            return FileSystem.getStaticResource(request.getUrl());
         }
-
         if (mustAuthUrls.contains(request.getUrl())) {
             if (authService.isAuthenticated(request)) {
                 return FileSystem.getPersonalizedResource(request.getUrl(), HtmlGenerator.getUserListLi(userService.getAllUser()));
             }
             return null;
         }
-
         if (optionalAuthUrls.contains(request.getUrl())) {
             if (authService.isAuthenticated(request)) {
                 return FileSystem.getPersonalizedResource(request.getUrl(), HtmlGenerator.getUserAnchor(authService.getSession(request).getUser()));

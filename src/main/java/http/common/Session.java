@@ -24,8 +24,8 @@ public class Session {
     public User getUser() {
         return user;
     }
-    // todo: expiration date 추가해서 유효성 검사
-    public boolean isValid() {
+
+    public Boolean isValid() {
         return true;
     }
 }
