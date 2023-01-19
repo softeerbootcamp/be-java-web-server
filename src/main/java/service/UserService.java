@@ -43,15 +43,13 @@ public class UserService {
         }
     }
 
-    public byte[] makeUserListBody(String filepath) throws IOException {
+    public byte[] makeUserListBody(String filepath, String userName) throws IOException {
         Collection<User> userList = userRepository.findAll();
-        return FileIoUtils.userListToString(userList, filepath);
+        return FileIoUtils.userListToString(userList, filepath, userName);
     }
 
-
-    public byte[] makeUserNameIndexBody(String id, String filepath) throws IOException {
-        User user = userRepository.findUserById(id);
-        return FileIoUtils.replaceLoginBtnToUserName(user, filepath);
+    public String getUserName(String id){
+        return userRepository.findUserById(id).getName();
     }
 
 }

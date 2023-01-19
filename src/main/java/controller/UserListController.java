@@ -30,13 +30,14 @@ public class UserListController extends AbstractController {
     @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         try {
-            sessionService.validateHasSession(httpRequest.getSessionId());
+            String sessionId = httpRequest.getSessionId();
+            sessionService.validateHasSession(sessionId);
+            logger.info("Session ID: " + sessionId);
 
             ContentType contentType = ContentType.from(USER_LIST_PATH);
             String filePath = contentType.getDirectory() + USER_LIST_PATH;
 
-            byte[] body = userService.makeUserListBody(filePath);
-
+            byte[] body = userService.makeUserListBody(filePath, sessionService.getUserName(sessionId));
             httpResponse.forward(HttpStatusCode.OK, contentType, body);
 
         } catch (NullPointerException e) {
