@@ -49,7 +49,6 @@ public class FrontController {
     public void handle(HttpRequest request, HttpResponse response) throws FileNotFoundException, URISyntaxException {
         try{
             String url = request.getUrl();
-            System.out.println("url: "+url);
             Model model = new Model();
             Controller controller = controllers.get(url);
             if(controller == null){

@@ -39,6 +39,7 @@ public class LoginController implements Controller{
             }
         }catch(NullPointerException e){
             System.out.println("no user exist");
+            NotFoundExceptionHandler.showErrorPage(response);
         }
     }
 
