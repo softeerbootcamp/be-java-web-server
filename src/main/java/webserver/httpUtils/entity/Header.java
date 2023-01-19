@@ -14,9 +14,9 @@ public class Header {
         return context;
     }
 
-    public boolean keySetContainsCookie()
+    public boolean containsKey()
     {
-        if(context.keySet().contains("Cookie")) return true;
+        if(context.keySet().contains("Cookie") && !context.get("Cookie").isBlank()) return true;
         return false;
     }
 }

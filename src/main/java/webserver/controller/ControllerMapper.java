@@ -1,11 +1,15 @@
 package webserver.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import webserver.httpUtils.Request;
+import webserver.httpUtils.RequestGetter;
 import webserver.httpUtils.entity.ReqLine;
 
 import java.util.HashMap;
 import java.util.Map;
 public class ControllerMapper {
+    private static final Logger logger = LoggerFactory.getLogger(ControllerMapper.class);
     private static ControllerMapper instance;
     private Map<String, Controller> controllerMap;
 
@@ -30,8 +34,12 @@ public class ControllerMapper {
 
     public Controller getController(Request req)
     {
-        // TODO dynamic과 static 구분해내기
-
+        if(req.hasCookie())
+        {
+            logger.debug("current controller : dynamic");
+            return new DynamicFileController();
+        }
+        logger.debug("current controller : static");
         return new StaticFileController();
     }
 }
