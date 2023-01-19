@@ -13,6 +13,6 @@ public class UserListController implements Controller{
     @Override
     public String doGet(HttpRequest request, HttpResponse response, Model model) {
         model.addAttribute("users",Database.findAll());
-        return "/user/list.html";
+        return "./templates/user/list.html";
     }
 }
