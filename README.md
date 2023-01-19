@@ -15,7 +15,7 @@ Java Web Application Server 2022
 - [x] step3 구현 - stylesheet 지원
 - [x] step4 구현 - POST로 회원 가입
 - [x] step5 구현 - 쿠키를 이용한 로그인
-- [ ] step6 구현 - 동적인 HTML
+- [x] step6 구현 - 동적인 HTML
 
 ## 학습한 내용
 
