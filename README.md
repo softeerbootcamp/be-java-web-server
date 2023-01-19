@@ -4,6 +4,18 @@ Java Web Application Server 2022
 이 프로젝트는 우아한 테크코스 박재성님의 허가를 받아 https://github.com/woowacourse/jwp-was 
 를 참고하여 작성되었습니다.
 
+현재 WAS 프로그램의 동작 구조이다.
+```mermaid
+flowchart LR 
+A[HTTP 요청 메시지] --> B; 
+B[FrontServlet] --> C;
+C[정적리소스 or API] -->|API:HandlerAdapter| E; 
+C -->|ViewResolver| G; 
+E[Controller] --> G; 
+G(Response객체 응답) --> I; 
+I[ResponseHandler];
+```
+
 ## 프로젝트 수행 과정
 ### Step 1 - index.html 응답
 최초의 상태는 localhost:8080으로 접속 시에 "Hello World"를 출력해준다. 이는 구현되어 있는 responseBody 메서드에 해당 문구를 byte[]로 변환하여 응답해주기 때문이다.
@@ -123,20 +135,6 @@ public Path findFilePath(String url) throws IOException {
 
 ### Step 4 - POST로 회원가입
  기존 GET방식에서 POST방식으로 변경된 회원가입 요구사항을 반영하기 위해 가장 먼저 필요한 것은 HTTP Request 메시지의 바디를 읽어오는 것이었다. 헤더와 바디 사이에는 빈 공백을 가지는 한 줄(line)이 있었고, 추후 다양한 요구사항을 만족하기 위해서는 메시지의 헤더 및 바디에 대한 정보를 가지고 있는 하나의 Request객체가 필요하였다.
-
 ### Step 5 - 쿠키를 이용한 로그인
-
-현재 WAS 프로그램의 동작 구조이다.
-```mermaid
-flowchart LR 
-A[HTTP 요청 메시지] --> B; 
-B[FrontServlet] --> C;
-C[정적리소스 or API] -->|API:HandlerAdapter| E; 
-C -->|ViewResolver| G; 
-E[Controller] --> G; 
-G(Response객체 응답) --> I; 
-I[ResponseHandler];
-```
-
 ### Step 6 - 동적인 HTML
 
