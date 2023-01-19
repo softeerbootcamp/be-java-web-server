@@ -26,7 +26,7 @@ public class ListService {
                 .build();
     }
 
-    private static HttpResponse logInListService(User logInUser, String filePath, String httpVersion, String contentType){
+    public static HttpResponse logInListService(User logInUser, String filePath, String httpVersion, String contentType){
         StringBuilder stringBuilder = makeHtml();
 
         // 파일 경로를 넘겨서 http response string 생성

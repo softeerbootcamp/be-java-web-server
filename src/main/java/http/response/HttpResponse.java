@@ -29,6 +29,14 @@ public class HttpResponse {
         this.header = httpResponseBuilder.header;
     }
 
+    public byte[] getBody() {
+        return body;
+    }
+
+    public HttpHeader getHeaders() {
+        return header;
+    }
+
     public static class HttpResponseBuilder{
         private HttpStatusLine httpStatusLine;
         private byte[] body;

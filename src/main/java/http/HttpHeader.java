@@ -40,4 +40,8 @@ public class HttpHeader {
     }
 
     public String getCookie() { return headers.get("Cookie"); }
+
+    public String getLocation() {
+        return headers.get("Location");
+    }
 }

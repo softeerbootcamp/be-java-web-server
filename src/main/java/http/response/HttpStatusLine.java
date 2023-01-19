@@ -18,4 +18,5 @@ public class HttpStatusLine {
     public String toStringForResponse(){
         return httpVersion + " " + httpStatus.toString() + System.lineSeparator();
     }
+
 }
