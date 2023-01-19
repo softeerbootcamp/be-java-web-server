@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -20,10 +21,9 @@ public class SessionManager {
         return sessionID;
     }
 
-    public static Session getSession(UUID sessionId) {
-        return sessions.get(sessionId);
+    public static Optional<Session> getSession(UUID sessionId) {
+        return Optional.ofNullable(sessions.get(sessionId));
     }
-
     public static void removeSession(UUID sessionId) {
         sessions.remove(sessionId);
     }
