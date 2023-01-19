@@ -27,11 +27,20 @@ public class HtmlBuildUtil {
         return listHtml.replace("<!-- user list location -->", content.toString());
     }
 
-    public static String withoutLogoutWithUserName(String path, User user){
-        String html = new String(HttpResponseUtil.generateBody(path));
-        if(path.startsWith("/qna") || path.startsWith("/user"))
-            html =  html.replace("<li><a href=\"../user/login.html\" role=\"button\">로그인</a></li>", "");
+    public static byte[] buildHtml(String path, User user) {
+        byte [] body = HttpResponseUtil.generateBody(path);
+        logger.debug("withoutLogoutWithUserName");
+        if(FileIoUtil.mappingDirectoryPath(path).toString().contains("static")) {
+            return body;
+        }
+        return withoutLogoutWithUserName(new String(body), path, user);
+    }
+
+    public static byte[] withoutLogoutWithUserName(String html, String path, User user) {
+        logger.debug("html Template");
+        if (path.startsWith("/qna") || path.startsWith("/user"))
+            html = html.replace("<li><a href=\"../user/login.html\" role=\"button\">로그인</a></li>", "");
         html = html.replace("<li><a href=\"user/login.html\" role=\"button\">로그인</a></li>", "");
-        return html.replace("<!--username location-->", "<li><a> "+user.getName()+" </a></li>");
+        return html.replace("<!--username location-->", "<li><a> " + user.getName() + " </a></li>").getBytes();
     }
 }
