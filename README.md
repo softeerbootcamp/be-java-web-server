@@ -12,7 +12,11 @@ Java Web Application Server 2022
 7. 가입한 회원 정보로 로그인을 할 수 있다. [x]
 8. [로그인] 메뉴를 클릭하면 http://localhost:8080/user/login.html 으로 이동해 로그인할 수 있다. [x]
 9. 로그인이 성공하면 index.html로 이동한다. [x]
-10. 로그인이 실패하면 /user/login_failed.html로 이동한다. [x]
+10. 로그인이 실패하면 /user/login_failed.html로 이동한다. [ ]
+11. 사용자가 로그인 상태일 경우 /index.html에서 사용자 이름을 표시해 준다. [ ]
+12. 사용자가 로그인 상태가 아닐 경우 /index.html에서 [로그인] 버튼을 표시해 준다. [ ]
+13. 사용자가 로그인 상태일 경우 http://localhost:8080/user/list 에서 사용자 목록을 출력한다. [ ]
+14. http://localhost:8080/user/list  페이지 접근시 로그인하지 않은 상태일 경우 로그인 페이지(login.html)로 이동한다. [ ]
 
 ## 프로젝트 구조
     ├── controller
