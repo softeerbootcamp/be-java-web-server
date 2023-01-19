@@ -1,7 +1,6 @@
 package http.response;
 
 import http.HttpHeader;
-import http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpResponseUtils;
