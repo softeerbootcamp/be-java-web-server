@@ -3,6 +3,8 @@ package view;
 import request.HttpRequest;
 import response.HttpResponse;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Map;
 
 public class ViewHandler {
@@ -19,9 +21,14 @@ public class ViewHandler {
     }
 
     public static void handle(String path, HttpRequest request, HttpResponse response, Model model) {
-        if (views.containsKey(path)) {
-            views.get(path).render(request, response, model);
+        try{
+            if (views.containsKey(path)) {
+                views.get(path).render(request, response, model);
+            }
+        }catch(IOException | URISyntaxException e){
+            e.printStackTrace();
         }
+
     }
 
 }

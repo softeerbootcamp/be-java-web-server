@@ -9,6 +9,8 @@ import response.HttpResponse;
 import session.HttpSessionManager;
 import utils.FileIoUtils;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Collection;
 
 
@@ -17,7 +19,7 @@ public class UserListView implements View{
     private static final String COOKIE_SESSION_KEY = "sid";
     private static final String CONTENT_LENGTH_HEADER_KEY = "Content-Length";
     @Override
-    public void render(HttpRequest request, HttpResponse response, Model data) {
+    public void render(HttpRequest request, HttpResponse response, Model data) throws IOException, URISyntaxException {
         System.out.println("UserListController doGet");
         String sessionKey = request.getCookie(COOKIE_SESSION_KEY);
         System.out.println("session key: "+sessionKey);
@@ -38,8 +40,8 @@ public class UserListView implements View{
         response.redirect("/user/login.html");
     }
 
-    private String getTable(Collection<User> users) {
-        int idx = 1;
+    private String getTable(Collection<User> users) throws IOException, URISyntaxException {
+        int idx = 0;
 
         StringBuilder content = new StringBuilder();
 

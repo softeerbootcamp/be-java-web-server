@@ -8,6 +8,9 @@ import response.HttpResponse;
 import session.HttpSessionManager;
 import utils.FileIoUtils;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+
 
 public class IndexView implements View{
     private static final String COOKIE_SESSION_KEY = "sid";
@@ -15,7 +18,7 @@ public class IndexView implements View{
 
 
     @Override
-    public void render(HttpRequest request, HttpResponse response, Model data) {
+    public void render(HttpRequest request, HttpResponse response, Model data) throws IOException, URISyntaxException {
 
         response.setStatus(HttpStatus.OK);
         response.setContentType(ContentType.HTML);

@@ -2,6 +2,7 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.URISyntaxException;
 
 import controller.*;
 import org.slf4j.Logger;
@@ -35,6 +36,8 @@ public class RequestHandler implements Runnable {
             rw.write(request,response);
         } catch (IOException e) {
             logger.error(e.getMessage());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
         }
     }
 }

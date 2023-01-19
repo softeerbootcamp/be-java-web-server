@@ -6,10 +6,13 @@ import request.HttpRequest;
 import response.HttpResponse;
 import utils.FileIoUtils;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+
 public class SignUpView implements View{
     private static final String CONTENT_LENGTH_HEADER_KEY = "Content-Length";
     @Override
-    public void render(HttpRequest request, HttpResponse response, Model data) {
+    public void render(HttpRequest request, HttpResponse response, Model data) throws IOException, URISyntaxException {
         response.setStatus(HttpStatus.OK);
         response.setContentType(ContentType.HTML);
         byte[] body = FileIoUtils.loadFileFromClasspath("./templates/user/form.html");

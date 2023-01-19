@@ -6,6 +6,9 @@ import request.HttpRequest;
 import response.HttpResponse;
 import utils.FileIoUtils;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,7 +16,7 @@ class FileServiceTest {
 
     @Test
     @DisplayName("해당 파일 내용이 잘 들어가는지 확인")
-    void serveFile() {
+    void serveFile() throws IOException, URISyntaxException {
         //given
         String url = "./templates/user/form.html";
         HttpResponse response = new HttpResponse();
