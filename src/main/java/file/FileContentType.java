@@ -12,11 +12,11 @@ public enum FileContentType {
     WOFF2("woff2", "application/font-woff2"),
     NO_MATCH("","text/plain");
 
-    private String postfix;
+    private final String postfix;
 
-    private String contentType;
+    private final String contentType;
 
-    private FileContentType(String postfix, String contentType) {
+    FileContentType(String postfix, String contentType) {
         this.postfix = postfix;
         this.contentType = contentType;
     }
