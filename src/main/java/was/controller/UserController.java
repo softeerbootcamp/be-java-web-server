@@ -1,8 +1,10 @@
 package was.controller;
 
 import db.SessionStorage;
+import enums.HttpMethod;
 import model.User;
 import service.UserService;
+import was.annotation.RequestMapping;
 import webserver.session.Session;
 import was.annotation.PostMapping;
 import webserver.domain.HttpRequest;
@@ -23,7 +25,7 @@ public class UserController implements Controller{
         }
         return userController;
     }
-    @PostMapping("/user/create")
+    @RequestMapping(method = HttpMethod.POST, value = "/user/create")
     public HttpResponseMessage create(HttpRequest httpRequest) {
         userService.addUser(httpRequest.getBody());
 
@@ -31,7 +33,7 @@ public class UserController implements Controller{
         return new HttpResponseMessage(httpResponse.sendRedirect("/index.html"), httpResponse.getBody());
     }
 
-    @PostMapping("/user/login")
+    @RequestMapping(method = HttpMethod.POST, value = "/user/login")
     public HttpResponseMessage login(HttpRequest httpRequest) {
         Map<String, String> body = httpRequest.getBody();
         User user = new User(body.get("userId"), body.get("password"));

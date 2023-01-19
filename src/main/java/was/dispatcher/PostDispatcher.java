@@ -1,6 +1,8 @@
 package was.dispatcher;
 
+import enums.HttpMethod;
 import was.annotation.PostMapping;
+import was.annotation.RequestMapping;
 import was.controller.Controller;
 import was.controller.ControllerFactory;
 import webserver.handler.ControllerHandler;
@@ -29,15 +31,19 @@ public class PostDispatcher implements ControllerHandler{
     private HttpResponseMessage dispatch(HttpRequest httpRequest, Controller controller, String path) {
         Method[] methods = controller.getClass().getDeclaredMethods();
         for (Method method : methods) {
-            Annotation annotation = method.getAnnotation(PostMapping.class);
+            Annotation annotation = method.getAnnotation(RequestMapping.class);
             if (annotation == null) {
                 continue;
             }
-            PostMapping postMapping = (PostMapping) annotation;
-            Object[] parameter = new Object[1];
-            parameter[0] = httpRequest;
-            if (path.equals(postMapping.value())) {
+
+            RequestMapping requestMappingAnno = (RequestMapping) annotation;
+            HttpMethod requestMethod = httpRequest.getRequestLine().getHttpMethod();
+            System.out.println("path = " + path);
+            System.out.println("requestMappingAnno = " + requestMappingAnno.value());
+            if (requestMappingAnno.method() == requestMethod && path.equals(requestMappingAnno.value())) {
                 try{
+                    Object[] parameter = new Object[1];
+                    parameter[0] = httpRequest;
                     return (HttpResponseMessage) method.invoke(controller, parameter);
                 } catch (Exception e) {
                     e.printStackTrace();
