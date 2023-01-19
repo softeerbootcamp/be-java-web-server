@@ -8,6 +8,7 @@ import controller.annotation.ControllerMethodInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.HttpRequest;
+import request.RequestHeader;
 import request.Url;
 import service.SessionService;
 import util.Cookie;
@@ -54,11 +55,13 @@ public class ControllerFinder {
             return;
         }
 
-        if (method.get().isAnnotationPresent(Auth.class) && !sessionService.isUserLoggedIn(Cookie.extractCookie(httpRequest.getRequestHeader()))) {
+        if (method.get().isAnnotationPresent(Auth.class) && sessionService.cookieValidInSession(httpRequest.getRequestHeader())) {
             throw new NotLoggedException(HttpsErrorMessage.NOT_LOGGED);
         }
         method.get().invoke(controller, dataOutputStream, httpRequest);
     }
+
+
 
 
     private static boolean isMatchControllerMethodWithRequest(ControllerMethodInfo controllerMethodInfo, HttpRequest httpRequest) {

@@ -6,8 +6,12 @@ import model.User;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import request.HttpRequest;
+import request.RequestHeader;
 import util.Cookie;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -15,6 +19,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SessionServiceTest {
     final String[] userValue = {"test", "1234", "testName", "test@naver.com"};
+
+    public static final byte[] INCLUDE_COOKIE_REQUEST = ("GET /index.html HTTP/1.1\n" +
+            "Host: localhost:8080\n" +
+            "Connection: keep-alive\n" +
+            "Accept: */*\n"+
+            "Cookie: sid=123456").getBytes();
+
+    public static final byte[] NOT_INCLUDE_COOKIE_REQUEST = ("GET /index.html HTTP/1.1\n" +
+            "Host: localhost:8080\n" +
+            "Connection: keep-alive\n" +
+            "Accept: */*").getBytes();
     private SessionService sessionService = new SessionService();
     private SessionDatabase sessionDatabase = new SessionDatabase();
     @Test
@@ -43,4 +58,18 @@ class SessionServiceTest {
         Optional<Session> result = sessionDatabase.findObjectById(cookie.getValue());
         assertThat(result.isPresent()).isTrue();
     }
+
+
+    @Test
+    @DisplayName("쿠키가 없는경우 valid 테스트")
+    void notHavingCookie() throws IOException {
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(NOT_INCLUDE_COOKIE_REQUEST);
+        //when
+        RequestHeader requestHeader = HttpRequest.getHttpRequest(inputStream).getRequestHeader();
+        boolean result = sessionService.cookieValidInSession(requestHeader);
+        //then
+        Assertions.assertThat(result).isFalse();
+    }
+
+
 }
