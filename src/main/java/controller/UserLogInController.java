@@ -37,7 +37,7 @@ public class UserLogInController extends AbstractController {
                     httpRequest.getParameter(PASSWORD)
             );
 
-            Session session = sessionService.makeSession(USER_ID);
+            Session session = sessionService.makeSession(httpRequest.getParameter(USER_ID));
 
             logger.info("Login Success");
 
