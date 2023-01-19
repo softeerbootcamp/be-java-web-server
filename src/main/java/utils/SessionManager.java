@@ -20,7 +20,7 @@ public class SessionManager {
         return sessionID;
     }
 
-    public static Session getData(UUID sessionId) {
+    public static Session getSession(UUID sessionId) {
         return sessions.get(sessionId);
     }
 
