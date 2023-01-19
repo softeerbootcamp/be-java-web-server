@@ -43,7 +43,7 @@ public class UserController implements Controller {
     private UserRender userRender = UserRender.getInstance();
 
 
-    @ControllerMethodInfo(path = "/user/create", type = RequestDataType.IN_BODY, method = HttpMethod.POST)
+    @ControllerMethodInfo(path = "/user/create", method = HttpMethod.POST)
     public HttpResponse UserQueryString(DataOutputStream dataOutputStream, HttpRequest httpRequest) throws IOException {
         requestReader = new RequestPostReader();
 
@@ -60,12 +60,12 @@ public class UserController implements Controller {
                 .setData(new Data(dataOutputStream))
                 .setFileType(FileType.HTML)
                 .setHttpStatus(HttpStatus.RE_DIRECT)
-                .setRedirectUrl(new Url("/index.html", RequestDataType.TEMPLATES_FILE))
+                .setRedirectUrl(new Url("/index.html",RequestDataType.FILE))
                 .setCookie(cookie)
                 .build();
     }
 
-    @ControllerMethodInfo(path = "/user/login", type = RequestDataType.IN_BODY, method = HttpMethod.POST)
+    @ControllerMethodInfo(path = "/user/login", method = HttpMethod.POST)
     public HttpResponse login(DataOutputStream dataOutputStream, HttpRequest httpRequest) throws IOException, FailLoggedException {
         requestReader = new RequestPostReader();
 
@@ -81,7 +81,7 @@ public class UserController implements Controller {
                     .setData(new Data(dataOutputStream))
                     .setFileType(FileType.HTML)
                     .setHttpStatus(HttpStatus.RE_DIRECT)
-                    .setRedirectUrl(new Url("/user/login_failed.html", RequestDataType.TEMPLATES_FILE))
+                    .setRedirectUrl(new Url("/user/login_failed.html",RequestDataType.FILE))
                     .build();
         }
 
@@ -95,12 +95,12 @@ public class UserController implements Controller {
                 .setData(new Data(dataOutputStream))
                 .setFileType(FileType.HTML)
                 .setHttpStatus(HttpStatus.RE_DIRECT)
-                .setRedirectUrl(new Url("/index.html", RequestDataType.TEMPLATES_FILE))
+                .setRedirectUrl(new Url("/index.html",RequestDataType.FILE))
                 .setCookie(cookie)
                 .build();
     }
 
-    @ControllerMethodInfo(path = "/user/login_failed.html", type = RequestDataType.TEMPLATES_FILE, method = HttpMethod.GET)
+    @ControllerMethodInfo(path = "/user/login_failed.html", method = HttpMethod.GET)
     public HttpResponse loginFailed(DataOutputStream dataOutputStream, HttpRequest httpRequest) throws IOException {
         fileReader = new TemplatesFileReader();
         byte[] data = fileReader.readFile(httpRequest.getUrl());
@@ -111,7 +111,7 @@ public class UserController implements Controller {
                 .build();
     }
 
-    @ControllerMethodInfo(path = "/user/login.html", type = RequestDataType.TEMPLATES_FILE, method = HttpMethod.GET)
+    @ControllerMethodInfo(path = "/user/login.html", method = HttpMethod.GET)
     public HttpResponse userLoginHtml(DataOutputStream dataOutputStream, HttpRequest httpRequest) throws IOException {
         fileReader = new TemplatesFileReader();
         byte[] data = fileReader.readFile(httpRequest.getUrl());
@@ -122,7 +122,7 @@ public class UserController implements Controller {
                 .build();
     }
 
-    @ControllerMethodInfo(path = "/user/form.html", type = RequestDataType.TEMPLATES_FILE, method = HttpMethod.GET)
+    @ControllerMethodInfo(path = "/user/form.html", method = HttpMethod.GET)
     public HttpResponse userFormHtml(DataOutputStream dataOutputStream, HttpRequest httpRequest) throws IOException {
         fileReader = new TemplatesFileReader();
         byte[] data = fileReader.readFile(httpRequest.getUrl());
@@ -134,7 +134,7 @@ public class UserController implements Controller {
     }
 
     @Auth
-    @ControllerMethodInfo(path = "/user/list.html", type = RequestDataType.TEMPLATES_FILE, method = HttpMethod.GET)
+    @ControllerMethodInfo(path = "/user/list\\.html|/user/list", method = HttpMethod.GET)
     public HttpResponse userListHtml(DataOutputStream dataOutputStream, HttpRequest httpRequest) throws IOException {
         fileReader = new TemplatesFileReader();
         byte[] userListHtml = fileReader.readFile(httpRequest.getUrl());

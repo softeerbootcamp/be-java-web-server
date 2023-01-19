@@ -29,7 +29,7 @@ public class HomeController implements Controller {
 
     private HomeRender homeRender = HomeRender.getInstance();
 
-    @ControllerMethodInfo(path = "/index.html", type = RequestDataType.TEMPLATES_FILE, method = HttpMethod.GET)
+    @ControllerMethodInfo(path = "/index.html", method = HttpMethod.GET)
     public HttpResponse home(DataOutputStream dataOutputStream, HttpRequest httpRequest) throws IOException {
         fileReader = new TemplatesFileReader();
         byte[] data ;

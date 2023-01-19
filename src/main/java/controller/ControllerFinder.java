@@ -61,8 +61,7 @@ public class ControllerFinder {
 
 
     private static boolean isMatchControllerMethodWithRequest(ControllerMethodInfo controllerMethodInfo, HttpRequest httpRequest) {
-        return httpRequest.getUrl().getRequestDataType().equals(controllerMethodInfo.type())
-                && httpRequest.getUrl().getUrl().contains(controllerMethodInfo.path())
+        return httpRequest.getUrl().getUrl().matches(controllerMethodInfo.path())
                 && httpRequest.getHttpMethod().equals(controllerMethodInfo.method());
     }
 

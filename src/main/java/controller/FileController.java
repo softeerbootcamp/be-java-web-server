@@ -26,19 +26,11 @@ public class FileController  implements  Controller{
 
     FileReader fileReader;
 
-//    @ControllerMethodInfo(path = "", type = RequestDataType.TEMPLATES_FILE, method = HttpMethod.GET)
-//    public HttpResponse TemplateController(DataOutputStream dataOutputStream, HttpRequest httpRequest) throws IOException {
-//        fileReader = new TemplatesFileReader();
-//        byte[] data = new byte[0];
-//        data = fileReader.readFile(httpRequest.getUrl());
-//        return new HttpResponse(new response.Data(dataOutputStream, data), FileType.getFileType(httpRequest.getUrl()), HttpStatus.OK);
-//    }
 
-    @ControllerMethodInfo(path = "", type = RequestDataType.STATIC_FILE, method = HttpMethod.GET)
+    @ControllerMethodInfo(path =".*\\.(css|js|tff|woff)$", method = HttpMethod.GET)
     public HttpResponse StaticController(DataOutputStream dataOutputStream, HttpRequest httpRequest) throws IOException {
         fileReader = new StaticFileReader();
-        byte[] data = new byte[0];
-        data = fileReader.readFile(httpRequest.getUrl());
+        byte[] data = fileReader.readFile(httpRequest.getUrl());
         return new HttpResponse.Builder()
                 .setData(new Data(dataOutputStream,data))
                 .setFileType(FileType.getFileType(httpRequest.getUrl()))

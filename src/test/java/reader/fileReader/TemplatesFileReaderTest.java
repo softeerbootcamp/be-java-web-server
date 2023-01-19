@@ -19,7 +19,7 @@ class TemplatesFileReaderTest {
     void readFile() throws IOException {
         String url = "/index.html";
         FileReader fileReader = new TemplatesFileReader();
-        Assertions.assertThat(fileReader.readFile(new Url(url, RequestDataType.TEMPLATES_FILE))).isEqualTo(
+        Assertions.assertThat(fileReader.readFile(new Url(url, RequestDataType.FILE))).isEqualTo(
                 Files.readAllBytes(new File("./src/main/resources/templates" + url).toPath())
         );
     }

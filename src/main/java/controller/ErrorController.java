@@ -23,7 +23,7 @@ public class ErrorController implements Controller{
         byte[] data;
         switch (httpStatus) {
             case NOT_FOUND:
-                data=fileReader.readFile(new Url(ERROR_404_ROUTE, RequestDataType.TEMPLATES_FILE));
+                data=fileReader.readFile(new Url(ERROR_404_ROUTE, RequestDataType.FILE));
                 return new HttpResponse.Builder()
                         .setData(new Data(dataOutputStream,data))
                         .setFileType(FileType.HTML)
@@ -33,19 +33,19 @@ public class ErrorController implements Controller{
                 return new HttpResponse.Builder()
                         .setData(new Data(dataOutputStream))
                         .setFileType(FileType.HTML)
-                        .setRedirectUrl(new Url(FORBIDDEN_ROUTE, RequestDataType.TEMPLATES_FILE))
+                        .setRedirectUrl(new Url(FORBIDDEN_ROUTE, RequestDataType.FILE))
                         .setHttpStatus(HttpStatus.RE_DIRECT)
                         .build();
 
             case UN_AUTHORIZED:
                 return new HttpResponse.Builder()
                         .setData(new Data(dataOutputStream))
-                        .setRedirectUrl(new Url(UN_AUTHORIZED_ROUTE, RequestDataType.TEMPLATES_FILE))
+                        .setRedirectUrl(new Url(UN_AUTHORIZED_ROUTE, RequestDataType.FILE))
                         .setFileType(FileType.HTML)
                         .setHttpStatus(HttpStatus.RE_DIRECT)
                         .build();
             default :
-                data=fileReader.readFile(new Url(ERROR_500_ROUTE,RequestDataType.TEMPLATES_FILE));
+                data=fileReader.readFile(new Url(ERROR_500_ROUTE,RequestDataType.FILE));
                 return new HttpResponse.Builder()
                         .setData(new Data(dataOutputStream,data))
                         .setFileType(FileType.HTML)

@@ -21,7 +21,7 @@ class RequestDataTypeTest {
     void findSTATICFILE() {
         String url = "/bootstrap.js";
         RequestDataType urlType = RequestDataType.getUrlType(url);
-        assertThat(urlType).isEqualTo(RequestDataType.STATIC_FILE);
+        assertThat(urlType).isEqualTo(RequestDataType.FILE);
     }
 
     @Test
@@ -29,6 +29,6 @@ class RequestDataTypeTest {
     void findTEMPLATES_FILE() {
         String url = "/index.html";
         RequestDataType urlType = RequestDataType.getUrlType(url);
-        assertThat(urlType).isEqualTo(RequestDataType.TEMPLATES_FILE);
+        assertThat(urlType).isEqualTo(RequestDataType.FILE);
     }
 }

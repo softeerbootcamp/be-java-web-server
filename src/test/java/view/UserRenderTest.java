@@ -29,7 +29,7 @@ class UserRenderTest {
     void addUserList() throws IOException {
         //given
         saveUsers();
-        byte[] userListHtml = fileReader.readFile(new Url("/user/list.html", RequestDataType.TEMPLATES_FILE));
+        byte[] userListHtml = fileReader.readFile(new Url("/user/list.html", RequestDataType.FILE));
         Collection<User> users = userDatabase.findAll();
         //when
         byte[] fixedUserListHtml = userRender.addUserList(userListHtml, users);

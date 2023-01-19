@@ -3,13 +3,18 @@ package request;
 import request.RequestDataType;
 
 public class Url {
-    private final String url;
+    private  String url;
 
     private final RequestDataType requestDataType;
 
     public Url(String url, RequestDataType requestDataType) {
         this.url = url;
         this.requestDataType = requestDataType;
+    }
+
+    public void attachHtmlExtension() {
+        if(!url.contains(".html"))
+        this.url += ".html";
     }
 
 

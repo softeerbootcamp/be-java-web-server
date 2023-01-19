@@ -23,7 +23,7 @@ class HomeRenderTest {
     @DisplayName("로그인 회원가입 태그 추가 테스트")
     void addSignInAndUpTag() throws IOException {
         //given
-        byte[] index = fileReader.readFile(new Url("/index.html", RequestDataType.TEMPLATES_FILE));
+        byte[] index = fileReader.readFile(new Url("/index.html", RequestDataType.FILE));
         //when
         byte[] fixedHtmlData = homeRender.addSignInAndUpTag(index);
         //then
@@ -35,7 +35,7 @@ class HomeRenderTest {
     void addUserName() throws IOException {
         //given
         String userName = "test";
-        byte[] indexData = fileReader.readFile(new Url("/index.html", RequestDataType.TEMPLATES_FILE));
+        byte[] indexData = fileReader.readFile(new Url("/index.html", RequestDataType.FILE));
         //when
         byte[] fixedData = homeRender.addUserName(indexData, userName);
         //then

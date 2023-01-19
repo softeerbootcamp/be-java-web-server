@@ -10,7 +10,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ControllerMethodInfo {
     String path();
-    RequestDataType type();
 
     HttpMethod method();
 
