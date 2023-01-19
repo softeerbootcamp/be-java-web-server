@@ -32,7 +32,7 @@ public class HttpRequestUtils {
         String[] values = cookie.split(";");
         for (String value : values) {
             String[] keyValuePair = value.split("=", 2);
-            if (keyValuePair[0].equals(" sid")) {
+            if (keyValuePair[0].contains("sid")) {
                 return keyValuePair[1];
             }
         }
