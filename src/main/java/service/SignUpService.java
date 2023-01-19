@@ -21,9 +21,9 @@ public class SignUpService {
         String userId = request.getQueryByKey("userId");
         String password = request.getQueryByKey("password");
         String name = request.getQueryByKey("name");
-        URLDecoder.decode(name, ENCODE_CHARSET);
+        name = URLDecoder.decode(name, ENCODE_CHARSET);
         String email = request.getQueryByKey("email");
-        URLDecoder.decode(email, ENCODE_CHARSET);
+        email = URLDecoder.decode(email, ENCODE_CHARSET);
         saveNewUser(userId,password,name,email);
     }
 
@@ -32,9 +32,9 @@ public class SignUpService {
         String userId = formInfo.get("userId");
         String password = formInfo.get("password");
         String name = formInfo.get("name");
-        URLDecoder.decode(name, ENCODE_CHARSET);
+        name = URLDecoder.decode(name, ENCODE_CHARSET);
         String email = formInfo.get("email");
-        URLDecoder.decode(email, ENCODE_CHARSET);
+        email = URLDecoder.decode(email, ENCODE_CHARSET);
         saveNewUser(userId,password,name,email);
     }
 
