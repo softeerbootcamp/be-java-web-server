@@ -22,9 +22,11 @@ import service.SessionService;
 import service.UserService;
 import util.*;
 import util.error.erroclass.FailLoggedException;
+import view.UserRender;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Map;
 
 @ControllerInfo
@@ -33,11 +35,12 @@ public class UserController implements Controller {
     private Database userDatabase = new UserDatabase();
     private UserService userService = new UserService();
 
-
     private SessionService sessionService = new SessionService();
 
     private RequestReader requestReader;
     private FileReader fileReader;
+
+    private UserRender userRender = UserRender.getInstance();
 
 
     @ControllerMethodInfo(path = "/user/create", type = RequestDataType.IN_BODY, method = HttpMethod.POST)
@@ -135,9 +138,10 @@ public class UserController implements Controller {
     @ControllerMethodInfo(path = "/user/list.html", type = RequestDataType.TEMPLATES_FILE, method = HttpMethod.GET)
     public HttpResponse userListHtml(DataOutputStream dataOutputStream, HttpRequest httpRequest) throws IOException {
         fileReader = new TemplatesFileReader();
-        byte[] data = fileReader.readFile(httpRequest.getUrl());
+        byte[] userListHtml = fileReader.readFile(httpRequest.getUrl());
+        byte[] fixedUserListHtml = userRender.addUserList(userListHtml, userDatabase.findAll());
         return new HttpResponse.Builder()
-                .setData(new Data(dataOutputStream, data))
+                .setData(new Data(dataOutputStream, fixedUserListHtml))
                 .setFileType(FileType.HTML)
                 .setHttpStatus(HttpStatus.OK)
                 .build();
