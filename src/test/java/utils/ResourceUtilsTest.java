@@ -20,7 +20,7 @@ public class ResourceUtilsTest {
         byte[] bytes = ResourceUtils.loadFileFromClasspath(filePath);
 
         // then
-        assertEquals(6902, bytes.length);
+        assertEquals(6963, bytes.length);
     }
 
     @Test

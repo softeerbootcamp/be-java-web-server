@@ -9,6 +9,7 @@ import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import view.Model;
 
 import java.io.DataOutputStream;
 import java.io.OutputStream;
@@ -42,9 +43,10 @@ public class SignUpControllerTest {
                 new HttpHeaders(),
                 user);
         HttpResponse response = new HttpResponse(mockDos);
+        Model model = new Model();
 
         // when
-        controller.execute(request, response);
+        controller.execute(request, response, model);
 
         // then
         String redirect = response.getHeaders().getValue("Location");
@@ -70,11 +72,12 @@ public class SignUpControllerTest {
                 new URL("/user/create", user),
                 new HttpHeaders());
         HttpResponse response = new HttpResponse(mockDos);
+        Model model = new Model();
 
         // when
         MethodNotAllowException exception = assertThrows(
                 MethodNotAllowException.class,
-                () -> controller.execute(request, response));
+                () -> controller.execute(request, response, model));
         // then
         assertEquals("Method Not Allowed", exception.getMessage());
     }

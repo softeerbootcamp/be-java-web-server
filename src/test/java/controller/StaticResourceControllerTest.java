@@ -6,6 +6,7 @@ import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import view.Model;
 
 import java.io.DataOutputStream;
 import java.io.OutputStream;
@@ -34,16 +35,17 @@ public class StaticResourceControllerTest {
                 new HttpHeaders()
         );
         HttpResponse response = new HttpResponse(mockDos);
+        Model model = new Model();
 
         // when
-        controller.execute(request, response);
+        controller.execute(request, response, model);
 
         // then
         HttpHeaders headers = response.getHeaders();
         assertAll(
                 () -> assertEquals(HttpStatus.OK, response.getStatus()),
                 () -> assertEquals(ContentType.TEXT_HTML.getType(), headers.getValue("Content-Type")),
-                () -> assertEquals(6902, response.getBody().length)
+                () -> assertEquals(6963, response.getBody().length)
         );
     }
 
@@ -58,11 +60,12 @@ public class StaticResourceControllerTest {
                 new HttpHeaders()
         );
         HttpResponse response = new HttpResponse(mockDos);
+        Model model = new Model();
 
         // when
         MethodNotAllowException exception = assertThrows(
                 MethodNotAllowException.class,
-                () -> controller.execute(request, response));
+                () -> controller.execute(request, response, model));
 
         // then
         assertEquals("Method Not Allowed", exception.getMessage());
