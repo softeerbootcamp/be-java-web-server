@@ -15,7 +15,7 @@ public class StaticResourceController implements Controller {
 
     private static final Logger logger = LoggerFactory.getLogger(StaticResourceController.class);
 
-    private static final List<String> supportedFileExtensions = List.of(".html", ".css", ".eot", ".svg", ".ttf", ".woff", ".woff2", ".png", ".js", ".ico");
+    private static final List<String> supportedFileExtensions = List.of(".css", ".eot", ".svg", ".ttf", ".woff", ".woff2", ".png", ".js", ".ico");
 
     private static final StaticResourceController instance = new StaticResourceController();
 
@@ -29,14 +29,8 @@ public class StaticResourceController implements Controller {
     @Override
     public void process(HttpRequest request, HttpResponse response) {
         String url = request.getUrl();
-        if (url.equals("/") || url.equals("/index.html")) {
+        if (url.equals("/")) {
             url = "/index.html";
-
-            // TODO: index.html 파일 외의 html 파일일 때도 로그인 상태일 때 사용자 이름을 표시하도록 구현 예정
-            if (request.isLogin()) {
-                DynamicResourceController.getInstance().process(request, response);
-                return;
-            }
         }
 
         try {

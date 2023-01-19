@@ -1,6 +1,7 @@
 package util;
 
 import Controller.Controller;
+import Controller.DynamicResourceController;
 import Controller.StaticResourceController;
 import Controller.UserController;
 import exception.ControllerNotFoundException;
@@ -19,7 +20,10 @@ public class ControllerMapper {
 
     public static Controller getController(HttpRequest request) {
         String url = request.getUrl();
-        if (url.equals("/") || StaticResourceController.isSupported(url)) {
+        if (url.equals("/") || url.endsWith(".html")) {
+            return DynamicResourceController.getInstance();
+        }
+        if (StaticResourceController.isSupported(url)) {
             return StaticResourceController.getInstance();
         }
 

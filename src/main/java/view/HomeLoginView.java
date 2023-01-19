@@ -4,8 +4,8 @@ import util.FileUtils;
 
 public class HomeLoginView {
 
-    public static String render(String name) {
-        byte[] file = FileUtils.loadFile("/index.html");
+    public static String render(String name, String url) {
+        byte[] file = FileUtils.loadFile(url);
 
         String userName = "<li><a role=\"button\">사용자 이름: " + name + "</a></li>";
 

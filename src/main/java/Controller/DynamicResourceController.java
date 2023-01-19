@@ -21,12 +21,18 @@ public class DynamicResourceController implements Controller {
 
     @Override
     public void process(HttpRequest request, HttpResponse response) {
+
+        if (!request.isLogin()) {
+            StaticResourceController.getInstance().process(request, response);
+            return;
+        }
+
         Session session = request.getSession();
         String userId = session.getAttribute(SessionConst.USER_ID);
 
         User loginUser = Database.findUserById(userId);
 
-        String body = HomeLoginView.render(loginUser.getName());
+        String body = HomeLoginView.render(loginUser.getName(), request.getUrl());
 
         response.ok(request);
         response.setBodyMessage(body);
