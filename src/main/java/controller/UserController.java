@@ -83,7 +83,7 @@ public class UserController implements Controller {
         RequestLine requestLine = request.getRequestLine();
 
         if(Sessions.isExistSession(request.getSessionId())) {
-            byte[] body = getUserListHtmlWhenLogin(userService.getUserList());
+            byte[] body = getUserListHtmlWhenLogin(userService.getUserList(), request);
 
             headers = HeaderUtils.response200Header(ContentType.HTML, body.length);
 
@@ -94,7 +94,7 @@ public class UserController implements Controller {
         return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.FOUND), headers);
     }
 
-    private byte[] getUserListHtmlWhenLogin(Collection<User> users) {
+    private byte[] getUserListHtmlWhenLogin(Collection<User> users, Request request) {
         StringBuilder userList = new StringBuilder();
         int row = 0;
 
@@ -119,6 +119,8 @@ public class UserController implements Controller {
         String originalListHtml = new String(body);
         String[] splitListHtml = originalListHtml.split("<tbody>");
         String resultListHtml = splitListHtml[0] + "<tbody>" + userList + splitListHtml[1];
+        resultListHtml = resultListHtml.replace("로그인",
+                Sessions.getSession(request.getSessionId()).getSessionData().get("user"));
         return resultListHtml.getBytes();
     }
 }
