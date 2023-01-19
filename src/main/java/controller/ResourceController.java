@@ -3,6 +3,7 @@ package controller;
 import http.ContentType;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import http.response.HttpStatusCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +31,7 @@ public class ResourceController extends AbstractController {
 
             byte[] body = loadFile(filePath);
 
-            httpResponse.forward(contentType, body);
+            httpResponse.forward(HttpStatusCode.OK, contentType, body);
 
         } catch (IllegalArgumentException e) {
             byte[] errorBody = load404ErrorFile();

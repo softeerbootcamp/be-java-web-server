@@ -3,6 +3,7 @@ package controller;
 import http.ContentType;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import http.response.HttpStatusCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.SessionService;
@@ -39,12 +40,12 @@ public class IndexController extends AbstractController {
 
             logger.info(sessionService.getUserId(sessionId));
             byte[] body = userService.makeUserNameIndexBody(sessionService.getUserId(sessionId), filePath);
-            httpResponse.forward(contentType, body);
+            httpResponse.forward(HttpStatusCode.OK, contentType, body);
 
         } catch (NullPointerException e) {
 
             byte[] body = FileIoUtils.activeLoginBtn(filePath);
-            httpResponse.forward(contentType, body);
+            httpResponse.forward(HttpStatusCode.OK, contentType, body);
         }
     }
 

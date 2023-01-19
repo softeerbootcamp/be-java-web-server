@@ -3,6 +3,7 @@ package controller;
 import http.ContentType;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import http.response.HttpStatusCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.SessionService;
@@ -36,7 +37,7 @@ public class UserListController extends AbstractController {
 
             byte[] body = userService.makeUserListBody(filePath);
 
-            httpResponse.forward(contentType, body);
+            httpResponse.forward(HttpStatusCode.OK, contentType, body);
 
         } catch (NullPointerException e) {
             httpResponse.sendRedirect(LOGIN_FORM_PATH);
