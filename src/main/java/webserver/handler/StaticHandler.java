@@ -30,9 +30,8 @@ public class StaticHandler implements ControllerHandler {
         String uri = httpRequest.getRequestLine().getUrl();
         HttpResponse httpResponse = new HttpResponse();
         String path = httpResponse.findPath(uri);
-
-        if (httpRequest.isContainsCookie() && uri.contains(".html")) {
-            UUID sessionId = httpRequest.getSessionId().get();
+        UUID sessionId = httpRequest.getSessionId().orElse(null);
+        if (SessionStorage.isExist(sessionId) && uri.contains(".html")) {
             return new HttpResponseMessage(httpResponse.forward(path, sessionId), httpResponse.getBody());
         }
         return new HttpResponseMessage(httpResponse.forward(path), httpResponse.getBody());
