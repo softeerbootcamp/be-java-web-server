@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import webserver.controller.IndexController;
+import webserver.controller.DynamicHtmlController;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -79,8 +79,8 @@ public class UserRequestHandlerTest {
         InputStream inputStream = new ByteArrayInputStream(requestMessage.getBytes());
         Request request = new Request(inputStream);
 
-        IndexController indexController = new IndexController();
-        Response response = indexController.service(request);
+        DynamicHtmlController dynamicHtmlController = new DynamicHtmlController();
+        Response response = dynamicHtmlController.service(request);
         //expected
         assertThat(response.getStatusLine().getHttpStatusCode()).isEqualTo(OK);
 

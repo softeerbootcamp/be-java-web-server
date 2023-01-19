@@ -2,10 +2,6 @@ package webserver.controller;
 
 import model.request.Request;
 import model.response.Response;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import util.AuthInterceptor;
-import webserver.RequestHandler;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,8 +15,6 @@ import static util.ViewResolver.findFilePath;
 
 public class FrontServlet {
 
-    private static final Logger logger = LoggerFactory.getLogger(FrontServlet.class);
-
     private final Map<String, WasHandlerAdapter> adapterMap = new HashMap<>();
 
     public FrontServlet() {
@@ -32,9 +26,9 @@ public class FrontServlet {
             Path path = findFilePath(request.getUrl());
 
             //TODO 인덱스.html마저 여기서...? 이거 너무 쓰레기같다. 컨트롤러 구조 고민필요.
-            if (request.getUrl().contains("index.html")) {
-                IndexController indexController = new IndexController();
-                return indexController.service(request);
+            if (request.getUrl().contains(".html")) {
+                DynamicHtmlController dynamicHtmlController = new DynamicHtmlController();
+                return dynamicHtmlController.service(request);
             }
 
             String contentType = Files.probeContentType(path)==null ? "*/*" : Files.probeContentType(path);

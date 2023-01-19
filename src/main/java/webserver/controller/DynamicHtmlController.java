@@ -16,16 +16,15 @@ import java.util.Map;
 
 import static model.response.HttpStatusCode.OK;
 
-public class IndexController {
+public class DynamicHtmlController {
 
     public Response service(Request request) throws IOException {
-        Path filePath = ViewResolver.findFilePath("index.html");
+        Path filePath = ViewResolver.findFilePath(request.getUrl());
+        BufferedReader br = new BufferedReader(new FileReader(filePath.toFile()));
+        String line;
+        StringBuilder body = new StringBuilder();
+
         if (AuthInterceptor.isAuthUser(request)) {
-            BufferedReader br = new BufferedReader(new FileReader(filePath.toFile()));
-
-            String line;
-            StringBuilder sb = new StringBuilder();
-
             while ((line = br.readLine()) != null) {
                 if (line.contains("로그인") || line.contains("회원가입")) {
                     continue;
@@ -33,16 +32,23 @@ public class IndexController {
                 if (line.contains("class=\"dropdown-toggle\"")) {
                     try {
                         String name = AuthInterceptor.findUserSession(request).getName();
-                        sb.append("<a>").append(name).append("님</a></li><li>");
+                        body.append("<a>").append(name).append("님</a></li><li>");
 
                     } catch (SessionExpiredException | SessionNotFoundException e) {
-                        sb.append(line);
+                        body.append(line);
                     }
                 }
-                sb.append(line);
+                body.append(line);
             }
-            return Response.of(request.getHttpVersion(), OK, Map.of("Content-Type", Files.probeContentType(filePath)), sb.toString().getBytes());
+            return Response.of(request.getHttpVersion(), OK, Map.of("Content-Type", Files.probeContentType(filePath)), body.toString().getBytes());
         }
-        return Response.of(request.getHttpVersion(), OK, Map.of("Content-Type", Files.probeContentType(filePath)), ViewResolver.findActualFile(filePath));
+
+        while ((line = br.readLine()) != null) {
+            if (line.contains("로그아웃")) {
+                continue;
+            }
+            body.append(line);
+        }
+        return Response.of(request.getHttpVersion(), OK, Map.of("Content-Type", Files.probeContentType(filePath)), body.toString().getBytes());
     }
 }
