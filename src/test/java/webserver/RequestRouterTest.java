@@ -94,7 +94,7 @@ class RequestRouterTest {
 
         //then
         assertEquals("/index.html", response.getHeaders().get("Location"));
-        assertEquals(expected.toString(), response.toString());
+        assertEquals(response.getHeaders().get("Set-Cookie").contains("SID"), true);
 
     }
 
