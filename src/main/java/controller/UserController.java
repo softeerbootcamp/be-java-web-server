@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.Request;
 import response.ResponseFactory;
+import utils.UserInfoParseUtils;
 import webserver.RequestResponseHandler;
 
 import java.io.File;
@@ -30,9 +31,9 @@ public class UserController implements Controller {
     public ResponseFactory controllerService(Request request) throws IOException {
         logger.debug("firstLine : " + request.getRequestLine().getURL());
         List<String> requestRequestBody = request.getRequestBody().getBodyLines();
-        List<String> userInfos = parseUrlToGetUserInfo(requestRequestBody);
+        List<String> userInfos = UserInfoParseUtils.parseUrlToGetUserInfo(requestRequestBody);
 
-        List<String> decodedUserInfos = decoder(userInfos);
+        List<String> decodedUserInfos = UserInfoParseUtils.userInfoDecoder(userInfos);
         User user = new User(decodedUserInfos.get(USERID_INDEX), decodedUserInfos.get(USERPWD_INDEX),
                 decodedUserInfos.get(USERNAME_INDEX), decodedUserInfos.get(USEREMAIL_INDEX));
 
@@ -48,29 +49,5 @@ public class UserController implements Controller {
         return responseFactory;
     }
 
-    public static List<String> decoder(List<String> userInfos) {
-        List<String> decodedInfos = new ArrayList<>();
-        for(String info : userInfos){
-            decodedInfos.add(URLDecoder.decode(info, StandardCharsets.UTF_8));
-        }
-        return decodedInfos;
-    }
 
-    public List<String> parseUrlToGetUserInfo(List<String> requestBodyLine) {
-        String UserInfos = getUserInfoFromBodyLines(requestBodyLine);
-        List<String> parsedUserInfo = new ArrayList<>();
-        String[] unParsedUserInfos = UserInfos.split("&");
-        for (String eachInfo : unParsedUserInfos) {
-            parsedUserInfo.add(eachInfo.split("=")[1]);
-        }
-        return parsedUserInfo;
-    }
-
-    public String getUserInfoFromBodyLines(List<String> lines) {
-        for (String line : lines
-        ) {
-            if (line.contains("user")) return line;
-        }
-        return null;
-    }
 }
