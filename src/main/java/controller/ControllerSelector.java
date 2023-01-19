@@ -16,15 +16,14 @@ public class ControllerSelector {
     public static Controller setController(Request request) {
         String method = request.getRequestLine().getMETHOD();
         String url = request.getRequestLine().getURL();
-        // todo : 나!!누!!자!!
-        if (method.equals(MethodEnums.GET.getValue())) {
-            if (request.getRequestLine().getURL().split("\\.")[_TOKEN_INDEX].equals("html") ||
-                    request.getRequestLine().getURL().split("\\.")[_TOKEN_INDEX].equals("ico")) {
-                return templateController;
-            }
-            return staticController;
+        if (url.split("\\.")[_TOKEN_INDEX].equals("html") ||
+                url.split("\\.")[_TOKEN_INDEX].equals("ico")) {
+            return templateController;
         }
-        // todo : 여기도 사실 url 만 있으면 되는게 아닐까? post 확인해야될까?
+        /* todo : 여기도 사실 url 만 있으면 되는게 아닐까?
+            post 확인해야될까? 3주차 까지 진행 해 보았는데, 아직 post 확인의 필요성을 못느끼고 있다.
+            추후 과정에서 쓸 일이 있으면 추가하자.
+        */
         if (method.equals(MethodEnums.POST.getValue())) {
             if (url.contains("/login")) {
                 return loginController;
