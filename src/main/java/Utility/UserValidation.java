@@ -4,14 +4,14 @@ import java.util.Objects;
 
 public class UserValidation {
 
-    public static boolean isUserCreationFormValid(String userIdOrNull, String passwordOrNull, String nameOrNull, String emailOrNull){
+    public static boolean isUserCreationFormValid(String userIdOrNull, String passwordOrNull, String nameOrNull, String emailOrNull) {
         return isIdValid(userIdOrNull)
                 && isEmailValid(emailOrNull)
                 && isPasswordValid(passwordOrNull)
                 && isNameValid(nameOrNull);
     }
 
-    public static boolean isIdValid(String userIdOrNull){
+    public static boolean isIdValid(String userIdOrNull) {
         return !Objects.isNull(userIdOrNull);
     }
 

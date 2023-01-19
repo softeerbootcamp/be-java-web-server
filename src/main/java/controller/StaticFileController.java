@@ -12,7 +12,8 @@ import org.slf4j.LoggerFactory;
 import service.SessionService;
 import service.StaticFileService;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -35,19 +36,19 @@ public class StaticFileController implements RequestController {
 
     @Override
     public CustomHttpResponse handleRequest(CustomHttpRequest req) {
-        if(!ifFileTypeRequested(req.getUrl()))
-            req.setUrl(req.getUrl()+".html");
+        if (!ifFileTypeRequested(req.getUrl()))
+            req.setUrl(req.getUrl() + ".html");
         logger.debug("req {} comes static handler", req.getUrl());
         return getFile(req);
     }
 
     private CustomHttpResponse getFile(CustomHttpRequest req) {
-        if(StaticFileService.isTemplateFile(req.getUrl()))
+        if (StaticFileService.isTemplateFile(req.getUrl()))
             return handleTemplateFile(req);
         return handleStaticFile(req);
     }
 
-    private CustomHttpResponse handleTemplateFile(CustomHttpRequest req){
+    private CustomHttpResponse handleTemplateFile(CustomHttpRequest req) {
         File file = StaticFileService.getFile(req.getUrl());
         User user = SessionService.getUserBySessionId(req.getSSID()).orElse(User.GUEST);
 
@@ -61,13 +62,13 @@ public class StaticFileController implements RequestController {
         }
     }
 
-    public CustomHttpResponse handleStaticFile(CustomHttpRequest req){
+    public CustomHttpResponse handleStaticFile(CustomHttpRequest req) {
         File file = StaticFileService.getFile(req.getUrl());
         String fileType = StaticFileService.getFileTypeFromUrl(req.getUrl());
         ContentType contentType = ContentType.getContentTypeByFileType(fileType);
         try {
             return CustomHttpResponse.of(StatusCode.OK, contentType, new HashMap<>(), Files.readAllBytes(Path.of(file.getPath())));
-        }catch (IOException e) {
+        } catch (IOException e) {
             return CustomHttpFactory.NOT_FOUND();
         }
     }

@@ -3,7 +3,10 @@ package service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -22,14 +25,14 @@ public class StaticFileService {
     public static String renderFile(File htmlFile, Map<String, String> matchings) throws FileNotFoundException {
         String originalFile = readFileToStr(htmlFile);
 
-        for(String key : matchings.keySet()){
-            originalFile = originalFile.replace(("{:"+key+":}"), matchings.get(key));
+        for (String key : matchings.keySet()) {
+            originalFile = originalFile.replace(("{:" + key + ":}"), matchings.get(key));
         }
-        originalFile = originalFile.replaceAll("\\{:\\w+:\\}","");
+        originalFile = originalFile.replaceAll("\\{:\\w+:\\}", "");
         return originalFile;
     }
 
-    public static boolean isTemplateFile(String url){
+    public static boolean isTemplateFile(String url) {
         return TEMPLATE_FILES.contains(getFileTypeFromUrl(url));
     }
 

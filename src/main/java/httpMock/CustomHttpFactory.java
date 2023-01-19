@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class CustomHttpFactory {
 
-    public static CustomHttpResponse OK_HTML(String htmlFile){
+    public static CustomHttpResponse OK_HTML(String htmlFile) {
         return CustomHttpResponse.of(
                 StatusCode.OK,
                 ContentType.TEXT_HTML,
@@ -55,7 +55,7 @@ public class CustomHttpFactory {
     }
 
 
-    public static CustomHttpResponse INTERNAL_ERROR(String errorMessage){
+    public static CustomHttpResponse INTERNAL_ERROR(String errorMessage) {
         return CustomHttpResponse.of(
                 StatusCode.INTERNAL_ERROR,
                 ContentType.TEXT_PLAIN,
