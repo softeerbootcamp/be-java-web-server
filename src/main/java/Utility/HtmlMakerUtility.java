@@ -26,13 +26,14 @@ public class HtmlMakerUtility {
         return message;
     }
 
-    public static Map<String, String> getLoginLogoutTemplate(boolean isUserAuthenticated){
-        if(!isUserAuthenticated)
+    public static Map<String, String> getDefaultTemplate(String username){
+        if(username.equals(User.GUEST.getName()))
             return new HashMap<>(){{
                 put("loginForm", loginButton());
                 put("registerForm", createButton());
             }};
         return new HashMap<>(){{
+            put("name", username);
             put("logoutForm", logoutButton());
         }};
     }
