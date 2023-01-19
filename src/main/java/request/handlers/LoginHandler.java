@@ -9,6 +9,9 @@ import request.RequestParser;
 import response.HttpResponseStatus;
 import response.Response;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Map;
 import java.util.UUID;
 
@@ -23,6 +26,22 @@ public class LoginHandler implements RequestHandler {
 
     public static LoginHandler getInstance() {
         return instance;
+    }
+
+    // TODO: user/login.html 수정
+    @Override
+    public Response doGet(Request request) {
+        try {
+            String resource = request.getResource();
+            if(!resource.endsWith(".html")) {
+                resource += ".html";
+            }
+            byte[] file = generateDynamicHeader(request.getCookie(),
+                    Files.readAllBytes(new File("src/main/resources/templates" + resource).toPath()));
+            return Response.createSimpleResponse(file, FileContentType.HTML.getContentType(), HttpResponseStatus.OK);
+        } catch (IOException e) {
+            return Response.from(HttpResponseStatus.NOT_FOUND);
+        }
     }
 
     @Override
