@@ -2,6 +2,7 @@ package controller;
 
 import exception.ConnectionClosedException;
 import exception.FileSystemException;
+import filesystem.Extension;
 import http.request.HttpRequest;
 import http.request.RequestFactory;
 import http.response.HttpResponse;
@@ -13,12 +14,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.List;
 import java.util.Map;
 
 public class FacadeController implements Runnable {
 
-    private static final List<String> staticResourceExtensions = List.of(".html", ".css", ".js", "eot", "svg", "ttf", "woff", "woff2", "png");
     private final Logger logger = LoggerFactory.getLogger(FacadeController.class);
     private final RequestFactory requestFactory = new RequestFactory();
     private final ResponseFactory responseFactory = new ResponseFactory();
@@ -54,6 +53,6 @@ public class FacadeController implements Runnable {
     }
 
     private boolean isStaticResourceRequest(String url) {
-        return staticResourceExtensions.stream().anyMatch(url::endsWith);
+        return Extension.isStaticResource(url);
     }
 }
