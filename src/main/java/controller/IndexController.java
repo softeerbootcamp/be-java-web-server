@@ -7,10 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.SessionService;
 import service.UserService;
+import utils.FileIoUtils;
 
 import java.io.IOException;
-
-import static utils.FileIoUtils.loadFile;
 
 public class IndexController extends AbstractController {
 
@@ -43,8 +42,8 @@ public class IndexController extends AbstractController {
             httpResponse.forward(contentType, body);
 
         } catch (NullPointerException e) {
-            byte[] body = loadFile(filePath);
 
+            byte[] body = FileIoUtils.activeLoginBtn(filePath);
             httpResponse.forward(contentType, body);
         }
     }
