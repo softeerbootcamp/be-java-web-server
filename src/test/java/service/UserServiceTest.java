@@ -2,11 +2,9 @@ package service;
 
 import db.UserDatabase;
 import model.User;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
-import util.error.erroclass.NotLoggedException;
+import util.error.erroclass.FailLoggedException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +23,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("로그인 성공 테스트")
-    void validLogin() throws NotLoggedException {
+    void validLogin() throws FailLoggedException {
         //given
         User user = new User(userValue[0], userValue[1], userValue[2], userValue[3]);
         userDatabase.addData(user);
@@ -48,7 +46,7 @@ class UserServiceTest {
         loginInfo.put(userKey[0], notCorrectId[0]);
         loginInfo.put(userKey[1], notCorrectId[1]);
         //then
-        assertThrows(NotLoggedException.class,() -> userService.validLogin(loginInfo));
+        assertThrows(FailLoggedException.class,() -> userService.validLogin(loginInfo));
     }
 
     @Test
@@ -62,6 +60,6 @@ class UserServiceTest {
         loginInfo.put(userKey[0], notCorrectPassword[0]);
         loginInfo.put(userKey[1], notCorrectPassword[1]);
         //then
-        assertThrows(NotLoggedException.class,() -> userService.validLogin(loginInfo));
+        assertThrows(FailLoggedException.class,() -> userService.validLogin(loginInfo));
     }
 }

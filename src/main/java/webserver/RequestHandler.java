@@ -1,15 +1,14 @@
 package webserver;
 
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
-import java.nio.file.NoSuchFileException;
 
 import controller.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.HttpRequest;
 import util.HttpStatus;
+import util.error.erroclass.FailLoggedException;
 import util.error.erroclass.NotLoggedException;
 
 public class RequestHandler implements Runnable {
@@ -33,12 +32,18 @@ public class RequestHandler implements Runnable {
 
             try {
                 ControllerFinder.findController(httpRequest, clientOutPutStream);
-            } catch (NotLoggedException | NullPointerException e) {
+            } catch (FailLoggedException | NullPointerException e) {
                 ErrorController.getErrorResponse(clientOutPutStream, HttpStatus.UN_AUTHORIZED);
                 e.printStackTrace();
                 logger.error("[ERROR]:{} {}", HttpStatus.UN_AUTHORIZED.getCode(), HttpStatus.UN_AUTHORIZED.getMessage());
-                logger.error("인증되지 않은 유저입니다. url:{}", httpRequest.getUrl().getUrl());
-            } catch (NoSuchMethodException e) {
+                logger.error("로그인되지 않은 유저입니다. url:{}", httpRequest.getUrl().getUrl());
+            }catch (NotLoggedException e) {
+                ErrorController.getErrorResponse(clientOutPutStream, HttpStatus.FORBIDDEN);
+                e.printStackTrace();
+                logger.error("[ERROR]:{} {}", HttpStatus.FORBIDDEN.getCode(), HttpStatus.FORBIDDEN.getMessage());
+                logger.error("로그인되지 않은 유저입니다. url:{}", httpRequest.getUrl().getUrl());
+            }
+            catch (NoSuchMethodException e) {
                 e.printStackTrace();
                 ErrorController.getErrorResponse(clientOutPutStream, HttpStatus.NOT_FOUND);
                 logger.error("[ERROR]:{} {}", HttpStatus.NOT_FOUND.getCode(), HttpStatus.NOT_FOUND.getMessage());

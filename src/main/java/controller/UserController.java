@@ -1,6 +1,7 @@
 package controller;
 
 
+import controller.annotation.Auth;
 import controller.annotation.ControllerInfo;
 import controller.annotation.ControllerMethodInfo;
 import db.Database;
@@ -20,7 +21,7 @@ import response.HttpResponse;
 import service.SessionService;
 import service.UserService;
 import util.*;
-import util.error.erroclass.NotLoggedException;
+import util.error.erroclass.FailLoggedException;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -62,7 +63,7 @@ public class UserController implements Controller {
     }
 
     @ControllerMethodInfo(path = "/user/login", type = RequestDataType.IN_BODY, method = HttpMethod.POST)
-    public HttpResponse login(DataOutputStream dataOutputStream, HttpRequest httpRequest) throws IOException, NotLoggedException {
+    public HttpResponse login(DataOutputStream dataOutputStream, HttpRequest httpRequest) throws IOException, FailLoggedException {
         requestReader = new RequestPostReader();
 
         Map<String, String> loginInfo = requestReader.readData(httpRequest);
@@ -70,7 +71,7 @@ public class UserController implements Controller {
         User validUser = null;
         try {
             validUser = userService.validLogin(loginInfo);
-        } catch (NotLoggedException e) {
+        } catch (FailLoggedException e) {
             logger.error("유효하지 않는 로그인 유저 요청");
             logger.error("/user/login_failed.html 로 redirect");
             return new HttpResponse.Builder()
@@ -122,8 +123,19 @@ public class UserController implements Controller {
     @ControllerMethodInfo(path = "/user/form.html", type = RequestDataType.TEMPLATES_FILE, method = HttpMethod.GET)
     public HttpResponse userFormHtml(DataOutputStream dataOutputStream, HttpRequest httpRequest) throws IOException {
         fileReader = new TemplatesFileReader();
-        byte[] data = new byte[0];
-        data = fileReader.readFile(httpRequest.getUrl());
+        byte[] data = fileReader.readFile(httpRequest.getUrl());
+        return new HttpResponse.Builder()
+                .setData(new Data(dataOutputStream, data))
+                .setFileType(FileType.HTML)
+                .setHttpStatus(HttpStatus.OK)
+                .build();
+    }
+
+    @Auth
+    @ControllerMethodInfo(path = "/user/list.html", type = RequestDataType.TEMPLATES_FILE, method = HttpMethod.GET)
+    public HttpResponse userListHtml(DataOutputStream dataOutputStream, HttpRequest httpRequest) throws IOException {
+        fileReader = new TemplatesFileReader();
+        byte[] data = fileReader.readFile(httpRequest.getUrl());
         return new HttpResponse.Builder()
                 .setData(new Data(dataOutputStream, data))
                 .setFileType(FileType.HTML)
