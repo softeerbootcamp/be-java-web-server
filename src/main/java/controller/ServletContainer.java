@@ -7,6 +7,7 @@ import servlet.Servlet;
 import servlet.UserCreate;
 import servlet.Userlogin;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,11 +44,15 @@ public class ServletContainer {
             if (servletContainer.get(requestPath) == null) {
                 String className = servletNameMapper.get(requestPath);
                 Class clazz = Class.forName(className);
-                servletContainer.put(requestPath, (Controller)clazz.newInstance());
+                servletContainer.put(requestPath, (Controller)clazz.getDeclaredConstructor().newInstance());
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NullPointerException e) {
             logger.error(e.getMessage());
             throw new RuntimeException(requestPath);
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
         }
         return servletContainer.get(requestPath);
     }
