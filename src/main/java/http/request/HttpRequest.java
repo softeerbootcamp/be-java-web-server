@@ -92,4 +92,16 @@ public class HttpRequest {
     public String getHttpVersion() {
         return requestLine.getVersion();
     }
+
+    public String getUrl() {
+        return requestLine.getUrl();
+    }
+
+    public HttpUri getUri() {
+        return requestLine.getHttpUri();
+    }
+
+    public String getContentType() {
+        return requestHeader.getContentType();
+    }
 }

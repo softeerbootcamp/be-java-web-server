@@ -45,4 +45,8 @@ public class RequestLine {
                 ", version='" + version + '\'' +
                 '}';
     }
+
+    public String getUrl() {
+        return httpUri.getPath();
+    }
 }

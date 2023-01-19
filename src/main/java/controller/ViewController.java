@@ -24,18 +24,16 @@ public class ViewController implements Controller {
 
     @Override
     public HttpResponse doService(HttpRequest httpRequest) throws IOException {
-        RequestLine requestLine = httpRequest.getRequestLine();
-        RequestHeader requestHeader = httpRequest.getRequestHeader();
-        HttpUri httpUri = requestLine.getHttpUri();
-        File file = FileIoUtil.getFile(requestLine.getHttpUri());
+        String url = httpRequest.getUrl();
+        File file = FileIoUtil.getFile(httpRequest.getUri());
         byte[] body = Files.readAllBytes(file.toPath());
 
-        if (httpUri.getPath().endsWith(".html") && SessionHandler.validateSession(httpRequest.getSid())) {
+        if (url.endsWith(".html") && SessionHandler.validateSession(httpRequest.getSid())) {
             HttpSession httpSession = SessionHandler.getSession(httpRequest.getSid());
             body = DynamicResolver.showUserName(file, httpSession.getUserName());
         }
 
-        return HttpResponseFactory.OK(requestHeader.getContentType(), body);
+        return HttpResponseFactory.OK(httpRequest.getContentType(), body);
     }
 
     @Override
