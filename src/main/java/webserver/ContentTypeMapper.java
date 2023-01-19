@@ -28,12 +28,4 @@ public enum ContentTypeMapper {
                 .orElseThrow(() -> new RuntimeException(extension)) // 정의되지 않은 확장자
                 .contentType;   // 해당하는 컨텐트 타입 리턴
     }
-
-    public String getExtensionValue() {
-        return extension;
-    }
-
-    public ContentType getMimeData() {
-        return contentType;
-    }
 }

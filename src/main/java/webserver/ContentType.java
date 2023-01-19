@@ -22,23 +22,11 @@ public enum ContentType {
     }
 
     public String value() {
-        String charsetToAppend = "";
-        if (charset == "") {
-            charsetToAppend = "";
-        }
-        if (charset != "") {
-            charsetToAppend = (";" + charset);
-        }
+        String charsetToAppend = (charset == "") ? "" : (";" + charset);
+        String boundaryToAppend = (boundary == "") ? "" : ( ";" + boundary);
 
-
-        String boundaryToAppend = "";
-        if (charset == "") {
-            boundaryToAppend = "";
-        }
-        if (charset != "") {
-            boundaryToAppend = (";" + boundary);
-        }
         String value = mediaType + charsetToAppend + boundaryToAppend;
+
         return value;
     }
 }
