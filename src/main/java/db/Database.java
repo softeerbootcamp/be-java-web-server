@@ -7,6 +7,9 @@ import java.util.Collection;
 import java.util.Map;
 
 public class Database {
+
+    public static User NOT_FOUND_USER = new User("", "", "" ,"");
+
     private static Map<String, User> users = Maps.newHashMap();
 
     public static void addUser(User user) {
@@ -14,7 +17,9 @@ public class Database {
     }
 
     public static User findUserById(String userId) {
-        return users.get(userId);
+        if(users.containsKey(userId))
+            return users.get(userId);
+        return NOT_FOUND_USER;
     }
 
     public static Collection<User> findAll() {
