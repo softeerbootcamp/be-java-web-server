@@ -85,4 +85,12 @@ public class HttpResponse {
         headers.put("Location", redirectUrl);
     }
 
+//    public void of(String filePath, HttpStatus status,ContentType contentType){
+//        byte[] body = FileIoUtils.loadFileFromClasspath(filePath);
+//        setStatus(status);
+//        setContentType(contentType);
+//        addToHeader("Content-Length", String.valueOf(body.length));
+//        setBody(body);//body에는 요청한 파일 내용이 들어감
+//    }
+
 }
