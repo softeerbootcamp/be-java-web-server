@@ -1,5 +1,6 @@
 package controller;
 
+import Utility.HtmlMakerUtility;
 import httpMock.CustomHttpFactory;
 import httpMock.CustomHttpRequest;
 import httpMock.CustomHttpResponse;
@@ -11,13 +12,13 @@ import org.slf4j.LoggerFactory;
 import service.SessionService;
 import service.StaticFileService;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 import static service.StaticFileService.getFileTypeFromUrl;
 
@@ -35,36 +36,39 @@ public class StaticFileController implements RequestController {
 
     @Override
     public CustomHttpResponse handleRequest(CustomHttpRequest req) {
+        if (!ifFileTypeRequested(req.getUrl()))
+            req.setUrl(req.getUrl() + ".html");
+        logger.debug("req {} comes static handler", req.getUrl());
         return getFile(req);
     }
 
-    public CustomHttpResponse getFile(CustomHttpRequest req) {
-        if(StaticFileService.isTemplateFile(req.getUrl()))
+    private CustomHttpResponse getFile(CustomHttpRequest req) {
+        if (StaticFileService.isTemplateFile(req.getUrl()))
             return handleTemplateFile(req);
         return handleStaticFile(req);
     }
 
-    public CustomHttpResponse handleTemplateFile(CustomHttpRequest req){
+    private CustomHttpResponse handleTemplateFile(CustomHttpRequest req) {
         File file = StaticFileService.getFile(req.getUrl());
         User user = SessionService.getUserBySessionId(req.getSSID()).orElse(User.GUEST);
+
         try {
-            FileReader fr = new FileReader(file);
-            BufferedReader br = new BufferedReader(fr);
-            String lines = br.lines().collect(Collectors.joining("\n"));
-            lines = StaticFileService.renderFile(lines, new HashMap<>(){{put("name", user.getName());}});
-            return CustomHttpResponse.of(StatusCode.OK, ContentType.TEXT_HTML, new HashMap<>(), lines.getBytes());
+            Map<String, String> matching = HtmlMakerUtility.getDefaultTemplate(user.getName());
+            String lines = StaticFileService.renderFile(file, matching);
+
+            return CustomHttpFactory.OK_HTML(lines);
         } catch (IOException e) {
             return CustomHttpFactory.NOT_FOUND();
         }
     }
 
-    public CustomHttpResponse handleStaticFile(CustomHttpRequest req){
+    public CustomHttpResponse handleStaticFile(CustomHttpRequest req) {
         File file = StaticFileService.getFile(req.getUrl());
         String fileType = StaticFileService.getFileTypeFromUrl(req.getUrl());
         ContentType contentType = ContentType.getContentTypeByFileType(fileType);
         try {
             return CustomHttpResponse.of(StatusCode.OK, contentType, new HashMap<>(), Files.readAllBytes(Path.of(file.getPath())));
-        }catch (IOException e) {
+        } catch (IOException e) {
             return CustomHttpFactory.NOT_FOUND();
         }
     }

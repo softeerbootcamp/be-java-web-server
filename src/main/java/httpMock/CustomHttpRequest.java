@@ -123,7 +123,7 @@ public class CustomHttpRequest {
         this.requestHeaders.put(itemName, itemList);
     }
 
-    public String getSSID(){
+    public String getSSID() {
         if (requestHeaders.get("Cookie") == null)
             return null;
         String sidLine = requestHeaders.get("Cookie").stream().filter(s -> s.startsWith("SID=")).findFirst().orElse(null);
@@ -131,6 +131,11 @@ public class CustomHttpRequest {
             return null;
         return sidLine.substring(sidLine.indexOf("=") + 1);
     }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     public String getUrl() {
         return url;
     }

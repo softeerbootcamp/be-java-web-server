@@ -30,7 +30,7 @@ class UserAccountControllerTest {
         CustomHttpRequest req = CustomHttpRequest.of(
                 "POST /user/create HTTP/1.1",
                 Collections.EMPTY_LIST,
-                List.of("userId=asdf&password=123123&email=asdfasdf@asdf.com")
+                List.of("userId=asdf&password=123a123&email=asdfasdf@asdf.com&name=hello")
         );
 
         //when

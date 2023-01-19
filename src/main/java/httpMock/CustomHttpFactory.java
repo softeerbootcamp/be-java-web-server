@@ -7,6 +7,15 @@ import java.util.HashMap;
 
 public class CustomHttpFactory {
 
+    public static CustomHttpResponse OK_HTML(String htmlFile) {
+        return CustomHttpResponse.of(
+                StatusCode.OK,
+                ContentType.TEXT_HTML,
+                CustomHttpResponse.EMPTY_HEADER,
+                htmlFile.getBytes()
+        );
+    }
+
     public static CustomHttpResponse REDIRECT(String location) {
         return CustomHttpResponse.of(
                 StatusCode.FOUND,
@@ -42,6 +51,16 @@ public class CustomHttpFactory {
                 ContentType.TEXT_PLAIN,
                 CustomHttpResponse.EMPTY_HEADER,
                 "지원하지 않는 HTTP Method 입니다.".getBytes(CustomHttpResponse.CHARSET)
+        );
+    }
+
+
+    public static CustomHttpResponse INTERNAL_ERROR(String errorMessage) {
+        return CustomHttpResponse.of(
+                StatusCode.INTERNAL_ERROR,
+                ContentType.TEXT_PLAIN,
+                CustomHttpResponse.EMPTY_HEADER,
+                errorMessage.getBytes(CustomHttpResponse.CHARSET)
         );
     }
 }
