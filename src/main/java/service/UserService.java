@@ -26,4 +26,8 @@ public class UserService {
     public Collection<User> getUserList() {
         return database.findAll();
     }
+
+    public User getUser(String userId) {
+        return database.findUserById(userId);
+    }
 }
