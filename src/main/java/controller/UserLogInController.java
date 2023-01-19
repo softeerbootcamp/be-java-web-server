@@ -4,6 +4,7 @@ import http.cookie.Cookie;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 
+import model.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.SessionService;
@@ -36,14 +37,13 @@ public class UserLogInController extends AbstractController {
                     httpRequest.getParameter(PASSWORD)
             );
 
-            String sessionId = sessionService.makeSessionId();
-            sessionService.makeSession(sessionId, USER_ID);
+            Session session = sessionService.makeSession(USER_ID);
 
             logger.info("Login Success");
 
             httpResponse.sendRedirect(
                     INDEX_PATH,
-                    Cookie.of(DEFAULT_SESSION_ID, sessionId)
+                    Cookie.of(DEFAULT_SESSION_ID, session.getSessionId())
             );
 
         } catch (IllegalArgumentException e) {

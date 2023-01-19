@@ -13,20 +13,24 @@ public class SessionService {
         this.sessionRepository = sessionRepository;
     }
 
-    public String makeSessionId() {
-        return UUID.randomUUID().toString();
-    }
+    public Session makeSession(String userId) {
+        String sessionId = UUID.randomUUID().toString();
+        Session session = new Session(sessionId, userId);
+        sessionRepository.addSession(sessionId, session);
 
-    public void makeSession(String sessionId, String value) {
-        Session session = new Session(sessionId);
-        session.setAttribute(sessionId, value);
-        sessionRepository.addSession(session.getId(), session);
+        return session;
     }
 
     public void validateHasSession(String id) {
         Session session = sessionRepository.findById(id);
         if (session == null)
             throw new NullPointerException("Session not found");
+    }
+
+    public String getUserId(String sessionId) {
+        return sessionRepository
+                .findById(sessionId)
+                .getUserId();
     }
 
 }
