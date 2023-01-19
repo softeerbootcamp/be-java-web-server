@@ -51,7 +51,7 @@ public class UserController implements Controller{
     public HttpResponseMessage showList(HttpRequest httpRequest) {
         HttpResponse httpResponse = new HttpResponse();
         UUID sessionId = httpRequest.getSessionId().orElse(null);
-        if (sessionId == null) {
+        if (sessionId == null || !SessionStorage.isExist(sessionId)) {
             return new HttpResponseMessage(httpResponse.sendRedirect("/user/login.html"), httpResponse.getBody());
         }
         String userId = SessionStorage.findSessionBy(sessionId).getUserId();
