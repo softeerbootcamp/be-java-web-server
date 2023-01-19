@@ -15,7 +15,7 @@ public class DynamicController {
         byte[] manualBody;
         String stringBody;
         stringBody = StringBuilderUtils.byteArrayToString(body);
-        stringBody = stringBody.replace("role=\"button\">로그인</a></li>","></a><li>");
+        stringBody = stringBody.replace("role=\"button\">로그인"," role=\"button\" style=\"display:none;\">로그인");
         manualBody = StringBuilderUtils.stringToByteArray(stringBody);
         return manualBody;
     }
