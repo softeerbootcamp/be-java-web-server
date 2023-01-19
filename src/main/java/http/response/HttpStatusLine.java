@@ -11,10 +11,6 @@ public class HttpStatusLine {
         this.httpVersion = httpVersion;
     }
 
-    public boolean checkStatus(HttpStatus status) {
-        return this.httpStatus.equals(status);
-    }
-
     public String toStringForResponse() {
         return httpVersion + " " + httpStatus.toString() + System.lineSeparator();
     }
