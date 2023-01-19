@@ -3,10 +3,7 @@ package controller;
 import exception.HttpMethodException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import utils.ContentType;
-import utils.FileIoUtils;
-import utils.HttpMethod;
-import utils.StatusCode;
+import utils.*;
 
 
 public class StaticFileController implements Controller {
@@ -17,6 +14,7 @@ public class StaticFileController implements Controller {
         HttpMethod requestHttpMethod = httpRequest.getHttpMethod();
         if (HttpMethod.GET.equals(requestHttpMethod)) {
             doGet(httpRequest, httpResponse);
+            return;
         }
         throw new HttpMethodException(requestHttpMethod);
     }
@@ -26,8 +24,9 @@ public class StaticFileController implements Controller {
         try {
             httpResponse.setBody(FileIoUtils.loadFile(path));
             httpResponse.setContentType(ContentType.getContentType(FileIoUtils.getExtension(path)));
-        } catch (NullPointerException e) {
+        } catch (IllegalArgumentException e) {
             httpResponse.setStatusCode(StatusCode.NOTFOUND);
+            httpResponse.setBody(FileIoUtils.loadFile(PathManager.ERROR_PATH));
         }
     }
 }

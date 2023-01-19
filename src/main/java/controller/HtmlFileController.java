@@ -16,6 +16,7 @@ public class HtmlFileController implements Controller {
         HttpMethod requestHttpMethod = httpRequest.getHttpMethod();
         if (HttpMethod.GET.equals(requestHttpMethod)) {
             doGet(httpRequest, httpResponse);
+            return;
         }
         throw new HttpMethodException(requestHttpMethod);
     }
@@ -30,6 +31,7 @@ public class HtmlFileController implements Controller {
                 httpResponse.setBody(FileIoUtils.makePage(path, null));
             } catch (IllegalArgumentException err) {
                 httpResponse.setStatusCode(StatusCode.NOTFOUND);
+                httpResponse.setBody(FileIoUtils.loadFile(PathManager.ERROR_PATH));
                 return;
             }
         }
