@@ -60,4 +60,15 @@ public class UserController implements Controller{
         System.out.println("userId = " + userId);
         return new HttpResponseMessage(httpResponse.forwardListPageHeaderMessage(userId, path), httpResponse.getBody());
     }
+
+    @RequestMapping(method =  HttpMethod.GET, value = "/user/logout")
+    public HttpResponseMessage logOut(HttpRequest httpRequest) {
+        HttpResponse httpResponse = new HttpResponse();
+        UUID sessionId = httpRequest.getSessionId().orElse(null);
+        if (sessionId == null) {
+            return new HttpResponseMessage(httpResponse.sendRedirect("/user/login.html"), httpResponse.getBody());
+        }
+        SessionStorage.findSessionBy(sessionId).invalidate();
+        return new HttpResponseMessage(httpResponse.sendRedirect("/index.html"), httpResponse.getBody());
+    }
 }
