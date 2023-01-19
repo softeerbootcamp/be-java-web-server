@@ -37,7 +37,7 @@ public class UserLogInController extends AbstractController {
             );
 
             String sessionId = sessionService.makeSessionId();
-            sessionService.makeSession(sessionId, "login");
+            sessionService.makeSession(sessionId, USER_ID);
 
             logger.info("Login Success");
 
