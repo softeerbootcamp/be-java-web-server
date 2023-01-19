@@ -31,7 +31,7 @@ public class FileController implements Controller {
     private byte[] createBody(HttpRequest httpRequest) {
         try {
             User user = LoginUtil.checkSession(httpRequest);
-            return HtmlBuildUtil.withoutLogoutWithUserName(httpRequest.getPath(), user).getBytes();
+            return HtmlBuildUtil.buildHtml(httpRequest.getPath(), user);
         } catch (NullPointerException e) {
             return HttpResponseUtil.generateBody(httpRequest.getPath());
         }
