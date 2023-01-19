@@ -22,7 +22,7 @@ public class Context {
         controllers.put("file", new ResourceController());
         controllers.put("/user/create", new UserCreateController(userService));
         controllers.put("/user/login", new UserLogInController(sessionService, userService));
-        controllers.put("/", new IndexController(sessionService, userService));
+        controllers.put("/index.html", new IndexController(sessionService, userService));
         controllers.put("/user/list.html", new UserListController(sessionService, userService));
         return controllers;
     }
