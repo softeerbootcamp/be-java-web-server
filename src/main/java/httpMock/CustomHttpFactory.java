@@ -44,4 +44,14 @@ public class CustomHttpFactory {
                 "지원하지 않는 HTTP Method 입니다.".getBytes(CustomHttpResponse.CHARSET)
         );
     }
+
+
+    public static CustomHttpResponse INTERNAL_ERROR(String errorMessage){
+        return CustomHttpResponse.of(
+                StatusCode.INTERNAL_ERROR,
+                ContentType.TEXT_PLAIN,
+                CustomHttpResponse.EMPTY_HEADER,
+                errorMessage.getBytes(CustomHttpResponse.CHARSET)
+        );
+    }
 }
