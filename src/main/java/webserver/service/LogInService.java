@@ -3,10 +3,15 @@ package webserver.service;
 import webserver.httpUtils.Request;
 import webserver.httpUtils.Response;
 
+import java.util.Map;
+
 public class LogInService implements Service{
     @Override
     public Response exec(Request req) {
-        // TODO 로그인 서비스 구현
+        Map<String, String> userInfo = getUserInfo(req);
+
+
+
         return null;
     }
 }

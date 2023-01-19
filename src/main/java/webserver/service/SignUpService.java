@@ -43,20 +43,4 @@ public class SignUpService implements Service{
                 .withStatCodeAndText(302, "FOUND")
                 .withHeaderKeyVal("Location", Paths.HOME_PATH);
     }
-
-    private Map<String, String> getUserInfo(Request req)
-    {
-        Map<String, String> parsedInfo = new HashMap<>();
-
-        String unparsedInfo = new String(req.getReqBody().getContext());
-        String tokens[] = unparsedInfo.split("&");
-        Arrays.stream(tokens).forEach(
-                elem -> {
-                    String keyVal[] = elem.split("=");
-                    parsedInfo.put(keyVal[0], keyVal[1]);
-                }
-        );
-
-        return parsedInfo;
-    }
 }
