@@ -60,7 +60,7 @@ public class UserController implements Controller {
                 .setData(new Data(dataOutputStream))
                 .setFileType(FileType.HTML)
                 .setHttpStatus(HttpStatus.RE_DIRECT)
-                .setRedirectUrl(new Url("/index.html",RequestDataType.TEMPLATES_FILE))
+                .setRedirectUrl(new Url("/index.html", RequestDataType.TEMPLATES_FILE))
                 .setCookie(cookie)
                 .build();
     }
@@ -81,12 +81,11 @@ public class UserController implements Controller {
                     .setData(new Data(dataOutputStream))
                     .setFileType(FileType.HTML)
                     .setHttpStatus(HttpStatus.RE_DIRECT)
-                    .setRedirectUrl(new Url("/user/login_failed.html",RequestDataType.TEMPLATES_FILE))
+                    .setRedirectUrl(new Url("/user/login_failed.html", RequestDataType.TEMPLATES_FILE))
                     .build();
         }
 
         Cookie cookie = sessionService.persistUser(validUser);
-
 
 
         logger.debug("로그인 성공한 userID:{}", validUser.getUserId());
@@ -96,7 +95,7 @@ public class UserController implements Controller {
                 .setData(new Data(dataOutputStream))
                 .setFileType(FileType.HTML)
                 .setHttpStatus(HttpStatus.RE_DIRECT)
-                .setRedirectUrl(new Url("/index.html",RequestDataType.TEMPLATES_FILE))
+                .setRedirectUrl(new Url("/index.html", RequestDataType.TEMPLATES_FILE))
                 .setCookie(cookie)
                 .build();
     }
@@ -106,7 +105,7 @@ public class UserController implements Controller {
         fileReader = new TemplatesFileReader();
         byte[] data = fileReader.readFile(httpRequest.getUrl());
         return new HttpResponse.Builder()
-                .setData(new Data(dataOutputStream,data))
+                .setData(new Data(dataOutputStream, data))
                 .setFileType(FileType.HTML)
                 .setHttpStatus(HttpStatus.OK)
                 .build();
@@ -117,7 +116,7 @@ public class UserController implements Controller {
         fileReader = new TemplatesFileReader();
         byte[] data = fileReader.readFile(httpRequest.getUrl());
         return new HttpResponse.Builder()
-                .setData(new Data(dataOutputStream,data))
+                .setData(new Data(dataOutputStream, data))
                 .setFileType(FileType.HTML)
                 .setHttpStatus(HttpStatus.OK)
                 .build();
@@ -146,11 +145,6 @@ public class UserController implements Controller {
                 .setHttpStatus(HttpStatus.OK)
                 .build();
     }
-
-
-
-
-
 
 }
 

@@ -16,7 +16,6 @@ public class TemplatesFileReader implements FileReader {
     @Override
     public byte[] readFile(Url url) throws IOException {
         byte[] bytes = null;
-
         bytes = Files.readAllBytes(new File(TEMPLATE_ROUTE + url.getUrl()).toPath());
 
         return bytes;
