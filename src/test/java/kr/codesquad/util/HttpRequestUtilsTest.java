@@ -35,8 +35,8 @@ public class HttpRequestUtilsTest {
     }
 
     @Test
-    @DisplayName("쿼리 스트링에서 이름/값을 파싱하여 반환하는지 검증한다.")
-    void parseQueryString() {
+    @DisplayName("바디 메시지에서 이름/값을 파싱하여 반환하는지 검증한다.")
+    void parseBodyMessage() {
         String queryString = "userId=abc&password=aaa%40%40%40&name=%EC%9E%84%EC%88%98%EB%AF%BC&email=a%40a";
 
         Map<String, String> result = HttpRequestUtils.parseBodyMessage(queryString);
