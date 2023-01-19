@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class HttpResponse {
-    public static final String FILEPATH = "./src/main/resources/";
+    public static final String FILEPATH = "./src/main/resources";
     private static final String HTML = "text/html";
     private static final String CSS = "text/css";
     private static final String JS = "text/javascript";
@@ -97,6 +97,14 @@ public class HttpResponse {
             return create404Message();
         }
         this.body = ViewResolver.makeDynamicHtml(SessionStorage.findSessionBy(sessionId).getUserId(), uri);
+        addHeader("Content-Type", mime(uri) + ";charset=utf-8");
+        return createForwardMessage();
+    }
+    public String forwardListPageHeaderMessage(String userId, String uri) {
+        if (!FileFinder.isFind(uri)) {
+            return create404Message();
+        }
+        this.body = ViewResolver.makeListHtml(userId, uri);
         addHeader("Content-Type", mime(uri) + ";charset=utf-8");
         return createForwardMessage();
     }
