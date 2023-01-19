@@ -29,9 +29,9 @@ public enum RequestMethodEnum {
     }
     ;
 
-    private String method;
+    private final String method;
 
-    private RequestMethodEnum(String method) {
+    RequestMethodEnum(String method) {
         this.method = method;
     }
 
