@@ -1,12 +1,10 @@
 package http.request;
 
 import http.HttpHeader;
-import org.slf4j.LoggerFactory;
 import utils.HttpMethod;
 
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Optional;
 
 public class HttpRequest {
     private final HttpRequestLine startLine;
@@ -60,5 +58,9 @@ public class HttpRequest {
         String[] cookies = cookie.split(";");
         String sid = Arrays.stream(cookies).filter(c -> c.contains("sid")).findFirst().orElse("");
         return sid.split("=")[1];
+    }
+
+    public boolean hasHtmlRequest() {
+        return getUri().getPath().contains("html");
     }
 }

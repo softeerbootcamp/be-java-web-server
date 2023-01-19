@@ -18,16 +18,18 @@ public class Dispatcher {
                 UserCreateController.PATH, new UserCreateController(appConfig.userService()),
                 StaticFileController.PATH, new StaticFileController(),
                 UserLoginController.PATH, new UserLoginController(appConfig.userService()),
-                UserListController.PATH, new UserListController(appConfig.userService())
+                UserListController.PATH, new UserListController(appConfig.userService()),
+                HtmlFileController.PATH, new HtmlFileController()
         );
     }
 
     public static void dispatch(HttpRequest request, HttpResponse response) {
-
-        Controller controller = controllers.get(request.getUri().getPath());
-        if (controller == null) {
-            controller = controllers.get(StaticFileController.PATH);
+        if (request.hasHtmlRequest()) {
+            controllers.get(HtmlFileController.PATH).service(request, response);
+            return;
         }
+        Controller controller = controllers.getOrDefault(request.getUri().getPath()
+                ,controllers.get(StaticFileController.PATH));
         controller.service(request, response);
     }
 }
