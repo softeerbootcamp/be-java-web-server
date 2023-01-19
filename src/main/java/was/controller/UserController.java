@@ -5,6 +5,7 @@ import enums.HttpMethod;
 import model.User;
 import service.UserService;
 import was.annotation.RequestMapping;
+import was.view.ViewResolver;
 import webserver.session.Session;
 import was.annotation.PostMapping;
 import webserver.domain.HttpRequest;
@@ -39,10 +40,24 @@ public class UserController implements Controller{
         User user = new User(body.get("userId"), body.get("password"));
 
         HttpResponse httpResponse = new HttpResponse();
+        String path = httpResponse.findPath("/index.html");
         if (userService.login(user)) {
             UUID sid = SessionStorage.addSession(Session.createSessionWith(user));
             return new HttpResponseMessage(httpResponse.sendCookieWithRedirect(sid, "/index.html"), httpResponse.getBody());
         }
         return new HttpResponseMessage(httpResponse.unauthorized(), httpResponse.getBody());
+    }
+    @RequestMapping(method = HttpMethod.GET, value = "/user/list")
+    public HttpResponseMessage showList(HttpRequest httpRequest) {
+        HttpResponse httpResponse = new HttpResponse();
+        UUID sessionId = httpRequest.getSessionId().orElse(null);
+        if (sessionId == null) {
+            return new HttpResponseMessage(httpResponse.sendRedirect("/user/login.html"), httpResponse.getBody());
+        }
+        String userId = SessionStorage.findSessionBy(sessionId).getUserId();
+        String path = httpResponse.findPath(httpRequest.getRequestLine().getUrl() + ".html");
+        System.out.println("path = " + path);
+        System.out.println("userId = " + userId);
+        return new HttpResponseMessage(httpResponse.forwardListPageHeaderMessage(userId, path), httpResponse.getBody());
     }
 }
