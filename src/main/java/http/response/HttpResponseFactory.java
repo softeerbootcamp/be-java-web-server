@@ -34,12 +34,12 @@ public class HttpResponseFactory {
         );
     }
 
-    public static HttpResponse NOT_FOUND() {
+    public static HttpResponse NOT_FOUND(String message) {
         return HttpResponse.of(
                 HttpStatus.NOT_FOUND,
                 "",
                 new HashMap<>(),
-                "".getBytes()
+                message.getBytes()
         );
     }
 }

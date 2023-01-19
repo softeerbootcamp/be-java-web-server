@@ -16,19 +16,8 @@ public class ViewController implements Controller {
 
     @Override
     public HttpResponse doService(HttpRequest httpRequest) throws IOException {
-        String url = httpRequest.getUrl();
         File file = FileIoUtil.getFile(httpRequest.getUri());
         byte[] body = Files.readAllBytes(file.toPath());
-
-        if (url.endsWith(".html") && SessionHandler.validateSession(httpRequest.getSid())) {
-            HttpSession httpSession = SessionHandler.getSession(httpRequest.getSid());
-            body = DynamicResolver.showUserName(file, httpSession.getUserName());
-        }
-
-        if (url.endsWith(".html") && !SessionHandler.validateSession(httpRequest.getSid())) {
-            body = DynamicResolver.hideLogoutButton(file);
-        }
-
         return HttpResponseFactory.OK(httpRequest.getContentType(), body);
     }
 

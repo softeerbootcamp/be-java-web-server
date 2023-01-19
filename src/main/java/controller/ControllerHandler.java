@@ -1,10 +1,12 @@
 package controller;
 
 import exception.ControllerNotFoundException;
+import exception.ResourceTypeNotFoundException;
 import http.request.HttpRequest;
 import http.request.HttpUri;
 import http.request.RequestLine;
 import http.response.HttpResponse;
+import http.response.HttpResponseFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,8 +23,13 @@ public class ControllerHandler {
     }
 
     public static HttpResponse handle(HttpRequest httpRequest) throws Exception {
-        Controller controller = findController(httpRequest);
-        return controller.doService(httpRequest);
+        try {
+            Controller controller = findController(httpRequest);
+            return controller.doService(httpRequest);
+        } catch (ResourceTypeNotFoundException | ControllerNotFoundException e) {
+            logger.error(e.getMessage());
+            return HttpResponseFactory.NOT_FOUND(e.getMessage());
+        }
     }
 
     public static Controller findController(HttpRequest httpRequest) {
@@ -31,6 +38,7 @@ public class ControllerHandler {
         if (!httpUri.isQueryParameterExist() && httpUri.isEndWithResourceType()) {
             return new ViewController();
         }
+
         return controllers
                 .stream()
                 .filter(controller -> controller.isMatch(httpRequest))

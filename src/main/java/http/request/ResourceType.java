@@ -2,6 +2,7 @@ package http.request;
 
 import exception.ResourceTypeNotFoundException;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public enum ResourceType {
@@ -16,8 +17,7 @@ public enum ResourceType {
     TTF(".ttf", "./static"),
     SVG(".svg", "./static"),
     EOT(".eot", "./static"),
-    CSS(".css", "./static"),
-    NONE("", "");
+    CSS(".css", "./static");
 
 
     private final String extension;
@@ -30,11 +30,10 @@ public enum ResourceType {
         this.path = path;
     }
 
-    public static ResourceType findResourceType(String path) {
+    public static Optional<ResourceType> findResourceType(String path) {
         return Stream.of(values())
                 .filter(resourceType -> path.endsWith(resourceType.getExtension()))
-                .findFirst()
-                .orElseThrow(() -> new ResourceTypeNotFoundException("Not Found Resource Type."));
+                .findFirst();
     }
 
     public String getExtension() {

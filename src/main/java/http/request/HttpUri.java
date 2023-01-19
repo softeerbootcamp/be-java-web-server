@@ -1,5 +1,10 @@
 package http.request;
 
+import exception.ResourceTypeNotFoundException;
+
+import java.util.Objects;
+import java.util.Optional;
+
 public class HttpUri {
 
     private final String path;
@@ -26,7 +31,11 @@ public class HttpUri {
     }
 
     public boolean isEndWithResourceType() {
-        return !parseResourceType().equals(ResourceType.NONE);
+        Optional<ResourceType> resourceType = parseResourceType();
+        if (resourceType.isEmpty() && path.contains(".")) {
+            throw new ResourceTypeNotFoundException("Not Found Resource Type.");
+        }
+        return resourceType.isPresent() || path.contains(".");
     }
 
     public String getDetachControllerPath() {
@@ -39,7 +48,7 @@ public class HttpUri {
         return split[2];
     }
 
-    public ResourceType parseResourceType() {
+    public Optional<ResourceType> parseResourceType() {
         return ResourceType.findResourceType(path);
     }
 
