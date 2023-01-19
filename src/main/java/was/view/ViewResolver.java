@@ -25,7 +25,7 @@ public class ViewResolver {
                 sb.append(line);
                 if (line.contains("Posts")) {
                     sb.append("<li><a href=\"#\" role=\"button\">개인정보수정</a></li>");
-                    sb.append("<li><a href=\"#\" role=\"button\">로그아웃</a></li>");
+                    sb.append("<li><a href=\"../user/logout\" role=\"button\">로그아웃</a></li>");
                 }
             }
             return sb.toString().getBytes();
@@ -61,7 +61,7 @@ public class ViewResolver {
                 }
                 if (line.contains("Posts")) {
                     sb.append("<li><a href=\"#\" role=\"button\">개인정보수정</a></li>");
-                    sb.append("<li><a href=\"#\" role=\"button\">로그아웃</a></li>");
+                    sb.append("<li><a href=\"../user/logout\" role=\"button\">로그아웃</a></li>");
                 }
             }
             return sb.toString().getBytes();
