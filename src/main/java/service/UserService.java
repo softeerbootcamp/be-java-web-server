@@ -6,6 +6,9 @@ import dto.SignUpDTO;
 import http.common.Session;
 import model.User;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserService {
     public String signUp(SignUpDTO signUpUserInfo) {
         User findUser = Database.findUserById(signUpUserInfo.getUserId());
@@ -32,5 +35,9 @@ public class UserService {
 
     private boolean passwordMatch(User findUser, LogInDTO logInUserInfo) {
         return findUser.getPassword().equals(logInUserInfo.getPassword());
+    }
+
+    public List<User> getAllUser() {
+        return new ArrayList<>(Database.findAll());
     }
 }
