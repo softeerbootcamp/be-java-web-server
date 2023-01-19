@@ -5,19 +5,23 @@ import model.User;
 import util.error.HttpsErrorMessage;
 import util.error.erroclass.FailLoggedException;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Optional;
 
-public class UserService implements Service<User> {
+public class UserService {
 
     private final String[] userKey = {"userId", "password", "name", "email"};
 
     private UserDatabase userDatabase = new UserDatabase();
 
 
-    @Override
     public User createModel(Map<String, String> userMap) {
-        return new User(userMap.get(userKey[0]), userMap.get(userKey[1]), userMap.get(userKey[2]), userMap.get(userKey[3]));
+        return new User(URLDecoder.decode(userMap.get(userKey[0]), StandardCharsets.UTF_8)
+                , URLDecoder.decode(userMap.get(userKey[1]), StandardCharsets.UTF_8),
+                URLDecoder.decode(userMap.get(userKey[2]), StandardCharsets.UTF_8),
+                URLDecoder.decode(userMap.get(userKey[3]), StandardCharsets.UTF_8));
     }
 
     public User validLogin(Map<String, String> loginInfo) throws FailLoggedException {
