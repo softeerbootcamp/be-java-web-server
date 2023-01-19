@@ -1,5 +1,6 @@
 package request.handlers;
 
+import file.FileContentType;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,26 +15,32 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Map;
 
-public class UserRegisterHandler implements RequestHandler {
-    private static final Logger logger = LoggerFactory.getLogger(UserRegisterHandler.class);
+public class UserCreateHandler implements RequestHandler {
+    private static final Logger logger = LoggerFactory.getLogger(UserCreateHandler.class);
 
-    private final static UserRegisterHandler instance;
+    private final static UserCreateHandler instance;
 
     static {
-        instance = new UserRegisterHandler();
+        instance = new UserCreateHandler();
     }
 
-    private UserRegisterHandler() {}
+    private UserCreateHandler() {}
 
-    public static UserRegisterHandler getInstance() {
+    public static UserCreateHandler getInstance() {
         return instance;
     }
 
+    // TODO: user/create.html 수정
     @Override
     public Response doGet(Request request) {
         try {
-            byte[] file = generateDynamicHeader(request.getCookie(), Files.readAllBytes(new File("src/main/resources/templates" + request.getResource()).toPath()));
-            return Response.createSimpleResponse(file, request.getResourceFileContentType(), HttpResponseStatus.OK);
+            String resource = request.getResource();
+            if(!resource.endsWith(".html")) {
+                resource += ".html";
+            }
+            byte[] file = generateDynamicHeader(request.getCookie(),
+                    Files.readAllBytes(new File("src/main/resources/templates" + resource).toPath()));
+            return Response.createSimpleResponse(file, FileContentType.HTML.getContentType(), HttpResponseStatus.OK);
         } catch (IOException e) {
             return Response.from(HttpResponseStatus.NOT_FOUND);
         }
