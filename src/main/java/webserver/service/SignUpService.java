@@ -22,7 +22,7 @@ public class SignUpService implements Service{
         User newUser = new User(userInfo.get(User.ID), userInfo.get(User.PASS_WORD), userInfo.get(User.NAME), userInfo.get(User.EMAIL));
         try
         {
-            if(null != Database.findUserById(newUser.getUserId()))
+            if(Database.findUserById(newUser.getUserId()) != Database.NOT_FOUND_USER)
                 throw new AlreadyHasSameIdException("이미 같은 아이디의 유저가 있음");
             Database.addUser(newUser);
         }catch (AlreadyHasSameIdException e)
