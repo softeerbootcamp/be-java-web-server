@@ -41,7 +41,7 @@ public class LoginController implements Controller{
         if (requestMessage.getRequestHeaderMessage().getHttpOnlyURL().contains("html"))
             body = changeNavbar(body, requestMessage);
         if (requestMessage.getRequestHeaderMessage().getHttpOnlyURL().startsWith("/user/list.html"))
-            body = dynamicListPage(body, requestMessage);
+            body = dynamicListPage(body);
         logger.info("body after dynamic change:\n"+body.toString());
         Response response = new Response(new DataOutputStream(out));
         response.response(body,requestMessage.getRequestHeaderMessage(), HttpStatus.Success);
@@ -54,20 +54,9 @@ public class LoginController implements Controller{
         return body;
     }
 
-    private byte[] dynamicListPage(byte[] body, RequestMessage requestMessage){
+    private byte[] dynamicListPage(byte[] body){
         Collection<User> users = userService.findUsers();
-        String bodyStr = new String(body);
-        String bodyPrefix = bodyStr.substring(0,bodyStr.indexOf("<tbody>")+"<tbody>".length());
-        String bodyPostfix = bodyStr.substring(bodyStr.indexOf("</tbody>"));
-        StringBuilder result = new StringBuilder(bodyPrefix);
-        int row = 1;
-        for (User user: users){
-            result.append("<tr>\n<th scope=\"row\">").append(row++).append("</th> <td>")
-                    .append(user.getUserId()).append("</td> <td>").append(user.getName()).append("</td> <td>")
-                    .append(user.getEmail()).append("</td><td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td>\n</tr>\n");
-        }
-        result.append(bodyPostfix);
-        return result.toString().getBytes();
+        return HtmlEditor.appendUserList(body,users);
     }
 
     private byte[] getStaticBody(RequestMessage requestMessage){

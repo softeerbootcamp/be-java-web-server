@@ -1,5 +1,8 @@
 package util;
 
+import model.domain.User;
+
+import java.util.Collection;
 import java.util.List;
 
 public class HtmlEditor {
@@ -24,4 +27,18 @@ public class HtmlEditor {
         bodyStr = bodyStr.replace("회원가입","님, 환영합니다.");
         return bodyStr.getBytes();
     }
+
+    public static byte[] appendUserList(byte[] body, Collection<User> users){
+        int row = 1;
+        String bodyStr = new String(body);
+        StringBuilder userList = new StringBuilder("<tbody>\n");
+        for (User user: users){
+            userList.append("<tr>\n<th scope=\"row\">").append(row++).append("</th> <td>")
+                    .append(user.getUserId()).append("</td> <td>").append(user.getName()).append("</td> <td>")
+                    .append(user.getEmail()).append("</td><td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td>\n</tr>\n");
+        }
+        bodyStr = bodyStr.replace("<tbody>",userList);
+        return bodyStr.getBytes();
+    }
+
 }
