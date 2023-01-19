@@ -1,7 +1,7 @@
 import controller.Controller;
 import controller.ControllerHandler;
 import controller.UserController;
-import controller.ViewController;
+import controller.StaticController;
 import http.request.HttpRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ public class ControllerHandlerTest {
         HttpRequest httpRequest = HttpRequest.from(br);
 
         Controller result = ControllerHandler.findController(httpRequest);
-        assertTrue(result instanceof ViewController);
+        assertTrue(result instanceof StaticController);
     }
 
     @DisplayName("UserController Return Test")

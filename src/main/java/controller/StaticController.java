@@ -1,26 +1,15 @@
 package controller;
 
-import http.HttpSession;
-import http.SessionHandler;
 import http.request.HttpRequest;
-import http.request.HttpUri;
-import http.request.RequestHeader;
-import http.request.RequestLine;
-import http.response.DynamicResolver;
 import http.response.HttpResponse;
 import http.response.HttpResponseFactory;
-import http.response.HttpStatus;
 import util.FileIoUtil;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.HashMap;
 
-public class ViewController implements Controller {
+public class StaticController implements Controller {
 
     @Override
     public HttpResponse doService(HttpRequest httpRequest) throws IOException {
