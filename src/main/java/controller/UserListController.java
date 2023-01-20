@@ -40,7 +40,7 @@ public class UserListController extends AbstractController {
             ContentType contentType = ContentType.from(USER_LIST_PATH);
             String filePath = contentType.getDirectory() + USER_LIST_PATH;
 
-            byte[] body = FileIoUtils.userListToString(
+            byte[] body = FileIoUtils.writeUserListBody(
                     userService.getUserList(),
                     filePath,
                     sessionService.getUserName(sessionId)
