@@ -4,13 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
+import db.SessionDatabase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.IOUtils;
 
 public class HttpRequest {
     private static final String lineSeparator = System.lineSeparator();
@@ -18,13 +16,15 @@ public class HttpRequest {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
     private final RequestStartLine requestStartLine;
-    private final RequestHeader header;
+    private final RequestHeader requestHeader;
     private final RequestBody body;
+    private final HttpSession httpSession;
 
-    public HttpRequest(RequestStartLine requestStartLine, RequestHeader requestHeader, RequestBody body) {
+    public HttpRequest(RequestStartLine requestStartLine, RequestHeader requestHeader, RequestBody body, HttpSession httpSession) {
         this.requestStartLine = requestStartLine;
-        this.header = requestHeader;
+        this.requestHeader = requestHeader;
         this.body = body;
+        this.httpSession = httpSession;
     }
 
     public static HttpRequest of(InputStream inputStream) throws IOException {
@@ -36,26 +36,20 @@ public class HttpRequest {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         RequestStartLine requestStartLine = RequestStartLine.of(bufferedReader);
         RequestHeader requestHeader = RequestHeader.of(bufferedReader);
-
-        logger.debug("[HttpRequest] RequestHeader Line : {}",requestHeader.getStringContentLength());
-        logger.debug("[HttpRequest] RequestHeader value : {}",requestHeader.toValue());
-
         RequestBody requestBody = RequestBody.of(bufferedReader, requestHeader.getContentLength());
+        HttpSession httpSession = getHttpSession(requestHeader);
 
-        logger.debug("[ HttpRequest ] requestHeader length : {}",requestHeader.getContentLength());
-        return new HttpRequest(requestStartLine, requestHeader, requestBody);
+        return new HttpRequest(requestStartLine, requestHeader, requestBody, httpSession);
     }
 
-    public String getPath() {
-        if (requestStartLine.isTemplatesResource()) {
-            logger.debug("templates request : {}" , String.format("./templates%s", requestStartLine.getPath()));
-            return String.format("./templates%s", requestStartLine.getPath());
+    private static HttpSession getHttpSession(RequestHeader requestHeader) {
+        String jSessionId = requestHeader.getCookieValue("JSESSIONID");
+        if (jSessionId.isEmpty()) {
+            HttpSession httpSession = HttpSession.create();
+            SessionDatabase.addHttpSession(httpSession);
+            return httpSession;
         }
-        if (requestStartLine.isStaticResource()) {
-            logger.debug("static request : {}" , String.format("./static%s", requestStartLine.getPath()));
-            return String.format("./static%s", requestStartLine.getPath());
-        }
-        return requestStartLine.getPath();
+        return SessionDatabase.findHttpSessionById(jSessionId);
     }
 
     public Map<String, String> getParameters() {
@@ -70,15 +64,27 @@ public class HttpRequest {
         return requestStartLine.getMethod() == Method.POST;
     }
 
-    public boolean isForStaticContent() {
-        return requestStartLine.isTemplatesResource() || requestStartLine.isStaticResource();
-    }
-
-    public boolean isQueryContent() {
-        return !isForStaticContent();
-    }
-
     public String getBody() {
         return body.getBody();
+    }
+
+    public String getCookieValue(String cookieName) {
+        return requestHeader.getCookieValue(cookieName);
+    }
+
+    public String getDefaultPath() {
+        return requestStartLine.getPath();
+    }
+
+    public String getSessionId() {
+        return httpSession.getId();
+    }
+
+    public HttpSession getHttpSession() {
+        return httpSession;
+    }
+
+    public String getMethod() {
+        return requestStartLine.getMethod().getMethodName();
     }
 }

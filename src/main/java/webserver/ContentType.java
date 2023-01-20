@@ -1,24 +1,32 @@
 package webserver;
 
 public enum ContentType {
-    HTML(".html","text/html;charset=utf-8"),
-    CSS(".css","text/css"),
-    JS(".js","application/javascript"),
-    FONT(".woff", "application/x-font-woff");
+    HTML("text/html", "charset=utf-8", ""),
+    CSS("text/css", "", ""),
+    JS("application/javascript", "", ""),
+    TXT("text/plain", "", ""),
+    APPLICATION_JSON("application/json", "", ""),
+    ICO("image/x-icon", "", ""),
+    TTF("font/ttf", "", ""),
+    WOFF("font/woff", "", ""),
+    WOFF2("font/woff2", "", "");
 
-    private String extension;
-    private String mimeData;
+    private final String mediaType;
+    private final String charset;
+    private final String boundary; // message 보낼때 구분자로 사용
 
-    ContentType(String extension, String mimeData) {
-        this.extension = extension;
-        this.mimeData = mimeData;
+    ContentType(String mediaType, String charset, String boundary) {
+        this.mediaType = mediaType;
+        this.charset = charset;
+        this.boundary = boundary;
     }
 
-    public String getExtensionValue() {
-        return extension;
-    }
+    public String value() {
+        String charsetToAppend = (charset == "") ? "" : (";" + charset);
+        String boundaryToAppend = (boundary == "") ? "" : ( ";" + boundary);
 
-    public String getMimeData() {
-        return mimeData;
+        String value = mediaType + charsetToAppend + boundaryToAppend;
+
+        return value;
     }
 }
