@@ -5,18 +5,18 @@ import java.time.LocalDateTime;
 public class UserSession {
     private final String userId;
     private final String name;
-    private final LocalDateTime createdTime;
-    private LocalDateTime expiredTime;
+    private final LocalDateTime createdDate;
+    private LocalDateTime expiredDate;
 
     public UserSession(User user) {
         this.userId = user.getUserId();
         this.name = user.getName();
-        this.createdTime = LocalDateTime.now();
-        this.expiredTime = LocalDateTime.now().plusMinutes(30L);
+        this.createdDate = LocalDateTime.now();
+        this.expiredDate = LocalDateTime.now().plusMinutes(30L);
     }
 
     public void expire() {
-        this.expiredTime = LocalDateTime.now().minusDays(1L);
+        this.expiredDate = LocalDateTime.now().minusDays(1L);
     }
 
     public String getUserId() {
@@ -27,7 +27,7 @@ public class UserSession {
         return name;
     }
 
-    public LocalDateTime getExpiredTime() {
-        return expiredTime;
+    public LocalDateTime getExpiredDate() {
+        return expiredDate;
     }
 }

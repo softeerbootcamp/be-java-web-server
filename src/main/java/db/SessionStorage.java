@@ -20,7 +20,7 @@ public class SessionStorage {
 
     public static UserSession findBySessionId(String sid) {
         UserSession userSession = Optional.ofNullable(sessionUsers.get(sid)).orElseThrow(SessionNotFoundException::new);
-        if (userSession.getExpiredTime().isBefore(LocalDateTime.now())) {
+        if (userSession.getExpiredDate().isBefore(LocalDateTime.now())) {
             throw new SessionExpiredException();
         }
         return userSession;

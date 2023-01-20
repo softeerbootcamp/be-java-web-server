@@ -23,6 +23,14 @@ I[ResponseHandler];
 6. 정적 리소스는 어댑터 대신 ViewResolver를 통해 알맞은 리소스를 찾는다.
 7. 모든 컨트롤러 혹은 뷰 리졸버는 반드시 알맞은 응답에 필요한 데이터를 가지고 있는 Response 객체로 응답한다.
 8. Response객체는 ResponseHandler의 인자로 들어가 클라이언트로 응답한다.
+
+### 예외 처리
+- WasException : WAS 프로그램에서 구현된 모든 custom exception이 확장하고 있는 부모 클래스
+- DuplicateUserIdException : 회원가입 시 중복된 유저 아이디에(PK) 대해 예외 발생
+- UserNotFoundException : 로그인 시 아이디, 패스워드에 해당하는 유저가 없을 경우 예외발생, 발생시 login_failed.html로 이동
+- SessionNotFoundException : 쿠키에 있는 세션 아이디와 일치하는 세션이 존재하지 않을 경우에 대한 예외 처리
+- SessionExpiredException : 세션이 만료된 경우에 대한 예외 처리 (현재 expire date는 세션 생성 후 30분 후로 지정되어 있음.)
+
 ## 프로젝트 수행 과정
 ### Step 1 - index.html 응답
 최초의 상태는 localhost:8080으로 접속 시에 "Hello World"를 출력해준다. 이는 구현되어 있는 responseBody 메서드에 해당 문구를 byte[]로 변환하여 응답해주기 때문이다.
@@ -142,6 +150,17 @@ public Path findFilePath(String url) throws IOException {
 
 ### Step 4 - POST로 회원가입
  기존 GET방식에서 POST방식으로 변경된 회원가입 요구사항을 반영하기 위해 가장 먼저 필요한 것은 HTTP Request 메시지의 바디를 읽어오는 것이었다. 헤더와 바디 사이에는 빈 공백을 가지는 한 줄(line)이 있었고, 추후 다양한 요구사항을 만족하기 위해서는 메시지의 헤더 및 바디에 대한 정보를 가지고 있는 하나의 Request객체가 필요하였다.
+로그인 확인 로직.
+
 ### Step 5 - 쿠키를 이용한 로그인
+ 로그인 유지 기술을 구현하기 위해 로그인 시에 세션을 생성하고 응답에 쿠키값을 set하는 로직을 추가하였다. 이후 클라이언트의 요청에는 쿠키헤더에 세션아이디를 가지고 있게 되고, 이를 바탕으로 로그인 유무를 판단한다. 또한, 로그인 유지 기술이라고 한다면 사용자가 원하는 시점에 로그아웃이 되도록 구현해야 하며, 또한 로그인되었다 하더라도 세션이 영원히 지속되지 않고 만료되어 보안 취약점에 노출되지 않도록 하는 것도 중요할 것이다. 이를 만족하기 위한 기능 요구사항은 아래와 같다.
+
+1. 로그인 유무 판단
+2. 로그인 유지
+3. 세션 만료 혹은 수동 로그아웃 버튼 입력을 통한 로그아웃
+4. 로그인 유무 판단에 따른 동적 HTML 응답
+ 
+ 이를 위해 클라이언트가 가지고온 세션 아이디가 유효한 세션인지를 판단하는 AuthInterceptor를 구현하였다. AuthInterceptor는 util패키지에 위치하여 모든 클래스에서 전역적으로 호출될 수 있으며, Request객체를 파라미터로 주면, validation여부를 반환해준다. 여기서 Validation에는 기본적으로 쿠키의 세션아이디와 일치하는 세션을 스토리지에서 찾고 (존재하지 않으면 SessionNotFound) 찾은 세션의 expire date가 유효한지 판단하여 (유효하지 않으면 SessionExpired) 다 통과하면 valid하다고 판단한다.
+
 ### Step 6 - 동적인 HTML
 
