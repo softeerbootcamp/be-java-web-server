@@ -8,41 +8,41 @@ Java Web Application Server 2022
 를 참고하여 작성되었습니다.
 
 ## 프로젝트 구조
-├── controller  
-│   ├── Controller.java  
-│   ├── HtmlController.java  
-│   ├── StaticFileController.java  
-│   └── UserController.java  
-├── db  
-│   ├── Database.java  
-│   └── Session.java  
-├── http  
-│   ├── HttpHeader.java  
-│   ├── HttpStatus.java  
-│   ├── HttpUri.java  
-│   ├── exception  
-│   │   └── NullHttpRequestException.java  
-│   ├── request  
-│   │   ├── HttpRequest.java  
-│   │   └── HttpRequestLine.java  
-│   └── response  
-│       ├── HttpResponse.java  
-│       └── HttpStatusLine.java  
-├── model  
-│   └── User.java  
-├── service  
-│   ├── HtmlService.java  
-│   ├── ListService.java  
-│   ├── LogInService.java  
-│   ├── SignUpService.java  
-│   └── StaticFileService.java  
-├── util  
-│   ├── HttpRequestUtils.java  
-│   └── HttpResponseUtils.java  
-└── webserver  
-├── ControllerHandler.java  
-├── RequestHandler.java  
-└── WebServer.java  
+    ├── controller  
+    │   ├── Controller.java  
+    │   ├── HtmlController.java  
+    │   ├── StaticFileController.java  
+    │   └── UserController.java  
+    ├── db  
+    │   ├── Database.java  
+    │   └── Session.java  
+    ├── http  
+    │   ├── HttpHeader.java  
+    │   ├── HttpStatus.java  
+    │   ├── HttpUri.java  
+    │   ├── exception  
+    │   │   └── NullHttpRequestException.java  
+    │   ├── request  
+    │   │   ├── HttpRequest.java  
+    │   │   └── HttpRequestLine.java  
+    │   └── response  
+    │       ├── HttpResponse.java  
+    │       └── HttpStatusLine.java  
+    ├── model  
+    │   └── User.java  
+    ├── service  
+    │   ├── HtmlService.java  
+    │   ├── ListService.java  
+    │   ├── LogInService.java  
+    │   ├── SignUpService.java  
+    │   └── StaticFileService.java  
+    ├── util  
+    │   ├── HttpRequestUtils.java  
+    │   └── HttpResponseUtils.java  
+    └── webserver  
+    ├── ControllerHandler.java  
+    ├── RequestHandler.java  
+    └── WebServer.java  
 
 + RequestHandler
   + HttpRequest 클래스에 입력을 받고 받은 URI로 알맞는 컨트롤러를 골라준다. 고른 컨트롤러로 응답을 만들고 응답을 출력해준다.
