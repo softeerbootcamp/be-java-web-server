@@ -2,7 +2,7 @@ package model;
 
 import java.time.LocalDateTime;
 
-public class HttpCookie {
+public class HttpSession {
 
     private String sessionId;
     private String username;
@@ -13,7 +13,7 @@ public class HttpCookie {
     private int maxAge;
     private static final int COOKIE_DURATION_DAY = 7;
 
-    public HttpCookie(String sessionId, String username, LocalDateTime now) {
+    public HttpSession(String sessionId, String username, LocalDateTime now) {
         this.sessionId = sessionId;
         this.username = username;
         this.path = "/";
@@ -25,11 +25,15 @@ public class HttpCookie {
         return sessionId;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
     public boolean isValid(){
         return maxAge > 0;
     }
 
-    public void invalidateCookie(){
+    public void invalidateSession(){
         maxAge = 0;
     }
 
