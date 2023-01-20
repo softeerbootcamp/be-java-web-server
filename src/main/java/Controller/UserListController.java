@@ -6,27 +6,26 @@ import Response.HttpResponse;
 import Response.HttpResponseBody;
 import Response.HttpResponseHeaders;
 import Response.HttpResponseStartLine;
-import db.Database;
-import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.HtmlBuildUtil;
-import util.LoginUtil;
+import view.UserListView;
 
-import java.util.Collection;
+import java.util.Objects;
 
 public class UserListController implements AuthController {
+    public static final String PATH = "/user/list";
     private static final Logger logger = LoggerFactory.getLogger(UserListController.class);
-
-    public UserListController() {
-        logger.debug("select UserlistController");
+    private static UserListController userListController = null;
+    public static UserListController getInstance(){
+        if(Objects.isNull(userListController)){
+            userListController = new UserListController();
+        }
+        return userListController;
     }
-
     @Override
     public HttpResponse createResponse(HttpRequest httpRequest) {
-        String html = HtmlBuildUtil.userList(Database.findAll());
-        User user = LoginUtil.checkSession(httpRequest);
-        byte[] body = HtmlBuildUtil.withoutLogoutWithUserName(html, "/user/list.html", user);
+        logger.debug("select UserlistController");
+        byte[] body = UserListView.getInstance().render(httpRequest);
         HttpResponse response = new HttpResponse().startLine(new HttpResponseStartLine(StatusCode.OK, httpRequest.getProtocol()))
                 .headers(new HttpResponseHeaders("/user/list.html", body.length))
                 .body(new HttpResponseBody(body));
