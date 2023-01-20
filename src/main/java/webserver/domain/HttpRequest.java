@@ -15,6 +15,7 @@ public class HttpRequest {
     private final Map<String, String> headers;
     private final Map<String, String> body;
 
+
     private HttpRequest(RequestLine requestLine, Map<String, String> headers, Map<String, String> body) {
         this.requestLine = requestLine;
         this.headers = headers;
@@ -60,5 +61,11 @@ public class HttpRequest {
             return Optional.of(UUID.fromString(sid));
         }
         return Optional.empty();
+    }
+    public boolean isContainsCookie() {
+        if (headers.containsKey("Cookie")) {
+            return true;
+        }
+        return false;
     }
 }

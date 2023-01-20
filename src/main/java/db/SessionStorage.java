@@ -1,5 +1,6 @@
 package db;
 
+import model.User;
 import webserver.session.Session;
 
 import java.util.HashMap;
@@ -22,5 +23,8 @@ public class SessionStorage {
         if (session.getSessionId() != null) {
             sessions.remove(session.getSessionId());
         }
+    }
+    public static boolean isExist(UUID uuid) {
+        return sessions.containsKey(uuid);
     }
 }

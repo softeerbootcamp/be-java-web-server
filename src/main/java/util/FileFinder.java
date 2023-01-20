@@ -11,18 +11,18 @@ import java.nio.file.Files;
 public class FileFinder {
     private static final Logger logger = LoggerFactory.getLogger(WebServer.class);
 
-    private static final String filePath = "./src/main/resources/";
     public static byte[] findFile(String uri) {
         try {
-            return Files.readAllBytes(new File(filePath + uri).toPath());
+            return Files.readAllBytes(new File(uri).toPath());
         } catch (IOException e) {
             logger.error(e.getMessage());
             return null;
             //TODO 나중에 exception 처리 해야함
         }
     }
+
     public static boolean isFind(String uri) {
-        File file = new File(filePath + uri);
+        File file = new File(uri);
         if (file.exists()) {
             if (file.isFile()) {
                 return true;

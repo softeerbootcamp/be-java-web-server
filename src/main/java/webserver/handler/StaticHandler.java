@@ -1,9 +1,15 @@
 package webserver.handler;
 
 
+import db.SessionStorage;
+import util.HttpParser;
+import was.view.ViewResolver;
 import webserver.domain.HttpRequest;
 import webserver.domain.HttpResponse;
 import webserver.domain.HttpResponseMessage;
+import webserver.session.Session;
+
+import java.util.UUID;
 
 public class StaticHandler implements ControllerHandler {
 
@@ -18,10 +24,16 @@ public class StaticHandler implements ControllerHandler {
         }
         return staticHandler = new StaticHandler();
     }
+
     @Override
     public HttpResponseMessage handle(HttpRequest httpRequest) {
         String uri = httpRequest.getRequestLine().getUrl();
         HttpResponse httpResponse = new HttpResponse();
-        return new HttpResponseMessage(httpResponse.forward(httpResponse.findPath(uri)), httpResponse.getBody());
+        String path = httpResponse.findPath(uri);
+        UUID sessionId = httpRequest.getSessionId().orElse(null);
+        if (SessionStorage.isExist(sessionId) && uri.contains(".html")) {
+            return new HttpResponseMessage(httpResponse.forward(path, sessionId), httpResponse.getBody());
+        }
+        return new HttpResponseMessage(httpResponse.forward(path), httpResponse.getBody());
     }
 }

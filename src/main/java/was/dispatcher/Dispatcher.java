@@ -1,6 +1,7 @@
 package was.dispatcher;
 
-import was.annotation.PostMapping;
+import enums.HttpMethod;
+import was.annotation.RequestMapping;
 import was.controller.Controller;
 import was.controller.ControllerFactory;
 import webserver.handler.ControllerHandler;
@@ -9,17 +10,17 @@ import webserver.domain.HttpResponseMessage;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-public class PostDispatcher implements ControllerHandler{
-    private static PostDispatcher postDispatcher;
+public class Dispatcher implements ControllerHandler{
+    private static Dispatcher dispatcher;
 
-    private PostDispatcher() {
+    private Dispatcher() {
     }
 
-    public static PostDispatcher getInstance() {
-        if (postDispatcher != null) {
-            return postDispatcher;
+    public static Dispatcher getInstance() {
+        if (dispatcher != null) {
+            return dispatcher;
         }
-        return postDispatcher = new PostDispatcher();
+        return dispatcher = new Dispatcher();
     }
     @Override
     public HttpResponseMessage handle(HttpRequest httpRequest) {
@@ -29,15 +30,19 @@ public class PostDispatcher implements ControllerHandler{
     private HttpResponseMessage dispatch(HttpRequest httpRequest, Controller controller, String path) {
         Method[] methods = controller.getClass().getDeclaredMethods();
         for (Method method : methods) {
-            Annotation annotation = method.getAnnotation(PostMapping.class);
+            Annotation annotation = method.getAnnotation(RequestMapping.class);
             if (annotation == null) {
                 continue;
             }
-            PostMapping postMapping = (PostMapping) annotation;
-            Object[] parameter = new Object[1];
-            parameter[0] = httpRequest;
-            if (path.equals(postMapping.value())) {
+
+            RequestMapping requestMappingAnno = (RequestMapping) annotation;
+            HttpMethod requestMethod = httpRequest.getRequestLine().getHttpMethod();
+            System.out.println("path = " + path);
+            System.out.println("requestMappingAnno = " + requestMappingAnno.value());
+            if (requestMappingAnno.method() == requestMethod && path.equals(requestMappingAnno.value())) {
                 try{
+                    Object[] parameter = new Object[1];
+                    parameter[0] = httpRequest;
                     return (HttpResponseMessage) method.invoke(controller, parameter);
                 } catch (Exception e) {
                     e.printStackTrace();
