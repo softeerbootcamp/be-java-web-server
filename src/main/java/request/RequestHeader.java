@@ -37,8 +37,8 @@ public class RequestHeader {
 
             String[] headerTokens = line.split(HEADER_DELIMITER);
             if (headerTokens.length >= 2) {
-                String key = headerTokens[0];
-                String value = headerTokens[1];
+                String key = headerTokens[0].trim();
+                String value = headerTokens[1].trim();
                 logger.debug("headerTokenKey : {}",key);
                 logger.debug("headerTokenValue : {}",value);
                 if (key.equals(COOKIE)) {

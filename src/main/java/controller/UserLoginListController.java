@@ -13,7 +13,7 @@ public class UserLoginListController extends AbstractController{
     public HttpResponse get(HttpRequest httpRequest) throws IOException, URISyntaxException {
         if ("true".equals(httpRequest.getCookieValue("logined"))) {
             return HttpResponse.ok()
-                    .body(TemplateFactory.of("user/list", Database.findAll()))
+                    .body(TemplateFactory.of("/user/list", Database.findAll()))
                     .build();
         }
         return HttpResponse.ok()
