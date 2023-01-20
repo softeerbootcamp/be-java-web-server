@@ -2,9 +2,9 @@ package webserver.controller;
 import org.junit.jupiter.api.*;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-import webserver.ControllerInterceptor;
-import webserver.Service.AuthService;
+import webserver.Service.UserService;
 import webserver.domain.ContentType;
+import webserver.domain.ModelAndView;
 import webserver.domain.StatusCodes;
 import webserver.domain.request.Request;
 import webserver.domain.response.Response;
@@ -19,15 +19,17 @@ import static org.mockito.Mockito.*;
 class UserControllerTest {
 
     UserController userController;
-    AuthService authService;
+    UserService userService;
     Request request;
     Response response;
     MockedStatic<ControllerInterceptor> ceMock;
 
+    ModelAndView mv;
+
     @BeforeEach
     void testSetUp(){
-        userController = new UserController();
-        String requestLine = "GET /index.html HTTP/1.1";
+        userController = UserController.getInstance();
+        String requestLine = "GET /user/form.html HTTP/1.1";
         String header = "password: testPass\n"+
                         "name: testName\n"+
                         "email : test@email.com";
@@ -35,25 +37,25 @@ class UserControllerTest {
         String body = "";
         request = Request.of(requestLine, header, body);
         response = mock(Response.class);
-        authService = mock(AuthService.class);
+        userService = mock(UserService.class);
         ceMock = mockStatic(ControllerInterceptor.class);
-
+        mv = mock(ModelAndView.class);
     }
 
     @Test
     @DisplayName("회원가입 메소드 테스트")
     public void userCreateTest() throws HttpRequestException {
 
-        AuthService authService = mock(AuthService.class);
+        UserService userService = mock(UserService.class);
 
         // given
         byte[] joinResult = "testResult".getBytes();
 
         // when
-        when(authService.join(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenReturn(joinResult);
+        when(userService.addUser(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenReturn(joinResult);
 
         //then
-        userController.userCreate(request.getRequestHeader(), response);
+        userController.userCreate(request.getRequestHeader(), response, mv);
         verify(response).redirect(StatusCodes.SEE_OTHER, joinResult, ContentType.TEXT_HTML, "http://localhost:8080/index.html");
     }
 
@@ -63,14 +65,13 @@ class UserControllerTest {
 
         //given
         String path = "/user/create";
-        AuthService authService = mock(AuthService.class);
+        UserService userService = mock(UserService.class);
         MockedStatic<ControllerInterceptor> ceMock = mockStatic(ControllerInterceptor.class);
 
-        ceMock.when(()-> ControllerInterceptor.executeController(Mockito.any(Class.class),  Mockito.any(Request.class), Mockito.any(Response.class))).thenThrow(new HttpRequestException(StatusCodes.INTERNAL_SERVER_ERROR));
-        userController.chain(request, response);
+        userController.chain(request, response, mv);
 
         //then
-        verify(userController, times(1)).userCreate(Mockito.any(Map.class), Mockito.any(Response.class));
+        verify(userController, times(1)).userCreate(Mockito.any(Map.class), Mockito.any(Response.class), mv);
     }
 
 
@@ -83,11 +84,11 @@ class UserControllerTest {
         MockedStatic<ControllerInterceptor> ceMock = mockStatic(ControllerInterceptor.class);
 
         //when
-        ceMock.when(()-> ControllerInterceptor.executeController(Mockito.any(Class.class),  Mockito.any(Request.class), Mockito.any(Response.class))).thenThrow(new HttpRequestException(StatusCodes.INTERNAL_SERVER_ERROR));
-        userController.chain(request, response);
+        ceMock.when(()-> ControllerInterceptor.executeController(Mockito.any(UserController.class),  Mockito.any(Request.class), Mockito.any(Response.class), mv)).thenThrow(new HttpRequestException(StatusCodes.INTERNAL_SERVER_ERROR));
+        userController.chain(request, response, mv);
 
         //then
-        Assertions.assertThrows(HttpRequestException.class, () -> userController.chain(request, response));
+        Assertions.assertThrows(HttpRequestException.class, () -> userController.chain(request, response, mv));
 
     }
 
@@ -101,8 +102,8 @@ class UserControllerTest {
         MockedStatic<ControllerInterceptor> ceMock = mockStatic(ControllerInterceptor.class);
 
         //when
-        ceMock.when(()-> ControllerInterceptor.executeController(Mockito.any(Class.class),  Mockito.any(Request.class), Mockito.any(Response.class))).thenThrow(new HttpRequestException(StatusCodes.INTERNAL_SERVER_ERROR));
-        userController.chain(request, response);
+        ceMock.when(()-> ControllerInterceptor.executeController(Mockito.any(UserController.class),  Mockito.any(Request.class), Mockito.any(Response.class), mv)).thenThrow(new HttpRequestException(StatusCodes.INTERNAL_SERVER_ERROR));
+        userController.chain(request, response, mv);
 
         //then
         assertEquals(StatusCodes.INTERNAL_SERVER_ERROR, response.getStatusCode());

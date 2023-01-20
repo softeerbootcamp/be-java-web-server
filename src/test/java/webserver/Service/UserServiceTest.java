@@ -16,7 +16,7 @@ public class UserServiceTest {
 
     @BeforeEach
     void testSetUp(){
-        userService = new UserService();
+        userService = UserService.getInstance();
     }
     @Test
     @DisplayName("회원 가입 테스트_1명")
