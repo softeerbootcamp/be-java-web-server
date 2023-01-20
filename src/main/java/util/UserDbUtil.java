@@ -1,7 +1,6 @@
 package util;
 
 import Request.HttpRequest;
-import Response.HttpResponse;
 import db.Database;
 import model.User;
 import org.slf4j.Logger;
@@ -10,8 +9,8 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 import java.util.Objects;
 
-public class ManageDB {
-    private static final Logger logger = LoggerFactory.getLogger(ManageDB.class);
+public class UserDbUtil {
+    private static final Logger logger = LoggerFactory.getLogger(UserDbUtil.class);
 
     public static void saveUser(HttpRequest httpRequest) {
         Map<String, String> params = httpRequest.getParams();

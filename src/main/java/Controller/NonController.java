@@ -1,53 +1,31 @@
 package Controller;
 
 import Request.HttpRequest;
-import Response.ContentType;
-import Response.HttpResponse;
-import Response.HttpResponseBody;
-import Response.HttpResponseStartLine;
+import Response.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import Request.StatusCode;
 import util.HttpResponseUtil;
 
-import java.io.DataOutputStream;
-import java.util.Map;
+import java.util.Objects;
+
 
 public class NonController implements Controller {
     private final Logger logger = LoggerFactory.getLogger(NonController.class);
-    HttpRequest httpRequest;
-    DataOutputStream dos;
-
-    public NonController(HttpRequest httpRequest, DataOutputStream dos) {
-        logger.debug("select NonController");
-        this.httpRequest = httpRequest;
-        this.dos = dos;
-    }
-
-    @Override
-    public HttpResponse createResponse() {
-        if (this.httpRequest.getPath().equals("/")) {
-            return responseRoot();
+    public static final String INDEX_HTML = "/index.html";
+    private static NonController nonController = null;
+    public static NonController getInstance(){
+        if(Objects.isNull(nonController)){
+            nonController = new NonController();
         }
-        return response404();
+        return nonController;
     }
-
-    public HttpResponse response404() {
-        logger.debug("[response404]");
-        byte[] body = "404: 존재하지않는 파일입니다.".getBytes();
-        HttpResponse httpResponse = new HttpResponse().startLine(new HttpResponseStartLine(StatusCode.NOT_FOUND, httpRequest.getProtocol()))
-                .headers(HttpResponseUtil.generateHeaders("", StatusCode.NOT_FOUND, body.length))
-                .body(new HttpResponseBody(body));
-        return httpResponse;
-    }
-
-    public HttpResponse responseRoot() {
-        logger.debug("[responseRoot]");
-        byte[] body = HttpResponseUtil.generateBody("/index.html");
-        HttpResponse httpResponse = new HttpResponse().startLine(new HttpResponseStartLine(StatusCode.OK, httpRequest.getProtocol()))
-                .headers(HttpResponseUtil.generateHeaders("/index.html", StatusCode.OK, body.length))
-                .body(new HttpResponseBody(body));
-
-        return httpResponse;
+    @Override
+    public HttpResponse createResponse(HttpRequest httpRequest) {
+        if (httpRequest.getPath().equals("/")) {
+            httpRequest.setPath(INDEX_HTML);
+            return FileController.getInstance().createResponse(httpRequest);
+        }
+        return FileController.getInstance().response404(httpRequest);
     }
 }

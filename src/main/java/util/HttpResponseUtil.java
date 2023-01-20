@@ -29,9 +29,9 @@ public class HttpResponseUtil {
         }
     }
 
-    public static HttpResponseHeaders generateHeaders(String requestPath, StatusCode statusCode, int length) {
+    public static Map<String, String> generateHeaders(String requestPath, int length) {
         ContentType contentType = ContentType.PLAIN;
-        if (statusCode.equals(StatusCode.OK)) {
+        if (!requestPath.isEmpty()) {
             String ex = FileIoUtil.findExtension(requestPath);
             contentType = ContentType.valueOf(ex.toUpperCase());
         }
@@ -39,7 +39,7 @@ public class HttpResponseUtil {
         Map<String, String> headers = new HashMap<>();          //headers
         headers.put("Content-Type", contentType.getContentText());
         headers.put("Content-Length", String.valueOf(length));
-        return new HttpResponseHeaders(headers);
+        return headers;
     }
 
     public static void sendResponse(DataOutputStream dos, HttpResponse httpResponse) {

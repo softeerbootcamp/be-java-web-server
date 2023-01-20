@@ -2,26 +2,34 @@ package Controller;
 
 import Request.HttpRequest;
 import util.FileIoUtil;
+import Exception.*;
 
-import java.io.DataOutputStream;
-import java.nio.file.Path;
+import java.util.Map;
 import java.util.Objects;
 
 public class MatchController {
-    public static Controller match(DataOutputStream dos, HttpRequest httpRequest) {
-        String requestPath = httpRequest.getPath();
-        Path path = FileIoUtil.mappingDirectoryPath(requestPath);
+    private final static Map<String, Controller> cons;
 
-        if (requestPath.startsWith("/user/create")) {
-            return new JoinController(httpRequest, dos);
+    static {
+        cons = Map.of(JoinController.PATH, JoinController.getInstance(),
+                LoginController.PATH, LoginController.getInstance(),
+                UserListController.PATH, UserListController.getInstance(),
+                FileController.PATH, FileController.getInstance());
+    }
+
+    public static Controller matching(HttpRequest httpRequest) {
+        String path = httpRequest.getPath();
+
+        Controller controller = cons.get(filePath(path));
+        if (Objects.isNull(controller)) {
+            return new NonController();
         }
-        try {
-            if (path.toFile().exists()) {
-                return new FileController(httpRequest, dos);
-            }
-        } catch (NullPointerException e) {
-            return new NonController(httpRequest, dos);
+        return controller;
+    }
+    private static String filePath(String path) {
+        if (path.contains(".")) {
+            return "";
         }
-        return new NonController(httpRequest, dos);
+        return path;
     }
 }

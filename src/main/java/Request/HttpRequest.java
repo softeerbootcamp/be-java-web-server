@@ -19,6 +19,12 @@ public class HttpRequest {
         return httpRequestStartLine.getMethod().getRequestByMethod(br, httpRequestStartLine);
     }
 
+    public Map<String,String> getHttpRequestHeaders() {
+        return httpRequestHeaders.getHeaders();
+    }
+    public void setPath(String path) {
+        httpRequestStartLine.setPath(path);
+    }
     public String getPath() {
         return httpRequestStartLine.getPath();
     }
