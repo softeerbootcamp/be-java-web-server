@@ -7,7 +7,7 @@ import model.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
-import utils.FileIoUtils;
+import utils.FileUtils;
 import utils.enums.HttpMethod;
 import utils.SessionManager;
 
@@ -40,7 +40,7 @@ public class UserListController implements Controller {
         String sid = httpRequest.getSession();
         try {
             Session session = SessionManager.getSession(UUID.fromString(sid)).orElseThrow(AuthenticationException::new);
-            httpResponse.setBody(FileIoUtils.makeUserListPage(userService.findAllUsers(), session));
+            httpResponse.setBody(FileUtils.makeUserListPage(userService.findAllUsers(), session));
         } catch (NullPointerException | AuthenticationException | IOException e) {
             httpResponse.redirect(LOGIN_PATH);
         }

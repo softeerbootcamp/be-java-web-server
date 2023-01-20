@@ -1,6 +1,6 @@
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import utils.FileIoUtils;
+import utils.FileUtils;
 
 import java.io.IOException;
 
@@ -17,7 +17,7 @@ class FileIoUtilsTest {
         String file = "/index.html";
 
         // when
-        byte[] result = FileIoUtils.loadFile(file);
+        byte[] result = FileUtils.loadFile(file);
 
         // then
         assertThat(result).isNotNull();
@@ -30,7 +30,7 @@ class FileIoUtilsTest {
         String file = "/not_existing_file.html";
 
         // when, then
-        assertThrows(IllegalArgumentException.class, () -> FileIoUtils.loadFile(file));
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.loadFile(file));
     }
 
     @Test
@@ -40,7 +40,7 @@ class FileIoUtilsTest {
         String file = "hello/index.html";
 
         //when
-        String extension = FileIoUtils.getExtension(file);
+        String extension = FileUtils.getExtension(file);
 
         //then
         assertThat(extension).isEqualTo("html");

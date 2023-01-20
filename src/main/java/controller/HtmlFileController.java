@@ -29,10 +29,10 @@ public class HtmlFileController implements Controller {
         String path = httpRequest.getUri().getPath();
         try {
             Session session = SessionManager.getSession(UUID.fromString(httpRequest.getSession())).orElse(null);
-            httpResponse.setBody(FileIoUtils.makePage(path, session));
+            httpResponse.setBody(FileUtils.createPage(path, session));
         } catch (NullPointerException e) {
             try {
-                httpResponse.setBody(FileIoUtils.makePage(path, null));
+                httpResponse.setBody(FileUtils.createPage(path, null));
             } catch (IOException err) {
                 httpResponse.setStatusCode(StatusCode.NOTFOUND);
                 return;
