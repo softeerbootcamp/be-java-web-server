@@ -12,17 +12,24 @@ import org.slf4j.LoggerFactory;
 import util.HttpResponseUtil;
 import util.LoginUtil;
 
+import java.util.Objects;
+
 public class LoginController implements Controller {
+    public static final String PATH = "/user/login";
     public static final String INDEX_HTML = "/index.html";
     public static final String USER_LOGIN_FAILED_HTML = "/user/login_failed.html";
     private final Logger logger = LoggerFactory.getLogger(LoginController.class);
+    private static LoginController loginController = null;
 
-    public LoginController() {
-        logger.debug("select LoginController");
+    public static LoginController getInstance(){
+        if(Objects.isNull(loginController)){
+            loginController = new LoginController();
+        }
+        return loginController;
     }
-
     @Override
     public HttpResponse createResponse(HttpRequest httpRequest) {
+        logger.debug("select LoginController");
         String sessionId;
         if (LoginUtil.checkUserInfoMatch(httpRequest)) {
             sessionId = SessionDb.saveNewSession(httpRequest);
