@@ -1,7 +1,7 @@
 package util;
 
 import db.SessionStorage;
-import exception.UserNotFoundException;
+import exception.SessionNotFoundException;
 import model.UserSession;
 import model.request.Request;
 
@@ -26,6 +26,6 @@ public class AuthInterceptor {
             String cookie = headers.get("Cookie");
             return SessionStorage.findBySessionId(parseSid(cookie));
         }
-        throw new UserNotFoundException();
+        throw new SessionNotFoundException();
     }
 }

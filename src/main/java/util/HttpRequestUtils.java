@@ -27,7 +27,6 @@ public class HttpRequestUtils {
         return map;
     }
 
-    //sid=1ad0baa4-9890-4720-8ba7-a8802286e576; Path=/
     public static String parseSid(String cookie) {
         String[] values = cookie.split(";");
         for (String value : values) {

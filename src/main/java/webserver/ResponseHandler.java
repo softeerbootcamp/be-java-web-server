@@ -37,7 +37,6 @@ public class ResponseHandler {
                     response404Header(dos);
                     break;
             }
-
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

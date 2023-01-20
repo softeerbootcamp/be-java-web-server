@@ -25,7 +25,6 @@ public class FrontServlet {
         try {
             Path path = findFilePath(request.getUrl());
 
-            //TODO 인덱스.html마저 여기서...? 이거 너무 쓰레기같다. 컨트롤러 구조 고민필요.
             if (request.getUrl().contains(".html")) {
                 DynamicHtmlController dynamicHtmlController = new DynamicHtmlController();
                 return dynamicHtmlController.service(request);
