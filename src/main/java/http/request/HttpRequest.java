@@ -1,7 +1,6 @@
 package http.request;
 
 import http.*;
-import http.cookie.CookieManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +11,9 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
+import static utils.HttpRequestUtil.extractSessionId;
+import static utils.HttpRequestUtil.readData;
+
 public class HttpRequest {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
@@ -21,18 +23,15 @@ public class HttpRequest {
     private final HttpStartLine startLine;
     private final HttpHeader httpHeaders;
     private final HttpRequestBody requestBody;
-    private final CookieManager cookies;
 
     private HttpRequest(
             HttpStartLine startLine,
             HttpHeader headers,
-            HttpRequestBody requestBody,
-            CookieManager cookies
+            HttpRequestBody requestBody
     ) {
         this.startLine = startLine;
         this.httpHeaders = headers;
         this.requestBody = requestBody;
-        this.cookies = cookies;
     }
 
     public static HttpRequest from(InputStream in) throws IOException {
@@ -50,20 +49,19 @@ public class HttpRequest {
             BufferedReader br
     ) throws IOException {
         HttpMethod httpMethod = startLine.getMethod();
-        CookieManager cookies = new CookieManager(headers.getHeaders().get("Cookie"));
         logger.info("HttpStartLine: {} {} {}", startLine.getMethod(), startLine.getUri().getPath(), startLine.getHttpVersion());
         logger.debug("Headers: {}", headers);
 
         if (httpMethod.equals(HttpMethod.GET)) {
             HttpRequestBody httpRequestBody = HttpRequestBody.createEmptyRequestBody();
-            return new HttpRequest(startLine, headers, httpRequestBody, cookies);
+            return new HttpRequest(startLine, headers, httpRequestBody);
         }
 
         if (httpMethod.equals(HttpMethod.POST)) {
             int contentLength = Integer.parseInt(headers.getValue("Content-Length"));
             String queryString = readData(br, contentLength);
             HttpRequestBody httpRequestBody = HttpRequestBody.createRequestBody(queryString);
-            return new HttpRequest(startLine, headers, httpRequestBody, cookies);
+            return new HttpRequest(startLine, headers, httpRequestBody);
         }
 
         return null;
@@ -88,30 +86,33 @@ public class HttpRequest {
         return startLine.getMethod();
     }
 
-    public HttpRequestBody getRequestBody() {
-        return requestBody;
-    }
-
     public Map<String, String> getParameters() {
         return requestBody.getParameters();
+    }
+
+    public String getParameter(String key) {
+        return getParameters().get(key);
     }
 
     public Uri getUri() {
         return startLine.getUri();
     }
 
+    public String getPath() {
+        return getUri().getPath();
+    }
+
     public Map<String, String> getHttpHeaders() {
         return httpHeaders.getHeaders();
     }
 
-    public CookieManager getCookies() {
-        return cookies;
-    }
+    public String getSessionId() {
+        String cookies = httpHeaders.getValue("Cookie");
+        if (cookies == null)
+            return null;
 
-    public static String readData(BufferedReader br, int contentLength) throws IOException {
-        char[] body = new char[contentLength];
-        br.read(body, 0, contentLength);
-        return String.copyValueOf(body);
+        return extractSessionId(cookies);
+
     }
 
 }

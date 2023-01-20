@@ -2,6 +2,8 @@ package http.cookie;
 
 public class Cookie {
 
+    public static final String COOKIE_SUFFIX = "; path=/";
+
     private final String name;
     private final String value;
 
@@ -11,7 +13,7 @@ public class Cookie {
     }
 
     public static Cookie of(String name, String value) {
-        return new Cookie(name, value);
+        return new Cookie(name, value + COOKIE_SUFFIX);
     }
 
     public String getName() {

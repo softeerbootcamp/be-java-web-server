@@ -9,6 +9,4 @@ import java.net.URISyntaxException;
 public interface Controller {
     void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException;
 
-    boolean isUri(HttpRequest httpRequest);
-
 }
