@@ -25,6 +25,10 @@ public class HttpRequest {
 		return httpRequestLine.getHttpMethod();
 	}
 
+	public boolean hasCookie() {
+		return headers.containsKey("Cookie");
+	}
+
 	public Url getUrl() {
 		return httpRequestLine.getRequestUrl();
 	}
@@ -34,7 +38,12 @@ public class HttpRequest {
 	}
 
 	public Cookie getCookie() {
-		return Cookie.from(headers.get("Cookie:"));
+		if (hasCookie()) {
+			return Cookie.from(headers.get("Cookie"));
+		} else {
+			throw new IllegalArgumentException("쿠키가 존재하지 않습니다.");
+		}
+
 	}
 
 	public String getSessionId() {

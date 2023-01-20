@@ -17,10 +17,16 @@ public class FrontController implements Controller {
 		}
 		return instance;
 	}
+
 	@Override
 	public void service(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
-		Controller controller = RequestMappingHandler.findController(httpRequest);
+		try {
+			Controller controller = RequestMappingHandler.findController(httpRequest);
+			controller.service(httpRequest, httpResponse);
+		} catch (Exception e) {
+			ErrorController controller = ErrorController.getInstance();
+			controller.service(httpRequest, httpResponse, e);
+		}
 
-		controller.service(httpRequest, httpResponse);
 	}
 }

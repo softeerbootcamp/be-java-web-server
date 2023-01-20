@@ -38,10 +38,12 @@ public class LoginController extends AbstractController {
 	public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
 		if (userService.matchIdPassword(httpRequest.getRequestBody("userId"), httpRequest.getRequestBody("password"))) {
 			User user = userService.findByUserId(httpRequest.getRequestBody("userId"));
-			Session session = new Session();
-			session.setAttribuite("user", user);
-			// TODO 세션 적용해야함
 			httpResponse.setHttpResponse(HttpStatus.FOUND, "", ContentType.HTML, "/index.html");
+			Session session = new Session();
+			SessionManager.addSession(session);
+			session.setAttribuite("user", user);
+
+			httpResponse.addSessionId(session);
 		} else {
 			httpResponse.setHttpResponse(HttpStatus.FOUND, "", ContentType.HTML, "/user/login_failed.html");
 		}

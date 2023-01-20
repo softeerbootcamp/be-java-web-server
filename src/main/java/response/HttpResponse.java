@@ -47,7 +47,7 @@ public class HttpResponse {
 	}
 
 	public void addSessionId(Session session) {
-		header.put("Set-Cookie", "SID=" + session.getSessionId());
+		header.put("set-cookie", "SID=" + session.getSessionId() + "; " + "Path=/");
 	}
 
 	public void setHttpResponse(HttpStatus httpStatus, String responseBody, ContentType contentType) {

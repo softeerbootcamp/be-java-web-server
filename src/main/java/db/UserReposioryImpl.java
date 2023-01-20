@@ -19,7 +19,8 @@ public class UserReposioryImpl implements UserRepository {
 		return instance;
 	}
 
-	private Map<String, User> users = Maps.newHashMap();
+	private Map<String, User> users = Maps.newHashMap(
+		Map.of("benny1020", User.of("benny1020", "password", "name", "benny1020@naver.com")));
 
 	@Override
 	public void addUser(User user) {

@@ -3,6 +3,7 @@ package controller;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
+import exception.BadRequestException;
 import request.HttpRequest;
 
 public enum RequestMappingHandler {
@@ -27,7 +28,7 @@ public enum RequestMappingHandler {
 		return Arrays.stream(RequestMappingHandler.values())
 			.filter(p -> path.startsWith(p.path))
 			.findFirst()
-			.orElseThrow(() -> new RuntimeException(path + ": 존재하는 경로가 없습니다.")).controller;
+			.orElseThrow(() -> new BadRequestException(path + ": 존재하는 경로가 없습니다.")).controller;
 
 	}
 
