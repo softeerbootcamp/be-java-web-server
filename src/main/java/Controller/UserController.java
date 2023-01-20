@@ -1,5 +1,6 @@
 package Controller;
 
+import db.Database;
 import exception.NullValueException;
 import exception.UrlNotFoundException;
 import exception.UserValidationException;
@@ -11,11 +12,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
 import util.HttpRequestUtils;
+import view.UserListView;
+import webserver.session.Session;
+import webserver.session.SessionConst;
 import webserver.session.SessionManager;
 
+import java.io.IOException;
+import java.util.Collection;
 import java.util.Map;
-
-import static webserver.session.SessionManager.SESSION_COOKIE_NAME;
 
 public class UserController implements Controller {
 
@@ -32,17 +36,17 @@ public class UserController implements Controller {
         String url = request.getUrl();
         String path = url.split(PREFIX)[1];
 
-        if (path.startsWith("/create") && request.getMethod() == HttpMethod.POST) {
+        if (path.equals("/create") && request.getMethod() == HttpMethod.POST) {
             createUser(request, response);
             return;
         }
 
-        if (path.startsWith("/login") && request.getMethod() == HttpMethod.POST) {
+        if (path.equals("/login") && request.getMethod() == HttpMethod.POST) {
             login(request, response);
             return;
         }
 
-        if (path.startsWith("/list") && request.getMethod() == HttpMethod.GET) {
+        if (path.equals("/list") && request.getMethod() == HttpMethod.GET) {
             showUserList(request, response);
             return;
         }
@@ -76,7 +80,8 @@ public class UserController implements Controller {
             User loginUser = userService.login(userInfo);
 
             String sessionId = SessionManager.createSession(loginUser.getUserId());
-            response.addHttpHeader("Set-Cookie", SESSION_COOKIE_NAME + "=" + sessionId+ "; Path=/");
+            logger.debug("sessionId: {}", sessionId);
+            response.addHttpHeader("Set-Cookie", SessionConst.SESSION_COOKIE_NAME + "=" + sessionId + "; Path=/");
 
             response.redirect(request, "/index.html");
         } catch (UserValidationException e) {
@@ -92,6 +97,19 @@ public class UserController implements Controller {
             return;
         }
 
-        StringBuilder sb = new StringBuilder();
+        try {
+            Session session = request.getSession();
+            String userId = session.getAttribute(SessionConst.USER_ID);
+            User loginUser = Database.findUserById(userId);
+
+            Collection<User> users = userService.findUserList();
+            String body = UserListView.render(users, loginUser.getName());
+
+            response.ok(request);
+            response.setBodyMessage(body);
+        } catch(IOException e) {
+            logger.error(e.getMessage());
+            response.notFound(request);
+        }
     }
 }

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class HttpRequestUtilsTest {
 
@@ -18,9 +19,11 @@ public class HttpRequestUtilsTest {
 
         Map<String, String> result = HttpRequestUtils.parseRequestHeader(headers);
 
-        assertThat(result.get("Host")).isEqualTo("localhost:8080");
-        assertThat(result.get("Connection")).isEqualTo("keep-alive");
-        assertThat(result.get("Accept")).isEqualTo("text/html");
+        assertAll(
+                () -> assertThat(result.get("Host")).isEqualTo("localhost:8080"),
+                () -> assertThat(result.get("Connection")).isEqualTo("keep-alive"),
+                () -> assertThat(result.get("Accept")).isEqualTo("text/html")
+        );
     }
 
     @Test
@@ -35,16 +38,18 @@ public class HttpRequestUtilsTest {
     }
 
     @Test
-    @DisplayName("쿼리 스트링에서 이름/값을 파싱하여 반환하는지 검증한다.")
-    void parseQueryString() {
+    @DisplayName("바디 메시지에서 이름/값을 파싱하여 반환하는지 검증한다.")
+    void parseBodyMessage() {
         String queryString = "userId=abc&password=aaa%40%40%40&name=%EC%9E%84%EC%88%98%EB%AF%BC&email=a%40a";
 
         Map<String, String> result = HttpRequestUtils.parseBodyMessage(queryString);
 
-        assertThat(result.get("userId")).isEqualTo("abc");
-        assertThat(result.get("password")).isEqualTo("aaa@@@");
-        assertThat(result.get("name")).isEqualTo("임수민");
-        assertThat(result.get("email")).isEqualTo("a@a");
+        assertAll(
+                () -> assertThat(result.get("userId")).isEqualTo("abc"),
+                () -> assertThat(result.get("password")).isEqualTo("aaa@@@"),
+                () -> assertThat(result.get("name")).isEqualTo("임수민"),
+                () -> assertThat(result.get("email")).isEqualTo("a@a")
+        );
     }
 
 }
