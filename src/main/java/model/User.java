@@ -1,6 +1,7 @@
 package model;
 
 public class User {
+    public static User GUEST = new User("", "", "guest", "");
     private String userId;
     private String password;
     private String name;

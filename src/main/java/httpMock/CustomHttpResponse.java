@@ -33,7 +33,7 @@ public class CustomHttpResponse {
         return new HashMap<>(this.headers);
     }
 
-    public void addToCookie(String value) {
+    public void addToCookie(String cookieElement) {
         if (this.headers == EMPTY_HEADER) {
             this.headers = new HashMap<>();
         }
@@ -41,7 +41,7 @@ public class CustomHttpResponse {
         if (this.headers.containsKey("Set-Cookie")) {
             exist = this.headers.get("Set-Cookie") + ";";
         }
-        this.headers.put("Set-Cookie", exist + value);
+        this.headers.put("Set-Cookie", exist + cookieElement);
     }
 
     public String getContentTypeLine() {

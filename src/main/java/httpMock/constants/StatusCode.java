@@ -14,7 +14,8 @@ public enum StatusCode {
     PAYMENT_REQ(402, "Payment Required"),
     FORBIDDEN(403, "Forbidden"),
     NOT_FOUND(404, "NOT_FOUND"),
-    METHOD_NOT_ALLOWED(405, "Method not allowed");
+    METHOD_NOT_ALLOWED(405, "Method not allowed"),
+    INTERNAL_ERROR(500, "Internal Server Error");
     private final int statusCode;
     private final String message;
 

@@ -5,25 +5,25 @@ import httpMock.CustomHttpResponse;
 import java.util.List;
 
 public enum ContentType {
-    IMAGE_ICON("image/x-icon", List.of("ico")),
-    TEXT_HTML("text/html", List.of("html")),
-    TEXT_CSS("text/css", List.of("css")),
-    TEXT_JAVASCRIPT("text/javascript", List.of("js")),
-    TEXT_PLAIN("text/plain", List.of("txt")),
-    TEXT_XML("text/xml", List.of("xml"));
+    IMAGE_ICON("image/x-icon","ico"),
+    TEXT_HTML("text/html","html"),
+    TEXT_CSS("text/css","css"),
+    TEXT_JAVASCRIPT("text/javascript","js"),
+    TEXT_PLAIN("text/plain","txt"),
+    TEXT_XML("text/xml","xml");
 
     private final String contentType;
-    private final List<String> fileTypes;
+    private final String fileType;
 
 
-    ContentType(String contentType, List<String> fileType) {
+    ContentType(String contentType, String fileType) {
         this.contentType = contentType;
-        this.fileTypes = fileType;
+        this.fileType = fileType;
     }
 
     public static ContentType getContentTypeByFileType(String fileType) {
         for (ContentType content : ContentType.values()) {
-            if (content.fileTypes.contains(fileType))
+            if (content.fileType.equals(fileType))
                 return content;
         }
         return TEXT_PLAIN;

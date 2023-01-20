@@ -1,6 +1,7 @@
 package controller;
 
-import Utility.UserValidation;
+import Utility.HtmlMakerUtility;
+import exceptions.CustomException;
 import httpMock.CustomHttpFactory;
 import httpMock.CustomHttpRequest;
 import httpMock.CustomHttpResponse;
@@ -9,30 +10,36 @@ import model.Session;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import repository.UserRepo;
 import service.SessionService;
+import service.StaticFileService;
 import service.UserService;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 public class UserAccountController implements RequestController {
     private static final Logger logger = LoggerFactory.getLogger(UserAccountController.class);
 
-    static UserAccountController userAccountService;
+    static UserAccountController userAccountController;
 
     private final Map<String, RequestController> routingTable = new HashMap<>() {{
         put("/user/create", (req) -> makeAccount(req));
         put("/user/login", (req) -> loginAccount(req));
         put("/user/logout", (req) -> logoutAccount(req));
+        put("/user/list", (req) -> userList(req));
+        put("/user/form", (req) -> userCreateForm(req));
     }};
 
 
     public static UserAccountController get() {
-        if (userAccountService == null) {
-            userAccountService = new UserAccountController();
+        if (userAccountController == null) {
+            synchronized (UserAccountController.class) {
+                userAccountController = new UserAccountController();
+            }
         }
-        return userAccountService;
+        return userAccountController;
     }
 
     @Override
@@ -46,53 +53,50 @@ public class UserAccountController implements RequestController {
     }
 
     public CustomHttpResponse makeAccount(CustomHttpRequest req) {
-        Set<HttpMethod> allowedMethods = Set.of(HttpMethod.POST);
+        Set<HttpMethod> allowedMethods = Set.of(HttpMethod.POST, HttpMethod.GET);
         if (!allowedMethods.contains(req.getHttpMethod()))
             return CustomHttpFactory.METHOD_NOT_ALLOWED();
 
+        if (req.getHttpMethod() == HttpMethod.GET)
+            return StaticFileController.get().handleRequest(req);
+
         Map<String, String> bodyParams = req.parseBodyFromUrlEncoded();
-        String userId = bodyParams.get("userId");
-        String password = bodyParams.get("password");
-        String name = bodyParams.get("name");
-        String email = bodyParams.get("email");
 
-        if (UserService.findUserById(userId) != null)
-            return CustomHttpFactory.BAD_REQUEST("userID duplicated");
-
-        if (!UserValidation.isEmailValid(email))
-            return CustomHttpFactory.BAD_REQUEST("email type invalid");
-
-        if (!UserValidation.isPasswordValid(password))
-            return CustomHttpFactory.BAD_REQUEST("password type invalid");
-
-        UserService.addUser(new User(userId, password, name, email));
-
-        return CustomHttpFactory.REDIRECT("/index.html");
+        try {
+            User user = UserService.addUser(bodyParams);
+            CustomHttpResponse res = CustomHttpFactory.REDIRECT("/index.html");
+            Session sess = SessionService.addUserToSession(user);
+            res.addToCookie(sess.toString());
+            return res;
+        } catch (CustomException e) {
+            return CustomHttpFactory.BAD_REQUEST(e.getMessage());
+        }
     }
 
     public CustomHttpResponse loginAccount(CustomHttpRequest req) {
-        Set<HttpMethod> allowedMethods = Set.of(HttpMethod.POST);
+        Set<HttpMethod> allowedMethods = Set.of(HttpMethod.POST, HttpMethod.GET);
         if (!allowedMethods.contains(req.getHttpMethod()))
             return CustomHttpFactory.METHOD_NOT_ALLOWED();
 
-        Map<String, String> bodyParams = req.parseBodyFromUrlEncoded();
-        String userId = bodyParams.get("userId");
-        String password = bodyParams.get("password");
+        logger.info("http method is {}", req.getHttpMethod());
+        if (req.getHttpMethod() == HttpMethod.GET)
+            return StaticFileController.get().handleRequest(req);
 
-        User customer = UserService.findUserById(userId);
-        if (customer != null && customer.getPassword().equals(password)) {
-            logger.info("User {} login success", customer.getName());
-            CustomHttpResponse res = CustomHttpFactory.REDIRECT("/index.html");
-            Session sess = SessionService.addUserToSession(customer);
-            res.addToCookie(sess.toString());
-            return res;
+        Map<String, String> bodyParams = req.parseBodyFromUrlEncoded();
+        User customer = UserService.getUserByReqbody(bodyParams);
+
+        if (customer == User.GUEST) {
+            logger.debug("User login failed");
+            return CustomHttpFactory.REDIRECT("/user/login_failed.html");
         }
 
-        logger.debug("User login failed");
-        return CustomHttpFactory.REDIRECT("/user/login_failed.html");
+        CustomHttpResponse res = CustomHttpFactory.REDIRECT("/index.html");
+        Session sess = SessionService.addUserToSession(customer);
+        res.addToCookie(sess.toString());
+        return res;
     }
 
-    public CustomHttpResponse logoutAccount(CustomHttpRequest req){
+    public CustomHttpResponse logoutAccount(CustomHttpRequest req) {
         Set<HttpMethod> allowedMethods = Set.of(HttpMethod.POST, HttpMethod.GET);
         if (!allowedMethods.contains(req.getHttpMethod()))
             return CustomHttpFactory.METHOD_NOT_ALLOWED();
@@ -102,5 +106,36 @@ public class UserAccountController implements RequestController {
         CustomHttpResponse res = CustomHttpFactory.REDIRECT("/user/login.html");
         res.addToCookie(expired.toString());
         return res;
+    }
+
+
+    public CustomHttpResponse userList(CustomHttpRequest req) {
+        Set<HttpMethod> allowedMethods = Set.of(HttpMethod.GET);
+        if (!allowedMethods.contains(req.getHttpMethod()))
+            return CustomHttpFactory.METHOD_NOT_ALLOWED();
+
+        if (!SessionService.isValidSSID(req.getSSID())) {
+            return CustomHttpFactory.REDIRECT("/user/login.html");
+        }
+
+        File file = StaticFileService.getFile("/user/list.html");
+        try {
+            User user = SessionService.getUserBySessionId(req.getSSID()).orElse(User.GUEST);
+            List<User> userList = new ArrayList<>(UserRepo.findAll());
+
+            Map<String, String> defaultTemplate = HtmlMakerUtility.getDefaultTemplate(user.getName());
+            defaultTemplate.put("userTable", HtmlMakerUtility.userListRows(userList));
+
+            String listPageStr = StaticFileService.renderFile(file, defaultTemplate);
+
+            return CustomHttpFactory.OK_HTML(listPageStr);
+        } catch (IOException e) {
+            logger.error("error while reading {}", file.getPath());
+            return CustomHttpFactory.INTERNAL_ERROR("error while reading " + file.getPath());
+        }
+    }
+
+    public CustomHttpResponse userCreateForm(CustomHttpRequest req) {
+        return StaticFileController.get().handleRequest(req);
     }
 }

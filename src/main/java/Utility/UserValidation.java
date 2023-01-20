@@ -1,28 +1,37 @@
 package Utility;
 
+import java.util.Objects;
+
 public class UserValidation {
 
-    public static boolean isNull(Object target) {
-        return target == null;
+    public static boolean isUserCreationFormValid(String userIdOrNull, String passwordOrNull, String nameOrNull, String emailOrNull) {
+        return isIdValid(userIdOrNull)
+                && isEmailValid(emailOrNull)
+                && isPasswordValid(passwordOrNull)
+                && isNameValid(nameOrNull);
     }
 
-    public static boolean isEmailValid(String email) {
-        if (isNull(email))
-            return false;
-        if (!email.contains("@"))
-            return false;
-        if (email.lastIndexOf("@") != email.indexOf("@"))
-            return false;
-        return email.substring(email.indexOf("@") + 1).contains(".");
+    public static boolean isIdValid(String userIdOrNull) {
+        return !Objects.isNull(userIdOrNull);
     }
 
-    public static boolean isPasswordValid(String password) {
-        if (isNull(password))
+    public static boolean isEmailValid(String emailOrNull) {
+        if (Objects.isNull(emailOrNull))
             return false;
-        return password.length() >= 6;
+        if (!emailOrNull.contains("@"))
+            return false;
+        if (emailOrNull.lastIndexOf("@") != emailOrNull.indexOf("@"))
+            return false;
+        return emailOrNull.substring(emailOrNull.indexOf("@") + 1).contains(".");
     }
 
-    public static boolean isNameValid(String name) {
-        return name != null;
+    public static boolean isPasswordValid(String passwordOrNull) {
+        if (Objects.isNull(passwordOrNull))
+            return false;
+        return passwordOrNull.length() >= 6;
+    }
+
+    public static boolean isNameValid(String nameOrNull) {
+        return !Objects.isNull(nameOrNull);
     }
 }
