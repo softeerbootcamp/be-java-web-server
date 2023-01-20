@@ -40,7 +40,7 @@ public class HttpRequestUtil {
         while (Objects.nonNull(line) && !line.equals("")) {
             logger.debug("header: " + line);
             String[] header = line.split(COLON);
-            if(header[0].equals("Cookie")){
+            if (header[0].equals("Cookie")) {
                 header[1] = extractCookie(header[1]);
             }
             if (header.length == 2) headers.put(header[0], header[1]);

@@ -31,7 +31,7 @@ public class HttpResponseUtil {
 
     public static Map<String, String> generateHeaders(String requestPath, int length) {
         ContentType contentType = ContentType.PLAIN;
-        if (!requestPath.isEmpty()){
+        if (!requestPath.isEmpty()) {
             String ex = FileIoUtil.findExtension(requestPath);
             contentType = ContentType.valueOf(ex.toUpperCase());
         }
