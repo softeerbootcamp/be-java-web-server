@@ -55,7 +55,7 @@ public class RequestParser{
         return map;
     }
 
-    public static Map<String, String> parseBody(Request request) throws IllegalArgumentException{
+    public static Map<String, String> parseFormEncodedBody(Request request) throws IllegalArgumentException{
         Map<String, String> map = new HashMap<>();
         String[] tokens = request.getRequestBody().split("&");
         for(String token : tokens) {

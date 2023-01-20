@@ -7,21 +7,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.Request;
 import request.RequestHandler;
+import request.RequestHandlerFactory;
+import request.RequestMethodEnum;
 import response.HttpResponse;
-import response.Response;
 
 public class ClientRequestThread implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(ClientRequestThread.class);
-
-    private final RequestHandler requestHandler;
 
     private Socket connection;
 
     private Request request;
 
-    public ClientRequestThread(Socket connectionSocket, RequestHandler requestHandler) {
+    public ClientRequestThread(Socket connectionSocket) {
         this.connection = connectionSocket;
-        this.requestHandler = requestHandler;
     }
 
     public void run() {
@@ -34,9 +32,14 @@ public class ClientRequestThread implements Runnable {
 
             log();
 
-            Response response = requestHandler.handle(request);
+            RequestHandler handler = RequestHandlerFactory.generateHandler(request);
 
-            HttpResponse.handleHttpResponse(out, response);
+            for(RequestMethodEnum methodEnum : RequestMethodEnum.values()) {
+                if(request.getMethod().equals(methodEnum.getMethod())) {
+                    HttpResponse.handleHttpResponse(out, methodEnum.execute(handler, request));
+                    return;
+                }
+            }
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

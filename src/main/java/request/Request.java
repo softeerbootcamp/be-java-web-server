@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class Request {
     private final String method;
@@ -74,17 +75,12 @@ public class Request {
         return FileContentType.NO_MATCH.getContentType();
     }
 
-    public String getResourceFilePostfix() {
-        String postfix = "";
-        int start = resource.lastIndexOf(".");
-        if(start != -1) {
-            postfix = resource.substring(resource.lastIndexOf("."));
-        }
-        return postfix;
-    }
-
     public Map<String, String> getRequestHeader() {
         return requestHeader;
+    }
+
+    public String getCookie() {
+        return requestHeader.get("Cookie") == null ? "" : requestHeader.get("Cookie").replace("sid=","");
     }
 
     public String getRequestBody() {

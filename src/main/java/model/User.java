@@ -8,18 +8,23 @@ public class User {
     private String name;
     private String email;
 
-    public User(String userId, String password, String name, String email) {
+    private User(String userId, String password, String name, String email) {
         this.userId = userId;
         this.password = password;
         this.name = name;
         this.email = email;
     }
 
-    public User(Map<String, String> parsedQueryString) {
-        userId = parsedQueryString.get("userId");
-        password = parsedQueryString.get("password");
-        name = parsedQueryString.get("name");
-        email = parsedQueryString.get("email");
+    public static User of(String userId, String password, String name, String email) {
+        return new User(userId, password, name, email);
+    }
+
+    public static User from(Map<String, String> parsedQueryString) {
+        String userId = parsedQueryString.get("userId");
+        String password = parsedQueryString.get("password");
+        String name = parsedQueryString.get("name");
+        String email = parsedQueryString.get("email");
+        return new User(userId, password, name, email);
     }
 
     public String getUserId() {
