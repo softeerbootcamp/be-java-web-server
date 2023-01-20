@@ -31,7 +31,7 @@ public class LoginControllerTest {
     @DisplayName("로그인 성공 테스트")
     void doPost() throws IOException, FileNotFoundException, URISyntaxException {
         String request =
-                "POST /user/create HTTP/1.1" + System.lineSeparator() +
+                "POST /user/login HTTP/1.1" + System.lineSeparator() +
                         "Host: localhost:8080" + System.lineSeparator() +
                         "Connection: keep-alive" + System.lineSeparator() +
                         "Content-Length: 33" + System.lineSeparator() +
@@ -65,7 +65,7 @@ public class LoginControllerTest {
     @DisplayName("잘못된 ID 입력 시 로그인 실패 테스트")
     void loginFailedWithWrongId() throws IOException, FileNotFoundException, URISyntaxException {
         String request =
-                "POST /user/create HTTP/1.1" + System.lineSeparator() +
+                "POST /user/login HTTP/1.1" + System.lineSeparator() +
                         "Host: localhost:8080" + System.lineSeparator() +
                         "Connection: keep-alive" + System.lineSeparator() +
                         "Content-Length: 28" + System.lineSeparator() +
@@ -97,7 +97,7 @@ public class LoginControllerTest {
     @DisplayName("잘못된 PASSWORD 입력 시 로그인 실패 테스트")
     void loginFailedWithWrongPASSWORD() throws IOException, FileNotFoundException, URISyntaxException {
         String request =
-                "POST /user/create HTTP/1.1" + System.lineSeparator() +
+                "POST /user/login HTTP/1.1" + System.lineSeparator() +
                         "Host: localhost:8080" + System.lineSeparator() +
                         "Connection: keep-alive" + System.lineSeparator() +
                         "Content-Length: 29" + System.lineSeparator() +
