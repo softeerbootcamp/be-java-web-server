@@ -1,7 +1,7 @@
 package webserver;
 
 import controller.Controller;
-import controller.DynamicHtmlController;
+import controller.HtmlController;
 import controller.StaticFileController;
 import controller.UserController;
 import http.request.HttpRequest;
@@ -10,23 +10,12 @@ public class ControllerHandler {
     public static Controller handleController(HttpRequest httpRequest) {
         //TODO httpRequest 보고 어떤 컨트롤러 써야되는지 리턴 해줘야됨
 
-        // 어떤 기능 (회원가입, 로그인 등) 을 원한다면?
-        // POST 요청일 때
-        if (httpRequest.isPost()) {
-            // 누가 원하는지 > 누구의 컨트롤러가 필요한지 넘겨줌
-            // User가 원하면 UserController
-            return whoWant(httpRequest.getUri());
-        }
+        // POST 요청일 때 : 회원가입, 로그인
+        // User의 요청이면 UserController 리턴
+        if (httpRequest.isPost()) return whoWant(httpRequest.getUri());
 
-        // 파일을 원한다면? ex) index.html, /user/form.html, .css, .js
-        // /index.html, /user/list.html
-        // Login 정보가 필요한 파일들을 원한다면 - 동적 html 처리
-        if(httpRequest.wantDynamicHtml()){
-            // 로그인을 하지 않은 index.html인 경우 정적 html 처리
-            if(httpRequest.getUri().equals("/index.html") && !httpRequest.isLogin())
-                return new StaticFileController();
-            return new DynamicHtmlController();
-        }
+        // html 파일을 원한다면?
+        if(httpRequest.wantHtml()) return new HtmlController();
 
         // 나머지 - 정적 처리
         return new StaticFileController();
