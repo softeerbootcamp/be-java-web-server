@@ -28,9 +28,10 @@ public class HtmlBuildUtil {
     }
 
     public static byte[] buildHtml(String path, User user) {
-        byte [] body = HttpResponseUtil.generateBody(path);
+        byte[] body = HttpResponseUtil.generateBody(path);
         logger.debug("withoutLogoutWithUserName");
-        if(FileIoUtil.mappingDirectoryPath(path).toString().contains("static")) {
+
+        if (FileIoUtil.mappingDirectoryPath(path).toString().contains("static")) {
             return body;
         }
         return withoutLogoutWithUserName(new String(body), path, user);
