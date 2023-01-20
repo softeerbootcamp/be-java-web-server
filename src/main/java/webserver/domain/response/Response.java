@@ -40,6 +40,11 @@ public class Response {
         headerMaps.put("Location", redirectUri);
     }
 
+    public void redirect(StatusCodes statusCode, String redirectUri) {
+        status = statusCode;
+        headerMaps.put("Location", redirectUri);
+    }
+
     public void ok(StatusCodes statusCode, byte[] bodyAsByte, ContentType contentType) {
         status = statusCode;
         body = bodyAsByte;
@@ -65,6 +70,12 @@ public class Response {
         } catch (IOException e) {
             logger.debug("Can not implement IO operation");
         }
+    }
+
+    public void changeBody(byte[] bodyAsByte, ContentType contentType){
+        body = bodyAsByte;
+        headerMaps.put("Content-Type" , contentType.getType());
+        headerMaps.put("Content-Length", String.valueOf(body.length));
     }
 
     public void addCookieOnHeader(String cookie){
