@@ -21,9 +21,7 @@ public class UserDatabase {
         return Optional.ofNullable(users.get(userId));
     }
 
-    public static ArrayList<User> findAll() {
-        return users.values()
-                    .stream()
-                    .collect(Collectors.toCollection(ArrayList::new));
+    public static List<User> findAll() {
+        return new ArrayList<>(users.values());
     }
 }
