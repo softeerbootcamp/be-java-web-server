@@ -51,13 +51,17 @@ public class HttpRequest {
 
     public String getSession() {
         String cookie = getHeaderValue("Cookie");
-        if (cookie == null)
-            return null;
-        if (!cookie.contains("sid"))
+        if (!hasSession(cookie))
             return null;
         String[] cookies = cookie.split(";");
         String sid = Arrays.stream(cookies).filter(c -> c.contains("sid")).findFirst().orElse("");
         return sid.split("=")[1];
+    }
+
+    private boolean hasSession(String cookie) {
+        if (cookie == null || !cookie.contains("sid"))
+            return false;
+        return true;
     }
 
     public boolean hasHtmlRequest() {
