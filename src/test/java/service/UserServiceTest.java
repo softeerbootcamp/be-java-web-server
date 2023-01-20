@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserServiceTest {
@@ -43,4 +44,10 @@ class UserServiceTest {
         userService.validateUser("user1", "password1");
     }
 
+    @Test
+    public void testValidateUser_failed() {
+        assertThatThrownBy(() -> userService.validateUser("user2", "password1"))
+                .isInstanceOf(LogInFailedException.class)
+                .hasMessage("로그인 실패");
+    }
 }
