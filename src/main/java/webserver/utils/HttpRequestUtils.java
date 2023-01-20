@@ -32,20 +32,22 @@ public class HttpRequestUtils {
         logger.info(requestLine);  //print out http request line
 
         //Store Http Request header
+        StringBuilder sb = new StringBuilder();
         String tempLine = br.readLine();
         while(!tempLine.equals("")){
-            header += tempLine + '\n';
+            sb.append(tempLine + '\n');
             logger.info(tempLine);  //print out http header
             tempLine = br.readLine();
         }
+        header = sb.toString();
 
         //Store Http Request body
-        StringBuilder sb = new StringBuilder();
+        sb.setLength(0);
         while(br.ready()){
             int next= br.read();
             sb.append((char)next);
         }
-        body  = sb.toString();
+        body = sb.toString();
 
         return Request.of(requestLine, header, body);  //make a Request instance using static factory method
     }
