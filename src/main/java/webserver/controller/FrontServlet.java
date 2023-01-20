@@ -24,16 +24,19 @@ public class FrontServlet {
     public Response process(Request request) {
         try {
             Path path = findFilePath(request.getUrl());
-            return Response.of(request.getHttpVersion(), OK, Map.of("Content-Type", Files.probeContentType(path)), findActualFile(path));
+
+            if (request.getUrl().contains(".html")) {
+                DynamicHtmlController dynamicHtmlController = new DynamicHtmlController();
+                return dynamicHtmlController.service(request);
+            }
+
+            String contentType = Files.probeContentType(path)==null ? "*/*" : Files.probeContentType(path);
+            return Response.of(request.getHttpVersion(), OK, Map.of("Content-Type", contentType), findActualFile(path));
 
         } catch (IOException e) {
             String[] split = request.getUrl().split("/");
             WasHandlerAdapter wasHandlerAdapter = adapterMap.get(split[1]);
             return wasHandlerAdapter.process(request);
-        } catch (NullPointerException exception) {
-            //TODO Header Map에 content-type 넣을 때 NullPointerException 발생해서 임시방편으로 처리해둠.
-            System.out.println(request.getUrl());
-            return Response.of(request.getHttpVersion(), OK, Map.of(),new byte[0]);
         }
     }
 }

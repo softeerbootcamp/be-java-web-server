@@ -1,16 +1,31 @@
 package controller;
 
+import db.Database;
+import db.SessionStorage;
+import exception.SessionNotFoundException;
+import model.User;
 import model.request.Request;
+import model.response.Response;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import webserver.controller.DynamicHtmlController;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static model.response.HttpStatusCode.OK;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserRequestHandlerTest {
+
+    @BeforeEach
+    void cleanDb() {
+        Database.cleanAll();
+        SessionStorage.cleanAll();
+    }
 
     @Test
     @DisplayName("입력된 request line에서 url 추출하는 메서드")
@@ -46,6 +61,30 @@ public class UserRequestHandlerTest {
         //then
         assertThat(url).isEqualTo("/index.html");
 
+    }
+
+    @Test
+    @DisplayName("잘못된 쿠키값 브라우저에서 인덱스.html로 전송시 무시")
+    void session_expired() throws Exception {
+        //given
+        Database.addUser(new User("javajigi", "password", "tester", "test@test.com"));
+
+        //when
+        String sid = "123456";
+        String requestMessage = "GET / HTTP/1.1\n"
+                + "Host: localhost:8080\n"
+                + "Connection: keep-alive\n"
+                + "Accept: */*"
+                + "Cookie: sid=" + sid;
+        InputStream inputStream = new ByteArrayInputStream(requestMessage.getBytes());
+        Request request = new Request(inputStream);
+
+        DynamicHtmlController dynamicHtmlController = new DynamicHtmlController();
+        Response response = dynamicHtmlController.service(request);
+        //expected
+        assertThat(response.getStatusLine().getHttpStatusCode()).isEqualTo(OK);
+
+        Assertions.assertThrows(SessionNotFoundException.class, () -> SessionStorage.findBySessionId(sid));
     }
 
 }

@@ -20,8 +20,6 @@ public class Request {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, UTF_8));
         String line = br.readLine();
         this.requestLine = new RequestLine(line);
-
-        //TODO line 변수를 없앨 수 있는 방법
         this.headers = extractHeaders(br, line);
         this.requestParams = extractBody(br);
     }

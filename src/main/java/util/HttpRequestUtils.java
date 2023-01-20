@@ -27,12 +27,11 @@ public class HttpRequestUtils {
         return map;
     }
 
-    //sid=1ad0baa4-9890-4720-8ba7-a8802286e576; Path=/
     public static String parseSid(String cookie) {
         String[] values = cookie.split(";");
         for (String value : values) {
             String[] keyValuePair = value.split("=", 2);
-            if (keyValuePair[0].equals("sid")) {
+            if (keyValuePair[0].contains("sid")) {
                 return keyValuePair[1];
             }
         }

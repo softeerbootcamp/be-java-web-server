@@ -1,19 +1,14 @@
 package webserver;
 
-import db.SessionStorage;
-import model.User;
 import model.request.Request;
 import model.response.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.HttpRequestUtils;
 import webserver.controller.FrontServlet;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
-
-import static util.HttpRequestUtils.parseSid;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -32,13 +27,6 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream()) {
             Request request = new Request(in);
-
-            if (request.getHeaders().containsKey("Cookie")) {
-                String cookie = request.getHeaders().get("Cookie");
-                logger.debug(">> 쿠키 있어요! {}", cookie);
-                User user = SessionStorage.findBySessionId(parseSid(cookie)).orElseThrow(() -> new RuntimeException("세션 없어요!"));
-                logger.debug(">> user id : {}", user.getUserId());
-            }
 
             Response response = frontServlet.process(request);
 
