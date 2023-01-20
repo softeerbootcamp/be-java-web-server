@@ -22,7 +22,9 @@ public class HttpRequest {
     public Map<String,String> getHttpRequestHeaders() {
         return httpRequestHeaders.getHeaders();
     }
-
+    public void setPath(String path) {
+        httpRequestStartLine.setPath(path);
+    }
     public String getPath() {
         return httpRequestStartLine.getPath();
     }
