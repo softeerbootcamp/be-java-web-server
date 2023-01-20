@@ -45,4 +45,24 @@ class SessionServiceTest {
                 .hasMessage("Session not found");
     }
 
+    @Test
+    @DisplayName("세션에 들어가 있는 userId를 정상적으로 가져오는지 테스트")
+    public void testGetUserId() {
+        String userId = "userId";
+        String userName = "userName";
+        Session session = sessionService.makeSession(userId, userName);
+
+        assertEquals(userId, sessionService.getUserId(session.getSessionId()));
+    }
+
+    @Test
+    @DisplayName("세션에 들어가 있는 userId를 정상적으로 가져오는지 테스트")
+    public void testGetUserName() {
+        String userId = "userId";
+        String userName = "userName";
+        Session session = sessionService.makeSession(userId, userName);
+
+        assertEquals(userName, sessionService.getUserName(session.getSessionId()));
+    }
+
 }
