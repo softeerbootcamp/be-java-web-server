@@ -1,6 +1,6 @@
 package http.request;
 
-import utils.HttpMethod;
+import utils.enums.HttpMethod;
 
 
 public class HttpRequestLine {

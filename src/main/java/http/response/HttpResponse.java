@@ -3,8 +3,8 @@ package http.response;
 import http.HttpHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.ContentType;
-import utils.StatusCode;
+import utils.enums.ContentType;
+import utils.enums.StatusCode;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

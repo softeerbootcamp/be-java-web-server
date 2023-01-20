@@ -3,7 +3,7 @@ package controller;
 import exception.HttpMethodException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import utils.HttpMethod;
+import utils.enums.HttpMethod;
 import utils.PathManager;
 import utils.SessionManager;
 

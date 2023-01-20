@@ -1,7 +1,7 @@
 package http.request;
 
 import http.HttpHeader;
-import utils.HttpMethod;
+import utils.enums.HttpMethod;
 
 import java.util.Arrays;
 import java.util.Map;

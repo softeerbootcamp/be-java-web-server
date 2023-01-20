@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
 import utils.FileIoUtils;
-import utils.HttpMethod;
+import utils.enums.HttpMethod;
 import utils.SessionManager;
 
 import javax.naming.AuthenticationException;

@@ -1,6 +1,6 @@
 package exception;
 
-import utils.HttpMethod;
+import utils.enums.HttpMethod;
 
 public class HttpMethodException extends RuntimeException {
     public HttpMethodException(HttpMethod methodName) {

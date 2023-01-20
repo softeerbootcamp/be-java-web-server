@@ -7,7 +7,7 @@ import http.request.HttpRequestLine;
 import http.request.URI;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import utils.HttpMethod;
+import utils.enums.HttpMethod;
 
 import java.util.HashMap;
 

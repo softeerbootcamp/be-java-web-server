@@ -4,6 +4,9 @@ import exception.HttpMethodException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import utils.*;
+import utils.enums.ContentType;
+import utils.enums.HttpMethod;
+import utils.enums.StatusCode;
 
 import java.io.IOException;
 
