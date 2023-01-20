@@ -2,9 +2,11 @@ package view;
 
 import util.FileUtils;
 
+import java.io.IOException;
+
 public class HomeLoginView {
 
-    public static String render(String name, String url) {
+    public static String render(String name, String url) throws IOException {
         byte[] file = FileUtils.loadFile(url);
 
         String userName = "<li><a role=\"button\">사용자 이름: " + name + "</a></li>";

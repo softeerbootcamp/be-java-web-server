@@ -3,11 +3,12 @@ package view;
 import model.User;
 import util.FileUtils;
 
+import java.io.IOException;
 import java.util.Collection;
 
 public class UserListView {
 
-    public static String render(Collection<User> users, String name) {
+    public static String render(Collection<User> users, String name) throws IOException {
         byte[] file = FileUtils.loadFile("/user/list.html");
 
         StringBuilder sb = new StringBuilder();

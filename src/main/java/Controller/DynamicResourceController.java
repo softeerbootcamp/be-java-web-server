@@ -10,6 +10,8 @@ import view.HomeLoginView;
 import webserver.session.Session;
 import webserver.session.SessionConst;
 
+import java.io.IOException;
+
 public class DynamicResourceController implements Controller {
 
     private static final Logger logger = LoggerFactory.getLogger(DynamicResourceController.class);
@@ -40,9 +42,14 @@ public class DynamicResourceController implements Controller {
 
         User loginUser = Database.findUserById(userId);
 
-        String body = HomeLoginView.render(loginUser.getName(), url);
+        try {
+            String body = HomeLoginView.render(loginUser.getName(), url);
 
-        response.ok(request);
-        response.setBodyMessage(body);
+            response.ok(request);
+            response.setBodyMessage(body);
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+            response.notFound(request);
+        }
     }
 }

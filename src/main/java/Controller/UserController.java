@@ -17,6 +17,7 @@ import webserver.session.Session;
 import webserver.session.SessionConst;
 import webserver.session.SessionManager;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
@@ -96,14 +97,19 @@ public class UserController implements Controller {
             return;
         }
 
-        Session session = request.getSession();
-        String userId = session.getAttribute(SessionConst.USER_ID);
-        User loginUser = Database.findUserById(userId);
+        try {
+            Session session = request.getSession();
+            String userId = session.getAttribute(SessionConst.USER_ID);
+            User loginUser = Database.findUserById(userId);
 
-        Collection<User> users = userService.findUserList();
-        String body = UserListView.render(users, loginUser.getName());
+            Collection<User> users = userService.findUserList();
+            String body = UserListView.render(users, loginUser.getName());
 
-        response.ok(request);
-        response.setBodyMessage(body);
+            response.ok(request);
+            response.setBodyMessage(body);
+        } catch(IOException e) {
+            logger.error(e.getMessage());
+            response.notFound(request);
+        }
     }
 }
