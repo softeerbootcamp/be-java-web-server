@@ -2,6 +2,7 @@ package view;
 
 import com.google.common.io.Files;
 import util.MessageParser;
+import util.Session;
 
 import java.util.Map;
 
@@ -17,7 +18,8 @@ public class RequestHeaderMessage {
     private String requestAttribute;
     private String contentType;
     private Map<String, String> header;
-    private String sessionId = "";
+    private Map<String, String> cookie;
+    private String sessionId;
     public String getHttpOnlyURL() {
         return httpOnlyURL;
     }
@@ -33,7 +35,7 @@ public class RequestHeaderMessage {
     public String getRequestAttribute() {return requestAttribute;}
 
     public String getContentType() {return contentType;}
-
+    public String getSessionId() {return sessionId;}
     public RequestHeaderMessage(String startLine, Map<String,String> header){
         this.startLine = startLine;
         String[] headers = startLine.split(" ");
@@ -42,6 +44,8 @@ public class RequestHeaderMessage {
         parseHttpReqURL(httpReqURL);
         httpVersion = headers[2];
         this.header = header;
+        this.cookie = getCookies();
+        sessionId = cookie.getOrDefault("sid","");
     }
 
     private void parseHttpReqURL(String httpReqURL){
@@ -50,6 +54,20 @@ public class RequestHeaderMessage {
         this.fileExtension = Files.getFileExtension(httpOnlyURL);
         this.requestAttribute = MessageParser.getRequestAttribute(httpOnlyURL);
         this.contentType = "text/" + (fileExtension.equals("js")?"javascript":fileExtension);
+    }
+
+    private Map<String,String> getCookies(){
+        return MessageParser.parseCookie(header.get("Cookie"));
+    }
+
+    public boolean isLogin(){
+        return Session.loginSession.get(sessionId) != null;
+    }
+
+    public String getSubPath(){
+        if (getFileExtension().contains("html"))
+            return "/templates";
+        return "/static";
     }
 
 }

@@ -8,11 +8,7 @@ import org.slf4j.LoggerFactory;
 import util.MessageParser;
 import util.HttpStatus;
 import util.Redirect;
-
 import util.Session;
-
-import view.RequestBodyMessage;
-import view.RequestHeaderMessage;
 import view.RequestMessage;
 import view.Response;
 import java.io.DataOutputStream;
@@ -22,9 +18,9 @@ import java.util.Map;
 
 public class UserController implements Controller{
 
-    static UserController userController;
+    private static UserController userController;
 
-
+    private final UserService userService = UserService.getInstance();
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private static final String USER_ID = "userId";
     private static final String PASSWORD = "password";
@@ -34,15 +30,21 @@ public class UserController implements Controller{
 
     private HttpStatus httpStatus = HttpStatus.ClientError;
 
+    private UserController(){}
+
     public static UserController getInstance(){
-        if (userController != null)
-            return userController;
-        return userController = new UserController();
+        if (userController == null){
+            synchronized (UserController.class){
+                if (userController == null){
+                    userController = new UserController();
+                }
+            }
+        }
+        return userController;
     }
 
     @Override
     public void control(RequestMessage requestMessage, OutputStream out) {
-        UserService userService = new UserService(new MemoryUserRepository());
         byte[] body = new byte[0];
         Map<String,String> headerKV= new HashMap<>();
         httpStatus = HttpStatus.ClientError;
@@ -58,7 +60,6 @@ public class UserController implements Controller{
         }
         if (requestMessage.getRequestHeaderMessage().getRequestAttribute().equals("/login")){
             userLogin(requestMessage, userService, headerKV);
-
             return;
         }
     }
@@ -74,7 +75,6 @@ public class UserController implements Controller{
             setLocation(Redirect.getRedirectLink(requestMessage.getRequestHeaderMessage().getRequestAttribute()), headerKV);
         } catch (IllegalStateException e){
             setLocation("/user/form_failed.html", headerKV);
-
             logger.debug(e.getMessage());
         }
     }
@@ -109,7 +109,6 @@ public class UserController implements Controller{
 
     private void setHeader(Map<String,String> headerKV, String key, String value){
         headerKV.put(key,value);
-
     }
 
 }

@@ -3,14 +3,14 @@ package controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpStatus;
-import view.RequestHeaderMessage;
 
 import view.RequestMessage;
 import view.Response;
-import webserver.RequestHandler;
 
 import java.io.DataOutputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class StaticController implements Controller{
 
@@ -18,27 +18,44 @@ public class StaticController implements Controller{
 
     private static final Logger logger = LoggerFactory.getLogger(StaticController.class);
     private static final String RELATIVE_PATH = "./src/main/resources";
-    private static final String STATIC = "/static";
-    private static final String TEMPLATES = "/templates";
+
+    private StaticController(){}
 
     public static StaticController getInstance(){
-        if (staticController != null)
-            return staticController;
-        return staticController = new StaticController();
+        if (staticController == null){
+            synchronized (StaticController.class){
+                if (staticController == null){
+                    staticController = new StaticController();
+                }
+            }
+        }
+        return staticController;
     }
 
-    private String getSubPath(RequestMessage requestMessage){
-        if (requestMessage.getRequestHeaderMessage().getFileExtension().contains("html"))
-            return TEMPLATES;
-        return STATIC;
-    }
     @Override
     public void control(RequestMessage requestMessage, OutputStream out) {
-        String fileURL = RELATIVE_PATH + getSubPath(requestMessage) + requestMessage.getRequestHeaderMessage().getHttpOnlyURL();
-        byte[] body = getBodyFile(fileURL);
-        HttpStatus httpStatus = setHttpStatus(body);
         Response response = new Response(new DataOutputStream(out));
+        byte[] body = getResponseBody(requestMessage);
+        Map<String,String> headerKV = new HashMap<>();
+        if (forbiddenAccess(requestMessage,headerKV)){
+            response.response(body,requestMessage.getRequestHeaderMessage(),HttpStatus.Redirection,headerKV);
+            return;
+        }
+        HttpStatus httpStatus = setHttpStatus(body);
         response.response(body,requestMessage.getRequestHeaderMessage(), httpStatus);
+    }
+
+    public byte[] getResponseBody(RequestMessage requestMessage){
+        String fileURL = RELATIVE_PATH + requestMessage.getRequestHeaderMessage().getSubPath() + requestMessage.getRequestHeaderMessage().getHttpOnlyURL();
+        return getBodyFile(fileURL);
+    }
+
+    private boolean forbiddenAccess(RequestMessage requestMessage, Map<String,String> headerKV){
+        if (requestMessage.getRequestHeaderMessage().getHttpOnlyURL().startsWith("/user/list")){
+            headerKV.put("Location","/user/login.html");
+            return true;
+        }
+        return false;
     }
 
 
