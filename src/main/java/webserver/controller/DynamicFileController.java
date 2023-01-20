@@ -10,6 +10,7 @@ import webserver.httpUtils.ResponseSender;
 import webserver.service.AlreadyLoggedInService;
 import webserver.service.LogInService;
 import webserver.service.Service;
+import webserver.service.ShowUserListService;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -25,6 +26,12 @@ public class DynamicFileController implements Controller{
 
         Service service = new Service() {};
         service = new AlreadyLoggedInService(sid_userid);
+
+        if(req.getReqLine().getQuery().contains("user/list"))
+        {
+            service = new ShowUserListService(sid_userid);
+        }
+
         Response res = service.exec(req);
 
         logger.debug("sid : " + sid_userid);

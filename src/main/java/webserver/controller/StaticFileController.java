@@ -3,6 +3,7 @@ package webserver.controller;
 import webserver.httpUtils.Request;
 import webserver.httpUtils.Response;
 import webserver.httpUtils.ResponseSender;
+import webserver.service.InvalidAccesstoUserListService;
 import webserver.service.LogInService;
 import webserver.service.Service;
 import webserver.service.SignUpService;
@@ -26,6 +27,10 @@ public class StaticFileController implements Controller{
         if(query.endsWith("user/login"))
         {
             service = new LogInService();
+        }
+        if(query.endsWith("user/list.html"))
+        {
+            service = new InvalidAccesstoUserListService();
         }
 
         Response res = service.exec(req);
