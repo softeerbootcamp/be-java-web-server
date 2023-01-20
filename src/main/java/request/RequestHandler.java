@@ -5,8 +5,6 @@ import response.Response;
 import service.SessionService;
 import service.UserService;
 
-import java.util.StringTokenizer;
-
 public interface RequestHandler {
     UserService userService = UserService.getInstance();
 
