@@ -3,23 +3,18 @@ package response;
 import enums.ContentTypeEnum;
 import enums.ControllerTypeEnum;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class NewResponse {
+public class ResponseFactory {
 
 
     private ResponseStatusLine responseStatusLine;
     private ResponseHeader responseHeader;
     private ResponseBody responseBody;
-    private List<String> responseAdder;
     private static final String NEW_LINE = "\r\n";
 
-    public NewResponse(Builder builder){
+    public ResponseFactory(Builder builder) {
         this.responseStatusLine = builder.responseStatusLine;
         this.responseHeader = builder.responseHeader;
         this.responseBody = builder.responseBody;
-        this.responseAdder = builder.responseAdder;
     }
 
     public ResponseStatusLine getResponseStatusLine() {
@@ -34,18 +29,14 @@ public class NewResponse {
         return responseBody;
     }
 
-    public List<String> getResponseAdder() {
-        return responseAdder;
-    }
-
     // 추가된 명령들을 response에 적기 위해 하나의 string 문장으로 형성
 
     public static class Builder {
         private ResponseStatusLine responseStatusLine;
         private ResponseHeader responseHeader;
         private ResponseBody responseBody;
-        private List<String> responseAdder = new ArrayList<>();
-        public Builder builder(){
+
+        public Builder builder() {
             return this;
         }
 
@@ -55,7 +46,7 @@ public class NewResponse {
         }
 
         public Builder setResponseHeader(ContentTypeEnum contentTypeEnum, int lengthOfBodyContent) {
-            this.responseHeader = new ResponseHeader(contentTypeEnum,lengthOfBodyContent);
+            this.responseHeader = new ResponseHeader(contentTypeEnum, lengthOfBodyContent);
             return this;
         }
 
@@ -63,13 +54,19 @@ public class NewResponse {
             this.responseBody = new ResponseBody(body);
             return this;
         }
+
         public Builder addResponseHeader(String addedLine) {
-            this.responseAdder.add(addedLine);
+            this.responseHeader.addHeaderLine(addedLine);
             return this;
         }
 
-        public NewResponse build(){
-            return new NewResponse(this);
+        public Builder addCookieHeader(String sid) {
+            this.responseHeader.addCookieLine(sid);
+            return this;
+        }
+
+        public ResponseFactory build() {
+            return new ResponseFactory(this);
         }
     }
 

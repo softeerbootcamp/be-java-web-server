@@ -7,9 +7,7 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.Request;
-import response.NewResponse;
-import response.Response;
-import response.ResponseSender;
+import response.ResponseFactory;
 import webserver.RequestResponseHandler;
 
 import java.io.File;
@@ -27,7 +25,7 @@ public class UserController implements Controller {
 
     // todo: user 정보들을 parse 하는 것은 좋지만, 추후 Validation Check 등에서 불편할 수 있으므로, Map 형태로 바꾸어 보자.
     @Override
-    public NewResponse controllerService(Request request) throws IOException {
+    public ResponseFactory controllerService(Request request) throws IOException {
         logger.debug("firstLine : " + request.getRequestLine().getURL());
         List<String> requestRequestBody = request.getRequestBody().getBodyLines();
         List<String> userInfos = parseUrlToGetUserInfo(requestRequestBody);
@@ -36,17 +34,14 @@ public class UserController implements Controller {
 
         Database.addUser(user);
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + "/index.html").toPath());
-        String addedLine="Location : /index.html";
-        NewResponse newResponse = new NewResponse.Builder()
+        String addedLine = "Location : /index.html";
+        ResponseFactory responseFactory = new ResponseFactory.Builder()
                 .setResponseStatusLine(ControllerTypeEnum.USER)
-                .setResponseHeader(ContentTypeEnum.CSS,body.length)
+                .setResponseHeader(ContentTypeEnum.CSS, body.length)
                 .addResponseHeader(addedLine)
                 .setResponseBody(body)
                 .build();
-        return newResponse;
-//        response.responseMaker(ControllerTypeEnum.USER, ContentTypeEnum.HTML,body.length,"/index.html");
-//        response.responseNewLineAdder();
-//        response.responseBody(body);
+        return responseFactory;
     }
 
     public List<String> parseUrlToGetUserInfo(List<String> requestBodyLine) {
@@ -58,9 +53,10 @@ public class UserController implements Controller {
         }
         return parsedUserInfo;
     }
-    public String getUserInfoFromBodyLines(List<String> lines){
-        for (String line:lines
-             ) {
+
+    public String getUserInfoFromBodyLines(List<String> lines) {
+        for (String line : lines
+        ) {
             if (line.contains("user")) return line;
         }
         return null;

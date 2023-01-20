@@ -12,8 +12,9 @@ public class HttpSessions {
     public static void addHttpSession(String id) {
         httpSessions.put(id, new HttpSession(getRandStringForSessionId()));
     }
+
     // todo : 적절한 이름 찾자..
-    public static String findSessionById(String userId){
+    public static String findSessionById(String userId) {
         return httpSessions.get(userId).getSessionIdById();
     }
 

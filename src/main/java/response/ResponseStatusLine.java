@@ -12,6 +12,7 @@ public class ResponseStatusLine {
     private static final String NEW_LINE = "\r\n";
 
     public ResponseStatusLine(ControllerTypeEnum controllerTypeEnum) {
+        // todo : 이거 request에서 받은 버전을 response로 보내줘야 하는 것으로 알고 있읍니당
         this.protocol = HttpVersionTypeEnum.HTTP1_1.getValue();
         this.statusCodeWithMessage =
                 StatusCodeWithMessageEnum.CODE_404.getKey() + " " + StatusCodeWithMessageEnum.CODE_404.getValue();
@@ -23,7 +24,7 @@ public class ResponseStatusLine {
             this.statusCodeWithMessage =
                     StatusCodeWithMessageEnum.CODE_200.getKey() + " " + StatusCodeWithMessageEnum.CODE_200.getValue();
         }
-        if (controllerTypeEnum == USER||controllerTypeEnum==LOGIN) {
+        if (controllerTypeEnum == USER || controllerTypeEnum == LOGIN) {
             this.statusCodeWithMessage =
                     StatusCodeWithMessageEnum.CODE_302.getKey() + " " + StatusCodeWithMessageEnum.CODE_302.getValue();
         }
