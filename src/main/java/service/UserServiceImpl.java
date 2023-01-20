@@ -9,9 +9,15 @@ import java.util.Map;
 
 public class UserServiceImpl implements UserService {
     private final Database database;
+    private static UserService userService;
 
-    public UserServiceImpl(Database database) {
+    private UserServiceImpl(Database database) {
         this.database = database;
+    }
+
+    public static UserService getInstance(Database database) {
+        if (userService == null) userService = new UserServiceImpl(database);
+        return userService;
     }
 
     @Override
