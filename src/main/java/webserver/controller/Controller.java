@@ -10,5 +10,6 @@ import java.util.Map;
 
 public interface Controller {
 
+    //TODO : modelAndView를 반환하도록
     void chain(Request req, Response res) throws HttpRequestException, IOException;
 }

@@ -2,11 +2,13 @@ package webserver;
 
 import model.HttpCookie;
 import webserver.annotation.ControllerInfo;
+import webserver.domain.ContentType;
 import webserver.domain.RequestMethod;
 import webserver.domain.StatusCodes;
 import webserver.domain.request.Request;
 import webserver.domain.response.Response;
 import webserver.exception.HttpRequestException;
+import webserver.security.SecurityFilter;
 import webserver.utils.HttpCookieUtils;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -37,20 +39,27 @@ public class ControllerInterceptor {
 
         methodList.forEach(method -> {
             ControllerInfo controllerInfo = method.getAnnotation(ControllerInfo.class);
-            if(controllerInfo.path().startsWith(req.getRequestLine().getResource().getPath())) {
+            String reqPath = req.getRequestLine().getResource().getPath();
+            if(controllerInfo.path().startsWith(reqPath)) {
                 try {
                     //check the validity of http method & parameters before executing the method
                     Map<String, String> contentMap = checkMethodThenReturnBody(req, controllerInfo, req.getRequestLine().getRequestMethod());
                     ArgumentResolver.checkParameters(contentMap, Arrays.asList(controllerInfo.queryStr()));
 
                     //hand over the session to controller only if it is valid
-                    //TODO : 해당 사항을 별도의 클래스로 분리해서 Security 관련 기능을 다룰 것
-                    String sessionId = req.getRequestHeader().get("Cookie");
-                    HttpCookieUtils.cookieValidation(sessionId).ifPresent(cookie -> contentMap.put("Cookie", cookie.getSessionId()));
+                    String sessionId = HttpCookieUtils.getSessionIdFromRequest(req).orElse(null);
+                    SecurityFilter.checkAuthorization(reqPath, sessionId);  //login checkup
+                    if (sessionId != null){
+                        HttpCookieUtils.cookieValidation(sessionId).ifPresent(cookie -> {
+                            contentMap.put("Cookie", cookie.getSessionId());
+                        });
+                    }
 
                     //invoke method
                     method.invoke(clazz.newInstance(), contentMap, res);
 
+                } catch (HttpRequestException e){
+                    res.error(e.getErrorCode(), e.getMsg().getBytes(), ContentType.TEXT_HTML);
                 } catch (InstantiationException | IllegalAccessException e) {
                     throw new HttpRequestException(StatusCodes.INTERNAL_SERVER_ERROR);
                 } catch (InvocationTargetException e) {

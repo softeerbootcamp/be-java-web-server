@@ -11,15 +11,14 @@ import webserver.domain.response.Response;
 import webserver.exception.HttpRequestException;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-class AuthControllerTest {
+class UserControllerTest {
 
-    AuthController authController;
+    UserController userController;
     AuthService authService;
     Request request;
     Response response;
@@ -27,7 +26,7 @@ class AuthControllerTest {
 
     @BeforeEach
     void testSetUp(){
-        authController = new AuthController();
+        userController = new UserController();
         String requestLine = "GET /index.html HTTP/1.1";
         String header = "password: testPass\n"+
                         "name: testName\n"+
@@ -54,7 +53,7 @@ class AuthControllerTest {
         when(authService.join(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenReturn(joinResult);
 
         //then
-        authController.userCreate(request.getRequestHeader(), response);
+        userController.userCreate(request.getRequestHeader(), response);
         verify(response).redirect(StatusCodes.SEE_OTHER, joinResult, ContentType.TEXT_HTML, "http://localhost:8080/index.html");
     }
 
@@ -68,10 +67,10 @@ class AuthControllerTest {
         MockedStatic<ControllerInterceptor> ceMock = mockStatic(ControllerInterceptor.class);
 
         ceMock.when(()-> ControllerInterceptor.executeController(Mockito.any(Class.class),  Mockito.any(Request.class), Mockito.any(Response.class))).thenThrow(new HttpRequestException(StatusCodes.INTERNAL_SERVER_ERROR));
-        authController.chain(request, response);
+        userController.chain(request, response);
 
         //then
-        verify(authController, times(1)).userCreate(Mockito.any(Map.class), Mockito.any(Response.class));
+        verify(userController, times(1)).userCreate(Mockito.any(Map.class), Mockito.any(Response.class));
     }
 
 
@@ -85,10 +84,10 @@ class AuthControllerTest {
 
         //when
         ceMock.when(()-> ControllerInterceptor.executeController(Mockito.any(Class.class),  Mockito.any(Request.class), Mockito.any(Response.class))).thenThrow(new HttpRequestException(StatusCodes.INTERNAL_SERVER_ERROR));
-        authController.chain(request, response);
+        userController.chain(request, response);
 
         //then
-        Assertions.assertThrows(HttpRequestException.class, () -> authController.chain(request, response));
+        Assertions.assertThrows(HttpRequestException.class, () -> userController.chain(request, response));
 
     }
 
@@ -103,7 +102,7 @@ class AuthControllerTest {
 
         //when
         ceMock.when(()-> ControllerInterceptor.executeController(Mockito.any(Class.class),  Mockito.any(Request.class), Mockito.any(Response.class))).thenThrow(new HttpRequestException(StatusCodes.INTERNAL_SERVER_ERROR));
-        authController.chain(request, response);
+        userController.chain(request, response);
 
         //then
         assertEquals(StatusCodes.INTERNAL_SERVER_ERROR, response.getStatusCode());
