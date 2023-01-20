@@ -16,18 +16,21 @@ public class Dispatcher {
         AppConfig appConfig = new AppConfig();
         controllers = Map.of(
                 UserCreateController.PATH, new UserCreateController(appConfig.userService()),
+                UserLogoutController.PATH, new UserLogoutController(),
                 StaticFileController.PATH, new StaticFileController(),
                 UserLoginController.PATH, new UserLoginController(appConfig.userService()),
-                UserListController.PATH, new UserListController(appConfig.userService())
+                UserListController.PATH, new UserListController(appConfig.userService()),
+                HtmlFileController.PATH, new HtmlFileController()
         );
     }
 
-    public static HttpResponse dispatch(HttpRequest request, HttpResponse response) {
-
-        Controller controller = controllers.get(request.getUri().getPath());
-        if (controller == null) {
-            controller = controllers.get(StaticFileController.PATH);
+    public static void dispatch(HttpRequest request, HttpResponse response) {
+        if (request.hasHtmlRequest()) {
+            controllers.get(HtmlFileController.PATH).service(request, response);
+            return;
         }
-        return controller.service(request, response);
+        Controller controller = controllers.getOrDefault(request.getUri().getPath()
+                ,controllers.get(StaticFileController.PATH));
+        controller.service(request, response);
     }
 }

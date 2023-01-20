@@ -15,7 +15,7 @@ import java.util.HashMap;
 public class HttpRequestGenerator {
     private static final Logger logger = LoggerFactory.getLogger(HttpRequestGenerator.class);
 
-    public static HttpRequest generateHttpMessage(BufferedReader br) throws IOException {
+    public static HttpRequest generate(BufferedReader br) throws IOException {
         HttpRequestLine httpRequestLine = parseStartLine(br);
         HttpHeader httpHeader = parseRequestHeader(br);
         if (httpRequestLine.hasBody()) {

@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import utils.ContentType;
 import utils.StatusCode;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -15,9 +17,11 @@ public class HttpResponse {
     private StatusCode statusCode;
     private HttpHeader headers;
     private HttpResponseBody body;
+    private DataOutputStream dos;
 
-    public HttpResponse(String version) {
+    public HttpResponse(String version, DataOutputStream dos) {
         this.version = version;
+        this.dos = dos;
         this.headers = HttpHeader.from(new HashMap<>());
         this.statusCode = StatusCode.OK;
         this.body = HttpResponseBody.createBody(new byte[0]);
@@ -27,17 +31,17 @@ public class HttpResponse {
         return body.getBody();
     }
 
+    public void setBody(byte[] body) {
+        this.headers.addHeader("Content-Length", String.valueOf(body.length));
+        this.body.setBody(body);
+    }
+
     public void setStatusCode(StatusCode statusCode) {
         this.statusCode = statusCode;
     }
 
     public void setContentType(ContentType contentType) {
         this.headers.addHeader("Content-Type", contentType.getType());
-    }
-
-    public void setBody(byte[] body) {
-        this.headers.addHeader("Content-Length", String.valueOf(body.length));
-        this.body.setBody(body);
     }
 
     public void setCookie(UUID sid) {
@@ -51,18 +55,14 @@ public class HttpResponse {
                 "\r\n";
     }
 
-    public void redirectHome() {
+    public void redirect(String path) {
         this.statusCode = StatusCode.SEE_OTHER;
-        headers.addHeader("Location", "/index.html");
+        headers.addHeader("Location", path);
     }
 
-    public void redirectLogin() {
-        this.statusCode = StatusCode.SEE_OTHER;
-        headers.addHeader("Location", "/user/login.html");
-    }
-
-    public void redirectLoginFailed() {
-        this.statusCode = StatusCode.SEE_OTHER;
-        headers.addHeader("Location", "/user/login_failed.html");
+    public void send() throws IOException {
+        dos.write(getHeaderMessage().getBytes());
+        dos.write(body.getBody(), 0, body.getBodySize());
+        dos.flush();
     }
 }

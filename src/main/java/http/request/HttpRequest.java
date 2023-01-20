@@ -3,6 +3,7 @@ package http.request;
 import http.HttpHeader;
 import utils.HttpMethod;
 
+import java.util.Arrays;
 import java.util.Map;
 
 public class HttpRequest {
@@ -24,8 +25,8 @@ public class HttpRequest {
         return new HttpRequest(startLine, requestHeader, null);
     }
 
-    public String getRequestBody() {
-        return requestBody.getContent();
+    public Map<String, String> getRequestBody() {
+        return requestBody.getParams();
     }
 
     public HttpMethod getHttpMethod() {
@@ -46,5 +47,24 @@ public class HttpRequest {
 
     public Map<String, String> getQueryParams() {
         return this.getUri().getParams();
+    }
+
+    public String getSession() {
+        String cookie = getHeaderValue("Cookie");
+        if (!hasSession(cookie))
+            return null;
+        String[] cookies = cookie.split(";");
+        String sid = Arrays.stream(cookies).filter(c -> c.contains("sid")).findFirst().orElse("");
+        return sid.split("=")[1];
+    }
+
+    private boolean hasSession(String cookie) {
+        if (cookie == null || !cookie.contains("sid"))
+            return false;
+        return true;
+    }
+
+    public boolean hasHtmlRequest() {
+        return getUri().getPath().contains("html");
     }
 }

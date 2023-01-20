@@ -1,7 +1,9 @@
 package controller;
 
+import exception.HttpMethodException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import model.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
@@ -9,11 +11,15 @@ import utils.FileIoUtils;
 import utils.HttpMethod;
 import utils.SessionManager;
 
+import javax.naming.AuthenticationException;
+import java.io.IOException;
 import java.util.UUID;
+
+import static utils.PathManager.LOGIN_PATH;
 
 public class UserListController implements Controller {
     public static final String PATH = "/user/list";
-    private static Logger logger = LoggerFactory.getLogger(UserListController.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserListController.class);
     private final UserService userService;
 
     public UserListController(UserService userService) {
@@ -21,24 +27,22 @@ public class UserListController implements Controller {
     }
 
     @Override
-    public HttpResponse service(HttpRequest httpRequest, HttpResponse httpResponse) {
-        if (httpRequest.getHttpMethod().equals(HttpMethod.GET)) {
-            return doGet(httpRequest, httpResponse);
+    public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
+        HttpMethod requestHttpMethod = httpRequest.getHttpMethod();
+        if (HttpMethod.GET.equals(requestHttpMethod)) {
+            doGet(httpRequest, httpResponse);
+            return;
         }
-        throw new IllegalArgumentException("존재하지 않는 Http 메서드입니다.");
+        throw new HttpMethodException(requestHttpMethod);
     }
 
-    public HttpResponse doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        String cookie = httpRequest.getHeaderValue("Cookie");
-        String sid = FileIoUtils.parseSId(cookie);
+    private void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+        String sid = httpRequest.getSession();
         try {
-            if (SessionManager.getData(UUID.fromString(sid)) != null) {
-                httpResponse.setBody(FileIoUtils.writeUserList());
-                return httpResponse;
-            }
-        } catch (NullPointerException e) {
-            httpResponse.redirectLogin();
+            Session session = SessionManager.getSession(UUID.fromString(sid)).orElseThrow(AuthenticationException::new);
+            httpResponse.setBody(FileIoUtils.makeUserListPage(userService.findAllUsers(), session));
+        } catch (NullPointerException | AuthenticationException | IOException e) {
+            httpResponse.redirect(LOGIN_PATH);
         }
-        return httpResponse;
     }
 }

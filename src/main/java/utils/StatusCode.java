@@ -3,6 +3,7 @@ package utils;
 public enum StatusCode {
     OK(200, "OK"),
     CREATED(201, "Created"),
+    NO_CONTENT(204, "No content"),
     FOUND(302, "Found"),
     SEE_OTHER(303, "See other"),
     UNAUTHORIZED(401, "Unauthorized"),
@@ -23,14 +24,6 @@ public enum StatusCode {
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("존재하지 않는 상태 메세지입니다.");
         }
-    }
-
-    public int getStatusCode() {
-        return statusCode;
-    }
-
-    public String getStatusMessage() {
-        return statusMessage;
     }
 
     @Override

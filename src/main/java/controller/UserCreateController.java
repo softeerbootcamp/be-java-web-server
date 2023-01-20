@@ -1,14 +1,16 @@
 package controller;
 
+import exception.HttpMethodException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
-import utils.FileIoUtils;
 import utils.HttpMethod;
 
 import java.util.Map;
+
+import static utils.PathManager.HOME_PATH;
 
 public class UserCreateController implements Controller {
     public static final String PATH = "/user/create";
@@ -21,17 +23,18 @@ public class UserCreateController implements Controller {
     }
 
     @Override
-    public HttpResponse service(HttpRequest httpRequest, HttpResponse httpResponse) {
-        if (httpRequest.getHttpMethod().equals(HttpMethod.POST)) {
-            return doPost(httpRequest, httpResponse);
+    public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
+        HttpMethod requestHttpMethod = httpRequest.getHttpMethod();
+        if (HttpMethod.POST.equals(requestHttpMethod)) {
+            doPost(httpRequest, httpResponse);
+            return;
         }
-        throw new IllegalArgumentException("존재하지 않는 Http 메서드입니다.");
+        throw new HttpMethodException(requestHttpMethod);
     }
 
-    private HttpResponse doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        Map<String, String> params = FileIoUtils.parseQueryString(httpRequest.getRequestBody());
-        userService.createUser(params);
-        httpResponse.redirectHome();
-        return httpResponse;
+    private void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+        Map<String, String> bodyParams = httpRequest.getRequestBody();
+        userService.createUser(bodyParams);
+        httpResponse.redirect(HOME_PATH);
     }
 }

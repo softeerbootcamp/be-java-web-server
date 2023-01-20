@@ -2,6 +2,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import utils.FileIoUtils;
 
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
 
@@ -10,7 +12,7 @@ class FileIoUtilsTest {
 
     @Test
     @DisplayName("존재하는 파일 로딩하기")
-    void testLoadFile_validFile() {
+    void testLoadFile_validFile() throws IOException {
         // given
         String file = "/index.html";
 

@@ -1,16 +1,19 @@
 package controller;
 
+import exception.HttpMethodException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
-import utils.FileIoUtils;
 import utils.HttpMethod;
 import utils.SessionManager;
 
 import javax.naming.AuthenticationException;
 import java.util.Map;
+
+import static utils.PathManager.HOME_PATH;
+import static utils.PathManager.LOGIN_FAILED_PATH;
 
 public class UserLoginController implements Controller {
     public static final String PATH = "/user/login";
@@ -22,22 +25,23 @@ public class UserLoginController implements Controller {
     }
 
     @Override
-    public HttpResponse service(HttpRequest httpRequest, HttpResponse httpResponse) {
-        if (httpRequest.getHttpMethod().equals(HttpMethod.POST))
-            return doPost(httpRequest, httpResponse);
-        throw new IllegalArgumentException("Login Controller에 존재하지 않는 Http 메서드입니다.");
+    public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
+        HttpMethod requestHttpMethod = httpRequest.getHttpMethod();
+        if (HttpMethod.POST.equals(requestHttpMethod)) {
+            doPost(httpRequest, httpResponse);
+            return;
+        }
+        throw new HttpMethodException(requestHttpMethod);
     }
 
-    private HttpResponse doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
-        Map<String, String> params = FileIoUtils.parseQueryString(httpRequest.getRequestBody());
+    private void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+        Map<String, String> bodyParams = httpRequest.getRequestBody();
         try {
-            userService.login(params.get("userId"), params.get("password"));
-            httpResponse.setCookie(SessionManager.createSession(userService.findUser(params.get("userId"))));
-            httpResponse.redirectHome();
+            userService.login(bodyParams.get("userId"), bodyParams.get("password"));
+            httpResponse.setCookie(SessionManager.createSession(userService.findUser(bodyParams.get("userId"))));
+            httpResponse.redirect(HOME_PATH);
+        } catch (AuthenticationException e) {
+            httpResponse.redirect(LOGIN_FAILED_PATH);
         }
-        catch (AuthenticationException e) {
-            httpResponse.redirectLoginFailed();
-        }
-        return httpResponse;
     }
 }

@@ -3,13 +3,14 @@ package controller;
 import exception.HttpMethodException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import utils.*;
+import utils.HttpMethod;
+import utils.PathManager;
+import utils.SessionManager;
 
-import java.io.IOException;
+import java.util.UUID;
 
-
-public class StaticFileController implements Controller {
-    public final static String PATH = "/";
+public class UserLogoutController implements Controller {
+    public static final String PATH = "/user/logout";
 
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
@@ -22,12 +23,7 @@ public class StaticFileController implements Controller {
     }
 
     private void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        String path = httpRequest.getUri().getPath();
-        try {
-            httpResponse.setBody(FileIoUtils.loadFile(path));
-            httpResponse.setContentType(ContentType.getContentType(FileIoUtils.getExtension(path)));
-        } catch (IOException e) {
-            httpResponse.setStatusCode(StatusCode.NOTFOUND);
-        }
+        SessionManager.removeSession(UUID.fromString(httpRequest.getSession()));
+        httpResponse.redirect(PathManager.LOGIN_PATH);
     }
 }

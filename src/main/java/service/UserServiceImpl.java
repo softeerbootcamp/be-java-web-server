@@ -4,13 +4,20 @@ import db.Database;
 import model.User;
 
 import javax.naming.AuthenticationException;
+import java.util.Collection;
 import java.util.Map;
 
 public class UserServiceImpl implements UserService {
     private final Database database;
+    private static UserService userService;
 
-    public UserServiceImpl(Database database) {
+    private UserServiceImpl(Database database) {
         this.database = database;
+    }
+
+    public static UserService getInstance(Database database) {
+        if (userService == null) userService = new UserServiceImpl(database);
+        return userService;
     }
 
     @Override
@@ -24,7 +31,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void login(String userId, String password) throws AuthenticationException{
+    public void login(String userId, String password) throws AuthenticationException {
         User user = findUser(userId);
         if (user == null)
             throw new AuthenticationException("존재하지 않는 아이디입니다");
@@ -41,5 +48,10 @@ public class UserServiceImpl implements UserService {
                 params.get("email")
         );
         join(user);
+    }
+
+    @Override
+    public Collection<User> findAllUsers() {
+        return database.findAll();
     }
 }
