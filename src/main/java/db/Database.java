@@ -1,6 +1,7 @@
 package db;
 
 import com.google.common.collect.Maps;
+import http.common.Session;
 import model.User;
 import http.common.Session;
 
@@ -29,5 +30,8 @@ public class Database {
 
     public static void addSession(Session session) {
         sessions.put(session.getId(), session);
+    }
+    public static Session getSession(String sid) {
+        return sessions.get(sid);
     }
 }

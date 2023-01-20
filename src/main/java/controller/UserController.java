@@ -3,11 +3,11 @@ package controller;
 import dto.LogInDTO;
 import dto.SignUpDTO;
 import http.common.Cookie;
+import http.common.Session;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import http.common.Session;
 import service.UserService;
 
 import java.util.Map;
@@ -30,7 +30,8 @@ public class UserController implements Controller {
     @Override
     public void service(HttpRequest request, HttpResponse response) {
         logger.debug("user controller called");
-        handlers.get(request.getUrl()).accept(request, response);
+        handlers.getOrDefault(request.getUrl(), Controller::handleInvalidRequest)
+                .accept(request, response);
     }
 
     private void logIn(HttpRequest request, HttpResponse response) {

@@ -1,5 +1,7 @@
 package filesystem;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public enum Extension {
@@ -17,5 +19,13 @@ public enum Extension {
 
     public List<String> getExtensions() {
         return List.copyOf(extensions);
+    }
+
+    public static Boolean isStaticResource(String url) {
+        return Arrays.stream(Extension.values())
+                .map(Extension::getExtensions)
+                .flatMap(Collection::stream)
+                .distinct()
+                .anyMatch(e -> url.endsWith(e));
     }
 }

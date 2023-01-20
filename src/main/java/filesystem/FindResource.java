@@ -12,10 +12,8 @@ public class FindResource {
     public FindResource(String resourcePath, byte[] resource) {
         this.resource = resource;
         this.contentType = ContentType.find(resourcePath);
-
-        if (resource.length == 0) {
-            contentType = ContentType.HTML;
-            status = Status.NOT_FOUND;
+        if (resourcePath.equals(PathResolver.NOT_FOUND_HTML)) {
+            this.status = Status.NOT_FOUND;
         }
     }
 

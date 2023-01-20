@@ -20,4 +20,12 @@ public class Session {
     public String getId() {
         return id;
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Boolean isValid() {
+        return true;
+    }
 }
