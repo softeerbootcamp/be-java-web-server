@@ -33,7 +33,7 @@ public final class FileIoUtils {
 
     }
 
-    public static byte[] userListToString(
+    public static byte[] writeUserListBody(
             Collection<User> userList,
             String filePath,
             String userName
