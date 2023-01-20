@@ -16,6 +16,8 @@ Java Web Application Server 2022
 │ ├── MatchController.java
 │ ├── NonController.java
 │ └── UserListController.java
+├── Exception
+│ └── NotExistFileException.java
 ├── Request
 │ ├── HttpMethod.java
 │ ├── HttpRequest.java
@@ -30,8 +32,8 @@ Java Web Application Server 2022
 │ ├── HttpResponseHeaders.java
 │ └── HttpResponseStartLine.java
 ├── db
-│" ├── Database.java
-│  └── SessionDb.java
+│ ├── Database.java
+│ └── SessionDb.java
 ├── model
 │ ├── Session.java
 │ └── User.java
@@ -42,6 +44,10 @@ Java Web Application Server 2022
 │ ├── HttpResponseUtil.java
 │ ├── LoginUtil.java
 │ └── UserDbUtil.java
+├── view
+│ ├── FileView.java
+│ ├── UserListView.java
+│ └── View.java
 └── webserver
     ├── RequestHandler.java
     └── WebServer.java
@@ -49,13 +55,15 @@ Java Web Application Server 2022
 ├── http
 │ └── test.http
 └── java
+    ├── controller
+    │ └── FileControllerTest.java
     └── util
         ├── FileIoUtilTest.java
         ├── HtmlBuildUtilTest.java
         ├── HttpRequestUtilTest.java
         ├── HttpResponseUtilTest.java
         ├── LoginUtilTest.java
-        └── UserDbUtilTest.java 
+        └── UserDbUtilTest.java
 ```
 
 이 프로젝트는 우아한 테크코스 박재성님의 허가를 받아 https://github.com/woowacourse/jwp-was 
