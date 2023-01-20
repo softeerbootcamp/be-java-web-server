@@ -27,9 +27,11 @@ public class ShowUserListService extends AlreadyLoggedInService{
         {
             String bodyStr = new String(bodyByte);
             bodyStr = replaceUserList(bodyStr);
-
-            )
+            bodyByte = bodyStr.getBytes();
         }
+
+        return res.
+                withBodyBytes(bodyByte);
     }
 
     private String replaceUserList(String bodyString)
@@ -54,8 +56,13 @@ public class ShowUserListService extends AlreadyLoggedInService{
             new StringBuffer()
                     .append("<tbody>\n")
                     .append("<tr>\n")
-                    .append("<th scope=\"row\">1</th>\n")
-                    .append("<td>"+ Database.findUserById(UserIdSession.getUserId(sid_userid)) +"</td>\\n")
+                    .append("<th scope=\"row\">테스트</th>\n>")
+                    .append("<td>아이디</td>\n")
+                    .append("<td>이름</td>\n")
+                    .append("<td>이메일</td>\n")
+                    .append("<td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td>\n")
+                    .append("</tr>\n")
+                    .append("</tbody>")
                     .toString()
         );
     }
