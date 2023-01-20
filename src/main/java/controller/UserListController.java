@@ -13,6 +13,7 @@ import service.UserService;
 import utils.FileIoUtils;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 public class UserListController extends AbstractController {
 
@@ -30,7 +31,7 @@ public class UserListController extends AbstractController {
     }
 
     @Override
-    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, URISyntaxException {
         try {
             String sessionId = httpRequest.getSessionId();
             sessionService.validateHasSession(sessionId);
@@ -52,6 +53,8 @@ public class UserListController extends AbstractController {
             httpResponse.sendRedirect(HttpStatusCode.FOUND, LOGIN_FORM_PATH);
 
         } catch (FileNotFoundException e) {
+            byte[] body = FileIoUtils.load404ErrorFile();
+            httpResponse.do404(body);
             throw new RuntimeException(e);
         }
     }

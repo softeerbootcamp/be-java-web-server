@@ -1,5 +1,6 @@
 package controller;
 
+import exception.FileNotFoundException;
 import exception.NonLogInException;
 import http.ContentType;
 import http.request.HttpRequest;
@@ -10,11 +11,8 @@ import org.slf4j.LoggerFactory;
 import service.SessionService;
 import utils.FileIoUtils;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
-
-import static utils.FileIoUtils.load404ErrorFile;
 
 public class ResourceController extends AbstractController {
 
@@ -43,9 +41,10 @@ public class ResourceController extends AbstractController {
             byte[] body = FileIoUtils.loadFile(filePath);
             httpResponse.forward(HttpStatusCode.OK, contentType, body);
 
-        } catch (FileNotFoundException ex) {
+        } catch (exception.FileNotFoundException ex) {
             ex.printStackTrace();
-            byte[] errorBody = load404ErrorFile();
+            byte[] errorBody = FileIoUtils.load404ErrorFile();
+            logger.error("FileNotFoundException");
             httpResponse.do404(errorBody);
         }
 
@@ -56,7 +55,7 @@ public class ResourceController extends AbstractController {
             HttpResponse httpResponse,
             String filePath,
             ContentType contentType
-    ) throws IOException, URISyntaxException {
+    ) throws IOException, URISyntaxException, FileNotFoundException {
         try {
             String sessionId = httpRequest.getSessionId();
             sessionService.validateHasSession(sessionId);
@@ -65,7 +64,7 @@ public class ResourceController extends AbstractController {
             byte[] body = FileIoUtils.replaceLoginBtnToUserName(sessionService.getUserName(sessionId), filePath);
             httpResponse.forward(HttpStatusCode.OK, contentType, body);
 
-        } catch (FileNotFoundException ex) {
+        } catch (exception.FileNotFoundException ex) {
             ex.printStackTrace();
             byte[] body = FileIoUtils.load404ErrorFile();
             httpResponse.do404(body);

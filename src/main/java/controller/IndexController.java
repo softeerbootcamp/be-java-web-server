@@ -1,5 +1,6 @@
 package controller;
 
+import exception.FileNotFoundException;
 import exception.NonLogInException;
 import http.ContentType;
 import http.request.HttpRequest;
@@ -11,6 +12,7 @@ import service.SessionService;
 import utils.FileIoUtils;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 public class IndexController extends AbstractController {
 
@@ -25,7 +27,7 @@ public class IndexController extends AbstractController {
     }
 
     @Override
-    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException, FileNotFoundException, URISyntaxException {
         ContentType contentType = ContentType.from(INDEX_PATH);
         String filePath = contentType.getDirectory() + INDEX_PATH;
 
@@ -41,6 +43,10 @@ public class IndexController extends AbstractController {
             byte[] body = FileIoUtils.loadFile(filePath);
             httpResponse.forward(HttpStatusCode.OK, contentType, body);
 
+        } catch (FileNotFoundException e) {
+            byte[] body = FileIoUtils.load404ErrorFile();
+            httpResponse.do404(body);
+            throw new RuntimeException(e);
         }
     }
 
