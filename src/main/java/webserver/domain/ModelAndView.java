@@ -5,15 +5,15 @@ import java.util.Map;
 
 public class ModelAndView {
 
-    public String viewName;
-    public Map<String, Object> viewModel = new HashMap<>();
+    public String viewPath;  //url of the resource
+    public Map<String, Object> viewModel = new HashMap<>();  //data to be programmatically bound to static files
 
-    public String getViewName() {
-        return viewName;
+    public String getViewPath() {
+        return viewPath;
     }
 
-    public void setViewName(String viewName) {
-        this.viewName = viewName;
+    public void setViewPath(String viewPath) {
+        this.viewPath = viewPath;
     }
 
     public Map<String, Object> getViewModel() {
