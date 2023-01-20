@@ -7,6 +7,73 @@ Java Web Application Server 2022
 이 프로젝트는 우아한 테크코스 박재성님의 허가를 받아 https://github.com/woowacourse/jwp-was 
 를 참고하여 작성되었습니다.
 
+### 프로젝트 구조
+    src/main/java
+    ├── customException
+    │   ├── AlreadyHasSameIdException.java
+    │   └── cannotLogIn
+    │       ├── CannotLogInException.java
+    │       ├── NotFoundUserException.java
+    │       └── PasswordMismatchException.java
+    ├── db
+    │   ├── Database.java
+    │   └── UserIdSession.java
+    ├── model
+    │   └── User.java
+    ├── utils
+    │   └── SessionIdGenerator.java
+    └── webserver
+    ├── Paths.java
+    ├── RequestHandler.java
+    ├── WebServer.java
+    ├── controller
+    │   ├── Controller.java
+    │   ├── ControllerMapper.java
+    │   ├── DynamicFileController.java
+    │   └── StaticFileController.java
+    ├── httpUtils
+    │   ├── Request.java
+    │   ├── RequestGetter.java
+    │   ├── Response.java
+    │   ├── ResponseSender.java
+    │   └── entity
+    │       ├── Body.java
+    │       ├── Header.java
+    │       ├── ReqLine.java
+    │       └── ResLine.java
+    └── service
+        ├── AlreadyLoggedInService.java
+        ├── InvalidAccesstoUserListService.java
+        ├── LogInService.java
+        ├── Service.java
+        ├── ShowUserListService.java
+        └── SignUpService.java
+- customException
+  - AreadyHasSameIdException : 이미 디비에 저장된 아이디로 회원가입 요청이 들어올 경우 던져지는 예외.
+  - CannotLogInException : 로그인할 수 없을 때 던져지는 예외. 아래 두 클래스는 이 클래스를 상속받는다.
+    - NotFoundUserException : 디비에 없는 아이디로 로그인 요청이 들어올 경우 던져지는 예외.
+    - PasswordMismatchException : 아이디는 맞지만, 비밀번호가 디비에 저장되어있는 것과 다를 때 던져지는 예외.
+- db
+  - 유저에 관한 정보가 저장되어 있는 디비와 세션
+- model
+  - User : 유저 관련
+- utils
+  - SessionIdGenerator : 세션아이디를 만들어주는 클래스
+- webserver : 웹 서버 관련 객체들이 들어있는 패키지
+  - controller : 컨트롤러 관련 클래스와 인터페이스가 들어있음
+  - httpUtils : http req, res와 그와 관련된 클래스들이 들어있음
+  - service : 실제로 서비스가 이루어지는 클래스. 모든 서비스들은 Service 클래스를 상속받는다.
+
+
+### 실행 과정 요약 
+- WebServer : 소켓 생성 및 클라이언트 대기
+- RequestHandler : http request(이하 요청)를 받고 알맞은 컨트롤러로 요청을 넘김
+- Controller : 요청 내용에 따라 서비스 객체에게 서비스를 실행하라고 명령함
+  - Service : 요청 내용에 맞는 서비스를 실행한 후 컨트롤러에게 응답(response)함
+  - 서비스 객체가 응답을 하면, 컨트롤러는 ResponseSender에게 응답을 클라이언트에게 전해달라고 요청
+- ResponseSender : 받은 응답을 클라이언트에게 전송함.
+
+
 ## 알게된 것 정리
 
 ### HTTP
