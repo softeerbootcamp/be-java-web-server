@@ -75,7 +75,6 @@ public class UserService {
         SessionDatabase.addHttpSession(httpSession);
 
         if (user != null && password.equals(user.getPassword())) {
-            logger.debug("ddododo");
             return HttpResponse.ok()
                     .bodyByPath("./templates/index.html")
                     .setCookie("JSESSIONID",  httpRequest.getSessionId(),"/")

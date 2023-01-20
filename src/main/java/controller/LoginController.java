@@ -17,6 +17,7 @@ import java.util.Map;
 public class LoginController extends AbstractController{
 
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+    private static final String lineSeparator = System.lineSeparator();
 
     @Override
     public HttpResponse get(HttpRequest httpRequest) {
@@ -26,6 +27,13 @@ public class LoginController extends AbstractController{
     @Override
     protected HttpResponse post(HttpRequest httpRequest) throws IOException, URISyntaxException {
         UserService userService = UserService.from(httpRequest);
-        return userService.postLoginService();
+        HttpResponse httpResponse = userService.postLoginService();
+
+        logger.debug("HttpResponse Header : {}{}{}{}{}{}", lineSeparator,
+                httpResponse.getStatusLine().getValue(),lineSeparator,
+                httpResponse.getHeader(),lineSeparator,
+                httpResponse.getCookie());
+        ;
+        return httpResponse;
     }
 }

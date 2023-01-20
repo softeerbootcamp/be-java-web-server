@@ -13,58 +13,37 @@
 
 ## 동작 과정:
 
-<br>
+# [index.html]
 
-1. RequsetHandler / HttpRequest.of 를 통해 HttpRequest 메시지 읽기
-2. ResponseHandler / controlRequestAndResponse 를 통해 쿼리 데이터인지 아닌지 구분
-   - Static Content인 경우 :
-     - headerFields 에 Content-Type, Content-Length 정보를 넣고 200 메시지와 함께 Response 메시지 리턴
-   - Query Data인 경우 :
-     - 리플렉션을 통해 서블릿을 만들어 주고, 해당 서블릿을 통해 POST/GET 메서드에 대한 응답 처리 수행
-     - 리다이렉션 디렉터리 정보 넣고, 302 Response 메시지 리턴 
-3. Response respond 메서드를 통해 Start Line, Header, Body 정보를 전달 
+- http://localhost:8080/index.html 로 접속했을 때 resources 디렉토리의 index.html 파일을 읽어 클라이언트에 응답한다.
+  - Http Request Header를 읽는다.
+  - Header에서 요청 URL을 추출한다.
+  - 요청 URL path에 맞는 파일로 응답한다.
 
+# [/user/form.html]
+- “회원가입” 메뉴를 클릭하면 http://localhost:8080/user/form.html 으로 이동하면서 회원가입할 수 있다. 회원가입한다. 회원가입을 하면 다음과 같은 형태로 사용자가 입력한 값이 서버에 전달된다.
+- HTML과 URL을 비교해 보고 사용자가 입력한 값을 파싱해 model.User 클래스에 저장한다.
+- “회원가입”을 완료하면 /index.html 페이지로 이동
 
- ## 클래스 역할
+# [HttpRequset.class]
+- 클라이언트 요청 데이터를 처리하는 로직을 별도의 클래스로 분리
+    - Header/Body의 처리를 담당하는 역할을 분리
+    - InputStream을 생성자로 받아 HTTP 메소드, URL, 헤더, 본문을 분리하는 작업 수행
 
-<br/>
+# [HttpResponse.class]
+- 클라이언트 응답 데이터를 처리하는 로직을 별도의 클래스로 분리
+  -  RequestHandler 클래스를 보면 응답 데이터 처리를 위한 많은 중복을 제거해준다.
 
-- HttpRequest : 클라이언트가 전송한 Http 요청 메시지에 담긴 텍스트 정보들을 하나의 객체로 관리할 수 있도록 설계된 클래스
-  - isQueryContent : query data 가 들어오는 페이지 <br> <br>
-     ex.  html/css/js/favicon 과 같은 static도 템플릿 파일도 아닌 경우
+# [Controller interface]
+- controller 인터페이스를 구현하는 AbstractController 추상클래스를 추가해 중복을 제거
+- service() 메소드에서 GET과 POST HTTP 메소드에 따라 doGet(), doPost() 메소드를 호출
 
-<br>
-
-- RequestStartLine
-  - start line 을 읽어들인다. 그 후 Host, User-Agent...Content-Length,Cookie 까지 읽는다.
-  - " " 기준으로 분리해 method, uri, httpVersion check
-
-<br>
-
-- Uri
-  - TemplateResource / staticResource = static 이나 템플릿 자원인지 확인
-  - getParameter : 입력된 쿼리 데이터를 파싱하여 파라미터로 반환
-  - 그래서 path엔 입력된 경로, parameter 엔 파싱된 데이터가 들어간다.
-
-<br>
-
-- RequestHandler
-  - httpRequest.isForStaticContent() = 쿼리 데이터가 아닌경우
-  - headerFields = 
-     - stylesheet 파일을 지원하도록 path의 확장자에 따라 headerFields에 Content-type과 MIME타입을 넣는다.
-     쿼리 데이터가 아니면 200 코드와 헤더 필드로 헤더를 만듬
-     - 바디와 함께 response 응답
-     - 쿼리 데이터면 302 코드와 index.html 로 리다이렉트
-     - 단, 이때 리플렉션을 통해 서블릿 동작 과정을 구현해 컨트롤러 역할을 하게 하였습니다.
-       - "user/create" 와 UserCreate class 를 controller 에 넣어줍니다.
-       - 쿼리 데이터일때, 컨트롤러에 키값을 servletClass 에 할당해줍니다.
-       - 그러면 servletClass 의 이름을 찍어보면 UserCreate class 를 가리키고 있음을 알 수 있습니다.
-       - 이 클래스를 servley에 새로운 인자로 넣어주고, service 로 request path 실행해주면 서블릿은 서빌릿 클래스 인스턴스가 됩니다.
-       - 이제 그 서블릿을 진행하면 GET/POST 인지 판단 후 User 를 데이터베이스에 넣게 됩니다.
-    
-<br>
-
-- respondToHttpRequest = 응답 메세지 전송
+# [login/session]
+- user/login.html에서 로그인이 성공하면 index.html로 이동하고, 로그인이 실패하면 /user/login_failed.html로 이동
+- 로그인이 성공하면 cookie를 활용해 로그인 상태를 유지
+  - 성공시 : header의 Cookie header 값이 logined=true 
+  - 실패시 : Cookie header 값이 logined=false
+  - Set-Cookie 설정시 모든 요청에 대해 Cookie 처리가 가능하도록 Path 설정 값을 (Path=/)로 설정
 
 <br/>
 
@@ -240,7 +219,74 @@ ex. 사용자 등록
 
 <br/>
 
+12. stream
 
+-  stream
+    - Arrays.stream : 배열을 스트림으로 변환
+    - map : 스트림 내 요소를 특정 값으로 변환
+    - collect : list or set 으로 원하는 자료형으로 변환 ex. Collect(Collectors.toSet/toList)
+    - filter : 조건에 맞는 모든 요소를 가져옴
+    - flterFirst : 조건에 맞는 첫번째 요소 가져옴
+    - Collectors.toMap
+
+13. - 쿠키
+    - 개념
+        - 방문자 식별을 위해 사이트가 사용하고 있는 서버를 이용해 사용자 컴퓨터에 설치되는 정보 파일
+        - 브라우저에 의해 저장됨
+        - 같은 서버에 의해 만들어진 요청들이 Cookie HTTP 헤더 안에 포함되어 전송됨
+        - 그 후 쿠키는 같은 서버에 의해 만들어진 Request들의 쿠키 헤더 안에 포함되어 전송됨
+        - 만료일, 지속시간이 명시될 수 있고, 만료된 쿠키는 보내지지 않음
+        - 특정 도메인이나 경로 제한을 설정할 수 있음
+        - Key-Value 쌍으로 클라이언트에 저장됨
+        - 서버에서 생성하며 Response Header에 Set-Cookie를 넣어 클라이언트에 전송
+
+    - Set-Cookie: HTTP Response Header는 서버로부터 사용자 에이전트로 전송됨
+      ex. Set-Cookie: <cookie-name>=<cookie-value>
+      ex. Set-Cookie: yummy_cookie=choco
+
+    - 전송과정 : 브라우저는 쿠키헤더를 사용해 서버로 이전에 저장했던 모든 쿠키들을 회신
+      ex.
+      GET /sample_page.html HTTP/1.1
+      Host: www.example.org
+      Cookie: yummy_cookie=choco; tasty_cookie=strawberry
+
+    - 쿠키의 라이프타임
+        - 브라우저는 현재 세션이 끝나는 시점을 정의
+        - 세션 쿠키 : 세션이 끝날 때 삭제됨
+        - 영속적인 쿠키 : Expired 속성에 명시된날짜에 삭제 / Max-Age속성에 명시된기간에 삭제
+          ex. Set-Cookie: id=a3fWa; Expires=Wed, 21 Oct 2015 07:28:00 GMT;
+
+    - Secure : HTTPS 프로토콜 상에서 암호화된 요청일 경우에만 전송됨
+    * 단, 본질적으로는 안전하지 않으므로 민감한 정보는 쿠키에 저장하면 안됨
+    - HttpOnly : 자바스크립트의 Document.cookie 에 접근할 수 없음
+      - ex. Set-Cookie: id=a3fWa; Expires=Wed, 21 Oct 2015 07:28:00 GMT;           Secure; HttpOnly
+
+    - 쿠키의 스코프
+    1) Domain : 쿠키가 전송되게 될 호스트 명시 (명시되지 않으면 문서 위치 호스트 일부가 기본값)
+    2) Path : Cookie 헤더를 전송하기 위해 요청되는 URL 내에 반드시 존재해야하는 URL 경로
+        - ex. /docs => /docs, /docs/Web 이 모두 포함됨
+
+    - 쿠키의 각종 옵션 정리
+        - key=value : 쿠키명,쿠키값 쌍으로 이뤄진 문자열 쿠키
+        - Expires : 쿠키 만료 기간
+        - domains : 쿠키가 전송될 도메인 특정
+        - path=URL : 쿠키가 전송될 URL 특정
+        - Secure : HTTPS일 경우 쿠키가 전송됨
+        - HttpOnly : JS에서 쿠키에 접근할 수 없도록 설정
+
+    - JSESSIONID
+        - 톰캣 컨테이너에서 세션을 유지하기 위해 발급하는 키
+        - 상태 저장하기 위해 톰캣은 JSESSIONID 쿠키를 클라이언트에게 발급
+        - 이 값을 통해 세션을 유지할 수 있음
+
+    - JSESSIONID 동작 방식
+        - 브라우저 최초 접근시Response 헤더에 JSESSIONID 값이 발급됨
+        - 브라우저 재요청시 Response를 통해 받은 JSESSIONID 를
+          Request 헤더 쿠키에 값을 넣어 서버에 요청됨
+            * 쿠키를 통해 JSESSIONID값을 전달받게 되면 새로운 JSESSIONID 값을 Response 헤더에 발급하지 않음
+        - 클라이언트로부터 전달받은 JSESSIONID값을 기준으로 서버에선 세션 메모리 영역에 상태 유지 값들을 저장함
+        - 유지 범위 : 서브도메인이 다르면 쿠키가 유지되지 않으므로 동일한 도메인
+        
 </details>
 
 <br/>
