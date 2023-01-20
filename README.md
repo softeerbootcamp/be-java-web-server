@@ -24,6 +24,19 @@ I[ResponseHandler];
 7. 모든 컨트롤러 혹은 뷰 리졸버는 반드시 알맞은 응답에 필요한 데이터를 가지고 있는 Response 객체로 응답한다.
 8. Response객체는 ResponseHandler의 인자로 들어가 클라이언트로 응답한다.
 
+### 적절한 API 및 리소스 호출 원리
+FrontServlet이 적합한 도메인의 어댑터를 찾는 과정, 도메인어댑터가 적합한 컨트롤러를 호출하는 방법에 리플렉션 기술을 적용하진 않았으며, Map을 통해 각 API단위로 나뉘어져 있는 컨트롤러에 도달하게 된다. 아래는 UserHandlerAdapter의 생성자 코드이다.
+```java
+public UserHandlerAdapter() {
+        controllerMap.put("/user/create", new UserCreateController());
+        controllerMap.put("/user/login", new UserLoginController());
+        controllerMap.put("/user/list", new UserListController());
+        controllerMap.put("/user/logout", new UserLogoutController());
+    }
+
+```
+
+
 ### 예외 처리
 - WasException : WAS 프로그램에서 구현된 모든 custom exception이 확장하고 있는 부모 클래스
 - DuplicateUserIdException : 회원가입 시 중복된 유저 아이디에(PK) 대해 예외 발생
@@ -160,7 +173,7 @@ public Path findFilePath(String url) throws IOException {
 3. 세션 만료 혹은 수동 로그아웃 버튼 입력을 통한 로그아웃
 4. 로그인 유무 판단에 따른 동적 HTML 응답
  
- 이를 위해 클라이언트가 가지고온 세션 아이디가 유효한 세션인지를 판단하는 AuthInterceptor를 구현하였다. AuthInterceptor는 util패키지에 위치하여 모든 클래스에서 전역적으로 호출될 수 있으며, Request객체를 파라미터로 주면, validation여부를 반환해준다. 여기서 Validation에는 기본적으로 쿠키의 세션아이디와 일치하는 세션을 스토리지에서 찾고 (존재하지 않으면 SessionNotFound) 찾은 세션의 expire date가 유효한지 판단하여 (유효하지 않으면 SessionExpired) 다 통과하면 valid하다고 판단한다.
+ 이를 위해 클라이언트가 가지고온 세션 아이디가 유효한 세션인지를 판단하는 **AuthInterceptor**를 구현하였다. AuthInterceptor는 util 패키지에 위치하여 모든 클래스에서 전역적으로 호출될 수 있으며, Request객체를 파라미터로 주면, validation 여부를 반환해준다. 여기서 Validation에는 기본적으로 쿠키의 세션아이디와 일치하는 세션을 스토리지에서 찾고 (존재하지 않으면 SessionNotFound) 찾은 세션의 expire date가 유효한지 판단하여 (유효하지 않으면 SessionExpired) 다 통과하면 valid하다고 판단한다. 
 
 ### Step 6 - 동적인 HTML
 
