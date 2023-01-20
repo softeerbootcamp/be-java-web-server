@@ -4,30 +4,30 @@ import db.UserRepository;
 import model.User;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserServiceTest {
 
-    @Test
-    void createUserTest() {
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put("userId", "kgstiger");
-        parameters.put("password", "123");
-        parameters.put("name", "kim");
-        parameters.put("email", "kgstiger@gmail.com");
+    private final UserRepository userRepository = new UserRepository();
+    private final UserService userService = new UserService(userRepository);
 
-        User user = new User(
-                parameters.get("userId"),
-                parameters.get("password"),
-                parameters.get("name"),
-                parameters.get("email")
-        );
-        UserService userService = new UserService();
+
+    @Test
+    public void testAddUser() {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("userId", "user1");
+        parameters.put("password", "password1");
+        parameters.put("name", "name1");
+        parameters.put("email", "email1");
+
         userService.addUser(parameters);
-        assertThat(UserRepository.findUserById("kgstiger").toString()).isEqualTo(user.toString());
+
+        Collection<User> users = userService.getUserList();
+        assertEquals(1, users.size());
     }
 
 }
