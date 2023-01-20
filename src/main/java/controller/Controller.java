@@ -4,20 +4,20 @@ import http.common.HttpMethod;
 import http.exception.MethodNotAllowException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import view.Model;
 
 public interface Controller {
-    default void execute(HttpRequest request, HttpResponse response) {
+    default String execute(HttpRequest request, HttpResponse response, Model model) {
         if (request.getMethod() == HttpMethod.GET) {
-            doGet(request, response);
-            return;
+            return doGet(request, response, model);
         }
 
-        doPost(request, response);
+        return doPost(request, response, model);
     }
-    default void doGet(HttpRequest request, HttpResponse response) {
+    default String doGet(HttpRequest request, HttpResponse response, Model model) {
         throw new MethodNotAllowException();
     }
-    default void doPost(HttpRequest request, HttpResponse response) {
+    default String doPost(HttpRequest request, HttpResponse response, Model model) {
         throw new MethodNotAllowException();
     }
 }

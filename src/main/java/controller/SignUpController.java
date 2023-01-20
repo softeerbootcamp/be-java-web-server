@@ -4,6 +4,7 @@ import db.Database;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
+import view.Model;
 
 import java.util.Map;
 
@@ -12,7 +13,7 @@ public class SignUpController implements Controller{
     public static final String PATH = "/user/create";
 
     @Override
-    public void doPost(HttpRequest request, HttpResponse response) {
+    public String doPost(HttpRequest request, HttpResponse response, Model model) {
         Map<String, String> data = request.getData();
 
         User user = new User(
@@ -24,5 +25,6 @@ public class SignUpController implements Controller{
 
         Database.addUser(user);
         response.redirect("/user/login.html");
+        return "";
     }
 }

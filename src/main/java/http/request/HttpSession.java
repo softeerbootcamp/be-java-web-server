@@ -10,6 +10,7 @@ public class HttpSession {
 
     public HttpSession(User user) {
         this.user = user;
+        sessionId();
     }
 
     // TODO: 원본이 아닌 새로운 User 만들어서 응답 생각해보기
