@@ -24,4 +24,8 @@ public class Database {
     public static Collection<User> findAll() {
         return users.values();
     }
+
+    public static boolean checkDuplicate(User user) {
+        return users.get(user.getUserId()) == null;
+    }
 }
