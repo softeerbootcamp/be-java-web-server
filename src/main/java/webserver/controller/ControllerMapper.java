@@ -1,8 +1,7 @@
 package webserver.controller;
 
-import org.checkerframework.checker.units.qual.C;
 import webserver.httpUtils.Request;
-import webserver.httpUtils.RequestParser;
+import webserver.httpUtils.entity.ReqLine;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,14 +9,14 @@ public class ControllerMapper {
     private static ControllerMapper instance;
     private Map<String, Controller> controllerMap;
 
-    public static final String SIGNUP = "SignUp";
+    public static final String DYNAMIC = "Dynamic";
     public static final String STATIC = "Static";
 
     private ControllerMapper()
     {
         controllerMap = new HashMap<>();
-        controllerMap.put(SIGNUP, new SignUpController());
         controllerMap.put(STATIC, new StaticFileController());
+        controllerMap.put(DYNAMIC, new DynamicFileController());
     }
 
     public static ControllerMapper getInstance()
@@ -31,13 +30,8 @@ public class ControllerMapper {
 
     public Controller getController(Request req)
     {
-        Map<String, String> reqLine = req.getReqLine();
-        String query = reqLine.get(Request.QUERY);
+        // TODO dynamic과 static 구분해내기
 
-        if(query.contains("create"))
-        {
-            return new SignUpController();
-        }
         return new StaticFileController();
     }
 }

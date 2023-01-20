@@ -4,11 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.controller.Controller;
 import webserver.controller.ControllerMapper;
-import webserver.controller.SignUpController;
 import webserver.httpUtils.Request;
-import webserver.httpUtils.RequestParser;
+import webserver.httpUtils.RequestGetter;
 import webserver.httpUtils.Response;
-import webserver.httpUtils.ResponseHandler;
 
 import java.io.*;
 import java.net.Socket;
@@ -19,7 +17,7 @@ public class RequestHandler implements Runnable {
 
     private Request req;
     private Response res;
-    private static RequestParser reqParser = new RequestParser();
+    private static RequestGetter reqGetter = new RequestGetter();
     private ControllerMapper controllerMapper = ControllerMapper.getInstance();
 
     private Socket connection;
@@ -34,11 +32,10 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            req = reqParser.parseRequestFromInputStream(in);
-            res = new Response();
+            req = reqGetter.getFromInputStream(in);
 
             Controller controller = controllerMapper.getController(req);
-            controller.exec(req, res, out);
+            controller.exec(req, out);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
