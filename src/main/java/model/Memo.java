@@ -1,15 +1,41 @@
-    package model;
+package model;
 
-    import java.util.Date;
+import java.time.LocalDateTime;
 
-    public class Memo {
-        private String comment;
-        private String userId;
-        private Date date;
+public class Memo {
+    private int memoId;
+    private String content;
+    private String author;
+    private String dateTime;
 
-        public Memo(String comment, String userId, Date date) {
-            this.comment = comment;
-            this.userId = userId;
-            this.date = date;
-        }
+    private Memo(int memoId, String content, String author, String dateTime) {
+        this.memoId = memoId;
+        this.content = content;
+        this.author = author;
+        this.dateTime = dateTime;
     }
+
+    public Memo create(int memoId, String content, String author) {
+        return new Memo(memoId, content, author, LocalDateTime.now().toString());
+    }
+
+    public Memo createWithDT(int memoId, String content, String author, String dateTime) {
+        return new Memo(memoId, content, author, dateTime);
+    }
+
+    public int getMemoId() {
+        return memoId;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getDateTime() {
+        return dateTime;
+    }
+}
