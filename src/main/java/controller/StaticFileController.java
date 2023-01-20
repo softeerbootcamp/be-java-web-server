@@ -5,6 +5,8 @@ import http.request.HttpRequest;
 import http.response.HttpResponse;
 import utils.*;
 
+import java.io.IOException;
+
 
 public class StaticFileController implements Controller {
     public final static String PATH = "/";
@@ -24,9 +26,8 @@ public class StaticFileController implements Controller {
         try {
             httpResponse.setBody(FileIoUtils.loadFile(path));
             httpResponse.setContentType(ContentType.getContentType(FileIoUtils.getExtension(path)));
-        } catch (IllegalArgumentException e) {
+        } catch (IOException e) {
             httpResponse.setStatusCode(StatusCode.NOTFOUND);
-            httpResponse.setBody(FileIoUtils.loadFile(PathManager.ERROR_PATH));
         }
     }
 }
