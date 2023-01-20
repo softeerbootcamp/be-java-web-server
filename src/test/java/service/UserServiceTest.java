@@ -71,4 +71,17 @@ class UserServiceTest {
         assertEquals("email1", user.getEmail());
     }
 
+    @Test
+    public void testGetUserName() {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("userId", "user1");
+        parameters.put("password", "password1");
+        parameters.put("name", "name1");
+        parameters.put("email", "email1");
+
+        userService.addUser(parameters);
+        assertEquals("name1", userService.getUserName(parameters.get("userId")));
+
+    }
+
 }
