@@ -1,5 +1,6 @@
 package controller;
 
+import exception.FileNotFoundException;
 import exception.NonLogInException;
 import http.ContentType;
 import http.request.HttpRequest;
@@ -9,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.SessionService;
 import service.UserService;
+import utils.FileIoUtils;
 
 import java.io.IOException;
 
@@ -18,7 +20,6 @@ public class UserListController extends AbstractController {
 
     public static final String LOGIN_FORM_PATH = "/user/login.html";
     public static final String USER_LIST_PATH = "/user/list.html";
-
 
     private final SessionService sessionService;
     private final UserService userService;
@@ -38,12 +39,20 @@ public class UserListController extends AbstractController {
             ContentType contentType = ContentType.from(USER_LIST_PATH);
             String filePath = contentType.getDirectory() + USER_LIST_PATH;
 
-            byte[] body = userService.makeUserListBody(filePath, sessionService.getUserName(sessionId));
+            byte[] body = FileIoUtils.userListToString(
+                    userService.getUserList(),
+                    filePath,
+                    sessionService.getUserName(sessionId)
+            );
+
             httpResponse.forward(HttpStatusCode.OK, contentType, body);
 
         } catch (NonLogInException e) {
             e.printStackTrace();
             httpResponse.sendRedirect(HttpStatusCode.FOUND, LOGIN_FORM_PATH);
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 

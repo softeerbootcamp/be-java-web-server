@@ -18,7 +18,7 @@ public final class FileIoUtils {
     private FileIoUtils() {
     }
 
-    public static byte[] loadFile(String filePath) throws IOException {
+    public static byte[] loadFile(String filePath) throws IOException, FileNotFoundException {
         try {
             Path path = Paths.get(Objects.requireNonNull(FileIoUtils.class.getClassLoader().getResource(filePath)).toURI());
             return Files.readAllBytes(path);
@@ -33,7 +33,11 @@ public final class FileIoUtils {
 
     }
 
-    public static byte[] userListToString(Collection<User> userList, String filePath, String userName) throws IOException {
+    public static byte[] userListToString(
+            Collection<User> userList,
+            String filePath,
+            String userName
+    ) throws IOException, FileNotFoundException {
         StringBuilder sb = new StringBuilder();
         String fileData = new String(loadFile(filePath));
         String target_index = "<li><a href=\"user/login.html\" role=\"button\">로그인</a></li>";
@@ -60,7 +64,7 @@ public final class FileIoUtils {
                 .getBytes();
     }
 
-    public static byte[] replaceLoginBtnToUserName(String userName, String filePath) throws IOException {
+    public static byte[] replaceLoginBtnToUserName(String userName, String filePath) throws IOException, FileNotFoundException {
         String fileData = new String(loadFile(filePath));
         String target_index = "<li><a href=\"user/login.html\" role=\"button\">로그인</a></li>";
         String target_others = "<li><a href=\"../user/login.html\" role=\"button\">로그인</a></li>";

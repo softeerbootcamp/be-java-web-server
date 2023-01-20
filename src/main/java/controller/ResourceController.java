@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import static utils.FileIoUtils.load404ErrorFile;
-import static utils.FileIoUtils.loadFile;
 
 public class ResourceController extends AbstractController {
 
@@ -41,7 +40,7 @@ public class ResourceController extends AbstractController {
             }
 
             logger.debug("filePath: {}", filePath);
-            byte[] body = loadFile(filePath);
+            byte[] body = FileIoUtils.loadFile(filePath);
             httpResponse.forward(HttpStatusCode.OK, contentType, body);
 
         } catch (FileNotFoundException ex) {
@@ -66,7 +65,7 @@ public class ResourceController extends AbstractController {
             byte[] body = FileIoUtils.replaceLoginBtnToUserName(sessionService.getUserName(sessionId), filePath);
             httpResponse.forward(HttpStatusCode.OK, contentType, body);
 
-        } catch (exception.FileNotFoundException ex) {
+        } catch (FileNotFoundException ex) {
             ex.printStackTrace();
             byte[] body = FileIoUtils.load404ErrorFile();
             httpResponse.do404(body);

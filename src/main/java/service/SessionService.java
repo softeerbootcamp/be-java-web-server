@@ -22,7 +22,7 @@ public class SessionService {
         return session;
     }
 
-    public void validateHasSession(String id) {
+    public void validateHasSession(String id) throws NonLogInException{
         Session session = sessionRepository.findById(id);
         if (session == null)
             throw new NonLogInException("Session not found");
