@@ -25,7 +25,7 @@ public class LoginControllerTest {
     private final UserService userService = new UserService(userRepository);
     private final SessionService sessionService = new SessionService(sessionRepository);
 
-    UserLogInController controller = new UserLogInController(sessionService, userService);
+    Controller controller = new UserLogInController(sessionService, userService);
 
     @Test
     @DisplayName("로그인 성공 테스트")
@@ -78,7 +78,7 @@ public class LoginControllerTest {
         HttpRequest httpRequest = HttpRequest.from(in);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         HttpResponse httpResponse = HttpResponse.createDefaultHttpResponse(byteArrayOutputStream);
-        System.out.println("userId=aaa&password=password".getBytes().length);
+
         User user = new User("javajigi", "password", "박재성", "javajigi@slipp.net");
         userRepository.addUser(user);
 
@@ -110,7 +110,7 @@ public class LoginControllerTest {
         HttpRequest httpRequest = HttpRequest.from(in);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         HttpResponse httpResponse = HttpResponse.createDefaultHttpResponse(byteArrayOutputStream);
-        System.out.println("userId=aaa&password=password".getBytes().length);
+
         User user = new User("javajigi", "password", "박재성", "javajigi@slipp.net");
         userRepository.addUser(user);
 

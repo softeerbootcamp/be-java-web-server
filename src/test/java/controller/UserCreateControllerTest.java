@@ -33,6 +33,7 @@ class UserCreateControllerTest {
                         "Accept: */*" + System.lineSeparator() +
                         System.lineSeparator() +
                         "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
+
         InputStream in = new ByteArrayInputStream(request.getBytes());
         HttpRequest httpRequest = HttpRequest.from(in);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
