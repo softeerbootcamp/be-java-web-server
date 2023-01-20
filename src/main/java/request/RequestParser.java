@@ -1,4 +1,4 @@
-package webserver;
+package request;
 
 import java.io.*;
 import java.util.Arrays;
@@ -14,7 +14,6 @@ public class RequestParser {
     public static HttpRequest parseInputStreamToHttpRequest(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in,"UTF-8"));
         RequestStartLine startLine = RequestStartLine.from(br.readLine());
-        System.out.println(startLine.getUrl());
         Map<String,String> headers = parseHeader(br);
         String cookieHeader = headers.get("Cookie");
         Map<String,String> cookies = parseCookie(cookieHeader);

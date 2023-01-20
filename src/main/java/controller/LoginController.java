@@ -2,14 +2,12 @@ package controller;
 
 import db.Database;
 import model.User;
+import request.HttpRequest;
+import response.HttpResponse;
 import service.LoginService;
-import webserver.HttpRequest;
-import webserver.HttpResponse;
-import webserver.HttpSession;
-import webserver.HttpSessionManager;
-
-import java.util.Optional;
-import java.util.UUID;
+import session.HttpSession;
+import session.HttpSessionManager;
+import view.Model;
 
 public class LoginController implements Controller{
 
@@ -19,10 +17,12 @@ public class LoginController implements Controller{
     private LoginService service= new LoginService();
 
     @Override
-    public void doPost(HttpRequest request, HttpResponse response) {
+    public String doPost(HttpRequest request, HttpResponse response, Model model) {
         String userId = request.parseBody().get("userId");
         String password = request.parseBody().get("password");
         doLogin(userId,password,response);
+
+        return "";
     }
 
     private void doLogin(String userId, String password,HttpResponse response){
@@ -39,6 +39,7 @@ public class LoginController implements Controller{
             }
         }catch(NullPointerException e){
             System.out.println("no user exist");
+            NotFoundExceptionHandler.showErrorPage(response);
         }
     }
 

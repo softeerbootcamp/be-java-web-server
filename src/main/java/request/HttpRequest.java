@@ -1,5 +1,8 @@
-package webserver;
+package request;
 
+import enums.HttpMethod;
+import session.HttpSession;
+import session.HttpSessionManager;
 import utils.HttpRequestUtils;
 
 import java.util.Collections;
@@ -11,7 +14,7 @@ public class HttpRequest {
     public static final String SID_ATTR_KEY = "sid";
 
     private final HttpMethod method;
-    private final String url;
+    private String url;
     //private final String host;
     private final Map<String, String> queries;
 
@@ -70,6 +73,9 @@ public class HttpRequest {
     }
 
 
+    public void setUrl(String url){
+        this.url = url;
+    }
     public String getUrl() {
         return url;
     }

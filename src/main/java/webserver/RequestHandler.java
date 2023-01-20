@@ -2,18 +2,15 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.file.Files;
-import java.util.Map;
+import java.net.URISyntaxException;
 
 import controller.*;
-import controller.Controller;
-import db.Database;
-import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.HttpRequestUtils;
-
-import javax.xml.crypto.dom.DOMCryptoContext;
+import request.HttpRequest;
+import request.RequestParser;
+import response.HttpResponse;
+import response.ResponseWriter;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -34,11 +31,13 @@ public class RequestHandler implements Runnable {
             //브라우저에서 서버로 들어오는 모든 요청은 Inputstream 안에 담겨져 있음, outputstream은 서버에서 브라우저로 보내는 응답
             HttpRequest request = RequestParser.parseInputStreamToHttpRequest(in);
             HttpResponse response = new HttpResponse();
-            frontController.service(request,response);
+            frontController.handle(request,response);
             ResponseWriter rw = new ResponseWriter(out);
             rw.write(request,response);
         } catch (IOException e) {
             logger.error(e.getMessage());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
         }
     }
 }

@@ -1,5 +1,6 @@
-package webserver;
+package request;
 
+import enums.HttpMethod;
 import utils.HttpRequestUtils;
 
 import java.util.HashMap;

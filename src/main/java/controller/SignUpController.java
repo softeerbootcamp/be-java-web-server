@@ -1,10 +1,9 @@
 package controller;
 
-import db.Database;
-import model.User;
 import service.SignUpService;
-import webserver.HttpRequest;
-import webserver.HttpResponse;
+import view.Model;
+import request.HttpRequest;
+import response.HttpResponse;
 
 import java.io.UnsupportedEncodingException;
 
@@ -21,24 +20,27 @@ public class SignUpController implements Controller{
     }
 
     @Override
-    public void doGet(HttpRequest request, HttpResponse response) {
+    public String doGet(HttpRequest request, HttpResponse response, Model model) {
         try{
             signUpService.signUp(request);
         }catch(UnsupportedEncodingException e){
             System.out.println(e.getMessage());
         }
         response.redirect(REDIRECT_URL);
+
+        return "";
     }
 
     @Override
-    public void doPost(HttpRequest request, HttpResponse response) {
+    public String doPost(HttpRequest request, HttpResponse response,Model model) {
         try{
             signUpService.singUpByPost(request);
         }catch(UnsupportedEncodingException e){
             System.out.println(e.getMessage());
         }
-        System.out.println(Database.findAll());
         response.redirect(REDIRECT_URL);
+
+        return "";
     }
 
     public String getPathUrl() {
