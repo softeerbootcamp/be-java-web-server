@@ -8,17 +8,23 @@ public class Session {
 
     private String uuid;
 
+    private final User user;
 
-    public Session(String uuid) {
-        this.uuid = uuid;
+    public Session( User user) {
+        this.uuid = makeSessionId();
+        this.user = user;
     }
 
     public String getUuid() {
         return uuid;
     }
 
-    public static String makeSessionId() {
+    private String makeSessionId() {
         return UUID.randomUUID().toString();
     }
 
+
+    public User getUser() {
+        return user;
+    }
 }

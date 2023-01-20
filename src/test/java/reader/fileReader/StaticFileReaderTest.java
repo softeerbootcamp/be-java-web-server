@@ -22,7 +22,7 @@ class StaticFileReaderTest {
     void readFile() throws IOException {
         String url = VALID_CSS_URL;
         FileReader fileReader = new StaticFileReader();
-        assertThat(fileReader.readFile(new Url(url, RequestDataType.STATIC_FILE))).isEqualTo(
+        assertThat(fileReader.readFile(new Url(url, RequestDataType.FILE))).isEqualTo(
                 Files.readAllBytes(new File(RELATIVE_PATH + url).toPath())
         );
     }
@@ -32,7 +32,7 @@ class StaticFileReaderTest {
     void readFileThrowException()  {
         String url = NOT_VALID_CSS_URL;
         FileReader fileReader = new StaticFileReader();
-        assertThatThrownBy(() -> fileReader.readFile(new Url(url,RequestDataType.STATIC_FILE)))
+        assertThatThrownBy(() -> fileReader.readFile(new Url(url,RequestDataType.FILE)))
                 .isInstanceOf(IOException.class);
     }
 }

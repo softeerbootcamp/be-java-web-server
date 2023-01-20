@@ -4,8 +4,7 @@ import java.util.Arrays;
 
 public enum RequestDataType {
     QUERY_STRING(".*\\?(.*)"),
-    TEMPLATES_FILE(".*\\.(html|ico)$"),
-    STATIC_FILE(".*\\.(css|js|tff|woff)$"),
+    FILE(".*\\.(html|ico|css|js|tff|woff)$"),
     IN_BODY(""),
 
     ;

@@ -20,7 +20,7 @@ class UserServiceAndDBTest {
     final String[] userKey = {"userId", "password", "name", "email"};
 
     Database<User> userDataBase = new UserDatabase();
-    Service userService = new UserService();
+    UserService userService = new UserService();
 
 
 
@@ -42,7 +42,7 @@ class UserServiceAndDBTest {
         );
     }
 
-    private void saveUser(String[] userValue) {
+    public void saveUser(String[] userValue) {
         HashMap<String, String> userMap = new HashMap<>();
         for (int i = 0; i < userKey.length; i++) {
             userMap.put(userKey[i],userValue[i]);

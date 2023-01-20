@@ -1,15 +1,15 @@
 package webserver;
 
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
-import java.nio.file.NoSuchFileException;
 
 import controller.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.HttpRequest;
 import util.HttpStatus;
+import util.error.erroclass.FailLoggedException;
+import util.error.erroclass.NotLoggedException;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -30,29 +30,60 @@ public class RequestHandler implements Runnable {
 
             DataOutputStream clientOutPutStream = new DataOutputStream(out);
 
-            Controller controller = ControllerFinder.findController(httpRequest.getUrl());
-
-
             try {
-                ControllerFinder.handleControllerInfoAnnotation(controller, httpRequest, clientOutPutStream);
-            } catch (NoSuchFileException e) {
+                ControllerFinder.findController(httpRequest, clientOutPutStream);
+            } catch (FailLoggedException | NullPointerException e) {
+                ErrorController.getErrorResponse(clientOutPutStream, HttpStatus.UN_AUTHORIZED);
                 e.printStackTrace();
-                ErrorController.getErrorResponse(clientOutPutStream,HttpStatus.NOT_FOUND);
+                logger.error("[ERROR]:{} {}", HttpStatus.UN_AUTHORIZED.getCode(), HttpStatus.UN_AUTHORIZED.getMessage());
+                logger.error("로그인되지 않은 유저입니다. url:{}", httpRequest.getUrl().getUrl());
+            }catch (NotLoggedException e) {
+                ErrorController.getErrorResponse(clientOutPutStream, HttpStatus.FORBIDDEN);
+                e.printStackTrace();
+                logger.error("[ERROR]:{} {}", HttpStatus.FORBIDDEN.getCode(), HttpStatus.FORBIDDEN.getMessage());
+                logger.error("로그인되지 않은 유저입니다. url:{}", httpRequest.getUrl().getUrl());
+            }
+            catch (NoSuchMethodException e) {
+                e.printStackTrace();
+                ErrorController.getErrorResponse(clientOutPutStream, HttpStatus.NOT_FOUND);
                 logger.error("[ERROR]:{} {}", HttpStatus.NOT_FOUND.getCode(), HttpStatus.NOT_FOUND.getMessage());
                 logger.error("FileReaderContoller에서 url에 맞는 페이지가 없습니다. url:{}", httpRequest.getUrl().getUrl());
-            } catch(InvocationTargetException e){
-                e.printStackTrace();
-                ErrorController.getErrorResponse(clientOutPutStream,HttpStatus.METHOD_NOT_ALLOWED);
-                logger.error("[ERROR]:{} {}", HttpStatus.NOT_FOUND.getCode(), HttpStatus.METHOD_NOT_ALLOWED.getMessage());
-                logger.error("url요청이 올바르지 않습니다! url:{}", httpRequest.getUrl().getUrl());
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 logger.error("[ERROR]:{} {}", HttpStatus.INTERNAL_SERVER_ERROR.getCode(), HttpStatus.INTERNAL_SERVER_ERROR.getMessage());
-                logger.error("서버에서 처리못하는 에러. controller:{}, url:{}", controller.getClass(), httpRequest.getUrl().getUrl());
-                ErrorController.getErrorResponse(clientOutPutStream,HttpStatus.INTERNAL_SERVER_ERROR);
-
+                logger.error("서버에서 처리못한 에러. controller:{}, url:{}", httpRequest.getUrl().getUrl());
+                ErrorController.getErrorResponse(clientOutPutStream, HttpStatus.INTERNAL_SERVER_ERROR);
             }
+
+//            Controller controller = ControllerFinder.findController(httpRequest.getUrl());
+//
+//
+//            try {
+//                ControllerFinder.handleControllerInfoAnnotation(controller, httpRequest, clientOutPutStream);
+//            } catch (NoSuchMethodException e) {
+//                e.printStackTrace();
+//                ErrorController.getErrorResponse(clientOutPutStream, HttpStatus.NOT_FOUND);
+//                logger.error("[ERROR]:{} {}", HttpStatus.NOT_FOUND.getCode(), HttpStatus.NOT_FOUND.getMessage());
+//                logger.error("FileReaderContoller에서 url에 맞는 페이지가 없습니다. url:{}", httpRequest.getUrl().getUrl());
+//            } catch (InvocationTargetException | NullPointerException e) {
+//                if (e.getCause() instanceof NotLoggedException) {
+//                    ErrorController.getErrorResponse(clientOutPutStream, HttpStatus.UN_AUTHORIZED);
+//                    e.printStackTrace();
+//                    logger.error("[ERROR]:{} {}", HttpStatus.UN_AUTHORIZED.getCode(), HttpStatus.UN_AUTHORIZED.getMessage());
+//                    logger.error("인증되지 않은 유저입니다. controller:{}, url:{}", controller.getClass(), httpRequest.getUrl().getUrl());
+//                } else {
+//                    e.printStackTrace();
+//                    ErrorController.getErrorResponse(clientOutPutStream, HttpStatus.METHOD_NOT_ALLOWED);
+//                    logger.error("[ERROR]:{} {}", HttpStatus.NOT_FOUND.getCode(), HttpStatus.METHOD_NOT_ALLOWED.getMessage());
+//                    logger.error("url요청이 올바르지 않습니다! url:{}", httpRequest.getUrl().getUrl());
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                logger.error("[ERROR]:{} {}", HttpStatus.INTERNAL_SERVER_ERROR.getCode(), HttpStatus.INTERNAL_SERVER_ERROR.getMessage());
+//                logger.error("서버에서 처리못하는 에러. controller:{}, url:{}", controller.getClass(), httpRequest.getUrl().getUrl());
+//                ErrorController.getErrorResponse(clientOutPutStream, HttpStatus.INTERNAL_SERVER_ERROR);
+//            }
+
 
         } catch (IOException e) {
             logger.error(e.getMessage());

@@ -1,5 +1,7 @@
 package request;
 
+import util.Cookie;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,6 +18,8 @@ public class RequestHeader {
     public RequestHeader(HashMap<String, String> headerContents) {
         this.headerContents = headerContents;
     }
+
+
 
     protected static RequestHeader makeRequestHeader(BufferedReader bufferedReader) throws IOException {
         HashMap<String, String> headerContents = new HashMap<>();
@@ -40,4 +44,5 @@ public class RequestHeader {
     public HashMap<String, String> getHeaderContents() {
         return headerContents;
     }
+
 }

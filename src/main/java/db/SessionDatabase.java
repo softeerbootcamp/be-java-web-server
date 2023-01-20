@@ -9,7 +9,6 @@ public class SessionDatabase implements Database<Session> {
     private static Map<String, Session> sessionDb = new HashMap<String, Session>();
 
     @Override
-
     public Optional<Session> findObjectById(String sessionUUID) {
         return Optional.ofNullable(sessionDb.get(sessionUUID));
     }

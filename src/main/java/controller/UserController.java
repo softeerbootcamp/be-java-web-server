@@ -1,11 +1,11 @@
 package controller;
 
 
+import controller.annotation.Auth;
 import controller.annotation.ControllerInfo;
 import controller.annotation.ControllerMethodInfo;
 import db.Database;
 import db.UserDatabase;
-import model.Session;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,51 +15,136 @@ import reader.requestReader.RequestPostReader;
 import reader.requestReader.RequestReader;
 import request.HttpRequest;
 import request.RequestDataType;
+import request.Url;
+import response.Data;
 import response.HttpResponse;
-import service.Service;
+import service.SessionService;
 import service.UserService;
 import util.*;
+import util.error.erroclass.FailLoggedException;
+import view.UserRender;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.Collection;
+import java.util.Map;
 
-@ControllerInfo(regex = ".*\\/user.*" )
+@ControllerInfo
 public class UserController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private Database userDatabase = new UserDatabase();
-    private Service userService = new UserService();
+    private UserService userService = new UserService();
+
+    private SessionService sessionService = new SessionService();
+
     private RequestReader requestReader;
     private FileReader fileReader;
 
+    private UserRender userRender = UserRender.getInstance();
 
-    @ControllerMethodInfo(path = "/user/create", type = RequestDataType.IN_BODY, method = HttpMethod.POST)
+
+    @ControllerMethodInfo(path = "/user/create", method = HttpMethod.POST)
     public HttpResponse UserQueryString(DataOutputStream dataOutputStream, HttpRequest httpRequest) throws IOException {
         requestReader = new RequestPostReader();
 
-        HashMap<String, String> userMap = requestReader.readData(httpRequest);
-        User user = (User) userService.createModel(userMap);
+        Map<String, String> userMap = requestReader.readData(httpRequest);
+        User user = userService.createModel(userMap);
         userDatabase.addData(user);
 
-        Cookie cookie = new Cookie(Session.SESSION_ID, Session.makeSessionId());
-        HttpResponse httpResponse = new HttpResponse(new response.Data(dataOutputStream), FileType.HTML, HttpStatus.RE_DIRECT
-                ,cookie);
+        Cookie cookie = sessionService.persistUser(user);
 
         logger.debug("저장된 user:{}", userDatabase.findObjectById(user.getUserId()));
-        logger.debug("생성된 Cookie-sid:{}",cookie.getValue() );
+        logger.debug("생성된 Cookie-sid:{}", cookie.getValue());
 
-        return httpResponse;
+        return new HttpResponse.Builder()
+                .setData(new Data(dataOutputStream))
+                .setFileType(FileType.HTML)
+                .setHttpStatus(HttpStatus.RE_DIRECT)
+                .setRedirectUrl(new Url("/index.html",RequestDataType.FILE))
+                .setCookie(cookie)
+                .build();
     }
 
-    @ControllerMethodInfo(path = "/user/form.html", type = RequestDataType.TEMPLATES_FILE, method = HttpMethod.GET)
+    @ControllerMethodInfo(path = "/user/login", method = HttpMethod.POST)
+    public HttpResponse login(DataOutputStream dataOutputStream, HttpRequest httpRequest) throws IOException, FailLoggedException {
+        requestReader = new RequestPostReader();
+
+        Map<String, String> loginInfo = requestReader.readData(httpRequest);
+
+        User validUser = null;
+        try {
+            validUser = userService.validLogin(loginInfo);
+        } catch (FailLoggedException e) {
+            logger.error("유효하지 않는 로그인 유저 요청");
+            logger.error("/user/login_failed.html 로 redirect");
+            return new HttpResponse.Builder()
+                    .setData(new Data(dataOutputStream))
+                    .setFileType(FileType.HTML)
+                    .setHttpStatus(HttpStatus.RE_DIRECT)
+                    .setRedirectUrl(new Url("/user/login_failed.html",RequestDataType.FILE))
+                    .build();
+        }
+
+        Cookie cookie = sessionService.persistUser(validUser);
+
+
+        logger.debug("로그인 성공한 userID:{}", validUser.getUserId());
+        logger.debug("생성된 Cookie-sid:{}", cookie.getValue());
+
+        return new HttpResponse.Builder()
+                .setData(new Data(dataOutputStream))
+                .setFileType(FileType.HTML)
+                .setHttpStatus(HttpStatus.RE_DIRECT)
+                .setRedirectUrl(new Url("/index.html",RequestDataType.FILE))
+                .setCookie(cookie)
+                .build();
+    }
+
+    @ControllerMethodInfo(path = "/user/login_failed.html", method = HttpMethod.GET)
+    public HttpResponse loginFailed(DataOutputStream dataOutputStream, HttpRequest httpRequest) throws IOException {
+        fileReader = new TemplatesFileReader();
+        byte[] data = fileReader.readFile(httpRequest.getUrl());
+        return new HttpResponse.Builder()
+                .setData(new Data(dataOutputStream, data))
+                .setFileType(FileType.HTML)
+                .setHttpStatus(HttpStatus.OK)
+                .build();
+    }
+
+    @ControllerMethodInfo(path = "/user/login.html", method = HttpMethod.GET)
+    public HttpResponse userLoginHtml(DataOutputStream dataOutputStream, HttpRequest httpRequest) throws IOException {
+        fileReader = new TemplatesFileReader();
+        byte[] data = fileReader.readFile(httpRequest.getUrl());
+        return new HttpResponse.Builder()
+                .setData(new Data(dataOutputStream, data))
+                .setFileType(FileType.HTML)
+                .setHttpStatus(HttpStatus.OK)
+                .build();
+    }
+
+    @ControllerMethodInfo(path = "/user/form.html", method = HttpMethod.GET)
     public HttpResponse userFormHtml(DataOutputStream dataOutputStream, HttpRequest httpRequest) throws IOException {
         fileReader = new TemplatesFileReader();
-        byte[] data = new byte[0];
-        data = fileReader.readFile(httpRequest.getUrl());
-        return new HttpResponse(new response.Data(dataOutputStream, data), FileType.getFileType(httpRequest.getUrl()), HttpStatus.OK);
+        byte[] data = fileReader.readFile(httpRequest.getUrl());
+        return new HttpResponse.Builder()
+                .setData(new Data(dataOutputStream, data))
+                .setFileType(FileType.HTML)
+                .setHttpStatus(HttpStatus.OK)
+                .build();
     }
 
+    @Auth
+    @ControllerMethodInfo(path = "/user/list\\.html|/user/list", method = HttpMethod.GET)
+    public HttpResponse userListHtml(DataOutputStream dataOutputStream, HttpRequest httpRequest) throws IOException {
+        fileReader = new TemplatesFileReader();
+        byte[] userListHtml = fileReader.readFile(httpRequest.getUrl());
+        byte[] fixedUserListHtml = userRender.addUserList(userListHtml, userDatabase.findAll());
+        return new HttpResponse.Builder()
+                .setData(new Data(dataOutputStream, fixedUserListHtml))
+                .setFileType(FileType.HTML)
+                .setHttpStatus(HttpStatus.OK)
+                .build();
+    }
 
 }
 

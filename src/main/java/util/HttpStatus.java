@@ -7,9 +7,11 @@ import java.util.Arrays;
 public enum HttpStatus {
     OK(200, "OK"),
     RE_DIRECT(302, "Found"),
+
+    UN_AUTHORIZED(401, "UnAuthorized"),
     NOT_FOUND(404,"NOT_FOUND"),
 
-    METHOD_NOT_ALLOWED(405, "Method Not Allowd"),
+    FORBIDDEN(403, "Forbidden"),
 
     INTERNAL_SERVER_ERROR(500,"INTERNAL_SERVER_ERROR")
     ;

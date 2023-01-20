@@ -11,7 +11,7 @@ class FileTypeTest {
     @Test
     @DisplayName(".html 파일 확장자명 테스트")
     void getFileTypeHtml()  {
-        Url url = new Url("/index.html", RequestDataType.TEMPLATES_FILE);
+        Url url = new Url("/index.html", RequestDataType.FILE);
         FileType fileType = FileType.getFileType(url);
         Assertions.assertThat(fileType).isEqualTo(FileType.HTML);
     }
@@ -19,7 +19,7 @@ class FileTypeTest {
     @Test
     @DisplayName(".css 파일 확장자명 테스트")
     void getFileTypeCss()  {
-        Url url = new Url("/index.css",RequestDataType.STATIC_FILE);
+        Url url = new Url("/index.css",RequestDataType.FILE);
         FileType fileType = FileType.getFileType(url);
         Assertions.assertThat(fileType).isEqualTo(FileType.CSS);
     }
@@ -27,7 +27,7 @@ class FileTypeTest {
     @Test
     @DisplayName(".js 파일 확장자명 테스트")
     void getFileTypeJS(){
-        Url url = new Url("/index.js",RequestDataType.STATIC_FILE);
+        Url url = new Url("/index.js",RequestDataType.FILE);
         FileType fileType = FileType.getFileType(url);
         Assertions.assertThat(fileType).isEqualTo(FileType.JS);
     }
