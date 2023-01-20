@@ -1,8 +1,6 @@
 package model.response;
 
 import model.general.Header;
-import model.general.Status;
-import model.request.Request;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -20,9 +18,8 @@ public class Response {
         this.body = body;
     }
 
-    public static Response of(Request request, Status status) {
-        return new Response(StatusLine.of(request.getRequestLine().getHttpVersion(), status),
-                Collections.emptyMap(), null);
+    public static Response from(StatusLine statusLine) {
+        return new Response(statusLine, Collections.emptyMap(), null);
     }
 
     public static Response of(StatusLine statusLine, Map<Header, String> headers) {

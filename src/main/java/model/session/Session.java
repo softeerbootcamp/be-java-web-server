@@ -19,4 +19,8 @@ public class Session {
     public String getSessionId() {
         return sessionId;
     }
+
+    public Map<String, Object> getSessionData() {
+        return sessionData;
+    }
 }

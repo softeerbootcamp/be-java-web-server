@@ -9,11 +9,16 @@ import model.request.Request;
 import model.request.RequestLine;
 import service.UserService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class ControllerMapper {
+    private static final Logger logger = LoggerFactory.getLogger(ControllerMapper.class);
+
     private static final Map<String, Controller> controllerMap = new HashMap<>();
 
     static {
@@ -22,6 +27,7 @@ public class ControllerMapper {
 
     public static Controller selectController(Request request) {
         RequestLine requestLine = request.getRequestLine();
+        logger.debug("Request Line: {}", requestLine.getUri());
 
         if(Objects.nonNull(requestLine.getContentType())) return new ViewController();
 

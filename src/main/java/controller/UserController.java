@@ -1,6 +1,7 @@
 package controller;
 
 import model.domain.User;
+import model.general.ContentType;
 import model.general.Header;
 import model.general.Method;
 import model.general.Status;
@@ -11,12 +12,16 @@ import model.response.StatusLine;
 import model.session.Session;
 import model.session.Sessions;
 import service.UserService;
+import util.HeaderUtils;
 import util.SessionUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Collection;
 import java.util.Map;
 
 public class UserController implements Controller {
@@ -31,15 +36,17 @@ public class UserController implements Controller {
     @Override
     public Response getResponse(Request request) {
         RequestLine requestLine = request.getRequestLine();
+        Method requestMethod = requestLine.getMethod();
+        String requestUri = requestLine.getUri();
 
-        if(requestLine.getMethod().equals(Method.POST) &&
-                requestLine.getUri().startsWith("/user/create")) return createUserResponse(request);
-        else if(requestLine.getMethod().equals(Method.POST) &&
-                requestLine.getUri().startsWith("/user/login")) return loginUserResponse(request);
-        else if(requestLine.getMethod().equals(Method.GET) &&
-                requestLine.getUri().startsWith("/user/list")) return userListResponse(request);
+        if(requestMethod.equals(Method.POST) &&
+                requestUri.startsWith("/user/create")) return createUserResponse(request);
+        else if(requestMethod.equals(Method.POST) &&
+                requestUri.startsWith("/user/login")) return loginUserResponse(request);
+        else if(requestMethod.equals(Method.GET) &&
+                requestUri.startsWith("/user/list")) return userListResponse(request);
 
-        return Response.of(request, Status.NOT_FOUND);
+        return Response.from(StatusLine.of(requestLine.getHttpVersion(), Status.NOT_FOUND));
     }
 
     private Response createUserResponse(Request request) {
@@ -48,7 +55,7 @@ public class UserController implements Controller {
                 userInfo.get("name"), userInfo.get("email"));
         userService.signUp(user);
 
-        Map<Header, String> headers = responseCreateUserHeader();
+        Map<Header, String> headers = HeaderUtils.responseCreateUserHeader();
 
         return Response.of(StatusLine.of(request.getRequestLine().getHttpVersion(), Status.FOUND), headers);
     }
@@ -60,14 +67,17 @@ public class UserController implements Controller {
         Map<Header, String> headers;
         RequestLine requestLine = request.getRequestLine();
         if(isLoginSuccess) {
-            headers = responseLoginSuccessHeader();
-            Session session = Sessions.getSession(parseSessionIdFromHeaders(headers));
-            session.setSessionData("user", userLoginInfo.get("userId"));
+            User user = userService.getUser(userLoginInfo.get("userId"));
+            String sessionId = SessionUtils.generateSessionId();
+            Session session = Sessions.getSession(sessionId);
+            session.setSessionData("user", user);
+
+            headers = HeaderUtils.responseLoginSuccessHeader(sessionId);
 
             return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.FOUND), headers);
         }
 
-        headers = responseLoginFailHeader();
+        headers = HeaderUtils.responseLoginFailHeader();
         return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.FOUND), headers);
     }
 
@@ -76,46 +86,45 @@ public class UserController implements Controller {
         RequestLine requestLine = request.getRequestLine();
 
         if(Sessions.isExistSession(request.getSessionId())) {
-            // TODO: 로그인되어 있는 경우 유저 리스트 불러올 수 있도경 구현
+            byte[] body = getUserListHtmlWhenLogin(userService.getUserList(), request);
+
+            headers = HeaderUtils.response200Header(ContentType.HTML, body.length);
+
+            return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.OK), headers, body);
         }
 
-        headers = responseRedirectLoginHtmlHeader();
+        headers = HeaderUtils.responseRedirectLoginHtmlHeader();
         return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.FOUND), headers);
     }
 
-    private Map<Header, String> responseCreateUserHeader() {
-        Map<Header, String> headers = new HashMap<>();
-        headers.put(Header.from("Location"), "/index.html");
+    private byte[] getUserListHtmlWhenLogin(Collection<User> users, Request request) {
+        StringBuilder userList = new StringBuilder();
+        int row = 0;
 
-        return headers;
-    }
+        for(User user : users) {
+            userList.append("<tr><th scope=\"row\">")
+                    .append(++row)
+                    .append("</th><td>")
+                    .append(user.getUserId()).append("</td><td>")
+                    .append(user.getName())
+                    .append("</td><td>")
+                    .append(user.getEmail())
+                    .append("</td><td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td></tr>");
+        }
 
-    private Map<Header, String> responseLoginSuccessHeader() {
-        Map<Header, String> headers = new HashMap<>();
-        headers.put(Header.from("Location"), "/index.html");
-        headers.put(Header.from("Set-Cookie"), "sid=" + SessionUtils.generateSessionId() + "; Path=/");
+        byte[] body;
+        try {
+            body = Files.readAllBytes(new File("./src/main/resources/templates/user/list.html").toPath());
+        } catch(IOException e) {
+            return new byte[0];
+        }
 
-        return headers;
-    }
-
-    private Map<Header, String> responseLoginFailHeader() {
-        Map<Header, String> headers = new HashMap<>();
-        headers.put(Header.from("Location"), " /user/login_failed.html");
-
-        return headers;
-    }
-
-    private Map<Header, String> responseRedirectLoginHtmlHeader() {
-        Map<Header, String> headers = new HashMap<>();
-        headers.put(Header.from("Location"), " /user/login.html");
-
-        return headers;
-    }
-
-    private String parseSessionIdFromHeaders(Map<Header, String> headers) {
-        String cookie = headers.get(Header.SET_COOKIE);
-        String sessionId = cookie.split(" ")[0].split("=")[1];
-
-        return sessionId.substring(0, sessionId.length() - 1);
+        User user = (User) Sessions.getSession(request.getSessionId()).getSessionData().get("user");
+        String originalListHtml = new String(body);
+        String[] splitListHtml = originalListHtml.split("<tbody>");
+        String resultListHtml = splitListHtml[0] + "<tbody>" + userList + splitListHtml[1];
+        resultListHtml = resultListHtml.replace("로그인", user.getName());
+        resultListHtml = resultListHtml.replace("user/login.html", "user/profile.html");
+        return resultListHtml.getBytes();
     }
 }

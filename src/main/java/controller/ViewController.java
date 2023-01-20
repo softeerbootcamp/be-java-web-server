@@ -1,5 +1,6 @@
 package controller;
 
+import model.domain.User;
 import model.general.ContentType;
 import model.general.Header;
 import model.general.Status;
@@ -7,6 +8,8 @@ import model.request.Request;
 import model.request.RequestLine;
 import model.response.Response;
 import model.response.StatusLine;
+import model.session.Sessions;
+import util.HeaderUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -29,37 +31,56 @@ public class ViewController implements Controller {
 
     @Override
     public Response getResponse(Request request) {
-        if(Objects.nonNull(request.getRequestLine().getContentType())) return getStaticFileResponse(request);
+        RequestLine requestLine = request.getRequestLine();
 
-        return Response.of(request, Status.NOT_FOUND);
+        if (Objects.nonNull(requestLine.getContentType())) return getStaticFileResponse(request);
+
+        return Response.from(StatusLine.of(requestLine.getHttpVersion(), Status.NOT_FOUND));
     }
 
     private Response getStaticFileResponse(Request request) {
         RequestLine requestLine = request.getRequestLine();
 
-        byte[] body;
-        try {
-            body = Files.readAllBytes(new File(generatePath(requestLine.getContentType()) +
-                    requestLine.getUri()).toPath());
-        } catch (IOException e) {
-            return Response.of(request, Status.NOT_FOUND);
-        }
+        byte[] body = makeResponseBody(Sessions.isExistSession(request.getSessionId()), request);
 
-        Map<Header, String> headers = response200Header(requestLine.getContentType(), body.length);
+        Map<Header, String> headers = HeaderUtils.response200Header(requestLine.getContentType(), body.length);
 
         return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.OK), headers, body);
     }
 
-    private Map<Header, String> response200Header(ContentType contentType, int messageBodyLength) {
-        Map<Header, String> headers = new HashMap<>();
-        headers.put(Header.from("Content-Type"), contentType.getContentTypeValue() + ";charset=utf-8");
-        headers.put(Header.from("Content-Length"), Integer.toString(messageBodyLength));
-
-        return headers;
+    private String generatePath(ContentType contentType) {
+        if (HTML.equals(contentType) || ICO.equals(contentType)) return templatePath;
+        else return staticPath;
     }
 
-    private String generatePath(ContentType contentType) {
-        if(HTML.equals(contentType) || ICO.equals(contentType)) return templatePath;
-        else return staticPath;
+    private byte[] makeResponseBody(boolean isLogin, Request request) {
+        RequestLine requestLine = request.getRequestLine();
+        byte[] body;
+
+        if (isLogin && requestLine.getContentType().equals(HTML)) {
+            try {
+                body = Files.readAllBytes(new File(generatePath(requestLine.getContentType()) +
+                        requestLine.getUri()).toPath());
+
+                User user = (User) Sessions.getSession(request.getSessionId()).getSessionData().get("user");
+                String originalIndexHtml = new String(body);
+                String resultIndexHtml = originalIndexHtml.replace("로그인", user.getName());
+                resultIndexHtml = resultIndexHtml.replace("user/login.html", "user/profile.html");
+                resultIndexHtml = resultIndexHtml.replace("자바지기", user.getName());
+                resultIndexHtml = resultIndexHtml.replace("javajigi@slipp.net", user.getEmail());
+                return resultIndexHtml.getBytes();
+            } catch (IOException e) {
+                return new byte[0];
+            }
+        }
+
+        try {
+            body = Files.readAllBytes(new File(generatePath(requestLine.getContentType()) +
+                    requestLine.getUri()).toPath());
+        } catch (IOException e) {
+            return new byte[0];
+        }
+
+        return body;
     }
 }

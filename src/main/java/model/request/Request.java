@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class Request {
     private static final Logger logger = LoggerFactory.getLogger(Request.class);
@@ -71,6 +72,8 @@ public class Request {
 
     public String getSessionId() {
         String cookie = headers.get(Header.COOKIE);
-        return cookie.split("=")[1];
+        if(Objects.nonNull(cookie)) return cookie.split("=")[1];
+
+        return "";
     }
 }

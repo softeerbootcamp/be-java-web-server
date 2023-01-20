@@ -3,6 +3,7 @@ package service;
 import db.Database;
 import model.domain.User;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 
@@ -20,5 +21,13 @@ public class UserService {
     public boolean logIn(Map<String, String> userLoginInfo) {
         User user = database.findUserById(userLoginInfo.get("userId"));
         return Objects.nonNull(user) && user.getPassword().equals(userLoginInfo.get("password"));
+    }
+
+    public Collection<User> getUserList() {
+        return database.findAll();
+    }
+
+    public User getUser(String userId) {
+        return database.findUserById(userId);
     }
 }
