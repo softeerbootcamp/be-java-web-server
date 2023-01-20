@@ -30,7 +30,8 @@ public class UserController implements Controller {
     @Override
     public void service(HttpRequest request, HttpResponse response) {
         logger.debug("user controller called");
-        handlers.get(request.getUrl()).accept(request, response);
+        handlers.getOrDefault(request.getUrl(), Controller::handleInvalidRequest)
+                .accept(request, response);
     }
 
     private void logIn(HttpRequest request, HttpResponse response) {

@@ -38,14 +38,6 @@ public class FileSystem {
         }
     }
 
-    public static byte[] readFile(String resourcePath) {
-        try {
-            return Files.readAllBytes(Paths.get(resourcePath));
-        } catch (IOException e) {
-            return new byte[0];
-        }
-    }
-
     public static FindResource getPersonalizedResource(String url, String chunkHtml) {
         String resourcePath = PathResolver.parse(url);
         byte[] resource = readFile(resourcePath);
@@ -72,6 +64,14 @@ public class FileSystem {
             return html.toString().getBytes();
         } catch (IOException e) {
             throw new FileSystemException(e);
+        }
+    }
+
+    private static byte[] readFile(String resourcePath) {
+        try {
+            return Files.readAllBytes(Paths.get(resourcePath));
+        } catch (IOException e) {
+            return HtmlGenerator.getNotFoundHTML().getBytes();
         }
     }
 }

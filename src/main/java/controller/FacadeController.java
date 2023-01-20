@@ -2,7 +2,7 @@ package controller;
 
 import exception.ConnectionClosedException;
 import exception.FileSystemException;
-import filesystem.Extension;
+import exception.HttpNotFoundException;
 import http.request.HttpRequest;
 import http.request.RequestFactory;
 import http.response.HttpResponse;
@@ -40,18 +40,11 @@ public class FacadeController implements Runnable {
     }
 
     private void delegateRequest(HttpRequest request, HttpResponse response) {
-        Controller controller = findController(request.getUrl());
-        controller.service(request, response);
-    }
-
-    private Controller findController(String url) {
-        if (isStaticResourceRequest(url)) {
-            return controllers.get(Domain.MAIN);
+        try {
+            Controller controller = controllers.get(Domain.find(request.getUrl()));
+            controller.service(request, response);
+        } catch (HttpNotFoundException e) {
+            controllers.get(Domain.MAIN).service(request, response);
         }
-        return controllers.get(Domain.find(url));
-    }
-
-    private boolean isStaticResourceRequest(String url) {
-        return Extension.isStaticResource(url);
     }
 }

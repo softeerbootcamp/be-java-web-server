@@ -23,4 +23,17 @@ public class HtmlGenerator {
                 "<li><a href='#' role='button'>로그아웃</a></li>" +
                 "<li><a href='#' role='button'>개인정보수정</a></li>";
     }
+
+    public static String getNotFoundHTML() {
+        return "<!DOCTYPE html>\n" +
+                "<html lang=\"en\">\n" +
+                "<head>\n" +
+                "    <meta charset=\"UTF-8\">\n" +
+                "    <title>Title</title>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "not found\n" +
+                "</body>\n" +
+                "</html>";
+    }
 }

@@ -6,7 +6,7 @@ public class PathResolver {
 
     private static final String TEMPLATE_PATH = "src/main/resources/templates%s";
     private static final String STATIC_PATH = "src/main/resources/static%s";
-    private static final String NOT_FOUND_HTML = "src/main/resources/templates/notfound.html";
+    public static final String NOT_FOUND_HTML = "src/main/resources/templates/notfound.html";
     public static final String INDEX_HTML = "/index.html";
     public static final String DOMAIN = "/";
     public static final String LOGIN_FAILED_HTML = "login_failed.html";
