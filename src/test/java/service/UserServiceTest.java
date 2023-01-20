@@ -50,4 +50,25 @@ class UserServiceTest {
                 .isInstanceOf(LogInFailedException.class)
                 .hasMessage("로그인 실패");
     }
+
+    @Test
+    public void testGetUserList() {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("userId", "user1");
+        parameters.put("password", "password1");
+        parameters.put("name", "name1");
+        parameters.put("email", "email1");
+
+        userService.addUser(parameters);
+
+        Collection<User> users = userService.getUserList();
+        assertEquals(1, users.size());
+
+        User user = users.iterator().next();
+        assertEquals("user1", user.getUserId());
+        assertEquals("password1", user.getPassword());
+        assertEquals("name1", user.getName());
+        assertEquals("email1", user.getEmail());
+    }
+
 }
