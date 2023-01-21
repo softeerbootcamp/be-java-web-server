@@ -7,6 +7,7 @@ import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.Session;
 import model.User;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import service.SessionService;
 import service.UserService;
@@ -30,6 +31,7 @@ class UserListControllerTest {
     Controller controller = new UserListController(sessionService, userService);
 
     @Test
+    @DisplayName("로그인 상태에서 유저리스트 요청 시 유저리스트 화면으로 이동하는지 테스트")
     void doGetWithLogin() throws IOException, FileNotFoundException, URISyntaxException {
         String request = "GET /user/login HTTP/1.1" + System.lineSeparator() +
                 "Host: localhost:8080" + System.lineSeparator() +
@@ -57,6 +59,7 @@ class UserListControllerTest {
     }
 
     @Test
+    @DisplayName("비 로그인 상태에서 유저리스트 요청 시 로그인 폼으로 이동하는지 테스트")
     void doGetWithNotLogin() throws IOException, FileNotFoundException, URISyntaxException {
         String request = "GET /user/login HTTP/1.1" + System.lineSeparator() +
                 "Host: localhost:8080" + System.lineSeparator() +
