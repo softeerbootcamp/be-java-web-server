@@ -23,5 +23,7 @@ https://drive.google.com/drive/folders/1fiup4puUcKT0FKiiD4JWScaqKPhgKk-9?usp=sha
   - 필요한 서비스를 주입 받은 컨트롤러 객체 생성
   - 존재하는 모든 컨트롤러를 Map 에 <path, Controller> 형태로 저장
 - 해당 클래스에서 만든 Map 을 WebServer 가 작동할 때 각 스레드에 인자로 넘겨서 주입
-- 결국 각 스레드는 동일한 Map 객체를 주입받아서 마치 싱글턴처럼 사용하려고 함
+- 결국 각 스레드는 동일한 Map 객체를 주입받아서 마치 싱글턴처럼 사용하려고 함  
+- :sparkles: 참고 사진
+    <img width="728" alt="스크린샷 2023-01-21 오후 7 42 44" src="https://user-images.githubusercontent.com/80745404/213863499-fbf0a618-aac8-4951-be68-f15b3892bf6b.png">
 
