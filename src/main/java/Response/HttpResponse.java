@@ -1,7 +1,10 @@
 package Response;
 
+import Request.StatusCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 public class HttpResponse {
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
@@ -40,5 +43,11 @@ public class HttpResponse {
 
     public byte[] getBody() {
         return this.httpResponseBody.getBody();
+    }
+    public StatusCode getStatusCode() {
+        return this.httpResponseStartLine.getStatus();
+    }
+    public Map<String, String> getHeader() {
+        return this.httpResponseHeaders.getHeaders();
     }
 }
