@@ -38,8 +38,4 @@ public class HttpSession {
         return expiredAt;
     }
 
-    public void expire() {
-        expiredAt = LocalDateTime.now();
-    }
-
 }

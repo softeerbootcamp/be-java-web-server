@@ -15,7 +15,6 @@ import util.FileIoUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -68,7 +67,7 @@ public class UserService {
     public HttpResponse logout(HttpRequest httpRequest) {
         if (SessionHandler.validateSession(httpRequest.getSid())) {
             HttpSession httpSession = SessionHandler.getSession(httpRequest.getSid());
-            httpSession.expire();
+            SessionHandler.expireSession(httpSession);
             return HttpResponseFactory.FOUND("/index.html");
         }
         return HttpResponseFactory.FOUND("/user/login.html");

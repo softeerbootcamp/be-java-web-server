@@ -24,7 +24,7 @@ public class ControllerHandler {
 
     public static HttpResponse handle(HttpRequest httpRequest) throws Exception {
         try {
-            Controller controller = findController(httpRequest);
+            Controller controller = findController(httpRequest.getUri());
             return controller.doService(httpRequest);
         } catch (ResourceTypeNotFoundException | ControllerNotFoundException e) {
             logger.error(e.getMessage());
@@ -32,8 +32,7 @@ public class ControllerHandler {
         }
     }
 
-    public static Controller findController(HttpRequest httpRequest) {
-        HttpUri httpUri = httpRequest.getUri();
+    public static Controller findController(HttpUri httpUri) {
         return controllers.getOrDefault(httpUri.getDetachControllerPath(), ResourceController.getInstance());
     }
 }

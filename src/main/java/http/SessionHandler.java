@@ -27,4 +27,7 @@ public class SessionHandler {
         return httpSessionMap.get(sid);
     }
 
+    public static void expireSession(HttpSession httpSession) {
+        httpSessionMap.remove(httpSession.getSid());
+    }
 }
