@@ -1,7 +1,7 @@
 package controller;
 
-import http.HttpSession;
-import http.SessionHandler;
+import http.session.HttpSession;
+import http.session.SessionHandler;
 import http.request.HttpRequest;
 import http.response.DynamicResolver;
 import http.response.HttpResponse;

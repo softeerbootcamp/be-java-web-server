@@ -2,8 +2,8 @@ package service;
 
 import controller.ResourceController;
 import db.Database;
-import http.HttpSession;
-import http.SessionHandler;
+import http.session.HttpSession;
+import http.session.SessionHandler;
 import http.request.HttpMethod;
 import http.request.HttpRequest;
 import http.request.ResourceType;
