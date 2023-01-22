@@ -35,7 +35,7 @@ public class HttpRequestUtils {
         StringBuilder sb = new StringBuilder();
         String tempLine = br.readLine();
         while(!tempLine.equals("")){
-            sb.append(tempLine + '\n');
+            sb.append(tempLine).append('\n');
             logger.info(tempLine);  //print out http header
             tempLine = br.readLine();
         }
