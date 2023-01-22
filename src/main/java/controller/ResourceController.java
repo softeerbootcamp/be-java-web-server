@@ -11,6 +11,7 @@ import util.FileIoUtil;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Objects;
 
 public class ResourceController implements Controller {
@@ -22,16 +23,20 @@ public class ResourceController implements Controller {
     public static ResourceController getInstance() {
         return resourceController;
     }
-    @Override
-    public HttpResponse doService(HttpRequest httpRequest) throws IOException {
-        String url = httpRequest.getUrl();
-        File file = FileIoUtil.getFile(httpRequest.getUri());
-        byte[] body = Files.readAllBytes(file.toPath());
-        if (url.endsWith(".html")) {
-            body = renderHtml(httpRequest, file);
-        }
 
-        return HttpResponseFactory.OK(httpRequest.getContentType(), body);
+    @Override
+    public HttpResponse doService(HttpRequest httpRequest) {
+        try {
+            String url = httpRequest.getUrl();
+            File file = FileIoUtil.getFile(httpRequest.getUri());
+            byte[] body = Files.readAllBytes(Path.of(file.getPath()));
+            if (url.endsWith(".html")) {
+                body = renderHtml(httpRequest, file);
+            }
+            return HttpResponseFactory.OK(httpRequest.getContentType(), body);
+        } catch (IOException e) {
+            return HttpResponseFactory.NOT_FOUND("Not Found File");
+        }
     }
 
     private byte[] renderHtml(HttpRequest httpRequest, File file) throws IOException {
@@ -41,6 +46,7 @@ public class ResourceController implements Controller {
         }
         return DynamicResolver.hideLogoutButton(file);
     }
+
     @Override
     public boolean isMatch(HttpRequest httpRequest) {
         return true;

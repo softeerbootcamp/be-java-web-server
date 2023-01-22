@@ -22,16 +22,16 @@ import java.util.Map;
 
 public class UserService {
 
-    public HttpResponse create(HttpRequest httpRequest) throws IOException {
-        if(httpRequest.getHttpMethod().equals(HttpMethod.GET)) {
+    public HttpResponse create(HttpRequest httpRequest) {
+        if (httpRequest.getHttpMethod().equals(HttpMethod.GET)) {
             return ResourceController.getInstance().doService(httpRequest);
         }
         Database.addUser(User.from(httpRequest.getRequestBody()));
         return HttpResponseFactory.FOUND("/index.html");
     }
 
-    public HttpResponse login(HttpRequest httpRequest) throws IOException {
-        if(httpRequest.getHttpMethod().equals(HttpMethod.GET)) {
+    public HttpResponse login(HttpRequest httpRequest) {
+        if (httpRequest.getHttpMethod().equals(HttpMethod.GET)) {
             return ResourceController.getInstance().doService(httpRequest);
         }
 
