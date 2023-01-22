@@ -1,8 +1,6 @@
 package webserver.view;
 
 import model.User;
-import webserver.controller.StaticController;
-import webserver.domain.ModelAndView;
 import webserver.domain.StatusCodes;
 import webserver.domain.request.Request;
 import webserver.domain.response.Response;

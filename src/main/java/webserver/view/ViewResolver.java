@@ -1,6 +1,5 @@
 package webserver.view;
 
-import webserver.domain.ModelAndView;
 import java.util.Map;
 
 public class ViewResolver {

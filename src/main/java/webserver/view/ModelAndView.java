@@ -1,4 +1,4 @@
-package webserver.domain;
+package webserver.view;
 
 import java.util.HashMap;
 import java.util.Map;

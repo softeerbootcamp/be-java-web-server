@@ -1,6 +1,6 @@
 package webserver.controller;
 
-import webserver.domain.ModelAndView;
+import webserver.view.ModelAndView;
 import webserver.domain.request.Request;
 import webserver.domain.response.Response;
 import webserver.exception.HttpRequestException;

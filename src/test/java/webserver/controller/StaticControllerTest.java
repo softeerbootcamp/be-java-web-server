@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import webserver.domain.ContentType;
-import webserver.domain.ModelAndView;
+import webserver.view.ModelAndView;
 import webserver.domain.StatusCodes;
 import webserver.domain.request.Request;
 import webserver.domain.response.Response;

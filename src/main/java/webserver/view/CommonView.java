@@ -1,7 +1,6 @@
 package webserver.view;
 
 import webserver.domain.ContentType;
-import webserver.domain.ModelAndView;
 import webserver.domain.StatusCodes;
 import webserver.domain.request.Request;
 import webserver.domain.response.Response;

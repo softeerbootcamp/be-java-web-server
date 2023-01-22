@@ -3,12 +3,13 @@ package webserver.controller;
 import webserver.ArgumentResolver;
 import webserver.annotation.ControllerInfo;
 import webserver.domain.ContentType;
-import webserver.domain.ModelAndView;
+import webserver.view.ModelAndView;
 import webserver.domain.RequestMethod;
 import webserver.domain.StatusCodes;
 import webserver.domain.request.Request;
 import webserver.domain.response.Response;
 import webserver.exception.HttpRequestException;
+import webserver.security.SecurityContext;
 import webserver.security.SecurityFilter;
 import webserver.utils.HttpSessionUtils;
 import java.lang.reflect.InvocationTargetException;
@@ -39,9 +40,7 @@ public class ControllerInterceptor {
         String sessionId = HttpSessionUtils.getSessionIdFromRequest(req).orElse(null);
         if (HttpSessionUtils.isSessionValid(sessionId)) {
             contentMap.put("Cookie", sessionId);
-            mv.addViewModel("login", true);
-        }else{
-            mv.addViewModel("login", false);
+            SecurityContext.addUser(sessionId);
         }
         mv.addViewModel("session-id", sessionId);
     }
@@ -58,7 +57,7 @@ public class ControllerInterceptor {
 
         //hand over the session to controller only if it is valid
         loginSessionCheck(req, contentMap, mv);
-        SecurityFilter.checkAuthorization(reqPath, mv);
+        SecurityFilter.checkAuthorization(reqPath);
 
         methodList.forEach(method -> {
             ControllerInfo controllerInfo = method.getAnnotation(ControllerInfo.class);

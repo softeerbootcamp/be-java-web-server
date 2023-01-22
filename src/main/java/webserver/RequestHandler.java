@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.controller.Controller;
 import webserver.domain.ContentType;
-import webserver.domain.ModelAndView;
+import webserver.view.ModelAndView;
 import webserver.domain.request.Request;
 import webserver.domain.response.Response;
 import webserver.exception.HttpRequestException;

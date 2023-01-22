@@ -4,7 +4,7 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import webserver.Service.UserService;
 import webserver.domain.ContentType;
-import webserver.domain.ModelAndView;
+import webserver.view.ModelAndView;
 import webserver.domain.StatusCodes;
 import webserver.domain.request.Request;
 import webserver.domain.response.Response;

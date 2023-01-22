@@ -5,12 +5,13 @@ import model.User;
 import webserver.Service.UserService;
 import webserver.annotation.ControllerInfo;
 import webserver.domain.ContentType;
-import webserver.domain.ModelAndView;
+import webserver.view.ModelAndView;
 import webserver.domain.RequestMethod;
 import webserver.domain.StatusCodes;
 import webserver.domain.request.Request;
 import webserver.domain.response.Response;
 import webserver.exception.HttpRequestException;
+import webserver.security.SecurityContext;
 import webserver.utils.HttpSessionUtils;
 import java.io.IOException;
 import java.util.List;
@@ -49,11 +50,10 @@ public class UserController implements Controller {
 
     @ControllerInfo(path = "/user/logout", methodName = "userLogout", method = RequestMethod.GET)
     public void userLogout(Map<String, String> queryStrs, Response response, ModelAndView mv){
-        String sessionId = queryStrs.get("Cookie");
-        HttpSessionUtils.cookieInvalidation(sessionId);
+        SecurityContext.clearContext();
         mv.setViewPath("redirect:/index.html");
         response.ok(StatusCodes.OK, ("<script>alert('로그아웃 완료되었습니다.'); </script>").getBytes(), ContentType.TEXT_HTML);
-        response.addCookieOnHeader(HttpSessionUtils.cookieInvalidation(sessionId));
+        response.addCookieOnHeader(HttpSessionUtils.cookieInvalidation(queryStrs.get("Cookie")));
     }
 
     @ControllerInfo(path = "/user/list", methodName = "userList", method = RequestMethod.GET)
