@@ -47,8 +47,4 @@ public class ResourceController implements Controller {
         return DynamicResolver.hideLogoutButton(file);
     }
 
-    @Override
-    public boolean isMatch(HttpRequest httpRequest) {
-        return true;
-    }
 }

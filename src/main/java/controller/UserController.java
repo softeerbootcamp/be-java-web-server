@@ -2,7 +2,6 @@ package controller;
 
 import http.request.HttpRequest;
 import http.request.HttpUri;
-import http.request.RequestLine;
 import http.response.HttpResponse;
 import http.response.HttpResponseFactory;
 import service.UserService;
@@ -12,7 +11,6 @@ import java.util.Arrays;
 public class UserController implements Controller {
 
     private static final UserService userService = new UserService();
-    private static final String path = "user";
 
     @Override
     public HttpResponse doService(HttpRequest httpRequest) {
@@ -28,10 +26,4 @@ public class UserController implements Controller {
         }
     }
 
-    @Override
-    public boolean isMatch(HttpRequest httpRequest) {
-        RequestLine requestLine = httpRequest.getRequestLine();
-        HttpUri httpUri = requestLine.getHttpUri();
-        return path.equals(httpUri.getDetachControllerPath());
-    }
 }
