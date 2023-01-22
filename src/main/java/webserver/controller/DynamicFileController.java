@@ -24,6 +24,8 @@ public class DynamicFileController implements Controller{
         String sid_userid = getSid(cookieStr);
 
         Service service = new Service() {};
+
+        // 로그인 부분을 현재 사용자 이름으로 변경하는 서비스
         service = new AlreadyLoggedInService(sid_userid);
 
         if(req.getReqLine().getQuery().contains("user/list"))

@@ -26,12 +26,9 @@ public class AlreadyLoggedInService implements Service{
         String contentType = Files.probeContentType(new File(reqQuery).toPath());
         byte bodyByte[] = Service.urlToByte(reqQuery);
 
-        if(reqQuery.endsWith("html"))
-        {
-            String bodyString = new String(bodyByte);
-            bodyString = replaceLoginTextToUsername(bodyString);
-            bodyByte = bodyString.getBytes();
-        }
+        String bodyString = new String(bodyByte);
+        bodyString = replaceLoginTextToUsername(bodyString);
+        bodyByte = bodyString.getBytes();
 
         return new Response()
                 .withVersion(req.getReqLine().getVersion())
