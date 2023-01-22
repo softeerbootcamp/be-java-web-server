@@ -14,6 +14,14 @@ import java.nio.file.Files;
 import java.util.Objects;
 
 public class ResourceController implements Controller {
+    private static final ResourceController resourceController = new ResourceController();
+
+    private ResourceController() {
+    }
+
+    public static ResourceController getInstance() {
+        return resourceController;
+    }
     @Override
     public HttpResponse doService(HttpRequest httpRequest) throws IOException {
         String url = httpRequest.getUrl();

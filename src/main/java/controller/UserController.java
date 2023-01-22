@@ -4,9 +4,12 @@ import http.request.HttpRequest;
 import http.request.HttpUri;
 import http.request.RequestLine;
 import http.response.HttpResponse;
+import http.response.HttpResponseFactory;
 import service.UserService;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
 
 public class UserController implements Controller {
 
@@ -17,10 +20,13 @@ public class UserController implements Controller {
     public HttpResponse doService(HttpRequest httpRequest) throws Exception {
         RequestLine requestLine = httpRequest.getRequestLine();
         HttpUri httpUri = requestLine.getHttpUri();
-
-        Method method = UserService.class.getDeclaredMethod(httpUri.getDetachServicePath(), HttpRequest.class);
-        return (HttpResponse) method.invoke(userService, httpRequest);
-
+        Method[] methods = UserService.class.getMethods();
+        for (Method method : methods) {
+            if(httpUri.getPath().contains(method.getName())) {
+                return (HttpResponse) method.invoke(userService, httpRequest);
+            }
+        }
+        return HttpResponseFactory.NOT_FOUND("Method Not Found");
     }
 
     @Override

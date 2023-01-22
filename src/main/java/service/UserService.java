@@ -1,8 +1,10 @@
 package service;
 
+import controller.ResourceController;
 import db.Database;
 import http.HttpSession;
 import http.SessionHandler;
+import http.request.HttpMethod;
 import http.request.HttpRequest;
 import http.request.ResourceType;
 import http.response.DynamicResolver;
@@ -13,19 +15,26 @@ import util.FileIoUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 public class UserService {
 
-    public HttpResponse create(HttpRequest httpRequest) {
+    public HttpResponse create(HttpRequest httpRequest) throws IOException {
+        if(httpRequest.getHttpMethod().equals(HttpMethod.GET)) {
+            return ResourceController.getInstance().doService(httpRequest);
+        }
         Database.addUser(User.from(httpRequest.getRequestBody()));
-
         return HttpResponseFactory.FOUND("/index.html");
     }
 
-    public HttpResponse login(HttpRequest httpRequest) {
+    public HttpResponse login(HttpRequest httpRequest) throws IOException {
+        if(httpRequest.getHttpMethod().equals(HttpMethod.GET)) {
+            return ResourceController.getInstance().doService(httpRequest);
+        }
+
         String requestId = httpRequest.getRequestBody().get("userId");
         String requestPassword = httpRequest.getRequestBody().get("password");
 

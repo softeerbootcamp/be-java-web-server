@@ -1,7 +1,6 @@
 import controller.Controller;
 import controller.ControllerHandler;
 import controller.UserController;
-import controller.StaticController;
 import http.request.HttpRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
