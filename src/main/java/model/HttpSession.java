@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 public class HttpSession {
 
     private String sessionId;
+
+    private String userId;
     private String username;
     private LocalDateTime createDate;
     private LocalDateTime expireDate;
@@ -13,12 +15,17 @@ public class HttpSession {
     private int maxAge;
     private static final int COOKIE_DURATION_DAY = 7;
 
-    public HttpSession(String sessionId, String username, LocalDateTime now) {
+    public HttpSession(String sessionId, String userId, String username, LocalDateTime now) {
         this.sessionId = sessionId;
+        this.userId = userId;
         this.username = username;
         this.path = "/";
         this.createDate = now;
         updateCookieTimeInfo(now);
+    }
+
+    public String getUserId() {
+        return userId;
     }
 
     public String getSessionId() {

@@ -2,7 +2,9 @@
 package webserver.utils;
 
 import db.SessionDataBase;
+import db.UserDatabase;
 import model.HttpSession;
+import model.User;
 import webserver.domain.StatusCodes;
 import webserver.domain.request.Request;
 import webserver.exception.HttpRequestException;
@@ -17,7 +19,8 @@ public class HttpSessionUtils {
     public static HttpSession generateSession(String userid){
 
         String sessionStr = UUID.randomUUID().toString();
-        HttpSession session = new HttpSession(sessionStr,userid,LocalDateTime.now());
+        User user = UserDatabase.findUserById(userid).orElse(null);
+        HttpSession session = new HttpSession(sessionStr, userid, user.getName(), LocalDateTime.now());
         SessionDataBase.addCookie(session);
         return session;
         }
