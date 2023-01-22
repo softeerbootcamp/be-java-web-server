@@ -1,17 +1,15 @@
 package webserver.service;
 
-import db.Database;
-import db.UserIdSession;
 import webserver.httpUtils.Request;
 import webserver.httpUtils.Response;
 
 import java.io.IOException;
 
-public class ShowUserListService extends AlreadyLoggedInService{
+public class UserListService extends AlreadyLoggedInService{
 
     private String sid_userid;
 
-    public ShowUserListService(String sid_usrid) {
+    public UserListService(String sid_usrid) {
         super(sid_usrid);
         this.sid_userid = sid_usrid;
     }

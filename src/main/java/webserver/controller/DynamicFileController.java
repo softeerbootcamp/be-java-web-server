@@ -8,9 +8,8 @@ import webserver.httpUtils.Request;
 import webserver.httpUtils.Response;
 import webserver.httpUtils.ResponseSender;
 import webserver.service.AlreadyLoggedInService;
-import webserver.service.LogInService;
 import webserver.service.Service;
-import webserver.service.ShowUserListService;
+import webserver.service.UserListService;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -29,7 +28,7 @@ public class DynamicFileController implements Controller{
 
         if(req.getReqLine().getQuery().contains("user/list"))
         {
-            service = new ShowUserListService(sid_userid);
+            service = new UserListService(sid_userid);
         }
 
         Response res = service.exec(req);
