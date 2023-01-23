@@ -8,46 +8,99 @@ Java Web Application Server 2022
 를 참고하여 작성되었습니다.
 
 ### 프로젝트 구조
-    src/main/java
-    ├── customException
-    │   ├── AlreadyHasSameIdException.java
-    │   └── cannotLogIn
-    │       ├── CannotLogInException.java
-    │       ├── NotFoundUserException.java
-    │       └── PasswordMismatchException.java
-    ├── db
-    │   ├── Database.java
-    │   └── UserIdSession.java
-    ├── model
-    │   └── User.java
-    ├── utils
-    │   └── SessionIdGenerator.java
-    └── webserver
-    ├── Paths.java
-    ├── RequestHandler.java
-    ├── WebServer.java
-    ├── controller
-    │   ├── Controller.java
-    │   ├── ControllerMapper.java
-    │   ├── DynamicFileController.java
-    │   └── StaticFileController.java
-    ├── httpUtils
-    │   ├── Request.java
-    │   ├── RequestGetter.java
-    │   ├── Response.java
-    │   ├── ResponseSender.java
-    │   └── entity
-    │       ├── Body.java
-    │       ├── Header.java
-    │       ├── ReqLine.java
-    │       └── ResLine.java
-    └── service
-        ├── AlreadyLoggedInService.java
-        ├── InvalidAccesstoUserListService.java
-        ├── LogInService.java
-        ├── Service.java
-        ├── ShowUserListService.java
-        └── SignUpService.java
+    ├─src/main/java
+    │  ├─java
+    │  │  ├─customException
+    │  │  │  │  AlreadyHasSameIdException.java
+    │  │  │  │  
+    │  │  │  └─cannotLogIn
+    │  │  │          CannotLogInException.java
+    │  │  │          NotFoundUserException.java
+    │  │  │          PasswordMismatchException.java
+    │  │  │          
+    │  │  ├─db
+    │  │  │      Database.java
+    │  │  │      UserIdSession.java
+    │  │  │      
+    │  │  ├─model
+    │  │  │      User.java
+    │  │  │      
+    │  │  ├─utils
+    │  │  │      SessionIdGenerator.java
+    │  │  │      
+    │  │  └─webserver
+    │  │      │  RequestHandler.java
+    │  │      │  WebServer.java
+    │  │      │  
+    │  │      ├─constants
+    │  │      │      InBody.java
+    │  │      │      Paths.java
+    │  │      │      
+    │  │      ├─controller
+    │  │      │      Controller.java
+    │  │      │      ControllerMapper.java
+    │  │      │      DynamicFileController.java
+    │  │      │      StaticFileController.java
+    │  │      │      
+    │  │      ├─httpUtils
+    │  │      │  │  Request.java
+    │  │      │  │  RequestGetter.java
+    │  │      │  │  Response.java
+    │  │      │  │  ResponseSender.java
+    │  │      │  │  
+    │  │      │  └─entity
+    │  │      │          Body.java
+    │  │      │          Header.java
+    │  │      │          ReqLine.java
+    │  │      │          ResLine.java
+    │  │      │          
+    │  │      └─service
+    │  │              AlreadyLoggedInService.java
+    │  │              InvalidAccesstoUserListService.java
+    │  │              LogInService.java
+    │  │              Service.java
+    │  │              SignUpService.java
+    │  │              UserListService.java
+    │  │              
+    │  └─resources
+    │      │  logback.xml
+    │      │  
+    │      ├─static
+    │      │  ├─css
+    │      │  │      bootstrap.min.css
+    │      │  │      styles.css
+    │      │  │      
+    │      │  ├─fonts
+    │      │  │      glyphicons-halflings-regular.eot
+    │      │  │      glyphicons-halflings-regular.svg
+    │      │  │      glyphicons-halflings-regular.ttf
+    │      │  │      glyphicons-halflings-regular.woff
+    │      │  │      glyphicons-halflings-regular.woff2
+    │      │  │      
+    │      │  ├─images
+    │      │  │      80-text.png
+    │      │  │      
+    │      │  └─js
+    │      │          bootstrap.min.js
+    │      │          jquery-2.2.0.min.js
+    │      │          scripts.js
+    │      │          
+    │      └─templates
+    │          │  favicon.ico
+    │          │  index.html
+    │          │  
+    │          ├─qna
+    │          │      form.html
+    │          │      show.html
+    │          │      
+    │          └─user
+    │                  form.html
+    │                  form_failed.html
+    │                  list.html
+    │                  login.html
+    │                  login_failed.html
+    │                  profile.html
+
 - customException
   - AreadyHasSameIdException : 이미 디비에 저장된 아이디로 회원가입 요청이 들어올 경우 던져지는 예외.
   - CannotLogInException : 로그인할 수 없을 때 던져지는 예외. 아래 두 클래스는 이 클래스를 상속받는다.
