@@ -115,7 +115,7 @@ Java Web Application Server 2022
 - webserver : 웹 서버 관련 객체들이 들어있는 패키지
   - controller : 컨트롤러 관련 클래스와 인터페이스가 들어있음
   - httpUtils : http req, res와 그와 관련된 클래스들이 들어있음
-  - service : 실제로 서비스가 이루어지는 클래스. 모든 서비스들은 Service 클래스를 상속받는다.
+  - service : 실제로 서비스가 이루어지는 클래스. 모든 서비스들은 Service 인터페이스를 상속받는다.
 
 
 ### 실행 과정 요약 
