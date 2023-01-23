@@ -221,3 +221,18 @@ html 문서의 head에서 meta태그 안에 다음과 같은 정보를 주면 �
 - Files 클래스의 probeContentType() 메서드
 - URLConnection 클래스의 guessContentTypeFromName() 메서드
 - MimetypesFileTypeMap 객체의 getContentType() 메서드
+
+### Stateless vs Stateful
+- Stateless
+
+Stateless는 과거의 transaction에 대한 기록이나 정보가 없는 것을 의미한다(현재의 transaction이 과거와 독립적임). 각각의 transaction은 마치 처음 일어나는 것처럼 만들어진다. 한 transaction 당 하나의 서비스나 기능을 제공한다(Short-term request).
+
+예를 들자면, 검색엔진을 들 수 있다. 검색창에 타이핑을 하고 엔터키를 눌렀다고 가정하자. 이 과정에서 인터럽트가 발생하거나, 브라우저가 닫히게 되면 사용자는 처음부터 다시 transaction을 만들어야만 한다. 다른 예시로는 자판기가 있다.(single request - single response)
+- Stateful
+
+반면에 Stateful은 현재의 transaction이 과거의 transaction의 맥락을 따라 수행되는 것, 즉 과거의 transaction 기록에 영향을 받을 수 있다는 것을 의미한다. 이러한 이유 때문에 stateful app은 사용자로부터 받은 요청을 처리할 때마다 같은 server를 사용한다.
+
+Stateful의  예시를 들자면 이메일을 들 수 있을 것이다. 이메일의 경우 첫 전송을 제외하면 나머지 transaction들은 이전에 송수신되었던 내용 뒤에 답장을 붙이는 식으로 진행된다. 이러한 특성 때문에, 중간에 인터럽트가 발생했다 하더라도 현재까지의 기록을 통하여 적절히 취사선택을 할 수 있다.
+
+[참고자료](https://www.redhat.com/en/topics/cloud-native-apps/stateful-vs-stateless)
+
