@@ -1,9 +1,13 @@
 package webserver.service;
 
+import db.Database;
+import model.User;
+import webserver.constants.InBody;
 import webserver.httpUtils.Request;
 import webserver.httpUtils.Response;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class UserListService extends AlreadyLoggedInService{
 
@@ -19,46 +23,30 @@ public class UserListService extends AlreadyLoggedInService{
     {
         Response res = super.exec(req);
 
-        byte[] bodyByte = Service.urlToByte(req.getReqLine().getQuery());
+        byte[] bodyByte = res.getResBody();
 
         String bodyStr = new String(bodyByte);
-        bodyStr = replaceUserList(bodyStr);
-        bodyByte = bodyStr.getBytes();
+        bodyStr = bodyStr.replace(InBody.beforeReplaced_UserList, generateAllUserList());
 
         return res.
-                withBodyBytes(bodyByte);
+                withBodyString(bodyStr);
     }
 
-    private String replaceUserList(String bodyString)
+    private String generateAllUserList()
     {
-        return bodyString.replace(
-            "<tbody>\n" +
-                    "                <tr>\n" +
-                    "                    <th scope=\"row\">1</th>\n" +
-                    "                    <td>javajigi</td>\n" +
-                    "                    <td>자바지기</td>\n" +
-                    "                    <td>javajigi@sample.net</td>\n" +
-                    "                    <td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td>\n" +
-                    "                </tr>\n" +
-                    "                <tr>\n" +
-                    "                    <th scope=\"row\">2</th>\n" +
-                    "                    <td>slipp</td>\n" +
-                    "                    <td>슬립</td>\n" +
-                    "                    <td>slipp@sample.net</td>\n" +
-                    "                    <td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td>\n" +
-                    "                </tr>\n" +
-                    "                </tbody>",
-            new StringBuffer()
-                    .append("<tbody>\n")
-                    .append("<tr>\n")
-                    .append("<th scope=\"row\">테스트</th>\n>")
-                    .append("<td>아이디</td>\n")
-                    .append("<td>이름</td>\n")
-                    .append("<td>이메일</td>\n")
-                    .append("<td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td>\n")
-                    .append("</tr>\n")
-                    .append("</tbody>")
-                    .toString()
-        );
+        StringBuffer sb = new StringBuffer();
+        int idx = 0;
+        for(User user : Database.findAll())
+        {
+            idx++;
+            sb.append("<tr>")
+                    .append("<th scope=\"row\">"+idx+"</th>")
+                    .append("<td>"+user.getUserId()+"</td>")
+                    .append("<td>"+user.getName()+"</td>")
+                    .append("<td>"+user.getEmail()+"</td>")
+                    .append("<td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td>")
+              .append("</tr>");
+        }
+        return sb.toString();
     }
 }
