@@ -5,15 +5,12 @@ import db.UserIdSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.WebServer;
+import webserver.constants.InBody;
 import webserver.httpUtils.Request;
 import webserver.httpUtils.Response;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 public class AlreadyLoggedInService implements Service{
@@ -31,7 +28,9 @@ public class AlreadyLoggedInService implements Service{
         byte bodyByte[] = Service.urlToByte(reqQuery);
 
         String bodyString = new String(bodyByte);
-        bodyString = replaceLoginTextToUsername(bodyString);
+        String newer = generateUserNameButt();
+        bodyString = bodyString.replace(InBody.beforeReplaced_LogInButton1, newer);
+        bodyString = bodyString.replace(InBody.beforeReplaced_LogInButton2, newer);
 
         return new Response()
                 .withVersion(req.getReqLine().getVersion())
@@ -41,16 +40,10 @@ public class AlreadyLoggedInService implements Service{
                 .withBodyString(bodyString);
     }
 
-    private String replaceLoginTextToUsername(String body)
+    private String generateUserNameButt()
     {
+        StringBuffer sb = new StringBuffer();
         String userName = Database.findUserById(UserIdSession.getUserId(sid_usrid)).getName();
-
-        body = body.replace(
-                "<li><a href=\"../user/login.html\" role=\"button\">로그인</a></li>",
-                "<li><a role=\"button\">"+userName+"</a></li>");
-        body = body.replace(
-                "<li><a href=\"user/login.html\" role=\"button\">로그인</a></li>",
-                "<li role=\"button\"><a>"+userName+"</a></li>");
-        return body;
+        return sb.append("<li role=\"button\"><a>"+ userName  +"</a></li>").toString();
     }
 }
