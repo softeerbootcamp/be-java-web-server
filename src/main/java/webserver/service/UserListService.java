@@ -21,12 +21,9 @@ public class UserListService extends AlreadyLoggedInService{
 
         byte[] bodyByte = Service.urlToByte(req.getReqLine().getQuery());
 
-        if(req.getReqLine().getQuery().endsWith(".html"))
-        {
-            String bodyStr = new String(bodyByte);
-            bodyStr = replaceUserList(bodyStr);
-            bodyByte = bodyStr.getBytes();
-        }
+        String bodyStr = new String(bodyByte);
+        bodyStr = replaceUserList(bodyStr);
+        bodyByte = bodyStr.getBytes();
 
         return res.
                 withBodyBytes(bodyByte);

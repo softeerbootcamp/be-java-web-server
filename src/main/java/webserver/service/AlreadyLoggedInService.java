@@ -10,6 +10,10 @@ import webserver.httpUtils.Response;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 public class AlreadyLoggedInService implements Service{
@@ -28,14 +32,13 @@ public class AlreadyLoggedInService implements Service{
 
         String bodyString = new String(bodyByte);
         bodyString = replaceLoginTextToUsername(bodyString);
-        bodyByte = bodyString.getBytes();
 
         return new Response()
                 .withVersion(req.getReqLine().getVersion())
                 .withStatCodeAndText(200, "OK")
                 .withHeaderKeyVal("Content-Type", contentType + ";charset=utf-8")
                 .withHeaderKeyVal("Content-Length", Integer.toString(bodyByte.length))
-                .withBodyBytes(bodyByte);
+                .withBodyString(bodyString);
     }
 
     private String replaceLoginTextToUsername(String body)
