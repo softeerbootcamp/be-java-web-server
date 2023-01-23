@@ -27,7 +27,7 @@ public class ResponseSender {
         // header
         res.getResHeader().getAll().entrySet().forEach(elem ->
                 {
-                    logger.debug(elem.getKey() + elem.getValue());
+                    logger.debug(elem.getKey() + " : " + elem.getValue());
                     try {
                         dos.writeBytes(elem.getKey() +": "+ elem.getValue() + "\r\n");
                     } catch (IOException e) {
