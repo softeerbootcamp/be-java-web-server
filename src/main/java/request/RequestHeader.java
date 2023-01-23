@@ -46,6 +46,7 @@ public class RequestHeader {
                     break;
                 }
                 fields.put(key,value);
+                logger.debug("readLastLine:{}",bufferedReader.readLine());
             }
         }
 
