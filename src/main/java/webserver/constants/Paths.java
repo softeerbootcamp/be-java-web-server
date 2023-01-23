@@ -1,4 +1,4 @@
-package webserver;
+package webserver.constants;
 
 public class Paths {
 

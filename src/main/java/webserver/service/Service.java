@@ -1,6 +1,6 @@
 package webserver.service;
 
-import webserver.Paths;
+import webserver.constants.Paths;
 import webserver.httpUtils.Request;
 import webserver.httpUtils.Response;
 
