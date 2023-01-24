@@ -1,3 +1,5 @@
+package http.request;
+
 import http.request.HttpMethod;
 import http.request.QueryParameters;
 import http.request.RequestLine;

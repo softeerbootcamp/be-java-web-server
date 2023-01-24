@@ -34,8 +34,8 @@ public class ResourceController implements Controller {
                 body = renderHtml(httpRequest, file);
             }
             return HttpResponseFactory.OK(httpRequest.getContentType(), body);
-        } catch (IOException e) {
-            return HttpResponseFactory.NOT_FOUND("Not Found File");
+        } catch (Exception e) {
+            return HttpResponseFactory.NOT_FOUND("Not Found");
         }
     }
 
