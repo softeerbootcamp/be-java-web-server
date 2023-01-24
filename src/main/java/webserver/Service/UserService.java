@@ -2,6 +2,7 @@ package webserver.Service;
 
 import db.UserDatabase;
 import model.User;
+import model.UserDto;
 import webserver.controller.UserController;
 import webserver.domain.StatusCodes;
 import webserver.exception.HttpRequestException;
@@ -20,12 +21,12 @@ public class UserService {
         private static final UserService INSTANCE = new UserService();
     }
 
-    public byte[] addUser(String userId, String password, String name, String email) {
-        UserDatabase.findUserById(userId).ifPresent(m -> {
+    public byte[] addUser(UserDto newUser) {
+        UserDatabase.findUserById(newUser.getUserId()).ifPresent(m -> {
             throw new HttpRequestException(StatusCodes.BAD_REQUEST, "<script>alert('사용자가 이미 존재합니다'); history.go(-1);</script>");
         });
-        UserDatabase.addUser(new User(userId, password, name, URLDecoder.decode(email)));
-        return userId.getBytes();
+        UserDatabase.addUser(User.from(newUser));
+        return newUser.getUserId().getBytes();
     }
 
     public String login(String userId, String password) {
