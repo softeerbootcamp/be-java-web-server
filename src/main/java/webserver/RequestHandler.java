@@ -35,14 +35,12 @@ public class RequestHandler implements Runnable {
             Response res = new Response();
             ModelAndView mv = new ModelAndView();
 
-            try{
-                Controller controller = handlerMapping.getHandler(req);  //get the controller to handle request
-                controller.chain(req, res, mv);
-                View targetView = ViewResolver.getHandler(mv);
-                targetView.makeView(req, res, mv);
-            }catch (HttpRequestException e){
-                res.error(e.getErrorCode(), e.getMsg().getBytes(), ContentType.TEXT_HTML);
-            }
+            Controller controller = handlerMapping.getHandler(req);  //get the controller to handle request
+            controller.chain(req, res, mv);
+
+            View targetView = ViewResolver.getHandler(mv);  //retrieve the view to render dynamic web page
+            targetView.makeView(req, res, mv);
+
             HttpResponseWriter.of(res, out); //write http response and send it back to client side
 
         } catch (IOException e) {

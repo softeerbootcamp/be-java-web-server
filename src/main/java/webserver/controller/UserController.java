@@ -2,8 +2,11 @@ package webserver.controller;
 
 import db.UserDatabase;
 import model.User;
+import model.UserDto;
 import webserver.Service.UserService;
 import webserver.annotation.ControllerInfo;
+import webserver.annotation.RequestBody;
+import webserver.annotation.RequestParam;
 import webserver.domain.ContentType;
 import webserver.view.ModelAndView;
 import webserver.domain.RequestMethod;
@@ -33,34 +36,32 @@ public class UserController implements Controller {
 
 
     @ControllerInfo(path = "/user/create", methodName = "userCreate", queryStr = {"userId", "password", "name", "email"}, method = RequestMethod.POST)
-    public void userCreate(Map<String, String> queryStrs, Response response, ModelAndView mv) {
-        userService.addUser(queryStrs.get("userId"), queryStrs.get("password"), queryStrs.get("name"), queryStrs.get("email"));
+    public void userCreate(UserDto newUser, Response response, ModelAndView mv) {
+        userService.addUser(newUser);
         mv.setViewPath("redirect:/index.html");
         response.ok(StatusCodes.OK, ("<script>alert('계정 생성이 완료되었습니다.'); </script>").getBytes(), ContentType.TEXT_HTML);
     }
 
     @ControllerInfo(path = "/user/login", methodName = "userLogin", queryStr = {"userId", "password"}, method = RequestMethod.POST)
-    public void userLogin(Map<String, String> queryStrs, Response response, ModelAndView mv) throws  HttpRequestException{
+    public void userLogin(@RequestBody Map<String, String> queryStrs, Response response, ModelAndView mv) throws  HttpRequestException{
         String userId = userService.login(queryStrs.get("userId"), queryStrs.get("password"));
-        if(queryStrs.get("Cookie") == null)     //when client got no session for now, generate a new cookie and add it on response header
-            response.addCookieOnHeader(HttpSessionUtils.generateSession(userId).toString());
         mv.setViewPath("redirect:/index.html");
         response.ok(StatusCodes.OK, ("<script>alert('로그인이 완료되었습니다.');</script>").getBytes(), ContentType.TEXT_HTML);
+        response.addCookieOnHeader(HttpSessionUtils.generateSession(userId).toString());
     }
 
     @ControllerInfo(path = "/user/logout", methodName = "userLogout", method = RequestMethod.GET)
-    public void userLogout(Map<String, String> queryStrs, Response response, ModelAndView mv){
+    public void userLogout(@RequestBody Map<String, String> queryStrs, Response response, ModelAndView mv){
         SecurityContext.clearContext();
         mv.setViewPath("redirect:/index.html");
         response.ok(StatusCodes.OK, ("<script>alert('로그아웃 완료되었습니다.'); </script>").getBytes(), ContentType.TEXT_HTML);
-        response.addCookieOnHeader(HttpSessionUtils.cookieInvalidation(queryStrs.get("Cookie")));
+        response.addCookieOnHeader(HttpSessionUtils.cookieInvalidation(mv.getViewModel().get("session-id").toString()));
     }
 
     @ControllerInfo(path = "/user/list", methodName = "userList", method = RequestMethod.GET)
-    public void userList(Map<String, String> queryStrs, Response response, ModelAndView mv) throws IOException {
-        List<User> allUsers = UserDatabase.findAll();
+    public void userList(@RequestBody Map<String, String> queryStrs, Response response, ModelAndView mv) {
         mv.setViewPath("/user/list.html");
-        mv.addViewModel("user", allUsers);
+        mv.addViewModel("user", UserDatabase.findAll());
     }
 
     @Override
