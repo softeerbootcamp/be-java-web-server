@@ -56,7 +56,7 @@ class SessionServiceTest {
     }
 
     @Test
-    @DisplayName("세션에 들어가 있는 userId를 정상적으로 가져오는지 테스트")
+    @DisplayName("세션에 들어가 있는 userName을 정상적으로 가져오는지 테스트")
     public void testGetUserName() {
         String userId = "userId";
         String userName = "userName";

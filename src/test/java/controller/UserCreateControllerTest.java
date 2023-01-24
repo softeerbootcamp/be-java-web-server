@@ -4,6 +4,7 @@ import db.UserRepository;
 import exception.FileNotFoundException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import service.UserService;
 
@@ -23,6 +24,7 @@ class UserCreateControllerTest {
     Controller controller = new UserCreateController(userService);
 
     @Test
+    @DisplayName("유저 회원가입 성공 테스트")
     void doPost() throws IOException, FileNotFoundException, URISyntaxException {
         String request =
                 "POST /user/login HTTP/1.1" + System.lineSeparator() +

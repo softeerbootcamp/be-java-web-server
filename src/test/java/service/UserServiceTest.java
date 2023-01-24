@@ -3,6 +3,7 @@ package service;
 import db.UserRepository;
 import exception.LogInFailedException;
 import model.User;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
@@ -19,6 +20,7 @@ class UserServiceTest {
 
 
     @Test
+    @DisplayName("새로운 유저 DB에 정상적으로 추가되는지 테스트")
     public void testAddUser() {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("userId", "user1");
@@ -33,6 +35,7 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("유저 검증 성공 테스트")
     public void testValidateUser() throws LogInFailedException {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("userId", "user1");
@@ -45,6 +48,7 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("유저 검증 실패 테스트")
     public void testValidateUser_failed() {
         assertThatThrownBy(() -> userService.validateUser("user2", "password1"))
                 .isInstanceOf(LogInFailedException.class)
@@ -52,6 +56,7 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("유저리스트 정상적으로 반환하는지 테스트")
     public void testGetUserList() {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("userId", "user1");
@@ -72,6 +77,7 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("유저 이름 정상적으로 반환하는지 테스트")
     public void testGetUserName() {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("userId", "user1");
