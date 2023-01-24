@@ -179,3 +179,9 @@ Java Web Application Server 2022
 - 가비지 컬렉션의 동작 원리, 알고리즘
 - lazy loading
 - Spring의 MVC 컨트롤러 각각의 파라미터와 리턴 타입에 대한 Best Practice
+
+------
+## TODO
+- path variable 처리
+- response 객체의 반환?
+- Test Code
