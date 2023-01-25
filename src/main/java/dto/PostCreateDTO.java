@@ -32,5 +32,9 @@ public class PostCreateDTO {
     public String getContent() {
         return content;
     }
+
+    public Boolean isEmpty() {
+        return writer.isEmpty() || title.isEmpty() || content.isEmpty();
+    }
 }
 
