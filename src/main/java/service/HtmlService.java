@@ -19,15 +19,16 @@ public class HtmlService {
                 .build();
     }
 
-    public static byte[] banLogInAndSignUpWhenUserLogInState(String responseString, User logInUser){
+    public static byte[] banLogInAndSignUpWhenUserLogInState(String responseString, User logInUser) {
         return replaceHyperLinkLikeIndexHtml(responseString).replace(
-                        "<li><a href=\"user/login.html\" role=\"button\">로그인</a></li>\n" +
-                "                <li><a href=\"user/form.html\" role=\"button\">회원가입</a></li>",
+                "<li><a href=\"user/login.html\" role=\"button\">로그인</a></li>\n" +
+                        "                <li><a href=\"user/form.html\" role=\"button\">회원가입</a></li>",
                 "<li><a role=\"button\">" + logInUser.getName() + "</a></li>").getBytes();
     }
-    public static String replaceHyperLinkLikeIndexHtml(String responseString){
+
+    public static String replaceHyperLinkLikeIndexHtml(String responseString) {
         return responseString.replace(
                 "../user/login.html", "user/login.html").replace(
-                        "../user/form.html", "user/form.html");
+                "../user/form.html", "user/form.html");
     }
 }

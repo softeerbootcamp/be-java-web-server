@@ -15,7 +15,7 @@ public class ControllerHandler {
         if (httpRequest.isPost()) return whoWant(httpRequest.getUri());
 
         // html 파일을 원한다면?
-        if(httpRequest.wantHtml()) return new HtmlController();
+        if (httpRequest.wantHtml()) return new HtmlController();
 
         // 나머지 - 정적 처리
         return new StaticFileController();

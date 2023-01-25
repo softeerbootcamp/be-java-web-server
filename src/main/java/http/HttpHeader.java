@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class HttpHeader {
 
-    private Map<String, String> headers = new HashMap<>();
+    private final Map<String, String> headers = new HashMap<>();
 
     public HttpHeader(List<String> headers) {
         for (String header : headers) {
@@ -17,7 +17,7 @@ public class HttpHeader {
         }
     }
 
-    public void addHeader(String headerKey, String headerValue){
+    public void addHeader(String headerKey, String headerValue) {
         headers.put(headerKey, headerValue);
     }
 
@@ -39,5 +39,11 @@ public class HttpHeader {
         return headers.get("Content-Length");
     }
 
-    public String getCookie() { return headers.get("Cookie"); }
+    public String getCookie() {
+        return headers.get("Cookie");
+    }
+
+    public String getLocation() {
+        return headers.get("Location");
+    }
 }

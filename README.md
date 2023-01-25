@@ -8,6 +8,65 @@ Java Web Application Server 2022
 를 참고하여 작성되었습니다.
 
 ## 프로젝트 구조
+    ├── controller  
+    │   ├── Controller.java  
+    │   ├── HtmlController.java  
+    │   ├── StaticFileController.java  
+    │   └── UserController.java  
+    ├── db  
+    │   ├── Database.java  
+    │   └── Session.java  
+    ├── http  
+    │   ├── HttpHeader.java  
+    │   ├── HttpStatus.java  
+    │   ├── HttpUri.java  
+    │   ├── exception  
+    │   │   └── NullHttpRequestException.java  
+    │   ├── request  
+    │   │   ├── HttpRequest.java  
+    │   │   └── HttpRequestLine.java  
+    │   └── response  
+    │       ├── HttpResponse.java  
+    │       └── HttpStatusLine.java  
+    ├── model  
+    │   └── User.java  
+    ├── service  
+    │   ├── HtmlService.java  
+    │   ├── ListService.java  
+    │   ├── LogInService.java  
+    │   ├── SignUpService.java  
+    │   └── StaticFileService.java  
+    ├── util  
+    │   ├── HttpRequestUtils.java  
+    │   └── HttpResponseUtils.java  
+    └── webserver  
+    ├── ControllerHandler.java  
+    ├── RequestHandler.java  
+    └── WebServer.java  
+
++ RequestHandler
+  + HttpRequest 클래스에 입력을 받고 받은 URI로 알맞는 컨트롤러를 골라준다. 고른 컨트롤러로 응답을 만들고 응답을 출력해준다.
++ ControllerHandler
+  + Post 요청인 경우를 먼저 확인 - 회원 가입과 로그인을 처리하는 UserController를 리턴  
+  + Html 파일 요청인 경우인지 확인 - Html파일을 처리하는 HtmlController를 리턴
+  + 나머지인 경우 (정적 파일) - 정적 파일을 처리하는 StaticFileController를 리턴
++ UserController
+  + HttpRequest 객체로부터 uri와 httpVersion을 받아온다.
+  + HttpRequest body의 query string을 파싱해서 Map 객체인 params에 넣어준다.
+  + 회원 가입 요청인 경우와 로그인 요청인 경우를 나누어 준다.
+  + 각각 params와 httpVersion을 나누어 주며 회원가입일 경우 SignUpService, 로그인일 경우 LogInService를 통해 응답을 생성해 준다.
+  + 생성된 응답 HttpResponse 객체를 리턴한다.
++ HtmlController
+  + HttpRequest 객체로부터 로그인 유저 정보, ContentType, 파일 경로, uri를 받는다.
+  + 유저 리스트 출력 html일 경우 ListService를 통해 응답 생성
+  + index.html 로그인 상태일 경우 HtmlService를 통해 응답 생성
+  + index.html 로그인 상태가 아닐 경우 정적 파일 요청이므로 StaticFileService를 통해 응답을 생성한다.
+  + 생성된 응답 HttpResponse 객체를 리턴한다.
++ StaticFileController
+  + 정적 파일들은 모두 /static 폴더 내에 있으므로 기본 파일 경로를 설정해준다.
+  + 설정해준 파일 경로에 HttpResquest객체로부터 받은 uri를 더해서 정적 파일 경로를 만들어준다.
+  + 만들어진 파일 경로로 StaticFileService를 통해 응답을 생성한다.
+  + 생성된 응답 HttpResponse 객체를 리턴한다.
 
 
 ## 프로젝트 학습 내용
@@ -161,3 +220,23 @@ Java Web Application Server 2022
       + Java 언어로 작성된 웹 애플리케이션의 컴포넌트
       + 서버 측에서 실행되며 http 요청을 처리
       + 클라이언트의 요청을 처리하고 응답을 생성
+
+------------
+  + Day 14
+    + stateful과 stateless
+      + stateful
+        + 상태 유지 : 서버가 클라이언트의 상태를 보존한다.
+        + 대표적으로 TCP의 3-way handshaking
+        + 문제점 : 해당 서버를 못쓰게 되어 다른 서버를 사용해야 할 때 발생 - 이전 서버의 정보가 없음
+        + 문제점 해결 : 현업에서는 캐시 서버 Redis 사용
+      + stateless
+        + 서버가 클라이언트의 상태를 보존하지 않음.
+        + 요청이 오면 바로 응답을 보내며 상태 관리는 클라이언트에서 책임을 짐.
+        + 대량의 트래픽이 발생했을 때에도 서버 확장을 통해 대처를 수월하게 할 수 있음.
+        + (stateful과 다르게 서버가 바뀌어도 정확한 응답에 문제가 없기 때문)
+        + 대표적으로 UDP와 HTTP
+        + 문제점 : 더 많은 데이터 소모 - 매번 요청할 때마다 부가정보 필요
+    + wrapper class
+      + 기본 자료타입을 객체로 다루기 위해서 사용하는 클래스
+    + git diff
+      + add 전과 후의 파일 내용을 비교해줌

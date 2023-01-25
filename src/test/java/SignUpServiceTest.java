@@ -1,3 +1,5 @@
+import db.Database;
+import http.response.HttpResponse;
 import model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,6 +26,23 @@ public class SignUpServiceTest {
         // then
         assertThat(user).usingRecursiveComparison().isEqualTo(new User(
                 "jhchoi57", "12349865", "최주형", "jhchoi57@gmail.com"));
+    }
+
+    @Test
+    void 회원가입_서비스_테스트() {
+        // given
+        String body = "userId=jhchoi57&" +
+                "password=12349865&" +
+                "name=%EC%B5%9C%EC%A3%BC%ED%98%95&" +
+                "email=jhchoi57%40gmail.com";
+        Map<String, String> params = HttpRequestUtils.parseQueryString(body);
+
+        // when
+        HttpResponse response = SignUpService.service(params, "HTTP/1.1");
+
+        // then
+        assertThat(response.getHeaders().getLocation()).isEqualTo("/index.html");
+        assertThat(Database.findUserById("jhchoi57").getUserId()).isNotEmpty();
     }
 
 }

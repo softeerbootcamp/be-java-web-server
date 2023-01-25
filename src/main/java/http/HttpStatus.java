@@ -6,8 +6,8 @@ public enum HttpStatus {
     OK(200, "OK"),
     FOUND(302, "FOUND");
 
-    private int statusCode;
-    private String status;
+    private final int statusCode;
+    private final String status;
 
     HttpStatus(int statusCode, String status) {
         this.statusCode = statusCode;
@@ -19,14 +19,6 @@ public enum HttpStatus {
                 .filter(httpStatus -> httpStatus.statusCode == statusCode)
                 .findAny()
                 .orElseThrow();
-    }
-
-    public int getStatusCode() {
-        return statusCode;
-    }
-
-    public String getStatus() {
-        return status;
     }
 
     public String toString() {

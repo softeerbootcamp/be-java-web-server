@@ -3,9 +3,9 @@ package http.request;
 import http.HttpUri;
 
 public class HttpRequestLine {
-    private String method;
-    private HttpUri uri;
-    private String version;
+    private final String method;
+    private final HttpUri uri;
+    private final String version;
 
     public HttpRequestLine(String method, HttpUri uri, String version) {
         this.method = method;
@@ -21,5 +21,7 @@ public class HttpRequestLine {
         return version;
     }
 
-    public String getHttpMethod(){ return method; }
+    public String getHttpMethod() {
+        return method;
+    }
 }

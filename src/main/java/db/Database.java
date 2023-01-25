@@ -1,7 +1,6 @@
 package db;
 
 import com.google.common.collect.Maps;
-import http.response.HttpResponse;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +10,7 @@ import java.util.Map;
 
 public class Database {
     private static final Logger logger = LoggerFactory.getLogger(Database.class);
-    private static Map<String, User> users = Maps.newHashMap();
+    private static final Map<String, User> users = Maps.newHashMap();
 
     public static void addUser(User user) {
         logger.debug("Database User input : {}", user);
@@ -24,5 +23,9 @@ public class Database {
 
     public static Collection<User> findAll() {
         return users.values();
+    }
+
+    public static boolean checkDuplicate(User user) {
+        return users.get(user.getUserId()) == null;
     }
 }
