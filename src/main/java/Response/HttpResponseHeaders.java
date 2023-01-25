@@ -1,7 +1,8 @@
 package Response;
 
-import util.HttpResponseUtil;
+import util.FileIoUtil;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -13,8 +14,18 @@ public class HttpResponseHeaders {
     public HttpResponseHeaders(Map<String, String> headers) {
         this.headers = headers;
     }
-    public HttpResponseHeaders(String requestPath, int length){
-        headers = HttpResponseUtil.generateHeaders(requestPath,length);
+
+    public static HttpResponseHeaders of(String requestPath, int length) {
+        ContentType contentType = ContentType.PLAIN;
+        if (!requestPath.isEmpty()) {
+            String ex = FileIoUtil.findExtension(requestPath);
+            contentType = ContentType.valueOf(ex.toUpperCase());
+        }
+
+        Map<String, String> headers = new HashMap<>();          //headers
+        headers.put("Content-Type", contentType.getContentText());
+        headers.put("Content-Length", String.valueOf(length));
+        return new HttpResponseHeaders(headers);
     }
 
     public Map<String, String> getHeaders() {

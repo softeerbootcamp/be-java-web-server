@@ -13,23 +13,17 @@ public class HttpResponse {
     private HttpResponseHeaders httpResponseHeaders;
     public static final String NEWLINE = "\r\n";
 
-    public HttpResponse() {
-
-    }
-
-    public HttpResponse startLine(HttpResponseStartLine httpResponseStartLine) {
-        this.httpResponseStartLine = httpResponseStartLine;
-        return this;
-    }
-
-    public HttpResponse headers(HttpResponseHeaders httpResponseHeaders) {
-        this.httpResponseHeaders = httpResponseHeaders;
-        return this;
-    }
-
-    public HttpResponse body(HttpResponseBody httpResponseBody) {
+    public HttpResponse(HttpResponseStartLine httpResponseStartLine, HttpResponseBody httpResponseBody, HttpResponseHeaders httpResponseHeaders) {
         this.httpResponseBody = httpResponseBody;
-        return this;
+        this.httpResponseStartLine = httpResponseStartLine;
+        this.httpResponseHeaders = httpResponseHeaders;
+    }
+
+    public static HttpResponse createResponse(String path, StatusCode code, String protocol) {
+        HttpResponseStartLine httpResponseStartLine = new HttpResponseStartLine(code, protocol);
+        HttpResponseBody httpResponseBody = HttpResponseBody.from(path);
+        HttpResponseHeaders httpResponseHeaders = HttpResponseHeaders.of(path, httpResponseBody.getLength());
+        return new HttpResponse(httpResponseStartLine, httpResponseBody, httpResponseHeaders);
     }
 
     public void putHeader(String key, String value) {
@@ -40,7 +34,9 @@ public class HttpResponse {
     public String toString() {
         return httpResponseStartLine.toString() + httpResponseHeaders.toString();
     }
-
+    public void setHttpResponseBody(byte[] body) {
+        this.httpResponseBody.setBody(body);
+    }
     public byte[] getBody() {
         return this.httpResponseBody.getBody();
     }
