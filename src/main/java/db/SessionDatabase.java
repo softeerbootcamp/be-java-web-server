@@ -25,7 +25,7 @@ public class SessionDatabase {
         return instance;
     }
 
-    // TODO: connection 관련 기능 분리하기
+    // TODO: QueryExecutor 적용하기
     public void add(Session session) throws SQLException, NullPointerException {
         Connection con = DatabaseConnection.getConnection();
         try {
