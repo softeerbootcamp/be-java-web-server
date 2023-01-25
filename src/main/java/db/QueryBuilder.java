@@ -3,23 +3,40 @@ package db;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class QueryBuilder {
     private final Connection conn;
+    private String select = "";
+    private String from = "";
+    private String where = "";
 
     public QueryBuilder(Connection conn) {
         this.conn = conn;
     }
 
-    public QueryBuilder insert(String... field) {
+    public QueryBuilder insert(String... values) {
+        return this;
+    }
+
+    public QueryBuilder into(String table) {
         return this;
     }
 
     public QueryBuilder select(String... filed) {
-      return this;
+        StringBuilder sb = new StringBuilder("SELECT ");
+
+        for (int idx = 0; idx < filed.length - 1; idx++) {
+            sb.append(filed[idx]).append(", ");
+        }
+        sb.append(filed[filed.length - 1]).append(" ");
+
+        this.select = sb.toString();
+        return this;
     }
 
     public QueryBuilder from(String table) {
+        this.from = "FROM " + table + " ";
         return this;
     }
 
@@ -28,7 +45,14 @@ public class QueryBuilder {
     }
 
     public ResultSet execute() {
-        return null;
+        String sql = select + from + where;
+        try {
+            Statement statement = conn.createStatement();
+            statement.execute(sql);
+            return statement.getResultSet();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void close() {
