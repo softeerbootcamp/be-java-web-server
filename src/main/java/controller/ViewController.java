@@ -39,11 +39,18 @@ public class ViewController implements Controller {
     }
 
     private Response getStaticFileResponse(Request request) {
+        Map<Header, String> headers;
         RequestLine requestLine = request.getRequestLine();
+        boolean isLogin = Sessions.isExistSession(request.getSessionId());
 
-        byte[] body = makeResponseBody(Sessions.isExistSession(request.getSessionId()), request);
+        if(!isLogin && requestLine.getUri().equals("/memo/form.html")) {
+            headers = HeaderUtils.responseRedirectLoginHtmlHeader();
+            return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.FOUND), headers);
+        }
 
-        Map<Header, String> headers = HeaderUtils.response200Header(requestLine.getContentType(), body.length);
+        byte[] body = makeResponseBody(isLogin, request);
+
+        headers = HeaderUtils.response200Header(requestLine.getContentType(), body.length);
 
         return Response.of(StatusLine.of(requestLine.getHttpVersion(), Status.OK), headers, body);
     }
