@@ -13,7 +13,6 @@ import response.HttpResponse;
 
 import java.io.FileNotFoundException;
 import java.net.URL;
-import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +31,6 @@ public class FileController implements Controller{
             return STATIC_DIR + url;
         }else if (isTemplate) {
             if(type == ContentType.ICO) FileService.serveFile(TEMPLATES_DIR + url,response);
-            //TODO 더 리팩토링 해보기
             URL fileUrl = FileIoUtils.class.getClassLoader().getResource(TEMPLATES_DIR + url);
             if (fileUrl == null) {
                 throw new FileNotFoundException();

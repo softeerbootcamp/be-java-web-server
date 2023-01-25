@@ -44,9 +44,7 @@ public class IndexView implements View{
     }
 
     public boolean isLogined(HttpRequest request){
-        System.out.println("isLogined");
         String sessionKey = request.getCookie(COOKIE_SESSION_KEY);
-        System.out.println("isLogined session key: "+sessionKey);
         // 쿠키 값이 유효한 경우 == 로그인 된 경우
         if (sessionKey != null && HttpSessionManager.getSession(sessionKey) != null) {
             return true;
