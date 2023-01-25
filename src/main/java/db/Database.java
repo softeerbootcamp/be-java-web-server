@@ -5,7 +5,9 @@ import http.common.Session;
 import model.Post;
 import model.User;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public class Database {
@@ -41,5 +43,9 @@ public class Database {
     public static void savePost(Post post) {
         post.setId(++POST_SEQUENCE);
         posts.put(post.getId(), post);
+    }
+
+    public static List<Post> getAllPosts() {
+        return new ArrayList<>(posts.values());
     }
 }
