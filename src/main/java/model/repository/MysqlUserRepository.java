@@ -15,6 +15,8 @@ public class MysqlUserRepository implements UserRepository{
     private static final String userName = "root";
     private static final String password = "vldb1234";
 
+    private MysqlUserRepository(){}
+
     public static UserRepository getInstance(){
         if (mysqlUserRepository == null){
             synchronized (MysqlUserRepository.class){
