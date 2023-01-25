@@ -4,7 +4,7 @@ import model.User;
 
 import java.util.Collection;
 
-public interface Database {
+public interface UserDatabase {
     void addUser(User user);
 
     User findUserById(String userId);

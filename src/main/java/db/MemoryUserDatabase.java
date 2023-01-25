@@ -6,16 +6,16 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class MemoryDatabase implements Database {
+public class MemoryUserDatabase implements UserDatabase {
     private final static Map<String, User> users = new ConcurrentHashMap<>();
-    private static Database database;
+    private static UserDatabase userDatabase;
 
-    private MemoryDatabase() {
+    private MemoryUserDatabase() {
     }
 
-    public static Database getInstance() {
-        if (database == null) database = new MemoryDatabase();
-        return database;
+    public static UserDatabase getInstance() {
+        if (userDatabase == null) userDatabase = new MemoryUserDatabase();
+        return userDatabase;
     }
 
     public void addUser(User user) {

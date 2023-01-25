@@ -1,6 +1,6 @@
 package service;
 
-import db.Database;
+import db.UserDatabase;
 import model.User;
 
 import javax.naming.AuthenticationException;
@@ -8,26 +8,26 @@ import java.util.Collection;
 import java.util.Map;
 
 public class UserServiceImpl implements UserService {
-    private final Database database;
+    private final UserDatabase userDatabase;
     private static UserService userService;
 
-    private UserServiceImpl(Database database) {
-        this.database = database;
+    private UserServiceImpl(UserDatabase userDatabase) {
+        this.userDatabase = userDatabase;
     }
 
-    public static UserService getInstance(Database database) {
-        if (userService == null) userService = new UserServiceImpl(database);
+    public static UserService getInstance(UserDatabase userDatabase) {
+        if (userService == null) userService = new UserServiceImpl(userDatabase);
         return userService;
     }
 
     @Override
     public void join(User user) {
-        database.addUser(user);
+        userDatabase.addUser(user);
     }
 
     @Override
     public User findUser(String userId) {
-        return database.findUserById(userId);
+        return userDatabase.findUserById(userId);
     }
 
     @Override
@@ -52,6 +52,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Collection<User> findAllUsers() {
-        return database.findAll();
+        return userDatabase.findAll();
     }
 }

@@ -1,7 +1,7 @@
 package webserver;
 
-import db.Database;
-import db.MemoryDatabase;
+import db.UserDatabase;
+import db.MemoryUserDatabase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.UserService;
@@ -14,7 +14,7 @@ public class AppConfig {
         return UserServiceImpl.getInstance(makeDatabase());
     }
 
-    private Database makeDatabase() {
-        return MemoryDatabase.getInstance();
+    private UserDatabase makeDatabase() {
+        return MemoryUserDatabase.getInstance();
     }
 }
