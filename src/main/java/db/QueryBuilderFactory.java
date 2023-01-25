@@ -20,4 +20,8 @@ public final class QueryBuilderFactory {
             throw new RuntimeException(e);
         }
     }
+
+    public static QueryBuilder newQueryBuilder() {
+        return newQueryBuilder("src/main/resources/db_config.xml");
+    }
 }

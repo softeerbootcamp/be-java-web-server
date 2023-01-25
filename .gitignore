@@ -204,4 +204,7 @@ gradle-app.setting
 # ETC
 .idea
 
+## properties
+src/main/resources/db_config.xml
+
 # End of https://www.toptal.com/developers/gitignore/api/macos,windows,intellij+all,gradle,java

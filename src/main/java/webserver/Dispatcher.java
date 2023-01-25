@@ -18,7 +18,8 @@ public class Dispatcher {
                 StaticResourceController.PATH, new StaticResourceController(),
                 SignUpController.PATH, new SignUpController(),
                 LoginController.PATH, new LoginController(),
-                UserListController.PATH, new UserListController()
+                UserListController.PATH, new UserListController(),
+                PostController.PATH, new PostController()
         );
     }
 
