@@ -1,7 +1,7 @@
 package Controller;
 
 import Request.HttpRequest;
-import Response.HttpResponse;
+import response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import Request.StatusCode;
@@ -41,6 +41,7 @@ public class FileController implements Controller {
         response.setHttpResponseBody(body);
         response.putHeader("Content-Length", String.valueOf(body.length));
         return response;
+
     }
 
     public HttpResponse response404(HttpRequest httpRequest) {

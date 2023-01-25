@@ -1,8 +1,8 @@
-package Response;
+package response;
 
 import Request.StatusCode;
 
-import static Response.HttpResponse.NEWLINE;
+import static response.HttpResponse.NEWLINE;
 
 public class HttpResponseStartLine {
     private StatusCode status;

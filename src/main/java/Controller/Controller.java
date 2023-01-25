@@ -2,7 +2,7 @@ package Controller;
 
 import Request.HttpRequest;
 import Request.StatusCode;
-import Response.HttpResponse;
+import response.HttpResponse;
 import util.HttpResponseUtil;
 
 import java.io.DataOutputStream;

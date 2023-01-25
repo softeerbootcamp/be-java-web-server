@@ -1,4 +1,4 @@
-package Response;
+package response;
 
 import util.FileIoUtil;
 
@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static Response.HttpResponse.NEWLINE;
+import static response.HttpResponse.NEWLINE;
 
 public class HttpResponseHeaders {
     private Map<String, String> headers;

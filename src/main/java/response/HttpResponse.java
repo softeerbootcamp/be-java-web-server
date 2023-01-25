@@ -1,4 +1,4 @@
-package Response;
+package response;
 
 import Request.StatusCode;
 import org.slf4j.Logger;

@@ -1,7 +1,6 @@
 package util;
 
-import Response.ContentType;
-import Response.HttpResponse;
+import response.HttpResponse;
 import org.slf4j.LoggerFactory;
 
 import java.io.DataOutputStream;

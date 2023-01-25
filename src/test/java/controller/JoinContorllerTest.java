@@ -2,7 +2,7 @@ package controller;
 
 import Controller.JoinController;
 import Request.*;
-import Response.HttpResponse;
+import response.HttpResponse;
 import model.User;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;

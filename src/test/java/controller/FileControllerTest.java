@@ -2,7 +2,7 @@ package controller;
 
 import Controller.Controller;
 import Request.*;
-import Response.HttpResponse;
+import response.HttpResponse;
 import db.SessionDb;
 import model.User;
 import org.assertj.core.api.Assertions;
