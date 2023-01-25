@@ -18,7 +18,7 @@ public class MainController implements Controller {
 
     public static final List<String> optionalAuthUrls = List.of("/", INDEX_HTML);
     public static final List<String> mustNotAuthUrls = List.of("/user/login.html", "/user/form.html");
-    public static final List<String> mustAuthUrls = List.of("/user/list.html");
+    public static final List<String> mustAuthUrls = List.of("/user/list.html", "/qna/form.html");
 
     private final Logger logger = LoggerFactory.getLogger(MainController.class);
     private final AuthService authService = new AuthService();
