@@ -138,7 +138,7 @@ public class Database {
         }
     }
 
-    public List<String> findAllMemos() {
+    public static List<String> findAllMemos() {
         List<String> memos = new ArrayList<>();
 
         try {
