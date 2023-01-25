@@ -56,8 +56,11 @@ public class Response {
         }
     }
 
-
     public void addCookieOnHeader(String cookie){
         headerMaps.put("Set-Cookie" , cookie);
+    }
+
+    public boolean isEmpty(){
+        return (status == null);
     }
 }
