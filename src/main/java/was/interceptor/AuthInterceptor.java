@@ -2,10 +2,6 @@ package was.interceptor;
 
 import db.SessionStorage;
 import webserver.domain.HttpRequest;
-import webserver.domain.HttpResponse;
-import webserver.domain.HttpResponseMessage;
-
-import java.util.Optional;
 import java.util.UUID;
 
 public class AuthInterceptor {

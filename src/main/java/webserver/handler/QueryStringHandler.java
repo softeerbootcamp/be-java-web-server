@@ -2,10 +2,8 @@ package webserver.handler;
 
 import service.UserService;
 import util.HttpParser;
-import was.annotation.GetMapping;
 import webserver.domain.HttpRequest;
 import webserver.domain.HttpResponse;
-import webserver.domain.HttpResponseMessage;
 
 import java.util.Map;
 

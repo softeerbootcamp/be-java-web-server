@@ -10,7 +10,6 @@ import webserver.domain.HttpResponse;
 import webserver.handler.ControllerHandler;
 import webserver.handler.ControllerHandlerFactory;
 import webserver.domain.HttpRequest;
-import webserver.domain.HttpResponseMessage;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);

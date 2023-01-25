@@ -8,7 +8,6 @@ import was.annotation.Auth;
 import was.annotation.RequestMapping;
 import webserver.domain.HttpRequest;
 import webserver.domain.HttpResponse;
-import webserver.domain.HttpResponseMessage;
 
 public class BoardController implements Controller {
     private static BoardController boardController;

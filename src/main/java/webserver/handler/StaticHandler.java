@@ -4,7 +4,6 @@ package webserver.handler;
 import db.SessionStorage;
 import webserver.domain.HttpRequest;
 import webserver.domain.HttpResponse;
-import webserver.domain.HttpResponseMessage;
 
 import java.util.UUID;
 

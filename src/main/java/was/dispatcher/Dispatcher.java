@@ -1,6 +1,5 @@
 package was.dispatcher;
 
-import db.SessionStorage;
 import enums.HttpMethod;
 import was.annotation.Auth;
 import was.annotation.RequestMapping;
@@ -10,12 +9,8 @@ import was.interceptor.AuthInterceptor;
 import webserver.domain.HttpResponse;
 import webserver.handler.ControllerHandler;
 import webserver.domain.HttpRequest;
-import webserver.domain.HttpResponseMessage;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.Optional;
-import java.util.UUID;
 
 public class Dispatcher implements ControllerHandler{
     private static Dispatcher dispatcher;

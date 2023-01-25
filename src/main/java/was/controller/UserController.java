@@ -9,8 +9,6 @@ import was.annotation.RequestMapping;
 import webserver.session.Session;
 import webserver.domain.HttpRequest;
 import webserver.domain.HttpResponse;
-import webserver.domain.HttpResponseMessage;
-
 import java.util.Map;
 import java.util.UUID;
 
