@@ -12,8 +12,19 @@ public class Session {
         this.timeStamp = System.currentTimeMillis();
     }
 
-    public static Session of(String sessionId, String userId) {
+    private Session(String sessionId, String userId, long timeStamp) {
+        this.sessionId = sessionId;
+        this.userId = userId;
+        this.timeStamp = timeStamp;
+    }
+
+
+    public static Session create(String sessionId, String userId) {
         return new Session(sessionId, userId);
+    }
+
+    public static Session createWithTimeStamp(String sessionId, String userId, long timeStamp) {
+        return new Session(sessionId, userId, timeStamp);
     }
 
     public long getTimeStamp() {
