@@ -137,14 +137,55 @@
                     </ul>
                 </div>
                 <div class="col-md-3 qna-write">
-                    <a href="./qna/form.html" class="btn btn-primary pull-right" role="button">질문하기</a>
+                    <a href="#qnaModal_notLoggedIn" data-toggle="modal" class="btn btn-primary pull-right">새 게시물</a>
+                    <!--<a href="#qnaModal" data-toggle="modal" class="btn btn-primary pull-right">새 게시물</a>-->
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<div class="modal fade" id="qnaModal_notLoggedIn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4>로그인 필요!</h4>
+            </div>
+            <div class="modal-body">
+                <p>로그인을 해야 새 게시물을 쓸 수 있습니다.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" id="qnaModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">새 게시물 생성</h4>
+            </div>
+            <div class="modal-body">
+                <form name="question" method="post" action="/user/create/article">
+                    <div class="form-group">
+                        <label for="article">한줄 게시물 내용</label>
+                        <input class="form-control" id="article" name="article" placeholder="내용을 입력하세요">
+                    </div>
+                    <button type="submit" class="btn btn-success clearfix pull-right">게시물 등록</button>
+                    <div class="clearfix"/>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 <!-- script references -->
+
 <script src="../js/jquery-2.2.0.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
 <script src="../js/scripts.js"></script>
