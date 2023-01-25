@@ -21,7 +21,12 @@ public class FacadeController implements Runnable {
     private final Logger logger = LoggerFactory.getLogger(FacadeController.class);
     private final RequestFactory requestFactory = new RequestFactory();
     private final ResponseFactory responseFactory = new ResponseFactory();
-    private final Map<Domain, Controller> controllers = Map.of(Domain.USER, new UserController(), Domain.MAIN, new MainController());
+    private final Map<Domain, Controller> controllers = Map.of(
+            Domain.USER, new UserController(),
+            Domain.MAIN, new MainController(),
+            Domain.POST, new PostController()
+    );
+
     private Socket connection;
 
     public FacadeController(Socket connectionSocket) {
