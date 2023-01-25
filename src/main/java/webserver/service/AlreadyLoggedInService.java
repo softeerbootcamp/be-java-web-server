@@ -28,16 +28,21 @@ public class AlreadyLoggedInService implements Service{
         byte bodyByte[] = Service.urlToByte(reqQuery);
 
         String bodyString = new String(bodyByte);
-        String newer = generateUserNameButt();
-        bodyString = bodyString.replace(InBody.beforeReplaced_LogInButton1, newer);
-        bodyString = bodyString.replace(InBody.beforeReplaced_LogInButton2, newer);
+        String disabledLoginButt = generateUserNameButt();
+        String articleModal = generateArticleModal();
+
+        bodyString = bodyString.replace(InBody.beforeReplaced_LogInButton1, disabledLoginButt);
+        bodyString = bodyString.replace(InBody.beforeReplaced_LogInButton2, disabledLoginButt);
+        bodyString = bodyString.replace(InBody.beforeReplaced_ArticleModal, articleModal);
+
+        bodyByte = bodyString.getBytes();
 
         return new Response()
                 .withVersion(req.getReqLine().getVersion())
                 .withStatCodeAndText(200, "OK")
                 .withHeaderKeyVal("Content-Type", contentType + ";charset=utf-8")
                 .withHeaderKeyVal("Content-Length", Integer.toString(bodyByte.length))
-                .withBodyString(bodyString);
+                .withBodyBytes(bodyByte);
     }
 
     private String generateUserNameButt()
@@ -45,5 +50,10 @@ public class AlreadyLoggedInService implements Service{
         StringBuffer sb = new StringBuffer();
         String userName = Database.findUserById(UserIdSession.getUserId(sid_usrid)).getName();
         return sb.append("<li role=\"button\"><a>"+ userName  +"</a></li>").toString();
+    }
+
+    private String generateArticleModal()
+    {
+        return new String("href=\"#articleModal\"");
     }
 }

@@ -93,15 +93,15 @@
                 <div class="col-md-6 text-center">
                 </div>
                 <div class="col-md-3 qna-write">
-                    <a href="#qnaModal_notLoggedIn" data-toggle="modal" class="btn btn-primary pull-right">새 게시물</a>
-                    <!--<a href="#qnaModal" data-toggle="modal" class="btn btn-primary pull-right">새 게시물</a>-->
+                    <a href="#articleModal_notLoggedIn" data-toggle="modal" class="btn btn-primary pull-right">새 게시물</a>
+                    <!--<a href="#articleModal" data-toggle="modal" class="btn btn-primary pull-right">새 게시물</a>-->
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="qnaModal_notLoggedIn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="articleModal_notLoggedIn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -117,7 +117,8 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-<div class="modal fade" id="qnaModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+<div class="modal fade" id="articleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -127,10 +128,10 @@
             <div class="modal-body">
                 <form name="question" method="post" action="/user/create/article">
                     <div class="form-group">
-                        <label for="article">한줄 게시물 내용</label>
-                        <input class="form-control" id="article" name="article" placeholder="내용을 입력하세요">
+                        <label for="article">한줄 글 내용</label>
+                        <input class="form-control" id="article" name="article" placeholder="글 내용을 입력하세요">
                     </div>
-                    <button type="submit" class="btn btn-success clearfix pull-right">게시물 등록</button>
+                    <button type="submit" class="btn btn-success clearfix pull-right">글 작성</button>
                     <div class="clearfix"/>
                 </form>
             </div>
@@ -140,6 +141,7 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
 <!-- script references -->
 
 <script src="../js/jquery-2.2.0.min.js"></script>
