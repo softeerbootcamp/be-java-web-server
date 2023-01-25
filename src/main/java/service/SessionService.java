@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import repository.MemorySessionRepo;
 import repository.SessionRepo;
-import repository.MemoryUserRepo;
+import repository.UserRepo;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -26,7 +26,7 @@ public class SessionService {
     public static Optional<User> getUserBySessionId(String ssid) {
         if (isValidSSID(ssid)) {
             Session session = sessionRepo.findBySSID(ssid).get();
-            return MemoryUserRepo.getInstance().findUserById(session.getUserId());
+            return UserRepo.getInstance().findUserById(session.getUserId());
         }
         return Optional.empty();
     }
