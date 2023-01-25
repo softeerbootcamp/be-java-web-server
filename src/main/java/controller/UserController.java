@@ -51,7 +51,7 @@ public class UserController implements Controller {
                 userInfo.get("name"), userInfo.get("email"));
         userService.signUp(user);
 
-        Map<Header, String> headers = HeaderUtils.responseCreateUserHeader();
+        Map<Header, String> headers = HeaderUtils.responseRedirectIndexHtmlHeader();
 
         return Response.of(StatusLine.of(request.getRequestLine().getHttpVersion(), Status.FOUND), headers);
     }
