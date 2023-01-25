@@ -1,8 +1,6 @@
 package model.service;
 
-import controller.StaticController;
 import model.domain.User;
-import model.repository.MemoryUserRepository;
 import model.repository.MysqlUserRepository;
 import model.repository.UserRepository;
 

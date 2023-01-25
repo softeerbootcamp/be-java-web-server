@@ -52,10 +52,6 @@ public class RequestHandler implements Runnable {
             controller = UserController.getInstance();
             return;
         }
-        if (requestHeaderMessage.getHttpOnlyURL().startsWith("/memo")){
-            controller = MemoController.getInstance();
-            return;
-        }
     }
 
 }
