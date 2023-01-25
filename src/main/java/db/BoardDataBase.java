@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import util.global.DBConnector;
 import view.UserRender;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +36,9 @@ public class BoardDataBase {
 
             String sql = "INSERT into board (writer,title,content,create_time) VALUES ( ?, ?, ?, ?)";
             pstmt = connection.prepareStatement(sql);
-            pstmt.setString(1, board.getWriter());
-            pstmt.setString(2, board.getTitle());
-            pstmt.setString(3, board.getContent());
+            pstmt.setString(1, URLDecoder.decode(board.getWriter(), StandardCharsets.UTF_8));
+            pstmt.setString(2, URLDecoder.decode(board.getTitle(),StandardCharsets.UTF_8));
+            pstmt.setString(3, URLDecoder.decode(board.getContent(),StandardCharsets.UTF_8));
             pstmt.setTimestamp(4, board.getCreateTime());
             pstmt.executeUpdate();
         } catch (SQLException e) {
