@@ -26,13 +26,13 @@ public class TemplateController implements Controller {
 
         String addedLine = null;
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + url).toPath());
-        body = DynamicController.dynamicIndex_ViewAllBoard(body);
+        body = DynamicRenderer.dynamicIndex_ViewAllBoard(body);
 
         if (isLogined) {
-            body = DynamicController.dynamicIndex_LoginBtnToUserBtn(body, request.getRequestHeader().getHeaderValueByKey("Cookie").split("=")[1]);
+            body = DynamicRenderer.dynamicIndex_LoginBtnToUserBtn(body, request.getRequestHeader().getHeaderValueByKey("Cookie").split("=")[1]);
         }
         if (url.contains("list.html")) {
-            body = DynamicController.dynamicListHtml(body);
+            body = DynamicRenderer.dynamicListHtml(body);
         }
         if (!isLogined && url.contains("/qna/form.html")) {
             controllerTypeEnum = ControllerTypeEnum.REDIRECT;

@@ -8,7 +8,7 @@ import utils.StringBuilderUtils;
 import java.sql.SQLException;
 import java.util.Collection;
 
-public class DynamicController {
+public class DynamicRenderer {
     // 로그인 버튼 -> 유저 이름으로
     public static byte[] dynamicIndex_LoginBtnToUserBtn(byte[] body, String sid) throws SQLException {
         byte[] manualBody;

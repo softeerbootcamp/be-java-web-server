@@ -25,7 +25,6 @@ public class ArticleController implements Controller{
     public ResponseFactory controllerService(Request request) throws IOException, SQLException {
         logger.debug("firstLine : " + request.getRequestLine().getURL());
         logger.debug("body : "+ request.getRequestBody().getBodyLines().toString());
-        String url = request.getRequestLine().getURL();
         ControllerTypeEnum controllerTypeEnum = ControllerTypeEnum.REDIRECT;
         boolean isLogined = request.isRequestHaveCookie();
         LocalDate now = LocalDate.now();
