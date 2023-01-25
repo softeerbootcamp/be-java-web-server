@@ -5,10 +5,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import repository.DBPostRepo;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 public class PostService {
-    private static Logger logger = LoggerFactory.getLogger(PostService.class);
+    private static final Logger logger = LoggerFactory.getLogger(PostService.class);
 
     public static Long createPost(Map<String, String> body) {
         String writer = body.get("writer");
@@ -22,5 +25,12 @@ public class PostService {
 
         logger.debug("postID : {}", post.getPostId());
         return post.getPostId();
+    }
+
+
+    public static List<Post> findAll() {
+        List<Post> result = new ArrayList<>(DBPostRepo.get().findAll());
+        Collections.reverse(result);
+        return result;
     }
 }
