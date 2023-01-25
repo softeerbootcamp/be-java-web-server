@@ -17,6 +17,17 @@ public class UserRepositoryMysql implements UserRepository {
 		this.dbManager = DBManager.getInstance();
 	}
 
+	private static UserRepositoryMysql instance;
+
+	public static UserRepositoryMysql getInstance() {
+		if (instance == null) {
+			synchronized (UserRepositoryMysql.class) {
+				instance = new UserRepositoryMysql();
+			}
+		}
+		return instance;
+	}
+
 	@Override
 	public void addUser(User user) {
 		try (Connection conn = dbManager.getConnection();
