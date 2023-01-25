@@ -6,6 +6,7 @@ import model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +29,11 @@ class UserServiceTest {
         parameters.put("name", "name1");
         parameters.put("email", "email1");
 
-        userService.addUser(parameters);
+        try {
+            userService.addUser(parameters);
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new RuntimeException(e);
+        }
 
         Collection<User> users = userService.getUserList();
         assertEquals(1, users.size());
@@ -43,7 +48,11 @@ class UserServiceTest {
         parameters.put("name", "name1");
         parameters.put("email", "email1");
 
-        userService.addUser(parameters);
+        try {
+            userService.addUser(parameters);
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new RuntimeException(e);
+        }
         userService.validateUser("user1", "password1");
     }
 
@@ -64,7 +73,11 @@ class UserServiceTest {
         parameters.put("name", "name1");
         parameters.put("email", "email1");
 
-        userService.addUser(parameters);
+        try {
+            userService.addUser(parameters);
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new RuntimeException(e);
+        }
 
         Collection<User> users = userService.getUserList();
         assertEquals(1, users.size());
@@ -85,7 +98,11 @@ class UserServiceTest {
         parameters.put("name", "name1");
         parameters.put("email", "email1");
 
-        userService.addUser(parameters);
+        try {
+            userService.addUser(parameters);
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new RuntimeException(e);
+        }
         assertEquals("name1", userService.getUserName(parameters.get("userId")));
 
     }
