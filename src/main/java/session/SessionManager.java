@@ -14,4 +14,8 @@ public class SessionManager {
 		return sessions.get(sessionId);
 	}
 
+	public static boolean valid(String sessionId) {
+		return sessions.containsKey(sessionId);
+	}
+
 }
