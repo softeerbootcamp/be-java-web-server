@@ -29,6 +29,8 @@ public class BoardController implements Controller {
     private FileReader fileReader;
     private BoardDataBase boardDataBase = BoardDataBase.getInstance();
 
+
+    @Auth
     @ControllerMethodInfo(path = "/qna/form.html", method = HttpMethod.GET)
     public HttpResponse qnaFormHtml(DataOutputStream dataOutputStream, HttpRequest httpRequest) throws IOException {
         fileReader = new TemplatesFileReader();
@@ -41,6 +43,7 @@ public class BoardController implements Controller {
     }
 
 
+    @Auth
     @ControllerMethodInfo(path = "/qna/form", method = HttpMethod.POST)
     public HttpResponse insertBoard(DataOutputStream dataOutputStream, HttpRequest httpRequest) {
         RequestPostReader reader = new RequestPostReader();
