@@ -2,7 +2,7 @@ package Controller;
 
 import Request.HttpRequest;
 import Request.StatusCode;
-import Response.HttpResponse;
+import response.HttpResponse;
 import db.SessionDb;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class LoginController implements Controller {
     public static final String PATH = "/user/login";
-    public static final String INDEX_HTML = "/index.html";
+    public static final String INDEX_HTML = "/index";
     public static final String USER_LOGIN_FAILED_HTML = "/user/login_failed.html";
     private final Logger logger = LoggerFactory.getLogger(LoginController.class);
     private static LoginController loginController = null;

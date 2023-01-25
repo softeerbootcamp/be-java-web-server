@@ -1,7 +1,7 @@
 package Controller;
 
 import Request.HttpRequest;
-import Response.HttpResponse;
+import response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.UserDbUtil;
@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class JoinController implements Controller {
     public static final String PATH = "/user/create";
-    public static final String INDEX_HTML = "/index.html";
+    public static final String INDEX_HTML = "/index";
     public static final String USER_FORM_HTML = "/user/form.html";
 
     private final Logger logger = LoggerFactory.getLogger(JoinController.class);

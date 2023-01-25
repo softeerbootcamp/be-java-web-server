@@ -2,7 +2,7 @@ package Controller;
 
 import Request.HttpRequest;
 import Request.StatusCode;
-import Response.HttpResponse;
+import response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import view.UserListView;

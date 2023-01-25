@@ -22,7 +22,7 @@ public class UserListView implements View{
     public byte[] render(HttpRequest httpRequest) {
         String html = HtmlBuildUtil.buildUserList(Database.findAll());
         User user = LoginUtil.checkSession(httpRequest);
-        byte[] body = HtmlBuildUtil.withoutLogoutWithUserName(html, "/user/list.html", user);
+        byte[] body = HtmlBuildUtil.withoutLoginWithUserName(html, "/user/list.html", user);
         return body;
     }
 }
