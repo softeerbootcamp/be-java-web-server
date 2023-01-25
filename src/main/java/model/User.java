@@ -1,11 +1,11 @@
 package model;
 
-import webserver.domain.RequestMethod;
-import webserver.domain.request.Request;
+import lombok.Getter;
+import model.dto.UserDto;
 
 import java.net.URLDecoder;
-import java.util.Map;
 
+@Getter
 public class User extends UserPrincipal{
     private String password;
     private String email;
@@ -17,21 +17,6 @@ public class User extends UserPrincipal{
     }
 
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
 
     public static User from(UserDto dto){
         return new User(dto.getUserId(), dto.getPassword(), dto.getName(), dto.getEmail());
