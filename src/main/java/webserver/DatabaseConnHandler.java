@@ -11,7 +11,6 @@ public class DatabaseConnHandler {
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/was",
                     "root","19450000");
             System.out.println("success");
-            Statement stmt = conn.createStatement();
             return conn;
 
         }catch (SQLException ex){
