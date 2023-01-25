@@ -21,7 +21,7 @@ public class Board {
 		this.boardWriter = boardWriter;
 	}
 
-	public Board of(Long id, String boardContents, String boardTitle, LocalDateTime boardTime, String boardWriter) {
+	public static Board of(Long id, String boardContents, String boardTitle, LocalDateTime boardTime, String boardWriter) {
 		return new Board(id, boardContents, boardTitle, boardTime, boardWriter);
 	}
 
