@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 
 public class Board {
 
+    private Long id;
+
     private String writer;
     private String title;
     private String content;
@@ -18,6 +20,14 @@ public class Board {
         this.title = title;
         this.content = content;
         this.createTime =Timestamp.valueOf(LocalDateTime.now());
+    }
+
+    public Board(Long id, String writer, String title, String content, Timestamp createTime) {
+        this.id = id;
+        this.writer = writer;
+        this.title = title;
+        this.content = content;
+        this.createTime = createTime;
     }
 
 

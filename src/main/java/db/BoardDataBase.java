@@ -6,9 +6,9 @@ import org.slf4j.LoggerFactory;
 import util.global.DBConnector;
 import view.UserRender;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BoardDataBase {
     private static final Logger logger = LoggerFactory.getLogger(BoardDataBase.class);
@@ -45,6 +45,36 @@ public class BoardDataBase {
         } finally {
             closeConnection(connection, pstmt);
         }
+    }
+
+    public List<Board> findAll() {
+        Connection connection = null;
+        PreparedStatement pstmt = null;
+        List<Board> boardList = new ArrayList<>();
+        try {
+            DBConnector dbConnector = new DBConnector();
+            connection = dbConnector.getConnection();
+            pstmt = null;
+
+            String sql = "SELECT * FROM Board ";
+            pstmt = connection.prepareStatement(sql);
+            ResultSet resultSet = pstmt.executeQuery();
+            while (resultSet.next()) {
+                Long id = Long.valueOf(resultSet.getString("id"));
+                String writer = resultSet.getString("writer");
+                String title = resultSet.getString("title");
+                String content = resultSet.getString("content");
+                Timestamp createTime = resultSet.getTimestamp("create_time");
+                boardList.add(new Board(id, writer, title, content, createTime));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            logger.error("[ERROR] BoardDatabase selectQuery에서의 에러 sql:{}",pstmt.toString());
+        } finally {
+            closeConnection(connection, pstmt);
+        }
+
+        return boardList;
     }
 
     private void closeConnection(Connection connection, PreparedStatement pstmt)  {
