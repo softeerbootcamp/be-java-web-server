@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class MySqlUserDatabase implements UserDatabase {
@@ -60,6 +61,19 @@ public class MySqlUserDatabase implements UserDatabase {
     @Override
     public Collection<User> findAll() {
         try (Connection connection = connectionPool.getConnection()) {
+            Collection<User> users = new ArrayList<>();
+            String selectSQL = "SELECT * FROM users";
+            PreparedStatement preparedStatement = connection.prepareStatement(selectSQL);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    String userId = resultSet.getString("user_id");
+                    String name = resultSet.getString("name");
+                    String email = resultSet.getString("email");
+                    String password = resultSet.getString("password");
+                    users.add(new User(userId, password, name, email));
+                }
+                return users;
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
