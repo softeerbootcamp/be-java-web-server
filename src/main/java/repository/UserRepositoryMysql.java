@@ -49,14 +49,19 @@ public class UserRepositoryMysql implements UserRepository {
 
 	@Override
 	public User findUserById(String userId) {
+		// TODO 없을시에 null 던지는데 Optional<User>로 리턴해야할까?
 		try (Connection conn = dbManager.getConnection();
 			 PreparedStatement preparedStatement = conn.prepareStatement(
-				 "select 1 from user where user_id = ?");
+				 "select * from user where user_id = ?");
 		) {
 			preparedStatement.setString(1, userId);
 			ResultSet resultSet = preparedStatement.executeQuery();
-			return User.of(resultSet.getString("user_id"), resultSet.getString("user_password"),
-				resultSet.getString("user_name"), resultSet.getString("user_email"));
+			if (resultSet.next()) {
+				return User.of(resultSet.getString("user_id"), resultSet.getString("user_password"),
+					resultSet.getString("user_name"), resultSet.getString("user_email"));
+			}
+			return null;
+
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
