@@ -1,6 +1,11 @@
 package bejavawebserver.controller;
 
+import bejavawebserver.model.User;
+import bejavawebserver.repository.memoryRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,15 +13,26 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 public class HtmlController {
+    private static final Logger logger = LoggerFactory.getLogger(HtmlController.class);
     @GetMapping("/index.html")
-    public String indexHtml(HttpServletRequest httpServletRequest){
+    public String indexHtml(HttpServletRequest httpServletRequest, Model model){
         HttpSession session = httpServletRequest.getSession(false);
 
         // 로그인 안되어 있음
-        if(session == null) return "index";
+        if(session == null) {
+            logger.debug("현재 로그인 상태 아님");
+            //model.addAttribute("userName", "로그인");
+            model.addAttribute("isLogin", false);
+            return "index";
+        }
 
         // 로그인 되어 있음
-        return "/user/list";
+        logger.debug("현재 로그인 상태임");
+        User loginUser = (User)session.getAttribute("user");
+        model.addAttribute("userName", loginUser.getName());
+        model.addAttribute("isLogin", true);
+
+        return "index";
 
     }
 

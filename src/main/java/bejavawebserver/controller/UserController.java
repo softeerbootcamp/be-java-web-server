@@ -20,7 +20,7 @@ public class UserController {
     @PostMapping("/user/login")
     public String login(LoginForm loginForm, HttpSession session){
         if(LoginService.isLoginSuccess(loginForm, session)){
-            return "redirect:/";
+            return "redirect:/index.html";
         }
         return "redirect:/user/login_failed.html";
     }

@@ -18,3 +18,8 @@ Java Web Application Server 2022
     + @RequiredArgsConstructor
       + 초기화 되지 않은 final 필드나 @NonNull 어노테이션이 붙은 필드에 대해 생성자를 만들어 준다.
       + @AllArgsConstructor, @NoArgsConstructor
+
++ Session method
+  + session.setAttribute(이름, 값)
+  + session.getAttribute(이름)
+    + 리턴 타입이 Object이므로 형 변환이 필요
