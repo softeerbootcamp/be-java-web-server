@@ -1,4 +1,4 @@
-package bejavawebserver.db;
+package bejavawebserver.repository;
 
 import bejavawebserver.model.User;
 import org.slf4j.Logger;

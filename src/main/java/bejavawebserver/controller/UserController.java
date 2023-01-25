@@ -1,6 +1,5 @@
 package bejavawebserver.controller;
 
-import bejavawebserver.db.memoryDB;
 import bejavawebserver.model.User;
 import bejavawebserver.service.LoginService;
 import bejavawebserver.service.SignUpService;

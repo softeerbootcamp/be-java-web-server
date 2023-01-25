@@ -1,6 +1,6 @@
 package bejavawebserver.service;
 
-import bejavawebserver.db.memoryDB;
+import bejavawebserver.repository.memoryDB;
 import bejavawebserver.model.User;
 
 import javax.servlet.http.HttpSession;
