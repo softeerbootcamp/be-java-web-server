@@ -9,4 +9,6 @@ public class LoginService {
     public static boolean loginCheck(User user, HttpSession session){
         return memoryRepository.findUserById(user.getUserId()) != null;
     }
+
+
 }
