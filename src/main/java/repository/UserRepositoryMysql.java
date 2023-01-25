@@ -13,11 +13,11 @@ import model.User;
 public class UserRepositoryMysql implements UserRepository {
 	private final DBManager dbManager;
 
+	private static UserRepositoryMysql instance;
+
 	public UserRepositoryMysql() {
 		this.dbManager = DBManager.getInstance();
 	}
-
-	private static UserRepositoryMysql instance;
 
 	public static UserRepositoryMysql getInstance() {
 		if (instance == null) {
