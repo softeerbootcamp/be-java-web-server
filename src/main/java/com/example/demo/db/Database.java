@@ -1,8 +1,7 @@
-package db;
+package com.example.demo.db;
 
+import com.example.demo.model.User;
 import com.google.common.collect.Maps;
-
-import model.User;
 
 import java.util.Collection;
 import java.util.Map;
