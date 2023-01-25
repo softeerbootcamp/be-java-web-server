@@ -4,22 +4,23 @@ import exception.HttpMethodException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.Session;
+import service.session.SessionService;
 import service.user.UserService;
 import utils.FileUtils;
-import utils.SessionManager;
 import utils.enums.ContentType;
 import utils.enums.HttpMethod;
 import utils.enums.StatusCode;
 
 import java.io.IOException;
-import java.util.UUID;
 
 public class HtmlFileController implements Controller {
     public static final String PATH = "html";
     private final UserService userService;
+    private final SessionService sessionService;
 
-    public HtmlFileController(UserService userService) {
+    public HtmlFileController(UserService userService, SessionService sessionService) {
         this.userService = userService;
+        this.sessionService = sessionService;
     }
 
     @Override
@@ -35,7 +36,7 @@ public class HtmlFileController implements Controller {
     private void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         String path = httpRequest.getUri().getPath();
         try {
-            Session session = SessionManager.getSession(UUID.fromString(httpRequest.getSession())).orElse(null);
+            Session session = sessionService.getSession(httpRequest.getSession()).orElse(null);
             httpResponse.setBody(FileUtils.createPage(path, userService.findUser(session.getUserId())));
         } catch (NullPointerException e) {
             try {

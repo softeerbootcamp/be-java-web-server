@@ -34,9 +34,11 @@ public class ConnectionPool implements Runnable {
                 logger.error(e.getMessage());
             }
         }
+        logger.debug("run :" + connections.size());
     }
 
     public Connection getConnection() {
+        logger.debug(String.valueOf(connections.size()));
         while (connections.isEmpty()) {
             try {
                 Thread.sleep(100);
@@ -49,5 +51,6 @@ public class ConnectionPool implements Runnable {
 
     public void releaseConnection(Connection connection) {
         connections.add(connection);
+        logger.debug(String.valueOf(connections.size()));
     }
 }

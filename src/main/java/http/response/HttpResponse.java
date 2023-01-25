@@ -50,8 +50,8 @@ public class HttpResponse {
         this.headers.addHeader(CONTENT_TYPE, contentType.getType());
     }
 
-    public void setCookie(UUID sid) {
-        String value = String.format("sid=%s; Path=/; MAX-AGE=300", sid.toString());
+    public void setCookie(String sid) {
+        String value = String.format("sid=%s; Path=/; MAX-AGE=300", sid);
         this.headers.addHeader(SET_COOKIE, value);
     }
 

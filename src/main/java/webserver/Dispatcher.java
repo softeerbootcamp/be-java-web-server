@@ -16,11 +16,11 @@ public class Dispatcher {
         AppConfig appConfig = new AppConfig();
         controllers = Map.of(
                 UserCreateController.PATH, new UserCreateController(appConfig.userService()),
-                UserLogoutController.PATH, new UserLogoutController(),
+                UserLogoutController.PATH, new UserLogoutController(appConfig.sessionService()),
                 StaticFileController.PATH, new StaticFileController(),
-                UserLoginController.PATH, new UserLoginController(appConfig.userService()),
-                UserListController.PATH, new UserListController(appConfig.userService()),
-                HtmlFileController.PATH, new HtmlFileController(appConfig.userService())
+                UserLoginController.PATH, new UserLoginController(appConfig.userService(), appConfig.sessionService()),
+                UserListController.PATH, new UserListController(appConfig.userService(), appConfig.sessionService()),
+                HtmlFileController.PATH, new HtmlFileController(appConfig.userService(), appConfig.sessionService())
         );
     }
 
