@@ -23,14 +23,16 @@ public class StaticHandler implements ControllerHandler {
     }
 
     @Override
-    public HttpResponseMessage handle(HttpRequest httpRequest) {
+    public HttpResponse handle(HttpRequest httpRequest) {
         String uri = httpRequest.getRequestLine().getUrl();
         HttpResponse httpResponse = new HttpResponse();
         String path = httpResponse.findPath(uri);
         UUID sessionId = httpRequest.getSessionId().orElse(null);
         if (SessionStorage.isExist(sessionId) && uri.contains(".html")) {
-            return new HttpResponseMessage(httpResponse.forward(path, sessionId), httpResponse.getBody());
+            httpResponse.forward(path, sessionId);
+            return httpResponse;
         }
-        return new HttpResponseMessage(httpResponse.forward(path), httpResponse.getBody());
+        httpResponse.forward(path);
+        return httpResponse;
     }
 }

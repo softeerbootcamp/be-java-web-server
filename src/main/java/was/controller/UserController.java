@@ -26,15 +26,16 @@ public class UserController implements Controller{
         return userController;
     }
     @RequestMapping(method = HttpMethod.POST, value = "/user/create")
-    public HttpResponseMessage create(HttpRequest httpRequest) {
+    public HttpResponse create(HttpRequest httpRequest) {
         userService.addUser(httpRequest.getBody());
 
         HttpResponse httpResponse = new HttpResponse();
-        return new HttpResponseMessage(httpResponse.sendRedirect("/index.html"), httpResponse.getBody());
+        httpResponse.sendRedirect("/index.html");
+        return httpResponse;
     }
 
     @RequestMapping(method = HttpMethod.POST, value = "/user/login")
-    public HttpResponseMessage login(HttpRequest httpRequest) {
+    public HttpResponse login(HttpRequest httpRequest) {
         Map<String, String> body = httpRequest.getBody();
         User user = new User(body.get("userId"), body.get("password"));
 
@@ -42,27 +43,28 @@ public class UserController implements Controller{
         String path = httpResponse.findPath("/index.html");
         if (userService.login(user)) {
             UUID sid = SessionStorage.addSession(Session.createSessionWith(user));
-            return new HttpResponseMessage(httpResponse.sendCookieWithRedirect(sid, "/index.html"), httpResponse.getBody());
+            httpResponse.sendCookieWithRedirect(sid, "/index.html");
+            return httpResponse;
         }
-        return new HttpResponseMessage(httpResponse.unauthorized(), httpResponse.getBody());
+        httpResponse.sendRedirect("/user/login_failed.html");
+        return httpResponse;
     }
     @Auth
     @RequestMapping(method = HttpMethod.GET, value = "/user/list")
-    public HttpResponseMessage showList(HttpRequest httpRequest) {
+    public HttpResponse showList(HttpRequest httpRequest) {
         HttpResponse httpResponse = new HttpResponse();
         UUID sessionId = httpRequest.getSessionId().get();
-        String userId = SessionStorage.findSessionBy(sessionId).getUserId();
         String path = httpResponse.findPath(httpRequest.getRequestLine().getUrl() + ".html");
-        System.out.println("path = " + path);
-        System.out.println("userId = " + userId);
-        return new HttpResponseMessage(httpResponse.forwardListPageHeaderMessage(userId, path), httpResponse.getBody());
+        httpResponse.forwardListPage(path, sessionId);
+        return httpResponse;
     }
     @Auth
     @RequestMapping(method =  HttpMethod.GET, value = "/user/logout")
-    public HttpResponseMessage logOut(HttpRequest httpRequest) {
+    public HttpResponse logOut(HttpRequest httpRequest) {
         HttpResponse httpResponse = new HttpResponse();
         UUID sessionId = httpRequest.getSessionId().get();
         SessionStorage.findSessionBy(sessionId).invalidate();
-        return new HttpResponseMessage(httpResponse.sendRedirect("/index.html"), httpResponse.getBody());
+        httpResponse.sendRedirect("/index.html");
+        return httpResponse;
     }
 }

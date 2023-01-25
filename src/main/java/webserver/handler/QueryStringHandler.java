@@ -22,13 +22,14 @@ public class QueryStringHandler implements ControllerHandler {
         return queryStringHandler = new QueryStringHandler();
     }
     @Override
-    public HttpResponseMessage handle(HttpRequest httpRequest) {
+    public HttpResponse handle(HttpRequest httpRequest) {
         String url = httpRequest.getRequestURL();
         Map<String, String> map = HttpParser.parseQueryString(url);
         UserService userService = UserService.getInstance();
         userService.addUser(map);
 
         HttpResponse httpResponse = new HttpResponse();
-        return new HttpResponseMessage(httpResponse.sendRedirect("/index.html"), httpResponse.getBody());
+        httpResponse.sendRedirect("/index.html");
+        return httpResponse;
     }
 }

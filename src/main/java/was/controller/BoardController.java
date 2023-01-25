@@ -24,12 +24,13 @@ public class BoardController implements Controller {
     }
     @Auth
     @RequestMapping(method = HttpMethod.POST, value = "/boards")
-    public HttpResponseMessage insertBoards(HttpRequest httpRequest) {
+    public HttpResponse insertBoards(HttpRequest httpRequest) {
         HttpResponse httpResponse = new HttpResponse();
         Board board = HttpParser.parseToBoard(httpRequest.getBody());
 
         //DB 넣는 작업
         BoardDatabase.addBoard(board);
-        return new HttpResponseMessage(httpResponse.sendRedirect("/index.html"), httpResponse.getBody());
+        httpResponse.sendRedirect("/index.html");
+        return httpResponse;
     }
 }

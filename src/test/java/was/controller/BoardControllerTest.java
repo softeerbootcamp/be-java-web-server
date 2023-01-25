@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import webserver.domain.HttpRequest;
 import webserver.domain.HttpRequestMessage;
+import webserver.domain.HttpResponse;
 import webserver.domain.HttpResponseMessage;
 
 import java.util.HashMap;
@@ -27,7 +28,7 @@ class BoardControllerTest {
         HttpRequestMessage httpRequestMessage = new HttpRequestMessage(header, body);
 
         BoardController boardController = BoardController.getInstance();
-        HttpResponseMessage httpResponseMessage = boardController.insertBoards(HttpRequest.newInstance(httpRequestMessage));
+        HttpResponse httpResponse = boardController.insertBoards(HttpRequest.newInstance(httpRequestMessage));
 
         //내가 원하는 board가 db에 들어가 있는지
         Board find = BoardDatabase.findBoardByTitle("제목");

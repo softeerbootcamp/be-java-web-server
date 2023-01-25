@@ -36,16 +36,17 @@ public class RequestHandler implements Runnable {
             } catch (NullPointerException e) {
                 logger.error(e.getMessage());
                 HttpResponse httpResponse = new HttpResponse();
-                response(dos, new HttpResponseMessage(httpResponse.create404Message(), httpResponse.getBody()));
+                httpResponse.notFound();
+                response(dos, httpResponse);
             }
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
-    private void response(DataOutputStream dos, HttpResponseMessage httpResponseMessage) {
+    private void response(DataOutputStream dos, HttpResponse httpResponse) {
         try {
-            byte[] body = httpResponseMessage.getBody();
-            dos.writeBytes(httpResponseMessage.getHeader());
+            byte[] body = httpResponse.getBody();
+            dos.writeBytes(httpResponse.getResponseMessageHeader());
             dos.write(body, 0, body.length);
             dos.flush();
         } catch (IOException e) {

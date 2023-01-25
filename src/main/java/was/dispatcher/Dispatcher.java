@@ -30,18 +30,19 @@ public class Dispatcher implements ControllerHandler{
         return dispatcher = new Dispatcher();
     }
     @Override
-    public HttpResponseMessage handle(HttpRequest httpRequest) {
+    public HttpResponse handle(HttpRequest httpRequest) {
         String path = httpRequest.getRequestLine().getUrl();
         return dispatch(httpRequest, ControllerFactory.getControllerInstance(httpRequest), path);
     }
-    private HttpResponseMessage dispatch(HttpRequest httpRequest, Controller controller, String path) {
+    private HttpResponse dispatch(HttpRequest httpRequest, Controller controller, String path) {
         Method[] methods = controller.getClass().getDeclaredMethods();
         for (Method method : methods) {
             Annotation auth = method.getAnnotation(Auth.class);
             if (auth != null) {
                 if (!AuthInterceptor.checkAuth(httpRequest)) {
                     HttpResponse httpResponse = new HttpResponse();
-                    return new HttpResponseMessage(httpResponse.sendRedirect("/user/login.html"), httpResponse.getBody());
+                    httpResponse.sendRedirect("/user/login.html");
+                    return httpResponse;
                 }
             }
             Annotation annotation = method.getAnnotation(RequestMapping.class);
@@ -55,7 +56,7 @@ public class Dispatcher implements ControllerHandler{
                 try{
                     Object[] parameter = new Object[1];
                     parameter[0] = httpRequest;
-                    return (HttpResponseMessage) method.invoke(controller, parameter);
+                    return (HttpResponse) method.invoke(controller, parameter);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
