@@ -1,9 +1,5 @@
 package model.repository;
-
-import controller.LoginController;
 import model.domain.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -18,7 +14,6 @@ public class MysqlUserRepository implements UserRepository{
     private static final String url = "jdbc:mysql://localhost:3306/jdbc";
     private static final String userName = "root";
     private static final String password = "vldb1234";
-    private static final Logger logger = LoggerFactory.getLogger(MysqlUserRepository.class);
 
     public static UserRepository getInstance(){
         if (mysqlUserRepository == null){
@@ -31,18 +26,6 @@ public class MysqlUserRepository implements UserRepository{
 
         return mysqlUserRepository;
     }
-
-    /*  connection 이후 코드
-
-    Statement statement = conn.createStatement();
-        ResultSet rs = statement.executeQuery("select * from users");
-        rs.next();
-        String userId = rs.getString("userId");
-        System.out.println(userId);
-        rs.close();
-        statement.close();
-        conn.close();
-     */
 
     @Override
     public User addUser(User user) {

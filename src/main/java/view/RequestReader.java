@@ -1,4 +1,6 @@
 package view;
+import controller.LoginController;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.MessageParser;
 
@@ -23,7 +25,6 @@ public class RequestReader {
         Map<String, String> header = new HashMap<>();
         while(!(brStr=br.readLine()).equals("")){
             MessageParser.parseKeyValue(header,brStr);
-            //logger.info(brStr);
         }
         return header;
     }
@@ -31,7 +32,6 @@ public class RequestReader {
     public char[] readBody(int size) throws IOException{
         char[] body = new char[size];
         br.read(body);
-        //logger.debug(new String(body));
         return body;
     }
 

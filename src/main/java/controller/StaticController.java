@@ -1,7 +1,5 @@
 package controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import util.HttpStatus;
 
 import view.RequestMessage;
@@ -16,7 +14,6 @@ public class StaticController implements Controller{
 
     private static StaticController staticController;
 
-    private static final Logger logger = LoggerFactory.getLogger(StaticController.class);
     private static final String RELATIVE_PATH = "./src/main/resources";
 
     private StaticController(){}
