@@ -5,10 +5,7 @@ import model.domain.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +41,33 @@ public class Database {
     }
 
     public User findUserById(String userId) {
-        return users.get(userId);
+        User user = null;
+
+        try {
+            Connection connection =
+                    DriverManager.getConnection(DB_URL.getDBInfo(), DB_USER_NAME.getDBInfo(), DB_PASSWORD.getDBInfo());
+
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement("select * from user where userId = ?;");
+
+            preparedStatement.setString(1, userId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            resultSet.next();
+            user = User.of(resultSet.getString(1), resultSet.getString(2),
+                    resultSet.getString(3), resultSet.getString(4));
+
+            logger.debug("userId: {}, password: {}, name: {}, email: {}",
+                    user.getUserId(), user.getPassword(), user.getName(), user.getEmail());
+
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return user;
     }
 
     public Collection<User> findAll() {
