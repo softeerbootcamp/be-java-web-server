@@ -32,6 +32,7 @@ public class IndexView implements View{
             List<Map<String,String>> qnas = (List<Map<String,String>>) data.getAttribute("qna_data");
             body = showUserName(user,body).getBytes();
             body = showQuestions(body,qnas).getBytes();
+            body = showPostingButton(body).getBytes();
         }else{ //로그인 상태가 아닐 경우 그냥 그대로
             body = showLoginButton(body).getBytes();
         }
@@ -103,4 +104,15 @@ public class IndexView implements View{
         html = html.replace("<!--please add here -->",content);
         return html;
     }
+
+    private static String showPostingButton(byte[] bytes){
+        StringBuilder content = new StringBuilder();
+        content.append("<a href=\"./qna/form.html\" class=\"btn btn-primary pull-right\" role=\"button\">질문하기</a>");
+
+        String html = new String(bytes);
+        html = html.replace("<!--<a href=\"./qna/form.html\" class=\"btn btn-primary pull-right\" role=\"button\">질문하기</a>-->\n",content);
+        return html;
+    }
+
+
 }
