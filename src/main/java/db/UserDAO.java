@@ -68,7 +68,7 @@ public class UserDAO {
     }
 
     public void deleteAll() throws SQLException {
-        PreparedStatement pstmt = connection.prepareStatement("DELETE FROM users");
+        PreparedStatement pstmt = connection.prepareStatement("TRUNCATE TABLE users");
         pstmt.executeUpdate();
     }
 }
