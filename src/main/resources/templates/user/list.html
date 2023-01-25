@@ -93,7 +93,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                %userList%
+                <tr th:each="user, i:${userList}">
+                    <th scope="row" th:text="${i.count}"></th>
+                    <td th:text="${user.userId}"></td>
+                    <td th:text="${user.name}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td><a href="#" class="btn btn-success" role="button">수정</a></td>
+                </tr>
                 </tbody>
             </table>
         </div>

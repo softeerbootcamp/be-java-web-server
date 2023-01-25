@@ -26,13 +26,4 @@ public class HtmlService {
 
         return uri;
     }
-
-    public static String service(Model model, String uri, HttpSession session) {
-        // 로그인 안되어 있음
-        if(session == null) {
-            return HtmlService.makeNotLoginView(model, uri);
-        }
-        // 로그인 되어 있음
-        return HtmlService.makeLoginView(model, uri, (User)session.getAttribute("user"));
-    }
 }
