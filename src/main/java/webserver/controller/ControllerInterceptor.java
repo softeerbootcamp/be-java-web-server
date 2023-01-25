@@ -18,8 +18,8 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ControllerInterceptor {
@@ -54,6 +54,27 @@ public class ControllerInterceptor {
         return paramList;
     }
 
+    //compare the path of the request with every path of controller method
+    private static boolean pathMatcher(String methodPath, String reqPath, ModelAndView mv){
+        List<String> methodPathList = Arrays.asList(methodPath.split("/"));
+        List<String> reqPathList = Arrays.asList(reqPath.split("/"));
+        Map<String, String> pathVarMap = new HashMap<>();
+
+        //TODO : 클래스의 목적과 관련없는 로직은 utils로
+        for(int idx = 0 ; idx < reqPathList.size(); idx++){
+            String path = methodPathList.get(idx);
+            if(Pattern.matches("\\{([^}]*?)\\}", path)){  //in case of @Pathvarible
+                pathVarMap.put(path, reqPathList.get(idx));
+                continue;
+            }
+            if(!reqPathList.get(idx).equals(path))
+                return false;
+        }
+
+        mv.addViewModel("pathVar", pathVarMap);
+        return true;
+    }
+
     public static void executeController(Controller controller, Request req, Response res, ModelAndView mv) {
         //extract all the methods in the class which include specific annotation
         Class<? extends Controller> clazz = controller.getClass();
@@ -66,7 +87,7 @@ public class ControllerInterceptor {
 
         methodList.forEach(method -> {
             ControllerInfo controllerInfo = method.getAnnotation(ControllerInfo.class);
-            if(controllerInfo.path().equals(reqPath)) {
+            if(pathMatcher(controllerInfo.path(), reqPath, mv)) {
                 try {
                     //check the validity of http method & parameters before executing the method
                     checkMethodThenReturnBody(controllerInfo, req.getRequestLine().getRequestMethod());
@@ -77,7 +98,7 @@ public class ControllerInterceptor {
                     //resolve arguments in a method
                     List<Parameter> collect = Arrays.stream(method.getParameters()).filter(parameter -> parameter.getType() != Response.class && parameter.getType() != ModelAndView.class).collect(Collectors.toList());
                     ArgumentResolver argumentResolver = ArgumentResolverMapping.findArgumentResolver(req.getRequestHeader().get("Content-Type"));
-                    Object[] paramList = addParamToList(argumentResolver.checkParameters(req, collect), res, mv);
+                    Object[] paramList = addParamToList(argumentResolver.checkParameters(req, collect, mv), res, mv);
 
                     //invoke method
                     method.invoke(controller, paramList);
