@@ -39,7 +39,7 @@ public class QueryExecutor {
                     pstmt.setString(index, arg);
                     index++;
                 }
-                if (index != args.length) {
+                if (index-1 != args.length) {
                     throw new SQLException();
                 }
             }
