@@ -4,10 +4,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Map;
 
-import controller.Controller;
-import controller.LoginController;
-import controller.StaticController;
-import controller.UserController;
+import controller.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import view.RequestBodyMessage;
@@ -53,6 +50,10 @@ public class RequestHandler implements Runnable {
         }
         if (requestHeaderMessage.getHttpOnlyURL().startsWith("/user")) {
             controller = UserController.getInstance();
+            return;
+        }
+        if (requestHeaderMessage.getHttpOnlyURL().startsWith("/memo")){
+            controller = MemoController.getInstance();
             return;
         }
     }
