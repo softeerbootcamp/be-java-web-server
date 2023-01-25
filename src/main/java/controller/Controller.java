@@ -5,9 +5,11 @@ import http.request.HttpRequest;
 import http.response.HttpResponse;
 
 public interface Controller {
-    void service(HttpRequest request, HttpResponse response);
+    static String NOT_FOUND = "NOT_FOUND";
 
     static void handleInvalidRequest(HttpRequest request, HttpResponse response) {
         throw new HttpNotFoundException();
     }
+
+    void service(HttpRequest request, HttpResponse response);
 }
