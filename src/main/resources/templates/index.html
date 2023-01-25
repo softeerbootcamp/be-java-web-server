@@ -5,12 +5,13 @@
 		<meta charset="utf-8">
 		<title>SLiPP Java Web Programming</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<link href="../static/css/bootstrap.min.css" rel="stylesheet">
-		<!--[if lt IE 9]>
-			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-		<![endif]-->
-<!--		<link href="../static/css/styles.css" rel="stylesheet">-->
-		<link href="../static/css/styles.css" rel="stylesheet">
+
+        <!--[if lt IE 9]>
+            <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <link th:href="@{../css/bootstrap.min.css}" rel="stylesheet">
+		<link th:href="@{../css/styles.css}" rel="stylesheet">
 	</head>
 	
 	<body>
@@ -51,7 +52,8 @@
         <div class="navbar-header">
             <a href="#" style="margin-left:15px;" class="navbar-btn btn btn-default btn-plus dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-home" style="color:#dd1111;"></i> Home <small><i class="glyphicon glyphicon-chevron-down"></i></small></a>
             <ul class="nav dropdown-menu">
-                <li><a href="user/profile.html"><i class="glyphicon glyphicon-user" style="color:#1111dd;"></i> Profile</a></li>
+<!--                <li><a href="user/profile.html"><i class="glyphicon glyphicon-user" style="color:#1111dd;"></i> Profile</a></li>-->
+                <li><a th:href="@{user/profile.html}"><i class="glyphicon glyphicon-user" style="color:#1111dd;"></i> Profile</a></li>
                 <li class="nav-divider"></li>
                 <li><a href="#"><i class="glyphicon glyphicon-cog" style="color:#dd1111;"></i> Settings</a></li>
             </ul>
@@ -66,8 +68,10 @@
         <div class="collapse navbar-collapse" id="navbar-collapse2">
             <ul class="nav navbar-nav navbar-right">
                 <li class="active"><a href="index.html">Posts</a></li>
-                <li><a href="user/login.html" role="button">로그인</a></li>
-                <li><a href="user/form.html" role="button">회원가입</a></li>
+<!--                <li><a href="user/login.html" role="button">로그인</a></li>-->
+                <li><a th:href="@{user/login.html}" role="button">로그인</a></li>
+<!--                <li><a href="user/form.html" role="button">회원가입</a></li>-->
+                <li><a th:href="@{user/form.html}" role="button">회원가입</a></li>
                 <!--
                 <li><a href="#loginModal" role="button" data-toggle="modal">로그인</a></li>
                 <li><a href="#registerModal" role="button" data-toggle="modal">회원가입</a></li>
@@ -92,7 +96,8 @@
                           <div class="auth-info">
                               <i class="icon-add-comment"></i>
                               <span class="time">2016-01-15 18:47</span>
-                              <a href="user/profile.html" class="author">자바지기</a>
+<!--                              <a href="user/profile.html" class="author">자바지기</a>-->
+                              <a th:href="@{user/profile.html}" class="author">자바지기</a>
                           </div>
                           <div class="reply" title="댓글">
                               <i class="icon-reply"></i>
@@ -111,6 +116,7 @@
                               <i class="icon-add-comment"></i>
                               <span class="time">2016-01-05 18:47</span>
                               <a href="user/profile.html" class="author">김문수</a>
+                              <a th:href="@{user/profile.html}" class="author">김문수</a>
                           </div>
                           <div class="reply" title="댓글">
                               <i class="icon-reply"></i>
@@ -134,7 +140,8 @@
                 </ul>
               </div>
               <div class="col-md-3 qna-write">
-                  <a href="qna/form.html" class="btn btn-primary pull-right" role="button">질문하기</a>
+<!--                  <a href="qna/form.html" class="btn btn-primary pull-right" role="button">질문하기</a>-->
+                  <a th:href="@{qna/form.html}" class="btn btn-primary pull-right" role="button">질문하기</a>
               </div>
           </div>
         </div>
@@ -142,8 +149,12 @@
 </div>
 
 <!-- script references -->
-<script src="../static/js/jquery-2.2.0.min.js"></script>
-<script src="../static/js/bootstrap.min.js"></script>
-<script src="../static/js/scripts.js"></script>
+<script th:src="@{../js/jquery-2.2.0.min.js}"></script>
+<script th:src="@{../js/bootstrap.min.js}"></script>
+<script th:src="@{../js/scripts.js}"></script>
+
+<!--<script src="../js/jquery-2.2.0.min.js"></script>-->
+<!--<script src="../js/bootstrap.min.js"></script>-->
+<!--<script src="../js/scripts.js"></script>-->
 	</body>
 </html>
