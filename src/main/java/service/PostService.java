@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class PostService {
     public void create(String writer, String title, String content) {
@@ -26,18 +25,19 @@ public class PostService {
         }
     }
 
-    public List<Map<String, String>> getPosts() {
-        List<Map<String, String>> posts = new ArrayList<>();
+    public List<Post> getPosts() {
+        List<Post> posts = new ArrayList<>();
         try(QueryBuilder qb = QueryBuilderFactory.newQueryBuilder()) {
             ResultSet resultSet = qb.select("*").from("post").read();
 
             while(resultSet.next()) {
                 posts.add(
-                        Map.of(
-                                "writer", resultSet.getString("writer"),
-                                "title", resultSet.getString("title"),
-                                "content", resultSet.getString("content"),
-                                "date", resultSet.getString("date")
+                        new Post(
+                                1L,
+                                resultSet.getString("writer"),
+                                resultSet.getString("title"),
+                                resultSet.getString("content"),
+                                resultSet.getString("date")
                         )
                 );
             }
