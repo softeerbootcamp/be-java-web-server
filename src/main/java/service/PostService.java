@@ -15,7 +15,7 @@ public class PostService {
         boolean result;
         try(QueryBuilder queryBuilder = QueryBuilderFactory.newQueryBuilder()) {
             result = queryBuilder
-                    .insert(writer, title, content, LocalDateTime.now().toString())
+                    .insert(null, writer, title, content, LocalDateTime.now().toString())
                     .into("post")
                     .fetch();
         }
@@ -33,7 +33,7 @@ public class PostService {
             while(resultSet.next()) {
                 posts.add(
                         new Post(
-                                1L,
+                                resultSet.getString("id"),
                                 resultSet.getString("writer"),
                                 resultSet.getString("title"),
                                 resultSet.getString("content"),

@@ -24,6 +24,7 @@ public class PostController implements Controller, Auth {
                 request.getData().get("title"),
                 request.getData().get("content")
         );
-        return "/index.html";
+        response.redirect("/index.html");
+        return "";
     }
 }

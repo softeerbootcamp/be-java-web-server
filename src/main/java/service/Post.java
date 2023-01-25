@@ -7,8 +7,8 @@ public class Post {
     private final String content;
     private final String date;
 
-    public Post(Long id, String writer, String title, String content, String date) {
-        this.id = id;
+    public Post(String id, String writer, String title, String content, String date) {
+        this.id = Long.valueOf(id);
         this.writer = writer;
         this.title = title;
         this.content = content;
