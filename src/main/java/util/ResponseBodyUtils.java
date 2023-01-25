@@ -23,7 +23,7 @@ public class ResponseBodyUtils {
         return resultProfileHtml.getBytes();
     }
 
-    public static byte[] getUserListHtmlWhenLogin(byte[] body, Request request, Collection<User> users) {
+    public static byte[] makeResponseBodyWhenLoginAndUserList(byte[] body, Request request, Collection<User> users) {
         StringBuilder userList = new StringBuilder();
         int row = 0;
 
