@@ -15,7 +15,7 @@ public class IndexView implements View {
             "                  <div class=\"wrap\">\n" +
             "                      <div class=\"main\">\n" +
             "                          <strong class=\"subject\">\n" +
-            "                              <a href=\"./qna/show.html\"><!--title--></a>\n" +
+            "                              <span\"><!--title--></span>\n" +
             "                          </strong>\n" +
             "                          <div><!--content--></div>\n" +
             "                          <div class=\"auth-info\">\n" +
