@@ -76,7 +76,7 @@ public class QueryBuilderTest {
         ResultSet resultSet = queryBuilder
                 .select("*")
                 .from("user")
-                .execute();
+                .read();
 
         // then
         Map<String, String> results = new HashMap<>();
@@ -108,7 +108,7 @@ public class QueryBuilderTest {
                 .select("user_id", "nickname")
                 .from("user")
                 .where("user_id", "<", "2")
-                .execute();
+                .read();
 
         // then
         List<Map<String, String>> results = new ArrayList<>();
@@ -146,7 +146,7 @@ public class QueryBuilderTest {
                 .from("user")
                 .where("user_id", "<", "3")
                 .where("nickname", "!=", "chan")
-                .execute();
+                .read();
 
         // then
         List<Map<String, String>> results = new ArrayList<>();
@@ -167,5 +167,25 @@ public class QueryBuilderTest {
         // close
         resultSet.close();
         statement.close();
+    }
+
+    @Test
+    void test() throws SQLException {
+            queryBuilder
+                .insert("1", "sol")
+                .into("user")
+                .fetch();
+
+        ResultSet user = queryBuilder
+                .select("*")
+                .from("user")
+                .read();
+
+        while (user.next()) {
+            System.out.println(user.getString("user_id"));
+            System.out.println(user.getString("nickname"));
+        }
+
+        user.close();
     }
 }

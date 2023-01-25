@@ -10,16 +10,27 @@ public class QueryBuilder {
     private String front = "";
     private String from = "";
     private String where = "";
+    private String values = "";
 
     public QueryBuilder(Connection conn) {
         this.conn = conn;
     }
 
     public QueryBuilder insert(String... values) {
+        StringBuilder sb = new StringBuilder("VALUES (");
+
+        for (int idx = 0; idx < values.length - 1; idx++) {
+            sb.append("\"").append(values[idx]).append("\"").append(", ");
+        }
+        sb.append("\"").append(values[values.length - 1]).append("\"").append(")");
+        this.values = sb.toString();
         return this;
     }
 
     public QueryBuilder into(String table) {
+        front = "INSERT INTO " + table + " " + values;
+        from = "";
+        where = "";
         return this;
     }
 
@@ -49,15 +60,26 @@ public class QueryBuilder {
         return this;
     }
 
-    public ResultSet execute() {
+    public ResultSet read() {
         String sql = front + from + where + ";";
         try {
+            System.out.println(sql);
             Statement statement = conn.createStatement();
             statement.execute(sql);
-            System.out.println(sql);
             return statement.getResultSet();
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public boolean fetch() {
+        try {
+            String sql = front + from + where + ";";
+            Statement statement = conn.createStatement();
+            statement.execute(sql);
+            return true;
+        } catch (SQLException e) {
+            return false;
         }
     }
 
