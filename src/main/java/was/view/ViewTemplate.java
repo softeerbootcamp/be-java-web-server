@@ -12,6 +12,10 @@ public class ViewTemplate {
             String line;
             StringBuilder sb = new StringBuilder();
             while ((line = br.readLine()) != null) {
+                if (userId == null) {
+                    sb.append(callback.createDynamicHtmlWith(line));
+                    continue;
+                }
                 sb.append(callback.createLoginStatusHtmlWith(line, userId));
             }
             return sb.toString().getBytes();
