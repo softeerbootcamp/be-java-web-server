@@ -1,15 +1,20 @@
 package db;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static java.sql.DriverManager.getConnection;
 
 public class DBConnection {
-    public static void selectAll() {
+    public static List<Map<String,String>> selectAll() {
+        List<Map<String,String>> result = new ArrayList<>();
         // 트랜잭션 시작
         // try( connection 얻어오기 ) -> 이렇게 하면 connection이 완료된 뒤에 자동으로 close된다.
         try(Connection conn = getConnection("jdbc:mysql://127.0.0.1:3306/qna_db?useSSL=false&serverTimezone=Asia/Seoul&useUnicode=true&character_set_server-utf8mb4","root","1234")){
-            // 데이터베이스명: qna
+            // 데이터베이스명: qna_db
             // DB 연결 ID: root
             // DB Password: 1234
             //System.out.println(conn);   // null 또는 exception이 발생하면 연결 실패한 것
@@ -18,7 +23,8 @@ public class DBConnection {
             // SQL 실행
             // - SQL 작성
             // writer=1234&title=1234&contents=1234
-            String sql = "SELECT writer, title, contents FROM qna_table";
+            String sql = "SELECT writer, title, contents, time FROM qna_table";
+            System.out.println(sql);
 
             // - PreparedStatement: SQL을 DBMS에서 실행할 준비
             try(PreparedStatement ps = conn.prepareStatement(sql)){
@@ -28,11 +34,28 @@ public class DBConnection {
 
                 while(rs.next()){   // rs.next(): 레코드 한 줄의 실행결과를 가져옴(boolean)
                     // rs가 읽어들인 레코드에 속한 컬럼 쪼개기
+                    Integer id = rs.getRow(); // row number
                     String writer = rs.getString("writer");
                     String title = rs.getString("title");
                     String contents = rs.getString("contents");
+                    String time = rs.getString("time");
+                    System.out.println(id+","+writer + "," + title + "," + contents+","+time);
+                    /*
+                    3223,2523,253225
+                    1234,1234,1234
+                    1234,1234,1234
+                    125,1235,1235
+                    sgds,fyf,xf
+                     */
 
-                    System.out.println(writer + "," + title + "," + contents);
+                    Map<String,String> elem = new HashMap<>();
+                    elem.put("row_id",id.toString());
+                    elem.put("writer",writer);
+                    elem.put("title",title);
+                    elem.put("contents",contents);
+                    elem.put("time",time);
+
+                    result.add(elem);
                 }
                 rs.close();
             }catch (Exception ex){
@@ -42,6 +65,8 @@ public class DBConnection {
         } catch(Exception ex){
             ex.printStackTrace();
         }
+
+        return result;
     }
 
     public static void storeInfo(String writer, String title, String contents) {
@@ -81,6 +106,5 @@ public class DBConnection {
             ex.printStackTrace();
         }
     }
-
 
 }
