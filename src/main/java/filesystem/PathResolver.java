@@ -6,10 +6,11 @@ public class PathResolver {
 
     private static final String TEMPLATE_PATH = "src/main/resources/templates%s";
     private static final String STATIC_PATH = "src/main/resources/static%s";
-    public static final String NOT_FOUND_HTML = "src/main/resources/templates/notfound.html";
+    public static final String NOT_FOUND_HTML = String.format(TEMPLATE_PATH, "notfound.html");
     public static final String INDEX_HTML = "/index.html";
     public static final String DOMAIN = "/";
     public static final String LOGIN_FAILED_HTML = "login_failed.html";
+    public static final String POST_DETAIL_HTML = "/qna/show.html";
 
     private static final Map<Extension, String> mappingInfo = Map.of(
             Extension.INDEX, TEMPLATE_PATH.substring(0, TEMPLATE_PATH.length() - 2) + INDEX_HTML,
