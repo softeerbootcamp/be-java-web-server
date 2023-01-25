@@ -1,6 +1,6 @@
 package service;
 
-import db.UserDatabase;
+import db.user.UserDatabase;
 import model.User;
 
 import javax.naming.AuthenticationException;
@@ -8,8 +8,8 @@ import java.util.Collection;
 import java.util.Map;
 
 public class UserServiceImpl implements UserService {
-    private final UserDatabase userDatabase;
     private static UserService userService;
+    private final UserDatabase userDatabase;
 
     private UserServiceImpl(UserDatabase userDatabase) {
         this.userDatabase = userDatabase;
