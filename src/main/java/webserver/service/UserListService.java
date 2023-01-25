@@ -1,13 +1,12 @@
 package webserver.service;
 
-import db.Database;
+import db.mysql.Database;
 import model.User;
 import webserver.constants.InBody;
 import webserver.httpUtils.Request;
 import webserver.httpUtils.Response;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class UserListService extends AlreadyLoggedInService{
 

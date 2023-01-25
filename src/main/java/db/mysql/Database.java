@@ -1,4 +1,4 @@
-package db;
+package db.mysql;
 
 import com.google.common.collect.Maps;
 import model.User;

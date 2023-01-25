@@ -1,7 +1,7 @@
 package webserver.service;
 
 import customException.AlreadyHasSameIdException;
-import db.Database;
+import db.mysql.Database;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,6 +1,6 @@
 package webserver.controller;
 
-import db.Database;
+import db.mysql.Database;
 import db.UserIdSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
