@@ -1,5 +1,6 @@
 package controller;
 
+import exceptions.CustomException;
 import httpMock.CustomHttpFactory;
 import httpMock.CustomHttpRequest;
 import httpMock.CustomHttpResponse;
@@ -51,7 +52,7 @@ public class PostController implements RequestController {
         }
 
         if (req.getHttpMethod() == HttpMethod.GET) {
-            if(SessionService.isValidSSID(req.getSSID()))
+            if (SessionService.isValidSSID(req.getSSID()))
                 return StaticFileController.get().handleRequest(req);
             return CustomHttpFactory.REDIRECT("/user/login");
         }
@@ -59,10 +60,14 @@ public class PostController implements RequestController {
         User user = SessionService.getUserBySessionId(req.getSSID()).orElse(null);
         if (user == null)
             return CustomHttpFactory.REDIRECT("/user/login");
-
-        PostService.createPost(req.parseBodyFromUrlEncoded());
-
-        return CustomHttpFactory.REDIRECT("/qna/show");
+        try {
+            PostService.createPost(req.parseBodyFromUrlEncoded());
+        } catch (CustomException e) {
+            return CustomHttpFactory.BAD_REQUEST(e.getMessage());
+        } catch (Exception e) {
+            return CustomHttpFactory.INTERNAL_ERROR(e.getMessage());
+        }
+        return CustomHttpFactory.REDIRECT("/index.html");
     }
 
     public CustomHttpResponse showPost(CustomHttpRequest req){

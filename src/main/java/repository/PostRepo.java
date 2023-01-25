@@ -6,6 +6,12 @@ import java.util.Collection;
 import java.util.Optional;
 
 public interface PostRepo {
+    PostRepo instance = new DBPostRepo();
+
+    static PostRepo getInstance() {
+        return instance;
+    }
+
     Post addPost(Post post);
 
     Optional<Post> findPostById(Long postId);

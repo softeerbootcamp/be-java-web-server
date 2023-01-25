@@ -1,5 +1,7 @@
 package service;
 
+import Utility.PostValidation;
+import exceptions.CustomException;
 import model.Post;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +23,9 @@ public class PostService {
         logger.debug("title : {}", body.get("title"));
         logger.debug("contents : {}", body.get("contents"));
 
+        if (!PostValidation.isValid(writer, title, content)) {
+            throw new CustomException("올바르지 않은 입력입니다.");
+        }
         Post post = DBPostRepo.get().addPost(new Post(writer, title, content));
 
         logger.debug("postID : {}", post.getPostId());
