@@ -6,7 +6,7 @@ import model.User;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import repository.UserRepo;
+import repository.MemoryUserRepo;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,7 +19,7 @@ class UserAccountControllerTest {
     @BeforeAll
     static void getUserAccountController() {
         userAccountController = UserAccountController.get();
-        UserRepo.addUser(new User("asdf", "asdfasdf123", "asdf", "asdfasdf@asdf.com"));
+        MemoryUserRepo.getInstance().addUser(new User("asdf", "asdfasdf123", "asdf", "asdfasdf@asdf.com"));
     }
 
     @Test

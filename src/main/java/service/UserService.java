@@ -5,7 +5,7 @@ import exceptions.CustomException;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import repository.UserRepo;
+import repository.MemoryUserRepo;
 
 import java.util.Map;
 
@@ -22,13 +22,13 @@ public class UserService {
             throw new CustomException("email, password, name을 올바르게 입력해 주세요.");
         }
 
-        if (UserRepo.findUserById(userId) != null) {
+        if (MemoryUserRepo.getInstance().findUserById(userId).isPresent()) {
             throw new CustomException("userID duplicated");
         }
 
         logger.debug("회원 가입 완료 {}, {}, {}", userId, password, name);
         User user = new User(userId, password, name, email);
-        UserRepo.addUser(user);
+        MemoryUserRepo.getInstance().addUser(user);
         return user;
     }
 
@@ -36,7 +36,7 @@ public class UserService {
 
         String userId = bodyParams.get("userId");
         String password = bodyParams.get("password");
-        User customer = UserRepo.findUserById(userId);
+        User customer = MemoryUserRepo.getInstance().findUserById(userId).orElse(null);
         if (customer != null && customer.getPassword().equals(password)) {
             return customer;
         }
