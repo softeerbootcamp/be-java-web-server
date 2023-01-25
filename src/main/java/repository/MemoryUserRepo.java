@@ -32,4 +32,8 @@ public class MemoryUserRepo implements UserRepo{
     public Collection<User> findAll() {
         return users.values();
     }
+
+    public void delete(String userId) {
+        users.remove(userId);
+    }
 }
