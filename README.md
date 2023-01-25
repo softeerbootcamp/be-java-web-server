@@ -185,3 +185,26 @@ Java Web Application Server 2022
 - path variable 처리
 - response 객체의 반환?
 - Test Code
+
+# 4주차 web server week3
+
+-----
+## 1일차 학습 내용
+
+### 오늘 할 일
+- [x] 머지 컨플릭트 수정
+- [x] path variable 처리
+- [x] profile 페이지 처리
+- [x] 스프링의 @Builder와 lombok을 이용하여 도메인 메소드 추상화
+- [x] 게시글과 댓글 도메인 생성
+- [x] Argumnet Resolver 기능 완성
+- 
+### 공부한 것
+- MySql과 NoSql의 차이
+   - mysql : 강력한 transaction을 보장 (ACID), 스키마의 무결성
+   - NoSql : 스키마가 없음, 수평 확장에 용이
+- Database Transaction Isolation Levels
+- 수직확장 / 수평확장의 차이와 용례
+- ORM : 데이터베이스와 객체를 매핑하는 기법
+   - 생산성과 유지보수성이 좋음
+   - 복잡한 비즈니스 로직은 다루기 다소 힘듦
