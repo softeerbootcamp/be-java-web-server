@@ -33,6 +33,7 @@ public class HomeRender {
         return homeStr.getBytes();
     }
 
+
     public byte[] addBoardList(byte[] homeData, List<Board> boardList) {
         String homeStr = new String(homeData);
 
@@ -42,7 +43,7 @@ public class HomeRender {
                     "                    <div class=\"wrap\">\n" +
                     "                        <div class=\"main\">\n" +
                     "                            <strong class=\"subject\">\n" +
-                    "                                <a href=\"./qna/show.html\">" + board.getTitle() + "</a>\n" +
+                    "                                <a href=\"./qna/show/"+board.getId()+"\">" + board.getTitle() + "</a>\n" +
                     "                            </strong>\n" +
                     "                            <div class=\"auth-info\">\n" +
                     "                                <i class=\"icon-add-comment\"></i>\n" +
