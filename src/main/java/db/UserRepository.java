@@ -13,49 +13,84 @@ public class UserRepository {
     private static final Database DATABASE = Database.getInstance();
 
     public static void addUser(User user) throws Exception {
-        Connection connection = DATABASE.getConnection();
-        String SQL = "insert into users(userId, password, name, email) values(?, ?, ?, ?)";
-        PreparedStatement pstmt = connection.prepareStatement(SQL);
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            conn = DATABASE.getConnection();
+            String SQL = "insert into users(userId, password, name, email) values(?, ?, ?, ?)";
+            pstmt = conn.prepareStatement(SQL);
 
-        pstmt.setString(1, user.getUserId());
-        pstmt.setString(2, user.getPassword());
-        pstmt.setString(3, user.getName());
-        pstmt.setString(4, user.getEmail());
-        pstmt.executeUpdate();
+            pstmt.setString(1, user.getUserId());
+            pstmt.setString(2, user.getPassword());
+            pstmt.setString(3, user.getName());
+            pstmt.setString(4, user.getEmail());
+            pstmt.executeUpdate();
 
+        } finally {
+            if (pstmt != null) {
+                pstmt.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
     }
 
     public static User findUserById(String userId) throws Exception {
-        Connection connection = DATABASE.getConnection();
-        String SQL = "select * from users where userId = ?";
-        PreparedStatement pstmt = connection.prepareStatement(SQL);
-        pstmt.setString(1, userId);
-        ResultSet rs = pstmt.executeQuery();
+        Connection conn = null;
+        PreparedStatement pstmt = null;
         User user = null;
-        while (rs.next()) {
-            String id = rs.getString("userId");
-            String password = rs.getString("password");
-            String name = rs.getString("name");
-            String email = rs.getString("email");
-            user = User.from(id, password, name, email);
-        }
+        try {
+            conn = DATABASE.getConnection();
+            String SQL = "select * from users where userId = ?";
+            pstmt = conn.prepareStatement(SQL);
+            pstmt.setString(1, userId);
 
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                String id = rs.getString("userId");
+                String password = rs.getString("password");
+                String name = rs.getString("name");
+                String email = rs.getString("email");
+                user = User.from(id, password, name, email);
+            }
+
+        } finally {
+            if (pstmt != null) {
+                pstmt.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
         return user;
     }
 
     public static Collection<User> findAll() throws Exception {
-        Connection connection = DATABASE.getConnection();
-        String SQL = "select * from users";
-        PreparedStatement pstmt = connection.prepareStatement(SQL);
-        ResultSet rs = pstmt.executeQuery();
-
+        Connection conn = null;
+        PreparedStatement pstmt = null;
         Collection<User> users = new ArrayList<>();
-        while (rs.next()) {
-            String id = rs.getString("userId");
-            String password = rs.getString("password");
-            String name = rs.getString("name");
-            String email = rs.getString("email");
-            users.add(User.from(id, password, name, email));
+        try {
+            conn = DATABASE.getConnection();
+            String SQL = "select * from users";
+            pstmt = conn.prepareStatement(SQL);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                String id = rs.getString("userId");
+                String password = rs.getString("password");
+                String name = rs.getString("name");
+                String email = rs.getString("email");
+                users.add(User.from(id, password, name, email));
+            }
+
+        } finally {
+            if (pstmt != null) {
+                pstmt.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
         }
         return users;
     }
