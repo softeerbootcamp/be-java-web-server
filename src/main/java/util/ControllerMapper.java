@@ -4,6 +4,7 @@ import controller.*;
 import db.Database;
 import model.request.Request;
 import model.request.RequestLine;
+import service.MemoService;
 import service.UserService;
 
 import org.slf4j.Logger;
