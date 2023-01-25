@@ -5,10 +5,7 @@ import http.common.Session;
 import model.Post;
 import model.User;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Database {
     private static Map<String, User> users = Maps.newHashMap();
@@ -47,5 +44,9 @@ public class Database {
 
     public static List<Post> getAllPosts() {
         return new ArrayList<>(posts.values());
+    }
+
+    public static Optional<Post> getPostById(long postId) {
+        return Optional.ofNullable(posts.get(postId));
     }
 }
