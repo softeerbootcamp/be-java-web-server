@@ -10,13 +10,13 @@ import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
-public class AuthServiceTest {
+public class UserServiceTest {
 
-    AuthService authService;
+    UserService userService;
 
     @BeforeEach
     void testSetUp(){
-        authService = new AuthService();
+        userService = UserService.getInstance();
     }
     @Test
     @DisplayName("회원 가입 테스트_1명")
@@ -31,7 +31,7 @@ public class AuthServiceTest {
         User user = new User(userId, password, email, name);
 
         //when
-        authService.join(userId, password, email, email);
+        userService.addUser(userId, password, email, email);
         when(userDatabase.findUserById(Mockito.anyString())).thenReturn(Optional.empty());
 
         //then
@@ -54,8 +54,8 @@ public class AuthServiceTest {
         //when
         when(userDatabase.findUserById(Mockito.anyString())).thenReturn(Optional.empty());
 
-        authService.join(userId, password, email, name);
-        authService.join("anotherID", password, email,name);
+        userService.addUser(userId, password, email, name);
+        userService.addUser("anotherID", password, email,name);
 
 
         //then
@@ -77,10 +77,10 @@ public class AuthServiceTest {
         //when
         when(userDatabase.findUserById(Mockito.anyString())).thenReturn(Optional.of(user));
 
-        authService.join(userId, password, email, email);
+        userService.addUser(userId, password, email, email);
 
         //then
-        Assertions.assertThrows(HttpRequestException.class, () -> authService.join(userId, password, email, email));
+        Assertions.assertThrows(HttpRequestException.class, () -> userService.addUser(userId, password, email, email));
     }
 
 

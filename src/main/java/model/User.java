@@ -1,17 +1,21 @@
 package model;
 
-public class User {
-    private String userId;
+import webserver.domain.RequestMethod;
+import webserver.domain.request.Request;
+
+import java.net.URLDecoder;
+import java.util.Map;
+
+public class User extends UserPrincipal{
     private String password;
-    private String name;
     private String email;
 
     public User(String userId, String password, String name, String email) {
-        this.userId = userId;
+        super(userId, name);
         this.password = password;
-        this.name = name;
-        this.email = email;
+        this.email = URLDecoder.decode(email);
     }
+
 
     public String getUserId() {
         return userId;
@@ -29,8 +33,7 @@ public class User {
         return email;
     }
 
-    @Override
-    public String toString() {
-        return "User [userId=" + userId + ", password=" + password + ", name=" + name + ", email=" + email + "]";
+    public static User from(UserDto dto){
+        return new User(dto.getUserId(), dto.getPassword(), dto.getName(), dto.getEmail());
     }
 }

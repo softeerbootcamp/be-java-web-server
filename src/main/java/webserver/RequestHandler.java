@@ -5,11 +5,15 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.controller.Controller;
-import webserver.domain.StatusCodes;
+import webserver.domain.ContentType;
+import webserver.view.ModelAndView;
 import webserver.domain.request.Request;
 import webserver.domain.response.Response;
+import webserver.exception.HttpRequestException;
 import webserver.utils.HttpRequestUtils;
 import webserver.utils.HttpResponseWriter;
+import webserver.view.View;
+import webserver.view.ViewResolver;
 
 public class RequestHandler implements Runnable {
 
@@ -29,19 +33,19 @@ public class RequestHandler implements Runnable {
 
             Request req = HttpRequestUtils.parseHttpRequest(in);
             Response res = new Response();
+            ModelAndView mv = new ModelAndView();
 
-            handlerMapping.getStaticHandler().chain(req, res);  //get static controller to handle this request
-            if(res.getStatusCode() == StatusCodes.NOT_FOUND){  // request is not precessed by static controller
-                Controller controller = handlerMapping.getHandler(req);  //get the controller to handle request
-                controller.chain(req, res);
-            }
+            Controller controller = handlerMapping.getHandler(req);  //get the controller to handle request
+            controller.chain(req, res, mv);
+
+            View targetView = ViewResolver.getHandler(mv);  //retrieve the view to render dynamic web page
+            targetView.makeView(req, res, mv);
 
             HttpResponseWriter.of(res, out); //write http response and send it back to client side
-
 
         } catch (IOException e) {
             logger.debug(e.getMessage());
         }
-    }
 
+    }
 }

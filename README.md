@@ -119,7 +119,7 @@ Java Web Application Server 2022
    - response에 쿠키 정보를 담아 전송
 - [x] 쿠키와 세션을 이용하여 약간의 security 기능
 - [x] logout 구현
-- [ ] HttpCookie 기능 관련 테스트코드 작성
+- [x] HttpCookie 기능 관련 테스트코드 작성
 
 ### 공부한 것
 - 로그아웃 시 세션 핸들링
@@ -132,13 +132,13 @@ Java Web Application Server 2022
 ----
 ## 3일차 학습 내용
 ### pull request 피드백 반영
-- [ ] mvc 컴포넌트를 싱글톤으로 수정
-- [ ] 쿠키 관련 테스트 코드
-- [ ] HttpRequestException의 생성자 수정
+- [x] mvc 컴포넌트를 싱글톤으로 수정
+- [x] 쿠키 관련 테스트 코드
+- [x] HttpRequestException의 생성자 수정
 
 ### 오늘 할 일
-- [ ] 동적 웹 생성
-- [ ] 로그인 여부를 판단하는 security 관련 로직
+- [x] 동적 웹 생성
+- [x] 로그인 여부를 판단하는 security 관련 로직
 
 ### 공부한 것
 - Service 내 메소드의 네이밍 best practice
@@ -146,3 +146,42 @@ Java Web Application Server 2022
    - synchronized 메소드 이용 
    - static + 생성자
 - Spring Security의 동작 원리
+
+
+----
+## 4일차 학습 내용
+### pull request 피드백 반영
+- [x] 불필요한 로깅 제거
+- [x] findAll 리턴 타입 수정
+- [x] 정적 팩토리 메서드 생성
+
+### 오늘 할 일
+- [x] View, View Resolver클래스 생성
+- [x] SecurityFilterChain 기능 구현
+- [x] 리소스 파일 정적으로 구성하
+
+### 공부한 것
+- 뷰 리졸버의 동작원리
+- lazyHolder를 이용한 싱글톤 패턴
+- Static 변수의 로딩 시점
+
+----
+## 5일차 학습 내용
+### 오늘 할 일
+- [x] response에 redirect를 처리할 수 있도록 httpCustomException
+- [x] 테스트코드 파라미터 수정
+- [x] View에서 공통 사항에 대하여 동적으로 처리하는 로직을 담당하는 클래스 생성
+- [x] 시연 영상 제작
+
+### 공부한 것
+- reflection의 익셉션 핸들링 방식
+- StringBuilder의 이점
+- 가비지 컬렉션의 동작 원리, 알고리즘
+- lazy loading
+- Spring의 MVC 컨트롤러 각각의 파라미터와 리턴 타입에 대한 Best Practice
+
+------
+## TODO
+- path variable 처리
+- response 객체의 반환?
+- Test Code

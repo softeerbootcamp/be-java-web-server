@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class CommonUtils {
@@ -33,11 +34,11 @@ public class CommonUtils {
     }
 
     public static String mapToStringSplitWithNewLine(Map<String, String> map){
-        String result = "";
+        StringBuilder sb = new StringBuilder();
         for(String key : map.keySet()){
-            result += key + ": " + map.get(key) + "\r\n";
+            sb.append(key + ": " + map.get(key) + "\r\n");
         }
-        return result;
+        return sb.toString();
     }
 
     public static Map<String, String> parseValues(String values, String separator) {
@@ -47,8 +48,8 @@ public class CommonUtils {
 
         String[] tokens = values.split(separator);
 
-        return Arrays.stream(tokens).map(t -> getKeyValue(t, "=")).filter(p -> p != null)
-                .collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
+        return Arrays.stream(tokens).map(t -> getKeyValue(t, "=")).filter(Objects::nonNull)
+                .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
     }
 
     private static Pair getKeyValue(String keyValue, String regex) {

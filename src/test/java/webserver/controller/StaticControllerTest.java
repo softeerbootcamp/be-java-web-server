@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import webserver.domain.ContentType;
+import webserver.view.ModelAndView;
 import webserver.domain.StatusCodes;
 import webserver.domain.request.Request;
 import webserver.domain.response.Response;
@@ -20,16 +21,17 @@ class StaticControllerTest {
     StaticController staticController;
     Response res;
     Request req;
+    ModelAndView mv;
 
     @BeforeEach
     void testSetUp(){
-        staticController = new StaticController();
+        staticController = StaticController.getInstance();
         String requestLine = "GET /index.html /1.1";
         String header = "";
         String body = "";
         req = Request.of(requestLine, header, body);
         req = mock(Request.class);
-
+        mv = mock(ModelAndView.class);
     }
 
     @Test
@@ -46,7 +48,7 @@ class StaticControllerTest {
         when(staticResourceFinder.staticFileResolver(path)).thenReturn(Optional.of(fileAsBytes));
 
         //then
-        staticController.chain(req, res);
+        staticController.chain(req, res, mv);
 
         verify(res).ok(StatusCodes.OK, fileAsBytes, StaticResourceFinder.getExtension(path));
     }
@@ -62,7 +64,7 @@ class StaticControllerTest {
 
         //when
         when(staticResourceFinder.staticFileResolver(path)).thenReturn(Optional.empty());
-        staticController.chain(req, res);
+        staticController.chain(req, res, mv);
 
         //then
         verify(res).error(StatusCodes.NOT_FOUND, StatusCodes.NOT_FOUND.getStatusMsg().getBytes(), ContentType.TEXT_HTML);
