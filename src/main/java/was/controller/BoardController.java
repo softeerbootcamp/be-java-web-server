@@ -26,8 +26,10 @@ public class BoardController implements Controller {
     @RequestMapping(method = HttpMethod.POST, value = "/board")
     public HttpResponseMessage insertBoards(HttpRequest httpRequest) {
         HttpResponse httpResponse = new HttpResponse();
-        HttpParser.parseToBoard(httpRequest.getBody());
-        
-        return null;
+        Board board = HttpParser.parseToBoard(httpRequest.getBody());
+
+        //DB 넣는 작업
+        BoardDatabase.addBoard(board);
+        return new HttpResponseMessage(httpResponse.sendRedirect("/index.html"), httpResponse.getBody());
     }
 }
