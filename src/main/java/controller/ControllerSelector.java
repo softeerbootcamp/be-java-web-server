@@ -32,6 +32,9 @@ public class ControllerSelector {
             if (url.contains("/create")) {
                 return userController;
             }
+            if (url.contains("/qna")){
+                return templateController;
+            }
         }
         return staticController;
     }
