@@ -168,24 +168,4 @@ public class QueryBuilderTest {
         resultSet.close();
         statement.close();
     }
-
-    @Test
-    void test() throws SQLException {
-            queryBuilder
-                .insert("1", "sol")
-                .into("user")
-                .fetch();
-
-        ResultSet user = queryBuilder
-                .select("*")
-                .from("user")
-                .read();
-
-        while (user.next()) {
-            System.out.println(user.getString("user_id"));
-            System.out.println(user.getString("nickname"));
-        }
-
-        user.close();
-    }
 }
