@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static model.general.Database.*;
 
@@ -135,5 +136,30 @@ public class Database {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<String> findAllMemos() {
+        List<String> memos = new ArrayList<>();
+
+        try {
+            Connection connection =
+                    DriverManager.getConnection(DB_URL.getDBInfo(), DB_USER_NAME.getDBInfo(), DB_PASSWORD.getDBInfo());
+
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement("select * from memo;");
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next()) {
+                memos.add(resultSet.getString("contents"));
+            }
+
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return memos;
     }
 }
