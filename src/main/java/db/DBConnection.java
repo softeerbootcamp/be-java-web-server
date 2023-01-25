@@ -62,6 +62,57 @@ public class DBConnection {
         return result;
     }
 
+    public static Map<String,String> selectOne(String id) {
+        Map<String,String> elem = new HashMap<>();
+        // 트랜잭션 시작
+        // try( connection 얻어오기 ) -> 이렇게 하면 connection이 완료된 뒤에 자동으로 close된다.
+        try(Connection conn = getConnection("jdbc:mysql://127.0.0.1:3306/qna_db?useSSL=false&serverTimezone=Asia/Seoul&useUnicode=true&character_set_server-utf8mb4","root","1234")){
+            // 데이터베이스명: qna_db
+            // DB 연결 ID: root
+            // DB Password: 1234
+            //System.out.println(conn);   // null 또는 exception이 발생하면 연결 실패한 것
+            System.out.println(conn.getClass().getName());  // Connection 인터페이스의 구현부를 알 수 있다.
+
+            // SQL 실행
+            // - SQL 작성
+            // writer=1234&title=1234&contents=1234
+            String sql = "SELECT _id, writer, title, contents, time FROM qna_table WHERE _id = ? ORDER BY time DESC";
+            System.out.println(sql);
+
+            // - PreparedStatement: SQL을 DBMS에서 실행할 준비
+            try(PreparedStatement ps = conn.prepareStatement(sql)){
+                ps.setString(1,id);
+                ResultSet rs = ps.executeQuery();
+                // executeQuery(): 준비된 SQL 실행. 실행된 결과는 DBMS에 있다.
+                // ResultSet: DBMS 안에 있는 실행결과를 참조
+
+                while(rs.next()){   // rs.next(): 레코드 한 줄의 실행결과를 가져옴(boolean)
+                    // rs가 읽어들인 레코드에 속한 컬럼 쪼개기
+                    //Integer id = rs.getRow(); // row number
+                    Integer rowId = rs.getInt("_id");
+                    String writer = rs.getString("writer");
+                    String title = rs.getString("title");
+                    String contents = rs.getString("contents");
+                    String time = rs.getString("time");
+
+                    elem.put("row_id",rowId.toString());
+                    elem.put("writer",writer);
+                    elem.put("title",title);
+                    elem.put("contents",contents);
+                    elem.put("time",time);
+                }
+                rs.close();
+            }catch (Exception ex){
+                System.out.println("SQL 실행 오류: " + ex);
+            }
+
+        } catch(Exception ex){
+            ex.printStackTrace();
+        }
+
+        return elem;
+    }
+
     public static void storeInfo(String writer, String title, String contents) {
         // 트랜잭션 시작
         // try( connection 얻어오기 ) -> 이렇게 하면 connection이 완료된 뒤에 자동으로 close된다.
