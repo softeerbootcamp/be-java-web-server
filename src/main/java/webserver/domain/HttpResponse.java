@@ -44,7 +44,7 @@ public class HttpResponse {
         return statusLine + processHeaders();
     }
 
-    private String create404Message() {
+    public String create404Message() {
         statusLine = "HTTP/1.1 404 Not Found \r\n";
         return statusLine;
     }
