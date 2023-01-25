@@ -19,7 +19,7 @@ public class RequestRouter {
     private static RequestRouter requestRouter;
     private final Map<String, RequestController> requestMap = new HashMap<>() {{
         put("/user", UserAccountController.get());
-        put("/qna/form", PostController.get());
+        put("/qna", PostController.get());
     }};
 
     private RequestRouter() {
