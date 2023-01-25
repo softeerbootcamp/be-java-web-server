@@ -1,15 +1,14 @@
 package controller;
 
-import http.session.HttpSession;
-import http.session.SessionHandler;
 import http.request.HttpRequest;
 import http.response.DynamicResolver;
 import http.response.HttpResponse;
 import http.response.HttpResponseFactory;
+import http.session.HttpSession;
+import http.session.SessionHandler;
 import util.FileIoUtil;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
@@ -39,12 +38,11 @@ public class ResourceController implements Controller {
         }
     }
 
-    private byte[] renderHtml(HttpRequest httpRequest, File file) throws IOException {
+    private byte[] renderHtml(HttpRequest httpRequest, File file) throws Exception {
         HttpSession httpSession = SessionHandler.getSession(httpRequest.getSid());
         if (Objects.nonNull(httpSession)) {
             return DynamicResolver.showUserName(file, httpSession.getUserName());
         }
         return DynamicResolver.hideLogoutButton(file);
     }
-
 }
