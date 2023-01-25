@@ -62,8 +62,8 @@ public class ResponseBodyUtils {
         }
 
         String originalHtml = new String(body);
-        String[] splitHtml = originalHtml.split("qna-list\">");
-        String resultHtml = splitHtml[0] + "qna-list\">" + memoList + splitHtml[1];
+        String[] splitHtml = originalHtml.split("class=\"list\">");
+        String resultHtml = splitHtml[0] + "class=\"list\">" + memoList + splitHtml[1];
         return resultHtml.getBytes();
     }
 }
