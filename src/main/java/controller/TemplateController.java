@@ -1,6 +1,5 @@
 package controller;
 
-import db.Database;
 import enums.ContentTypeEnum;
 import enums.ControllerTypeEnum;
 import org.slf4j.Logger;

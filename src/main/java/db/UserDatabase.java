@@ -2,7 +2,6 @@ package db;
 
 import com.google.common.collect.Maps;
 
-import com.mysql.cj.protocol.Resultset;
 import model.User;
 import webserver.DatabaseConnHandler;
 
@@ -13,7 +12,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Map;
 
-public class Database {
+public class UserDatabase {
     private static Map<String, User> users = Maps.newHashMap();
     private static DatabaseConnHandler databaseConnHandler;
     private static Connection conn;
@@ -29,7 +28,7 @@ public class Database {
         conn.close();
         users.put(user.getUserId(), user);
     }
-    // todo : findUserById 할때마다 커넥션 형성하는데, 비용이 너무 큰 느낌이다. 
+    // todo : findUserById 할때마다 커넥션 형성하는데, 비용이 너무 큰 느낌이다. 사용처를 다시 확인하고,리펙토링하자
     public static User findUserById(String userId) throws SQLException {
         User user = null;
         conn = databaseConnHandler.dbConnection();
@@ -43,7 +42,6 @@ public class Database {
                     rs.getString("Name"),rs.getString("Email") );
         }
         conn.close();
-
         return user;
     }
 

@@ -1,6 +1,6 @@
 package controller;
 
-import db.Database;
+import db.UserDatabase;
 import enums.ContentTypeEnum;
 import enums.ControllerTypeEnum;
 import org.slf4j.Logger;
@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class LoginController implements Controller{
@@ -56,10 +55,10 @@ public class LoginController implements Controller{
     }
     // util 로 빼주자
     public boolean checkIdPwdIsInDatabase(String id, String pwd) throws SQLException {
-        if(Database.findUserById(id)==null){
+        if(UserDatabase.findUserById(id)==null){
             return false;
         }
-        if(Database.findUserById(id).getPassword().equals(pwd)){
+        if(UserDatabase.findUserById(id).getPassword().equals(pwd)){
             return true;
         }return false;
     }
