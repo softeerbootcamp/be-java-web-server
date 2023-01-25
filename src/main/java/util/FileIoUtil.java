@@ -55,6 +55,10 @@ public class FileIoUtil {
             int idx = path.indexOf(URL_PARAM_DELIMITER);
             return path.substring(idx + 1);
         }
+        if (path.startsWith("/qna/show")) {
+            String[] split = path.split("/");
+            return "id="+split[split.length-1];
+        }
         return "";
     }
 
