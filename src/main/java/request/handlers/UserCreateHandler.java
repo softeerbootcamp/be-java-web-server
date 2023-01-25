@@ -13,6 +13,7 @@ import response.Response;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.sql.SQLException;
 import java.util.Map;
 
 public class UserCreateHandler implements RequestHandler {
@@ -43,6 +44,8 @@ public class UserCreateHandler implements RequestHandler {
             return Response.createSimpleResponse(file, FileContentType.HTML.getContentType(), HttpResponseStatus.OK);
         } catch (IOException e) {
             return Response.from(HttpResponseStatus.NOT_FOUND);
+        } catch (SQLException | NullPointerException e) {
+            return Response.from(HttpResponseStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -58,6 +61,9 @@ public class UserCreateHandler implements RequestHandler {
         } catch (IllegalArgumentException e) {
             logger.error("잘못된 입력값");
             return Response.from(HttpResponseStatus.BAD_REQUEST);
+        } catch (SQLException | NullPointerException e) {
+            logger.error("db 연결 에러");
+            return Response.from(HttpResponseStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

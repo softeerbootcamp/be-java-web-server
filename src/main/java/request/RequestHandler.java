@@ -5,6 +5,8 @@ import response.Response;
 import service.SessionService;
 import service.UserService;
 
+import java.sql.SQLException;
+
 public interface RequestHandler {
     UserService userService = UserService.getInstance();
 
@@ -27,11 +29,11 @@ public interface RequestHandler {
     }
 
     // TODO: 괴상한 코드 수정
-    default byte[] generateDynamicHeader(String cookie, byte[] file) throws IllegalArgumentException{
+    default byte[] generateDynamicHeader(String cookie, byte[] file) throws IllegalArgumentException, SQLException, NullPointerException {
         String fileString = new String(file);
         if(fileString.contains("${userId}")) {
             fileString = fileString.replace("${userId}", sessionService.isValid(cookie)
-                    ? sessionService.findSession(cookie).get().getUser().getUserId() : "");
+                    ? sessionService.findSession(cookie).get().getUserId() : "");
         }
         if(fileString.contains("로그인")) {
             fileString = fileString.replace("로그인", sessionService.isValid(cookie)
