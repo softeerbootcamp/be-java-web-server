@@ -37,11 +37,12 @@ public class ConnectionPool implements Runnable {
         logger.debug("run :" + connections.size());
     }
 
-    public Connection getConnection() {
+    public synchronized Connection getConnection() {
         logger.debug(String.valueOf(connections.size()));
         while (connections.isEmpty()) {
             try {
-                Thread.sleep(100);
+                logger.debug("Waiting for connection");
+                wait();
             } catch (InterruptedException e) {
                 logger.error("Error waiting for connection" + e.getMessage());
             }
