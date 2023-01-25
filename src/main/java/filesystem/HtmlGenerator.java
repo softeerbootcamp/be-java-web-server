@@ -41,7 +41,7 @@ public class HtmlGenerator {
     public static String getPostElementHTML(List<Post> posts) {
         StringBuilder msg = new StringBuilder();
         for (Post post : posts) {
-            msg.append("<li>" + "<div class='wrap'>" + "<div class='main'>" + "<strong class='subject'>" + "<a href='./qna/show.html'>").append(post.getTitle()).append("</a> ").append("</strong>").append("<div class='auth-info'> ").append("<a href='./user/profile.html' class='author'>").append(post.getUser().getName()).append("</a>").append("</div>").append("</div> ").append("</div>").append("</li>");
+            msg.append("<li>" + "<div class='wrap'>" + "<div class='main'>" + "<strong class='subject'>" + "<a href='./post/" + post.getId() + "'>").append(post.getTitle()).append("</a> ").append("</strong>").append("<div class='auth-info'> ").append("<a href='./user/profile.html' class='author'>").append(post.getUser().getName()).append("</a>").append("</div>").append("</div> ").append("</div>").append("</li>");
         }
         return msg.toString();
     }
