@@ -1,20 +1,93 @@
 package db;
 
-import com.google.common.collect.Maps;
 import model.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.Map;
+import java.sql.*;
 
 public class SessionRepository {
 
-    private final Map<String, Session> sessions = Maps.newHashMap();
+    private static final Logger logger = LoggerFactory.getLogger(SessionRepository.class);
 
-    public void addSession(String id, Session session) {
-        sessions.put(id, session);
+    public SessionRepository() {
     }
 
-    public Session findById(String id) {
-        return sessions.get(id);
+    public void addSession(String sessionId, String userId, String userName) {
+        String url = "jdbc:mysql://localhost:3306/WAS?serverTimezone=UTC";
+        String id = "root";
+        String pw = "codesquad123";
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        String query = "INSERT INTO WAS.SESSION VALUES (?,?,?)";
+
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection(url, id, pw);
+            logger.info("Connection 객체 생성성공");
+
+            pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, sessionId);
+            pstmt.setString(2, userId);
+            pstmt.setString(3, userName);
+
+            pstmt.executeUpdate();
+
+        } catch (ClassNotFoundException e) {
+            logger.error("드라이버 로드 실패");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (conn != null) conn.close();
+                if (pstmt != null) pstmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
+    public Session findById(String sessionId) {
+        String url = "jdbc:mysql://localhost:3306/WAS?serverTimezone=UTC";
+        String id = "root";
+        String pw = "codesquad123";
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        String query = "SELECT * FROM WAS.SESSION WHERE sessionID = ?";
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection(url, id, pw);
+            logger.info("Connection 객체 생성성공");
+
+            pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, sessionId);
+
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return new Session(
+                        rs.getString("sessionId"),
+                        rs.getString("userId"),
+                        rs.getString("userName"));
+            }
+
+        } catch (ClassNotFoundException e) {
+            logger.error("드라이버 로드 실패");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (conn != null) conn.close();
+                if (pstmt != null) pstmt.close();
+                if (rs != null) rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
 }
