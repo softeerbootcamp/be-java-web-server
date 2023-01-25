@@ -1,7 +1,10 @@
 package controller;
 
+import controller.annotation.Auth;
 import controller.annotation.ControllerInfo;
 import controller.annotation.ControllerMethodInfo;
+import db.BoardDataBase;
+import model.Board;
 import model.User;
 import reader.fileReader.FileReader;
 import reader.fileReader.TemplatesFileReader;
@@ -18,11 +21,14 @@ import util.HttpStatus;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 @ControllerInfo
 public class BoardController implements Controller {
     private FileReader fileReader;
+    private BoardDataBase boardDataBase = BoardDataBase.getInstance();
+
     @ControllerMethodInfo(path = "/qna/form.html", method = HttpMethod.GET)
     public HttpResponse qnaFormHtml(DataOutputStream dataOutputStream, HttpRequest httpRequest) throws IOException {
         fileReader = new TemplatesFileReader();
@@ -31,6 +37,24 @@ public class BoardController implements Controller {
                 .setData(new Data(dataOutputStream, data))
                 .setFileType(FileType.HTML)
                 .setHttpStatus(HttpStatus.OK)
+                .build();
+    }
+
+
+    @ControllerMethodInfo(path = "/qna/form", method = HttpMethod.POST)
+    public HttpResponse insertBoard(DataOutputStream dataOutputStream, HttpRequest httpRequest) {
+        RequestPostReader reader = new RequestPostReader();
+        HashMap<String, String> dataMap = reader.readData(httpRequest);
+        boardDataBase.insert(new Board(
+                dataMap.get("writer"),
+                dataMap.get("title"),
+                dataMap.get("contents")
+        ));
+        return new HttpResponse.Builder()
+                .setData(new Data(dataOutputStream))
+                .setFileType(FileType.HTML)
+                .setHttpStatus(HttpStatus.RE_DIRECT)
+                .setRedirectUrl(new Url("/index.html", RequestDataType.FILE))
                 .build();
     }
 }
