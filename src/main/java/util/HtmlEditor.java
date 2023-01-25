@@ -1,5 +1,6 @@
 package util;
 
+import model.domain.Memo;
 import model.domain.User;
 
 import java.util.Collection;
@@ -39,6 +40,13 @@ public class HtmlEditor {
         }
         bodyStr = bodyStr.replace("<tbody>",userList);
         return bodyStr.getBytes();
+    }
+
+    public static byte[] appendMemoList(byte[] body, Collection<Memo> memos){
+        String bodyStr = new String(body);
+        StringBuilder memoList = new StringBuilder("<ul class=\"list\">");
+        //todo: memoList 동적으로 보이도록 html 편집 코드 작성
+        return null;
     }
 
 }

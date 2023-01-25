@@ -1,6 +1,7 @@
 package controller;
 
 import model.domain.User;
+import model.service.MemoService;
 import model.service.UserService;
 import util.HtmlEditor;
 import util.HttpStatus;
@@ -15,7 +16,7 @@ import java.util.Collection;
 public class LoginController implements Controller{
     private static LoginController loginController;
     private final UserService userService = UserService.getInstance();
-
+    private final MemoService memoService = MemoService.getInstance();
     private static final String RELATIVE_PATH = "./src/main/resources";
 
     private LoginController(){}
