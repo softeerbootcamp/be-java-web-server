@@ -19,6 +19,10 @@ public class StaticController implements Controller {
     @Override
     public ResponseFactory controllerService(Request request) throws IOException {
         String url = request.getRequestLine().getURL();
+        boolean isLogined = request.isRequestHaveCookie();
+        if (!isLogined && url.contains("/qna")) {
+            url = url.replace("/qna", "");
+        }
         if (url.contains("/user/css") || url.contains("/user/js")) {
             url = url.substring(5);
         }
