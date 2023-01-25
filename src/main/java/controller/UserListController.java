@@ -40,7 +40,7 @@ public class UserListController implements Controller {
         String sid = httpRequest.getSession();
         try {
             Session session = SessionManager.getSession(UUID.fromString(sid)).orElseThrow(AuthenticationException::new);
-            httpResponse.setBody(FileUtils.makeUserListPage(userService.findAllUsers(), session));
+            httpResponse.setBody(FileUtils.makeUserListPage(userService.findAllUsers(), userService.findUser(session.getUserId())));
         } catch (NullPointerException | AuthenticationException | IOException e) {
             httpResponse.redirect(LOGIN_PATH);
         }

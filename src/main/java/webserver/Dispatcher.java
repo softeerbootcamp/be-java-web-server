@@ -20,7 +20,7 @@ public class Dispatcher {
                 StaticFileController.PATH, new StaticFileController(),
                 UserLoginController.PATH, new UserLoginController(appConfig.userService()),
                 UserListController.PATH, new UserListController(appConfig.userService()),
-                HtmlFileController.PATH, new HtmlFileController()
+                HtmlFileController.PATH, new HtmlFileController(appConfig.userService())
         );
     }
 
@@ -30,7 +30,7 @@ public class Dispatcher {
             return;
         }
         Controller controller = controllers.getOrDefault(request.getUri().getPath()
-                ,controllers.get(StaticFileController.PATH));
+                , controllers.get(StaticFileController.PATH));
         controller.service(request, response);
     }
 }

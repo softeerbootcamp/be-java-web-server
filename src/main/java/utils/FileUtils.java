@@ -24,12 +24,12 @@ public class FileUtils {
     public static String getExtension(String file) {
         return file.substring(file.lastIndexOf(".") + 1);
     }
-    public static byte[] createPage(String path, Session session) throws IOException {
+    public static byte[] createPage(String path, User user) throws IOException {
         String page = new String(loadFile(path));
-        if (path.contains("index.html") && session != null) {
-            page = page.replace("<!--username-->", String.format("<li><a>%s</a></li>", session.getName()));
+        if (path.contains("index.html") && user != null) {
+            page = page.replace("<!--username-->", String.format("<li><a>%s</a></li>", user.getName()));
         }
-        return removeUselessButton(page, session != null).getBytes();
+        return removeUselessButton(page, user != null).getBytes();
     }
 
     private static String removeLoginButton(String page) {
@@ -49,13 +49,13 @@ public class FileUtils {
         return removeLogoutButton(page);
     }
 
-    public static byte[] makeUserListPage(Collection<User> users, Session session) throws IOException {
+    public static byte[] makeUserListPage(Collection<User> users, User loginUser) throws IOException {
         StringBuilder sb = new StringBuilder();
-        String userListPage = removeUselessButton(new String(loadFile(PathManager.USER_LIST_PATH)), session != null);
-        sb.append(createLoginUserHTML(session));
+        String userListPage = removeUselessButton(new String(loadFile(PathManager.USER_LIST_PATH)), loginUser != null);
+        sb.append(createLoginUserHTML(loginUser));
         int cnt = 2;
         for (User user : users) {
-            if (user.getUserId().equals(session.getUserId()))
+            if (user.getUserId().equals(loginUser.getUserId()))
                 continue;
             sb.append("<tr>");
             sb.append(String.format("<th scope=\"row\">%d</th> <td>%s</td> <td>%s</td> <td>%s</td> <td>",
@@ -65,11 +65,11 @@ public class FileUtils {
         return userListPage.replace("<!--userList-->", sb.toString()).getBytes();
     }
 
-    public static String createLoginUserHTML(Session session) {
+    public static String createLoginUserHTML(User user) {
         StringBuilder sb = new StringBuilder();
         sb.append("<tr>");
         sb.append(String.format("<th scope=\"row\">1</th> <td>%s</td> <td>%s</td> <td>%s</td>",
-                session.getUserId(), session.getName(), session.getEmail()));
+                user.getUserId(), user.getName(), user.getEmail()));
         sb.append("<td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td>");
         sb.append("</tr>");
         return sb.toString();
