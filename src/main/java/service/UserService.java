@@ -6,6 +6,7 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Collection;
 import java.util.Map;
 
@@ -23,7 +24,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void addUser(Map<String, String> parameters) {
+    public void addUser(Map<String, String> parameters) throws SQLIntegrityConstraintViolationException {
         User user = new User(
                 parameters.get(USER_ID),
                 parameters.get(PASSWORD),
