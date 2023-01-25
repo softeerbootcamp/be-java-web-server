@@ -22,6 +22,7 @@ public class FrontController {
     private static final String LOGIN_PATH_URL ="/user/login";
     private static final String USER_LIST_PATH_URL ="/user/list";
     private static final String QNA_FORM_PATH ="/qna/form.html";
+    private static final String QNA_DETAIL_PATH ="/qna/show.html";
 
     //객체 캐싱
     static{
@@ -30,11 +31,13 @@ public class FrontController {
         LoginController loginInController = new LoginController();
         UserListController userListController = new UserListController();
         QnaController qnaController = new QnaController();
+        QnaShowController qnaShowController = new QnaShowController();
         controllers = Map.of(
                 SIGN_UP_PATH_URL,signUpController,
                 LOGIN_PATH_URL,loginInController,
                 USER_LIST_PATH_URL,userListController,
-                QNA_FORM_PATH,qnaController
+                QNA_FORM_PATH,qnaController,
+                QNA_DETAIL_PATH,qnaShowController
         );
     }
 
