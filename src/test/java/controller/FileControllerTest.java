@@ -3,11 +3,7 @@ package controller;
 import Controller.Controller;
 import Request.*;
 import Response.HttpResponse;
-import Response.HttpResponseBody;
-import Response.HttpResponseHeaders;
-import Response.HttpResponseStartLine;
 import db.SessionDb;
-import model.Session;
 import model.User;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
@@ -17,7 +13,6 @@ import Controller.FileController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.*;
-import view.FileView;
 
 import java.util.HashMap;
 
@@ -37,10 +32,7 @@ public class FileControllerTest {
         Controller controller = new FileController();
         HttpResponse response = controller.createResponse(httpRequest);
         //then
-        HttpResponse httpResponse = new HttpResponse().startLine(new HttpResponseStartLine(StatusCode.NOT_FOUND, "HTTP/1.1"))
-                .body(new HttpResponseBody("404: 존재하지않는 파일입니다.".getBytes()))
-                .headers(new HttpResponseHeaders("", "404: 존재하지않는 파일입니다.".getBytes().length));
-        Assertions.assertThat(response.getBody()).isEqualTo(httpResponse.getBody());
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(StatusCode.NOT_FOUND);
     }
     @Test
     @DisplayName("동적 html 생성을 테스트")
@@ -73,10 +65,9 @@ public class FileControllerTest {
         User user = SessionDb.getSession(sessionId).getUser();
         logger.debug(SessionDb.getSession(sessionId).toString());
         byte[] body = HtmlBuildUtil.buildHtml("/index.html", user);
-        HttpResponse httpResponse = new HttpResponse().startLine(new HttpResponseStartLine(StatusCode.OK,"HTTP/1.1"))
-                .headers(new HttpResponseHeaders("/index.html", body.length))
-                .body(new HttpResponseBody(body));
-
+        HttpResponse httpResponse = HttpResponse.createResponse("/index.html", StatusCode.OK, "HTTP/1.1");
+        httpResponse.setHttpResponseBody(body);
+        httpResponse.putHeader("Content-Length", String.valueOf(body.length));
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(result.getBody().length).isEqualTo(httpResponse.getBody().length);
         softly.assertThat(result.getHeader().get("Cookie")).isEqualTo(httpResponse.getHeader().get("Cookie"));
