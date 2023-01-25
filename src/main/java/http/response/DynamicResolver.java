@@ -22,7 +22,8 @@ public class DynamicResolver {
             if (line.contains("Posts")) {
                 sb.append("<li><a>").append(userName).append("</a></li>").append(System.lineSeparator());
             }
-            if (line.contains("%memoList%")) {
+            if (line.contains("<ul class=\"list\">")) {
+                sb.append(line).append(System.lineSeparator());
                 appendMemoList(sb);
                 continue;
             }
@@ -46,7 +47,7 @@ public class DynamicResolver {
                 appendUserList(sb, users);
                 continue;
             }
-            if (line.contains("%memoList%")) {
+            if (line.contains("<ul class=\"list\">")) {
                 appendMemoList(sb);
                 continue;
             }
@@ -63,7 +64,7 @@ public class DynamicResolver {
             if (line.contains("로그아웃")) {
                 continue;
             }
-            if (line.contains("%memoList%")) {
+            if (line.contains("<ul class=\"list\">")) {
                 appendMemoList(sb);
                 continue;
             }
@@ -88,12 +89,14 @@ public class DynamicResolver {
 
     private static void appendMemoList(StringBuilder sb) throws Exception {
         Collection<Memo> memos = MemoRepository.findAll();
+        sb.append("<ul class=\"list\">").append(System.lineSeparator());
         for (Memo memo : memos) {
-            sb.append("<tr>");
-            sb.append("<td>").append(memo.getCreatedAt()).append("</td>");
-            sb.append("<td>").append(memo.getUserName()).append("</td>");
-            sb.append("<td>").append(memo.getContent()).append("</td>");
-            sb.append("</tr>");
+            sb.append("<li><div class=\"wrap\"><div class=\"main\">");
+            sb.append("<h4>").append(memo.getContent()).append("</h4>");
+            sb.append("<div class=\"auth-info\">");
+            sb.append("<span class=\"time\">").append(memo.getCreatedAt()).append("</span>");
+            sb.append("<span class=\"tag\">").append(memo.getUserName()).append("</span>");
+            sb.append("</div></div></div></li>");
         }
     }
 }
