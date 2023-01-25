@@ -3,13 +3,9 @@ package Controller;
 import Request.HttpRequest;
 import Request.StatusCode;
 import Response.HttpResponse;
-import Response.HttpResponseBody;
-import Response.HttpResponseHeaders;
-import Response.HttpResponseStartLine;
 import db.SessionDb;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.HttpResponseUtil;
 import util.LoginUtil;
 
 import java.util.Objects;
@@ -21,12 +17,15 @@ public class LoginController implements Controller {
     private final Logger logger = LoggerFactory.getLogger(LoginController.class);
     private static LoginController loginController = null;
 
-    public static LoginController getInstance(){
-        if(Objects.isNull(loginController)){
-            loginController = new LoginController();
+    public static LoginController getInstance() {
+        if (Objects.isNull(loginController)) {
+            synchronized (LoginController.class) {
+                loginController = new LoginController();
+            }
         }
         return loginController;
     }
+
     @Override
     public HttpResponse createResponse(HttpRequest httpRequest) {
         logger.debug("select LoginController");
@@ -46,11 +45,9 @@ public class LoginController implements Controller {
     }
 
     private HttpResponse responseLoginFailed(HttpRequest httpRequest) {
-        byte[] body = HttpResponseUtil.generateBody(USER_LOGIN_FAILED_HTML);
-        HttpResponse response = new HttpResponse().startLine(new HttpResponseStartLine(StatusCode.OK, httpRequest.getProtocol()))
-                .headers(new HttpResponseHeaders(USER_LOGIN_FAILED_HTML, body.length))
-                .body(new HttpResponseBody(body));
-        return response;
+        HttpResponse httpResponse = HttpResponse.createResponse(USER_LOGIN_FAILED_HTML, StatusCode.OK, httpRequest.getProtocol());
+
+        return httpResponse;
     }
 
 }

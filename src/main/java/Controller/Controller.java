@@ -3,9 +3,6 @@ package Controller;
 import Request.HttpRequest;
 import Request.StatusCode;
 import Response.HttpResponse;
-import Response.HttpResponseBody;
-import Response.HttpResponseHeaders;
-import Response.HttpResponseStartLine;
 import util.HttpResponseUtil;
 
 import java.io.DataOutputStream;
@@ -20,9 +17,7 @@ public interface Controller {
     }
 
     default HttpResponse redirect(String loc, HttpRequest httpRequest) {
-        HttpResponse response = new HttpResponse().startLine(new HttpResponseStartLine(StatusCode.FOUND, httpRequest.getProtocol()))
-                .headers(new HttpResponseHeaders("", 0))
-                .body(new HttpResponseBody("".getBytes()));
+        HttpResponse response = HttpResponse.createResponse("", StatusCode.FOUND, httpRequest.getProtocol());
         response.putHeader("Location", loc);
         return response;
     }
