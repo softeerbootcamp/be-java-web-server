@@ -1,8 +1,8 @@
 package util;
 
+import model.Board;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.RequestHandler;
 import webserver.domain.HttpRequestMessage;
 
 import java.io.BufferedReader;
@@ -71,5 +71,9 @@ public class HttpParser {
 
     public static String parseSessionId(String query) {
         return query.substring(query.indexOf("=") + 1);
+    }
+
+    public static Board parseToBoard(Map<String, String> httpBody) throws NullPointerException{
+        return new Board(httpBody.get("writer"), httpBody.get("title"), httpBody.get("content"));
     }
 }
