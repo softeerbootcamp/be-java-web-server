@@ -29,10 +29,17 @@ public class DBUserRepo implements UserRepo{
     public Collection<User> findAll() {
         List<List<String>> users = DBConnectionManager.sendSql("select id, password, name, email from Customer", null);
         List<User> userList = new ArrayList<>();
-        for(List<String> row : users){
+        for (List<String> row : users) {
             User user = new User(row);
             userList.add(user);
         }
         return userList;
+    }
+
+
+    @Override
+    public void delete(String userId) {
+        String[] args = {userId};
+        DBConnectionManager.sendSql("delete from Customer where id=?", args);
     }
 }
