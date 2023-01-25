@@ -46,4 +46,8 @@ public class Board {
     public Timestamp getCreateTime() {
         return createTime;
     }
+
+    public Long getId() {
+        return id;
+    }
 }
