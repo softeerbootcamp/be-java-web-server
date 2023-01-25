@@ -55,7 +55,7 @@ public class FileIoUtil {
             int idx = path.indexOf(URL_PARAM_DELIMITER);
             return path.substring(idx + 1);
         }
-        throw new RuntimeException();
+        return "";
     }
 
     public static Path mappingDirectoryPath(String path) throws NullPointerException {
