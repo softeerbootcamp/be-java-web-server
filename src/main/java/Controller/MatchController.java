@@ -22,7 +22,7 @@ public class MatchController {
 
         Controller controller = cons.get(filePath(path));
         if (Objects.isNull(controller)) {
-            return new NonController();
+            return NonController.getInstance();
         }
         return controller;
     }
