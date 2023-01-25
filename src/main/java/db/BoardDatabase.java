@@ -32,11 +32,10 @@ public class BoardDatabase {
     public static Collection<Article> getAllArticles() throws SQLException {
         Collection<Article> articleCollection = new ArrayList<>();
         conn = databaseConnHandler.dbConnection();
-        String sql = "SELECT * FROM ?";
+        String sql = "SELECT * FROM Board";
         PreparedStatement psmt = conn.prepareStatement(sql);
-        psmt.setString(1, "Board");
         ResultSet rs = psmt.executeQuery();
-        if (rs.next()) {
+        while (rs.next()) {
             articleCollection.add(
                     new Article(
                             rs.getString("Date"),

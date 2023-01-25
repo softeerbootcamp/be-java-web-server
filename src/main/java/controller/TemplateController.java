@@ -26,6 +26,7 @@ public class TemplateController implements Controller {
 
         String addedLine = null;
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + url).toPath());
+        body = DynamicController.dynamicIndex_ViewAllBoard(body);
 
         if (isLogined) {
             body = DynamicController.dynamicIndex_LoginBtnToUserBtn(body, request.getRequestHeader().getHeaderValueByKey("Cookie").split("=")[1]);

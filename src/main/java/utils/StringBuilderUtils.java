@@ -49,6 +49,7 @@ public class StringBuilderUtils {
     public static String viewAllBoardBuilder() throws SQLException {
         stringBuilder = new StringBuilder();
         Collection<Article> board = BoardDatabase.getAllArticles();
+        int articleNum = 0;
         for(Article article:board){
             stringBuilder.append("                <li>\n" +
                     "                    <div class=\"wrap\">\n" +
@@ -63,13 +64,13 @@ public class StringBuilderUtils {
                     "                                <span class=\"time\">");
             stringBuilder.append(article.getDate());
             stringBuilder.append("</span>\n" +
-                    "                                <a href=\"./user/profile.html\" class=\"author\">");
+                    "                                <class=\"author\">");
             stringBuilder.append(article.getUserId());
             stringBuilder.append("</a>\n" +
                     "                            </div>\n" +
                     "                            <div class=\"reply\" title=\"댓글\">\n" +
                     "                                <i class=\"icon-reply\"></i>\n" +
-                    "                                <span class=\"point\">8</span>\n" +
+                    "                                <span class=\"point\">"+ (++articleNum)+"</span>\n" +
                     "                            </div>\n" +
                     "                        </div>\n" +
                     "                    </div>\n" +
