@@ -6,16 +6,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 import static model.general.Database.*;
 
 public class Database {
     private static final Logger logger = LoggerFactory.getLogger(Database.class);
-
-    private Map<String, User> users = new HashMap<>();
 
     public void addUser(User user) {
         try {
@@ -55,8 +52,8 @@ public class Database {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             resultSet.next();
-            user = User.of(resultSet.getString(1), resultSet.getString(2),
-                    resultSet.getString(3), resultSet.getString(4));
+            user = User.of(resultSet.getString("userId"), resultSet.getString("password"),
+                    resultSet.getString("name"), resultSet.getString("email"));
 
             logger.debug("userId: {}, password: {}, name: {}, email: {}",
                     user.getUserId(), user.getPassword(), user.getName(), user.getEmail());
@@ -71,6 +68,28 @@ public class Database {
     }
 
     public Collection<User> findAll() {
-        return users.values();
+        Collection<User> users = new ArrayList<>();
+
+        try {
+            Connection connection =
+                    DriverManager.getConnection(DB_URL.getDBInfo(), DB_USER_NAME.getDBInfo(), DB_PASSWORD.getDBInfo());
+
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement("select * from user;");
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next()) {
+                users.add(User.of(resultSet.getString("userId"), resultSet.getString("password"),
+                        resultSet.getString("name"), resultSet.getString("email")));
+            }
+
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return users;
     }
 }
