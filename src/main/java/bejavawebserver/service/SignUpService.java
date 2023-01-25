@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class SignUpService {
     public static void addDatabase(User user) {
-        //if(memoryDB.checkDuplicate(user)) throw new DuplicateSignUpUserException("중복된 사용자가 있습니다.");
+        if(memoryRepository.checkDuplicate(user)) throw new RuntimeException("중복된 사용자가 있습니다.");
         memoryRepository.addUser(user);
     }
 }

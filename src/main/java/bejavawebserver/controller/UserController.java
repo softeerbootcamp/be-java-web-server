@@ -13,7 +13,11 @@ import javax.servlet.http.HttpSession;
 public class UserController {
     @PostMapping("/user/create")
     public String signUp(User user){
-        SignUpService.addDatabase(user);
+        try{
+            SignUpService.addDatabase(user);
+        }catch (RuntimeException r){
+            return "redirect:/user/form.html";
+        }
         return "redirect:/";
     }
 
