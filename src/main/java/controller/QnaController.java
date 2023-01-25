@@ -32,6 +32,7 @@ public class QnaController implements Controller {
             String contents = formInfo.get("contents");
             contents = URLDecoder.decode(contents, ENCODE_CHARSET);
             DBConnection.storeInfo(writer, title, contents);
+            response.redirect("/index.html");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
