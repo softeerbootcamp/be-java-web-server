@@ -22,17 +22,21 @@ public class MySqlUserDatabase implements UserDatabase {
 
     @Override
     public void addUser(User user) {
-        try (Connection connection = connectionPool.getConnection()) {
+        try {
+            Connection connection = connectionPool.getConnection();
             String insertSQL = "INSERT INTO users VALUES (?,?,?,?)";
-            PreparedStatement preparedStatement = connection.prepareStatement(insertSQL);
-            preparedStatement.setString(1, user.getUserId());
-            preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setString(3, user.getName());
-            preparedStatement.setString(4, user.getEmail());
-            int count = preparedStatement.executeUpdate();
-            if (count == 1)
-                logger.debug("데이터 입력 성공");
-            connectionPool.releaseConnection(connection);
+            try (PreparedStatement preparedStatement = connection.prepareStatement(insertSQL)) {
+                preparedStatement.setString(1, user.getUserId());
+                preparedStatement.setString(2, user.getPassword());
+                preparedStatement.setString(3, user.getName());
+                preparedStatement.setString(4, user.getEmail());
+                int count = preparedStatement.executeUpdate();
+                if (count == 1)
+                    logger.debug("데이터 입력 성공");
+            } finally {
+                connectionPool.releaseConnection(connection);
+
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -40,17 +44,21 @@ public class MySqlUserDatabase implements UserDatabase {
 
     @Override
     public User findUserById(String userId) {
-        try (Connection connection = connectionPool.getConnection()) {
+        try {
+            Connection connection = connectionPool.getConnection();
             String selectSQL = "SELECT * FROM users WHERE user_id = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(selectSQL);
-            preparedStatement.setString(1, userId);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    String name = resultSet.getString("name");
-                    String email = resultSet.getString("email");
-                    String password = resultSet.getString("password");
-                    return new User(userId, password, name, email);
+            try (PreparedStatement preparedStatement = connection.prepareStatement(selectSQL)) {
+                preparedStatement.setString(1, userId);
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        String name = resultSet.getString("name");
+                        String email = resultSet.getString("email");
+                        String password = resultSet.getString("password");
+                        return new User(userId, password, name, email);
+                    }
                 }
+            } finally {
+                connectionPool.releaseConnection(connection);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -60,24 +68,27 @@ public class MySqlUserDatabase implements UserDatabase {
 
     @Override
     public Collection<User> findAll() {
-        try (Connection connection = connectionPool.getConnection()) {
+        try {
+            Connection connection = connectionPool.getConnection();
             Collection<User> users = new ArrayList<>();
             String selectSQL = "SELECT * FROM users";
-            PreparedStatement preparedStatement = connection.prepareStatement(selectSQL);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    String userId = resultSet.getString("user_id");
-                    String name = resultSet.getString("name");
-                    String email = resultSet.getString("email");
-                    String password = resultSet.getString("password");
-                    users.add(new User(userId, password, name, email));
+            try (PreparedStatement preparedStatement = connection.prepareStatement(selectSQL)) {
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    while (resultSet.next()) {
+                        String userId = resultSet.getString("user_id");
+                        String name = resultSet.getString("name");
+                        String email = resultSet.getString("email");
+                        String password = resultSet.getString("password");
+                        users.add(new User(userId, password, name, email));
+                    }
+                    return users;
                 }
-                return users;
+            } finally {
+                connectionPool.releaseConnection(connection);
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return new ArrayList<>();
     }
 }
