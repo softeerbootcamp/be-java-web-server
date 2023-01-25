@@ -15,6 +15,7 @@ public class Dispatcher {
 
     static {
         controllers = Map.of(
+                IndexController.PATH, new IndexController(),
                 StaticResourceController.PATH, new StaticResourceController(),
                 SignUpController.PATH, new SignUpController(),
                 LoginController.PATH, new LoginController(),
