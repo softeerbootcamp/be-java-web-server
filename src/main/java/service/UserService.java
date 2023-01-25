@@ -1,7 +1,5 @@
 package service;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -9,8 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 
-import db.UserReposioryImpl;
-import db.UserRepository;
+import repository.UserRepository;
+import repository.UserRepositoryMysql;
 import model.User;
 
 public class UserService {
@@ -30,7 +28,7 @@ public class UserService {
 	}
 
 	public UserService() {
-		this.userRepository = UserReposioryImpl.getInstance();
+		this.userRepository = UserRepositoryMysql.getInstance();
 	}
 
 	public boolean matchIdPassword(String userId, String password) {
