@@ -8,16 +8,18 @@ import util.LoginUtil;
 
 import java.util.Objects;
 
-public class FileView implements View{
+public class FileView implements View {
     private static FileView fileView = null;
-    public static FileView getInstance(){
-        if(Objects.isNull(fileView)){
-            synchronized (FileView.class){
+
+    public static FileView getInstance() {
+        if (Objects.isNull(fileView)) {
+            synchronized (FileView.class) {
                 fileView = new FileView();
             };
         }
         return fileView;
     }
+
     @Override
     public byte[] render(HttpRequest httpRequest) {
         try {
