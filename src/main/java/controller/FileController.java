@@ -1,5 +1,6 @@
 package controller;
 
+import db.DBConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.FileService;
@@ -12,6 +13,9 @@ import response.HttpResponse;
 
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.sql.SQLOutput;
+import java.util.List;
+import java.util.Map;
 
 public class FileController implements Controller{
 
@@ -32,6 +36,10 @@ public class FileController implements Controller{
             URL fileUrl = FileIoUtils.class.getClassLoader().getResource(TEMPLATES_DIR + url);
             if (fileUrl == null) {
                 throw new FileNotFoundException();
+            }
+            if(url.equals("/index.html")){
+                List<Map<String,String>> data = DBConnection.selectAll();
+                model.addAttribute("qna_data",data);
             }
             return TEMPLATES_DIR + url;
         }
