@@ -7,6 +7,7 @@ import httpMock.constants.ContentType;
 import httpMock.constants.StatusCode;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import repository.UserRepo;
 import service.StaticFileService;
 
 import java.io.IOException;
@@ -17,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RequestRouterTest {
     static RequestRouter requestRouter;
@@ -77,7 +79,7 @@ class RequestRouterTest {
         CustomHttpRequest req = CustomHttpRequest.of(
                 "POST /user/create HTTP/1.1",
                 Collections.EMPTY_LIST,
-                List.of("userId=rohsik2&password=qwevcqvew&name=adfqewfrw&email=rohsik@gmail.com")
+                List.of("userId=hero&password=qwevcqvew&name=adfqewfrw&email=rohsik@gmail.com")
         );
 
         CustomHttpResponse expected = new CustomHttpResponse(
@@ -94,7 +96,9 @@ class RequestRouterTest {
 
         //then
         assertEquals("/index.html", response.getHeaders().get("Location"));
-        assertEquals(response.getHeaders().get("Set-Cookie").contains("SID"), true);
+        assertTrue(response.getHeaders().get("Set-Cookie").contains("SID"));
+
+        UserRepo.getInstance().delete("hero");
 
     }
 
