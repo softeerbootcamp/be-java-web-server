@@ -61,6 +61,9 @@ public class ResponseFactory {
         }
 
         public Builder addCookieHeader(String sid) {
+            if(sid==null) {
+                return this;
+            }
             this.responseHeader.addCookieLine(sid);
             return this;
         }

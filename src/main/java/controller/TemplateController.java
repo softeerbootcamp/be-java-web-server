@@ -1,5 +1,6 @@
 package controller;
 
+import db.Database;
 import enums.ContentTypeEnum;
 import enums.ControllerTypeEnum;
 import org.slf4j.Logger;
@@ -19,8 +20,14 @@ public class TemplateController implements Controller {
     public ResponseFactory controllerService(Request request) throws IOException {
         logger.debug("firstLine : " + request.getRequestLine().getURL());
         String url = request.getRequestLine().getURL();
-
+        boolean isLogined = request.isRequestHaveCookie();
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + url).toPath());
+        if(isLogined){
+            body = DynamicController.dynamicIndexHtml(body,request.getRequestHeader().getHeaderValueByKey("Cookie").split("=")[1]);
+        }
+        if(url.contains("list.html")){
+            body = DynamicController.dynamicListHtml(body);
+        }
         ResponseFactory responseFactory = new ResponseFactory.Builder()
                 .setResponseStatusLine(ControllerTypeEnum.TEMPLATE)
                 .setResponseHeader(ContentTypeEnum.HTML, body.length)

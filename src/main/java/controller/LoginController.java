@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import request.Request;
 import response.ResponseFactory;
 import session.HttpSessions;
+import utils.UserInfoParseUtils;
 import webserver.RequestResponseHandler;
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +30,7 @@ public class LoginController implements Controller{
         logger.debug("login request : "+request.getRequestLine().getVERSION());
         logger.debug("login request : "+request.getRequestBody().getBodyLines());
         List<String> bodyLine = request.getRequestBody().getBodyLines();
-        List<String> userInfos = parseUrlToGetUserInfo(bodyLine);
+        List<String> userInfos = UserInfoParseUtils.parseUrlToGetUserInfo(bodyLine);
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + "/index.html").toPath());
         String addedLine="Location : /index.html";
         // 로그인이 성공하면? session add
@@ -37,6 +38,7 @@ public class LoginController implements Controller{
             HttpSessions.addHttpSession(userInfos.get(USERID_INDEX));
             sid = HttpSessions.findSessionById(userInfos.get(USERID_INDEX));
         }else{
+            // 실패하면?
             logger.debug("login failed!");
             addedLine="Location : /user/login_failed.html";
         }
@@ -44,8 +46,8 @@ public class LoginController implements Controller{
         ResponseFactory responseFactory = new ResponseFactory.Builder()
                 .setResponseStatusLine(ControllerTypeEnum.LOGIN)
                 .setResponseHeader(ContentTypeEnum.CSS,body.length)
-                .addCookieHeader(sid)
                 .addResponseHeader(addedLine)
+                .addCookieHeader(sid)
                 .setResponseBody(body)
                 .build();
         return responseFactory;
@@ -53,7 +55,7 @@ public class LoginController implements Controller{
     }
     // util 로 빼주자
     public boolean checkIdPwdIsInDatabase(String id, String pwd){
-        if(Database.findUserById(id).equals(null)){
+        if(Database.findUserById(id)==null){
             return false;
         }
         if(Database.findUserById(id).getPassword().equals(pwd)){
@@ -61,21 +63,4 @@ public class LoginController implements Controller{
         }else return false;
     }
 
-    // todo : 해당 메소드 2번 사용되는데 받는 형태도 비슷하다. 어디 묶어볼까?
-    public List<String> parseUrlToGetUserInfo(List<String> requestBodyLine) {
-        String result = getUserInfoFromBodyLines(requestBodyLine);
-        List<String> parsedUserInfo = new ArrayList<>();
-        String[] unParsedUserInfos = result.split("&");
-        for (String eachInfo : unParsedUserInfos) {
-            parsedUserInfo.add(eachInfo.split("=")[1]);
-        }
-        return parsedUserInfo;
-    }
-    public String getUserInfoFromBodyLines(List<String> lines){
-        for (String line:lines
-        ) {
-            if (line.contains("user")) return line;
-        }
-        return null;
-    }
 }

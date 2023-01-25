@@ -8,10 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.Request;
 import response.ResponseFactory;
+import utils.UserInfoParseUtils;
 import webserver.RequestResponseHandler;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,15 +25,15 @@ public class UserController implements Controller {
     private static final int USERNAME_INDEX = 2;
     private static final int USEREMAIL_INDEX = 3;
     private static final Logger logger = LoggerFactory.getLogger(RequestResponseHandler.class);
-
-    // todo: user 정보들을 parse 하는 것은 좋지만, 추후 Validation Check 등에서 불편할 수 있으므로, Map 형태로 바꾸어 보자.
     @Override
     public ResponseFactory controllerService(Request request) throws IOException {
         logger.debug("firstLine : " + request.getRequestLine().getURL());
         List<String> requestRequestBody = request.getRequestBody().getBodyLines();
-        List<String> userInfos = parseUrlToGetUserInfo(requestRequestBody);
-        User user = new User(userInfos.get(USERID_INDEX), userInfos.get(USERPWD_INDEX),
-                userInfos.get(USERNAME_INDEX), userInfos.get(USEREMAIL_INDEX));
+        List<String> userInfos = UserInfoParseUtils.parseUrlToGetUserInfo(requestRequestBody);
+
+        List<String> decodedUserInfos = UserInfoParseUtils.userInfoDecoder(userInfos);
+        User user = new User(decodedUserInfos.get(USERID_INDEX), decodedUserInfos.get(USERPWD_INDEX),
+                decodedUserInfos.get(USERNAME_INDEX), decodedUserInfos.get(USEREMAIL_INDEX));
 
         Database.addUser(user);
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + "/index.html").toPath());
@@ -44,21 +47,5 @@ public class UserController implements Controller {
         return responseFactory;
     }
 
-    public List<String> parseUrlToGetUserInfo(List<String> requestBodyLine) {
-        String UserInfos = getUserInfoFromBodyLines(requestBodyLine);
-        List<String> parsedUserInfo = new ArrayList<>();
-        String[] unParsedUserInfos = UserInfos.split("&");
-        for (String eachInfo : unParsedUserInfos) {
-            parsedUserInfo.add(eachInfo.split("=")[1]);
-        }
-        return parsedUserInfo;
-    }
 
-    public String getUserInfoFromBodyLines(List<String> lines) {
-        for (String line : lines
-        ) {
-            if (line.contains("user")) return line;
-        }
-        return null;
-    }
 }
