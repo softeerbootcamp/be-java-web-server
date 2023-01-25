@@ -10,4 +10,6 @@ public class InBody {
     public static String beforeReplaced_UserList = "<!-- emptyLIst -->";
 
     public static String beforeReplaced_CreateNewArticleButtonModal = "qnaModal_notLoggedIn";
+
+    public static String beforeReplaced_ArticleList = "<!--articleList-->";
 }
