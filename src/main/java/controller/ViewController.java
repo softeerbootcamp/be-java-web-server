@@ -1,5 +1,6 @@
 package controller;
 
+import db.Database;
 import model.general.ContentType;
 import model.general.Header;
 import model.general.Status;
@@ -70,6 +71,9 @@ public class ViewController implements Controller {
         } catch (IOException e) {
             return new byte[0];
         }
+
+        if(requestLine.getUri().equals("/index.html"))
+            body = ResponseBodyUtils.makeResponseBodyMemoList(body, Database.findAllMemos());
 
         if (isLogin && requestLine.getContentType().equals(HTML))
             body = ResponseBodyUtils.makeResponseBodyWhenLoginSuccess(body, request);
