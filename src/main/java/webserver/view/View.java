@@ -14,7 +14,7 @@ public interface View {
 
         if(mv.getViewPath().startsWith("redirect:"))  //separate a redirection request from a rendering request
         {
-            res.redirect(StatusCodes.SEE_OTHER, mv.getViewPath().substring(9));
+            res.addRedirection(StatusCodes.SEE_OTHER, mv.getViewPath().substring(9));
             return;
         }
         String menuBar = "";

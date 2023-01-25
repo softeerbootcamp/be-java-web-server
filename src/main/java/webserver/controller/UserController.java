@@ -39,14 +39,14 @@ public class UserController implements Controller {
     public void userCreate(UserDto newUser, Response response, ModelAndView mv) {
         userService.addUser(newUser);
         mv.setViewPath("redirect:/index.html");
-        response.ok(StatusCodes.OK, ("<script>alert('계정 생성이 완료되었습니다.'); </script>").getBytes(), ContentType.TEXT_HTML);
+        response.addHeaderAndBody(StatusCodes.OK, ("<script>alert('계정 생성이 완료되었습니다.'); </script>").getBytes(), ContentType.TEXT_HTML);
     }
 
     @ControllerInfo(path = "/user/login", methodName = "userLogin", queryStr = {"userId", "password"}, method = RequestMethod.POST)
     public void userLogin(@RequestBody Map<String, String> queryStrs, Response response, ModelAndView mv) throws  HttpRequestException{
         String userId = userService.login(queryStrs.get("userId"), queryStrs.get("password"));
         mv.setViewPath("redirect:/index.html");
-        response.ok(StatusCodes.OK, ("<script>alert('로그인이 완료되었습니다.');</script>").getBytes(), ContentType.TEXT_HTML);
+        response.addHeaderAndBody(StatusCodes.OK, ("<script>alert('로그인이 완료되었습니다.');</script>").getBytes(), ContentType.TEXT_HTML);
         response.addCookieOnHeader(HttpSessionUtils.generateSession(userId).toString());
     }
 
@@ -54,7 +54,7 @@ public class UserController implements Controller {
     public void userLogout(@RequestBody Map<String, String> queryStrs, Response response, ModelAndView mv){
         SecurityContext.clearContext();
         mv.setViewPath("redirect:/index.html");
-        response.ok(StatusCodes.OK, ("<script>alert('로그아웃 완료되었습니다.'); </script>").getBytes(), ContentType.TEXT_HTML);
+        response.addHeaderAndBody(StatusCodes.OK, ("<script>alert('로그아웃 완료되었습니다.'); </script>").getBytes(), ContentType.TEXT_HTML);
         response.addCookieOnHeader(HttpSessionUtils.cookieInvalidation(mv.getViewModel().get("session-id").toString()));
     }
 

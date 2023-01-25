@@ -83,11 +83,11 @@ public class ControllerInterceptor {
                     method.invoke(controller, paramList);
 
                 } catch (HttpRequestException e){
-                    res.error(e.getErrorCode(), e.getMsg().getBytes(), ContentType.TEXT_HTML);
+                    res.addHeaderAndBody(e.getErrorCode(), e.getMsg().getBytes(), ContentType.TEXT_HTML);
                 } catch (IllegalAccessException | InvocationTargetException | IOException | NoSuchMethodException |
                          InstantiationException ex) {
                     HttpRequestException e = (HttpRequestException) ex.getCause();
-                    res.error(e.getErrorCode(), e.getMsg().getBytes(), ContentType.TEXT_HTML);
+                    res.addHeaderAndBody(e.getErrorCode(), e.getMsg().getBytes(), ContentType.TEXT_HTML);
                 }
             }
         });

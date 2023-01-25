@@ -34,7 +34,7 @@ public class CommonView implements View{
                         fileContent = fileContent.replace(menuBar, "")
                                                  .replace("<li id=\"username\"></li>", nameTag);
                     }
-                    res.ok(StatusCodes.OK, fileContent.getBytes(), getExtension(resourceUrl));}
+                    res.addHeaderAndBody(StatusCodes.OK, fileContent.getBytes(), getExtension(resourceUrl));}
                     ,()-> res.notFoundError(StatusCodes.NOT_FOUND)); //if not
     }
 }

@@ -50,7 +50,7 @@ class StaticControllerTest {
         //then
         staticController.chain(req, res, mv);
 
-        verify(res).ok(StatusCodes.OK, fileAsBytes, StaticResourceFinder.getExtension(path));
+        verify(res).addHeaderAndBody(StatusCodes.OK, fileAsBytes, StaticResourceFinder.getExtension(path));
     }
 
     @Test
@@ -67,6 +67,6 @@ class StaticControllerTest {
         staticController.chain(req, res, mv);
 
         //then
-        verify(res).error(StatusCodes.NOT_FOUND, StatusCodes.NOT_FOUND.getStatusMsg().getBytes(), ContentType.TEXT_HTML);
+        verify(res).addHeaderAndBody(StatusCodes.NOT_FOUND, StatusCodes.NOT_FOUND.getStatusMsg().getBytes(), ContentType.TEXT_HTML);
     }
 }

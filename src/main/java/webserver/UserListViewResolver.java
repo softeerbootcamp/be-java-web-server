@@ -28,9 +28,9 @@ public class UserListViewResolver {
         String path = mv.getViewName();
         String userTableScript = getTableOfUser(mv.getViewModel().get("user"));
         StaticResourceFinder.staticFileResolver(path)
-                .ifPresent( (fileAsBytes) -> {
+                .ifPresent(fileAsBytes -> {
                     String fileContent = new String(fileAsBytes);
                     String newContent = fileContent.replaceAll("(?is)<tbody.+?/tbody>", "<tbody> " + userTableScript + " </tbody>");
-                    res.ok(StatusCodes.OK, newContent.getBytes(), StaticResourceFinder.getExtension(path));});//if not
+                    res.addHeaderAndBody(StatusCodes.OK, newContent.getBytes(), StaticResourceFinder.getExtension(path));});//if not
     }
 }
