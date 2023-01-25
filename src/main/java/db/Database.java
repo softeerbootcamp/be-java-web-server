@@ -28,7 +28,7 @@ public class Database {
             preparedStatement.setString(4, user.getEmail());
 
             int changeRow = preparedStatement.executeUpdate();
-            logger.debug("변경된 row 수: {}", changeRow);
+            logger.debug("변경된 row 수(user): {}", changeRow);
 
             preparedStatement.close();
             connection.close();
@@ -92,5 +92,48 @@ public class Database {
         }
 
         return users;
+    }
+
+    public void addMemo(String userId, String contents) {
+        int userIdx = 0;
+
+        try {
+            Connection connection =
+                    DriverManager.getConnection(DB_URL.getDBInfo(), DB_USER_NAME.getDBInfo(), DB_PASSWORD.getDBInfo());
+
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement("select idx from user where userId = ?;");
+
+            preparedStatement.setString(1, userId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            resultSet.next();
+            userIdx = resultSet.getInt("idx");
+
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Connection connection =
+                    DriverManager.getConnection(DB_URL.getDBInfo(), DB_USER_NAME.getDBInfo(), DB_PASSWORD.getDBInfo());
+
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement("insert into memo(userIdx, contents) values(?, ?);");
+
+            preparedStatement.setInt(1, userIdx);
+            preparedStatement.setString(2, contents);
+
+            int changeRow = preparedStatement.executeUpdate();
+            logger.debug("변경된 row 수(memo): {}", changeRow);
+
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
