@@ -60,7 +60,7 @@ public class LoginController implements Controller{
         }
         if(Database.findUserById(id).getPassword().equals(pwd)){
             return true;
-        }else return false;
+        }return false;
     }
 
 }
