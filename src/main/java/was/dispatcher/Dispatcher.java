@@ -1,15 +1,22 @@
 package was.dispatcher;
 
+import db.SessionStorage;
 import enums.HttpMethod;
+import was.annotation.Auth;
 import was.annotation.RequestMapping;
 import was.controller.Controller;
 import was.controller.ControllerFactory;
+import was.interceptor.AuthInterceptor;
+import webserver.domain.HttpResponse;
 import webserver.handler.ControllerHandler;
 import webserver.domain.HttpRequest;
 import webserver.domain.HttpResponseMessage;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Optional;
+import java.util.UUID;
+
 public class Dispatcher implements ControllerHandler{
     private static Dispatcher dispatcher;
 
@@ -30,6 +37,13 @@ public class Dispatcher implements ControllerHandler{
     private HttpResponseMessage dispatch(HttpRequest httpRequest, Controller controller, String path) {
         Method[] methods = controller.getClass().getDeclaredMethods();
         for (Method method : methods) {
+            Annotation auth = method.getAnnotation(Auth.class);
+            if (auth != null) {
+                if (!AuthInterceptor.checkAuth(httpRequest)) {
+                    HttpResponse httpResponse = new HttpResponse();
+                    return new HttpResponseMessage(httpResponse.sendRedirect("/user/login.html"), httpResponse.getBody());
+                }
+            }
             Annotation annotation = method.getAnnotation(RequestMapping.class);
             if (annotation == null) {
                 continue;
@@ -37,8 +51,6 @@ public class Dispatcher implements ControllerHandler{
 
             RequestMapping requestMappingAnno = (RequestMapping) annotation;
             HttpMethod requestMethod = httpRequest.getRequestLine().getHttpMethod();
-            System.out.println("path = " + path);
-            System.out.println("requestMappingAnno = " + requestMappingAnno.value());
             if (requestMappingAnno.method() == requestMethod && path.equals(requestMappingAnno.value())) {
                 try{
                     Object[] parameter = new Object[1];

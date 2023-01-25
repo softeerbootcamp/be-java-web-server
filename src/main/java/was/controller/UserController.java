@@ -4,10 +4,9 @@ import db.SessionStorage;
 import enums.HttpMethod;
 import model.User;
 import service.UserService;
+import was.annotation.Auth;
 import was.annotation.RequestMapping;
-import was.view.ViewResolver;
 import webserver.session.Session;
-import was.annotation.PostMapping;
 import webserver.domain.HttpRequest;
 import webserver.domain.HttpResponse;
 import webserver.domain.HttpResponseMessage;
@@ -47,27 +46,22 @@ public class UserController implements Controller{
         }
         return new HttpResponseMessage(httpResponse.unauthorized(), httpResponse.getBody());
     }
+    @Auth
     @RequestMapping(method = HttpMethod.GET, value = "/user/list")
     public HttpResponseMessage showList(HttpRequest httpRequest) {
         HttpResponse httpResponse = new HttpResponse();
-        UUID sessionId = httpRequest.getSessionId().orElse(null);
-        if (sessionId == null || !SessionStorage.isExist(sessionId)) {
-            return new HttpResponseMessage(httpResponse.sendRedirect("/user/login.html"), httpResponse.getBody());
-        }
+        UUID sessionId = httpRequest.getSessionId().get();
         String userId = SessionStorage.findSessionBy(sessionId).getUserId();
         String path = httpResponse.findPath(httpRequest.getRequestLine().getUrl() + ".html");
         System.out.println("path = " + path);
         System.out.println("userId = " + userId);
         return new HttpResponseMessage(httpResponse.forwardListPageHeaderMessage(userId, path), httpResponse.getBody());
     }
-
+    @Auth
     @RequestMapping(method =  HttpMethod.GET, value = "/user/logout")
     public HttpResponseMessage logOut(HttpRequest httpRequest) {
         HttpResponse httpResponse = new HttpResponse();
-        UUID sessionId = httpRequest.getSessionId().orElse(null);
-        if (sessionId == null) {
-            return new HttpResponseMessage(httpResponse.sendRedirect("/user/login.html"), httpResponse.getBody());
-        }
+        UUID sessionId = httpRequest.getSessionId().get();
         SessionStorage.findSessionBy(sessionId).invalidate();
         return new HttpResponseMessage(httpResponse.sendRedirect("/index.html"), httpResponse.getBody());
     }
