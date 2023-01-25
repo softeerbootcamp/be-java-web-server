@@ -23,7 +23,10 @@ public class FieldResolveStrategy implements ArgResolveStrategy{
         paramList.forEach(param -> {
             String bodyContent = body.get(param.getName());
             if(bodyContent == null)
-                throw new HttpRequestException(StatusCodes.BAD_REQUEST, "<script>alert('입력값을 확인해주세요'); history.go(-1);</script>");
+                throw  HttpRequestException.builder()
+                        .statusCode(StatusCodes.BAD_REQUEST)
+                        .msg("<script>alert('입력값을 확인해주세요'); history.go(-1);</script>")
+                        .build();
             paramObjList.add(bodyContent);
         });
         return paramObjList.toArray();

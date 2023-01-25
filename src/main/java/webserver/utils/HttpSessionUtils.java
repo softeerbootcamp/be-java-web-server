@@ -61,10 +61,13 @@ public class HttpSessionUtils {
         return false;
     }
 
-    public static String sessionIdToUserName(String sessionId){
+    public static String sessionIdToUserName(String sessionId) {
         HttpSession session = SessionDataBase.findSessionById(sessionId).orElse(null);
         if(session == null)
-            throw new HttpRequestException(StatusCodes.BAD_REQUEST, "<script>alert('로그인 세션이 종료되었습니다.'); window.location.href = 'http://localhost:8080/user/login_failed.html';</script>");
+            throw HttpRequestException.builder()
+                .statusCode(StatusCodes.BAD_REQUEST)
+                .msg("<script>alert('로그인 세션이 종료되었습니다.'); window.location.href = 'http://localhost:8080/user/login_failed.html';</script>")
+                .build();
         return session.getUsername();
     }
 }

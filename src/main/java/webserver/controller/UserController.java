@@ -65,7 +65,7 @@ public class UserController implements Controller {
     }
 
     @Override
-    public void chain(Request req, Response res, ModelAndView mv) throws HttpRequestException {
+    public void chain(Request req, Response res, ModelAndView mv) {
         ControllerInterceptor.executeController(getInstance(), req, res, mv);
     }
 }
