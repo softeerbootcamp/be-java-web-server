@@ -14,20 +14,18 @@ import java.net.URLDecoder;
 public class RequestGetter {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestGetter.class);
-    private String currentLine;
 
-    public RequestGetter(){ currentLine = new String(); }
+    public RequestGetter(){ }
 
     public Request getFromInputStream(InputStream in) throws IOException
     {
-        BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-        currentLine = new String(" ");
-        while(currentLine.isBlank()) currentLine = br.readLine();
+        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+        String line = br.readLine();
 
         Request req = new Request();
         try{
 
-            ReqLine parsedLine = parseRequestLine(br);
+            ReqLine parsedLine = parseRequestLine(line);
 
             req.setReqLine(parsedLine.getMethod(), parsedLine.getQuery(), parsedLine.getVersion());
             req.setReqHeader(getHeaderKeyValues(br));
@@ -40,37 +38,37 @@ public class RequestGetter {
         return req;
     }
 
-    private ReqLine parseRequestLine(BufferedReader br) throws IOException
+    private ReqLine parseRequestLine(String line) throws IOException
     {
         ReqLine parsedRequestLine = new ReqLine();
 
-        String tokens[] = currentLine.split(" ");
+        String tokens[] = line.split(" ");
         parsedRequestLine.setMethod(tokens[0]);
         parsedRequestLine.setQuery(tokens[1].equals("/") ?
                 Paths.HOME_PATH :
                 URLDecoder.decode(tokens[1]));
         parsedRequestLine.setVersion(tokens[2]);
 
-        currentLine = br.readLine();
         return parsedRequestLine;
     }
 
     private Map<String, String> getHeaderKeyValues(BufferedReader br) throws IOException
     {
         Map<String, String> parsedHeader = new HashMap<String, String>();
+        String line = br.readLine();
 
-        while(!currentLine.isBlank())
+        while(!line.isBlank())
         {
             try{
 
                 String keyVal[] = new String[2];
-                keyVal = currentLine.split(": ");
+                keyVal = line.split(": ");
                 parsedHeader.put(keyVal[0], keyVal[1]);
             } catch(ArrayIndexOutOfBoundsException e)
             {
-                logger.error(currentLine);
+                logger.error(line);
             }
-            currentLine = br.readLine();
+            line = br.readLine();
         }
         return parsedHeader;
     }
