@@ -15,6 +15,7 @@ public class QueryBuilder implements AutoCloseable {
     private String from = "";
     private String where = "";
     private String values = "";
+    private String order = "";
 
     public QueryBuilder(Connection conn) {
         this.conn = conn;
@@ -68,13 +69,19 @@ public class QueryBuilder implements AutoCloseable {
         return this;
     }
 
+    public QueryBuilder order(String filed, String order) {
+        this.order = " ORDER BY " + filed + " " + order;
+        return this;
+    }
+
     public ResultSet read() {
-        String sql = front + from + where + ";";
+        String sql = front + from + where + order + ";";
         try {
             System.out.println(sql);
             statement = conn.createStatement();
             statement.execute(sql);
             resultSet = statement.getResultSet();
+            reset();
             return resultSet;
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -87,10 +94,19 @@ public class QueryBuilder implements AutoCloseable {
             System.out.println(sql);
             statement = conn.createStatement();
             statement.execute(sql);
+            reset();
             return true;
         } catch (SQLException e) {
             return false;
         }
+    }
+
+    private void reset() {
+        front = "";
+        from = "";
+        where = "";
+        values = "";
+        order = "";
     }
 
     @Override

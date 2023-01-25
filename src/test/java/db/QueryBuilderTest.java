@@ -168,4 +168,78 @@ public class QueryBuilderTest {
         resultSet.close();
         statement.close();
     }
+
+    @Test
+    @DisplayName("오름차순 테스트")
+    void orderByAsc() throws SQLException {
+        // given
+        Statement statement = connection.createStatement();
+        statement.execute("INSERT INTO user VALUES(1, 'sol');");
+        statement.execute("INSERT INTO user VALUES(2, 'chan');");
+        statement.execute("INSERT INTO user VALUES(3, 'kim');");
+
+        // when
+        ResultSet resultSet = queryBuilder
+                .select("user_id", "nickname")
+                .from("user")
+                .order("user_id", "ASC")
+                .read();
+
+        // then
+        List<Map<String, String>> results = new ArrayList<>();
+        while (resultSet.next()) {
+            results.add(
+                    Map.of(
+                            "user_id", resultSet.getString("user_id"),
+                            "nickname", resultSet.getString("nickname"))
+            );
+        }
+
+        assertAll(
+                () -> assertThat(results.size()).isEqualTo(3),
+                () -> assertThat(results.get(0).get("user_id")).isEqualTo("1"),
+                () -> assertThat(results.get(0).get("nickname")).isEqualTo("sol")
+        );
+
+        // close
+        resultSet.close();
+        statement.close();
+    }
+
+    @Test
+    @DisplayName("내림차순 테스트")
+    void orderByDesc() throws SQLException {
+// given
+        Statement statement = connection.createStatement();
+        statement.execute("INSERT INTO user VALUES(1, 'sol');");
+        statement.execute("INSERT INTO user VALUES(2, 'chan');");
+        statement.execute("INSERT INTO user VALUES(3, 'kim');");
+
+        // when
+        ResultSet resultSet = queryBuilder
+                .select("user_id", "nickname")
+                .from("user")
+                .order("user_id", "DESC")
+                .read();
+
+        // then
+        List<Map<String, String>> results = new ArrayList<>();
+        while (resultSet.next()) {
+            results.add(
+                    Map.of(
+                            "user_id", resultSet.getString("user_id"),
+                            "nickname", resultSet.getString("nickname"))
+            );
+        }
+
+        assertAll(
+                () -> assertThat(results.size()).isEqualTo(3),
+                () -> assertThat(results.get(0).get("user_id")).isEqualTo("3"),
+                () -> assertThat(results.get(0).get("nickname")).isEqualTo("kim")
+        );
+
+        // close
+        resultSet.close();
+        statement.close();
+    }
 }
