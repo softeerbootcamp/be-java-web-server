@@ -36,7 +36,7 @@ public class PostController implements Controller {
 
     private void addNewPost(HttpRequest request, HttpResponse response) {
         authService.getUser(request).ifPresent((user) -> {
-            PostCreateDTO postInfo = PostCreateDTO.of(request.getParameters(WRITER, TITLE, CONTENT));
+            PostCreateDTO postInfo = PostCreateDTO.of(user, request.getParameters(TITLE, CONTENT));
             postService.create(postInfo, user);
         });
         response.redirect(DOMAIN);
