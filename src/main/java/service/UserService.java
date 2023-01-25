@@ -1,7 +1,13 @@
 package service;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Lists;
 
 import db.UserReposioryImpl;
 import db.UserRepository;
@@ -43,6 +49,10 @@ public class UserService {
 		User user = User.of(userId, password, name, email);
 		userRepository.addUser(user);
 		logger.info(user + " 회원가입했습니다.");
+	}
+
+	public List<User> findAll() {
+		return Lists.newArrayList(userRepository.findAll());
 	}
 
 	public User findByUserId(String userId) {
