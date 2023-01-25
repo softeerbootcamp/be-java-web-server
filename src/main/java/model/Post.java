@@ -2,6 +2,8 @@ package model;
 
 import dto.PostCreateDTO;
 
+import java.time.LocalDateTime;
+
 public class Post {
 
     private Long id;
@@ -9,10 +11,13 @@ public class Post {
     private String title;
     private String content;
 
+    private LocalDateTime createdDate;
+
     public Post(User user, PostCreateDTO postCreateDTO) {
         this.user = user;
         this.title = postCreateDTO.getTitle();
         this.content = postCreateDTO.getContent();
+        this.createdDate = LocalDateTime.now();
     }
 
     public static Post of(User user, PostCreateDTO postCreateDTO) {
@@ -37,5 +42,9 @@ public class Post {
 
     public String getContent() {
         return content;
+    }
+
+    public String getCreatedDate() {
+        return createdDate.toString();
     }
 }
