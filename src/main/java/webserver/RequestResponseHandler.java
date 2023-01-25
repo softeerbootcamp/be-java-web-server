@@ -2,6 +2,7 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
+import java.sql.SQLException;
 
 import controller.Controller;
 import controller.ControllerSelector;
@@ -42,6 +43,8 @@ public class RequestResponseHandler implements Runnable {
             logger.error(e.getMessage());
         } catch (NullPointerException nullPointerException) {
             logger.error("아무런 요청이 없습니다!!~!");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 

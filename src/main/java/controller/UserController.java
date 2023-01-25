@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class UserController implements Controller {
     private static final int USEREMAIL_INDEX = 3;
     private static final Logger logger = LoggerFactory.getLogger(RequestResponseHandler.class);
     @Override
-    public ResponseFactory controllerService(Request request) throws IOException {
+    public ResponseFactory controllerService(Request request) throws IOException, SQLException {
         logger.debug("firstLine : " + request.getRequestLine().getURL());
         List<String> requestRequestBody = request.getRequestBody().getBodyLines();
         List<String> userInfos = UserInfoParseUtils.parseUrlToGetUserInfo(requestRequestBody);
