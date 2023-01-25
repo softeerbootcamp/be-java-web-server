@@ -55,9 +55,9 @@ public class StringBuilderUtils {
                     "                    <div class=\"wrap\">\n" +
                     "                        <div class=\"main\">\n" +
                     "                            <strong class=\"subject\">\n" +
-                    "                                <a href=\"./qna/show.html\">");
+                    "                                ");
             stringBuilder.append(article.getBody());
-            stringBuilder.append("</a>\n" +
+            stringBuilder.append("\n" +
                     "                            </strong>\n" +
                     "                            <div class=\"auth-info\">\n" +
                     "                                <i class=\"icon-add-comment\"></i>\n" +
@@ -66,7 +66,7 @@ public class StringBuilderUtils {
             stringBuilder.append("</span>\n" +
                     "                                <class=\"author\">");
             stringBuilder.append(article.getUserId());
-            stringBuilder.append("</a>\n" +
+            stringBuilder.append("\n" +
                     "                            </div>\n" +
                     "                            <div class=\"reply\" title=\"댓글\">\n" +
                     "                                <i class=\"icon-reply\"></i>\n" +
