@@ -18,14 +18,13 @@ public class PostController implements RequestController {
     private static final Logger logger = LoggerFactory.getLogger(PostController.class);
     private static PostController postController;
 
-    private final PostService postService;
     private final Map<String, RequestController> routingTable = new HashMap<>() {{
         put("/qna/form", (req) -> createPost(req));
+        put("/qna/show", (req) -> showPost(req));
     }};
 
 
     private PostController() {
-        postService = new PostService();
     }
 
     public static PostController get() {
@@ -59,9 +58,16 @@ public class PostController implements RequestController {
         if (user == null)
             return CustomHttpFactory.REDIRECT("/user/login");
 
-        postService.createPost(req.parseBodyFromUrlEncoded());
+        PostService.createPost(req.parseBodyFromUrlEncoded());
 
         return CustomHttpFactory.REDIRECT("/qna/show");
+    }
 
+    public CustomHttpResponse showPost(CustomHttpRequest req){
+        Set<HttpMethod> allowed = Set.of(HttpMethod.GET);
+        if (!allowed.contains(req.getHttpMethod())) {
+            return CustomHttpFactory.METHOD_NOT_ALLOWED();
+        }
+        return StaticFileController.get().handleRequest(req);
     }
 }
