@@ -17,6 +17,8 @@ public interface View {
             res.addRedirection(StatusCodes.SEE_OTHER, mv.getViewPath().substring(9));
             return;
         }
+        if(!res.isEmpty())  //if response has already been processed
+            return;
         String menuBar = "";
         String nameTag = "";
         if(SecurityContext.getContext() == null){
