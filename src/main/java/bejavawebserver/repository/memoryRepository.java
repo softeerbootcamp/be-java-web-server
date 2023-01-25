@@ -8,8 +8,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class memoryDB {
-    private static final Logger logger = LoggerFactory.getLogger(memoryDB.class);
+public class memoryRepository {
+    private static final Logger logger = LoggerFactory.getLogger(memoryRepository.class);
     private static final Map<String, User> users = new HashMap<>();
 
     public static void addUser(User user) {
