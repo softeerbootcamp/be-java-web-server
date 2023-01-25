@@ -1,6 +1,6 @@
 package webserver.service;
 
-import db.mysql.Database;
+import db.mysql.DB_Users;
 import db.UserIdSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +47,7 @@ public class AlreadyLoggedInService implements Service{
     private String generateUserNameButt()
     {
         StringBuffer sb = new StringBuffer();
-        String userName = Database.findUserById(UserIdSession.getUserId(sid_usrid)).getName();
+        String userName = DB_Users.findUserById(UserIdSession.getUserId(sid_usrid)).getName();
         return sb.append("<li role=\"button\"><a>"+ userName  +"</a></li>").toString();
     }
 

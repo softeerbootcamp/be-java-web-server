@@ -1,6 +1,6 @@
 package webserver.controller;
 
-import db.mysql.Database;
+import db.mysql.DB_Users;
 import db.UserIdSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +36,7 @@ public class DynamicFileController implements Controller{
         Response res = service.exec(req);
 
         logger.debug("sid : " + sid_userid);
-        logger.debug("name : " + Database.findUserById(UserIdSession.getUserId(sid_userid)).getName());
+        logger.debug("name : " + DB_Users.findUserById(UserIdSession.getUserId(sid_userid)).getName());
 
         resSender = new ResponseSender(res);
         resSender.sendRes(out);

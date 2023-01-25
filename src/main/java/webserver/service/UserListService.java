@@ -1,6 +1,6 @@
 package webserver.service;
 
-import db.mysql.Database;
+import db.mysql.DB_Users;
 import model.User;
 import webserver.constants.InBody;
 import webserver.httpUtils.Request;
@@ -35,7 +35,7 @@ public class UserListService extends AlreadyLoggedInService{
     {
         StringBuffer sb = new StringBuffer();
         int idx = 0;
-        for(User user : Database.findAll())
+        for(User user : DB_Users.findAll())
         {
             idx++;
             sb.append("<tr>")
