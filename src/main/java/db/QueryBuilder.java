@@ -24,6 +24,10 @@ public class QueryBuilder implements AutoCloseable {
         StringBuilder sb = new StringBuilder("VALUES (");
 
         for (int idx = 0; idx < values.length - 1; idx++) {
+            if (values[idx] == null) {
+                sb.append(values[idx]).append(", ");
+                continue;
+            }
             sb.append("\"").append(values[idx]).append("\"").append(", ");
         }
         sb.append("\"").append(values[values.length - 1]).append("\"").append(")");
@@ -80,6 +84,7 @@ public class QueryBuilder implements AutoCloseable {
     public boolean fetch() {
         try {
             String sql = front + from + where + ";";
+            System.out.println(sql);
             statement = conn.createStatement();
             statement.execute(sql);
             return true;
