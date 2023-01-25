@@ -2,6 +2,7 @@ package controller;
 
 import util.HttpStatus;
 
+import util.Redirect;
 import view.RequestMessage;
 import view.Response;
 
@@ -48,11 +49,12 @@ public class StaticController implements Controller{
     }
 
     private boolean forbiddenAccess(RequestMessage requestMessage, Map<String,String> headerKV){
-        if (requestMessage.getRequestHeaderMessage().getHttpOnlyURL().startsWith("/user/list")){
-            headerKV.put("Location","/user/login.html");
-            return true;
-        }
-        return false;
+        String uri = requestMessage.getRequestHeaderMessage().getHttpOnlyURL();
+        String redirectLink = Redirect.getRedirectLink(uri);
+        if (redirectLink.equals(""))
+            return false;
+        headerKV.put("Location",redirectLink);
+        return true;
     }
 
 }
