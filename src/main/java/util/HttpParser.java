@@ -76,7 +76,7 @@ public class HttpParser {
         return query.substring(query.indexOf("=") + 1);
     }
 
-    public static Board parseToBoard(Map<String, String> httpBody) throws NullPointerException{
+    public static Board parseToBoard(Map<String, String> httpBody) {
         return new Board(httpBody.get("writer"), httpBody.get("title"), httpBody.get("content"));
     }
 }

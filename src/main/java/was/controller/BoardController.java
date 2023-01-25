@@ -24,11 +24,8 @@ public class BoardController implements Controller {
     @RequestMapping(method = HttpMethod.POST, value = "/board")
     public HttpResponseMessage insertBoards(HttpRequest httpRequest) {
         HttpResponse httpResponse = new HttpResponse();
-        try {
-            HttpParser.parseToBoard(httpRequest.getBody());
-        } catch (NullPointerException e) {
-            return new HttpResponseMessage(httpResponse.create404Message(), httpResponse.getBody());
-        }
+        HttpParser.parseToBoard(httpRequest.getBody());
+        
         return null;
     }
 }
