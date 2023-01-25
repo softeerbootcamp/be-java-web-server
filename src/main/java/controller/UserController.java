@@ -92,7 +92,7 @@ public class UserController implements Controller {
             } catch(IOException e) {
                 return Response.from(StatusLine.of(requestLine.getHttpVersion(), Status.NOT_FOUND));
             }
-            body = ResponseBodyUtils.getUserListHtmlWhenLogin(body, request, userService.getUserList());
+            body = ResponseBodyUtils.makeResponseBodyWhenLoginAndUserList(body, request, userService.getUserList());
 
             headers = HeaderUtils.response200Header(ContentType.HTML, body.length);
 
