@@ -5,6 +5,8 @@ import dto.PostCreateDTO;
 import model.Post;
 import model.User;
 
+import java.util.Optional;
+
 public class PostService {
 
     public Post create(PostCreateDTO postInfo, User user) {
@@ -18,5 +20,9 @@ public class PostService {
         if (postInfo.isEmpty()) {
             throw new IllegalStateException("post has empty input");
         }
+    }
+
+    public Optional<Post> readPost(long postId) {
+        return Database.getPostById(postId);
     }
 }
