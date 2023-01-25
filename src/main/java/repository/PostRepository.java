@@ -30,7 +30,6 @@ public class PostRepository {
             while (rs.next()) {
                 posts.add(getPostDAO(rs));
             }
-
             return posts;
         } catch (SQLException e) {
             throw new DBException(e);
@@ -46,6 +45,29 @@ public class PostRepository {
         String content = rs.getString("content");
         Date createdDate = rs.getDate("createdDate");
         return PostDAO.of(postId, userId, title, content, createdDate);
+    }
+
+    public PostDAO findById(long id) {
+        Connection con = null;
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM Post WHERE id = (?)";
+
+        try {
+            con = DBUtil.getConnection();
+            pstm = con.prepareStatement(sql);
+            pstm.setLong(1, id);
+            rs = pstm.executeQuery();
+
+            if (rs.next()) {
+                return getPostDAO(rs);
+            }
+            throw new IllegalStateException("post not found");
+        } catch (SQLException e) {
+            throw new DBException(e);
+        } finally {
+            close(con, pstm, rs);
+        }
     }
 
     private void close(Connection con, PreparedStatement pstm, ResultSet rs) {
