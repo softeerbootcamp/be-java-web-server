@@ -13,11 +13,15 @@ import model.session.Session;
 import model.session.Sessions;
 import service.UserService;
 import util.HeaderUtils;
+import util.ResponseBodyUtils;
 import util.SessionUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Map;
 
 public class UserController implements Controller {
@@ -82,7 +86,13 @@ public class UserController implements Controller {
         RequestLine requestLine = request.getRequestLine();
 
         if(Sessions.isExistSession(request.getSessionId())) {
-            byte[] body = userService.getUserListHtmlWhenLogin(request);
+            byte[] body;
+            try {
+                body = Files.readAllBytes(new File("./src/main/resources/templates/user/list.html").toPath());
+            } catch(IOException e) {
+                return Response.from(StatusLine.of(requestLine.getHttpVersion(), Status.NOT_FOUND));
+            }
+            body = ResponseBodyUtils.getUserListHtmlWhenLogin(body, request, userService.getUserList());
 
             headers = HeaderUtils.response200Header(ContentType.HTML, body.length);
 
