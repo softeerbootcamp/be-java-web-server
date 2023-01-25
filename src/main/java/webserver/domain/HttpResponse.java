@@ -88,6 +88,10 @@ public class HttpResponse {
             return create404Message();
         }
         this.body = FileFinder.findFile(uri);
+
+        if (uri.contains("index.html")) {
+            this.body = ViewTemplate.fileReadTemplate(null, uri, new LoginIndexCallback());
+        }
         addHeader("Content-Type", mime(uri) + ";charset=utf-8");
         return createForwardMessage();
     }
@@ -96,6 +100,7 @@ public class HttpResponse {
         if (!FileFinder.isFind(uri)) {
             return create404Message();
         }
+
         this.body = ViewTemplate.fileReadTemplate(SessionStorage.findSessionBy(sessionId).getUserId(), uri, new LoginIndexCallback());
         addHeader("Content-Type", mime(uri) + ";charset=utf-8");
         return createForwardMessage();
