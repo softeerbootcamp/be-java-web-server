@@ -23,7 +23,7 @@ public class BoardController implements Controller {
         return boardController;
     }
     @Auth
-    @RequestMapping(method = HttpMethod.POST, value = "/board")
+    @RequestMapping(method = HttpMethod.POST, value = "/boards")
     public HttpResponseMessage insertBoards(HttpRequest httpRequest) {
         HttpResponse httpResponse = new HttpResponse();
         Board board = HttpParser.parseToBoard(httpRequest.getBody());
