@@ -9,26 +9,26 @@ public class Session {
 
     private final String sid;
 
-    private final User user;
+    private final String userId;
 
     private LocalDateTime expirationTime;
 
-    private Session(String sid, User user, LocalDateTime expirationTime) {
+    private Session(String sid, String user, LocalDateTime expirationTime) {
         this.sid = sid;
-        this.user = user;
+        this.userId = user;
         this.expirationTime = expirationTime;
     }
 
-    public static Session of(String sid, User user) {
-        return new Session(sid, user, LocalDateTime.now().plusHours(SESSION_EXPIRE_HOUR));
+    public static Session of(String sid, String userId) {
+        return new Session(sid, userId, LocalDateTime.now().plusHours(SESSION_EXPIRE_HOUR));
     }
 
     public String getSid() {
         return sid;
     }
 
-    public User getUser() {
-        return user;
+    public String getUserId() {
+        return userId;
     }
 
     public void extendExpirationTime() {
