@@ -23,7 +23,7 @@ public class DBConnection {
             // SQL 실행
             // - SQL 작성
             // writer=1234&title=1234&contents=1234
-            String sql = "SELECT writer, title, contents, time FROM qna_table";
+            String sql = "SELECT _id, writer, title, contents, time FROM qna_table ORDER BY time DESC";
             System.out.println(sql);
 
             // - PreparedStatement: SQL을 DBMS에서 실행할 준비
@@ -34,19 +34,12 @@ public class DBConnection {
 
                 while(rs.next()){   // rs.next(): 레코드 한 줄의 실행결과를 가져옴(boolean)
                     // rs가 읽어들인 레코드에 속한 컬럼 쪼개기
-                    Integer id = rs.getRow(); // row number
+                    //Integer id = rs.getRow(); // row number
+                    Integer id = rs.getInt("_id");
                     String writer = rs.getString("writer");
                     String title = rs.getString("title");
                     String contents = rs.getString("contents");
                     String time = rs.getString("time");
-                    System.out.println(id+","+writer + "," + title + "," + contents+","+time);
-                    /*
-                    3223,2523,253225
-                    1234,1234,1234
-                    1234,1234,1234
-                    125,1235,1235
-                    sgds,fyf,xf
-                     */
 
                     Map<String,String> elem = new HashMap<>();
                     elem.put("row_id",id.toString());
