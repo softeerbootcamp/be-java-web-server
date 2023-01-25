@@ -3,11 +3,21 @@ package bejavawebserver.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 @Controller
 public class HtmlController {
     @GetMapping("/index.html")
-    public String indexHtml(){
-        return "index";
+    public String indexHtml(HttpServletRequest httpServletRequest){
+        HttpSession session = httpServletRequest.getSession(false);
+
+        // 로그인 안되어 있음
+        if(session == null) return "index";
+
+        // 로그인 되어 있음
+        return "/user/list";
+
     }
 
     @GetMapping("/qna/form.html")

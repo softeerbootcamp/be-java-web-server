@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 public class HomeController {
     @GetMapping("/")
     public String home(){
-        //@SessionAttribute()
         return "index";
     }
 }

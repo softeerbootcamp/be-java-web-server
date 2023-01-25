@@ -1,5 +1,6 @@
 package bejavawebserver.controller;
 
+import bejavawebserver.model.LoginForm;
 import bejavawebserver.model.User;
 import bejavawebserver.service.LoginService;
 import bejavawebserver.service.SignUpService;
@@ -17,9 +18,9 @@ public class UserController {
     }
 
     @PostMapping("/user/login")
-    public String login(User user, HttpSession session){
-        if(LoginService.loginCheck(user, session)){
-            return "redirect:/user/login.html";
+    public String login(LoginForm loginForm, HttpSession session){
+        if(LoginService.isLoginSuccess(loginForm, session)){
+            return "redirect:/";
         }
         return "redirect:/user/login_failed.html";
     }
