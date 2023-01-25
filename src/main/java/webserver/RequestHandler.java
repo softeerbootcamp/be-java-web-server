@@ -2,64 +2,51 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.URISyntaxException;
 
-import controller.Controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import request.HttpRequest;
-import request.HttpRequestMapper;
-import response.HttpResponse;
-import response.StatusCode;
 
-import javax.naming.AuthenticationException;
-
-public class RequestHandler implements Runnable{
-
-    private static final String lineSeparate = System.lineSeparator();
+public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-    private final Socket connection; // Client
-    private final HttpRequestMapper httpRequestMapper;
 
-    public RequestHandler(Socket connectionSocket, HttpRequestMapper httpRequestMapper) {
+    private Socket connection;
+
+    public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
-        this.httpRequestMapper = httpRequestMapper;
     }
 
     public void run() {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
 
-
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            /* TODO
-            *   - in : 서버 -> 클라이언트로 응답을 보내는 데이터를 싣음 */
-            HttpResponse httpResponse = controlRequestAndResponse(HttpRequest.of(in));
-            respondToHttpRequest(out, httpResponse);
+            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
+            DataOutputStream dos = new DataOutputStream(out);
+            byte[] body = "Hello World".getBytes();
+            response200Header(dos, body.length);
+            responseBody(dos, body);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    public HttpResponse controlRequestAndResponse(HttpRequest httpRequest) {
-        /*
-        * HttpRequestMapper의 getController를 통해
-        * */
-        try{
-            Controller controller = httpRequestMapper.getController(httpRequest);
-            return controller.service(httpRequest);
+    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+        try {
+            dos.writeBytes("HTTP/1.1 200 OK \r\n");
+            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        } catch (AuthenticationException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
-        throw new RuntimeException("control Req/Res error");
     }
 
-    private void respondToHttpRequest(OutputStream out, HttpResponse httpResponse) {
-        DataOutputStream dos = new DataOutputStream(out);
-        httpResponse.respond(dos);
+    private void responseBody(DataOutputStream dos, byte[] body) {
+        try {
+            dos.write(body, 0, body.length);
+            dos.flush();
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
     }
 }
