@@ -1,4 +1,4 @@
-import db.Database;
+import db.UserRepository;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.response.HttpStatus;
@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import service.UserService;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.StringReader;
 import java.util.Objects;
 
@@ -24,18 +23,18 @@ public class UserServiceTest {
     private UserService userService = new UserService();
 
     @Test
-    public void testCreate() throws IOException {
+    public void testCreate() throws Exception {
         BufferedReader br = new BufferedReader(new StringReader(input));
         HttpRequest httpRequest = HttpRequest.from(br);
         HttpResponse httpResponse = userService.create(httpRequest);
         assertEquals(HttpStatus.FOUND, httpResponse.getHttpStatus());
         assertEquals("/index.html", httpResponse.getHeaders().get("Location"));
-        assertTrue(Objects.nonNull(Database.findUserById("askldnf")));
+        assertTrue(Objects.nonNull(UserRepository.findUserById("askldnf")));
 
     }
 
     @Test
-    public void testLoginSuccess() throws IOException {
+    public void testLoginSuccess() throws Exception {
         BufferedReader br = new BufferedReader(new StringReader(input));
         HttpRequest httpRequest = HttpRequest.from(br);
         HttpResponse httpResponse = userService.login(httpRequest);
