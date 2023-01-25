@@ -1,5 +1,6 @@
 package controller;
 
+import exception.LogInFailedException;
 import http.cookie.Cookie;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -33,12 +34,11 @@ public class UserLogInController extends AbstractController {
     @Override
     public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         try {
-            userService.validateUser(
-                    httpRequest.getParameter(USER_ID),
-                    httpRequest.getParameter(PASSWORD)
-            );
+            String id = httpRequest.getParameter(USER_ID);
+            String pw = httpRequest.getParameter(PASSWORD);
+            userService.validateUser(id, pw);
 
-            Session session = sessionService.makeSession(httpRequest.getParameter(USER_ID));
+            Session session = sessionService.makeSession(id, userService.getUserName(id));
 
             logger.info("Login Success");
 
@@ -48,8 +48,9 @@ public class UserLogInController extends AbstractController {
                     Cookie.of(DEFAULT_SESSION_ID, session.getSessionId())
             );
 
-        } catch (IllegalArgumentException e) {
+        } catch (LogInFailedException e) {
             logger.info("Login Failed");
+            e.printStackTrace();
             httpResponse.sendRedirect(HttpStatusCode.FOUND, LOGIN_FAILED_PATH);
         }
     }

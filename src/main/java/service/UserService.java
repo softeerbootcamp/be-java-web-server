@@ -1,12 +1,11 @@
 package service;
 
 import db.UserRepository;
+import exception.LogInFailedException;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.FileIoUtils;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
@@ -18,9 +17,7 @@ public class UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-
     private final UserRepository userRepository;
-
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -36,22 +33,19 @@ public class UserService {
         userRepository.addUser(user);
     }
 
-    public void validateUser(String requestUserId, String requestPassword) {
+    public void validateUser(String requestUserId, String requestPassword) throws LogInFailedException {
         User user = userRepository.findUserById(requestUserId);
         if (user == null || !requestPassword.equals(user.getPassword())) {
-            throw new IllegalArgumentException("로그인 실패");
+            throw new LogInFailedException("로그인 실패");
         }
     }
 
-    public byte[] makeUserListBody(String filepath) throws IOException {
-        Collection<User> userList = userRepository.findAll();
-        return FileIoUtils.userListToString(userList, filepath);
+    public Collection<User> getUserList() {
+        return userRepository.findAll();
     }
 
-
-    public byte[] makeUserNameIndexBody(String id, String filepath) throws IOException {
-        User user = userRepository.findUserById(id);
-        return FileIoUtils.replaceLoginBtnToUserName(user, filepath);
+    public String getUserName(String id) {
+        return userRepository.findUserById(id).getName();
     }
 
 }

@@ -1,6 +1,7 @@
 package webserver;
 
 import controller.Controller;
+import exception.FileNotFoundException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
@@ -38,7 +39,7 @@ public class RequestHandler implements Runnable {
 
             controller.service(httpRequest, httpResponse);
 
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException | URISyntaxException | FileNotFoundException e) {
             logger.error(e.getMessage());
         }
     }

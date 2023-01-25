@@ -1,5 +1,6 @@
 package utils;
 
+import exception.FileNotFoundException;
 import model.User;
 
 import java.io.IOException;
@@ -17,12 +18,12 @@ public final class FileIoUtils {
     private FileIoUtils() {
     }
 
-    public static byte[] loadFile(String filePath) throws IOException {
+    public static byte[] loadFile(String filePath) throws IOException, FileNotFoundException {
         try {
             Path path = Paths.get(Objects.requireNonNull(FileIoUtils.class.getClassLoader().getResource(filePath)).toURI());
             return Files.readAllBytes(path);
         } catch (NullPointerException | URISyntaxException e) {
-            throw new IllegalArgumentException("파일이 존재하지 않습니다.");
+            throw new FileNotFoundException("파일이 존재하지 않습니다.");
         }
     }
 
@@ -32,9 +33,15 @@ public final class FileIoUtils {
 
     }
 
-    public static byte[] userListToString(Collection<User> userList, String filePath) throws IOException {
+    public static byte[] writeUserListBody(
+            Collection<User> userList,
+            String filePath,
+            String userName
+    ) throws IOException, FileNotFoundException {
         StringBuilder sb = new StringBuilder();
         String fileData = new String(loadFile(filePath));
+        String target_index = "<li><a href=\"user/login.html\" role=\"button\">로그인</a></li>";
+        String target_others = "<li><a href=\"../user/login.html\" role=\"button\">로그인</a></li>";
 
         int idx = 3;
 
@@ -51,23 +58,20 @@ public final class FileIoUtils {
 
         return fileData
                 .replace("<!--userlist-->", sb.toString())
+                .replace("<!--username-->", String.format("<li><a>%s</a></li>", userName))
+                .replace(target_index, "")
+                .replace(target_others, "")
                 .getBytes();
     }
 
-    public static byte[] replaceLoginBtnToUserName(User user, String filePath) throws IOException {
+    public static byte[] replaceLoginBtnToUserName(String userName, String filePath) throws IOException, FileNotFoundException {
         String fileData = new String(loadFile(filePath));
+        String target_index = "<li><a href=\"user/login.html\" role=\"button\">로그인</a></li>";
+        String target_others = "<li><a href=\"../user/login.html\" role=\"button\">로그인</a></li>";
         return fileData
-                .replace("<!--username-->", String.format("<li><a>%s</a></li>", user.getName()))
-                .getBytes();
-    }
-
-    public static byte[] activeLoginBtn(String filePath) throws IOException {
-        String fileData = new String(loadFile(filePath));
-        String postBtn = "<li class=\"active\"><a href=\"index.html\">Posts</a></li>";
-        String loginBtn = "<li><a href=\"user/login.html\" role=\"button\">로그인</a></li>";
-        return fileData
-                .replace(postBtn, String.format("%s", "<li><a href=\"index.html\">Posts</a></li>"))
-                .replace(loginBtn, String.format("%s", "<li class=\"active\"><a href=\"user/login.html\" role=\"button\">로그인</a></li>"))
+                .replace("<!--username-->", String.format("<li><a>%s</a></li>", userName))
+                .replace(target_index, "")
+                .replace(target_others, "")
                 .getBytes();
     }
 

@@ -1,5 +1,7 @@
 package http;
 
+import exception.FileNotFoundException;
+
 import java.util.Arrays;
 
 public enum ContentType {
@@ -21,11 +23,11 @@ public enum ContentType {
         this.extender = extender;
     }
 
-    public static ContentType from(String path) {
+    public static ContentType from(String path) throws FileNotFoundException {
         return Arrays.stream(values())
                 .filter(contentType -> path.endsWith(contentType.extender))
                 .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(FileNotFoundException::new);
     }
 
     public String getDirectory() {

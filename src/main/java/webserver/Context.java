@@ -19,10 +19,10 @@ public class Context {
         UserService userService = new UserService(userRepository);
         SessionService sessionService = new SessionService(sessionRepository);
 
-        controllers.put("file", new ResourceController());
+        controllers.put("file", new ResourceController(sessionService));
         controllers.put("/user/create", new UserCreateController(userService));
         controllers.put("/user/login", new UserLogInController(sessionService, userService));
-        controllers.put("/index.html", new IndexController(sessionService, userService));
+        controllers.put("/", new IndexController(sessionService));
         controllers.put("/user/list.html", new UserListController(sessionService, userService));
         return controllers;
     }
