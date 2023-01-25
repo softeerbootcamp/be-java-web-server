@@ -17,7 +17,8 @@ public class ViewHandler {
                 "./templates/user/login.html", new LoginView(),
                 "./templates/user/login_failed.html", new LoginFailView(),
                 "./templates/user/form.html", new SignUpView(),
-                "./templates/qna/form.html", new FormView()
+                "./templates/qna/form.html", new FormView(),
+                "./templates/qna/show.html", new QnaDetailView()
         );
     }
 
