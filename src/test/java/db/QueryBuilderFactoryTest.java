@@ -14,12 +14,8 @@ public class QueryBuilderFactoryTest {
         String configPath = "src/test/resources/db_config.xml";
 
         // when
-        QueryBuilder queryBuilder = QueryBuilderFactory.newQueryBuilder(configPath);
-
-        // then
-        assertThat(queryBuilder).isNotNull();
-
-        // close
-        queryBuilder.close();
+        try(QueryBuilder queryBuilder = QueryBuilderFactory.newQueryBuilder(configPath)) {
+            assertThat(queryBuilder).isNotNull();
+        }
     }
 }

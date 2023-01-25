@@ -4,9 +4,13 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Objects;
 
-public class QueryBuilder {
+public class QueryBuilder implements AutoCloseable {
     private final Connection conn;
+    private Statement statement;
+    private ResultSet resultSet;
+
     private String front = "";
     private String from = "";
     private String where = "";
@@ -64,9 +68,10 @@ public class QueryBuilder {
         String sql = front + from + where + ";";
         try {
             System.out.println(sql);
-            Statement statement = conn.createStatement();
+            statement = conn.createStatement();
             statement.execute(sql);
-            return statement.getResultSet();
+            resultSet = statement.getResultSet();
+            return resultSet;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -75,7 +80,7 @@ public class QueryBuilder {
     public boolean fetch() {
         try {
             String sql = front + from + where + ";";
-            Statement statement = conn.createStatement();
+            statement = conn.createStatement();
             statement.execute(sql);
             return true;
         } catch (SQLException e) {
@@ -83,8 +88,15 @@ public class QueryBuilder {
         }
     }
 
+    @Override
     public void close() {
         try {
+            if (Objects.nonNull(resultSet)) {
+                resultSet.close();
+            }
+            if (Objects.nonNull(statement)) {
+                statement.close();
+            }
             conn.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
