@@ -26,7 +26,6 @@ public class TemplateController implements Controller {
         String url = request.getRequestLine().getURL();
         ControllerTypeEnum controllerTypeEnum = ControllerTypeEnum.TEMPLATE;
         boolean isLogined = request.isRequestHaveCookie();
-        LocalDate now = LocalDate.now();
         logger.debug("body : "+ request.getRequestBody().getBodyLines().toString());
 
         String addedLine = null;
