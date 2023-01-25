@@ -51,7 +51,9 @@ public class PostController implements RequestController {
         }
 
         if (req.getHttpMethod() == HttpMethod.GET) {
-            return StaticFileController.get().handleRequest(req);
+            if(SessionService.isValidSSID(req.getSSID()))
+                return StaticFileController.get().handleRequest(req);
+            return CustomHttpFactory.REDIRECT("/user/login");
         }
 
         User user = SessionService.getUserBySessionId(req.getSSID()).orElse(null);
