@@ -41,6 +41,7 @@ public class Database {
         User user = null;
 
         try {
+            // DB Connection 정보 따로 관리하기 위해 Database라는 enum class 따로 생성, GitHub에 반영 X
             Connection connection =
                     DriverManager.getConnection(DB_URL.getDBInfo(), DB_USER_NAME.getDBInfo(), DB_PASSWORD.getDBInfo());
 
