@@ -9,6 +9,7 @@ import service.UserService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import service.ViewService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +29,7 @@ public class ControllerMapper {
         RequestLine requestLine = request.getRequestLine();
         logger.debug("Request Line: {}", requestLine.getUri());
 
-        if(Objects.nonNull(requestLine.getContentType())) return new ViewController();
+        if(Objects.nonNull(requestLine.getContentType())) return new ViewController(new ViewService());
 
         for(Map.Entry<String, Controller> controllerEntry : controllerMap.entrySet()) {
             if(isExistController(controllerEntry.getKey(), requestLine.getControllerCriteria())) {
