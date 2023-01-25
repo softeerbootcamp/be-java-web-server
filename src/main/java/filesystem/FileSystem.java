@@ -80,7 +80,7 @@ public class FileSystem {
         try {
             return Files.readAllBytes(Paths.get(resourcePath));
         } catch (IOException e) {
-            return HtmlGenerator.getNotFoundHTML(resourcePath).getBytes();
+            return HtmlGenerator.getNotFoundHTML().getBytes();
         }
     }
 }

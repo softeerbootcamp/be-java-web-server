@@ -25,7 +25,7 @@ public class HtmlGenerator {
                 "<li><a href='#' role='button'>개인정보수정</a></li>";
     }
 
-    public static String getNotFoundHTML(String resourcePath) {
+    public static String getNotFoundHTML() {
         return "<!DOCTYPE html>\n" +
                 "<html lang=\"en\">\n" +
                 "<head>\n" +
@@ -33,7 +33,7 @@ public class HtmlGenerator {
                 "    <title>Title</title>\n" +
                 "</head>\n" +
                 "<body>\n" +
-                resourcePath + " not found\n" +
+                "not found\n" +
                 "</body>\n" +
                 "</html>";
     }
