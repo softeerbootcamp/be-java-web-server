@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 public class QueryBuilder {
     private final Connection conn;
-    private String select = "";
+    private String front = "";
     private String from = "";
     private String where = "";
 
@@ -31,7 +31,7 @@ public class QueryBuilder {
         }
         sb.append(filed[filed.length - 1]).append(" ");
 
-        this.select = sb.toString();
+        this.front = sb.toString();
         return this;
     }
 
@@ -50,7 +50,7 @@ public class QueryBuilder {
     }
 
     public ResultSet execute() {
-        String sql = select + from + where + ";";
+        String sql = front + from + where + ";";
         try {
             Statement statement = conn.createStatement();
             statement.execute(sql);

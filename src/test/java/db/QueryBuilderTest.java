@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -48,6 +47,17 @@ public class QueryBuilderTest {
             Statement statement = connection.createStatement();
             statement.execute("DROP TABLE test.user;");
             connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @BeforeEach()
+    void truncate() {
+        try {
+            Statement statement = connection.createStatement();
+            statement.execute("TRUNCATE user;");
+            statement.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
