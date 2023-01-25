@@ -12,12 +12,13 @@ import webserver.RequestResponseHandler;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.sql.SQLException;
 
 public class TemplateController implements Controller {
     private static final Logger logger = LoggerFactory.getLogger(RequestResponseHandler.class);
 
     @Override
-    public ResponseFactory controllerService(Request request) throws IOException {
+    public ResponseFactory controllerService(Request request) throws IOException, SQLException {
         logger.debug("firstLine : " + request.getRequestLine().getURL());
         String url = request.getRequestLine().getURL();
         ControllerTypeEnum controllerTypeEnum = ControllerTypeEnum.TEMPLATE;

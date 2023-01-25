@@ -13,6 +13,7 @@ import webserver.RequestResponseHandler;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class LoginController implements Controller{
     private static final int USERPWD_INDEX = 1;
 
     @Override
-    public ResponseFactory controllerService(Request request) throws IOException {
+    public ResponseFactory controllerService(Request request) throws IOException, SQLException {
         logger.debug("login request : "+request.getRequestLine().getMETHOD());
         logger.debug("login request : "+request.getRequestLine().getURL());
         logger.debug("login request : "+request.getRequestLine().getVERSION());
@@ -54,7 +55,7 @@ public class LoginController implements Controller{
 
     }
     // util 로 빼주자
-    public boolean checkIdPwdIsInDatabase(String id, String pwd){
+    public boolean checkIdPwdIsInDatabase(String id, String pwd) throws SQLException {
         if(Database.findUserById(id)==null){
             return false;
         }

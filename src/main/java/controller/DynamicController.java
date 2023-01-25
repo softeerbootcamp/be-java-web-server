@@ -5,12 +5,13 @@ import model.User;
 import session.HttpSessions;
 import utils.StringBuilderUtils;
 
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 public class DynamicController {
-    public static byte[] dynamicIndexHtml(byte[] body,String sid){
+    public static byte[] dynamicIndexHtml(byte[] body,String sid) throws SQLException {
         byte[] manualBody;
         String stringBody;
         stringBody = StringBuilderUtils.byteArrayToString(body);
