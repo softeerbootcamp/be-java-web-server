@@ -9,9 +9,9 @@ import java.util.Collection;
 public class HtmlBuildUtil {
     private static final Logger logger = LoggerFactory.getLogger(HtmlBuildUtil.class);
 
-    public static String userList(Collection<User> users) {
+    public static String buildUserList(Collection<User> users) {
         int idx = 1;
-        String listHtml = new String(HttpResponseUtil.generateBody("/user/list.html"));
+        String listHtml = new String(HttpResponseUtil.generateBytesBody("/user/list.html"));
         StringBuilder content = new StringBuilder();
         for (User user : users) {
             content.append("<tr><th scope=\"row\">")
@@ -28,7 +28,7 @@ public class HtmlBuildUtil {
     }
 
     public static byte[] buildHtml(String path, User user) {
-        byte[] body = HttpResponseUtil.generateBody(path);
+        byte[] body = HttpResponseUtil.generateBytesBody(path);
         logger.debug("withoutLogoutWithUserName");
 
         if (FileIoUtil.mappingDirectoryPath(path).toString().contains("static")) {
