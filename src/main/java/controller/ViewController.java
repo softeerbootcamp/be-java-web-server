@@ -1,6 +1,5 @@
 package controller;
 
-import model.domain.User;
 import model.general.ContentType;
 import model.general.Header;
 import model.general.Status;
@@ -9,6 +8,7 @@ import model.request.RequestLine;
 import model.response.Response;
 import model.response.StatusLine;
 import model.session.Sessions;
+import util.ResponseBodyUtils;
 import util.HeaderUtils;
 
 import org.slf4j.Logger;
@@ -57,29 +57,18 @@ public class ViewController implements Controller {
         RequestLine requestLine = request.getRequestLine();
         byte[] body;
 
-        if (isLogin && requestLine.getContentType().equals(HTML)) {
-            try {
-                body = Files.readAllBytes(new File(generatePath(requestLine.getContentType()) +
-                        requestLine.getUri()).toPath());
-
-                User user = (User) Sessions.getSession(request.getSessionId()).getSessionData().get("user");
-                String originalIndexHtml = new String(body);
-                String resultIndexHtml = originalIndexHtml.replace("로그인", user.getName());
-                resultIndexHtml = resultIndexHtml.replace("user/login.html", "user/profile.html");
-                resultIndexHtml = resultIndexHtml.replace("자바지기", user.getName());
-                resultIndexHtml = resultIndexHtml.replace("javajigi@slipp.net", user.getEmail());
-                return resultIndexHtml.getBytes();
-            } catch (IOException e) {
-                return new byte[0];
-            }
-        }
-
         try {
             body = Files.readAllBytes(new File(generatePath(requestLine.getContentType()) +
                     requestLine.getUri()).toPath());
         } catch (IOException e) {
             return new byte[0];
         }
+
+        if (isLogin && requestLine.getContentType().equals(HTML))
+            body = ResponseBodyUtils.makeResponseBodyWhenLoginSuccess(body, request);
+
+        if (isLogin && requestLine.getUri().equals("/user/profile.html"))
+            body = ResponseBodyUtils.makeResponseBodyWhenLoginAndProfileHtml(body, request);
 
         return body;
     }
