@@ -1,10 +1,10 @@
 package webserver.domain;
 
 import db.SessionStorage;
-import enums.UserEnum;
-import model.User;
 import util.FileFinder;
-import was.view.ViewResolver;
+import was.view.LoginIndexCallback;
+import was.view.LoginListCallback;
+import was.view.ViewTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -96,15 +96,16 @@ public class HttpResponse {
         if (!FileFinder.isFind(uri)) {
             return create404Message();
         }
-        this.body = ViewResolver.makeDynamicHtml(SessionStorage.findSessionBy(sessionId).getUserId(), uri);
+        this.body = ViewTemplate.fileReadTemplate(SessionStorage.findSessionBy(sessionId).getUserId(), uri, new LoginIndexCallback());
         addHeader("Content-Type", mime(uri) + ";charset=utf-8");
         return createForwardMessage();
     }
+
     public String forwardListPageHeaderMessage(String userId, String uri) {
         if (!FileFinder.isFind(uri)) {
             return create404Message();
         }
-        this.body = ViewResolver.makeListHtml(userId, uri);
+        this.body = ViewTemplate.fileReadTemplate(userId, uri, new LoginListCallback());
         addHeader("Content-Type", mime(uri) + ";charset=utf-8");
         return createForwardMessage();
     }
