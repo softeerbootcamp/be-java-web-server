@@ -25,7 +25,7 @@ public class LoginController implements Controller{
 
     public static LoginController getInstance(){
         if (loginController == null){
-            synchronized (UserController.class){
+            synchronized (LoginController.class){
                 if (loginController == null){
                     loginController = new LoginController();
                 }
