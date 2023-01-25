@@ -16,7 +16,9 @@ public class HttpRequest {
 
     public static HttpRequest createReqeust(BufferedReader br) {
         HttpRequestStartLine httpRequestStartLine = HttpRequestStartLine.from(br);
-        return httpRequestStartLine.getMethod().getRequestByMethod(br, httpRequestStartLine);
+        HttpRequestHeaders httpRequestHeaders = HttpRequestHeaders.from(br);
+        HttpRequestParams httpRequestParams = httpRequestStartLine.getMethod().getParamsByMethod(br, httpRequestHeaders.getContentLength(), httpRequestStartLine);
+        return new HttpRequest(httpRequestStartLine, httpRequestParams, httpRequestHeaders);
     }
 
     public Map<String,String> getHttpRequestHeaders() {
