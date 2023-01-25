@@ -1,10 +1,10 @@
 package webserver;
 
 import model.User;
-import webserver.domain.ModelAndView;
 import webserver.domain.StatusCodes;
 import webserver.domain.response.Response;
 import webserver.utils.StaticResourceFinder;
+import webserver.view.ModelAndView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class UserListViewResolver {
     }
 
     public static void makeUserListView(ModelAndView mv, Response res) throws IOException {
-        String path = mv.getViewName();
+        String path = mv.getViewPath();
         String userTableScript = getTableOfUser(mv.getViewModel().get("user"));
         StaticResourceFinder.staticFileResolver(path)
                 .ifPresent(fileAsBytes -> {

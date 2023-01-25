@@ -3,9 +3,6 @@ package webserver.controller;
 import webserver.view.ModelAndView;
 import webserver.domain.request.Request;
 import webserver.domain.response.Response;
-import webserver.exception.HttpRequestException;
-
-import java.io.IOException;
 
 public class StaticController implements Controller {
 

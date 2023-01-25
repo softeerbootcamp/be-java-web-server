@@ -1,11 +1,8 @@
 package db;
 
 import com.google.common.collect.Maps;
-
 import model.User;
-
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class UserDatabase {
     private static Map<String, User> users = Maps.newHashMap();

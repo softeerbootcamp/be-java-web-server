@@ -2,12 +2,9 @@ package webserver.Service;
 
 import db.UserDatabase;
 import model.User;
-import model.UserDto;
-import webserver.controller.UserController;
+import model.dto.UserDto;
 import webserver.domain.StatusCodes;
 import webserver.exception.HttpRequestException;
-
-import java.net.URLDecoder;
 
 public class UserService {
 
