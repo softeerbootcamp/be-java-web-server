@@ -35,9 +35,6 @@ public class DynamicFileController implements Controller{
 
         Response res = service.exec(req);
 
-        logger.debug("sid : " + sid_userid);
-        logger.debug("name : " + DB_Users.findUserById(UserIdSession.getUserId(sid_userid)).getName());
-
         resSender = new ResponseSender(res);
         resSender.sendRes(out);
     }

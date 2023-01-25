@@ -11,6 +11,7 @@ import webserver.httpUtils.Response;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.sql.SQLException;
 
 public class AlreadyLoggedInService implements Service{
     private static final Logger logger = LoggerFactory.getLogger(AlreadyLoggedInService.class);
@@ -44,10 +45,14 @@ public class AlreadyLoggedInService implements Service{
                 .withBodyBytes(bodyByte);
     }
 
-    private String generateUserNameButt()
-    {
+    private String generateUserNameButt() {
         StringBuffer sb = new StringBuffer();
-        String userName = DB_Users.findUserById(UserIdSession.getUserId(sid_usrid)).getName();
+        String userName = null;
+        try {
+            userName = DB_Users.findUserById(UserIdSession.getUserId(sid_usrid)).getName();
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
         return sb.append("<li role=\"button\"><a>"+ userName  +"</a></li>").toString();
     }
 

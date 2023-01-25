@@ -12,6 +12,7 @@ import webserver.constants.Paths;
 import webserver.httpUtils.Request;
 import webserver.httpUtils.Response;
 
+import java.sql.SQLException;
 import java.util.Map;
 
 public class LogInService implements Service{
@@ -30,7 +31,7 @@ public class LogInService implements Service{
             if(!userInfo.get(User.PASS_WORD).equals(whoIsTryingLogIn.getPassword()))
                 throw new PasswordMismatchException("비밀번호를 다시 입력하세요");
 
-        } catch(CannotLogInException e)
+        } catch(CannotLogInException | SQLException e)
         {
             return new Response()
                     .withVersion(req.getReqLine().getVersion())

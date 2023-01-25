@@ -9,6 +9,7 @@ import webserver.constants.Paths;
 import webserver.httpUtils.Request;
 import webserver.httpUtils.Response;
 
+import java.sql.SQLException;
 import java.util.Map;
 
 public class SignUpService implements Service{
@@ -23,7 +24,7 @@ public class SignUpService implements Service{
             if(DB_Users.findUserById(newUser.getUserId()) != DB_Users.NOT_FOUND_USER)
                 throw new AlreadyHasSameIdException("이미 같은 아이디의 유저가 있음");
             DB_Users.addUser(newUser);
-        }catch (AlreadyHasSameIdException e)
+        }catch (AlreadyHasSameIdException | SQLException e)
         {
             logger.error(e.getMessage());
             return new Response()
