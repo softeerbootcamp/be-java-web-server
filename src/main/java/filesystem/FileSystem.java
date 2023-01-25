@@ -11,6 +11,9 @@ import java.nio.file.Paths;
 
 public class FileSystem {
 
+    private static final String START_SYMBOL = "<%";
+    private static final String END_SYMBOL = "%>";
+
     private FileSystem() {
     }
 
@@ -27,7 +30,7 @@ public class FileSystem {
             StringBuilder html = new StringBuilder();
             String line = bf.readLine();
             while (line != null) {
-                if (!line.trim().equals("<%") && !line.trim().equals("%>") && !line.trim().equals("<% %>")) {
+                if (!line.trim().equals(START_SYMBOL) && !line.trim().equals(END_SYMBOL)) {
                     html.append(line).append(System.lineSeparator());
                 }
                 line = bf.readLine();
@@ -55,9 +58,9 @@ public class FileSystem {
             boolean inserted = false;
 
             while (line != null) {
-                if (!inserted && line.trim().contains("<%")) {
+                if (!inserted && line.trim().contains(START_SYMBOL)) {
                     line = bf.readLine();
-                    while (line != null && !line.trim().contains("%>")) {
+                    while (line != null && !line.trim().contains(END_SYMBOL)) {
                         line = bf.readLine();
                     }
                     sb.append(chunkHtml + System.lineSeparator());
