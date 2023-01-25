@@ -6,12 +6,21 @@ import service.PostService;
 import view.Model;
 
 public class PostController implements Controller, Auth {
-    public static final String PATH = "/qna";
+    public static final String PATH = "/qna/form.html";
 
     private final PostService postService;
 
     public PostController() {
         this.postService = new PostService();
+    }
+
+    @Override
+    public String doGet(HttpRequest request, HttpResponse response, Model model) {
+        if (!auth(request, response)) {
+            return "";
+        }
+
+        return "/qna/form.html";
     }
 
     @Override
