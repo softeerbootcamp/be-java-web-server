@@ -30,9 +30,12 @@ public class ControllerInterceptor {
                 .collect(Collectors.toList());
     }
 
-    private static void checkMethodThenReturnBody(ControllerInfo controllerInfo, RequestMethod requestMethod) throws HttpRequestException {
+    private static void checkMethodThenReturnBody(ControllerInfo controllerInfo, RequestMethod requestMethod) {
         if (requestMethod != controllerInfo.method())
-            throw new HttpRequestException(StatusCodes.METHOD_NOT_ALLOWED, "<script>alert('올바르지 않은 요청입니다'); history.go(-1);</script>");
+            throw HttpRequestException.builder()
+                    .statusCode(StatusCodes.METHOD_NOT_ALLOWED)
+                    .msg("<script>alert('올바르지 않은 요청입니다'); history.go(-1);</script>")
+                    .build();
     }
 
     private static void loginSessionCheck(Request req, ModelAndView mv){
@@ -59,9 +62,7 @@ public class ControllerInterceptor {
         String reqPath = req.getRequestLine().getResource().getPath();
         mv.setViewPath(reqPath);
 
-        //hand over the session to controller only if it is valid
-        loginSessionCheck(req, mv);
-        SecurityFilter.checkAuthorization(reqPath);
+        loginSessionCheck(req, mv); //hand over the session to controller only if it is valid
 
         methodList.forEach(method -> {
             ControllerInfo controllerInfo = method.getAnnotation(ControllerInfo.class);
@@ -70,9 +71,14 @@ public class ControllerInterceptor {
                     //check the validity of http method & parameters before executing the method
                     checkMethodThenReturnBody(controllerInfo, req.getRequestLine().getRequestMethod());
 
+                    //authorization checker for chaining
+                    SecurityFilter.checkAuthorization(reqPath);
+
+                    //resolve arguments in a method
                     List<Parameter> collect = Arrays.stream(method.getParameters()).filter(parameter -> parameter.getType() != Response.class && parameter.getType() != ModelAndView.class).collect(Collectors.toList());
                     ArgumentResolver argumentResolver = ArgumentResolverMapping.findArgumentResolver(req.getRequestHeader().get("Content-Type"));
                     Object[] paramList = addParamToList(argumentResolver.checkParameters(req, collect), res, mv);
+
                     //invoke method
                     method.invoke(controller, paramList);
 
