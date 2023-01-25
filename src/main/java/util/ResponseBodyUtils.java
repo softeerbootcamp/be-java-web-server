@@ -5,6 +5,7 @@ import model.request.Request;
 import model.session.Sessions;
 
 import java.util.Collection;
+import java.util.List;
 
 public class ResponseBodyUtils {
     public static byte[] makeResponseBodyWhenLoginSuccess(byte[] body, Request request) {
@@ -45,5 +46,24 @@ public class ResponseBodyUtils {
         resultListHtml = resultListHtml.replace("로그인", user.getName());
         resultListHtml = resultListHtml.replace("user/login.html", "user/profile.html");
         return resultListHtml.getBytes();
+    }
+
+    public static byte[] makeResponseBodyMemoList(byte[] body, List<String> memos) {
+        StringBuilder memoList = new StringBuilder();
+
+        for(String memo : memos) {
+            memoList.append("<li>")
+                    .append("<div class=\"wrap\">")
+                    .append("<div class=\"main\">")
+                    .append("<strong class=\"subject\">")
+                    .append(memo)
+                    .append("</strong>")
+                    .append("</div></div></li>");
+        }
+
+        String originalHtml = new String(body);
+        String[] splitHtml = originalHtml.split("qna-list\">");
+        String resultHtml = splitHtml[0] + "qna-list\">" + memoList + splitHtml[1];
+        return resultHtml.getBytes();
     }
 }
