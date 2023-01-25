@@ -9,6 +9,7 @@ public enum ContentType {
     TEXT_JAVASCRIPT("text/javascript; " + Constants.charsetUTF8, "js"),
     TEXT_PLAIN("text/plain; " + Constants.charsetUTF8, "plain"),
     TEXT_XML("text/xml; " + Constants.charsetUTF8, "xml"),
+    FORM_URLENCODED("application/x-www-form-urlencoded" + Constants.charsetUTF8, "form"),
     APPLICATION("Application/json; " + Constants.charsetUTF8, "json"),
     APPLICATION_JAVASCRIPT("Applcation/javascript; " + Constants.charsetUTF8, "js");
 
@@ -35,6 +36,12 @@ public enum ContentType {
                 .orElse(TEXT_PLAIN);
     }
 
+    public static ContentType findByType(String name){
+        return Arrays.stream(ContentType.values())
+                .filter(contentType -> contentType.getType().startsWith(name))
+                .findFirst()
+                .orElse(FORM_URLENCODED);
+    }
     private static class Constants { // static member class
         private static final String charsetUTF8 = "charset= utf-8";
     }
