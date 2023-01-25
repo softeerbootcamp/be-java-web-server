@@ -58,6 +58,7 @@ public class IndexView implements View {
 
             String copy = postTags;
             copy = copy.replace("<!--title-->", post.getTitle());
+            copy = copy.replace("<!--writer-->", post.getWriter());
             copy = copy.replace("<!--content-->", post.getContent());
             copy = copy.replace("<!--time-->", post.getDate());
             copy = copy.replace("<!--index-->", String.valueOf(post.getId()));

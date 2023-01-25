@@ -28,7 +28,8 @@ public class PostService {
     public List<Post> getPosts() {
         List<Post> posts = new ArrayList<>();
         try(QueryBuilder qb = QueryBuilderFactory.newQueryBuilder()) {
-            ResultSet resultSet = qb.select("*").from("post").read();
+            ResultSet resultSet = qb
+                    .select("*").from("post").order("date", "DESC").read();
 
             while(resultSet.next()) {
                 posts.add(
