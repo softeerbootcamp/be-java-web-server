@@ -64,6 +64,9 @@ public class HttpParser {
         Map<String, String> map = new HashMap<>();
         for (String p : param) {
             String[] attributes = p.split("=");
+            if (attributes.length != 2) {
+                throw new NullPointerException();
+            }
             map.put(attributes[0], attributes[1]);
         }
         return map;

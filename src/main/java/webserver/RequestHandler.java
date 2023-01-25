@@ -6,6 +6,7 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpParser;
+import webserver.domain.HttpResponse;
 import webserver.handler.ControllerHandler;
 import webserver.handler.ControllerHandlerFactory;
 import webserver.domain.HttpRequest;
@@ -28,9 +29,15 @@ public class RequestHandler implements Runnable {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             DataOutputStream dos = new DataOutputStream(out);
 
-            HttpRequest httpRequest = HttpRequest.newInstance(HttpParser.parseHttpRequest(in));
-            ControllerHandler controllerHandler = ControllerHandlerFactory.getHandler(httpRequest);
-            response(dos, controllerHandler.handle(httpRequest));
+            try {
+                HttpRequest httpRequest = HttpRequest.newInstance(HttpParser.parseHttpRequest(in));
+                ControllerHandler controllerHandler = ControllerHandlerFactory.getHandler(httpRequest);
+                response(dos, controllerHandler.handle(httpRequest));
+            } catch (NullPointerException e) {
+                logger.error(e.getMessage());
+                HttpResponse httpResponse = new HttpResponse();
+                response(dos, new HttpResponseMessage(httpResponse.create404Message(), httpResponse.getBody()));
+            }
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
