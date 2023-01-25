@@ -26,7 +26,7 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public String createSession(User data) {
         String sessionID = UUID.randomUUID().toString();
-        sessionDatabase.addSession(Session.of(sessionID, data.getUserId()));
+        sessionDatabase.addSession(Session.create(sessionID, data.getUserId()));
         return sessionID;
     }
 
