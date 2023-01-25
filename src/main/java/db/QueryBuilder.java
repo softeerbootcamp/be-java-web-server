@@ -41,14 +41,20 @@ public class QueryBuilder {
     }
 
     public QueryBuilder where(String key, String condition, String value) {
+        String string = key + condition + "\"" + value + "\"";
+        this.where = this.where.isEmpty()
+                ? "WHERE " + string
+                : this.where + " AND " + string;
+
         return this;
     }
 
     public ResultSet execute() {
-        String sql = select + from + where;
+        String sql = select + from + where + ";";
         try {
             Statement statement = conn.createStatement();
             statement.execute(sql);
+            System.out.println(sql);
             return statement.getResultSet();
         } catch (SQLException e) {
             throw new RuntimeException(e);
