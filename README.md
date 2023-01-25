@@ -34,6 +34,10 @@ Java Web Application Server 2022
     model.addAttribute("userName", loginUser.getName());
     model.addAttribute("isLogin", true);
 ```
++ gradle dependencies
+  + runtimeOnly / compileOnly
+    + compileOnly - 컴파일 시점에 꼭 필요한 라이브러리
+    + runtimeOnly - 컴파일 시점에는 필요 없지만 실행 시점에는 꼭 필요한 라이브러리
 
 
     
