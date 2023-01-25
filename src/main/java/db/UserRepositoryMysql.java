@@ -37,8 +37,18 @@ public class UserRepositoryMysql implements UserRepository {
 	}
 
 	@Override
-	public User findUserById(String UserId) {
-		return null;
+	public User findUserById(String userId) {
+		try (Connection conn = dbManager.getConnection();
+			 PreparedStatement preparedStatement = conn.prepareStatement(
+				 "select 1 from user where user_id = ?");
+		) {
+			preparedStatement.setString(1, userId);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			return User.of(resultSet.getString("user_id"), resultSet.getString("user_password"),
+				resultSet.getString("user_name"), resultSet.getString("user_email"));
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
@@ -64,6 +74,16 @@ public class UserRepositoryMysql implements UserRepository {
 
 	@Override
 	public boolean idExist(String userId) {
-		return false;
+
+		try (Connection conn = dbManager.getConnection();
+			 PreparedStatement preparedStatement = conn.prepareStatement(
+				 "select 1 from user where user_id = ?");
+		) {
+			preparedStatement.setString(1, userId);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			return resultSet.next();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }
