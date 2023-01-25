@@ -1,6 +1,9 @@
 package util.global;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
+import webserver.RequestHandler;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ConfigReader {
-
+    private static final Logger logger = LoggerFactory.getLogger(ConfigReader.class);
     private static ConfigReader configReader;
 
     private static final String PROPERTIES_PATH = "src/main/resources/application.properties";
@@ -26,10 +29,11 @@ public class ConfigReader {
             config = yaml.load(in);
         } catch (IOException e) {
             e.printStackTrace();
+            logger.error("[ERROR] application.properties 읽어오는데 문제 발생");
         }
     }
 
-    public static ConfigReader getInstance() throws FileNotFoundException {
+    public static ConfigReader getInstance()  {
         if (configReader == null) {
             configReader = new ConfigReader();
         }
