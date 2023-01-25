@@ -9,7 +9,10 @@ import request.HttpRequest;
 public enum RequestMappingHandler {
 
 	USER_CONTROLLER(UserController.PATH, UserController.getInstance()),
-	LOGIN_CONTROLLER(LoginController.PATH, LoginController.getInstance());
+	LOGIN_CONTROLLER(LoginController.PATH, LoginController.getInstance()),
+
+	USER_LIST_CONTROLLER(UserListController.PATH, UserListController.getInstance()),
+	BOARD_CONTROLLER(BoardController.PATH, BoardController.getInstance());
 	private String path;
 	private Controller controller;
 
