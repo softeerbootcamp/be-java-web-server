@@ -30,6 +30,7 @@ public class PostRepository {
             while (rs.next()) {
                 posts.add(getPostDAO(rs));
             }
+
             return posts;
         } catch (SQLException e) {
             throw new DBException(e);
@@ -44,7 +45,7 @@ public class PostRepository {
         String title = rs.getString("title");
         String content = rs.getString("content");
         Date createdDate = rs.getDate("createdDate");
-        return new PostDAO(postId, userId, title, content, createdDate);
+        return PostDAO.of(postId, userId, title, content, createdDate);
     }
 
     private void close(Connection con, PreparedStatement pstm, ResultSet rs) {

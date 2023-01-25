@@ -9,12 +9,16 @@ public class PostDAO {
     private String content;
     private Date createdDate;
 
-    public PostDAO(Long id, Long uid, String title, String content, Date createdDate) {
+    private PostDAO(Long id, Long uid, String title, String content, Date createdDate) {
         this.id = id;
         this.uid = uid;
         this.title = title;
         this.content = content;
         this.createdDate = createdDate;
+    }
+
+    public static PostDAO of(Long postId, Long userId, String title, String content, Date createdDate) {
+        return new PostDAO(postId, userId, title, content, createdDate);
     }
 
     public Long getId() {
