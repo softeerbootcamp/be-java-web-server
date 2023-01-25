@@ -18,8 +18,26 @@ Java Web Application Server 2022
     + @RequiredArgsConstructor
       + 초기화 되지 않은 final 필드나 @NonNull 어노테이션이 붙은 필드에 대해 생성자를 만들어 준다.
       + @AllArgsConstructor, @NoArgsConstructor
-
 + Session method
   + session.setAttribute(이름, 값)
   + session.getAttribute(이름)
     + 리턴 타입이 Object이므로 형 변환이 필요
++ Thymeleaf
+```HTML
+    <li><a th:if="${isLogin}" th:text="${userName}"></a></li>
+    <li><a href="user/login.html" role="button" th:if="${!isLogin}">로그인</a></li>
+    <li><a href="user/form.html" role="button" th:if="${!isLogin}">회원가입</a></li>
+```
+  + html 태그로 불리안, 변수 가능
+  + model 객체를 통해 삽입
+```java
+    model.addAttribute("userName", loginUser.getName());
+    model.addAttribute("isLogin", true);
+```
+
+
+    
+    
+    
+    
+

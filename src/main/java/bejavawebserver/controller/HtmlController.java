@@ -2,6 +2,7 @@ package bejavawebserver.controller;
 
 import bejavawebserver.model.User;
 import bejavawebserver.repository.memoryRepository;
+import bejavawebserver.service.HtmlService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -13,29 +14,24 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 public class HtmlController {
-    private static final Logger logger = LoggerFactory.getLogger(HtmlController.class);
-    @GetMapping("/index.html")
+    //@GetMapping("/index.html")
+
+    @GetMapping(value = {
+            "/index.html",
+            "/qna/form.html",
+            "/qna/show.html",
+            "/user/form.html",
+            "/user/list.html",
+            "/user/login.html",
+            "/user/login_failed.html",
+            "/user/profile.html"})
     public String indexHtml(HttpServletRequest httpServletRequest, Model model){
         HttpSession session = httpServletRequest.getSession(false);
-
-        // 로그인 안되어 있음
-        if(session == null) {
-            logger.debug("현재 로그인 상태 아님");
-            //model.addAttribute("userName", "로그인");
-            model.addAttribute("isLogin", false);
-            return "index";
-        }
-
-        // 로그인 되어 있음
-        logger.debug("현재 로그인 상태임");
-        User loginUser = (User)session.getAttribute("user");
-        model.addAttribute("userName", loginUser.getName());
-        model.addAttribute("isLogin", true);
-
-        return "index";
-
+        String uri = httpServletRequest.getRequestURI();
+        return HtmlService.service(model, uri, session);
     }
 
+    /*
     @GetMapping("/qna/form.html")
     public String quaFormHtml(){
         return "/qna/form";
@@ -70,5 +66,7 @@ public class HtmlController {
     public String userProfileHtml(){
         return "/user/profile";
     }
+
+     */
 
 }
