@@ -1,5 +1,6 @@
 package controller;
 
+import model.domain.User;
 import model.general.Header;
 import model.general.Method;
 import model.general.Status;
@@ -31,18 +32,21 @@ public class MemoController implements Controller {
         Method requestMethod = requestLine.getMethod();
         String requestUri = requestLine.getUri();
 
-        if(requestMethod.equals(Method.POST) &&
+        if (requestMethod.equals(Method.POST) &&
                 requestUri.startsWith("/memo")) return createMemoResponse(request);
 
         return Response.from(StatusLine.of(requestLine.getHttpVersion(), Status.NOT_FOUND));
     }
 
     private Response createMemoResponse(Request request) {
+        Map<String, String> memoInfo = request.getBody().getContent();
         Map<Header, String> headers;
         RequestLine requestLine = request.getRequestLine();
+        String sessionId = request.getSessionId();
 
-        if(Sessions.isExistSession(request.getSessionId())) {
-
+        if (Sessions.isExistSession(sessionId)) {
+            User user = (User) Sessions.getSession(sessionId).getSessionData().get("user");
+            memoService.writeMemo(user, memoInfo);
         }
 
         headers = HeaderUtils.responseRedirectIndexHtmlHeader();
