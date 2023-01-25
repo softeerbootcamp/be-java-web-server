@@ -1,8 +1,7 @@
 package controller;
 
-import db.Database;
 import db.SessionStorage;
-import exception.UserNotFoundException;
+import db.UserDAO;
 import model.User;
 import model.request.Request;
 import model.response.Response;
@@ -14,15 +13,18 @@ import webserver.controller.UserCreateController;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.sql.SQLException;
 
 import static model.response.HttpStatusCode.FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserCreateControllerTest {
 
+    UserDAO userDAO = new UserDAO();
+
     @BeforeEach
-    void cleanDb() {
-        Database.cleanAll();
+    void cleanDb() throws SQLException {
+        userDAO.deleteAll();
         SessionStorage.cleanAll();
     }
 
@@ -47,7 +49,7 @@ public class UserCreateControllerTest {
         //expected
         Assertions.assertThat(response.getStatusLine().getHttpStatusCode()).isEqualTo(FOUND);
 
-        User userById = Database.findUserById("javajigi").orElseThrow(UserNotFoundException::new);
+        User userById = userDAO.findByUserId("javajigi");
         assertThat(userById.getEmail()).isEqualTo("javajigi@slipp.net");
 
     }

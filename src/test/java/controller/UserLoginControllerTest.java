@@ -1,7 +1,7 @@
 package controller;
 
-import db.Database;
 import db.SessionStorage;
+import db.UserDAO;
 import model.User;
 import model.UserSession;
 import model.request.Request;
@@ -14,15 +14,18 @@ import webserver.controller.UserLoginController;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.sql.SQLException;
 
 import static model.response.HttpStatusCode.FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserLoginControllerTest {
 
+    UserDAO userDAO = new UserDAO();
+
     @BeforeEach
-    void cleanDb() {
-        Database.cleanAll();
+    void cleanDb() throws SQLException {
+        userDAO.deleteAll();
         SessionStorage.cleanAll();
     }
 
@@ -30,7 +33,7 @@ public class UserLoginControllerTest {
     @DisplayName("유저 로그인 성공 (세션 저장 확인)")
     void login_session() throws Exception {
         //given
-        Database.addUser(new User("javajigi", "password", "tester", "test@test.com"));
+        userDAO.insert(new User("javajigi", "password", "tester", "test@test.com"));
 
         //when
         String body = "userId=javajigi&password=password";
@@ -62,7 +65,7 @@ public class UserLoginControllerTest {
     @DisplayName("유저 로그인 실패 (login_failed 리다이렉트 여부, set-cookie 안하는지)")
     void login_failed() throws Exception {
         //given
-        Database.addUser(new User("javajigi", "password", "tester", "test@test.com"));
+        userDAO.insert(new User("javajigi", "password", "tester", "test@test.com"));
 
         //when
         String body = "userId=javajigi&password=wrong";

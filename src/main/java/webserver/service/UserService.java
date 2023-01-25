@@ -1,8 +1,7 @@
 package webserver.service;
 
-import db.Database;
 import db.SessionStorage;
-import exception.UserNotFoundException;
+import db.UserDAO;
 import model.User;
 import model.UserSession;
 import model.request.Request;
@@ -11,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpRequestUtils;
 
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.UUID;
 
@@ -19,18 +19,23 @@ import static model.response.HttpStatusCode.FOUND;
 public class UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
+    private final UserDAO userDAO = new UserDAO();
+
     public void signUpUser(Request request) {
         Map<String, String> requestParams = request.getRequestParams();
         User user = new User(requestParams.get("userId"),
                 requestParams.get("password"),
                 requestParams.get("name"),
                 requestParams.get("email"));
-        Database.addUser(user);
+        try {
+            userDAO.insert(user);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public Response loginUser(Request request) throws UserNotFoundException {
-        User byUser = Database.findUserById(request.getRequestParams().get("userId"))
-                .orElseThrow(UserNotFoundException::new);
+    public Response loginUser(Request request) throws SQLException {
+        User byUser = userDAO.findByUserId(request.getRequestParams().get("userId"));
 
         boolean isValid = byUser.getPassword().equals(request.getRequestParams().get("password"));
         if (isValid) {

@@ -1,13 +1,21 @@
 package repository;
 
 import db.Database;
-import db.UserRepository;
+import db.UserDAO;
 import model.User;
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class UserRepositoryTest {
+import java.sql.SQLException;
+
+public class UserDAOTest {
+
+    @BeforeEach
+    void setUp() throws SQLException {
+        UserDAO userDAO = new UserDAO();
+        userDAO.deleteAll();
+    }
 
     @Test
     @DisplayName("유저정보 저장 테스트")
@@ -16,8 +24,8 @@ public class UserRepositoryTest {
         User user = new User("test", "123123", "tester", "test.com");
 
         //when
-        UserRepository userRepository = new UserRepository();
-        userRepository.insert(user);
+        UserDAO userDAO = new UserDAO();
+        userDAO.insert(user);
 
         //then
 //        Assertions.assertThat();
@@ -29,7 +37,6 @@ public class UserRepositoryTest {
         //given
         Database database = Database.getInstance();
         //when
-        Assertions.assertThat(database.getUSER()).isEqualTo("root");
     }
 
 }
