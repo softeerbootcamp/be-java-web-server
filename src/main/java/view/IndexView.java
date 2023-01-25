@@ -82,7 +82,7 @@ public class IndexView implements View{
                     "                  <div class=\"wrap\">\n" +
                     "                      <div class=\"main\">\n" +
                     "                          <strong class=\"subject\">\n" +
-                    "                              <a href=\"./qna/show.html\">"+qna.get("title")+"</a>\n" +
+                    "                              <a href=\"./qna/show.html?id="+qna.get("row_id")+"\">"+qna.get("title")+"</a>\n" +
                     "                          </strong>\n" +
                     "                          <div class=\"auth-info\">\n" +
                     "                              <i class=\"icon-add-comment\"></i>\n" +
