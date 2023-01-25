@@ -2,10 +2,11 @@ package db;
 
 import utils.SessionIdGenerator;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class UserIdSession {
-    private static Map<String, String> sessions;
+    private static Map<String, String> sessions = new HashMap<>();
 
     public static String getUserId(String sessionId)
     {

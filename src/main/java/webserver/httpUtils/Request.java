@@ -51,9 +51,9 @@ public class Request {
     }
     // endregion
 
-    private boolean hasCookie()
+    public boolean hasCookie()
     {
-        if(header.keySetContainsCookie()) return true;
+        if(header.containsKey()) return true;
         return false;
     }
 

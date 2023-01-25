@@ -1,12 +1,15 @@
 package webserver.service;
 
-import webserver.Paths;
+import webserver.constants.Paths;
 import webserver.httpUtils.Request;
 import webserver.httpUtils.Response;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public interface Service {
     default Response exec(Request req) throws IOException {
@@ -28,4 +31,19 @@ public interface Service {
         return Files.readAllBytes(new File(Paths.STATIC_PATH + url).toPath());
     }
 
+    default Map<String, String> getUserInfo(Request req)
+    {
+        Map<String, String> parsedInfo = new HashMap<>();
+
+        String unparsedInfo = new String(req.getReqBody().getContext());
+        String tokens[] = unparsedInfo.split("&");
+        Arrays.stream(tokens).forEach(
+                elem -> {
+                    String keyVal[] = elem.split("=");
+                    parsedInfo.put(keyVal[0], keyVal[1]);
+                }
+        );
+
+        return parsedInfo;
+    }
 }

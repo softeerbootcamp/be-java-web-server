@@ -2,7 +2,7 @@ package webserver.httpUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.Paths;
+import webserver.constants.Paths;
 import webserver.httpUtils.entity.ReqLine;
 
 import java.io.*;
@@ -21,7 +21,8 @@ public class RequestGetter {
     public Request getFromInputStream(InputStream in) throws IOException
     {
         BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-        currentLine = br.readLine();
+        currentLine = new String(" ");
+        while(currentLine.isBlank()) currentLine = br.readLine();
 
         Request req = new Request();
         try{

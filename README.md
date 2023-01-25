@@ -7,6 +7,126 @@ Java Web Application Server 2022
 이 프로젝트는 우아한 테크코스 박재성님의 허가를 받아 https://github.com/woowacourse/jwp-was 
 를 참고하여 작성되었습니다.
 
+### 프로젝트 구조
+    ├─src/main/java
+    │  ├─java
+    │  │  ├─customException
+    │  │  │  │  AlreadyHasSameIdException.java
+    │  │  │  │  
+    │  │  │  └─cannotLogIn
+    │  │  │          CannotLogInException.java
+    │  │  │          NotFoundUserException.java
+    │  │  │          PasswordMismatchException.java
+    │  │  │          
+    │  │  ├─db
+    │  │  │      Database.java
+    │  │  │      UserIdSession.java
+    │  │  │      
+    │  │  ├─model
+    │  │  │      User.java
+    │  │  │      
+    │  │  ├─utils
+    │  │  │      SessionIdGenerator.java
+    │  │  │      
+    │  │  └─webserver
+    │  │      │  RequestHandler.java
+    │  │      │  WebServer.java
+    │  │      │  
+    │  │      ├─constants
+    │  │      │      InBody.java
+    │  │      │      Paths.java
+    │  │      │      
+    │  │      ├─controller
+    │  │      │      Controller.java
+    │  │      │      ControllerMapper.java
+    │  │      │      DynamicFileController.java
+    │  │      │      StaticFileController.java
+    │  │      │      
+    │  │      ├─httpUtils
+    │  │      │  │  Request.java
+    │  │      │  │  RequestGetter.java
+    │  │      │  │  Response.java
+    │  │      │  │  ResponseSender.java
+    │  │      │  │  
+    │  │      │  └─entity
+    │  │      │          Body.java
+    │  │      │          Header.java
+    │  │      │          ReqLine.java
+    │  │      │          ResLine.java
+    │  │      │          
+    │  │      └─service
+    │  │              AlreadyLoggedInService.java
+    │  │              InvalidAccesstoUserListService.java
+    │  │              LogInService.java
+    │  │              Service.java
+    │  │              SignUpService.java
+    │  │              UserListService.java
+    │  │              
+    │  └─resources
+    │      │  logback.xml
+    │      │  
+    │      ├─static
+    │      │  ├─css
+    │      │  │      bootstrap.min.css
+    │      │  │      styles.css
+    │      │  │      
+    │      │  ├─fonts
+    │      │  │      glyphicons-halflings-regular.eot
+    │      │  │      glyphicons-halflings-regular.svg
+    │      │  │      glyphicons-halflings-regular.ttf
+    │      │  │      glyphicons-halflings-regular.woff
+    │      │  │      glyphicons-halflings-regular.woff2
+    │      │  │      
+    │      │  ├─images
+    │      │  │      80-text.png
+    │      │  │      
+    │      │  └─js
+    │      │          bootstrap.min.js
+    │      │          jquery-2.2.0.min.js
+    │      │          scripts.js
+    │      │          
+    │      └─templates
+    │          │  favicon.ico
+    │          │  index.html
+    │          │  
+    │          ├─qna
+    │          │      form.html
+    │          │      show.html
+    │          │      
+    │          └─user
+    │                  form.html
+    │                  form_failed.html
+    │                  list.html
+    │                  login.html
+    │                  login_failed.html
+    │                  profile.html
+
+- customException
+  - AreadyHasSameIdException : 이미 디비에 저장된 아이디로 회원가입 요청이 들어올 경우 던져지는 예외.
+  - CannotLogInException : 로그인할 수 없을 때 던져지는 예외. 아래 두 클래스는 이 클래스를 상속받는다.
+    - NotFoundUserException : 디비에 없는 아이디로 로그인 요청이 들어올 경우 던져지는 예외.
+    - PasswordMismatchException : 아이디는 맞지만, 비밀번호가 디비에 저장되어있는 것과 다를 때 던져지는 예외.
+- db
+  - 유저에 관한 정보가 저장되어 있는 디비와 세션
+- model
+  - User : 유저 관련
+- utils
+  - SessionIdGenerator : 세션아이디를 만들어주는 클래스
+- webserver : 웹 서버 관련 객체들이 들어있는 패키지
+  - controller : 컨트롤러 관련 클래스와 인터페이스가 들어있음
+  - httpUtils : http req, res와 그와 관련된 클래스들이 들어있음
+  - service : 실제로 서비스가 이루어지는 클래스. 모든 서비스들은 Service 인터페이스를 상속받는다.
+
+
+### 실행 과정 요약 
+- WebServer : 소켓 생성 및 클라이언트 대기
+- RequestHandler : http request(이하 요청)를 받고 알맞은 컨트롤러로 요청을 넘김
+- Controller : 요청 내용에 따라 서비스 객체에게 서비스를 실행하라고 명령함
+  - Service : 요청 내용에 맞는 서비스를 실행한 후 컨트롤러에게 응답(response)함
+  - 서비스 객체가 응답을 하면, 컨트롤러는 ResponseSender에게 응답을 클라이언트에게 전해달라고 요청
+- ResponseSender : 받은 응답을 클라이언트에게 전송함.
+
+
 ## 알게된 것 정리
 
 ### HTTP
@@ -15,6 +135,7 @@ hyperText인 html을 전송하기 위한 통신규약
 - connectionless
 - stateless
 - tcp와 udp를 사용하며, 80번 포트
+
 ### HTTP 동작방식
 ![img.png](ReadmeImg/img.png)
 1. 사용자가 브라우저에 URL을 입력한다.
@@ -101,3 +222,33 @@ html 문서의 head에서 meta태그 안에 다음과 같은 정보를 주면 �
 - Files 클래스의 probeContentType() 메서드
 - URLConnection 클래스의 guessContentTypeFromName() 메서드
 - MimetypesFileTypeMap 객체의 getContentType() 메서드
+
+### Stateless vs Stateful
+- Stateless
+
+Stateless는 과거의 transaction에 대한 기록이나 정보가 없는 것을 의미한다(현재의 transaction이 과거와 독립적임). 각각의 transaction은 마치 처음 일어나는 것처럼 만들어진다. 한 transaction 당 하나의 서비스나 기능을 제공한다(Short-term request).
+
+예를 들자면, 검색엔진을 들 수 있다. 검색창에 타이핑을 하고 엔터키를 눌렀다고 가정하자. 이 과정에서 인터럽트가 발생하거나, 브라우저가 닫히게 되면 사용자는 처음부터 다시 transaction을 만들어야만 한다. 다른 예시로는 자판기가 있다.(single request - single response)
+- Stateful
+
+반면에 Stateful은 현재의 transaction이 과거의 transaction의 맥락을 따라 수행되는 것, 즉 과거의 transaction 기록에 영향을 받을 수 있다는 것을 의미한다. 이러한 이유 때문에 stateful app은 사용자로부터 받은 요청을 처리할 때마다 같은 server를 사용한다.
+
+Stateful의  예시를 들자면 이메일을 들 수 있을 것이다. 이메일의 경우 첫 전송을 제외하면 나머지 transaction들은 이전에 송수신되었던 내용 뒤에 답장을 붙이는 식으로 진행된다. 이러한 특성 때문에, 중간에 인터럽트가 발생했다 하더라도 현재까지의 기록을 통하여 적절히 취사선택을 할 수 있다.
+
+[참고자료](https://www.redhat.com/en/topics/cloud-native-apps/stateful-vs-stateless)
+
+### 쿠키와 세션
+
+HTTP는 기본적으로 stateless하다. 그러나 필요에 따라 상태정보를 알고있어야 할 때가 있는데, 이때 사용하는 것이 쿠키와 세션이다. 쿠키와 세션은 모두 여러 페이지들에 걸쳐 사용되는 유저의 데이터를 저장한다는 공통점이 있지만, 사용 목적 등 여러 면에서 다르다.
+
+| 쿠키                                                                           | 세션                                                                                                                     |
+|------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------|
+| clinet-side에 저장됨. header에 의해 전송                                              | server-side에 저장됨                                                                                                       |
+| 사용자의 브라우징 기록이나 장바구니 정보 등을 저장하기 위해 사용.<br/>원할 때 활성화/비활성화 가능                   | 다수의 페이지들에 걸쳐 사용되는 정보를 일시적으로 저장하기 위해 사용<br/>log-in시 초기화되며, log-out시 없어짐(session이라 불리는 이유)<br/>서버 시스템이 shut-down될 때도 없어짐 |
+| 문자열 타입의 데이터만 저장할 수 있음                  .<br/> 한 쿠키 당 최대 4KB                  | 사용자의 정보는 세션 변수에 저장되며, 어떤 형태의 정보(혹은 파일)든 저장할 수 있음.<br/>원하는 만큼 저장 가능                                                     |
+| local에 저장되어있고, 브라우저에 그대로 노출됨.<br/> 허가받지 않은 유저가 사용자 시스템에 접근할 수 있을 경우 보안에 취약함. | 각 사용자에 따라 다른 세션정보를 가짐. (각 유저는 sessionID에 의하여 식별됨)      . 쿠키에 비해 보안성이 높음.                                               |
+
+쿠키로 구현된 세션의 동작 방식
+(이 경우, '세션은 쿠키에 종속적이다'라고 표현함)
+
+![img.png](ReadmeImg/세션 동작 방식.png)
