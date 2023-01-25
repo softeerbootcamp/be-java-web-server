@@ -1,6 +1,8 @@
 package was.controller;
 
+import db.BoardDatabase;
 import enums.HttpMethod;
+import model.Board;
 import util.HttpParser;
 import was.annotation.Auth;
 import was.annotation.RequestMapping;
@@ -14,7 +16,7 @@ public class BoardController implements Controller {
     }
     public static BoardController getInstance() {
         if (boardController == null) {
-            synchronized (boardController) {
+            synchronized (BoardController.class) {
                 return new BoardController();
             }
         }
