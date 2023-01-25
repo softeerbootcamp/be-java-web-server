@@ -1,14 +1,12 @@
 package bejavawebserver.model;
 
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 
 @Data
-@RequiredArgsConstructor
 public class LoginForm {
-    @NotNull
+    @NonNull
     private final String userId;
-    @NotNull
+    @NonNull
     private final String password;
 }
