@@ -1,10 +1,10 @@
-package db.memo;
+package db.board;
 
 import model.Memo;
 
 import java.util.Collection;
 
-public interface MemoDatabase {
+public interface BoardDatabase {
     void addMemo(Memo memo);
 
     Collection<Memo> findAll();

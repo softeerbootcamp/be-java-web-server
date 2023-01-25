@@ -6,7 +6,7 @@ import http.response.HttpResponse;
 import model.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import service.UserService;
+import service.user.UserService;
 import utils.FileUtils;
 import utils.enums.HttpMethod;
 import utils.SessionManager;

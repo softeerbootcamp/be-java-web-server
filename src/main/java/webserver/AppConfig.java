@@ -5,8 +5,8 @@ import db.user.MySqlUserDatabase;
 import db.user.UserDatabase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import service.UserService;
-import service.UserServiceImpl;
+import service.user.UserService;
+import service.user.UserServiceImpl;
 
 public class AppConfig {
     private static final Logger logger = LoggerFactory.getLogger(AppConfig.class);
