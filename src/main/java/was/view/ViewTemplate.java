@@ -9,7 +9,12 @@ public class ViewTemplate {
     public static byte[] fileReadTemplate(String userId, String path, BufferedReaderCallback callback) {
         try {
             BufferedReader br = new BufferedReader(new FileReader(path));
-            return callback.createDynamicHtmlWith(br, userId).getBytes();
+            String line;
+            StringBuilder sb = new StringBuilder();
+            while ((line = br.readLine()) != null) {
+                sb.append(callback.createDynamicHtmlWith(line, userId));
+            }
+            return sb.toString().getBytes();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {

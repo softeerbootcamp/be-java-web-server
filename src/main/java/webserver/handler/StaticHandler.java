@@ -2,12 +2,9 @@ package webserver.handler;
 
 
 import db.SessionStorage;
-import util.HttpParser;
-import was.view.ViewResolver;
 import webserver.domain.HttpRequest;
 import webserver.domain.HttpResponse;
 import webserver.domain.HttpResponseMessage;
-import webserver.session.Session;
 
 import java.util.UUID;
 
