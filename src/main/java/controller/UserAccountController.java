@@ -10,7 +10,7 @@ import model.Session;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import repository.UserRepo;
+import repository.MemoryUserRepo;
 import service.SessionService;
 import service.StaticFileService;
 import service.UserService;
@@ -22,7 +22,7 @@ import java.util.*;
 public class UserAccountController implements RequestController {
     private static final Logger logger = LoggerFactory.getLogger(UserAccountController.class);
 
-    static UserAccountController userAccountController;
+    private static UserAccountController userAccountController;
 
     private final Map<String, RequestController> routingTable = new HashMap<>() {{
         put("/user/create", (req) -> makeAccount(req));
@@ -121,7 +121,7 @@ public class UserAccountController implements RequestController {
         File file = StaticFileService.getFile("/user/list.html");
         try {
             User user = SessionService.getUserBySessionId(req.getSSID()).orElse(User.GUEST);
-            List<User> userList = new ArrayList<>(UserRepo.findAll());
+            List<User> userList = new ArrayList<>(MemoryUserRepo.getInstance().findAll());
 
             Map<String, String> defaultTemplate = HtmlMakerUtility.getDefaultTemplate(user.getName());
             defaultTemplate.put("userTable", HtmlMakerUtility.userListRows(userList));
