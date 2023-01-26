@@ -4,15 +4,12 @@ import model.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class SessionDatabase {
-    private static final Logger logger = LoggerFactory.getLogger(SessionDatabase.class);
-
     private static final SessionDatabase instance;
 
     private SessionDatabase() {}
@@ -25,76 +22,48 @@ public class SessionDatabase {
         return instance;
     }
 
-    // TODO: QueryExecutor 적용하기
-    public void add(Session session) throws SQLException, NullPointerException {
-        Connection con = DatabaseConnection.getConnection();
-        try {
-            String query = "INSERT INTO Sessions (id, expirationTime, userId) VALUES(?, ?, ?)";
-            PreparedStatement pstmt = con.prepareStatement(query);
-            pstmt.setString(1, session.getSid());
-            pstmt.setString(2, session.getExpirationTime().toString());
-            pstmt.setString(3, session.getUserId());
-            pstmt.executeUpdate();
+    public void add(Session session) throws SQLException {
+        String query = "INSERT INTO Sessions (id, expirationTime, userId) VALUES(?, ?, ?)";
+        String[] args = new String[3];
+        args[0] = session.getId();
+        args[1] = session.getExpirationTime().toString();
+        args[2] = session.getUserId();
 
-            con.close();
-            logger.debug("session {} added", session.getUserId());
-        } finally {
-            con.close();
-        }
+        QueryExecutor.executeUpdateQuery(query, args);
     }
 
-    public Optional<Session> findById(String sid) throws SQLException, NullPointerException {
-        Connection con = DatabaseConnection.getConnection();
-        try {
-            String query = "SELECT * FROM Sessions WHERE id = ?";
-            PreparedStatement pstmt = con.prepareStatement(query);
-            pstmt.setString(1, sid);
-            ResultSet rs = pstmt.executeQuery();
+    public Optional<Session> findById(String sid) throws SQLException {
+        String query = "SELECT * FROM Sessions WHERE id = ?";
+        String[] args = new String[1];
+        args[0] = sid;
 
-            if (!rs.next()) {
-                con.close();
-                return Optional.empty();
-            }
+        List<Map<String, String>> result = QueryExecutor.executeSelectQuery(query, args);
 
-            String id = rs.getString("id");
-            String userId = rs.getString("userId");
-
-            con.close();
-            return Optional.of(Session.of(id, userId));
-        } finally {
-            con.close();
+        if(result.size() == 0) {
+            return Optional.empty();
         }
+
+        String id = result.get(0).get("id");
+        String userId = result.get(0).get("userId");
+
+        return Optional.of(Session.of(id, userId));
     }
 
-    public boolean existsBySessionId(String sid) throws SQLException, NullPointerException {
-        Connection con = DatabaseConnection.getConnection();
-        try {
-            String query = "SELECT * FROM Sessions WHERE id = ?";
-            PreparedStatement pstmt = con.prepareStatement(query);
-            pstmt.setString(1, sid);
-            ResultSet rs = pstmt.executeQuery();
+    public boolean existsBySessionId(String sid) throws SQLException {
+        String query = "SELECT * FROM Sessions WHERE id = ?";
+        String[] args = new String[1];
+        args[0] = sid;
 
-            if (!rs.next()) {
-                con.close();
-                return false;
-            }
+        List<Map<String, String>> result = QueryExecutor.executeSelectQuery(query, args);
 
-            con.close();
-            return true;
-        } finally {
-            con.close();
-        }
+        return !result.isEmpty();
     }
 
-    public void deleteSession(String sid) throws SQLException, NullPointerException {
-        Connection con = DatabaseConnection.getConnection();
-        try {
-            String query = "DELETE FROM Sessions WHERE id = ?";
-            PreparedStatement pstmt = con.prepareStatement(query);
-            pstmt.setString(1, sid);
-            pstmt.executeUpdate();
-        } finally {
-            con.close();
-        }
+    public void deleteSession(String sid) throws SQLException {
+        String query = "DELETE FROM Sessions WHERE id = ?";
+        String[] args = new String[1];
+        args[0] = sid;
+
+        QueryExecutor.executeUpdateQuery(query, args);
     }
 }

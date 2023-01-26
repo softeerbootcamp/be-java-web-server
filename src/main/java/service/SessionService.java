@@ -24,19 +24,19 @@ public class SessionService {
         return instance;
     }
 
-    public void addSession(Session session) throws SQLException, NullPointerException {
+    public void addSession(Session session) throws SQLException {
         sessionDatabase.add(session);
     }
 
-    public Optional<Session> findSession(String sid) throws SQLException, NullPointerException {
+    public Optional<Session> findSession(String sid) throws SQLException {
         return sessionDatabase.findById(sid);
     }
 
-    public void removeSession(String sid) throws SQLException, NullPointerException {
+    public void removeSession(String sid) throws SQLException {
         sessionDatabase.deleteSession(sid);
     }
 
-    public boolean isValid(String sid) throws SQLException, NullPointerException {
+    public boolean isValid(String sid) throws SQLException {
         Session session = sessionDatabase.findById(sid).orElse(null);
         return !(session == null || session.getExpirationTime().isBefore(LocalDateTime.now()));
     }

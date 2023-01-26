@@ -1,14 +1,19 @@
 package request.handlers;
 
 import file.FileContentType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import request.Request;
 import request.RequestHandler;
 import response.HttpResponseStatus;
 import response.Response;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 
 public class LogoutHandler implements RequestHandler {
+    private static final Logger logger = LoggerFactory.getLogger(LogoutHandler.class);
+
     private final static LogoutHandler instance;
 
     static {
@@ -34,7 +39,8 @@ public class LogoutHandler implements RequestHandler {
                     HttpResponseStatus.FOUND,
                     "Location: /index.html\r\n" + "Set-Cookie: sid=;Path=/\r\n"
             );
-        } catch (SQLException | NullPointerException e) {
+        } catch (SQLException e) {
+            logger.error(Arrays.toString(e.getStackTrace()));
             return Response.from(HttpResponseStatus.INTERNAL_SERVER_ERROR);
         }
     }

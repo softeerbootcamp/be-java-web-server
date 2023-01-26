@@ -18,7 +18,6 @@ public class NoMatchHandler implements RequestHandler {
         return instance;
     }
 
-    // TODO: 코드의 반복을 없앨 수 있게 리팩토링
     @Override
     public Response doGet(Request request) {
         return Response.from(HttpResponseStatus.NOT_FOUND);

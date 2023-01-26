@@ -8,7 +8,9 @@ public enum HandlerEnum {
     REGISTER("^/user/create", UserCreateHandler.getInstance()),
     LOGIN("^/user/login", LoginHandler.getInstance()),
     LOGOUT("^/user/logout", LogoutHandler.getInstance()),
-    LIST("^/user/list", UserListHandler.getInstance());
+    LOGIN_FAILED("^/user/login_failed", LoginFailedHandler.getInstance()),
+    LIST("^/user/list", UserListHandler.getInstance()),
+    QnA("^/qna/form", QnAHandler.getInstance());
 
     private final String urlRegEx;
 

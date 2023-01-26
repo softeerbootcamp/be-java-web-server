@@ -4,9 +4,6 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -25,18 +22,18 @@ public class UserDatabase {
         return instance;
     }
 
-    public void addUser(User user) throws IllegalArgumentException, SQLException, NullPointerException {
+    public void addUser(User user) throws SQLException {
         String query = "INSERT INTO Users (id, pwd, userName, email) VALUES(?, ?, ?, ?)";
         String[] args = new String[4];
-        args[0] = user.getUserId();
-        args[1] = user.getPassword();
-        args[2] = user.getName();
+        args[0] = user.getId();
+        args[1] = user.getPwd();
+        args[2] = user.getUsername();
         args[3] = user.getEmail();
 
         QueryExecutor.executeUpdateQuery(query, args);
     }
 
-    public Optional<User> findUserById(String userId) throws SQLException, NullPointerException {
+    public Optional<User> findUserById(String userId) throws SQLException {
         String query = "SELECT * FROM Users WHERE id = ?";
         String[] args = new String[1];
         args[0] = userId;
@@ -55,55 +52,42 @@ public class UserDatabase {
         return Optional.of(User.of(id, pwd, userName, email));
     }
 
-    // TODO: 마저 적용하기
-    public Optional<User> findUserByIdAndPwd(String userId, String pwd) throws SQLException, NullPointerException {
-        Connection con = DatabaseConnection.getConnection();
-        try {
-            String query = "SELECT * FROM Users WHERE id = ? AND pwd = ?";
-            PreparedStatement pstmt = con.prepareStatement(query);
-            pstmt.setString(1, userId);
-            pstmt.setString(2, pwd);
-            ResultSet rs = pstmt.executeQuery();
+    public Optional<User> findUserByIdAndPwd(String userId, String pwd) throws SQLException {
+        String query = "SELECT * FROM Users WHERE id = ? AND pwd = ?";
+        String[] args = new String[2];
+        args[0] = userId;
+        args[1] = pwd;
 
-            if (!rs.next()) {
-                con.close();
-                return Optional.empty();
-            }
+        List<Map<String, String>> result = QueryExecutor.executeSelectQuery(query, args);
 
-            String id = rs.getString("id");
-            String password = rs.getString("pwd");
-            String userName = rs.getString("userName");
-            String email = rs.getString("email");
-
-            con.close();
-            return Optional.of(User.of(id, password, userName, email));
-        } finally {
-            con.close();
+        if(result.size() == 0) {
+            return Optional.empty();
         }
+
+        String id = result.get(0).get("id");
+        String password = result.get(0).get("pwd");
+        String username = result.get(0).get("username");
+        String email = result.get(0).get("email");
+
+        return Optional.of(User.of(id, password, username, email));
     }
 
-    public Collection<User> findAll() throws SQLException, NullPointerException {
-        Connection con = DatabaseConnection.getConnection();
-        try {
-            String query = "SELECT * FROM Users";
-            PreparedStatement pstmt = con.prepareStatement(query);
-            ResultSet rs = pstmt.executeQuery();
+    public Collection<User> findAll() throws SQLException {
+        String query = "SELECT * FROM Users";
+        String[] args = new String[0];
 
-            List<User> list = new ArrayList<>();
-            while (rs.next()) {
-                String id = rs.getString("id");
-                String pwd = rs.getString("pwd");
-                String userName = rs.getString("userName");
-                String email = rs.getString("email");
+        List<Map<String, String>> result = QueryExecutor.executeSelectQuery(query, args);
+        List<User> userList = new ArrayList<>();
 
-                User user = User.of(id, pwd, userName, email);
-                list.add(user);
-            }
+        for(Map<String, String> res : result) {
+            String id = res.get("id");
+            String pwd = res.get("pwd");
+            String username = res.get("username");
+            String email = res.get("email");
 
-            con.close();
-            return list;
-        } finally {
-            con.close();
+            userList.add(User.of(id, pwd, username, email));
         }
+
+        return userList;
     }
 }

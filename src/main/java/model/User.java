@@ -3,15 +3,15 @@ package model;
 import java.util.Map;
 
 public class User {
-    private String userId;
-    private String password;
-    private String name;
+    private String id;
+    private String pwd;
+    private String username;
     private String email;
 
-    private User(String userId, String password, String name, String email) {
-        this.userId = userId;
-        this.password = password;
-        this.name = name;
+    private User(String id, String pwd, String username, String email) {
+        this.id = id;
+        this.pwd = pwd;
+        this.username = username;
         this.email = email;
     }
 
@@ -27,16 +27,16 @@ public class User {
         return new User(userId, password, name, email);
     }
 
-    public String getUserId() {
-        return userId;
+    public String getId() {
+        return id;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPwd() {
+        return pwd;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
     public String getEmail() {
@@ -45,6 +45,6 @@ public class User {
 
     @Override
     public String toString() {
-        return "User [userId=" + userId + ", password=" + password + ", name=" + name + ", email=" + email + "]";
+        return "User [userId=" + id + ", password=" + pwd + ", name=" + username + ", email=" + email + "]";
     }
 }

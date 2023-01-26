@@ -2,18 +2,21 @@ package request.handlers;
 
 import file.FileContentType;
 import model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import request.Request;
 import request.RequestHandler;
 import response.HttpResponseStatus;
 import response.Response;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Collection;
 
 public class UserListHandler implements RequestHandler {
+    private static final Logger logger = LoggerFactory.getLogger(UserListHandler.class);
+
     private static final UserListHandler instance;
 
     static {
@@ -40,35 +43,34 @@ public class UserListHandler implements RequestHandler {
             if(!resource.endsWith(".html")) {
                 resource += ".html";
             }
-            byte[] file = generateDynamicHeader(request.getCookie(),
-                    Files.readAllBytes(new File("src/main/resources/templates" + resource).toPath()));
-            file = generateDynamicList(file);
-            return Response.createSimpleResponse(file, FileContentType.HTML.getContentType(), HttpResponseStatus.OK);
+            String filePath = "src/main/resources/templates" + resource;
+            String content = generateDynamicHeader(request.getCookie(), filePath);
+            content = generateDynamicList(content);
+            return Response.createSimpleResponse(content.getBytes(), FileContentType.HTML.getContentType(), HttpResponseStatus.OK);
         } catch (IOException e) {
             return Response.from(HttpResponseStatus.NOT_FOUND);
-        } catch (SQLException | NullPointerException e) {
+        } catch (SQLException e) {
+            logger.error(Arrays.toString(e.getStackTrace()));
             return Response.from(HttpResponseStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    private byte[] generateDynamicList(byte[] file) {
-        try {
-            String fileString = new String(file);
-            Collection<User> users = userService.findAllUsers();
-            StringBuilder stringBuilder = new StringBuilder();
-            int no = 1;
-            for (User user : users) {
-                stringBuilder.append("<tr><th scope=\"row\">" + (no++) +
-                        "</th> <td>" + user.getUserId() +
-                        "</td> <td>" + user.getName() +
-                        "</td> <td>" + user.getEmail() +
-                        "</td><td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td></tr>");
-            }
-            fileString = fileString.replace("${}", stringBuilder.toString());
-            return fileString.getBytes();
-        } catch (SQLException | NullPointerException e) {
-            e.printStackTrace();
-            return null;
+    private String generateDynamicList(String fileContent) throws SQLException {
+        Collection<User> users = userService.findAllUsers();
+        StringBuilder stringBuilder = new StringBuilder();
+        int no = 1;
+        for (User user : users) {
+            stringBuilder.append(
+                    "<tr>" +
+                            "<th scope=\"row\">" + no + "</th> " +
+                            "<td>" + user.getId() + "</td>" +
+                            "<td>" + user.getUsername() + "</td>" +
+                            "<td>" + user.getEmail() + "</td>" +
+                            "<td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td>" +
+                    "</tr>");
+            no++;
         }
+        fileContent = fileContent.replace("${userList}", stringBuilder.toString());
+        return fileContent;
     }
 }
