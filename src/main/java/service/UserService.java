@@ -1,6 +1,7 @@
 package service;
 
 import db.Database;
+import db.JdbcTemplate;
 import model.User;
 import java.util.Map;
 
@@ -16,7 +17,10 @@ public class UserService {
     }
 
     public void addUser(Map<String, String> parsedUserMap) {
-        Database.addUser(new User(parsedUserMap.get("userId"), parsedUserMap.get("password"), parsedUserMap.get("name"), parsedUserMap.get("email")));
+        User user = new User(parsedUserMap.get("userId"), parsedUserMap.get("password"), parsedUserMap.get("name"), parsedUserMap.get("email"));
+        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        jdbcTemplate.insertIntoUserDb(user);
+        Database.addUser(user);
     }
     public boolean login(User user) {
         User dbUser = Database.findUserById(user.getUserId());

@@ -1,24 +1,37 @@
 package db;
 
+import model.User;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class JdbcTemplate {
-    public  void workWithStatementStrategy() {
+    public void insertIntoUserDb(User user) {
+        workWithStatementStrategy(new DbCallback() {
+            @Override
+            public PreparedStatement makePreparedStatement(Connection con) throws SQLException{
+                PreparedStatement ps = con.prepareStatement("insert into user(userId, password, name, email) values (?, ? ,?, ?)");
+
+                ps.setString(1, user.getUserId());
+                ps.setString(2, user.getPassword());
+                ps.setString(3, user.getName());
+                ps.setString(4, user.getEmail());
+                return ps;
+            }
+        });
+    }
+    public void workWithStatementStrategy(DbCallback callback) {
         String jdbc_url = "jdbc:mysql://localhost:3306/webserver?serverTimezone=UTC";
         Connection con = null;
         PreparedStatement ps = null;
 
         try {
-            Class.forName("com.mysql.Jdbc.Driver");
             con = DriverManager.getConnection(jdbc_url, "root", "84338253");
 
-            ps = con.prepareStatement("somthing");
+            ps = callback.makePreparedStatement(con);
             ps.executeUpdate();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
