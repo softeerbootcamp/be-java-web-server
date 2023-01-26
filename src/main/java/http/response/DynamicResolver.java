@@ -52,7 +52,7 @@ public class DynamicResolver {
         }
     }
 
-    private static void appendUserList(StringBuilder sb) throws Exception {
+    private static void appendUserList(StringBuilder sb) {
         int idx = 1;
         Collection<User> users = UserRepository.findAll();
         for (User user : users) {
@@ -61,7 +61,7 @@ public class DynamicResolver {
         }
     }
 
-    private static void appendMemoList(StringBuilder sb) throws Exception {
+    private static void appendMemoList(StringBuilder sb) {
         Collection<Memo> memos = MemoRepository.findAll();
         sb.append("<ul class=\"list\">").append(System.lineSeparator());
         for (Memo memo : memos) {

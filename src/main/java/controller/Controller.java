@@ -5,6 +5,6 @@ import http.response.HttpResponse;
 
 public interface Controller {
 
-    HttpResponse doService(HttpRequest httpRequest) throws Exception;
+    HttpResponse doService(HttpRequest httpRequest);
 
 }

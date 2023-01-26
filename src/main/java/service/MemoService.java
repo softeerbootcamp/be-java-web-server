@@ -10,7 +10,7 @@ import model.Memo;
 
 public class MemoService {
 
-    public HttpResponse create(HttpRequest httpRequest) throws Exception {
+    public HttpResponse create(HttpRequest httpRequest) {
         if (SessionHandler.validateSession(httpRequest.getSid())) {
             HttpSession httpSession = SessionHandler.getSession(httpRequest.getSid());
             String username = httpSession.getUserName();

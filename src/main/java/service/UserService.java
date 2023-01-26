@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class UserService {
 
-    public HttpResponse create(HttpRequest httpRequest) throws Exception {
+    public HttpResponse create(HttpRequest httpRequest) {
         if (httpRequest.getHttpMethod().equals(HttpMethod.GET)) {
             return ResourceController.getInstance().doService(httpRequest);
         }
@@ -27,7 +27,7 @@ public class UserService {
         return HttpResponseFactory.FOUND("/index.html");
     }
 
-    public HttpResponse login(HttpRequest httpRequest) throws Exception {
+    public HttpResponse login(HttpRequest httpRequest) {
         if (httpRequest.getHttpMethod().equals(HttpMethod.GET)) {
             return ResourceController.getInstance().doService(httpRequest);
         }
@@ -44,7 +44,7 @@ public class UserService {
         return HttpResponseFactory.FOUND("/user/login_failed.html");
     }
 
-    public HttpResponse list(HttpRequest httpRequest) throws Exception {
+    public HttpResponse list(HttpRequest httpRequest) {
         Map<String, String> headers = new HashMap<>();
         if (SessionHandler.validateSession(httpRequest.getSid())) {
             HttpSession httpSession = SessionHandler.getSession(httpRequest.getSid());
@@ -65,7 +65,7 @@ public class UserService {
         return HttpResponseFactory.FOUND("/user/login.html");
     }
 
-    private boolean isExistUser(String id, String pw) throws Exception {
+    private boolean isExistUser(String id, String pw) {
         User user = UserRepository.findUserById(id);
         return user != null && user.getPassword().equals(pw);
     }
