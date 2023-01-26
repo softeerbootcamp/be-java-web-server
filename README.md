@@ -1,4 +1,31 @@
+# 게시판 만들기
+
+- branch : board
+
+<details>
+
+## 요구사항:
+
+<br>
+
+- index.html에 로그인한 사용자가 글을 쓸 수 있는 한 줄 메모장을 구현한다.
+- 로그인하지 않은 사용자도 게시글을 볼 수 있다.
+- 로그인한 사용자만 글을 쓸 수 있다.
+- MySQL을 사용한다.
+
+
+
+
+
+</details>
+
+
+
 # Java web server
+
+- branch : webserver
+
+<details>
 
 ## 요구사항:
 
@@ -16,38 +43,44 @@
 # [index.html]
 
 - http://localhost:8080/index.html 로 접속했을 때 resources 디렉토리의 index.html 파일을 읽어 클라이언트에 응답한다.
-  - Http Request Header를 읽는다.
-  - Header에서 요청 URL을 추출한다.
-  - 요청 URL path에 맞는 파일로 응답한다.
+    - Http Request Header를 읽는다.
+    - Header에서 요청 URL을 추출한다.
+    - 요청 URL path에 맞는 파일로 응답한다.
 
 # [/user/form.html]
-- “회원가입” 메뉴를 클릭하면 http://localhost:8080/user/form.html 으로 이동하면서 회원가입할 수 있다. 회원가입한다. 회원가입을 하면 다음과 같은 형태로 사용자가 입력한 값이 서버에 전달된다.
+
+- “회원가입” 메뉴를 클릭하면 http://localhost:8080/user/form.html 으로 이동하면서 회원가입할 수 있다. 회원가입한다. 회원가입을 하면 다음과 같은 형태로 사용자가 입력한 값이 서버에
+  전달된다.
 - HTML과 URL을 비교해 보고 사용자가 입력한 값을 파싱해 model.User 클래스에 저장한다.
 - “회원가입”을 완료하면 /index.html 페이지로 이동
 
 # [HttpRequset.class]
+
 - 클라이언트 요청 데이터를 처리하는 로직을 별도의 클래스로 분리
     - Header/Body의 처리를 담당하는 역할을 분리
     - InputStream을 생성자로 받아 HTTP 메소드, URL, 헤더, 본문을 분리하는 작업 수행
 
 # [HttpResponse.class]
+
 - 클라이언트 응답 데이터를 처리하는 로직을 별도의 클래스로 분리
-  -  RequestHandler 클래스를 보면 응답 데이터 처리를 위한 많은 중복을 제거해준다.
+    - RequestHandler 클래스를 보면 응답 데이터 처리를 위한 많은 중복을 제거해준다.
 
 # [Controller interface]
+
 - controller 인터페이스를 구현하는 AbstractController 추상클래스를 추가해 중복을 제거
 - service() 메소드에서 GET과 POST HTTP 메소드에 따라 doGet(), doPost() 메소드를 호출
 
 # [login/session]
+
 - user/login.html에서 로그인이 성공하면 index.html로 이동하고, 로그인이 실패하면 /user/login_failed.html로 이동
 - 로그인이 성공하면 cookie를 활용해 로그인 상태를 유지
-  - 성공시 : header의 Cookie header 값이 logined=true 
-  - 실패시 : Cookie header 값이 logined=false
-  - Set-Cookie 설정시 모든 요청에 대해 Cookie 처리가 가능하도록 Path 설정 값을 (Path=/)로 설정
+    - 성공시 : header의 Cookie header 값이 logined=true
+    - 실패시 : Cookie header 값이 logined=false
+    - Set-Cookie 설정시 모든 요청에 대해 Cookie 처리가 가능하도록 Path 설정 값을 (Path=/)로 설정
 
 <br/>
 
- ## 학습
+## 학습
 
 <br/>
 
@@ -57,26 +90,24 @@
 1. DataOutputStream <br/>
 
 : FileReader는 데이터를 읽어서 숫자 데이터로 변환해줘야하지만,DataOutputStream은 데이터 변환까지 해줘서 파일을 읽고 쓰는 클래스 (즉, 프리미티브 타입의 데이터를 읽을 수 잇음)
- 
-  > write() 
-  
-  : 데이터를 파일에 쓰기
 
-  > flush()
+> write()
 
-  : 현재 버퍼에 저장되 있는 내용을 클라이언트에 전송하고 버퍼를 비운다.<br/>
+: 데이터를 파일에 쓰기
 
-  즉, 강제로 버퍼의 내용을 전송함으로써 데드락 상태를 해제한다.<br/>
+> flush()
+
+: 현재 버퍼에 저장되 있는 내용을 클라이언트에 전송하고 버퍼를 비운다.<br/>
+
+즉, 강제로 버퍼의 내용을 전송함으로써 데드락 상태를 해제한다.<br/>
 
   <br/>
-
 
 2. 프록시<br/>
 
 : 클라이언트와 서버 사이에 존재하며 캐싱, 필터링, 로드 밸런싱, 인증, 로깅 등의 다양한 기능을 수행한다.<br/>
 
 <br/>
-
 
 3. 브라우저 동작 방식<br/>
 
@@ -92,9 +123,6 @@
 
 <br/>
 
-
-
-
 4. MIME 타입이란? <br/>
 
 > 클라이언트에게 전송된 문서의 다양성을 알려주기 위한 메커니즘 <br/>
@@ -103,12 +131,11 @@
 
 <br/>
 
-
 5. of 패턴
+
 - of 에 데이터를 읽은 후 생성자를 리턴해서 멤버에 값을 할당한다.
 
 <br/>
-
 
 6. InputStreamReader
 
@@ -118,13 +145,11 @@
 
 <br/>
 
-
 7. BufferedReader
 
 - BufferReader 를 통해 입력 데이터가 바로 출력되기 보다는 버퍼를 통해 데이터를 묶어서 한 문장씩 읽어들일 수 있게 한다.
 
 <br/>
-
 
 8. StringBuilder
 
@@ -135,37 +160,38 @@
 9. reflection
 
 - Reflection이란 클래스의 구조를 분석하여 동적 로딩을 가능하게 하는 기능
-  - new Instance () : 동적 객체 생성시 사용됨
-    - 기본 생성자를 호출해 객체를 생성하기 때문에 반드시 클래스에 기본 생성자가 존재해야함
-    - 만약 매개변수가 있는 생성자를 호출하고 싶다면 리플랙션으로 Constructor 객체를 얻어 new Instance 진행
-    
+    - new Instance () : 동적 객체 생성시 사용됨
+        - 기본 생성자를 호출해 객체를 생성하기 때문에 반드시 클래스에 기본 생성자가 존재해야함
+        - 만약 매개변수가 있는 생성자를 호출하고 싶다면 리플랙션으로 Constructor 객체를 얻어 new Instance 진행
+
   > new Instance() = Deprecated <br>
   > -> getDeclaredConstructor().newInstance() 로 수정
 
-  - getDeclaredConstructors(), getDeclaredFields(), getDeclaredMethods() : 클래스 생성자, 필드정보, 메소드 정보를 알고 싶을 때 사용한다
+    - getDeclaredConstructors(), getDeclaredFields(), getDeclaredMethods() : 클래스 생성자, 필드정보, 메소드 정보를 알고 싶을 때 사용한다
 
-  - invoke : Method를 동적으로 실행시켜 주는 메소드
+    - invoke : Method를 동적으로 실행시켜 주는 메소드
 
 10. HTTP 메시지 구조
-  - Header + Body 로 나뉨
+
+- Header + Body 로 나뉨
     - Header (주소정보, 메서드 방식, 클라이언트 정보, 브라우저 정보, 접속 URL)
-      - start line에는 요청이나 응답의 상태를 나타낸다.
-      - 요청을 지정하거나, 메시지에 포함된 본문을 설명하는 헤더의 집합이다.
-      - 헤더와 본문을 구분하는 빈 줄이 있다. 그 줄을 말한다.
+        - start line에는 요청이나 응답의 상태를 나타낸다.
+        - 요청을 지정하거나, 메시지에 포함된 본문을 설명하는 헤더의 집합이다.
+        - 헤더와 본문을 구분하는 빈 줄이 있다. 그 줄을 말한다.
     - Body (비어 있다가 필요시 데이터 정보 담김)
-      - 요청과 관련된 데이터나 응답과 관련된 데이터 또는 문서를 포함 (선택적 사용됨)
+        - 요청과 관련된 데이터나 응답과 관련된 데이터 또는 문서를 포함 (선택적 사용됨)
 
 11. Request Body 역할
 
- - Request Body 가 책임져야 하는 것 : 
-   - code : API 사용 프로그램 처리 결과를 간략히 전달하는 것
-     - 첫 세자리 (프로토콜 상태 코드), 넷째 자리 (타입 코드), 마지막 두 자리 (구분 코드)
-   - message : 코더,개발자를 위한 메시지를 주는 것
-   - result : 처리 결과 값을 넘겨주는 것
-   - 세가지 요소
-     - HTTP method
-     - URL
-     - HTTP version
+- Request Body 가 책임져야 하는 것 :
+    - code : API 사용 프로그램 처리 결과를 간략히 전달하는 것
+        - 첫 세자리 (프로토콜 상태 코드), 넷째 자리 (타입 코드), 마지막 두 자리 (구분 코드)
+    - message : 코더,개발자를 위한 메시지를 주는 것
+    - result : 처리 결과 값을 넘겨주는 것
+    - 세가지 요소
+        - HTTP method
+        - URL
+        - HTTP version
 
  ~~~
  {
@@ -221,7 +247,7 @@ ex. 사용자 등록
 
 12. stream
 
--  stream
+- stream
     - Arrays.stream : 배열을 스트림으로 변환
     - map : 스트림 내 요소를 특정 값으로 변환
     - collect : list or set 으로 원하는 자료형으로 변환 ex. Collect(Collectors.toSet/toList)
@@ -229,7 +255,8 @@ ex. 사용자 등록
     - flterFirst : 조건에 맞는 첫번째 요소 가져옴
     - Collectors.toMap
 
-13. - 쿠키
+13.
+    - 쿠키
     - 개념
         - 방문자 식별을 위해 사이트가 사용하고 있는 서버를 이용해 사용자 컴퓨터에 설치되는 정보 파일
         - 브라우저에 의해 저장됨
@@ -240,28 +267,27 @@ ex. 사용자 등록
         - Key-Value 쌍으로 클라이언트에 저장됨
         - 서버에서 생성하며 Response Header에 Set-Cookie를 넣어 클라이언트에 전송
 
-    - Set-Cookie: HTTP Response Header는 서버로부터 사용자 에이전트로 전송됨
-      ex. Set-Cookie: <cookie-name>=<cookie-value>
+    - Set-Cookie: HTTP Response Header는 서버로부터 사용자 에이전트로 전송됨 ex. Set-Cookie: <cookie-name>=<cookie-value>
       ex. Set-Cookie: yummy_cookie=choco
 
-    - 전송과정 : 브라우저는 쿠키헤더를 사용해 서버로 이전에 저장했던 모든 쿠키들을 회신
-      ex.
-      GET /sample_page.html HTTP/1.1
-      Host: www.example.org
+    - 전송과정 : 브라우저는 쿠키헤더를 사용해 서버로 이전에 저장했던 모든 쿠키들을 회신 ex. GET /sample_page.html HTTP/1.1 Host: www.example.org
       Cookie: yummy_cookie=choco; tasty_cookie=strawberry
 
     - 쿠키의 라이프타임
         - 브라우저는 현재 세션이 끝나는 시점을 정의
         - 세션 쿠키 : 세션이 끝날 때 삭제됨
-        - 영속적인 쿠키 : Expired 속성에 명시된날짜에 삭제 / Max-Age속성에 명시된기간에 삭제
-          ex. Set-Cookie: id=a3fWa; Expires=Wed, 21 Oct 2015 07:28:00 GMT;
+        - 영속적인 쿠키 : Expired 속성에 명시된날짜에 삭제 / Max-Age속성에 명시된기간에 삭제 ex. Set-Cookie: id=a3fWa; Expires=Wed, 21 Oct 2015 07:
+          28:00 GMT;
 
     - Secure : HTTPS 프로토콜 상에서 암호화된 요청일 경우에만 전송됨
+
     * 단, 본질적으로는 안전하지 않으므로 민감한 정보는 쿠키에 저장하면 안됨
+
     - HttpOnly : 자바스크립트의 Document.cookie 에 접근할 수 없음
-      - ex. Set-Cookie: id=a3fWa; Expires=Wed, 21 Oct 2015 07:28:00 GMT;           Secure; HttpOnly
+        - ex. Set-Cookie: id=a3fWa; Expires=Wed, 21 Oct 2015 07:28:00 GMT; Secure; HttpOnly
 
     - 쿠키의 스코프
+
     1) Domain : 쿠키가 전송되게 될 호스트 명시 (명시되지 않으면 문서 위치 호스트 일부가 기본값)
     2) Path : Cookie 헤더를 전송하기 위해 요청되는 URL 내에 반드시 존재해야하는 URL 경로
         - ex. /docs => /docs, /docs/Web 이 모두 포함됨
@@ -281,12 +307,11 @@ ex. 사용자 등록
 
     - JSESSIONID 동작 방식
         - 브라우저 최초 접근시Response 헤더에 JSESSIONID 값이 발급됨
-        - 브라우저 재요청시 Response를 통해 받은 JSESSIONID 를
-          Request 헤더 쿠키에 값을 넣어 서버에 요청됨
+        - 브라우저 재요청시 Response를 통해 받은 JSESSIONID 를 Request 헤더 쿠키에 값을 넣어 서버에 요청됨
             * 쿠키를 통해 JSESSIONID값을 전달받게 되면 새로운 JSESSIONID 값을 Response 헤더에 발급하지 않음
         - 클라이언트로부터 전달받은 JSESSIONID값을 기준으로 서버에선 세션 메모리 영역에 상태 유지 값들을 저장함
         - 유지 범위 : 서브도메인이 다르면 쿠키가 유지되지 않으므로 동일한 도메인
-        
+
 </details>
 
 <br/>
@@ -322,11 +347,11 @@ ex. 사용자 등록
   <br/>
 
 - 쓰레드를 만들고 없애는 비용은 엄청 크다.
-   <br/>
+  <br/>
 
     - 쓰레드를 계속 생성하고 삭제하는게 아님
     - 쓰레드 풀에 미리 쓰레드를 만들어 놓고 하나씩 빼내서 쓰는게 좋다.<br/>
-      
+
 <br/>
 
 - 풀 리퀘스트를 웬만하면 해라
@@ -346,30 +371,28 @@ ex. 사용자 등록
 <details>
 
 - 해야 할 일은 주석 "/TODO" 라고 해서 인텔리J의 도움을 받는다. <br/>
-( 주로, 메소드 몸통 안에 많이 사용한다. )
+  ( 주로, 메소드 몸통 안에 많이 사용한다. )
 
 <br/>
 
 - logger.info/debug/error 등 로거 레벨에 대해 공부한다.
 
-  - trace
-    : 프로그램 실행되면서 발생하는 모든 것을 추적함
-    시스템 성능이 느려질 수 있어 trace는 잘 사용안함
+    - trace
+      : 프로그램 실행되면서 발생하는 모든 것을 추적함 시스템 성능이 느려질 수 있어 trace는 잘 사용안함
 
-  - debug
-    : 프로그램이 실행되는 과정에서 값을 찍어보고 싶을 때 사용
+    - debug
+      : 프로그램이 실행되는 과정에서 값을 찍어보고 싶을 때 사용
 
-  - info
-    : 프로그램에 실행시 정보들을 출력하는 default 값이다.
+    - info
+      : 프로그램에 실행시 정보들을 출력하는 default 값이다.
 
-  - warn
-    : 경고성 콘솔들이 출력됨
+    - warn
+      : 경고성 콘솔들이 출력됨
 
-  - error
-    : 에러 발생 시, 콘솔에 로그를 찍는 로그 레벨
-      * try catch 문에서 e.printstacktrace 는 콘솔에 로그를 찍고
-        IO 발생시키기 때문에 성능에 악영향을 미치기 때문에 로거를 이용함
-      * 보통 try catch 문에 넣어서 사용하므로 무조건 실행되는 SOUT 보단 좋은 성능이다.
+    - error
+      : 에러 발생 시, 콘솔에 로그를 찍는 로그 레벨
+        * try catch 문에서 e.printstacktrace 는 콘솔에 로그를 찍고 IO 발생시키기 때문에 성능에 악영향을 미치기 때문에 로거를 이용함
+        * 보통 try catch 문에 넣어서 사용하므로 무조건 실행되는 SOUT 보단 좋은 성능이다.
 
 <br/>
 
@@ -382,29 +405,27 @@ ex. 사용자 등록
 - NIO는 무엇이고, NIO에서 파일 읽을 때 Paths.get() 을 이용하는게 낫지 않은가?
 
 
-- NIO 가 무엇인가
-  New Input Output 약자이다.
-  채널이 양방향 버퍼를 통해 외부 데이터와 통신한다.
+- NIO 가 무엇인가 New Input Output 약자이다. 채널이 양방향 버퍼를 통해 외부 데이터와 통신한다.
 
   -IO와 차이점
     - IO와 달리 읽기/쓰기를 하나의 통로로 해결한다.
     - IO는 데이터가 흘러가는 통로가 Stream, NIO는 통로가 channel
 
     - stream vs channel
-      - stream
-        > Input/Ouput Stream 을 구분해서 사용함 ( 단방향 )
-        > 데이터 단위가 바이트 단위이다.
-        > 읽기 쓰기 작업시 blocking 된다.
+        - stream
+          > Input/Ouput Stream 을 구분해서 사용함 ( 단방향 )
+          > 데이터 단위가 바이트 단위이다.
+          > 읽기 쓰기 작업시 blocking 된다.
 
-      - channel
-        > 양방향이라 소켓,파일채널 등의 객체 하나로 입/출력이 가능
-        > ByteBuffer 객체를 통해 데이터를 읽고씀
-        > 읽기 쓰기 작업시 non-blocking 된다.
+        - channel
+          > 양방향이라 소켓,파일채널 등의 객체 하나로 입/출력이 가능
+          > ByteBuffer 객체를 통해 데이터를 읽고씀
+          > 읽기 쓰기 작업시 non-blocking 된다.
 
 
 - blocking 방식이란?
-  - 블로킹 되면 쓰레드는 프로세스를 실행하고 있지 않은 상태로 유지됩니다.
-  - 네트워킹처럼 오래걸리는 작업은 블로킹으로 작업 수행하면 병목의 원인이 된다.
+    - 블로킹 되면 쓰레드는 프로세스를 실행하고 있지 않은 상태로 유지됩니다.
+    - 네트워킹처럼 오래걸리는 작업은 블로킹으로 작업 수행하면 병목의 원인이 된다.
 
  ```
  [ 예시 ]
@@ -443,24 +464,21 @@ connect socket이 accept 되기 전까지는 그 아래 기능은 동작하지 �
 <br/>
 
 - Non-blocking 방식?
-  - API호출 시 작업 완료 여부와 상관없이 즉각적으로 현재 상태에 대한 응답이 옴
-  - API호출 후 쓰레드 제어권이 있기 때문에 다른 작업 진행할 수 있음
-  
-  - 정리
-  aceept(), read() 등의 메서드를 호출해도 블락되지 않습니다. <br/>
-  이벤트가 들어오면 콜백 함수를 실행시키는 방식으로 비동기 처리를 하게 됩니다.<br/>
-  이러한 특징은 다수의 쓰레드로 IO를 관리하는 방식에 비해 쓰레드 스위칭 비용을 줄이기 때문에 이점을 줍니다. <br/>
-  그렇다면 당장 이벤트가 발생했는지 확인하는 리스너가 필요합니다. <br/>
-  이를 위해 Selector 라는 이벤트 리스너를 제공합니다. <br/>
-    - Selector : 멀티 채널 작업을 싱글 스레드에서 처리할 수 있도록 멀티플렉서도 제공
-  
+    - API호출 시 작업 완료 여부와 상관없이 즉각적으로 현재 상태에 대한 응답이 옴
+    - API호출 후 쓰레드 제어권이 있기 때문에 다른 작업 진행할 수 있음
+
+    - 정리 aceept(), read() 등의 메서드를 호출해도 블락되지 않습니다. <br/>
+      이벤트가 들어오면 콜백 함수를 실행시키는 방식으로 비동기 처리를 하게 됩니다.<br/>
+      이러한 특징은 다수의 쓰레드로 IO를 관리하는 방식에 비해 쓰레드 스위칭 비용을 줄이기 때문에 이점을 줍니다. <br/>
+      그렇다면 당장 이벤트가 발생했는지 확인하는 리스너가 필요합니다. <br/>
+      이를 위해 Selector 라는 이벤트 리스너를 제공합니다. <br/>
+        - Selector : 멀티 채널 작업을 싱글 스레드에서 처리할 수 있도록 멀티플렉서도 제공
+
 
 - 파일 끝 자동 개행 기능 추가
-  - https://velog.io/@d-h-k/intellij-%ED%8C%8C%EC%9D%BC%EB%81%9D%EC%97%90-%EA%B0%9C%ED%96%89%EC%9D%84-%EC%9E%90%EB%8F%99%EC%9C%BC%EB%A1%9C-%EC%B6%94%EA%B0%80%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95
-  - 설정 > editor > general > Ensure every saved file ends 체크
+    - https://velog.io/@d-h-k/intellij-%ED%8C%8C%EC%9D%BC%EB%81%9D%EC%97%90-%EA%B0%9C%ED%96%89%EC%9D%84-%EC%9E%90%EB%8F%99%EC%9C%BC%EB%A1%9C-%EC%B6%94%EA%B0%80%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95
+    - 설정 > editor > general > Ensure every saved file ends 체크
 
 </details>
 
-
-
-
+</details>
