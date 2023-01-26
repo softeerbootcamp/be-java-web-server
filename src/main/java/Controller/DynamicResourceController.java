@@ -1,6 +1,6 @@
 package Controller;
 
-import db.Database;
+import db.UserDatabase;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
@@ -40,7 +40,7 @@ public class DynamicResourceController implements Controller {
         Session session = request.getSession();
         String userId = session.getAttribute(SessionConst.USER_ID);
 
-        User loginUser = Database.findUserById(userId);
+        User loginUser = UserDatabase.findUserById(userId);
 
         try {
             String body = HomeLoginView.render(loginUser.getName(), url);

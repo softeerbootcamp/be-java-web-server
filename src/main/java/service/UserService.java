@@ -1,6 +1,6 @@
 package service;
 
-import db.Database;
+import db.UserDatabase;
 import exception.UserValidationException;
 import model.User;
 import org.slf4j.Logger;
@@ -19,14 +19,14 @@ public class UserService {
         User user = createUser(userInfo);
         logger.debug("user : {}", user);
 
-        Database.addUser(user);
+        UserDatabase.addUser(user);
     }
 
     public User login(Map<String, String> userInfo) {
         String userId = userInfo.get("userId");
         String password = userInfo.get("password");
 
-        User findUser = Database.findUserById(userId);
+        User findUser = UserDatabase.findUserById(userId);
 
         if (findUser == null) {
             throw new UserValidationException("아이디가 존재하지 않습니다.");
@@ -40,11 +40,11 @@ public class UserService {
     }
 
     public Collection<User> findUserList() {
-        return Database.findAll();
+        return UserDatabase.findAll();
     }
 
     private void validateDuplication(String userId) {
-        if (Database.findUserById(userId) != null) {
+        if (UserDatabase.findUserById(userId) != null) {
             throw new UserValidationException("중복되는 아이디입니다.");
         }
     }
