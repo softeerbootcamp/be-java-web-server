@@ -10,4 +10,8 @@ public class BoardService {
     public static void save(Board board) {
         boardRepository.insert(board);
     }
+
+    public static void printList() {
+
+    }
 }
