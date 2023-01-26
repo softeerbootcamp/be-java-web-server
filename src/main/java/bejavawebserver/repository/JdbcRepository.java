@@ -14,8 +14,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class JdbcRepository {
@@ -77,6 +76,38 @@ public class JdbcRepository {
 
         } catch (Exception e) {
             logger.debug("error : {}", e.getMessage());
+            return null;
+        } finally {
+            close(conn, pstmt, rs);
+        }
+    }
+
+    public List<User> findAll() {
+        String sql = "select * from User";
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try{
+            conn = getConnection();
+            pstmt = conn.prepareStatement(sql);
+
+            rs = pstmt.executeQuery();
+
+            List<User> userList = new ArrayList<>();
+            while(rs.next()){
+                User user = new User(
+                        rs.getString("user_id"),
+                        rs.getString("password"),
+                        rs.getString("name"),
+                        rs.getString("email")
+                );
+                userList.add(user);
+            }
+            return userList;
+
+        } catch (Exception e) {
+            logger.debug("error : {}", e.getMessage());
 
             return null;
         } finally {
@@ -104,6 +135,7 @@ public class JdbcRepository {
             e.printStackTrace();
         }
     }
+
 
 
 }
