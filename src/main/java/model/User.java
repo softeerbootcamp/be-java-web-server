@@ -1,6 +1,7 @@
 package model;
 
 import java.util.List;
+import java.util.Map;
 
 public class User {
     public static User GUEST = new User("", "", "guest", "");
@@ -16,11 +17,11 @@ public class User {
         this.email = email;
     }
 
-    public User(List<String> row){
-        this.userId = row.get(0);
-        this.password = row.get(1);
-        this.name = row.get(2);
-        this.email = row.get(3);
+    public User(Map<String, String> row){
+        this.userId = row.get("id");
+        this.password = row.get("password");
+        this.name = row.get("name");
+        this.email = row.get("email");
     }
 
     public String getUserId() {

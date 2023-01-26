@@ -16,7 +16,6 @@ public class StaticFileService {
     private static final String TEMPLATE_PATH = StaticFileService.class.getClassLoader().getResource("./templates").getPath();
     private static final List<String> TEMPLATE_FILES = List.of("html");
     private static final Logger logger = LoggerFactory.getLogger(StaticFileService.class);
-
     public static String getFileTypeFromUrl(String url) {
         int index = url.lastIndexOf(".");
         return url.substring(index + 1);

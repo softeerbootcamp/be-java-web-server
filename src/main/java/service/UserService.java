@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
-
+    private static UserRepo userRepo = UserRepo.get();
     public static User addUser(Map<String, String> bodyParams) {
         String userId = bodyParams.get("userId");
         String password = bodyParams.get("password");
@@ -22,13 +22,13 @@ public class UserService {
             throw new CustomException("email, password, name을 올바르게 입력해 주세요.");
         }
 
-        if (UserRepo.getInstance().findUserById(userId).isPresent()) {
+        if (userRepo.findUserById(userId).isPresent()) {
             throw new CustomException("userID duplicated");
         }
 
         logger.debug("회원 가입 완료 {}, {}, {}", userId, password, name);
         User user = new User(userId, password, name, email);
-        UserRepo.getInstance().addUser(user);
+        userRepo.addUser(user);
         return user;
     }
 
@@ -36,7 +36,7 @@ public class UserService {
 
         String userId = bodyParams.get("userId");
         String password = bodyParams.get("password");
-        User customer = UserRepo.getInstance().findUserById(userId).orElse(null);
+        User customer = userRepo.findUserById(userId).orElse(null);
         if (customer != null && customer.getPassword().equals(password)) {
             return customer;
         }

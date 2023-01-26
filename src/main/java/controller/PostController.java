@@ -29,8 +29,11 @@ public class PostController implements RequestController {
     }
 
     public static PostController get() {
-        if (postController == null)
-            postController = new PostController();
+        if (postController == null) {
+            synchronized (PostController.class) {
+                postController = new PostController();
+            }
+        }
         return postController;
     }
 
@@ -57,8 +60,8 @@ public class PostController implements RequestController {
             return CustomHttpFactory.REDIRECT("/user/login");
         }
 
-        User user = SessionService.getUserBySessionId(req.getSSID()).orElse(null);
-        if (user == null)
+
+        if (SessionService.getUserBySessionId(req.getSSID()).isEmpty())
             return CustomHttpFactory.REDIRECT("/user/login");
         try {
             PostService.createPost(req.parseBodyFromUrlEncoded());

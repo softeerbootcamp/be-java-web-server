@@ -4,7 +4,6 @@ import model.Session;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import repository.MemorySessionRepo;
 import repository.SessionRepo;
 import repository.UserRepo;
 
@@ -15,7 +14,9 @@ import java.util.UUID;
 public class SessionService {
     private static final Logger logger = LoggerFactory.getLogger(SessionService.class);
 
-    private static final SessionRepo sessionRepo = new MemorySessionRepo();
+    private static final SessionRepo sessionRepo = SessionRepo.get();
+    private static final UserRepo userRepo = UserRepo.get();
+
 
     public static Session addUserToSession(User user) {
         Session session = new Session(UUID.randomUUID().toString(), user.getUserId());
@@ -26,7 +27,7 @@ public class SessionService {
     public static Optional<User> getUserBySessionId(String ssid) {
         if (isValidSSID(ssid)) {
             Session session = sessionRepo.findBySSID(ssid).get();
-            return UserRepo.getInstance().findUserById(session.getUserId());
+            return userRepo.findUserById(session.getUserId());
         }
         return Optional.empty();
     }
