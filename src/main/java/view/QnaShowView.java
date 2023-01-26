@@ -4,7 +4,7 @@ import request.HttpRequest;
 import db.DBConnector;
 import model.Qna;
 import model.User;
-import repository.QnaRepository;
+import db.QnaRepository;
 import util.HtmlBuildUtil;
 import util.LoginUtil;
 
@@ -18,14 +18,13 @@ public class QnaShowView implements View {
             synchronized (QnaShowView.class) {
                 qnaShowView = new QnaShowView();
             }
-            ;
         }
         return qnaShowView;
     }
 
     @Override
     public byte[] render(HttpRequest httpRequest) {
-        int id = Integer.parseInt(httpRequest.getParams().get("id"));
+        int id = Integer.parseInt(httpRequest.getParams().get("path_variable"));
         Qna qna = new QnaRepository().findOneById(id, DBConnector.connect());
         String html = HtmlBuildUtil.buildQnaShow(qna);
         try {
