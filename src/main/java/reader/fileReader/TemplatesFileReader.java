@@ -2,6 +2,7 @@ package reader.fileReader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import request.RequestDataType;
 import request.Url;
 
 import java.io.File;
@@ -15,10 +16,30 @@ public class TemplatesFileReader implements FileReader {
 
     @Override
     public byte[] readFile(Url url) throws IOException {
-        url.attachHtmlExtension();
-        byte[] bytes = Files.readAllBytes(new File(TEMPLATE_ROUTE + url.getUrl()).toPath());
-
+        String urlStr = splitPathVariable(url);
+        urlStr = attachHtmlExtension(urlStr);
+        byte[] bytes = Files.readAllBytes(new File(TEMPLATE_ROUTE + urlStr).toPath());
         return bytes;
 
     }
+
+    private String splitPathVariable(Url url) {
+        String urlStr = url.getUrl();
+        if (url.getRequestDataType().equals(RequestDataType.PATH_VARIABLE)) {
+            String[] parts = url.getUrl().split("/");
+            for (int i = 1; i < parts.length-1; i++) {
+                urlStr = "/" + parts[i];
+            }
+        }
+        System.out.println("urlStr = " + urlStr);
+        return urlStr;
+    }
+
+    private String attachHtmlExtension(String url) {
+        if (!url.contains(".html")) {
+            url += ".html";
+        }
+        return url;
+    }
+
 }

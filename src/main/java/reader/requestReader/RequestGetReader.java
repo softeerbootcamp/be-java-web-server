@@ -3,6 +3,8 @@ package reader.requestReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.HttpRequest;
+import request.RequestDataType;
+import request.Url;
 
 import java.util.HashMap;
 
@@ -10,8 +12,9 @@ public class RequestGetReader implements RequestReader {
     private final String QUERY_STRING_REGEX = "\\?";
     private final String QUERY_STRING_DATAS_REGEX = "&";
     private final String DATA_REGEX = "=";
-    private static final Logger logger = LoggerFactory.getLogger(RequestGetReader.class);
+    public final static String PATH_VARIABLE_KEY = "pathVariableKey";
 
+    private static final Logger logger = LoggerFactory.getLogger(RequestGetReader.class);
 
 
     @Override
@@ -19,10 +22,20 @@ public class RequestGetReader implements RequestReader {
         switch (httpRequest.getUrl().getRequestDataType()) {
             case QUERY_STRING:
                 return readQueryString(httpRequest);
+            case PATH_VARIABLE:
+                return readPathVariable(httpRequest.getUrl());
             default:
                 return null;
         }
 
+    }
+
+    //TODO 테스트 필요
+    private HashMap<String, String> readPathVariable(Url url) {
+        HashMap<String, String> hashMap = new HashMap<>();
+        String[] parts = url.getUrl().split("/");
+        hashMap.put(PATH_VARIABLE_KEY, parts[parts.length - 1]);
+        return hashMap;
     }
 
 
@@ -37,7 +50,6 @@ public class RequestGetReader implements RequestReader {
         }
         return hashMap;
     }
-
 
 
 }

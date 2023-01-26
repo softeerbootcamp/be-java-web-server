@@ -2,6 +2,7 @@ package controller;
 
 import controller.annotation.ControllerInfo;
 import controller.annotation.ControllerMethodInfo;
+import db.BoardDataBase;
 import db.SessionDatabase;
 import model.Session;
 import reader.fileReader.FileReader;
@@ -26,6 +27,7 @@ public class HomeController implements Controller {
 
     private SessionService sessionService = new SessionService();
     private SessionDatabase sessionDatabase = new SessionDatabase();
+    private BoardDataBase boardDataBase = BoardDataBase.getInstance();
 
     private HomeRender homeRender = HomeRender.getInstance();
 
@@ -50,6 +52,7 @@ public class HomeController implements Controller {
         }else{
             htmlData = homeRender.addSignInAndUpTag(htmlData);
         }
+        htmlData = homeRender.addBoardList(htmlData, boardDataBase.findAll());
         return htmlData;
     }
 }

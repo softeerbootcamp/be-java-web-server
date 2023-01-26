@@ -12,10 +12,9 @@ public class Url {
         this.requestDataType = requestDataType;
     }
 
-    public void attachHtmlExtension() {
-        if(!url.contains(".html"))
-        this.url += ".html";
-    }
+
+
+
 
 
     public String getUrl() {
