@@ -22,7 +22,7 @@ public class DB_Board {
     public static void addArticle(String article, String sid_uid) throws SQLException {
         String userId = UserIdSession.getUserId(sid_uid);
         Calendar currCal = Calendar.getInstance();
-        currCal.getWeekYear();
+
         try
         {
             Class.forName("com.mysql.jdbc.Driver");
@@ -30,7 +30,11 @@ public class DB_Board {
                     "user=" + ADMIN_ID + "&" +
                     "password=" + ADMIN_PASSWORD);
 
-            String sql = "INSERT INTO board(writerId, content, date) VALUES (?, ?, ?)";
+            // insert
+            String sql = "INSERT INTO board(writerId, content, date) VALUES ("
+                       +    "(SELECT id FROM Users where uid = ?)"
+                       + ", ?, ?)";
+            // TODO foreign key 제약조건에 걸리지 않고 넣는 방법 고안하기
 
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, userId);
