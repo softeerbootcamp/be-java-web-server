@@ -20,8 +20,7 @@ public class Board {
     private LocalDateTime createdAt;
 
 
-    public void addMetadata(Integer boardId, String writer, String writerName, LocalDateTime createdAt){
-        this.boardId = boardId;
+    public void addMetadata(String writer, String writerName, LocalDateTime createdAt){
         this.writerId = writer;
         this.writerName = writerName;
         this.createdAt = createdAt;

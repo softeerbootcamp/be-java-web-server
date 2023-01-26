@@ -1,6 +1,8 @@
 package webserver.security;
 
+import model.User;
 import model.UserPrincipal;
+import webserver.utils.HttpSessionUtils;
 
 public class SecurityContext {
 
@@ -16,8 +18,8 @@ public class SecurityContext {
     }
 
     public static void addUser(String sessionId){
-        UserPrincipal user = SecurityUtils.getUserPrincipalFromCookie(sessionId);
-        if(userStore.get() == null)
-            userStore.set(user);
+        if(userStore.get() == null){
+            userStore.set(HttpSessionUtils.getInstance().sessionIdToUserPrincipal(sessionId));
+        }
     }
 }
