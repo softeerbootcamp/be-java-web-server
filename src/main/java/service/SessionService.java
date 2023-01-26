@@ -26,7 +26,7 @@ public class SessionService {
     public static Optional<User> getUserBySessionId(String ssid) {
         if (isValidSSID(ssid)) {
             Session session = sessionRepo.findBySSID(ssid).get();
-            return UserRepo.getInstance().findUserById(session.getUserId());
+            return UserRepo.get().findUserById(session.getUserId());
         }
         return Optional.empty();
     }

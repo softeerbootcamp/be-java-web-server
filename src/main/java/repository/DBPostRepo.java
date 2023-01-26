@@ -6,14 +6,6 @@ import java.util.*;
 
 public class DBPostRepo implements PostRepo {
 
-    private static DBPostRepo instance;
-
-    public static DBPostRepo get(){
-        if(instance == null)
-            instance = new DBPostRepo();
-        return instance;
-    }
-
     public Post addPost(Post post){
         String[] arguments = {post.getAuthor(), post.getTitle(), post.getContents()};
         DBConnectionManager.sendSql("insert into Post(author, title, contents) values (?, ?, ?)", arguments);

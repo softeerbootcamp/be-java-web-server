@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import repository.DBConnectionManager;
-import repository.DBPostRepo;
+import repository.PostRepo;
 
 import java.util.List;
 import java.util.Map;
@@ -41,9 +41,9 @@ public class DBConnectionTest {
     @DisplayName("Post Repository를 이용한 post 삽입 삭제 테스트")
     void insertion_test_2() {
         //given
-        Post post = DBPostRepo.get().addPost(new Post("123", "456", "789"));
-        Post new_post = DBPostRepo.get().findPostById(post.getPostId()).get();
-        DBPostRepo.get().delete(post);
+        Post post = PostRepo.get().addPost(new Post("123", "456", "789"));
+        Post new_post = PostRepo.get().findPostById(post.getPostId()).get();
+        PostRepo.get().delete(post);
         assertEquals(post.toString(), new_post.toString());
     }
 }

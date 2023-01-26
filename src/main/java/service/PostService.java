@@ -5,7 +5,7 @@ import exceptions.CustomException;
 import model.Post;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import repository.DBPostRepo;
+import repository.PostRepo;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,7 +26,7 @@ public class PostService {
         if (!PostValidation.isValid(writer, title, content)) {
             throw new CustomException("올바르지 않은 입력입니다.");
         }
-        Post post = DBPostRepo.get().addPost(new Post(writer, title, content));
+        Post post = PostRepo.get().addPost(new Post(writer, title, content));
 
         logger.debug("postID : {}", post.getPostId());
         return post.getPostId();
@@ -34,7 +34,7 @@ public class PostService {
 
 
     public static List<Post> findAll() {
-        List<Post> result = new ArrayList<>(DBPostRepo.get().findAll());
+        List<Post> result = new ArrayList<>(PostRepo.get().findAll());
         Collections.reverse(result);
         return result;
     }

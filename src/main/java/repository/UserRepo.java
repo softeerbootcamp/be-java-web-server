@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface UserRepo {
     UserRepo instance = new DBUserRepo();
 
-    static UserRepo getInstance() {
+    static UserRepo get() {
         return instance;
     }
 

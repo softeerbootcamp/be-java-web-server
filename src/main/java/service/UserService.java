@@ -22,13 +22,13 @@ public class UserService {
             throw new CustomException("email, password, name을 올바르게 입력해 주세요.");
         }
 
-        if (UserRepo.getInstance().findUserById(userId).isPresent()) {
+        if (UserRepo.get().findUserById(userId).isPresent()) {
             throw new CustomException("userID duplicated");
         }
 
         logger.debug("회원 가입 완료 {}, {}, {}", userId, password, name);
         User user = new User(userId, password, name, email);
-        UserRepo.getInstance().addUser(user);
+        UserRepo.get().addUser(user);
         return user;
     }
 
@@ -36,7 +36,7 @@ public class UserService {
 
         String userId = bodyParams.get("userId");
         String password = bodyParams.get("password");
-        User customer = UserRepo.getInstance().findUserById(userId).orElse(null);
+        User customer = UserRepo.get().findUserById(userId).orElse(null);
         if (customer != null && customer.getPassword().equals(password)) {
             return customer;
         }

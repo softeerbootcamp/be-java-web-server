@@ -20,12 +20,12 @@ class UserAccountControllerTest {
     @BeforeAll
     static void getUserAccountController() {
         userAccountController = UserAccountController.get();
-        UserRepo.getInstance().addUser(new User("asdf", "asdfasdf123", "asdf", "asdfasdf@asdf.com"));
+        UserRepo.get().addUser(new User("asdf", "asdfasdf123", "asdf", "asdfasdf@asdf.com"));
     }
 
     @AfterAll
     static void deleteUserAccount() {
-        UserRepo.getInstance().delete("asdf");
+        UserRepo.get().delete("asdf");
     }
 
     @Test

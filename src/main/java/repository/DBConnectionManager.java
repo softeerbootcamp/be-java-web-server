@@ -41,8 +41,8 @@ public class DBConnectionManager {
     }
 
     public static List<Map<String, String>> sendSql(String sql, String[] arguments) {
-        try(Connection conn = DriverManager.getConnection(url, id, pw);
-            PreparedStatement statement = conn.prepareStatement(sql);
+        try (Connection conn = DriverManager.getConnection(url, id, pw);
+             PreparedStatement statement = conn.prepareStatement(sql);
         ) {
             for (int i = 0; arguments != null && i < arguments.length; i++) {
                 statement.setString(i + 1, arguments[i]);

@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface PostRepo {
     PostRepo instance = new DBPostRepo();
 
-    static PostRepo getInstance() {
+    static PostRepo get() {
         return instance;
     }
 

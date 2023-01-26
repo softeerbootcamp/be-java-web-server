@@ -120,7 +120,7 @@ public class UserAccountController implements RequestController {
         File file = StaticFileService.getFile("/user/list.html");
         try {
             User user = SessionService.getUserBySessionId(req.getSSID()).orElse(User.GUEST);
-            List<User> userList = new ArrayList<>(UserRepo.getInstance().findAll());
+            List<User> userList = new ArrayList<>(UserRepo.get().findAll());
 
             Map<String, String> defaultTemplate = HtmlMakerUtility.getDefaultTemplate(user.getName());
             defaultTemplate.put("userTable", HtmlMakerUtility.userListRows(userList));

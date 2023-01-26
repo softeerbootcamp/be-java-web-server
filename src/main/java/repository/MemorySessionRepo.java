@@ -8,18 +8,7 @@ import java.util.Optional;
 
 public class MemorySessionRepo implements SessionRepo {
 
-    private static MemorySessionRepo instance;
     private final Map<String, Session> sessionMap;
-
-    public static MemorySessionRepo getInstance() {
-        if (instance == null) {
-            synchronized (MemorySessionRepo.class) {
-                instance = new MemorySessionRepo();
-            }
-        }
-        return instance;
-    }
-
     public MemorySessionRepo() {
         this.sessionMap = new HashMap<>();
     }

@@ -98,7 +98,7 @@ class RequestRouterTest {
         assertEquals("/index.html", response.getHeaders().get("Location"));
         assertTrue(response.getHeaders().get("Set-Cookie").contains("SID"));
 
-        UserRepo.getInstance().delete("hero");
+        UserRepo.get().delete("hero");
 
     }
 
