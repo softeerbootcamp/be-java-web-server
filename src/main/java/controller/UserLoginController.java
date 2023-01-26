@@ -1,13 +1,11 @@
 package controller;
 
-import exception.HttpMethodException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.session.SessionService;
 import service.user.UserService;
-import utils.enums.HttpMethod;
 
 import javax.naming.AuthenticationException;
 import java.util.Map;
@@ -24,16 +22,6 @@ public class UserLoginController extends AbstractController {
     public UserLoginController(UserService userService, SessionService sessionService) {
         this.userService = userService;
         this.sessionService = sessionService;
-    }
-
-    @Override
-    public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
-        HttpMethod requestHttpMethod = httpRequest.getHttpMethod();
-        if (HttpMethod.POST.equals(requestHttpMethod)) {
-            doPost(httpRequest, httpResponse);
-            return;
-        }
-        throw new HttpMethodException(requestHttpMethod);
     }
 
     @Override

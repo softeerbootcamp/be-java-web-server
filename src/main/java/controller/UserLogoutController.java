@@ -1,11 +1,9 @@
 package controller;
 
-import exception.HttpMethodException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import service.session.SessionService;
 import utils.PathManager;
-import utils.enums.HttpMethod;
 
 public class UserLogoutController extends AbstractController {
     public static final String PATH = "/user/logout";
@@ -13,16 +11,6 @@ public class UserLogoutController extends AbstractController {
 
     public UserLogoutController(SessionService sessionService) {
         this.sessionService = sessionService;
-    }
-
-    @Override
-    public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
-        HttpMethod requestHttpMethod = httpRequest.getHttpMethod();
-        if (HttpMethod.GET.equals(requestHttpMethod)) {
-            doGet(httpRequest, httpResponse);
-            return;
-        }
-        throw new HttpMethodException(requestHttpMethod);
     }
 
     @Override

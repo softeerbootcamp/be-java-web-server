@@ -1,6 +1,5 @@
 package controller;
 
-import exception.HttpMethodException;
 import exception.NotLogInException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -10,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import service.session.SessionService;
 import service.user.UserService;
 import utils.FileUtils;
-import utils.enums.HttpMethod;
 
 import java.io.IOException;
 
@@ -25,16 +23,6 @@ public class UserListController extends AbstractController {
     public UserListController(UserService userService, SessionService sessionService) {
         this.userService = userService;
         this.sessionService = sessionService;
-    }
-
-    @Override
-    public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
-        HttpMethod requestHttpMethod = httpRequest.getHttpMethod();
-        if (HttpMethod.GET.equals(requestHttpMethod)) {
-            doGet(httpRequest, httpResponse);
-            return;
-        }
-        throw new HttpMethodException(requestHttpMethod);
     }
 
     @Override

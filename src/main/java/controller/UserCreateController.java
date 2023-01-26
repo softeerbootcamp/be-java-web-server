@@ -1,12 +1,10 @@
 package controller;
 
-import exception.HttpMethodException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.user.UserService;
-import utils.enums.HttpMethod;
 
 import java.util.Map;
 
@@ -20,16 +18,6 @@ public class UserCreateController extends AbstractController {
 
     public UserCreateController(UserService userService) {
         this.userService = userService;
-    }
-
-    @Override
-    public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
-        HttpMethod requestHttpMethod = httpRequest.getHttpMethod();
-        if (HttpMethod.POST.equals(requestHttpMethod)) {
-            doPost(httpRequest, httpResponse);
-            return;
-        }
-        throw new HttpMethodException(requestHttpMethod);
     }
 
     @Override

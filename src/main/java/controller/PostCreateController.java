@@ -1,6 +1,5 @@
 package controller;
 
-import exception.HttpMethodException;
 import exception.NotLogInException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -10,7 +9,6 @@ import service.post.PostService;
 import service.session.SessionService;
 import service.user.UserService;
 import utils.PathManager;
-import utils.enums.HttpMethod;
 
 import java.util.Map;
 
@@ -26,15 +24,6 @@ public class PostCreateController extends AbstractController {
         this.postService = postService;
     }
 
-    @Override
-    public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
-        HttpMethod requestHttpMethod = httpRequest.getHttpMethod();
-        if (HttpMethod.POST.equals(requestHttpMethod)) {
-            doPost(httpRequest, httpResponse);
-            return;
-        }
-        throw new HttpMethodException(requestHttpMethod);
-    }
 
     @Override
     public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {

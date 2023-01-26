@@ -1,6 +1,5 @@
 package controller;
 
-import exception.HttpMethodException;
 import exception.NotLogInException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -12,7 +11,6 @@ import service.session.SessionService;
 import service.user.UserService;
 import utils.FileUtils;
 import utils.enums.ContentType;
-import utils.enums.HttpMethod;
 import utils.enums.StatusCode;
 
 import java.util.Collection;
@@ -30,19 +28,8 @@ public class HtmlFileController extends AbstractController {
     }
 
     @Override
-    public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
-        HttpMethod requestHttpMethod = httpRequest.getHttpMethod();
-        if (HttpMethod.GET.equals(requestHttpMethod)) {
-            doGet(httpRequest, httpResponse);
-            return;
-        }
-        throw new HttpMethodException(requestHttpMethod);
-    }
-
-    @Override
     public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         String path = httpRequest.getUri().getPath();
-        String sessionId = httpRequest.getSession();
         if (!FileUtils.fileExists(path)) {
             httpResponse.setStatusCode(StatusCode.NOTFOUND);
             return;
