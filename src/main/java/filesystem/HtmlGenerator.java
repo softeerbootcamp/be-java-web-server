@@ -1,5 +1,6 @@
 package filesystem;
 
+import model.Post;
 import model.User;
 
 import java.util.List;
@@ -24,8 +25,7 @@ public class HtmlGenerator {
                 "<li><a href='#' role='button'>개인정보수정</a></li>";
     }
 
-    public static String getNotFoundHTML(String resourcePath) {
-        System.out.println(resourcePath);
+    public static String getNotFoundHTML() {
         return "<!DOCTYPE html>\n" +
                 "<html lang=\"en\">\n" +
                 "<head>\n" +
@@ -33,8 +33,16 @@ public class HtmlGenerator {
                 "    <title>Title</title>\n" +
                 "</head>\n" +
                 "<body>\n" +
-                resourcePath + " not found\n" +
+                "not found\n" +
                 "</body>\n" +
                 "</html>";
+    }
+
+    public static String getPostElementHTML(List<Post> posts) {
+        StringBuilder msg = new StringBuilder();
+        for (Post post : posts) {
+            msg.append("<li>" + "<div class='wrap'>" + "<div class='main'>" + "<strong class='subject'>" + "<a href='./post/" + post.getId() + "'>").append(post.getTitle()).append("</a> ").append("</strong>").append("<div class='auth-info'> ").append("<a href='./user/profile.html' class='author'>").append(post.getUser().getName()).append("</a>").append("</div>").append("</div> ").append("</div>").append("</li>");
+        }
+        return msg.toString();
     }
 }

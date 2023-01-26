@@ -1,5 +1,6 @@
 package controller;
 
+import db.Database;
 import filesystem.FileSystem;
 import filesystem.FindResource;
 import filesystem.HtmlGenerator;
@@ -18,7 +19,7 @@ public class MainController implements Controller {
 
     public static final List<String> optionalAuthUrls = List.of("/", INDEX_HTML);
     public static final List<String> mustNotAuthUrls = List.of("/user/login.html", "/user/form.html");
-    public static final List<String> mustAuthUrls = List.of("/user/list.html");
+    public static final List<String> mustAuthUrls = List.of("/user/list.html", "/qna/form.html");
 
     private final Logger logger = LoggerFactory.getLogger(MainController.class);
     private final AuthService authService = new AuthService();
@@ -42,13 +43,17 @@ public class MainController implements Controller {
         }
         if (mustAuthUrls.contains(request.getUrl())) {
             if (authService.isAuthenticated(request)) {
-                return FileSystem.getPersonalizedResource(request.getUrl(), HtmlGenerator.getUserListLi(userService.getAllUser()));
+                return FileSystem.getPersonalizedResource(request.getUrl(),
+                        HtmlGenerator.getUserListLi(userService.getAllUser())
+                );
             }
             return null;
         }
         if (optionalAuthUrls.contains(request.getUrl())) {
             if (authService.isAuthenticated(request)) {
-                return FileSystem.getPersonalizedResource(request.getUrl(), HtmlGenerator.getUserAnchor(authService.getSession(request).getUser()));
+                return FileSystem.getPersonalizedResource(request.getUrl(),
+                        HtmlGenerator.getUserAnchor(authService.getUser(request).get()),
+                        HtmlGenerator.getPostElementHTML(Database.getAllPosts()));
             }
         }
         return FileSystem.getStaticResource(request.getUrl());
