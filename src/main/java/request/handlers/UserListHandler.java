@@ -2,6 +2,8 @@ package request.handlers;
 
 import file.FileContentType;
 import model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import request.Request;
 import request.RequestHandler;
 import response.HttpResponseStatus;
@@ -11,9 +13,12 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Collection;
 
 public class UserListHandler implements RequestHandler {
+    private static final Logger logger = LoggerFactory.getLogger(UserListHandler.class);
+
     private static final UserListHandler instance;
 
     static {
@@ -66,8 +71,8 @@ public class UserListHandler implements RequestHandler {
             }
             fileString = fileString.replace("${}", stringBuilder.toString());
             return fileString.getBytes();
-        } catch (SQLException | NullPointerException e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            logger.error(Arrays.toString(e.getStackTrace()));
             return null;
         }
     }

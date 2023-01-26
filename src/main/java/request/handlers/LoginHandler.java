@@ -3,6 +3,8 @@ package request.handlers;
 import file.FileContentType;
 import model.Session;
 import model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import request.Request;
 import request.RequestHandler;
 import request.RequestParser;
@@ -13,10 +15,13 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
 
 public class LoginHandler implements RequestHandler {
+    private static final Logger logger = LoggerFactory.getLogger(LoginHandler.class);
+
     private static final LoginHandler instance;
 
     static {
@@ -57,8 +62,12 @@ public class LoginHandler implements RequestHandler {
             return Response.createFullResponse(HttpResponseStatus.FOUND.getMessage().getBytes(), request.getResourceFileContentType(), HttpResponseStatus.FOUND,
                     "Set-Cookie: sid=" + sid + ";Path=/\r\n" +
                             "Location: /index.html\r\n");
-        } catch (IllegalArgumentException | SQLException | NullPointerException e) {
+        } catch (IllegalArgumentException e) {
             // TODO: 로그인 실패 시 user/login_failed.html로 안날아가는 버그 수정
+            return Response.createSimpleResponse("<script>alert('login failed'); window.location.href = 'http://localhost:8080/user/login_failed.html';</script>".getBytes(),
+                    FileContentType.HTML.getContentType(), HttpResponseStatus.BAD_REQUEST);
+        } catch (SQLException e) {
+            logger.error("{}", Arrays.toString(e.getStackTrace()));
             return Response.createSimpleResponse("<script>alert('login failed'); window.location.href = 'http://localhost:8080/user/login_failed.html';</script>".getBytes(),
                     FileContentType.HTML.getContentType(), HttpResponseStatus.BAD_REQUEST);
         }
