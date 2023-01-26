@@ -16,6 +16,10 @@ public class ResponseStatusLine {
         this.protocol = HttpVersionTypeEnum.HTTP1_1.getValue();
         this.statusCodeWithMessage =
                 StatusCodeWithMessageEnum.CODE_404.getKey() + " " + StatusCodeWithMessageEnum.CODE_404.getValue();
+        if(controllerTypeEnum==REDIRECT){
+            this.statusCodeWithMessage =
+                    StatusCodeWithMessageEnum.CODE_302.getKey() + " " + StatusCodeWithMessageEnum.CODE_404.getValue();
+        }
         if (controllerTypeEnum == STATIC) {
             this.statusCodeWithMessage =
                     StatusCodeWithMessageEnum.CODE_200.getKey() + " " + StatusCodeWithMessageEnum.CODE_200.getValue();

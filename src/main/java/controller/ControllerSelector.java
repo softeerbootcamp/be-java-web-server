@@ -2,6 +2,7 @@ package controller;
 
 import enums.ControllerTypeEnum;
 import enums.MethodEnums;
+import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.Request;
@@ -10,10 +11,12 @@ import webserver.RequestResponseHandler;
 
 public class ControllerSelector {
     private static final Logger logger = LoggerFactory.getLogger(RequestResponseHandler.class);
+   // todo : 선언들 줄일 수 있는 방안 생각해보자..
     private static final TemplateController templateController = new TemplateController();
     private static final UserController userController = new UserController();
     private static final StaticController staticController = new StaticController();
     private static final LoginController loginController = new LoginController();
+    private static final ArticleController articleController = new ArticleController();
     private static final int _TOKEN_INDEX = 1;
 
     public static Controller setController(Request request) {
@@ -31,6 +34,9 @@ public class ControllerSelector {
             }
             if (url.contains("/create")) {
                 return userController;
+            }
+            if (url.contains("/qna")){
+                return articleController;
             }
         }
         return staticController;

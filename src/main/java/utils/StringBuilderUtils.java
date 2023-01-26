@@ -1,8 +1,11 @@
 package utils;
 
+import db.BoardDatabase;
+import model.Article;
 import model.User;
 
 import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
 import java.util.Collection;
 
 public class StringBuilderUtils {
@@ -41,6 +44,40 @@ public class StringBuilderUtils {
         stringBuilder = new StringBuilder();
         stringBuilder.append("role=\"button\" disabled>");
         stringBuilder.append(user.getName());
+        return stringBuilder.toString();
+    }
+    public static String viewAllBoardBuilder() throws SQLException {
+        stringBuilder = new StringBuilder();
+        Collection<Article> board = BoardDatabase.getAllArticles();
+        int articleNum = 0;
+        for(Article article:board){
+            stringBuilder.append("                <li>\n" +
+                    "                    <div class=\"wrap\">\n" +
+                    "                        <div class=\"main\">\n" +
+                    "                            <strong class=\"subject\">\n" +
+                    "                                ");
+            stringBuilder.append(article.getBody());
+            stringBuilder.append("\n" +
+                    "                            </strong>\n" +
+                    "                            <div class=\"auth-info\">\n" +
+                    "                                <i class=\"icon-add-comment\"></i>\n" +
+                    "                                <span class=\"time\">");
+            stringBuilder.append(article.getDate());
+            stringBuilder.append("</span>\n" +
+                    "                                <class=\"author\">");
+            stringBuilder.append(article.getUserId());
+            stringBuilder.append("\n" +
+                    "                            </div>\n" +
+                    "                            <div class=\"reply\" title=\"댓글\">\n" +
+                    "                                <i class=\"icon-reply\"></i>\n" +
+                    "                                <span class=\"point\">"+ (++articleNum)+"</span>\n" +
+                    "                            </div>\n" +
+                    "                        </div>\n" +
+                    "                    </div>\n" +
+                    "                </li>\n");
+
+        }
+
         return stringBuilder.toString();
     }
 }

@@ -1,22 +1,13 @@
-# java-was-2022
-Java Web Application Server 2022
+# java-was-2023
+Java Web Application Server 2023
 
-## 현재 작업중인 것 (week3 branch)
+## 현재 작업중인 것 (week4 branch)
 ### 기능구현
-1. 로그인을 GET에서 POST로 수정 후 정상 동작하도록 구현한다.[x]
-2. 가입을 완료하면 /index.html 페이지로 이동한다.[x]
-3. http://localhost:8080/user/form.html 파일의 form태그 method를 get에서 post로 수정한다.[x]
-4. 나머지 회원가입 기능이 정상적으로 동작하도록 구현한다.[x]
-5. 가입 후 페이지 이동을 위해 HTTP redirection 기능을 구현한다.[x]
-6. todo 처리 [x]
-7. 가입한 회원 정보로 로그인을 할 수 있다. [x]
-8. [로그인] 메뉴를 클릭하면 http://localhost:8080/user/login.html 으로 이동해 로그인할 수 있다. [x]
-9. 로그인이 성공하면 index.html로 이동한다. [x]
-10. 로그인이 실패하면 /user/login_failed.html로 이동한다. [x]
-11. 사용자가 로그인 상태일 경우 /index.html에서 사용자 이름을 표시해 준다. [x]
-12. 사용자가 로그인 상태가 아닐 경우 /index.html에서 [로그인] 버튼을 표시해 준다. [x]
-13. 사용자가 로그인 상태일 경우 http://localhost:8080/user/list 에서 사용자 목록을 출력한다. [x]
-14. http://localhost:8080/user/list  페이지 접근시 로그인하지 않은 상태일 경우 로그인 페이지(login.html)로 이동한다. [x]
+1. index.html에 로그인한 사용자가 글을 쓸 수 있는 한 줄 메모장을 구현한다.
+2. 로그인하지 않은 사용자도 게시글을 볼 수 있다.
+3. 로그인한 사용자만 글을 쓸 수 있다.
+
+
 
 ## 프로젝트 구조
     ├── controller

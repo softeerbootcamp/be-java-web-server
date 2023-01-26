@@ -1,6 +1,6 @@
 package controller;
 
-import db.Database;
+import db.UserDatabase;
 import enums.ContentTypeEnum;
 import enums.ControllerTypeEnum;
 import model.User;
@@ -13,10 +13,8 @@ import webserver.RequestResponseHandler;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.List;
 
 public class UserController implements Controller {
@@ -26,7 +24,7 @@ public class UserController implements Controller {
     private static final int USEREMAIL_INDEX = 3;
     private static final Logger logger = LoggerFactory.getLogger(RequestResponseHandler.class);
     @Override
-    public ResponseFactory controllerService(Request request) throws IOException {
+    public ResponseFactory controllerService(Request request) throws IOException, SQLException {
         logger.debug("firstLine : " + request.getRequestLine().getURL());
         List<String> requestRequestBody = request.getRequestBody().getBodyLines();
         List<String> userInfos = UserInfoParseUtils.parseUrlToGetUserInfo(requestRequestBody);
@@ -35,7 +33,7 @@ public class UserController implements Controller {
         User user = new User(decodedUserInfos.get(USERID_INDEX), decodedUserInfos.get(USERPWD_INDEX),
                 decodedUserInfos.get(USERNAME_INDEX), decodedUserInfos.get(USEREMAIL_INDEX));
 
-        Database.addUser(user);
+        UserDatabase.addUser(user);
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + "/index.html").toPath());
         String addedLine = "Location : /index.html";
         ResponseFactory responseFactory = new ResponseFactory.Builder()

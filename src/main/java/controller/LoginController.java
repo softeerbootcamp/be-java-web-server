@@ -1,6 +1,6 @@
 package controller;
 
-import db.Database;
+import db.UserDatabase;
 import enums.ContentTypeEnum;
 import enums.ControllerTypeEnum;
 import org.slf4j.Logger;
@@ -13,7 +13,7 @@ import webserver.RequestResponseHandler;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.List;
 
 public class LoginController implements Controller{
@@ -24,7 +24,7 @@ public class LoginController implements Controller{
     private static final int USERPWD_INDEX = 1;
 
     @Override
-    public ResponseFactory controllerService(Request request) throws IOException {
+    public ResponseFactory controllerService(Request request) throws IOException, SQLException {
         logger.debug("login request : "+request.getRequestLine().getMETHOD());
         logger.debug("login request : "+request.getRequestLine().getURL());
         logger.debug("login request : "+request.getRequestLine().getVERSION());
@@ -54,13 +54,13 @@ public class LoginController implements Controller{
 
     }
     // util 로 빼주자
-    public boolean checkIdPwdIsInDatabase(String id, String pwd){
-        if(Database.findUserById(id)==null){
+    public boolean checkIdPwdIsInDatabase(String id, String pwd) throws SQLException {
+        if(UserDatabase.findUserById(id)==null){
             return false;
         }
-        if(Database.findUserById(id).getPassword().equals(pwd)){
+        if(UserDatabase.findUserById(id).getPassword().equals(pwd)){
             return true;
-        }else return false;
+        }return false;
     }
 
 }
