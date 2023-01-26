@@ -1,16 +1,16 @@
-package db;
+package bejavawebserver.repository;
 
-import com.google.common.collect.Maps;
-import model.User;
+import bejavawebserver.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
-public class Database {
-    private static final Logger logger = LoggerFactory.getLogger(Database.class);
-    private static final Map<String, User> users = Maps.newHashMap();
+public class memoryRepository {
+    private static final Logger logger = LoggerFactory.getLogger(memoryRepository.class);
+    private static final Map<String, User> users = new HashMap<>();
 
     public static void addUser(User user) {
         logger.debug("Database User input : {}", user);
@@ -26,6 +26,6 @@ public class Database {
     }
 
     public static boolean checkDuplicate(User user) {
-        return users.get(user.getUserId()) == null;
+        return users.get(user.getUserId()) != null;
     }
 }

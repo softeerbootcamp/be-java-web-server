@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="kr">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta content="text/html; charset=UTF-8" http-equiv="content-type">
     <meta charset="utf-8">
@@ -67,10 +68,11 @@
         <div class="collapse navbar-collapse" id="navbar-collapse2">
             <ul class="nav navbar-nav navbar-right">
                 <li class="active"><a href="../index.html">Posts</a></li>
-                <li><a href="../user/login.html" role="button">로그인</a></li>
-                <li><a href="../user/form.html" role="button">회원가입</a></li>
-                <li><a href="#" role="button">로그아웃</a></li>
-                <li><a href="#" role="button">개인정보수정</a></li>
+                <li><a th:if="${isLogin}" th:text="${userName}"></a></li>
+                <li><a href="../user/login.html" role="button" th:if="${!isLogin}">로그인</a></li>
+                <li><a href="../user/form.html" role="button" th:if="${!isLogin}">회원가입</a></li>
+                <li><a href="#" role="button" th:if="${isLogin}">로그아웃</a></li>
+                <li><a href="#" role="button" th:if="${isLogin}">개인정보수정</a></li>
             </ul>
         </div>
     </div>
