@@ -14,7 +14,6 @@ import service.exception.NotFoundException;
 import service.post.PostService;
 
 import java.util.Map;
-import java.util.function.BiConsumer;
 
 import static dto.PostCreateDTO.CONTENT;
 import static dto.PostCreateDTO.TITLE;
@@ -30,7 +29,7 @@ public class PostController implements Controller {
     private final Logger logger = LoggerFactory.getLogger(PostController.class);
     private final PostService postService = new PostService();
     private final AuthService authService = new AuthService();
-    private final Map<String, BiConsumer<HttpRequest, HttpResponse>> handlers = Map.of(
+    private final Map<String, Handler> handlers = Map.of(
             "/post/create", this::addNewPost,
             "/post/(\\d)+", this::getPostDetail
     );
@@ -39,13 +38,13 @@ public class PostController implements Controller {
     public void service(HttpRequest request, HttpResponse response) {
         logger.debug("post controller called");
         try {
-            getHandler(request).accept(request, response);
+            getHandler(request).handle(request, response);
         } catch (RuntimeException e) {
             response.redirect(redirectUrls.get(e.getClass()));
         }
     }
 
-    private BiConsumer<HttpRequest, HttpResponse> getHandler(HttpRequest request) {
+    private Handler getHandler(HttpRequest request) {
         return handlers.getOrDefault(handlers.keySet().stream()
                 .filter(k -> request.getUrl().matches(k))
                 .findAny()

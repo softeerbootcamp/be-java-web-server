@@ -14,7 +14,6 @@ import service.user.exception.LoginIdNotExistException;
 import service.user.exception.PasswordNotMatchException;
 
 import java.util.Map;
-import java.util.function.BiConsumer;
 
 import static dto.SignUpDTO.*;
 import static filesystem.PathResolver.DOMAIN;
@@ -30,7 +29,7 @@ public class UserController implements Controller {
     );
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService = new UserService();
-    private final Map<String, BiConsumer<HttpRequest, HttpResponse>> handlers = Map.of(
+    private final Map<String, Handler> handlers = Map.of(
             "/user/create", this::signUp,
             "/user/login", this::logIn
     );
@@ -40,7 +39,7 @@ public class UserController implements Controller {
         logger.debug("user controller called");
         try {
             handlers.getOrDefault(request.getUrl(), Controller::handleInvalidRequest)
-                    .accept(request, response);
+                    .handle(request, response);
         } catch (RuntimeException e) {
             response.redirect(redirectUrls.get(e.getClass()));
         }
