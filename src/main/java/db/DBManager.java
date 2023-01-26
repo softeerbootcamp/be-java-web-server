@@ -34,34 +34,36 @@ public class DBManager {
         return DriverManager.getConnection(url, user, password);
     }
 
-    //3. 모든 자원들 해제
-    public void close(Connection conn, PreparedStatement stmt, ResultSet rs) {
-        if(rs != null) {
-            try {
-                rs.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        if(stmt != null) {
-            try {
-                stmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        if(conn != null) {
-            try {
-                conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+    //현재 autocloseable을 활용해서 try-catch문으로 응용하므로 close함수는 따로 부르지 않음
 
-    //3. 자원 해제 함수 오버로딩
-    public void close(Connection conn, PreparedStatement stmt) {
-        close(conn, stmt, null);
-    }
+//    //3. 모든 자원들 해제
+//    public void close(Connection conn, PreparedStatement stmt, ResultSet rs) {
+//        if(rs != null) {
+//            try {
+//                rs.close();
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        if(stmt != null) {
+//            try {
+//                stmt.close();
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        if(conn != null) {
+//            try {
+//                conn.close();
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
+//
+//    //3. 자원 해제 함수 오버로딩
+//    public void close(Connection conn, PreparedStatement stmt) {
+//        close(conn, stmt, null);
+//    }
 
 }
