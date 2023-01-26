@@ -5,6 +5,7 @@ import bejavawebserver.model.User;
 import bejavawebserver.repository.JdbcRepository;
 import bejavawebserver.service.LoginService;
 import bejavawebserver.service.SignUpService;
+import com.mysql.cj.log.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import java.sql.SQLException;
 @Controller
 public class UserController {
     @Autowired SignUpService signUpService;
+    @Autowired LoginService loginService;
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     @PostMapping("/user/create")
     public String signUp(User user){
@@ -31,7 +33,7 @@ public class UserController {
 
     @PostMapping("/user/login")
     public String login(LoginForm loginForm, HttpSession session){
-        if(LoginService.isLoginSuccess(loginForm, session)){
+        if(loginService.isLoginSuccess(loginForm, session)){
             return "redirect:/index.html";
         }
         return "redirect:/user/login_failed.html";
