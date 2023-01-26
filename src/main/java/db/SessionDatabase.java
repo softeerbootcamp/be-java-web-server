@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.Optional;
 
 public class SessionDatabase {
-    private static final Logger logger = LoggerFactory.getLogger(SessionDatabase.class);
-
     private static final SessionDatabase instance;
 
     private SessionDatabase() {}
