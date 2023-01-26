@@ -1,6 +1,6 @@
-package Controller;
+package controller;
 
-import Request.HttpRequest;
+import request.HttpRequest;
 import db.DBConnector;
 import model.Qna;
 import org.slf4j.Logger;

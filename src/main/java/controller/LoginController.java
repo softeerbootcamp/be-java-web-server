@@ -1,7 +1,7 @@
-package Controller;
+package controller;
 
-import Request.HttpRequest;
-import Request.StatusCode;
+import request.HttpRequest;
+import request.StatusCode;
 import response.HttpResponse;
 import db.SessionDb;
 import org.slf4j.Logger;

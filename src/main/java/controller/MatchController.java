@@ -1,6 +1,6 @@
-package Controller;
+package controller;
 
-import Request.HttpRequest;
+import request.HttpRequest;
 
 import java.util.Map;
 import java.util.Objects;

@@ -1,6 +1,6 @@
-package Controller;
+package controller;
 
-import Request.HttpRequest;
+import request.HttpRequest;
 import response.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
