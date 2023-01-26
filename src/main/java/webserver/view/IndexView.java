@@ -25,7 +25,7 @@ public class IndexView implements View{
     private String getTableOfBoard(Object boardObjList){     //make html <tbody> tag with userList
         StringBuilder sb = new StringBuilder();
         sb.append("<li> <div class=\"wrap\"> <div class=\"main\">\n <strong class=\"subject\">");
-        sb.append("<a href=\"./qna/show.html\">%s</a>\n");
+        sb.append("<a href=\"./board/show/%d\">%s</a>\n");
         sb.append("</strong> <div class=\"auth-info\"> <i class=\"icon-add-comment\"></i>");
         sb.append("<span class=\"time\">%s</span>");
         sb.append("<a href=\"./user/profile/%s\" class=\"author\">%s</a>\n </div>\n");
@@ -37,7 +37,7 @@ public class IndexView implements View{
         sb.setLength(0);
 
         ArrayList<Board> boardList = ArrayList.class.cast(boardObjList);
-        boardList.forEach(board-> sb.append(String.format(rawStr, board.getTitle(), board.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),board.getWriterId(), board.getWriterName(), board.getBoardId())));
+        boardList.forEach(board-> sb.append(String.format(rawStr,board.getBoardId(), board.getTitle(), board.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),board.getWriterId(), board.getWriterName(), board.getBoardId())));
         return sb.toString();
     }
     @Override

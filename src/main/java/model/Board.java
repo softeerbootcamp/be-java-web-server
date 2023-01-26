@@ -3,6 +3,8 @@ package model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import model.dto.BoardDto;
+
 import java.time.LocalDateTime;
 
 @Builder
@@ -23,6 +25,10 @@ public class Board {
         this.writerId = writer;
         this.writerName = writerName;
         this.createdAt = createdAt;
+    }
+
+    public BoardDto toDto(){
+        return new BoardDto(this.boardId, this.writerId, this.writerName, this.title, this.contents, this.createdAt);
     }
 
 }

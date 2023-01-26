@@ -27,8 +27,8 @@ public class BoardDatabase {
         boards.put(boardId.incrementAndGet(), board);
     }
 
-    public static Optional<Board> findBoardById(String sessionId) {
-        return Optional.ofNullable(boards.get(sessionId));
+    public static Optional<Board> findBoardById(Integer boardId) {
+        return Optional.ofNullable(boards.get(boardId));
     }
 
     public static void deleteBoard(Integer boardId){

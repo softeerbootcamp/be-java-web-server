@@ -76,10 +76,11 @@
 <div class="container" id="main">
     <div class="col-md-12 col-sm-12 col-lg-12">
         <div class="panel panel-default">
-          <header class="qna-header">
+            <header class="qna-header">
+                <!-- post start -->
               <h2 class="qna-title">InitializingBean implements afterPropertiesSet() 호출되지 않는 문제.</h2>
-          </header>
-          <div class="content-main">
+            </header>
+            <div class="content-main">
               <article class="article">
                   <div class="article-header">
                       <div class="article-header-thumb">
@@ -94,8 +95,9 @@
                       </div>
                   </div>
                   <div class="article-doc">
-                      <p>A 에 의존성을 가지는 B라는 클래스가 있습니다.</p><p>B라는 클래스는 InitializingBean 을 상속하고 afterPropertiesSet을 구현하고 있습니다.
-                      서버가 가동되면서 bean들이 초기화되는 시점에 B라는 클래스의 afterPropertiesSet 메소드는</p><p>A라는 클래스의 특정 메소드인 afunc()를 호출하고 있습니다.</p>
+                      <p>호출하고 있습니다.</p>
+                      <!-- post end -->
+
                   </div>
                   <div class="article-utils">
                       <ul class="article-utils-list">
@@ -114,7 +116,6 @@
                       </ul>
                   </div>
               </article>
-
               <div class="qna-comment">
                   <div class="qna-comment-slipp">
                       <p class="qna-comment-count"><strong>2</strong>개의 의견</p>
@@ -149,6 +150,7 @@
                                   </ul>
                               </div>
                           </article>
+                          <!-- comment start -->
                           <article class="article" id="answer-1406">
                               <div class="article-header">
                                   <div class="article-header-thumb">
@@ -178,9 +180,12 @@
                                   </ul>
                               </div>
                           </article>
-                          <form class="answer-form">
+                          <!-- comment end -->
+                          <!-- write comment start -->
+                          <form class="answer-form" method="post" id="answer" action="/board/createComment">
+                              <!-- write comment end -->
                               <div class="form-group" style="padding:14px;">
-                                  <textarea class="form-control" placeholder="Update your status"></textarea>
+                                  <textarea class="form-control" name="contents" placeholder="Update your status"></textarea>
                               </div>
                               <button class="btn btn-success pull-right" type="button">답변하기</button>
                               <div class="clearfix" />
