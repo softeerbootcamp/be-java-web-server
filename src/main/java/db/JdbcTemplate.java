@@ -102,7 +102,20 @@ public class JdbcTemplate {
                     }
                 });
     }
-
+    public List<Board> findAllBoards() {
+        return queryForObject("select * from board",
+                new Object[]{},
+                new ResultSetExtractor<Board>() {
+                    @Override
+                    public List<Board> extractData(ResultSet rs) throws SQLException {
+                        List<Board> list = new ArrayList<>();
+                        while (rs.next()) {
+                            list.add(new Board(rs.getString("writer"), rs.getString("contents")));
+                        }
+                        return list;
+                    }
+                });
+    }
     private <T> List<T> queryForObject(String sql, Object[] objects, ResultSetExtractor<T> resultSetExtractor) {
         return query(new DbCallback() {
             @Override

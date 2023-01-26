@@ -24,4 +24,7 @@ public class BoardService {
     public void addBoard(Board board) {
         jdbcTemplate.insertIntoBoardDb(board);
     }
+    public List<Board> getAllBoards() {
+        return jdbcTemplate.findAllBoards();
+    }
 }
