@@ -61,7 +61,7 @@ public class PostController implements RequestController {
         }
 
 
-        if (SessionService.getUserBySessionId(req.getSSID()).isPresent())
+        if (SessionService.getUserBySessionId(req.getSSID()).isEmpty())
             return CustomHttpFactory.REDIRECT("/user/login");
         try {
             PostService.createPost(req.parseBodyFromUrlEncoded());
