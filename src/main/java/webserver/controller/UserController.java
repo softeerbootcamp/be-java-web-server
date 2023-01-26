@@ -1,6 +1,7 @@
 package webserver.controller;
 
-import db.UserDatabase;
+import db.tmpl.UserDatabase;
+import model.User;
 import model.dto.UserDto;
 import webserver.Service.UserService;
 import webserver.annotation.ControllerInfo;
@@ -30,8 +31,13 @@ public class UserController implements Controller {
         private static final UserController INSTANCE = new UserController();
     }
 
-    public UserService userService = UserService.getInstance();
+    private UserService userService = UserService.getInstance();
+    private HttpSessionUtils httpSessionUtils = HttpSessionUtils.getInstance();
+    private UserDatabase userDatabase;
 
+    public void setUserDatabase(UserDatabase userDatabase){
+        this.userDatabase = userDatabase;
+    }
 
     @ControllerInfo(path = "/user/create", methodName = "userCreate", queryStr = {"userId", "password", "name", "email"}, method = RequestMethod.POST)
     public void userCreate(UserDto newUser, Response response, ModelAndView mv) {
@@ -42,10 +48,10 @@ public class UserController implements Controller {
 
     @ControllerInfo(path = "/user/login", methodName = "userLogin", queryStr = {"userId", "password"}, method = RequestMethod.POST)
     public void userLogin(@RequestBody Map<String, String> queryStrs, Response response, ModelAndView mv) throws  HttpRequestException{
-        String userId = userService.login(queryStrs.get("userId"), queryStrs.get("password"));
+        User user = userService.login(queryStrs.get("userId"), queryStrs.get("password"));
         mv.setViewPath("redirect:/");
         response.addHeaderAndBody(StatusCodes.OK, ("<script>alert('로그인이 완료되었습니다.');</script>").getBytes(), ContentType.TEXT_HTML);
-        response.addCookieOnHeader(HttpSessionUtils.generateSession(userId).toString());
+        response.addCookieOnHeader(httpSessionUtils.generateSession(user.getUserId()).toString());
     }
 
     @ControllerInfo(path = "/user/logout", methodName = "userLogout", method = RequestMethod.GET)
@@ -53,24 +59,24 @@ public class UserController implements Controller {
         SecurityContext.clearContext();
         mv.setViewPath("redirect:/");
         response.addHeaderAndBody(StatusCodes.OK, ("<script>alert('로그아웃 완료되었습니다.'); </script>").getBytes(), ContentType.TEXT_HTML);
-        response.addCookieOnHeader(HttpSessionUtils.cookieInvalidation(mv.getViewModel().get("session-id").toString()));
+        response.addCookieOnHeader(httpSessionUtils.cookieInvalidation(mv.getViewModel().get("session-id").toString()));
     }
 
     @ControllerInfo(path = "/user/list", methodName = "userList", method = RequestMethod.GET)
     public void userList(@RequestBody Map<String, String> queryStrs, Response response, ModelAndView mv) {
         mv.setViewPath("/user/list.html");
-        mv.addViewModel("user", UserDatabase.findAll());
+        mv.addViewModel("user", userDatabase.findAll());
     }
 
     @ControllerInfo(path = "/user/profile/{userId}", methodName = "userProfile", method = RequestMethod.GET)
     public void userProfile(@PathVariable String userId, Response response, ModelAndView mv) {
         mv.setViewPath("/user/profile.html");
-        mv.addViewModel("user", UserDatabase.findUserById(userId));
+        mv.addViewModel("user", userDatabase.findUserById(userId));
     }
 
 
     @Override
     public void chain(Request req, Response res, ModelAndView mv) {
-        ControllerInterceptor.executeController(getInstance(), req, res, mv);
+        ControllerInterceptor.getInstance().executeController(getInstance(), req, res, mv);
     }
 }

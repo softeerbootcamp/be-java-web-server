@@ -10,7 +10,7 @@ public class SecurityFilter {
     public static List<String> accessList;
 
     static{
-        accessList = List.of("/user/list", "/board/create", "/qna/form.html");
+        accessList = List.of("/user/list", "/board/create", "/board/form.html");
     }
 
     public static void checkAuthorization(String path) {

@@ -1,27 +1,31 @@
-package db;
+package db.memoryDB;
 
 import com.google.common.collect.Maps;
+import db.tmpl.SessionDatabase;
 import model.HttpSession;
-
 import java.util.*;
 
-public class SessionDataBase {
+public class MemorySessionDataBase implements SessionDatabase {
 
     private static Map<String, HttpSession> sessions = Maps.newHashMap();
 
-    public static void addCookie(HttpSession session) {
+    @Override
+    public void addCookie(HttpSession session) {
         sessions.put(session.getSessionId(), session);
     }
 
-    public static Optional<HttpSession> findSessionById(String sessionId) {
+    @Override
+    public Optional<HttpSession> findSessionById(String sessionId) {
         return Optional.ofNullable(sessions.get(sessionId));
     }
 
-    public static void deleteCookie(String sessionId){
+    @Override
+    public void deleteCookie(String sessionId){
         sessions.remove(sessionId);
     }
 
-    public static List<HttpSession> findAll() {
+    @Override
+    public List<HttpSession> findAll() {
         return new ArrayList<>(sessions.values());
     }
 

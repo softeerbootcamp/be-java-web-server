@@ -24,13 +24,23 @@ import java.util.stream.Collectors;
 
 public class ControllerInterceptor {
 
-    private static List<Method> extractAllMethods (Class<?> clazz){   //get all the methods in a specific class
+    private ControllerInterceptor(){}
+
+    public static ControllerInterceptor getInstance(){
+        return ControllerInterceptor.LazyHolder.INSTANCE;
+    }
+
+    private static class LazyHolder{
+        private static final ControllerInterceptor INSTANCE = new ControllerInterceptor();
+    }
+
+    private List<Method> extractAllMethods (Class<?> clazz){   //get all the methods in a specific class
         return Arrays.stream(clazz.getDeclaredMethods())
                 .filter(method -> method.isAnnotationPresent(ControllerInfo.class))
                 .collect(Collectors.toList());
     }
 
-    private static void checkMethodThenReturnBody(ControllerInfo controllerInfo, RequestMethod requestMethod) {
+    private void checkMethodThenReturnBody(ControllerInfo controllerInfo, RequestMethod requestMethod) {
         if (requestMethod != controllerInfo.method())
             throw HttpRequestException.builder()
                     .statusCode(StatusCodes.METHOD_NOT_ALLOWED)
@@ -38,15 +48,16 @@ public class ControllerInterceptor {
                     .build();
     }
 
-    private static void loginSessionCheck(Request req, ModelAndView mv){
-        String sessionId = HttpSessionUtils.getSessionIdFromRequest(req).orElse(null);
-        if (HttpSessionUtils.isSessionValid(sessionId)) {
+    private void loginSessionCheck(Request req, ModelAndView mv){
+        HttpSessionUtils httpSessionUtil = HttpSessionUtils.getInstance();
+        String sessionId = httpSessionUtil.getSessionIdFromRequest(req).orElse(null);
+        if (httpSessionUtil.isSessionValid(sessionId)) {
             SecurityContext.addUser(sessionId);
             mv.addViewModel("session-id", sessionId);
         }
     }
 
-    private static Object[] addParamToList(Object[] paramList, Response res, ModelAndView mv) {
+    private Object[] addParamToList(Object[] paramList, Response res, ModelAndView mv) {
         int len = paramList.length;
         paramList = Arrays.copyOf(paramList, len + 2);
         paramList[len]  = res;
@@ -55,19 +66,20 @@ public class ControllerInterceptor {
     }
 
     //compare the path of the request with every path of controller method
-    private static boolean pathMatcher(String methodPath, String reqPath, ModelAndView mv){
+    private boolean pathMatcher(String methodPath, String reqPath, ModelAndView mv){
         List<String> methodPathList = Arrays.asList(methodPath.split("/"));
         List<String> reqPathList = Arrays.asList(reqPath.split("/"));
         Map<String, String> pathVarMap = new HashMap<>();
-
-        //TODO : 클래스의 목적과 관련없는 로직은 utils로
+        if(methodPathList.size() != reqPathList.size())
+            return false;
         for(int idx = 0 ; idx < reqPathList.size(); idx++){
             String path = methodPathList.get(idx);
+            String pathVar = reqPathList.get(idx);
             if(Pattern.matches("\\{([^}]*?)\\}", path)){  //in case of @Pathvarible
-                pathVarMap.put(path, reqPathList.get(idx));
+                pathVarMap.put(path.substring(1, path.length()-1), pathVar);
                 continue;
             }
-            if(!reqPathList.get(idx).equals(path))
+            if(!pathVar.equals(path))
                 return false;
         }
 
@@ -75,7 +87,7 @@ public class ControllerInterceptor {
         return true;
     }
 
-    public static void executeController(Controller controller, Request req, Response res, ModelAndView mv) {
+    public  void executeController(Controller controller, Request req, Response res, ModelAndView mv) {
         //extract all the methods in the class which include specific annotation
         Class<? extends Controller> clazz = controller.getClass();
         List<Method> methodList = extractAllMethods(clazz);
