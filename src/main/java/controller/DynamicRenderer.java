@@ -13,7 +13,7 @@ public class DynamicRenderer {
     public static byte[] dynamicIndex_LoginBtnToUserBtn(byte[] body, String sid) throws SQLException {
         String stringBody = StringBuilderUtils.byteArrayToString(body);
         User user = UserDatabase.findUserById(HttpSessions.findUserIdBySid(sid));
-        stringBody = stringBody.replace("role=\"button\">로그인", StringBuilderUtils.userNameButtonBuilder(user));
+        stringBody = stringBody.replace("<a href=\"user/login.html\" role=\"button\">로그인</a>", StringBuilderUtils.userNameButtonBuilder(user));
         return StringBuilderUtils.stringToByteArray(stringBody);
     }
 

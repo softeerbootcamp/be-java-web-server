@@ -42,8 +42,10 @@ public class StringBuilderUtils {
     }
     public static String userNameButtonBuilder(User user){
         stringBuilder = new StringBuilder();
-        stringBuilder.append("role=\"button\" disabled>");
+        stringBuilder.append("<a>");
         stringBuilder.append(user.getName());
+        stringBuilder.append("</a>");
+
         return stringBuilder.toString();
     }
     public static String userLogoutButtonOnBuilder(){
