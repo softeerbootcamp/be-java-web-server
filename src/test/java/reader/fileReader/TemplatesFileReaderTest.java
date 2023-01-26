@@ -38,4 +38,18 @@ class TemplatesFileReaderTest {
                 Files.readAllBytes(new File("./src/main/resources/templates" + url.getUrl() + ".html").toPath())
         );
     }
+
+    @Test
+    @DisplayName("url이 pathVariable인경우 뒤의 데이터를 무시하고 html파일 읽기 테스트")
+    void testPathVariableTest() throws IOException {
+        //given
+        Url url = new Url("/qna/show/34", RequestDataType.PATH_VARIABLE);
+        //when
+        FileReader fileReader = new TemplatesFileReader();
+        byte[] data = fileReader.readFile(url);
+        //then
+        assertThat(data).isEqualTo(
+                Files.readAllBytes(new File("./src/main/resources/templates/qna/show.html").toPath())
+        );
+    }
 }
