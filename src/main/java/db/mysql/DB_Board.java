@@ -32,7 +32,6 @@ public class DB_Board {
             String sql = "INSERT INTO board(writerId, content, date) VALUES ("
                        +    "(SELECT id FROM Users where uid = ?)"
                        + ", ?, ?)";
-            // TODO foreign key 제약조건에 걸리지 않고 넣는 방법 고안하기
 
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, userId);
