@@ -3,6 +3,7 @@ package db;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -18,6 +19,7 @@ class QnARepositoryTest {
     }
 
     @Test
+    @DisplayName("DB 데이터 전체 조회")
     void selectAll() {
         //given
         //when
@@ -30,6 +32,7 @@ class QnARepositoryTest {
     }
 
     @Test
+    @DisplayName("특정 데이터 조회")
     void selectOne() {
         //given,when
         SoftAssertions softAssertions = new SoftAssertions();
@@ -42,6 +45,7 @@ class QnARepositoryTest {
     }
 
     @Test
+    @DisplayName("db 데이터 추가")
     void storeInfo() {
         //given,when
         SoftAssertions softAssertions = new SoftAssertions();
