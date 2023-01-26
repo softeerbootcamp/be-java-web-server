@@ -3,23 +3,23 @@ package dto;
 import java.util.Map;
 
 public class LogInDTO {
-    public static final String USER_ID = "userId";
+    public static final String LOGIN_ID = "loginId";
     public static final String PASSWORD = "password";
 
-    private String userId;
+    private String loginId;
     private String password;
 
-    public LogInDTO(String userId, String password) {
-        this.userId = userId;
+    public LogInDTO(String loginId, String password) {
+        this.loginId = loginId;
         this.password = password;
     }
 
     public static LogInDTO of(Map<String, String> parameters) {
-        return new LogInDTO(parameters.get(USER_ID), parameters.get(PASSWORD));
+        return new LogInDTO(parameters.get(LOGIN_ID), parameters.get(PASSWORD));
     }
 
-    public String getUserId() {
-        return userId;
+    public String getLoginId() {
+        return loginId;
     }
 
     public String getPassword() {
