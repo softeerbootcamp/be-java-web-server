@@ -16,11 +16,13 @@ import java.net.URL;
 import java.util.Map;
 
 public class FrontController {
+
     private static final Map<String,Controller> controllers;
     private static final String SIGN_UP_PATH_URL = "/user/create";
     private static final String LOGIN_PATH_URL ="/user/login";
     private static final String USER_LIST_PATH_URL ="/user/list";
-    private static final String GENERAL_FILE_PATH ="/file";
+    private static final String QNA_FORM_PATH ="/qna/form.html";
+    private static final String QNA_DETAIL_PATH ="/qna/show.html";
 
     //객체 캐싱
     static{
@@ -28,17 +30,15 @@ public class FrontController {
         SignUpController signUpController = new SignUpController(signUpService);
         LoginController loginInController = new LoginController();
         UserListController userListController = new UserListController();
-        FileController fileController = new FileController();
+        QnaController qnaController = new QnaController();
+        QnaShowController qnaShowController = new QnaShowController();
         controllers = Map.of(
                 SIGN_UP_PATH_URL,signUpController,
                 LOGIN_PATH_URL,loginInController,
                 USER_LIST_PATH_URL,userListController,
-                GENERAL_FILE_PATH,fileController
+                QNA_FORM_PATH,qnaController,
+                QNA_DETAIL_PATH,qnaShowController
         );
-    }
-
-    public Controller getControllerByUrl(String pathUrl){
-        return controllers.get(pathUrl);
     }
 
     /**
@@ -50,7 +50,10 @@ public class FrontController {
         try{
             String url = request.getUrl();
             Model model = new Model();
+            //해당 요청에 대해 찾은 컨트롤러에서 doGet, doPost로 분기되어 처리되도록 구현했음
+            //그런데 현재 과제에서의 url은 get과 post 요청 url들이 각각 다르다는 점 기억하기
             Controller controller = controllers.get(url);
+            // 인덱스 파일 요청에 대해서 처리하기 위해 별도로 만든 것
             if(controller == null){
                 controller = new FileController();
             }
