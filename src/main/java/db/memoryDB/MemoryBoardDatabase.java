@@ -1,6 +1,7 @@
-package db;
+package db.memoryDB;
 
 import com.google.common.collect.Maps;
+import db.tmpl.BoardDataBase;
 import model.Board;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,34 +9,38 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class BoardDatabase {
+public class MemoryBoardDatabase implements BoardDataBase {
 
     public static final AtomicInteger boardId = new AtomicInteger();
-    private BoardDatabase (){}
+    private MemoryBoardDatabase(){}
 
-    public static BoardDatabase getInstance(){
-        return BoardDatabase.LazyHolder.INSTANCE;
+    public static MemoryBoardDatabase getInstance(){
+        return MemoryBoardDatabase.LazyHolder.INSTANCE;
     }
 
     private static class LazyHolder{   //Singleton
-        private static final BoardDatabase INSTANCE = new BoardDatabase();
+        private static final MemoryBoardDatabase INSTANCE = new MemoryBoardDatabase();
     }
-
     private static Map<Integer, Board> boards = Maps.newHashMap();
 
-    public static void addBoard(Board board) {
+    @Override
+    public void addBoard(Board board) {
         boards.put(boardId.incrementAndGet(), board);
     }
 
-    public static Optional<Board> findBoardById(Integer boardId) {
+    @Override
+    public Optional<Board> findBoardById(Integer boardId) {
         return Optional.ofNullable(boards.get(boardId));
     }
 
-    public static void deleteBoard(Integer boardId){
+    @Override
+    public void deleteBoard(Integer boardId){
         boards.remove(boardId);
     }
 
-    public static List<Board> findAll() {
+    @Override
+    public List<Board> findAll() {
         return new ArrayList<>(boards.values());
     }
+
 }
