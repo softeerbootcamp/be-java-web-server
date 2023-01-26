@@ -2,19 +2,22 @@
 Java Web Application Server 2022
 
 ## 프로젝트 정보
-- step5,6 구현완료.
+- step7 구현완료.
 - [wiki](https://github.com/jieonkim23/be-java-web-server/wiki) 에 학습내용 정리함.
 ### Tree
 ```
-./src/main/java
+../src/main/java
 ├── Controller
 │ ├── AuthController.java
 │ ├── Controller.java
 │ ├── FileController.java
+│ ├── IndexController.java
 │ ├── JoinController.java
 │ ├── LoginController.java
 │ ├── MatchController.java
 │ ├── NonController.java
+│ ├── QnaCreateController.java
+│ ├── QnaShowController.java
 │ └── UserListController.java
 ├── Exception
 │ └── NotExistFileException.java
@@ -25,18 +28,22 @@ Java Web Application Server 2022
 │ ├── HttpRequestParams.java
 │ ├── HttpRequestStartLine.java
 │ └── StatusCode.java
-├── Response
+├── db
+│ ├── DBConnector.java
+│ ├── Database.java
+│ └── SessionDb.java
+├── model
+│ ├── Qna.java
+│ ├── Session.java
+│ └── User.java
+├── repository
+│ └── QnaRepository.java
+├── response
 │ ├── ContentType.java
 │ ├── HttpResponse.java
 │ ├── HttpResponseBody.java
 │ ├── HttpResponseHeaders.java
 │ └── HttpResponseStartLine.java
-├── db
-│ ├── Database.java
-│ └── SessionDb.java
-├── model
-│ ├── Session.java
-│ └── User.java
 ├── util
 │ ├── FileIoUtil.java
 │ ├── HtmlBuildUtil.java
@@ -46,6 +53,8 @@ Java Web Application Server 2022
 │ └── UserDbUtil.java
 ├── view
 │ ├── FileView.java
+│ ├── IndexView.java
+│ ├── QnaShowView.java
 │ ├── UserListView.java
 │ └── View.java
 └── webserver
@@ -56,7 +65,10 @@ Java Web Application Server 2022
 │ └── test.http
 └── java
     ├── controller
-    │ └── FileControllerTest.java
+    │ ├── FileControllerTest.java
+    │ └── JoinContorllerTest.java
+    ├── repo
+    │ └── QnaRepositoryTest.java
     └── util
         ├── FileIoUtilTest.java
         ├── HtmlBuildUtilTest.java

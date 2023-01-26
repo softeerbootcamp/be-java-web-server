@@ -55,7 +55,11 @@ public class FileIoUtil {
             int idx = path.indexOf(URL_PARAM_DELIMITER);
             return path.substring(idx + 1);
         }
-        throw new RuntimeException();
+        if (path.startsWith("/qna/show")) {
+            String[] split = path.split("/");
+            return "id="+split[split.length-1];
+        }
+        return "";
     }
 
     public static Path mappingDirectoryPath(String path) throws NullPointerException {

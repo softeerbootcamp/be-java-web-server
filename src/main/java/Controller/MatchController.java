@@ -1,8 +1,6 @@
 package Controller;
 
 import Request.HttpRequest;
-import util.FileIoUtil;
-import Exception.*;
 
 import java.util.Map;
 import java.util.Objects;
@@ -14,7 +12,10 @@ public class MatchController {
         cons = Map.of(JoinController.PATH, JoinController.getInstance(),
                 LoginController.PATH, LoginController.getInstance(),
                 UserListController.PATH, UserListController.getInstance(),
-                FileController.PATH, FileController.getInstance());
+                FileController.PATH, FileController.getInstance(),
+                IndexController.PATH, IndexController.getInstance(),
+                QnaCreateController.PATH, QnaCreateController.getInstance(),
+                QnaShowController.PATH, QnaShowController.getInstance());
     }
 
     public static Controller matching(HttpRequest httpRequest) {
@@ -22,13 +23,16 @@ public class MatchController {
 
         Controller controller = cons.get(filePath(path));
         if (Objects.isNull(controller)) {
-            return new NonController();
+            return NonController.getInstance();
         }
         return controller;
     }
     private static String filePath(String path) {
         if (path.contains(".")) {
             return "";
+        }
+        if (path.startsWith("/qna/show")){
+            return "/qna/show";
         }
         return path;
     }

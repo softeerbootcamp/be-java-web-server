@@ -6,34 +6,26 @@ import util.FileIoUtil;
 
 import java.io.BufferedReader;
 import java.util.HashMap;
+import java.util.Map;
 
 public enum HttpMethod {
     GET {
         @Override
-        public HttpRequest getRequestByMethod(BufferedReader br, HttpRequestStartLine httpRequestStartLine) {
-            HttpRequestParams httpRequestParams;
-            try {
-                String query = FileIoUtil.splitQuery(httpRequestStartLine.getPath());
-                httpRequestParams = HttpRequestParams.from(query);
-            } catch (RuntimeException e) {
-                httpRequestParams = new HttpRequestParams(new HashMap<>());
-            }
-            HttpRequestHeaders httpRequestHeaders = HttpRequestHeaders.from(br);
-            return new HttpRequest(httpRequestStartLine, httpRequestParams, httpRequestHeaders);
+        public HttpRequestParams getParamsByMethod(BufferedReader br, int length, HttpRequestStartLine startLine){
+            String query = FileIoUtil.splitQuery(startLine.getPath());
+            return HttpRequestParams.from(query);
         }
+
     },
     POST {
         @Override
-        public HttpRequest getRequestByMethod(BufferedReader br, HttpRequestStartLine httpRequestStartLine) {
-            HttpRequestHeaders httpRequestHeaders = HttpRequestHeaders.from(br);
-            int length = Integer.parseInt(httpRequestHeaders.getHeaders().get("Content-Length"));
+        public HttpRequestParams getParamsByMethod(BufferedReader br, int length, HttpRequestStartLine startLine){
             String data = FileIoUtil.readBuffer(br, length);
-            HttpRequestParams httpRequestParams = HttpRequestParams.from(data);
-            return new HttpRequest(httpRequestStartLine, httpRequestParams, httpRequestHeaders);
+            return HttpRequestParams.from(data);
         }
     };
     private static final Logger logger = LoggerFactory.getLogger(HttpMethod.class);
 
-    public abstract HttpRequest getRequestByMethod(BufferedReader br, HttpRequestStartLine httpRequestStartLine);
+    public abstract HttpRequestParams getParamsByMethod(BufferedReader br, int length, HttpRequestStartLine startLine);
 
 }

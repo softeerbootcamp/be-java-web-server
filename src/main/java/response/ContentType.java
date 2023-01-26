@@ -1,4 +1,4 @@
-package Response;
+package response;
 
 public enum ContentType {
     HTML("text/html"),
