@@ -2,110 +2,26 @@ package db;
 
 import exception.SessionNotFoundException;
 import model.Session;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SessionRepository {
 
-    private static final Logger logger = LoggerFactory.getLogger(SessionRepository.class);
+    private final Map<String, Session> sessions = new HashMap<>();
 
     public SessionRepository() {
     }
 
-    public void addSession(String sessionId, String userId, String userName) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-
-        String query = "INSERT INTO WAS.SESSION VALUES (?,?,?)";
-
-
-        try {
-            conn = DBManager.getInstance().getConnection();
-
-            logger.info("Connection 객체 생성성공");
-
-            pstmt = conn.prepareStatement(query);
-            pstmt.setString(1, sessionId);
-            pstmt.setString(2, userId);
-            pstmt.setString(3, userName);
-
-            pstmt.executeUpdate();
-
-        } catch (ClassNotFoundException e) {
-            logger.error("드라이버 로드 실패");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            if(conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e){
-                    e.printStackTrace();
-                }
-            }
-            if(pstmt != null) {
-                try{
-                    pstmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+    public void addSession(String sessionId, Session session) {
+        sessions.put(sessionId, session);
     }
 
     public Session findById(String sessionId) throws SessionNotFoundException {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-
-        String query = "SELECT * FROM WAS.SESSION WHERE sessionID = ?";
-        try {
-            conn = DBManager.getInstance().getConnection();
-
-            logger.info("Connection 객체 생성성공");
-
-            pstmt = conn.prepareStatement(query);
-            pstmt.setString(1, sessionId);
-
-            rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                return Session.of(
-                        rs.getString("sessionId"),
-                        rs.getString("userId"),
-                        rs.getString("userName"));
-            }
-
-        } catch (ClassNotFoundException e) {
-            logger.error("드라이버 로드 실패");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new SessionNotFoundException("Session Not Found");
-        } finally {
-            if(conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e){
-                    e.printStackTrace();
-                }
-            }
-            if(pstmt != null) {
-                try{
-                    pstmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if(rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+        Session session = sessions.get(sessionId);
+        if(session == null) {
+            throw new SessionNotFoundException("session not found");
         }
-        return null;
+        return sessions.get(sessionId);
     }
 }
