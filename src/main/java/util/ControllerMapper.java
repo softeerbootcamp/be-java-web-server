@@ -4,8 +4,10 @@ import Controller.Controller;
 import Controller.DynamicResourceController;
 import Controller.StaticResourceController;
 import Controller.UserController;
+import Controller.MemoController;
 import exception.ControllerNotFoundException;
 import http.request.HttpRequest;
+import service.MemoService;
 import service.UserService;
 
 import java.util.LinkedHashMap;
@@ -16,6 +18,7 @@ public class ControllerMapper {
 
     static {
         controllerMap.put(UserController.PREFIX, new UserController(UserService.getInstance()));
+        controllerMap.put(MemoController.PREFIX, new MemoController(MemoService.getInstance()));
     }
 
     public static Controller getController(HttpRequest request) {
