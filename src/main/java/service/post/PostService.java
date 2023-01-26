@@ -1,4 +1,4 @@
-package service;
+package service.post;
 
 import dao.PostDAO;
 import dto.PostCreateDTO;
@@ -6,6 +6,8 @@ import model.Post;
 import model.User;
 import repository.PostRepository;
 import repository.UserRepository;
+import service.exception.EmptyInputException;
+import service.exception.NotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,16 +26,16 @@ public class PostService {
 
     private void validate(PostCreateDTO postInfo) {
         if (postInfo.isEmpty()) {
-            throw new IllegalStateException("post has empty input");
+            throw new EmptyInputException("post has empty input");
         }
     }
 
     public Post readPost(long postId) {
         PostDAO postDAO = postRepository.findById(postId).orElseThrow(() -> {
-            throw new IllegalArgumentException("post not found");
+            throw new NotFoundException("post not found");
         });
         User user = userRepository.findById(postDAO.getUid()).orElseThrow(() -> {
-            throw new IllegalStateException("user not found");
+            throw new NotFoundException("user not found");
         });
         return Post.of(user, postDAO);
     }

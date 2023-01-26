@@ -5,10 +5,13 @@ import filesystem.FileSystem;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.Post;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.AuthService;
-import service.PostService;
+import service.exception.EmptyInputException;
+import service.exception.NotFoundException;
+import service.post.PostService;
 
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -20,6 +23,10 @@ import static filesystem.PathResolver.POST_DETAIL_HTML;
 
 public class PostController implements Controller {
 
+    private static final Map<Class, String> redirectUrls = Map.of(
+            EmptyInputException.class, DOMAIN,
+            NotFoundException.class, DOMAIN
+    );
     private final Logger logger = LoggerFactory.getLogger(PostController.class);
     private final PostService postService = new PostService();
     private final AuthService authService = new AuthService();
@@ -33,9 +40,8 @@ public class PostController implements Controller {
         logger.debug("post controller called");
         try {
             getHandler(request).accept(request, response);
-        } catch (IllegalArgumentException | IllegalStateException e) {
-            logger.debug(e.getMessage());
-            response.redirect(DOMAIN);
+        } catch (RuntimeException e) {
+            response.redirect(redirectUrls.get(e.getClass()));
         }
     }
 
@@ -47,10 +53,8 @@ public class PostController implements Controller {
     }
 
     private void addNewPost(HttpRequest request, HttpResponse response) {
-        authService.getUser(request).ifPresentOrElse((user) -> {
-            PostCreateDTO postInfo = PostCreateDTO.of(user, request.getParameters(TITLE, CONTENT));
-            postService.addNewPost(postInfo, user);
-        }, () -> logger.debug("not authorized add new post request"));
+        User user = authService.getUser(request);
+        postService.addNewPost(PostCreateDTO.of(user, request.getParameters(TITLE, CONTENT)), user);
         response.redirect(DOMAIN);
     }
 

@@ -8,7 +8,7 @@ import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.AuthService;
-import service.PostService;
+import service.post.PostService;
 import service.user.UserService;
 
 import java.util.List;
@@ -52,7 +52,7 @@ public class MainController implements Controller {
         if (optionalAuthUrls.contains(request.getUrl())) {
             if (authService.isAuthenticated(request)) {
                 return FileSystem.getPersonalizedResource(request.getUrl(),
-                        HtmlGenerator.getUserAnchor(authService.getUser(request).get()),
+                        HtmlGenerator.getUserAnchor(authService.getUser(request)),
                         HtmlGenerator.getPostElementHTML(postService.getAllPost()));
             }
         }
