@@ -37,7 +37,7 @@ public class ConnectionPool implements Runnable {
         logger.debug("run :" + connections.size());
     }
 
-    public Connection getConnection() {
+    public synchronized Connection getConnection() {
         logger.debug(String.valueOf(connections.size()));
         while (connections.isEmpty()) {
             try {
