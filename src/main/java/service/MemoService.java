@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Map;
 
 public class MemoService {
@@ -25,6 +26,10 @@ public class MemoService {
         MemoDatabase.addMemo(memo);
 
         logger.debug("Memo: {}", memo);
+    }
+
+    public Collection<Memo> findMemoList() {
+        return MemoDatabase.findAll();
     }
 
     private Memo createMemo(Map<String, String> memoInfo) {
