@@ -55,14 +55,13 @@ public class BoardDataBase {
         Connection connection = null;
         PreparedStatement pstmt = null;
         List<Board> boardList = new ArrayList<>();
+        ResultSet resultSet = null;
         try {
             DBConnector dbConnector = new DBConnector();
             connection = dbConnector.getConnection();
-            pstmt = null;
-
             String sql = "SELECT * FROM Board ORDER BY create_time DESC;";
             pstmt = connection.prepareStatement(sql);
-            ResultSet resultSet = pstmt.executeQuery();
+            resultSet = pstmt.executeQuery();
             while (resultSet.next()) {
                 Long id = Long.valueOf(resultSet.getString("id"));
                 String writer = resultSet.getString("writer");
@@ -75,7 +74,7 @@ public class BoardDataBase {
             e.printStackTrace();
             logger.error("[ERROR] BoardDatabase selectQuery에서의 에러 sql:{}", pstmt.toString());
         } finally {
-            closeConnection(connection, pstmt);
+            closeConnection(connection, pstmt, resultSet);
         }
 
         return boardList;
@@ -88,6 +87,24 @@ public class BoardDataBase {
             }
             if (connection != null) {
                 connection.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            logger.error("close DB Connection 중 에러");
+        }
+
+    }
+
+    private void closeConnection(Connection connection, PreparedStatement pstmt,ResultSet resultSet) {
+        try {
+            if (pstmt != null) {
+                pstmt.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+            if (resultSet != null) {
+                resultSet.close();
             }
         } catch (SQLException e) {
             e.printStackTrace();
