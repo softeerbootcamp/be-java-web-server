@@ -27,7 +27,11 @@ public class JdbcRepository {
         this.dataSource = dataSource;
     }
 
-    public void addUser(User user) throws SQLException {
+    public boolean checkDuplicate(User user) {
+        return findUserById(user.getUserId()) != null;
+    }
+
+    public void addUser(User user) {
         String sql = "insert into User values(?, ?, ?, ?)";
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -72,7 +76,9 @@ public class JdbcRepository {
             return findUser;
 
         } catch (Exception e) {
-            throw new IllegalStateException(e);
+            logger.debug("error : {}", e.getMessage());
+
+            return null;
         } finally {
             close(conn, pstmt, rs);
         }

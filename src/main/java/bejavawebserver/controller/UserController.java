@@ -2,20 +2,28 @@ package bejavawebserver.controller;
 
 import bejavawebserver.model.LoginForm;
 import bejavawebserver.model.User;
+import bejavawebserver.repository.JdbcRepository;
 import bejavawebserver.service.LoginService;
 import bejavawebserver.service.SignUpService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpSession;
+import java.sql.SQLException;
 
 @Controller
 public class UserController {
+    @Autowired SignUpService signUpService;
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     @PostMapping("/user/create")
     public String signUp(User user){
         try{
-            SignUpService.addDatabase(user);
+            signUpService.addDatabase(user);
         }catch (RuntimeException r){
+            logger.debug(r.getMessage());
             return "redirect:/user/form.html";
         }
         return "redirect:/";
