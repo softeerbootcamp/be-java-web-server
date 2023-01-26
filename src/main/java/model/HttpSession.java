@@ -1,9 +1,12 @@
 package model;
 
+import lombok.Builder;
 import lombok.Getter;
+import webserver.utils.HttpSessionUtils;
 
 import java.time.LocalDateTime;
 
+@Builder
 @Getter
 public class HttpSession {
 
@@ -18,13 +21,16 @@ public class HttpSession {
     private int maxAge;
     private static final int COOKIE_DURATION_DAY = 7;
 
-    public HttpSession(String sessionId, String userId, String username, LocalDateTime now) {
-        this.sessionId = sessionId;
-        this.userId = userId;
-        this.username = username;
-        this.path = "/";
-        this.createDate = now;
-        updateCookieTimeInfo(now);
+    public static HttpSession of(String sessionId, String userid, String name, LocalDateTime now) {
+        HttpSession session = HttpSession.builder()
+                                        .sessionId(sessionId)
+                                        .userId(userid)
+                                        .username(name)
+                                        .createDate(now)
+                                        .path("/")
+                                        .build();
+        session.updateCookieTimeInfo(now);
+        return session;
     }
 
     public boolean isValid(){
