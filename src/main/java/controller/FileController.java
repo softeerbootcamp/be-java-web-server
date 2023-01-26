@@ -21,6 +21,17 @@ public class FileController implements Controller{
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
     private static final String TEMPLATES_DIR = "./templates";
     private static final String STATIC_DIR = "./static";
+
+    private static FileController instance;
+
+    public static FileController getInstance(){
+        if (instance == null) {
+            synchronized (FileController.class) {
+                instance = new FileController();
+            }
+        }
+        return instance;
+    }
     @Override
     public String doGet(HttpRequest request, HttpResponse response, Model model) throws FileNotFoundException,IllegalArgumentException {
         String url = request.getUrl();

@@ -13,6 +13,17 @@ public class QnaController implements Controller {
 
     private static final String ENCODE_CHARSET = "UTF-8";
 
+    private static QnaController instance;
+
+    public static QnaController getInstance(){
+        if(instance == null){
+            synchronized (QnaController.class) {
+                instance = new QnaController();
+            }
+        }
+        return instance;
+    }
+
     @Override
     public String doGet(HttpRequest request, HttpResponse response, Model model) {
         //model.addAttribute("users", Database.findAll());

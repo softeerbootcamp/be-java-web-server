@@ -1,18 +1,12 @@
 package controller;
 
-import enums.ContentType;
-import enums.HttpStatus;
-import service.SignUpService;
-import utils.FileIoUtils;
 import view.Model;
 import view.ViewHandler;
 import request.HttpRequest;
 import response.HttpResponse;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Map;
 
 public class FrontController {
@@ -26,12 +20,11 @@ public class FrontController {
 
     //객체 캐싱
     static{
-        SignUpService signUpService = new SignUpService();
-        SignUpController signUpController = new SignUpController(signUpService);
-        LoginController loginInController = new LoginController();
-        UserListController userListController = new UserListController();
-        QnaController qnaController = new QnaController();
-        QnaShowController qnaShowController = new QnaShowController();
+        SignUpController signUpController = SignUpController.getInstance();
+        LoginController loginInController = LoginController.getInstance();
+        UserListController userListController = UserListController.getInstance();
+        QnaController qnaController = QnaController.getInstance();
+        QnaShowController qnaShowController = QnaShowController.getInstance();
         controllers = Map.of(
                 SIGN_UP_PATH_URL,signUpController,
                 LOGIN_PATH_URL,loginInController,
@@ -55,7 +48,7 @@ public class FrontController {
             Controller controller = controllers.get(url);
             // 인덱스 파일 요청에 대해서 처리하기 위해 별도로 만든 것
             if(controller == null){
-                controller = new FileController();
+                controller = FileController.getInstance();
             }
             String path = controller.service(request,response,model);
             if(path.startsWith("./templates")){// ./templates/index.html ,템플릿 하위에 있는 애들은 뷰로 그려줘야 함

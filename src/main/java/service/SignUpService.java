@@ -11,7 +11,16 @@ import java.util.Map;
 public class SignUpService {
 
     private static final String ENCODE_CHARSET = "UTF-8";
+    private static SignUpService instance;
 
+    public static SignUpService getInstance() {
+        if (instance == null) {
+            synchronized (SignUpService.class) {
+                instance = new SignUpService();
+            }
+        }
+        return instance;
+    }
 
     public void signUp(HttpRequest request) throws UnsupportedEncodingException {
         String userId = request.getQueryByKey("userId");

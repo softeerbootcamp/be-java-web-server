@@ -13,12 +13,23 @@ public class SignUpController implements Controller{
 
     private static final String REDIRECT_URL ="/index.html";
 
+    private static SignUpController instance;
     private final SignUpService signUpService;
 
-    public SignUpController(SignUpService signUpService) {
-        this.signUpService = signUpService;
+    public SignUpController() {
+        this.signUpService = SignUpService.getInstance();
     }
 
+
+    public static SignUpController getInstance(){
+        if(instance == null){
+            synchronized (SignUpController.class){
+                instance = new SignUpController();
+            }
+        }
+
+        return instance;
+    }
     @Override
     public String doGet(HttpRequest request, HttpResponse response, Model model) {
         try{
