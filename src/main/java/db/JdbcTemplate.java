@@ -2,27 +2,32 @@ package db;
 
 import model.User;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JdbcTemplate {
-    public void insertIntoUserDb(User user) {
-        workWithStatementStrategy(new DbCallback() {
-            @Override
-            public PreparedStatement makePreparedStatement(Connection con) throws SQLException{
-                PreparedStatement ps = con.prepareStatement("insert into user(userId, password, name, email) values (?, ? ,?, ?)");
 
-                ps.setString(1, user.getUserId());
-                ps.setString(2, user.getPassword());
-                ps.setString(3, user.getName());
-                ps.setString(4, user.getEmail());
-                return ps;
-            }
-        });
+    public void insertIntoUserDb(User user) {
+        executeUpdate("insert into user(userId, password, name, email) values (?, ? ,?, ?)",
+                user.getUserId(), user.getPassword(), user.getName(), user.getEmail());
     }
-    public void workWithStatementStrategy(DbCallback callback) {
+
+    public void executeUpdate(final String sql, final String... param) {
+        updateWithCallback((con) -> {
+                    PreparedStatement ps = con.prepareStatement(sql);
+
+                    if (param != null) {
+                        for (int i = 1; i <= param.length; i++) {
+                            ps.setString(i, param[i - 1]);
+                        }
+                    }
+                    return ps;
+                }
+        );
+    }
+
+    private void updateWithCallback(DbCallback callback) {
         String jdbc_url = "jdbc:mysql://localhost:3306/webserver?serverTimezone=UTC";
         Connection con = null;
         PreparedStatement ps = null;

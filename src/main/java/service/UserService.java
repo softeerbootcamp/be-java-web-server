@@ -7,6 +7,8 @@ import java.util.Map;
 
 public class UserService {
     private static UserService userService;
+    private JdbcTemplate jdbcTemplate = new JdbcTemplate();
+
     private UserService() {
     }
     public static UserService getInstance() {
@@ -18,7 +20,6 @@ public class UserService {
 
     public void addUser(Map<String, String> parsedUserMap) {
         User user = new User(parsedUserMap.get("userId"), parsedUserMap.get("password"), parsedUserMap.get("name"), parsedUserMap.get("email"));
-        JdbcTemplate jdbcTemplate = new JdbcTemplate();
         jdbcTemplate.insertIntoUserDb(user);
     }
     public boolean login(User user) {
