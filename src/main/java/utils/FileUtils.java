@@ -7,7 +7,8 @@ import model.User;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.Collection;
+import java.util.Set;
 
 public class FileUtils {
     private static final String STATIC_RESOURCE_PATH = FileUtils.class.getClassLoader().getResource("./static").getPath();
@@ -31,12 +32,18 @@ public class FileUtils {
     public static String getExtension(String file) {
         return file.substring(file.lastIndexOf(".") + 1);
     }
-    public static byte[] createPage(String path, User user) throws IOException {
-        String page = new String(loadFile(path));
-        if (path.contains("index.html") && user != null) {
-            page = page.replace("<!--username-->", String.format("<li><a>%s</a></li>", user.getName()));
+
+    public static byte[] createPage(String path, User user) {
+        try {
+            String page = new String(loadFile(path));
+            if (path.contains("index.html") && user != null) {
+                page = page.replace("<!--username-->", String.format("<li><a>%s</a></li>", user.getName()));
+            }
+            return removeUselessButton(page, user != null).getBytes();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new byte[0];
         }
-        return removeUselessButton(page, user != null).getBytes();
     }
 
     private static String removeLoginButton(String page) {
@@ -87,7 +94,7 @@ public class FileUtils {
         return sb.toString();
     }
 
-    public static byte[] createPostListPage(User user, Collection<Post> posts) throws IOException {
+    public static byte[] createPostListPage(User user, Collection<Post> posts) {
         StringBuilder sb = new StringBuilder();
         for (Post post : posts) {
             sb.append("<li> <div class=\"wrap\"> <div class=\"main\">");
