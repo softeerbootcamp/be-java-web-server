@@ -9,6 +9,11 @@ import http.response.HttpResponse;
 import http.response.ResponseFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import service.exception.EmptyInputException;
+import service.exception.NotFoundException;
+import service.user.exception.LoginIdDuplicatedException;
+import service.user.exception.LoginIdNotExistException;
+import service.user.exception.PasswordNotMatchException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,20 +21,30 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Map;
 
-public class FacadeController implements Runnable {
+import static filesystem.PathResolver.*;
 
-    private final Logger logger = LoggerFactory.getLogger(FacadeController.class);
-    private final RequestFactory requestFactory = new RequestFactory();
-    private final ResponseFactory responseFactory = new ResponseFactory();
-    private final Map<Domain, Controller> controllers = Map.of(
+public class Dispatcher implements Runnable {
+
+    private final Logger logger = LoggerFactory.getLogger(Dispatcher.class);
+    private static final RequestFactory requestFactory = new RequestFactory();
+    private static final ResponseFactory responseFactory = new ResponseFactory();
+    private static final Map<Domain, Controller> controllers = Map.of(
             Domain.USER, new UserController(),
             Domain.MAIN, new MainController(),
             Domain.POST, new PostController()
     );
+    private static final Map<Class, Handler> redirectUrls = Map.of(
+            HttpNotFoundException.class, ((request, response) -> controllers.get(Domain.MAIN).service(request, response)),
+            PasswordNotMatchException.class, ((request, response) -> response.redirect(LOGIN_FAILED_HTML)),
+            LoginIdNotExistException.class, ((request, response) -> response.redirect(LOGIN_FAILED_HTML)),
+            EmptyInputException.class, ((request, response) -> response.redirect(POST_CREATE_HTML)),
+            LoginIdDuplicatedException.class, ((request, response) -> response.redirect(DOMAIN)),
+            NotFoundException.class, ((request, response) -> response.redirect(DOMAIN))
+    );
 
     private Socket connection;
 
-    public FacadeController(Socket connectionSocket) {
+    public Dispatcher(Socket connectionSocket) {
         this.connection = connectionSocket;
     }
 
@@ -48,8 +63,8 @@ public class FacadeController implements Runnable {
         try {
             Controller controller = controllers.get(Domain.find(request.getUrl()));
             controller.service(request, response);
-        } catch (HttpNotFoundException e) {
-            controllers.get(Domain.MAIN).service(request, response);
+        } catch (RuntimeException e) {
+            redirectUrls.get(e.getClass()).handle(request, response);
         }
     }
 }

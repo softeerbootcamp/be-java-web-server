@@ -9,8 +9,6 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.AuthService;
-import service.exception.EmptyInputException;
-import service.exception.NotFoundException;
 import service.post.PostService;
 
 import java.util.Map;
@@ -22,10 +20,6 @@ import static filesystem.PathResolver.POST_DETAIL_HTML;
 
 public class PostController implements Controller {
 
-    private static final Map<Class, String> redirectUrls = Map.of(
-            EmptyInputException.class, DOMAIN,
-            NotFoundException.class, DOMAIN
-    );
     private final Logger logger = LoggerFactory.getLogger(PostController.class);
     private final PostService postService = new PostService();
     private final AuthService authService = new AuthService();
@@ -37,11 +31,7 @@ public class PostController implements Controller {
     @Override
     public void service(HttpRequest request, HttpResponse response) {
         logger.debug("post controller called");
-        try {
-            getHandler(request).handle(request, response);
-        } catch (RuntimeException e) {
-            response.redirect(redirectUrls.get(e.getClass()));
-        }
+        getHandler(request).handle(request, response);
     }
 
     private Handler getHandler(HttpRequest request) {

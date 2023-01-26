@@ -1,6 +1,6 @@
 package webserver;
 
-import controller.FacadeController;
+import controller.Dispatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +19,7 @@ public class WebServer {
     private static void run(ServerSocket serverSocket) throws IOException {
         Socket connection;
         while ((connection = serverSocket.accept()) != null) {
-            Thread thread = new Thread(new FacadeController(connection));
+            Thread thread = new Thread(new Dispatcher(connection));
             thread.start();
         }
     }

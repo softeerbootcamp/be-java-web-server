@@ -9,24 +9,15 @@ import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.user.UserService;
-import service.user.exception.LoginIdDuplicatedException;
-import service.user.exception.LoginIdNotExistException;
-import service.user.exception.PasswordNotMatchException;
 
 import java.util.Map;
 
 import static dto.SignUpDTO.*;
 import static filesystem.PathResolver.DOMAIN;
-import static filesystem.PathResolver.LOGIN_FAILED_HTML;
 import static http.common.Session.SESSION_FIELD_NAME;
 
 public class UserController implements Controller {
 
-    private static final Map<Class, String> redirectUrls = Map.of(
-            LoginIdNotExistException.class, LOGIN_FAILED_HTML,
-            PasswordNotMatchException.class, LOGIN_FAILED_HTML,
-            LoginIdDuplicatedException.class, DOMAIN
-    );
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService = new UserService();
     private final Map<String, Handler> handlers = Map.of(
@@ -37,12 +28,8 @@ public class UserController implements Controller {
     @Override
     public void service(HttpRequest request, HttpResponse response) {
         logger.debug("user controller called");
-        try {
-            handlers.getOrDefault(request.getUrl(), Controller::handleInvalidRequest)
-                    .handle(request, response);
-        } catch (RuntimeException e) {
-            response.redirect(redirectUrls.get(e.getClass()));
-        }
+        handlers.getOrDefault(request.getUrl(), Controller::handleInvalidRequest)
+                .handle(request, response);
     }
 
     private void logIn(HttpRequest request, HttpResponse response) {
