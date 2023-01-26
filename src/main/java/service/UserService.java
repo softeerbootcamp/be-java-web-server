@@ -1,7 +1,9 @@
 package service;
 
 import db.UserRepository;
+import exception.InvalidPasswordException;
 import exception.LogInFailedException;
+import exception.UserNotFoundException;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,17 +26,27 @@ public class UserService {
     }
 
     public void validateUser(String requestUserId, String requestPassword) throws LogInFailedException, RuntimeException {
-        User user = userRepository.findUserById(requestUserId);
-        if (user == null || !requestPassword.equals(user.getPassword())) {
+        try {
+            validatePassword(requestPassword, validateId(requestUserId).getPassword());
+        } catch (UserNotFoundException | InvalidPasswordException e) {
             throw new LogInFailedException("로그인 실패");
         }
     }
 
+    private User validateId(String requestUserId) throws UserNotFoundException {
+        return userRepository.findUserById(requestUserId);
+    }
+
+    private void validatePassword(String requestPassword, String password) throws InvalidPasswordException {
+        if(!requestPassword.equals(password)) {
+            throw new InvalidPasswordException();
+        }
+    }
     public Collection<User> getUserList() {
         return userRepository.findAll();
     }
 
-    public String getUserName(String id) {
+    public String getUserName(String id) throws UserNotFoundException {
         return userRepository.findUserById(id).getName();
     }
 

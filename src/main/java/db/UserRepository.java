@@ -1,5 +1,6 @@
 package db;
 
+import exception.UserNotFoundException;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +58,7 @@ public class UserRepository {
         }
     }
 
-    public User findUserById(String userId) {
+    public User findUserById(String userId) throws UserNotFoundException {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -108,9 +109,8 @@ public class UserRepository {
                     e.printStackTrace();
                 }
             }
+            throw new UserNotFoundException();
         }
-
-        return null;
     }
 
     public Collection<User> findAll() {
