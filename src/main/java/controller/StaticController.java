@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.Request;
 import response.*;
+import session.HttpCookie;
 import webserver.RequestResponseHandler;
 
 import java.io.File;
@@ -19,7 +20,7 @@ public class StaticController implements Controller {
     @Override
     public ResponseFactory controllerService(Request request) throws IOException {
         String url = request.getRequestLine().getURL();
-        boolean isLogined = request.isRequestHaveCookie();
+        boolean isLogined = request.getHttpCookie().isLogin();
         if (!isLogined && url.contains("/qna")) {
             url = url.replace("/qna", "");
         }

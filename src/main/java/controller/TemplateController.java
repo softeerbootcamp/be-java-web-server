@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.Request;
 import response.ResponseFactory;
+import session.HttpCookie;
+import session.HttpSessions;
 import webserver.RequestResponseHandler;
 
 import java.io.File;
@@ -21,24 +23,28 @@ public class TemplateController implements Controller {
         logger.debug("firstLine : " + request.getRequestLine().getURL());
         String url = request.getRequestLine().getURL();
         ControllerTypeEnum controllerTypeEnum = ControllerTypeEnum.TEMPLATE;
-        boolean isLogined = request.isRequestHaveCookie();
-        logger.debug("body : "+ request.getRequestBody().getBodyLines().toString());
+        HttpCookie cookie = request.getHttpCookie();
 
         String addedLine = null;
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + url).toPath());
         body = DynamicRenderer.dynamicIndex_ViewAllBoard(body);
-
-        if (isLogined) {
+        // 쿠키가 있는데 유효하지 않으면 쿠키 삭제
+        if(cookie!=null && !HttpSessions.cookieValidationCheck(cookie)){
+            addedLine += "Cookie : null";
+            cookie.cleanCookie();
+        }
+        if (cookie.isLogin()) {
             body = DynamicRenderer.dynamicIndex_LoginBtnToUserBtn(body, request.getRequestHeader().getHeaderValueByKey("Cookie").split("=")[1]);
             body = DynamicRenderer.dynamicIndex_LogoutBtnOn(body);
         }
         if (url.contains("list.html")) {
             body = DynamicRenderer.dynamicListHtml(body);
         }
-        if (!isLogined && url.contains("/qna/form.html")) {
+        if (!cookie.isLogin() && url.contains("/qna/form.html")) {
             controllerTypeEnum = ControllerTypeEnum.REDIRECT;
             addedLine = "Location : /index.html";
         }
+
 
         ResponseFactory responseFactory = new ResponseFactory.Builder()
                 .setResponseStatusLine(controllerTypeEnum)

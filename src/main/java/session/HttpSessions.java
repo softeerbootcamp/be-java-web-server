@@ -7,10 +7,19 @@ import java.util.Random;
 
 public class HttpSessions {
     private String id;
+    // user id 와 http session 매
     public static Map<String, HttpSession> httpSessions = Maps.newHashMap();
 
     public static void addHttpSession(String id) {
         httpSessions.put(id, new HttpSession(getRandStringForSessionId()));
+    }
+    public static boolean cookieValidationCheck(HttpCookie cookie){
+        for(HttpSession session : httpSessions.values()){
+            if(session.getSessionId() == cookie.getSid()){
+                return true;
+            }
+        }
+        return false;
     }
 
     // todo : 적절한 이름 찾자..
@@ -23,7 +32,7 @@ public class HttpSessions {
             if (oneUserSession.getSessionId().equals(sid)) return userId;
         }
         // return 못찾았을때 처리..
-        return "";
+        return null;
     }
     public static String getRandStringForSessionId() {
         int leftLimit = 48; // digit '0'
@@ -39,6 +48,7 @@ public class HttpSessions {
             }
             buffer.append((char) randomLimitedInt);
         }
+
         return buffer.toString();
     }
 }
