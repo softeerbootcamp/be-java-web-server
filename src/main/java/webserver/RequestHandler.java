@@ -27,7 +27,7 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
 
             HttpRequest httpRequest = HttpRequest.createReqeust(br);
-            Controller controller = MatchController.matching(httpRequest);
+            Controller controller = ControllerHandler.match(httpRequest);
             controller.response(httpRequest, dos);
         } catch (IOException e) {
             logger.error(e.getMessage());
