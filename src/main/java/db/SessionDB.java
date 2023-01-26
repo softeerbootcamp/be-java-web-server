@@ -2,12 +2,10 @@ package db;
 
 import com.google.common.collect.Maps;
 import http.common.Session;
-import model.Post;
-import model.User;
 
-import java.util.*;
+import java.util.Map;
 
-public class Database {
+public class SessionDB {
     private static Map<String, Session> sessions = Maps.newHashMap();
 
     public static void addSession(Session session) {
