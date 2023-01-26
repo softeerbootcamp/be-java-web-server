@@ -5,8 +5,8 @@ import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import service.UserService;
-import utils.HttpMethod;
+import service.user.UserService;
+import utils.enums.HttpMethod;
 
 import java.util.Map;
 

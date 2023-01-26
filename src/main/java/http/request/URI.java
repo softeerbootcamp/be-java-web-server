@@ -1,6 +1,6 @@
 package http.request;
 
-import utils.FileIoUtils;
+import utils.ParseUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +17,7 @@ public class URI {
 
     public static URI create(String target) {
         if (target.contains("?"))
-            return new URI(parsePath(target), FileIoUtils.parseQueryString(target.split("\\?")[1]));
+            return new URI(parsePath(target), ParseUtils.parseQueryString(target.split("\\?")[1]));
         return new URI(parsePath(target), new HashMap<>());
     }
 

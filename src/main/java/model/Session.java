@@ -2,20 +2,29 @@ package model;
 
 public class Session {
     private final long timeStamp;
+    private final String sessionId;
     private final String userId;
-    private final String name;
-    private final String email;
 
 
-    private Session(String userId, String name, String email) {
+    private Session(String sessionId, String userId) {
+        this.sessionId = sessionId;
         this.userId = userId;
-        this.name = name;
-        this.email = email;
         this.timeStamp = System.currentTimeMillis();
     }
 
-    public static Session from(User user) {
-        return new Session(user.getUserId(), user.getName(), user.getEmail());
+    private Session(String sessionId, String userId, long timeStamp) {
+        this.sessionId = sessionId;
+        this.userId = userId;
+        this.timeStamp = timeStamp;
+    }
+
+
+    public static Session create(String sessionId, String userId) {
+        return new Session(sessionId, userId);
+    }
+
+    public static Session createWithTimeStamp(String sessionId, String userId, long timeStamp) {
+        return new Session(sessionId, userId, timeStamp);
     }
 
     public long getTimeStamp() {
@@ -26,11 +35,7 @@ public class Session {
         return userId;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
+    public String getSessionId() {
+        return sessionId;
     }
 }

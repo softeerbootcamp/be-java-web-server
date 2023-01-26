@@ -3,14 +3,17 @@ package controller;
 import exception.HttpMethodException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import utils.HttpMethod;
+import service.session.SessionService;
 import utils.PathManager;
-import utils.SessionManager;
-
-import java.util.UUID;
+import utils.enums.HttpMethod;
 
 public class UserLogoutController implements Controller {
     public static final String PATH = "/user/logout";
+    private final SessionService sessionService;
+
+    public UserLogoutController(SessionService sessionService) {
+        this.sessionService = sessionService;
+    }
 
     @Override
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) {
@@ -23,7 +26,7 @@ public class UserLogoutController implements Controller {
     }
 
     private void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-        SessionManager.removeSession(UUID.fromString(httpRequest.getSession()));
+        sessionService.removeSession(httpRequest.getSession());
         httpResponse.redirect(PathManager.LOGIN_PATH);
     }
 }

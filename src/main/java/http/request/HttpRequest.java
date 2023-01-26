@@ -1,9 +1,12 @@
 package http.request;
 
 import http.HttpHeader;
-import utils.HttpMethod;
+import utils.enums.HttpMethod;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 public class HttpRequest {
@@ -17,12 +20,40 @@ public class HttpRequest {
         this.requestBody = requestBody;
     }
 
-    public static HttpRequest of(HttpRequestLine startLine, HttpHeader requestHeader, HttpRequestBody requestBody) {
-        return new HttpRequest(startLine, requestHeader, requestBody);
+    public static HttpRequest of(BufferedReader br) throws IOException {
+        HttpRequestLine httpRequestLine = createStartLine(br);
+        HttpHeader httpHeader = createRequestHeader(br);
+        if (httpRequestLine.hasBody()) {
+            HttpRequestBody httpRequestBody = createRequestBody(httpHeader.getContentLength(), br);
+            return new HttpRequest(httpRequestLine, httpHeader, httpRequestBody);
+        }
+        return new HttpRequest(httpRequestLine, httpHeader, null);
     }
 
-    public static HttpRequest ofNoBody(HttpRequestLine startLine, HttpHeader requestHeader) {
-        return new HttpRequest(startLine, requestHeader, null);
+    private static HttpRequestLine createStartLine(BufferedReader br) throws IOException {
+        String line = br.readLine();
+        String[] startLine = line.split(" ");
+        return HttpRequestLine.of(HttpMethod.getHttpMethod(startLine[0]), URI.create(startLine[1]), startLine[2]);
+    }
+
+    private static HttpHeader createRequestHeader(BufferedReader br) throws IOException {
+        HttpHeader httpHeader = HttpHeader.from(new HashMap<>());
+        while (true) {
+            String line = br.readLine();
+            if (line.equals("")) break;
+            String[] datas = line.split(":");
+            httpHeader.addHeader(datas[0].trim(), datas[1].trim());
+        }
+        return httpHeader;
+    }
+
+    private static HttpRequestBody createRequestBody(int contentLength, BufferedReader br) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        while (contentLength != 0) {
+            sb.append((char) br.read());
+            contentLength -= 1;
+        }
+        return HttpRequestBody.from(sb.toString());
     }
 
     public Map<String, String> getRequestBody() {
@@ -59,9 +90,7 @@ public class HttpRequest {
     }
 
     private boolean hasSession(String cookie) {
-        if (cookie == null || !cookie.contains("sid"))
-            return false;
-        return true;
+        return cookie != null && cookie.contains("sid");
     }
 
     public boolean hasHtmlRequest() {

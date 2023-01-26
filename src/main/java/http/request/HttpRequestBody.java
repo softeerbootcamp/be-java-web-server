@@ -1,6 +1,6 @@
 package http.request;
 
-import utils.FileIoUtils;
+import utils.ParseUtils;
 
 import java.util.Map;
 
@@ -12,7 +12,7 @@ public class HttpRequestBody {
     }
 
     public static HttpRequestBody from(String content) {
-        Map<String, String> params = FileIoUtils.parseQueryString(content);
+        Map<String, String> params = ParseUtils.parseQueryString(content);
         return new HttpRequestBody(params);
     }
 

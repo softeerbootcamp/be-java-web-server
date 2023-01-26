@@ -5,9 +5,9 @@ import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import service.UserService;
-import utils.HttpMethod;
-import utils.SessionManager;
+import service.session.SessionService;
+import service.user.UserService;
+import utils.enums.HttpMethod;
 
 import javax.naming.AuthenticationException;
 import java.util.Map;
@@ -19,9 +19,11 @@ public class UserLoginController implements Controller {
     public static final String PATH = "/user/login";
     private static final Logger logger = LoggerFactory.getLogger(UserLoginController.class);
     private final UserService userService;
+    private final SessionService sessionService;
 
-    public UserLoginController(UserService userService) {
+    public UserLoginController(UserService userService, SessionService sessionService) {
         this.userService = userService;
+        this.sessionService = sessionService;
     }
 
     @Override
@@ -38,7 +40,7 @@ public class UserLoginController implements Controller {
         Map<String, String> bodyParams = httpRequest.getRequestBody();
         try {
             userService.login(bodyParams.get("userId"), bodyParams.get("password"));
-            httpResponse.setCookie(SessionManager.createSession(userService.findUser(bodyParams.get("userId"))));
+            httpResponse.setCookie(sessionService.createSession(userService.findUser(bodyParams.get("userId"))));
             httpResponse.redirect(HOME_PATH);
         } catch (AuthenticationException e) {
             httpResponse.redirect(LOGIN_FAILED_PATH);

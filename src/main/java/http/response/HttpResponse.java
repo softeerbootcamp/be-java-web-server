@@ -3,8 +3,8 @@ package http.response;
 import http.HttpHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.ContentType;
-import utils.StatusCode;
+import utils.enums.ContentType;
+import utils.enums.StatusCode;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -12,6 +12,10 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class HttpResponse {
+    private static final String CONTENT_LENGTH = "Content-Length";
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String SET_COOKIE = "Set-Cookie";
+    private static final String CRLF = "\r\n";
     private static final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
     private String version;
     private StatusCode statusCode;
@@ -20,6 +24,8 @@ public class HttpResponse {
     private DataOutputStream dos;
 
     public HttpResponse(String version, DataOutputStream dos) {
+        if (version == null || version.trim().isEmpty() || dos == null)
+            throw new IllegalArgumentException("Invalid version argument passed");
         this.version = version;
         this.dos = dos;
         this.headers = HttpHeader.from(new HashMap<>());
@@ -32,7 +38,7 @@ public class HttpResponse {
     }
 
     public void setBody(byte[] body) {
-        this.headers.addHeader("Content-Length", String.valueOf(body.length));
+        this.headers.addHeader(CONTENT_LENGTH, String.valueOf(body.length));
         this.body.setBody(body);
     }
 
@@ -41,18 +47,18 @@ public class HttpResponse {
     }
 
     public void setContentType(ContentType contentType) {
-        this.headers.addHeader("Content-Type", contentType.getType());
+        this.headers.addHeader(CONTENT_TYPE, contentType.getType());
     }
 
-    public void setCookie(UUID sid) {
-        String value = String.format("sid=%s; Path=/; MAX-AGE=300", sid.toString());
-        this.headers.addHeader("Set-Cookie", value);
+    public void setCookie(String sid) {
+        String value = String.format("sid=%s; Path=/; MAX-AGE=300", sid);
+        this.headers.addHeader(SET_COOKIE, value);
     }
 
     public String getHeaderMessage() {
         return String.format("%s %s \r\n", this.version, this.statusCode) +
                 headers.getMessage() +
-                "\r\n";
+                CRLF;
     }
 
     public void redirect(String path) {
