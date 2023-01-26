@@ -16,6 +16,7 @@ Java Web Application Server 2022
 - [x] step4 구현 - POST로 회원 가입
 - [x] step5 구현 - 쿠키를 이용한 로그인
 - [x] step6 구현 - 동적인 HTML
+- [x] step7 구현 - 한 줄 게시판 구현
 
 ## 학습한 내용
 
