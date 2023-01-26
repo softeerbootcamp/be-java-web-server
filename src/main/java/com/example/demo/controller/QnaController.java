@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Board;
 import com.example.demo.model.BoardDto;
+import com.example.demo.service.BoardService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +34,8 @@ public class QnaController {
         log.debug("writer:{}",boardDto.getWriter());
         log.debug("title:{}",boardDto.getTitle());
         log.debug("content:{}",boardDto.getContent());
+
+        BoardService.save(board);
 
         return "redirect:/index";
     }

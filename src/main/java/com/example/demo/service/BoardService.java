@@ -1,9 +1,13 @@
 package com.example.demo.service;
 
 import com.example.demo.model.Board;
+import com.example.demo.repository.BoardRepository;
 
 public class BoardService {
-    public void save(Board board) {
 
+    static final BoardRepository boardRepository = new BoardRepository();
+
+    public static void save(Board board) {
+        boardRepository.insert(board);
     }
 }
