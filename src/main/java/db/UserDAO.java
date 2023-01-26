@@ -1,6 +1,8 @@
 package db;
 
+import exception.UserNotFoundException;
 import model.User;
+import model.request.UserCreate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,18 +26,18 @@ public class UserDAO {
         }
     }
 
-    public void insert(User user) throws SQLException {
+    public void insert(UserCreate userCreate) throws SQLException {
         String sql = "INSERT INTO USERS(userId, password, name, email) VALUES (?, ?, ?, ?)";
 
         PreparedStatement pstmt = connection.prepareStatement(sql);
-        pstmt.setString(1, user.getUserId());
-        pstmt.setString(2, user.getPassword());
-        pstmt.setString(3, user.getName());
-        pstmt.setString(4, user.getEmail());
+        pstmt.setString(1, userCreate.getUserId());
+        pstmt.setString(2, userCreate.getPassword());
+        pstmt.setString(3, userCreate.getName());
+        pstmt.setString(4, userCreate.getEmail());
         logger.debug(">> sql : {}", sql);
 
         pstmt.executeUpdate();
-        logger.debug(">> User {} Saved", user.getUserId());
+        logger.debug(">> User {} Saved", userCreate.getUserId());
     }
 
     public User findByUserId(String userId) throws SQLException {
@@ -44,13 +46,14 @@ public class UserDAO {
         preparedStatement.setString(1, userId);
         ResultSet resultSet = preparedStatement.executeQuery();
         if (resultSet.next()) {
-            User user = new User(resultSet.getString("userId"),
+            return new User(
+                    resultSet.getLong("uid"),
+                    resultSet.getString("userId"),
                     resultSet.getString("password"),
                     resultSet.getString("name"),
                     resultSet.getString("email"));
-            return user;
         }
-        return null;
+        throw new UserNotFoundException();
     }
 
     public List<User> findAll() throws SQLException {
@@ -58,7 +61,9 @@ public class UserDAO {
         PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM users");
         ResultSet resultSet = preparedStatement.executeQuery();
         while (resultSet.next()) {
-            User user = new User(resultSet.getString("userId"),
+            User user = new User(
+                    resultSet.getLong("uid"),
+                    resultSet.getString("userId"),
                     resultSet.getString("password"),
                     resultSet.getString("name"),
                     resultSet.getString("email"));
@@ -68,7 +73,7 @@ public class UserDAO {
     }
 
     public void deleteAll() throws SQLException {
-        PreparedStatement pstmt = connection.prepareStatement("TRUNCATE TABLE users");
-        pstmt.executeUpdate();
+        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM users");
+        preparedStatement.executeUpdate();
     }
 }

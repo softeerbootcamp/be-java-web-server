@@ -86,65 +86,18 @@
     <div class="col-md-12 col-sm-12 col-lg-10 col-lg-offset-1">
         <div class="panel panel-default qna-list">
             <ul class="list">
-                    <table class="table">
-                        <thead class="thead-light">
-                        <tr>
-                            <th>날짜</th>
-                            <th>작성자</th>
-                            <th>내용</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <!-- %글 목록% -->
-                        <tr>
-                            <th scope="row"><span class="time">2016-01-05 18:47</span></th>
-                            <td class="auth-info">
-
-                                <a href="./user/profile.html" class="author">김문수</a>
-                            </td>
-                            <td class="body">
-                                <span>runtime 에 reflect 발동 주체 객체가 뭔지 알 방법이 있을까요?</span>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                <li>
-                    <div class="wrap">
-                        <div class="main">
-                            <strong class="subject">
-                                <a href="./qna/show.html">국내에서 Ruby on Rails와 Play가 활성화되기 힘든 이유는 뭘까?</a>
-                            </strong>
-                            <div class="auth-info">
-                                <i class="icon-add-comment"></i>
-                                <span class="time">2016-01-15 18:47</span>
-                                <a href="./user/profile.html" class="author">자바지기</a>
-                            </div>
-                            <div class="reply" title="댓글">
-                                <i class="icon-reply"></i>
-                                <span class="point">8</span>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="wrap">
-                        <div class="main">
-                            <strong class="subject">
-                                <a href="./qna/show.html">runtime 에 reflect 발동 주체 객체가 뭔지 알 방법이 있을까요?</a>
-                            </strong>
-                            <div class="auth-info">
-                                <i class="icon-add-comment"></i>
-                                <span class="time">2016-01-05 18:47</span>
-                                <a href="./user/profile.html" class="author">김문수</a>
-                            </div>
-                            <div class="reply" title="댓글">
-                                <i class="icon-reply"></i>
-                                <span class="point">12</span>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-
+                <table class="table">
+                    <thead class="thead-light">
+                    <tr>
+                        <th>날짜</th>
+                        <th>작성자</th>
+                        <th>내용</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    %commentsList%
+                    </tbody>
+                </table>
             </ul>
             <div class="row">
                 <div class="col-md-3"></div>
@@ -159,8 +112,17 @@
                         <li><a href="#">»</a></li>
                     </ul>
                 </div>
-                <div class="col-md-3 qna-write">
-                    <a href="./comment/form.html" class="btn btn-primary pull-right" role="button">작성하기</a>
+                <div class="col-md-12 col-sm-12 col-lg-10 col-lg-offset-1">
+                    <div class="panel panel-default content-main">
+                        <form name="question" method="post" action="/user/comment">
+                            <div class="form-group">
+                                <label for="contents">내용</label>
+                                <textarea name="contents" id="contents" rows="5" class="form-control"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-success clearfix pull-right">작성하기</button>
+                            <div class="clearfix" />
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

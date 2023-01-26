@@ -22,7 +22,7 @@ public class UserCommentController implements UserController {
         if (AuthInterceptor.isAuthUser(request)) {
             try {
                 UserSession userSession = AuthInterceptor.findUserSession(request);
-                commentDAO.insert(new Comment(userSession.getName(), request.getRequestParams().get("contents")));
+                commentDAO.insert(new Comment(userSession.getUserId(), userSession.getName(), request.getRequestParams().get("contents")));
                 return Response.of(request.getHttpVersion(), FOUND, Map.of("Location", "/index.html"), new byte[0]);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
