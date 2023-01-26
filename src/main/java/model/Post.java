@@ -2,14 +2,14 @@ package model;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.util.Map;
 
 public class Post {
     private Long postId;
     private final String author;
     private final String title;
     private final String contents;
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
     public Post (String initAuthor, String initTitle, String initContents){
         author = initAuthor;
@@ -17,13 +17,12 @@ public class Post {
         contents = initContents;
     }
 
-    public Post(List<String> row) {
-        postId = Long.valueOf(row.get(0));
-        author = row.get(1);
-        title = row.get(2);
-        contents = row.get(3);
-
-        created_at = LocalDateTime.parse(row.get(4), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    public Post(Map<String, String> row) {
+        postId = Long.valueOf(row.get("id"));
+        author = row.get("author");
+        title = row.get("title");
+        contents = row.get("contents");
+        createdAt = LocalDateTime.parse(row.get("created_at"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
 
@@ -47,7 +46,7 @@ public class Post {
     }
 
     public String getCreatedAt() {
-        return created_at.toString();
+        return createdAt.toString();
     }
 
     @Override
