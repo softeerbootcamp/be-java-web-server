@@ -28,9 +28,13 @@ public class DynamicFileController implements Controller{
         // 로그인 부분을 현재 사용자 이름으로 변경하는 서비스
         service = new AlreadyLoggedInService(sid_userid);
 
-        if(req.getReqLine().getQuery().contains("user/list"))
+        if(req.getReqLine().getQuery().endsWith("user/list.html"))
         {
             service = new UserListService(sid_userid);
+        }
+        if(req.getReqLine().getQuery().endsWith("user/create/article"))
+        {
+            service = new PostNewArticleService(sid_userid);
         }
 
         Response res = service.exec(req);
