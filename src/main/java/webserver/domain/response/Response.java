@@ -32,31 +32,15 @@ public class Response {
     }
 
 
-    public void redirect(StatusCodes statusCode, byte[] bodyAsByte, ContentType contentType, String redirectUri) {
+    public void addHeaderAndBody(StatusCodes statusCode, byte[] bodyAsByte, ContentType contentType){
         status = statusCode;
         body = bodyAsByte;
         headerMaps.put("Content-Type" , contentType.getType());
         headerMaps.put("Content-Length", String.valueOf(body.length));
-        headerMaps.put("Location", redirectUri);
     }
-
-    public void redirect(StatusCodes statusCode, String redirectUri) {
+    public void addRedirection(StatusCodes statusCode, String redirectUri) {
         status = statusCode;
         headerMaps.put("Location", redirectUri);
-    }
-
-    public void ok(StatusCodes statusCode, byte[] bodyAsByte, ContentType contentType) {
-        status = statusCode;
-        body = bodyAsByte;
-        headerMaps.put("Content-Type" , contentType.getType());
-        headerMaps.put("Content-Length", String.valueOf(body.length));
-    }
-
-    public void error(StatusCodes statusCode, byte[] bodyAsByte, ContentType contentType) {
-        status = statusCode;
-        body = bodyAsByte;
-        headerMaps.put("Content-Type" , contentType.getType());
-        headerMaps.put("Content-Length", String.valueOf(body.length));
     }
 
     public void notFoundError(StatusCodes statusCode){
@@ -72,13 +56,11 @@ public class Response {
         }
     }
 
-    public void changeBody(byte[] bodyAsByte, ContentType contentType){
-        body = bodyAsByte;
-        headerMaps.put("Content-Type" , contentType.getType());
-        headerMaps.put("Content-Length", String.valueOf(body.length));
-    }
-
     public void addCookieOnHeader(String cookie){
         headerMaps.put("Set-Cookie" , cookie);
+    }
+
+    public boolean isEmpty(){
+        return (status == null);
     }
 }

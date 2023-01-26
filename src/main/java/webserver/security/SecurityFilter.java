@@ -10,13 +10,15 @@ public class SecurityFilter {
     public static List<String> accessList;
 
     static{
-        accessList = List.of("/user/list");
+        accessList = List.of("/user/list", "/board/create", "/qna/form.html");
     }
 
-    public static void checkAuthorization(String path){
-        if(accessList.stream().anyMatch(path::startsWith)){
-            if(SecurityContext.getContext() == null)
-                throw new HttpRequestException(StatusCodes.FORBIDDEN, "<script>alert('권한이 없습니다.'); window.location.href = 'http://localhost:8080/user/login.html';</script>");
+    public static void checkAuthorization(String path) {
+        if(accessList.stream().anyMatch(path::startsWith) && SecurityContext.getContext() == null){
+                throw HttpRequestException.builder()
+                        .statusCode(StatusCodes.FORBIDDEN)
+                        .msg("<script>alert('권한이 없습니다.'); window.location.href = 'http://localhost:8080/user/login.html';</script>")
+                        .build();
         }
     }
 

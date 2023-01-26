@@ -1,7 +1,10 @@
 package model;
 
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 
+@Getter
 public class HttpSession {
 
     private String sessionId;
@@ -22,18 +25,6 @@ public class HttpSession {
         this.path = "/";
         this.createDate = now;
         updateCookieTimeInfo(now);
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public String getSessionId() {
-        return sessionId;
-    }
-
-    public String getUsername() {
-        return username;
     }
 
     public boolean isValid(){

@@ -25,7 +25,7 @@ public class UserListView implements View{
     public String resourceUrl = "/user/list.html";
 
     private String getTableOfUser(Object userObjList){     //make html <tbody> tag with userList
-        String rawStr = "<tr> <th scope=\"row\">%d</th> <td>%s</td> <td>%s</td> <td>%s</td><td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td>\n </tr>";
+        String rawStr = "<tr> <th scope=\"row\">%d</th> <td>%s</td> <td>%s</td> <td>%s</td><td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td>\n </tr>";  //Todo : String Builder 이용하기
         AtomicInteger count = new AtomicInteger(0);
         StringBuilder sb = new StringBuilder();
 
@@ -45,7 +45,7 @@ public class UserListView implements View{
                     fileContent = fileContent.replace(menuBar, "")
                                              .replace("<li id=\"username\"></li>", nameTag)
                                              .replaceAll("(?is)<tbody.+?/tbody>", "<tbody> " + userTableScript + " </tbody>");
-                    res.ok(StatusCodes.OK, fileContent.getBytes(), StaticResourceFinder.getExtension(resourceUrl));
+                    res.addHeaderAndBody(StatusCodes.OK, fileContent.getBytes(), StaticResourceFinder.getExtension(resourceUrl));
                 });
     }
 

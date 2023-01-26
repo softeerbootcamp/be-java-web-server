@@ -17,7 +17,7 @@ public class EntityResolveStrategy implements ArgResolveStrategy{
     }
 
     @Override
-    public Object[] argumentParsing(Map<String, String> body, List<Parameter> paramList) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public Object[] argumentParsing(Map<String, String> body, List<Parameter> paramList) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Class<?> clazz = paramList.get(0).getType();
         Method method = clazz.getMethod("from", Map.class);
         return new Object[]{clazz.cast(method.invoke(null, body))};

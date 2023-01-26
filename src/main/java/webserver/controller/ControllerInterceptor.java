@@ -18,8 +18,8 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ControllerInterceptor {
@@ -30,9 +30,12 @@ public class ControllerInterceptor {
                 .collect(Collectors.toList());
     }
 
-    private static void checkMethodThenReturnBody(ControllerInfo controllerInfo, RequestMethod requestMethod) throws HttpRequestException {
+    private static void checkMethodThenReturnBody(ControllerInfo controllerInfo, RequestMethod requestMethod) {
         if (requestMethod != controllerInfo.method())
-            throw new HttpRequestException(StatusCodes.METHOD_NOT_ALLOWED, "<script>alert('올바르지 않은 요청입니다'); history.go(-1);</script>");
+            throw HttpRequestException.builder()
+                    .statusCode(StatusCodes.METHOD_NOT_ALLOWED)
+                    .msg("<script>alert('올바르지 않은 요청입니다'); history.go(-1);</script>")
+                    .build();
     }
 
     private static void loginSessionCheck(Request req, ModelAndView mv){
@@ -51,6 +54,27 @@ public class ControllerInterceptor {
         return paramList;
     }
 
+    //compare the path of the request with every path of controller method
+    private static boolean pathMatcher(String methodPath, String reqPath, ModelAndView mv){
+        List<String> methodPathList = Arrays.asList(methodPath.split("/"));
+        List<String> reqPathList = Arrays.asList(reqPath.split("/"));
+        Map<String, String> pathVarMap = new HashMap<>();
+
+        //TODO : 클래스의 목적과 관련없는 로직은 utils로
+        for(int idx = 0 ; idx < reqPathList.size(); idx++){
+            String path = methodPathList.get(idx);
+            if(Pattern.matches("\\{([^}]*?)\\}", path)){  //in case of @Pathvarible
+                pathVarMap.put(path, reqPathList.get(idx));
+                continue;
+            }
+            if(!reqPathList.get(idx).equals(path))
+                return false;
+        }
+
+        mv.addViewModel("pathVar", pathVarMap);
+        return true;
+    }
+
     public static void executeController(Controller controller, Request req, Response res, ModelAndView mv) {
         //extract all the methods in the class which include specific annotation
         Class<? extends Controller> clazz = controller.getClass();
@@ -59,29 +83,32 @@ public class ControllerInterceptor {
         String reqPath = req.getRequestLine().getResource().getPath();
         mv.setViewPath(reqPath);
 
-        //hand over the session to controller only if it is valid
-        loginSessionCheck(req, mv);
-        SecurityFilter.checkAuthorization(reqPath);
+        loginSessionCheck(req, mv); //hand over the session to controller only if it is valid
 
         methodList.forEach(method -> {
             ControllerInfo controllerInfo = method.getAnnotation(ControllerInfo.class);
-            if(controllerInfo.path().equals(reqPath)) {
+            if(pathMatcher(controllerInfo.path(), reqPath, mv)) {
                 try {
                     //check the validity of http method & parameters before executing the method
                     checkMethodThenReturnBody(controllerInfo, req.getRequestLine().getRequestMethod());
 
+                    //authorization checker for chaining
+                    SecurityFilter.checkAuthorization(reqPath);
+
+                    //resolve arguments in a method
                     List<Parameter> collect = Arrays.stream(method.getParameters()).filter(parameter -> parameter.getType() != Response.class && parameter.getType() != ModelAndView.class).collect(Collectors.toList());
                     ArgumentResolver argumentResolver = ArgumentResolverMapping.findArgumentResolver(req.getRequestHeader().get("Content-Type"));
-                    Object[] paramList = addParamToList(argumentResolver.checkParameters(req, collect), res, mv);
+                    Object[] paramList = addParamToList(argumentResolver.checkParameters(req, collect, mv), res, mv);
+
                     //invoke method
                     method.invoke(controller, paramList);
 
                 } catch (HttpRequestException e){
-                    res.error(e.getErrorCode(), e.getMsg().getBytes(), ContentType.TEXT_HTML);
+                    res.addHeaderAndBody(e.getErrorCode(), e.getMsg().getBytes(), ContentType.TEXT_HTML);
                 } catch (IllegalAccessException | InvocationTargetException | IOException | NoSuchMethodException |
                          InstantiationException ex) {
                     HttpRequestException e = (HttpRequestException) ex.getCause();
-                    res.error(e.getErrorCode(), e.getMsg().getBytes(), ContentType.TEXT_HTML);
+                    res.addHeaderAndBody(e.getErrorCode(), e.getMsg().getBytes(), ContentType.TEXT_HTML);
                 }
             }
         });
