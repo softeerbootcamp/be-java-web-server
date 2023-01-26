@@ -1,6 +1,7 @@
 package db;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
@@ -18,9 +19,9 @@ class DBManagerTest {
     }
 
     @Test
+    @DisplayName("연결 및 해제시 null 이나 예외가 발생하지 않으면 정상")
     void getConnection() {
         //given, when , then
-        //null 이나 예외가 발생하지 않으면 정상
         assertThatCode(() -> {
             Connection connection = dbManager.getConnection(); // command option v
             dbManager.close(connection,null );
