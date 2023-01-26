@@ -63,7 +63,7 @@ public class BoardRepository {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
-        String query = "SELECT * FROM WAS.BOARD";
+        String query = "SELECT * FROM WAS.BOARD ORDER BY createdDate DESC LIMIT 10";
 
         try {
             conn = DBManager.getInstance().getConnection();
