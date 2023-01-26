@@ -15,7 +15,7 @@ public class LoginIndexCallback implements BufferedReaderCallback {
                         "                  <div class=\"wrap\">\n" +
                         "                      <div class=\"main\">\n" +
                         "                          <strong class=\"subject\">\n" +
-                        "                              <a href=\"./qna/show.html\">" + board.getTitle() + "</a>\n" +
+                        "                              <a href=\"./qna/show.html\">" + board.getContents() + "</a>\n" +
                         "                          </strong>\n" +
                         "                          <div class=\"auth-info\">\n" +
                         "                              <i class=\"icon-add-comment\"></i>\n" +
