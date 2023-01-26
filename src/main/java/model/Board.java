@@ -5,20 +5,20 @@ import java.time.LocalDateTime;
 public class Board {
 	private Long id;
 
-	private String boardContents;
+	private String contents;
 
-	private String boardTitle;
+	private String title;
 
-	private LocalDateTime boardTime;
+	private LocalDateTime time;
 
-	private String boardWriter;
+	private String writer;
 
-	private Board(Long id, String boardContents, String boardTitle, LocalDateTime boardTime, String boardWriter) {
+	private Board(Long id, String contents, String title, LocalDateTime time, String writer) {
 		this.id = id;
-		this.boardContents = boardContents;
-		this.boardTitle = boardTitle;
-		this.boardTime = boardTime;
-		this.boardWriter = boardWriter;
+		this.contents = contents;
+		this.title = title;
+		this.time = time;
+		this.writer = writer;
 	}
 
 	public static Board of(Long id, String boardContents, String boardTitle, LocalDateTime boardTime, String boardWriter) {
@@ -29,19 +29,19 @@ public class Board {
 		return id;
 	}
 
-	public String getBoardContents() {
-		return boardContents;
+	public String getContents() {
+		return contents;
 	}
 
-	public String getBoardTitle() {
-		return boardTitle;
+	public String getTitle() {
+		return title;
 	}
 
-	public LocalDateTime getBoardTime() {
-		return boardTime;
+	public LocalDateTime getTime() {
+		return time;
 	}
 
-	public String getBoardWriter() {
-		return boardWriter;
+	public String getWriter() {
+		return writer;
 	}
 }
