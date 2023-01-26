@@ -10,9 +10,7 @@ import request.RequestParser;
 import response.HttpResponseStatus;
 import response.Response;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Map;
@@ -32,7 +30,6 @@ public class UserCreateHandler implements RequestHandler {
         return instance;
     }
 
-    // TODO: user/create.html 수정
     @Override
     public Response doGet(Request request) {
         try {
@@ -40,12 +37,13 @@ public class UserCreateHandler implements RequestHandler {
             if(!resource.endsWith(".html")) {
                 resource += ".html";
             }
-            byte[] file = generateDynamicHeader(request.getCookie(),
-                    Files.readAllBytes(new File("src/main/resources/templates" + resource).toPath()));
-            return Response.createSimpleResponse(file, FileContentType.HTML.getContentType(), HttpResponseStatus.OK);
+            String filePath = "src/main/resources/templates" + resource;
+            String content = generateDynamicHeader(request.getCookie(), filePath);
+            return Response.createSimpleResponse(content.getBytes(), FileContentType.HTML.getContentType(), HttpResponseStatus.OK);
         } catch (IOException e) {
             return Response.from(HttpResponseStatus.NOT_FOUND);
-        } catch (SQLException | NullPointerException e) {
+        } catch (SQLException e) {
+            logger.error(Arrays.toString(e.getStackTrace()));
             return Response.from(HttpResponseStatus.INTERNAL_SERVER_ERROR);
         }
     }

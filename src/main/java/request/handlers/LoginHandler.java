@@ -11,9 +11,7 @@ import request.RequestParser;
 import response.HttpResponseStatus;
 import response.Response;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Map;
@@ -34,7 +32,6 @@ public class LoginHandler implements RequestHandler {
         return instance;
     }
 
-    // TODO: user/login.html 수정
     @Override
     public Response doGet(Request request) {
         try {
@@ -42,12 +39,13 @@ public class LoginHandler implements RequestHandler {
             if(!resource.endsWith(".html")) {
                 resource += ".html";
             }
-            byte[] file = generateDynamicHeader(request.getCookie(),
-                    Files.readAllBytes(new File("src/main/resources/templates" + resource).toPath()));
-            return Response.createSimpleResponse(file, FileContentType.HTML.getContentType(), HttpResponseStatus.OK);
+            String filePath = "src/main/resources/templates" + resource;
+            String content = generateDynamicHeader(request.getCookie(), filePath);
+            return Response.createSimpleResponse(content.getBytes(), FileContentType.HTML.getContentType(), HttpResponseStatus.OK);
         } catch (IOException e) {
             return Response.from(HttpResponseStatus.NOT_FOUND);
-        } catch (SQLException | NullPointerException e) {
+        } catch (SQLException e) {
+            logger.error(Arrays.toString(e.getStackTrace()));
             return Response.from(HttpResponseStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -63,11 +61,10 @@ public class LoginHandler implements RequestHandler {
                     "Set-Cookie: sid=" + sid + ";Path=/\r\n" +
                             "Location: /index.html\r\n");
         } catch (IllegalArgumentException e) {
-            // TODO: 로그인 실패 시 user/login_failed.html로 안날아가는 버그 수정
             return Response.createSimpleResponse("<script>alert('login failed'); window.location.href = 'http://localhost:8080/user/login_failed.html';</script>".getBytes(),
                     FileContentType.HTML.getContentType(), HttpResponseStatus.BAD_REQUEST);
         } catch (SQLException e) {
-            logger.error("{}", Arrays.toString(e.getStackTrace()));
+            logger.error(Arrays.toString(e.getStackTrace()));
             return Response.createSimpleResponse("<script>alert('login failed'); window.location.href = 'http://localhost:8080/user/login_failed.html';</script>".getBytes(),
                     FileContentType.HTML.getContentType(), HttpResponseStatus.BAD_REQUEST);
         }
