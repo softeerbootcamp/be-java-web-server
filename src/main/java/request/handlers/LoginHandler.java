@@ -12,6 +12,7 @@ import response.Response;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.UUID;
 
@@ -41,6 +42,8 @@ public class LoginHandler implements RequestHandler {
             return Response.createSimpleResponse(file, FileContentType.HTML.getContentType(), HttpResponseStatus.OK);
         } catch (IOException e) {
             return Response.from(HttpResponseStatus.NOT_FOUND);
+        } catch (SQLException | NullPointerException e) {
+            return Response.from(HttpResponseStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -48,16 +51,14 @@ public class LoginHandler implements RequestHandler {
     public Response doPost(Request request) {
         try {
             Map<String, String> requestBody = RequestParser.parseFormEncodedBody(request);
-            User user = userService.findUser(requestBody.get("userId")).orElseThrow(()->{ throw new IllegalArgumentException(); });
-            if (user.getPassword().equals(requestBody.get("password"))) {
-                String sid = String.valueOf(UUID.randomUUID());
-                sessionService.addSession(Session.of(sid, user));
-                return Response.createFullResponse(HttpResponseStatus.FOUND.getMessage().getBytes(), request.getResourceFileContentType(), HttpResponseStatus.FOUND,
-                        "Set-Cookie: sid=" + sid + ";Path=/\r\n" +
-                                "Location: /index.html\r\n");
-            }
-            throw new IllegalArgumentException();
-        } catch (IllegalArgumentException e) {
+            User user = userService.findUserByIdAndPwd(requestBody.get("userId"), requestBody.get("password")).orElseThrow(()->{ throw new IllegalArgumentException(); });
+            String sid = String.valueOf(UUID.randomUUID());
+            sessionService.addSession(Session.of(sid, user.getUserId()));
+            return Response.createFullResponse(HttpResponseStatus.FOUND.getMessage().getBytes(), request.getResourceFileContentType(), HttpResponseStatus.FOUND,
+                    "Set-Cookie: sid=" + sid + ";Path=/\r\n" +
+                            "Location: /index.html\r\n");
+        } catch (IllegalArgumentException | SQLException | NullPointerException e) {
+            // TODO: 로그인 실패 시 user/login_failed.html로 안날아가는 버그 수정
             return Response.createSimpleResponse("<script>alert('login failed'); window.location.href = 'http://localhost:8080/user/login_failed.html';</script>".getBytes(),
                     FileContentType.HTML.getContentType(), HttpResponseStatus.BAD_REQUEST);
         }
