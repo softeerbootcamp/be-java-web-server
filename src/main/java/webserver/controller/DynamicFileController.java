@@ -7,10 +7,7 @@ import org.slf4j.LoggerFactory;
 import webserver.httpUtils.Request;
 import webserver.httpUtils.Response;
 import webserver.httpUtils.ResponseSender;
-import webserver.service.AlreadyLoggedInService;
-import webserver.service.PostNewArticleService;
-import webserver.service.Service;
-import webserver.service.UserListService;
+import webserver.service.*;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -21,21 +18,31 @@ public class DynamicFileController implements Controller{
     private ResponseSender resSender;
     @Override
     public void exec(Request req, OutputStream out) throws IOException {
-        String cookieStr = req.getCookie();
-        String sid_userid = getSid(cookieStr);
+        String cookieStr = new String();
+        String sid_userid = new String();
+        if(req.hasCookie())
+        {
+            cookieStr = req.getCookie();
+            sid_userid = getSid(cookieStr);
+        }
 
         Service service = new Service() {};
 
         // 로그인 부분을 현재 사용자 이름으로 변경하는 서비스
         service = new AlreadyLoggedInService(sid_userid);
 
-        if(req.getReqLine().getQuery().endsWith("user/list.html"))
+        String query = req.getReqLine().getQuery();
+        if(query.endsWith("user/list.html"))
         {
             service = new UserListService(sid_userid);
         }
-        if(req.getReqLine().getQuery().endsWith("user/create/article"))
+        if(query.endsWith("user/create/article"))
         {
             service = new PostNewArticleService(sid_userid);
+        }
+        if(query.endsWith("index.html"))
+        {
+            service = new ArticleListService();
         }
 
         Response res = service.exec(req);
