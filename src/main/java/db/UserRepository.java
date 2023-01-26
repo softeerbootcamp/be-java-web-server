@@ -20,7 +20,6 @@ public class UserRepository {
 
         String query = "INSERT INTO WAS.user VALUES (?,?,?,?)";
 
-
         try {
             conn = DBManager.getInstance().getConnection();
 
@@ -110,6 +109,7 @@ public class UserRepository {
                     e.printStackTrace();
                 }
             }
+
         }
         return null;
     }

@@ -25,10 +25,10 @@ public class UserService {
         userRepository.addUser(User.from(parameters));
     }
 
-    public void validateUser(String requestUserId, String requestPassword) throws LogInFailedException, RuntimeException {
+    public void validateUser(String requestUserId, String requestPassword) throws LogInFailedException {
         try {
             validatePassword(requestPassword, validateId(requestUserId).getPassword());
-        } catch (UserNotFoundException | InvalidPasswordException e) {
+        } catch (UserNotFoundException | InvalidPasswordException | NullPointerException e) {
             throw new LogInFailedException("로그인 실패");
         }
     }

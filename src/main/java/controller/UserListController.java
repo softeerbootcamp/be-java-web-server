@@ -48,7 +48,7 @@ public class UserListController extends AbstractController {
 
             httpResponse.forward(HttpStatusCode.OK, contentType, body);
 
-        } catch (SessionNotFoundException | RuntimeException e) {
+        } catch (SessionNotFoundException e) {
             e.printStackTrace();
             httpResponse.sendRedirect(HttpStatusCode.FOUND, LOGIN_FORM_PATH);
 

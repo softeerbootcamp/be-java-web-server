@@ -70,7 +70,7 @@ public class ResourceController extends AbstractController {
             byte[] body = FileIoUtils.load404ErrorFile();
             httpResponse.do404(body);
 
-        } catch (SessionNotFoundException | RuntimeException e) {
+        } catch (SessionNotFoundException e) {
             byte[] body = FileIoUtils.loadFile(filePath);
             httpResponse.forward(HttpStatusCode.OK, contentType, body);
         }
