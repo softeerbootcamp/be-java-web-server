@@ -1,12 +1,14 @@
 package Controller;
 
-import db.Database;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import view.HomeLoginView;
+import service.MemoService;
+import service.UserService;
+import view.HomeView;
+import view.LoginView;
 import webserver.session.Session;
 import webserver.session.SessionConst;
 
@@ -27,23 +29,30 @@ public class DynamicResourceController implements Controller {
     @Override
     public void process(HttpRequest request, HttpResponse response) {
 
-        if (!request.isLogin()) {
-            StaticResourceController.getInstance().process(request, response);
-            return;
-        }
-
         String url = request.getUrl();
         if (url.equals("/")) {
             url = "/index.html";
         }
 
-        Session session = request.getSession();
-        String userId = session.getAttribute(SessionConst.USER_ID);
-
-        User loginUser = Database.findUserById(userId);
+        if (!request.isLogin() && !url.equals("/index.html")) {
+            StaticResourceController.getInstance().process(request, response);
+            return;
+        }
 
         try {
-            String body = HomeLoginView.render(loginUser.getName(), url);
+            String body = "";
+            if (url.equals("/index.html")) {
+                body = HomeView.render(url, MemoService.getInstance().findMemoList(), body);
+            }
+
+            if (request.isLogin()) {
+                Session session = request.getSession();
+                String userId = session.getAttribute(SessionConst.USER_ID);
+
+                User loginUser = UserService.getInstance().findUserById(userId);
+
+                body = LoginView.render(loginUser.getName(), url, body);
+            }
 
             response.ok(request);
             response.setBodyMessage(body);

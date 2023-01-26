@@ -1,6 +1,6 @@
 package service;
 
-import db.Database;
+import db.UserDatabase;
 import exception.UserValidationException;
 import model.User;
 import org.slf4j.Logger;
@@ -12,6 +12,14 @@ import java.util.Map;
 public class UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+    private static final UserService instance = new UserService();
+
+    public static UserService getInstance() {
+        return instance;
+    }
+
+    private UserService() {
+    }
 
     public void signUp(Map<String, String> userInfo) {
         validateDuplication(userInfo.get("userId"));
@@ -19,14 +27,14 @@ public class UserService {
         User user = createUser(userInfo);
         logger.debug("user : {}", user);
 
-        Database.addUser(user);
+        UserDatabase.addUser(user);
     }
 
     public User login(Map<String, String> userInfo) {
         String userId = userInfo.get("userId");
         String password = userInfo.get("password");
 
-        User findUser = Database.findUserById(userId);
+        User findUser = UserDatabase.findUserById(userId);
 
         if (findUser == null) {
             throw new UserValidationException("아이디가 존재하지 않습니다.");
@@ -39,12 +47,16 @@ public class UserService {
         return findUser;
     }
 
+    public User findUserById(String userId) {
+        return UserDatabase.findUserById(userId);
+    }
+
     public Collection<User> findUserList() {
-        return Database.findAll();
+        return UserDatabase.findAll();
     }
 
     private void validateDuplication(String userId) {
-        if (Database.findUserById(userId) != null) {
+        if (UserDatabase.findUserById(userId) != null) {
             throw new UserValidationException("중복되는 아이디입니다.");
         }
     }
@@ -55,6 +67,6 @@ public class UserService {
         String name = userInfo.get("name");
         String email = userInfo.get("email");
 
-        return new User(userId, password, name, email);
+        return User.of(userId, password, name, email);
     }
 }
