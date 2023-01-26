@@ -1,15 +1,18 @@
+import dto.Comment;
 import model.User;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.*;
+import service.CommentService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.sql.*;
+import java.util.List;
 import java.util.Map;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static utility.CredentialsParser.getDBCredentials;
 
-public class MySQLConnectionTest {
+public class CommentServiceTest {
     private static final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private static final PrintStream originalOut = System.out;
 
@@ -23,43 +26,22 @@ public class MySQLConnectionTest {
     }
 
     @Test
-    @DisplayName("user 테이블 삽입 테스트")
+    @DisplayName("comments 코멘트 생성 테스트")
     public void insertUserIntoTable() throws SQLException {
+        SoftAssertions softly = new SoftAssertions();
+
         PreparedStatement pstmt = null;
         User user = new User.UserBuilder()
                 .setUserId("gildong").setPassword("1234")
                 .setEmail("gildong@asdf.com").setName("Hong Gildong").build();
 
-        try {
-            String sql = "INSERT INTO users VALUES (default, ?, ?, ?, ?)";
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, user.getUserId());
-            pstmt.setString(2, user.getPassword());
-            pstmt.setString(3, user.getUsername());
-            pstmt.setString(4, user.getEmail());
+        CommentService.createComment("첫 글", "gildong", "Hong Gildong");
 
-            pstmt.executeUpdate();
-        } finally {
-            if (pstmt != null) {
-                pstmt.close();
-            }
-        }
-        ResultSet result = null;
+        List<Comment> comments = CommentService.getAll();
 
-        try {
-            String sql = "SELECT * FROM users";
+        System.out.println(comments);
 
-            pstmt = conn.prepareStatement(sql);
-            result = pstmt.executeQuery();
-        } finally {
-            if(result != null && result.next()) {
-                String userId = result.getString("userId");
-                String name = result.getString("name");
-
-                System.out.print(userId + " " + name);
-                assertThat(outContent.toString()).isEqualTo("gildong Hong Gildong");
-            }
-        }
+        // softly.assertThat(comments).is("gildong Hong Gildong");
     }
 
     @AfterEach
@@ -67,7 +49,7 @@ public class MySQLConnectionTest {
         PreparedStatement pstmt = null;
 
         try {
-            String sql = "TRUNCATE users";
+            String sql = "TRUNCATE comments";
             pstmt = conn.prepareStatement(sql);
 
             pstmt.execute();

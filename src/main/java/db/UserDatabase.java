@@ -10,10 +10,6 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class UserDatabase {
-    private static Map<String, User> users = new HashMap<>();
-    private static final String FindUser = "SELECT * FROM users WHERE userId=?";
-    private static final String FindAllUsers = "SELECT * FROM users";
-
     private static final Connection con = DBConnection.getInstance();
 
     public static void addUser(User user) {
@@ -23,7 +19,7 @@ public class UserDatabase {
             pstmt = con.prepareStatement(sql);
             pstmt.setString(1, user.getUserId());
             pstmt.setString(2, user.getPassword());
-            pstmt.setString(3, user.getName());
+            pstmt.setString(3, user.getUsername());
             pstmt.setString(4, user.getEmail());
 
             pstmt.executeUpdate();
@@ -60,7 +56,7 @@ public class UserDatabase {
         return Optional.ofNullable(user);
     }
 
-    public static Optional<Collection<User>> findAll() {
+    public static Optional<Collection<User>> getAll() {
         PreparedStatement pstmt = null;
         ResultSet result = null;
         List<User> users = new ArrayList<>();
@@ -71,12 +67,15 @@ public class UserDatabase {
 
             result = pstmt.executeQuery();
 
-            User user = User.UserBuilder.builder()
-                    .setUserId(result.getString("userId"))
-                    .setName(result.getString("name"))
-                    .setEmail(result.getString("email"))
-                    .build();
-            users.add(user);
+            while(result != null && result.next()) {
+                User user = User.UserBuilder.builder()
+                        .setUserId(result.getString("userId"))
+                        .setName(result.getString("name"))
+                        .setEmail(result.getString("email"))
+                        .build();
+                users.add(user);
+            }
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

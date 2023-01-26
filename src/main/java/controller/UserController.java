@@ -69,8 +69,6 @@ public class UserController {
         HttpStatusCode status = HttpStatusCode.NOT_FOUND;
         String contentType = "text/html";
 
-        logger.debug("user - loginUser");
-
         boolean loginSuccess = false;
         Map<String, String> params = null;
 
@@ -93,7 +91,7 @@ public class UserController {
 
         if(loginSuccess) {
             // Session을 Cookie로 저장
-            SessionCookie session = SessionService.createSession(params.get("userId"), Map.of());
+            SessionCookie session = SessionService.createSession(params.get("userId"), params.get("name"), Map.of());
             header.put("Set-Cookie", session.toString());
             logger.debug("/user/login - " + session);
         }

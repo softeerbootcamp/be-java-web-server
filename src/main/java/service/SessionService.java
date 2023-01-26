@@ -16,12 +16,12 @@ public class SessionService {
 
     private static final Map<String, String> options = new HashMap<>();
 
-    public static SessionCookie createSession(String userId, Map<String, String> options) throws IllegalStateException {
+    public static SessionCookie createSession(String userId, String userName, Map<String, String> options) throws IllegalStateException {
         SessionService.resetOptions();
 
         SessionService.options.putAll(options);
 
-        SessionCookie s = new SessionCookie(userId, Map.copyOf(SessionService.options));
+        SessionCookie s = new SessionCookie(userId, userName, Map.copyOf(SessionService.options));
         SessionDatabase.addSession(s);
 
         return s;

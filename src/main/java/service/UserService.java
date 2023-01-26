@@ -31,8 +31,8 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
     }
 
-    public static List<User> findAllUsers() {
-        Optional<Collection<User>> users = UserDatabase.findAll();
+    public static List<User> getAllUsers() {
+        Optional<Collection<User>> users = UserDatabase.getAll();
         if(users.isPresent()) {
             return new ArrayList<>(users.get());
         }

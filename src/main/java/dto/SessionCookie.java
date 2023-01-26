@@ -5,8 +5,8 @@ import java.util.Map;
 public class SessionCookie extends Session {
     private Map<String, String> cookieOptions;
 
-    public SessionCookie(String username, Map<String, String> options) {
-        super(username);
+    public SessionCookie(String userId, String username, Map<String, String> options) {
+        super(userId, username);
         this.cookieOptions = options;
     }
 

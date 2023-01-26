@@ -17,7 +17,7 @@ public class HttpResponse {
     public final HttpStatusCode statusCode;
     public final String contentType;
     public final String resourcePath;
-    private StringBuilder generatedPage;
+    private String generatedPage;
     private Map<String, String> header;
 
     public HttpResponse(String resourcePath, HttpStatusCode statusCode, String contentType, Map<String, String> header) {
@@ -25,14 +25,14 @@ public class HttpResponse {
         this.resourcePath = resourcePath;
         this.header = header;
         this.contentType = contentType;  // TODO: contentType = null일 때 e.g., woff 예외처리 필요
-        this.generatedPage = new StringBuilder();
+        this.generatedPage = "";
     }
 
     public HttpResponse(String resourcePath, HttpStatusCode statusCode, String contentType) {
         this(resourcePath, statusCode, contentType, new HashMap<>());
     }
 
-    public HttpResponse(String resourcePath, HttpStatusCode statusCode, String contentType, Map<String, String> header, StringBuilder generatedPage) {
+    public HttpResponse(String resourcePath, HttpStatusCode statusCode, String contentType, Map<String, String> header, String generatedPage) {
         this(resourcePath, statusCode, contentType, header);
         this.generatedPage = generatedPage;
     }
@@ -50,7 +50,7 @@ public class HttpResponse {
 
         if(generatedPage.length() != 0) {
             logger.debug("동적 html");
-            body = this.generatedPage.toString().getBytes();
+            body = this.generatedPage.getBytes();
         }
 
         dos.writeBytes(String.format("%s %s \r\n", "HTTP/1.1", statusCode.toString()));
@@ -75,7 +75,7 @@ public class HttpResponse {
         private HttpStatusCode statusCode;
         private String contentType;
         private String resourcePath;
-        private StringBuilder generatedPage;
+        private String generatedPage;
         private Map<String, String> header;
 
         public HttpResponseBuilder setStatusCode(HttpStatusCode statusCode) {
@@ -93,7 +93,7 @@ public class HttpResponse {
             return this;
         }
 
-        public HttpResponseBuilder setGeneratedPage(StringBuilder generatedPage) {
+        public HttpResponseBuilder setGeneratedPage(String generatedPage) {
             this.generatedPage = generatedPage;
             return this;
         }
@@ -107,7 +107,7 @@ public class HttpResponse {
             if(header == null)
                 header = Map.of();
             if(generatedPage == null)
-                generatedPage = new StringBuilder();
+                generatedPage = "";
             return new HttpResponse(resourcePath, statusCode, contentType, header, generatedPage);
         }
     }

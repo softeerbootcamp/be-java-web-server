@@ -32,9 +32,10 @@ public class RequestDispatcher {
     static {
         instance = Map.ofEntries(
                 entry(UserController.class, new UserController()),
-                entry(ViewController.class, new ViewController())
+                entry(ViewController.class, new ViewController()),
+                entry(CommentController.class, new CommentController())
         );
-        controllers = List.of(UserController.class, ViewController.class);
+        controllers = List.of(UserController.class, ViewController.class, CommentController.class);
     }
 
     public static HttpResponse fulfillRequest(HttpRequest request) throws IOException {

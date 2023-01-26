@@ -1,12 +1,70 @@
 # java-was-2022
 Java Web Application Server 2022
 
-
 ## 프로젝트 정보 
 
 이 프로젝트는 우아한 테크코스 박재성님의 허가를 받아 https://github.com/woowacourse/jwp-was 
 를 참고하여 작성되었습니다.
 ----
+## 프로젝트 구조
+```
+src/main/java
+├── controller
+│   ├── CommentController.java
+│   ├── ControllerMapping.java
+│   ├── RequestDispatcher.java
+│   ├── UserController.java
+│   └── ViewController.java
+├── db
+│   ├── CommentDatabase.java
+│   ├── SessionDatabase.java
+│   └── UserDatabase.java
+├── dto
+│   ├── Comment.java
+│   ├── HttpRequest.java
+│   ├── HttpResponse.java
+│   ├── Session.java
+│   └── SessionCookie.java
+├── model
+│   └── User.java
+├── service
+│   ├── CommentService.java
+│   ├── DBConnection.java
+│   ├── SessionService.java
+│   ├── TemplateRenderer.java
+│   └── UserService.java
+├── utility
+│   ├── CredentialsParser.java
+│   ├── HttpMethodType.java
+│   ├── HttpRequestUtils.java
+│   └── HttpStatusCode.java
+└── webserver
+    ├── RequestHandler.java
+    └── WebServer.java
+```
+
+* controller - 요청에 대한 처리를 담당하는 컨트롤러 클래스 포함
+  * CommentController - 한 줄 코멘트 작성 요청 처리를 담당
+  * RequestDispatcher - 각 요청을 처리할 수 있는 Controller의 메서드를 찾고 호출
+  * ControllerMapping - 요청에 맞는 컨트롤러를 리플렉션을 통해 찾을 수 있도록 돕는 Annotation
+  * UserController - 계정 로그인, 회원가입 등의 요청 처리를 담당
+  * ViewController - 동적 페이지 생성 등의 요청 처리를 담당
+
+
+* service - DB연결, 세션, 동적 페이지(템플릿), 유저 관련 서비스 레이어
+* utility - Request의 파싱, xml로 저장된 계정 정보의 파싱 등을 수행
+## 프로젝트 설정
+
+----
+### DB 연결
+
+```docker run --name {mysql-container} -e MYSQL_ROOT_PASSWORD={password} -p 3306:3306 -d mysql:8.0.32```
+
+```docker exec -it mysql-container bash```
+
+## 프로젝트 실행
+`WebServer.main()` 실행
+
 ## HTTP 프로토콜
 ![w301.png](ReadmeImg%2Fw301.png)
 웹에서 통용되는 데이터 교환의 근간이 되는 **클라이언트** - **서버** 프로토콜이다.
@@ -57,3 +115,7 @@ Java Thread 객체는 시작 혹은 정지만 가능하고, 재시작과 같은 
 Thread를 통해 처리율은 높일 수 있지만, 여러 Thread가 부분별하게 생성 가능하기 때문에 Thread 생성에서 오는 오버헤드가 존재한다. 
 이는 일정 수의 Thread를 미리 생성, 필요할 때 빌려 사용하고 사용이 끝나면 다시 Thread를 반납하는 ThreadPool을 통해 경감시킬 수 있다. 
 
+
+
+### 
+![img1.daumcdn.png](ReadmeImg%2Fimg1.daumcdn.png)
