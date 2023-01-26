@@ -11,7 +11,7 @@ public class HtmlGenerator {
         StringBuilder html = new StringBuilder();
         for (int i = 0; i < users.size(); i++) {
             html.append("<tr>" + "<th scope='row'>").append(i).append(1).append("</th>").append("<td>")
-                    .append(users.get(i).getUserId()).append("</td>").append("<td>").append(users.get(i).getName())
+                    .append(users.get(i).getLoginId()).append("</td>").append("<td>").append(users.get(i).getName())
                     .append("</td>").append("<td>").append(users.get(i).getEmail()).append("</td>")
                     .append("<td><a href='#' class='btn btn-success' role='button'>수정</a></td>")
                     .append("</tr>");

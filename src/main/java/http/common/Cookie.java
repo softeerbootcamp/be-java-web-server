@@ -12,7 +12,7 @@ public class Cookie {
     private String value;
     private String path;
 
-    public Cookie(String key, String value) {
+    private Cookie(String key, String value) {
         this.key = key;
         this.value = value;
         this.path = ROOT_PATH;
@@ -29,6 +29,10 @@ public class Cookie {
             }
         });
         return cookies;
+    }
+
+    public static Cookie of(String key, String value) {
+        return new Cookie(key, value);
     }
 
     public String getKey() {
