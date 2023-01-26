@@ -31,11 +31,15 @@ public class QnaController {
     public String boardGenerateExcute(@ModelAttribute("boardDto") BoardDto boardDto) {
         Board board = new Board(boardDto.getWriter(), boardDto.getTitle(), boardDto.getContent());
 
-        log.debug("writer:{}",boardDto.getWriter());
-        log.debug("title:{}",boardDto.getTitle());
-        log.debug("content:{}",boardDto.getContent());
+        log.debug("writer:{}", boardDto.getWriter());
+        log.debug("title:{}", boardDto.getTitle());
+        log.debug("content:{}", boardDto.getContent());
 
         BoardService.save(board);
+
+        String writer = BoardService.printOne(board.getWriter());
+
+        log.debug("저장된 작성자 : {}",writer);
 
         return "redirect:/index";
     }

@@ -10,16 +10,14 @@ public class BoardRepository {
 
     private static final String url = "jdbc:mysql://localhost:3306/webserver";
     private static final String id = "root";
-    private static final String password = "1234";
+    private static final String password = "td134579";
     private Connection con = null;
     private PreparedStatement pstt = null;
-    private java.sql.Statement st = null;
     private ResultSet resultSet = null;
 
     public BoardRepository() {
         try {
             con = DriverManager.getConnection(url, id, password);
-            st = con.createStatement();
         }
         catch (SQLException e) {
             System.out.println("SQLException: " + e.getMessage());

@@ -11,7 +11,8 @@ public class BoardService {
         boardRepository.insert(board);
     }
 
-    public static void printList() {
-
+    public static String printOne(String writer) {
+        Board board = boardRepository.findByBoardId(writer);
+        return board.getWriter();
     }
 }
