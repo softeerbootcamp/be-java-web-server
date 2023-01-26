@@ -11,7 +11,6 @@ import java.util.Collection;
 import java.util.List;
 
 import model.Board;
-import model.User;
 
 public class BoardRepositoryMysql implements BoardRepository {
 
@@ -38,10 +37,10 @@ public class BoardRepositoryMysql implements BoardRepository {
 		try (Connection conn = dbManager.getConnection();
 			 PreparedStatement preparedStatement = conn.prepareStatement("insert into board values(?,?,?,?,?)");
 		) {
-			preparedStatement.setString(1, board.getBoardWriter());
-			preparedStatement.setTimestamp(2, Timestamp.valueOf(board.getBoardTime())); // 반대로 매핑할때는 toTimestamp()
-			preparedStatement.setString(3, board.getBoardTitle());
-			preparedStatement.setString(4, board.getBoardContents());
+			preparedStatement.setString(1, board.getWriter());
+			preparedStatement.setTimestamp(2, Timestamp.valueOf(board.getTime())); // 반대로 매핑할때는 toTimestamp()
+			preparedStatement.setString(3, board.getTitle());
+			preparedStatement.setString(4, board.getContents());
 			preparedStatement.setInt(5, 0);
 
 			if (preparedStatement.executeUpdate() != 1) {

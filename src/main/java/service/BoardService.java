@@ -1,6 +1,8 @@
 package service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import model.Board;
 import repository.BoardRepository;
@@ -29,5 +31,8 @@ public class BoardService {
 		boardRepository.addPost(board);
 	}
 
+	public List<Board> findBoards() {
+		return new ArrayList<>(boardRepository.findAll());
+	}
 
 }
