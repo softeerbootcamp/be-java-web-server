@@ -3,10 +3,10 @@ package was.view;
 import db.JdbcTemplate;
 import model.User;
 
-public class LoginListCallback implements BufferedReaderCallback{
+public class ListCallback implements BufferedReaderCallback{
     private int no;
 
-    public LoginListCallback() {
+    public ListCallback() {
         this.no = 0;
     }
 

@@ -3,7 +3,7 @@ package webserver.domain;
 import db.SessionStorage;
 import util.FileFinder;
 import was.view.LoginIndexCallback;
-import was.view.LoginListCallback;
+import was.view.ListCallback;
 import was.view.ViewTemplate;
 
 import java.util.HashMap;
@@ -101,7 +101,7 @@ public class HttpResponse {
             return;
         }
         statusLine = "HTTP/1.1 200 OK \r\n";
-        this.body = ViewTemplate.fileReadTemplate(SessionStorage.findSessionBy(sessionId).getUserId(), uri, new LoginListCallback());
+        this.body = ViewTemplate.fileReadTemplate(SessionStorage.findSessionBy(sessionId).getUserId(), uri, new ListCallback());
         addHeader("Content-Type", mime(uri) + ";charset=utf-8");
     }
 }
