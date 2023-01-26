@@ -56,6 +56,21 @@ public class JdbcTemplate {
             }
         }
     }
+    public User findUserByUserId(String userId) {
+        return queryForObject("select * from user where userId = ?",
+                new Object[]{userId},
+                new ResultSetExtractor<User>() {
+                    @Override
+                    public List<User> extractData(ResultSet rs) throws SQLException {
+                        List<User> list = new ArrayList<>();
+                        while (rs.next()) {
+                            list.add(new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"), rs.getString("email")));
+                        }
+                        return list;
+                    }
+                }).get(0);
+    }
+
     private <T> List<T> queryForObject(String sql, Object[] objects, ResultSetExtractor<T> resultSetExtractor) {
         return query(new DbCallback() {
             @Override
