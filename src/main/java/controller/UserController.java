@@ -26,7 +26,7 @@ public class UserController implements Controller {
                     .get()
                     .invoke(userService, httpRequest);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getCause().getMessage());
             return HttpResponseFactory.NOT_FOUND(e.getCause().getMessage());
         }
     }

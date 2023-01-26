@@ -39,7 +39,7 @@ public class ResourceController implements Controller {
             return HttpResponseFactory.OK(httpRequest.getContentType(), body);
         } catch (IOException e) {
             logger.error(e.getMessage());
-            return HttpResponseFactory.NOT_FOUND("Not Found");
+            return HttpResponseFactory.NOT_FOUND(e.getMessage());
         }
     }
 
