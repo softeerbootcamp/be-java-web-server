@@ -86,18 +86,18 @@
     <div class="col-md-12 col-sm-12 col-lg-10 col-lg-offset-1">
         <div class="panel panel-default qna-list">
             <ul class="list">
-                    <table class="table">
-                        <thead class="thead-light">
-                        <tr>
-                            <th>날짜</th>
-                            <th>작성자</th>
-                            <th>내용</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        %commentsList%
-                        </tbody>
-                    </table>
+                <table class="table">
+                    <thead class="thead-light">
+                    <tr>
+                        <th>날짜</th>
+                        <th>작성자</th>
+                        <th>내용</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    %commentsList%
+                    </tbody>
+                </table>
             </ul>
             <div class="row">
                 <div class="col-md-3"></div>
@@ -112,8 +112,17 @@
                         <li><a href="#">»</a></li>
                     </ul>
                 </div>
-                <div class="col-md-3 qna-write">
-                    <a href="./comment/form.html" class="btn btn-primary pull-right" role="button">작성하기</a>
+                <div class="col-md-12 col-sm-12 col-lg-10 col-lg-offset-1">
+                    <div class="panel panel-default content-main">
+                        <form name="question" method="post" action="/user/comment">
+                            <div class="form-group">
+                                <label for="contents">내용</label>
+                                <textarea name="contents" id="contents" rows="5" class="form-control"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-success clearfix pull-right">작성하기</button>
+                            <div class="clearfix" />
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
