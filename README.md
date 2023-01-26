@@ -173,7 +173,15 @@ public Path findFilePath(String url) throws IOException {
 3. 세션 만료 혹은 수동 로그아웃 버튼 입력을 통한 로그아웃
 4. 로그인 유무 판단에 따른 동적 HTML 응답
  
- 이를 위해 클라이언트가 가지고온 세션 아이디가 유효한 세션인지를 판단하는 **AuthInterceptor**를 구현하였다. AuthInterceptor는 util 패키지에 위치하여 모든 클래스에서 전역적으로 호출될 수 있으며, Request객체를 파라미터로 주면, validation 여부를 반환해준다. 여기서 Validation에는 기본적으로 쿠키의 세션아이디와 일치하는 세션을 스토리지에서 찾고 (존재하지 않으면 SessionNotFound) 찾은 세션의 expire date가 유효한지 판단하여 (유효하지 않으면 SessionExpired) 다 통과하면 valid하다고 판단한다. 
+ 이를 위해 클라이언트가 가지고온 세션 아이디가 유효한 세션인지를 판단하는 **AuthInterceptor**를 구현하였다. AuthInterceptor는 util 패키지에 위치하여 모든 클래스에서 전역적으로 호출될 수 있다.
 
+ - 로그인 유무 판단 : Request객체를 인터셉터의 isAuthUser() 메서드 파라미터로 주면, validation 여부를 반환해준다. 여기서 Validation에는 기본적으로 쿠키의 세션아이디와 일치하는 세션을 HashMap 형태로 저장된 스토리지에서 찾고 (존재하지 않으면 SessionNotFound) 찾은 세션의 expire date가 유효한지 판단하여 (유효하지 않으면 SessionExpired) 다 통과하면 valid하다고 판단한다.
+ - 로그인 유지 : 로그인이 유지되기 위해 최초 로그인 시 스토리지에 세션이 저장될 때 생성시각과 만료시각을 필드로 저장한다. 사용자는 로그인 후 이름이 우측 상단에 표시됨으로써 로그인이 유지되어 있음을 확인할 수 있고, 애플리케이션은 로그인 유무에 따라 분기가 필요한 로직마다 AuthInterceptor에서 앞서 설명한 로직을 통해 처리한다.
+ - 세션 만료 혹은 수동 로그아웃 버튼 입력을 통한 로그아웃 : 만료시각은 현재 생성시각의 30분후로 설정되어 있어 30분후 자동으로 로그인 유지가 끊히도록 구현하였다.
+ - 로그인 유무 판단에 따른 동적 HTML 응답 : Step6에서 이어서 설명.
 ### Step 6 - 동적인 HTML
+
+
+### Step 7 - 한 줄 게시판 구현
+
 

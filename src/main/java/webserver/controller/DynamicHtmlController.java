@@ -36,6 +36,7 @@ public class DynamicHtmlController {
         return GuestIndex(request, filePath, br, body);
     }
 
+    //비로그인 상태에서의 index.html 동적 생성
     private Response GuestIndex(Request request, Path filePath, BufferedReader br, StringBuilder body) throws IOException {
         String line;
         while ((line = br.readLine()) != null) {
@@ -49,6 +50,7 @@ public class DynamicHtmlController {
         return Response.of(request.getHttpVersion(), OK, Map.of("Content-Type", Files.probeContentType(filePath)), fileData.getBytes());
     }
 
+    //로그인 상태에서의 index.html 동적 생성
     private Response loginUserIndex(Request request, Path filePath, BufferedReader br, StringBuilder body) throws IOException {
         String line;
         while ((line = br.readLine()) != null) {
@@ -71,6 +73,7 @@ public class DynamicHtmlController {
         return Response.of(request.getHttpVersion(), OK, Map.of("Content-Type", Files.probeContentType(filePath)), fileData.getBytes());
     }
 
+    //한줄 메모장 index.html 동적 생성
     private String writeCommentLists(StringBuilder body) {
         CommentDAO commentDAO = new CommentDAO();
 
@@ -79,7 +82,10 @@ public class DynamicHtmlController {
             StringBuilder sb = new StringBuilder();
             sb.append("<tr>");
             for (CommentResponse commentResponse : commentResponseList) {
-                sb.append("<tr> <th scope=\"row\"><span class=\"time\">").append(commentResponse.getCreatedDate()).append("</span></th> <td class=\"auth-info\"> ").append("<a href= \"./user/profile.html\" class=\"author\">").append(commentResponse.getAuthor()).append("</a> </td> <td class=\"body\"> <span>").append(commentResponse.getContent()).append("</span> </td> </tr>");
+                sb.append("<tr> <th scope=\"row\"><span class=\"time\">").append(commentResponse.getCreatedDate())
+                        .append("</span></th> <td class=\"auth-info\"> ").append("<a href= \"./user/profile.html\" class=\"author\">")
+                        .append(commentResponse.getAuthor()).append("</a> </td> <td class=\"body\"> <span>").append(commentResponse.getContent())
+                        .append("</span> </td> </tr>");
             }
             return body.toString().replace("%commentsList%", URLDecoder.decode(sb.toString(), StandardCharsets.UTF_8));
 

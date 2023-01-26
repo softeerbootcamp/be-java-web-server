@@ -25,6 +25,7 @@ public class FrontServlet {
         try {
             Path path = findFilePath(request.getUrl());
 
+            //모든 html 파일에 일관되게 동적 html 포맷 (사용자 이름 표시, 비로그인 시 로그아웃 버튼 삭제, 로그인 시 회원가입, 로그인 버튼 삭제) 적용을 위해
             if (request.getUrl().contains(".html")) {
                 DynamicHtmlController dynamicHtmlController = new DynamicHtmlController();
                 return dynamicHtmlController.service(request);
