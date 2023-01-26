@@ -1,20 +1,15 @@
 package db;
 
-import com.google.common.collect.Maps;
 import model.Memo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
 
 public class MemoDatabase {
     private static final Logger logger = LoggerFactory.getLogger(UserDatabase.class);
-    private static final Map<Long, Memo> memos = Maps.newHashMap();
 
     public static void addMemo(Memo memo) {
         try {
@@ -37,6 +32,30 @@ public class MemoDatabase {
     }
 
     public static Collection<Memo> findAll() {
-        return memos.values();
+        Collection<Memo> memos = new ArrayList<>();
+
+        try {
+            Connection connection = DbConnectionManager.getConnection();
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement("select * from memo;");
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                memos.add(Memo.of(resultSet.getLong("memoId"),
+                        resultSet.getString("writer"),
+                        resultSet.getString("content"),
+                        resultSet.getTimestamp("createdAt").toLocalDateTime()
+                ));
+            }
+
+            preparedStatement.close();
+            connection.close();
+
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+
+        return memos;
     }
 }
