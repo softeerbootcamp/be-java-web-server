@@ -17,6 +17,7 @@ dependencies {
     implementation 'com.google.guava:guava:29.0-jre'
     implementation 'ch.qos.logback:logback-classic:1.2.3'
     implementation 'com.github.jknack:handlebars:4.2.0'
+    implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.0.31'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
