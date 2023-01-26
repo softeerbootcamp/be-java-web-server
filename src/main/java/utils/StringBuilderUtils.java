@@ -11,7 +11,7 @@ import java.util.Collection;
 public class StringBuilderUtils {
     private static StringBuilder stringBuilder;
     // 현재 하드코딩으로 javajigi slipp 들어가있어서 임시로 상수 설정. 해당부분 지워도 되면 수정하겠음.
-    private static int LIST_START_INDEX = 3;
+    private static int LIST_START_INDEX = 1;
 
     public static String byteArrayToString(byte[] body) {
         stringBuilder  = new StringBuilder();
@@ -40,11 +40,29 @@ public class StringBuilderUtils {
         }
         return stringBuilder.toString();
     }
-    public static String userNameButtonBuilder(User user){
+    public static String signUpButtonHideBuilder(){
         stringBuilder = new StringBuilder();
-        stringBuilder.append("role=\"button\" disabled>");
-        stringBuilder.append(user.getName());
+        stringBuilder.append("<!--                <li><a href=\"user/form.html\" role=\"button\">회원가입</a></li>-->\n");
         return stringBuilder.toString();
+    }    public static String userNameButtonBuilder(User user){
+        stringBuilder = new StringBuilder();
+        stringBuilder.append("<a>");
+        stringBuilder.append(user.getName());
+        stringBuilder.append("</a>");
+
+        return stringBuilder.toString();
+    }
+    public static String userLogoutButtonOnBuilder(){
+        stringBuilder = new StringBuilder();
+        stringBuilder.append("<li><a href=\"#\" role=\"button\">로그아웃</a></li>\n" +
+                "                <li><a href=\"#\" role=\"button\">개인정보수정</a></li>");
+        return  stringBuilder.toString();
+    }
+    public static String userLogoutButtonOffBuilder(){
+        stringBuilder = new StringBuilder();
+        stringBuilder.append("<!--                <li><a href=\"#\" role=\"button\">로그아웃</a></li>-->\n" +
+                "<!--                <li><a href=\"#\" role=\"button\">개인정보수정</a></li>-->");
+        return  stringBuilder.toString();
     }
     public static String viewAllBoardBuilder() throws SQLException {
         stringBuilder = new StringBuilder();

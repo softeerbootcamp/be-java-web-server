@@ -13,7 +13,6 @@ import java.util.Collection;
 import java.util.Map;
 
 public class BoardDatabase {
-    private static Map<Integer, Article> boards = Maps.newHashMap();
     private static DatabaseConnHandler databaseConnHandler;
     private static Connection conn;
 

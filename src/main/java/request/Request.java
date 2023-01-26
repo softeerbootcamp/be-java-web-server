@@ -2,6 +2,8 @@ package request;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import session.HttpCookie;
+import session.HttpSessions;
 import webserver.RequestResponseHandler;
 
 import java.io.BufferedReader;
@@ -13,6 +15,7 @@ public class Request {
     private RequestLine requestLine;
     private RequestHeader requestHeader;
     private RequestBody requestBody;
+    private HttpCookie httpCookie;
     private static final Logger logger = LoggerFactory.getLogger(RequestResponseHandler.class);
     private static final String NEW_LINE = "\r\n";
 
@@ -20,6 +23,7 @@ public class Request {
     public Request(BufferedReader bufferedReader) throws IOException {
         setRequestLine(bufferedReader);
         setRequestHeader(bufferedReader);
+        setHttpCookie(requestHeader);
         setRequestBody(bufferedReader);
         if (requestLine.getMETHOD().equals(null)) {
             throw new NullPointerException("아무런 요청이 없습니다!!");
@@ -56,12 +60,23 @@ public class Request {
         requestBody.addBodyLines(fullLine);
     }
 
-
-    public boolean isRequestHaveCookie() {
-        if (requestHeader.isHeaderMapContains("Cookie")) {
-            return true;
+    public void setHttpCookie(RequestHeader requestHeader) {
+        // 쿠키가 없을때
+        if (!requestHeader.isHeaderMapContains("Cookie")) {
+            this.httpCookie = new HttpCookie(null);
+            return;
         }
-        return false;
+        // 쿠키가 존재
+        this.httpCookie = new HttpCookie(requestHeader.getHeaderValueByKey("Cookie").split("=")[1]);
+        // 해당 쿠키가 유효한지 확인
+        if(!HttpSessions.cookieValidationCheck(this.httpCookie)){
+            this.httpCookie.cleanCookie();
+        }
+    }
+
+
+    public HttpCookie getHttpCookie() {
+        return httpCookie;
     }
 
     public boolean isBodyExistsOrEOL(String oneLine) throws IOException {

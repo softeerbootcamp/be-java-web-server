@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import request.Request;
 import response.ResponseFactory;
 import session.HttpSessions;
-import utils.StringBuilderUtils;
 import webserver.RequestResponseHandler;
 
 import java.io.File;
@@ -26,7 +25,7 @@ public class ArticleController implements Controller{
         logger.debug("firstLine : " + request.getRequestLine().getURL());
         logger.debug("body : "+ request.getRequestBody().getBodyLines().toString());
         ControllerTypeEnum controllerTypeEnum = ControllerTypeEnum.REDIRECT;
-        boolean isLogined = request.isRequestHaveCookie();
+        boolean isLogined = request.getHttpCookie().isLogin();
         LocalDate now = LocalDate.now();
         String addedLine = null;
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + "/index.html").toPath());
