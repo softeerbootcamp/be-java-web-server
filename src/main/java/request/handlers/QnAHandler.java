@@ -78,7 +78,7 @@ public class QnAHandler implements RequestHandler {
                     HttpResponseStatus.FOUND,
                     "Location: /index.html\r\n");
         } catch (SQLException e) {
-            logger.error(Arrays.toString(e.getStackTrace()));
+            logger.error(Arrays.toString(e.getStackTrace()));러
             return  Response.from(HttpResponseStatus.INTERNAL_SERVER_ERROR);
         }
     }
