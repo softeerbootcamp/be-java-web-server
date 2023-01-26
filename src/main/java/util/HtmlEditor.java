@@ -44,7 +44,25 @@ public class HtmlEditor {
 
     public static byte[] appendMemoList(byte[] body, Collection<Memo> memos){
         String bodyStr = new String(body);
-        StringBuilder memoList = new StringBuilder("<ul class=\"list\">");
+        StringBuilder memoList = new StringBuilder("<ul class=\"list\" name=\"memoList\">");
+        String staticHtml = "<li>\n" +
+                "    <div class=\"wrap\">\n" +
+                "        <div class=\"main\">\n" +
+                "            <strong class=\"subject\">\n" +
+                "                <a>%s</a>\n" +
+                "            </strong>\n" +
+                "            <div class=\"auth-info\">\n" +
+                "                <i class=\"icon-add-comment\"></i>\n" +
+                "                <a class=\"author\">%s</a>\n" +
+                "            </div>\n" +
+                "        </div>\n" +
+                "    </div>\n" +
+                "</li>\n";
+        for (Memo memo: memos){
+            String dynamicHtml = String.format(staticHtml,memo.getContent(),memo.getUserId());
+            memoList.append(dynamicHtml);
+        }
+        bodyStr = bodyStr.replace("<ul class=\"list\" name=\"memoList\">", memoList);
         //todo: memoList 동적으로 보이도록 html 편집 코드 작성
         return null;
     }
