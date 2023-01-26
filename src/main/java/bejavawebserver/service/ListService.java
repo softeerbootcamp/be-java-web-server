@@ -13,10 +13,11 @@ import java.util.List;
 @Service
 public class ListService {
     @Autowired JdbcRepository jdbcRepository;
+    @Autowired HtmlService htmlService;
 
     public String makeUserList(Model model, String uri, User loginUser){
         List<User> userList = new ArrayList<>(jdbcRepository.findAll());
         model.addAttribute("userList", userList);
-        return HtmlService.makeLoginView(model, uri, loginUser);
+        return htmlService.makeLoginView(model, uri, loginUser);
     }
 }
