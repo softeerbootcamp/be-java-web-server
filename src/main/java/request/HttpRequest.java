@@ -1,4 +1,4 @@
-package Request;
+package request;
 
 import java.io.BufferedReader;
 import java.util.Map;

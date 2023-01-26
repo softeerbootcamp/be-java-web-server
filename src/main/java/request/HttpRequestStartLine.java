@@ -1,12 +1,10 @@
-package Request;
+package request;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.FileIoUtil;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
 
 public class HttpRequestStartLine {
     private String path;

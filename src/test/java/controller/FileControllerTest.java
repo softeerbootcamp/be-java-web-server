@@ -1,7 +1,6 @@
 package controller;
 
-import Controller.Controller;
-import Request.*;
+import request.*;
 import response.HttpResponse;
 import db.SessionDb;
 import model.User;
@@ -9,7 +8,6 @@ import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import Controller.FileController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.*;

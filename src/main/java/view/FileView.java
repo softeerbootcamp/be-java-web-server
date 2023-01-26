@@ -1,6 +1,6 @@
 package view;
 
-import Request.HttpRequest;
+import request.HttpRequest;
 import model.User;
 import util.HtmlBuildUtil;
 import util.HttpResponseUtil;

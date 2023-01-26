@@ -1,8 +1,4 @@
-package Request;
-
-import Request.HttpRequest;
-
-import java.util.Objects;
+package request;
 
 public enum StatusCode {
     CONTINUE(100, "Continue"),

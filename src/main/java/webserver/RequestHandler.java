@@ -3,8 +3,8 @@ package webserver;
 import java.io.*;
 import java.net.Socket;
 
-import Controller.*;
-import Request.HttpRequest;
+import controller.*;
+import request.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

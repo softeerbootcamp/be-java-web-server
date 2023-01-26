@@ -1,6 +1,6 @@
 package view;
 
-import Request.HttpRequest;
+import request.HttpRequest;
 import db.DBConnector;
 import model.Qna;
 import model.User;

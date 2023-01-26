@@ -1,6 +1,6 @@
 package view;
 
-import Request.HttpRequest;
+import request.HttpRequest;
 
 public interface View {
     byte[] render(HttpRequest httpRequest);

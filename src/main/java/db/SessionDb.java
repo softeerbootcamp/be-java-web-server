@@ -1,6 +1,6 @@
 package db;
 
-import Request.HttpRequest;
+import request.HttpRequest;
 import model.Session;
 import model.User;
 import util.UserDbUtil;

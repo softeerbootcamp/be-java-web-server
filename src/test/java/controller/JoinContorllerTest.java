@@ -1,7 +1,6 @@
 package controller;
 
-import Controller.JoinController;
-import Request.*;
+import request.*;
 import response.HttpResponse;
 import model.User;
 import org.assertj.core.api.SoftAssertions;

@@ -1,8 +1,7 @@
-package Request;
+package request;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.FileIoUtil;
 import util.HttpRequestUtil;
 
 import java.util.HashMap;
