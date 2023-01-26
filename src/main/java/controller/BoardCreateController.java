@@ -26,7 +26,7 @@ public class BoardCreateController extends AbstractController {
             boardService.addBoard(httpRequest.getParameters());
             httpResponse.sendRedirect(HttpStatusCode.FOUND, "/index.html");
 
-        } catch (NonLogInException e) {
+        } catch (NonLogInException | RuntimeException e) {
             httpResponse.sendRedirect(HttpStatusCode.FOUND, "/user/login.html");
         }
     }

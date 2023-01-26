@@ -69,10 +69,9 @@ public class ResourceController extends AbstractController {
             byte[] body = FileIoUtils.load404ErrorFile();
             httpResponse.do404(body);
 
-        } catch (NonLogInException e) {
+        } catch (NonLogInException | RuntimeException e) {
             byte[] body = FileIoUtils.loadFile(filePath);
             httpResponse.forward(HttpStatusCode.OK, contentType, body);
-
         }
 
     }

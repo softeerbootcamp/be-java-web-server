@@ -48,7 +48,7 @@ public class UserLogInController extends AbstractController {
                     Cookie.of(DEFAULT_SESSION_ID, session.getSessionId())
             );
 
-        } catch (LogInFailedException e) {
+        } catch (LogInFailedException | RuntimeException e) {
             logger.info("Login Failed");
             e.printStackTrace();
             httpResponse.sendRedirect(HttpStatusCode.FOUND, LOGIN_FAILED_PATH);
