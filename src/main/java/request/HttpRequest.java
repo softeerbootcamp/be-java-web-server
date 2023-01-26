@@ -3,6 +3,8 @@ package request;
 import java.util.Map;
 
 import cookie.Cookie;
+import model.User;
+import session.SessionManager;
 import webserver.HttpMethod;
 import webserver.Url;
 
@@ -14,11 +16,22 @@ public class HttpRequest {
 	private Map<String, String> headers;
 
 	private Map<String, String> body;
+	private final User sessionUser;
 
 	private HttpRequest(HttpRequestLine httpRequestLine, Map<String, String> headers, Map<String,String> body) {
 		this.httpRequestLine = httpRequestLine;
 		this.headers = headers;
 		this.body = body;
+
+		if (validSession()) {
+			sessionUser = (User)SessionManager.getSession(getCookie().getSessionId()).getAttribute("user");
+		} else {
+			sessionUser = User.GUEST;
+		}
+	}
+
+	public User getSessionUser() {
+		return sessionUser;
 	}
 
 	public HttpMethod getMethod() {
@@ -46,8 +59,8 @@ public class HttpRequest {
 
 	}
 
-	public String getSessionId() {
-		return getCookie().getSessionId();
+	public boolean validSession() {
+		return hasCookie() && SessionManager.valid(getCookie().getSessionId());
 	}
 
 	public String getRequestBody(String key) {

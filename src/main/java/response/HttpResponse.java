@@ -29,6 +29,12 @@ public class HttpResponse {
 		this.responseBody = responseBody;
 	}
 
+	public void redirect(String redirectUrl) {
+		this.line = new HttpResponseLine(HttpStatus.FOUND);
+		this.header = new HashMap<>();
+		initHeader(ContentType.HTML, "", redirectUrl);
+	}
+
 	public HttpResponse(HttpStatus httpStatus, String responseBody, ContentType contentType) {
 		this.line = new HttpResponseLine(httpStatus);
 		this.header = new HashMap<>();

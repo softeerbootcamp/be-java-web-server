@@ -6,6 +6,8 @@ public class User {
     private String name;
     private String email;
 
+    public static final User GUEST = new User("guest", "", "guest", "guest");
+
     private User(String userId, String password, String name, String email) {
         this.userId = userId;
         this.password = password;
