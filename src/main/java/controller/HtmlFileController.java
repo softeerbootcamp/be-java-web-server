@@ -49,7 +49,8 @@ public class HtmlFileController implements Controller {
             if (path.equals(PathManager.HOME_PATH)) {
                 httpResponse.setBody(FileUtils.createPostListPage(user, postService.findAll()));
             }
-            httpResponse.setBody(FileUtils.createPage(path, user));
+            else
+                httpResponse.setBody(FileUtils.createPage(path, user));
         } catch (NotLogInException e) {
             try {
                 httpResponse.setBody(FileUtils.createPage(path, null));

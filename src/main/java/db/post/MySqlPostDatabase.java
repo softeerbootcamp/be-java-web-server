@@ -28,17 +28,16 @@ public class MySqlPostDatabase implements PostDatabase {
             Connection connection = connectionPool.getConnection();
             Collection<Post> posts = new ArrayList<>();
             String selectSQL = "SELECT * FROM posts";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(selectSQL)) {
-                try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                    while (resultSet.next()) {
-                        String title = resultSet.getString("title");
-                        String content = resultSet.getString("content");
-                        String writer = resultSet.getString("writer");
-                        String dateTime = resultSet.getString("dt_created");
-                        posts.add(Post.createWithDT(title, content, writer, dateTime));
-                    }
-                    return posts.stream().sorted(Collections.reverseOrder()).collect(Collectors.toList());
+            try (PreparedStatement preparedStatement = connection.prepareStatement(selectSQL);
+                 ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    String title = resultSet.getString("title");
+                    String content = resultSet.getString("content");
+                    String writer = resultSet.getString("writer");
+                    String dateTime = resultSet.getString("dt_created");
+                    posts.add(Post.createWithDT(title, content, writer, dateTime));
                 }
+                return posts.stream().sorted(Collections.reverseOrder()).collect(Collectors.toList());
             } finally {
                 connectionPool.releaseConnection(connection);
             }

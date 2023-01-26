@@ -69,16 +69,15 @@ public class MySqlSessionDatabase implements SessionDatabase {
             Connection connection = connectionPool.getConnection();
             Collection<Session> sessions = new ArrayList<>();
             String selectSQL = "SELECT * FROM sessions";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(selectSQL)) {
-                try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                    while (resultSet.next()) {
-                        String sessionId = resultSet.getString("session_id");
-                        String userId = resultSet.getString("user_id");
-                        long timestamp = resultSet.getLong("timestamp");
-                        sessions.add(Session.createWithTimeStamp(sessionId, userId, timestamp));
-                    }
-                    return sessions;
+            try (PreparedStatement preparedStatement = connection.prepareStatement(selectSQL);
+                 ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    String sessionId = resultSet.getString("session_id");
+                    String userId = resultSet.getString("user_id");
+                    long timestamp = resultSet.getLong("timestamp");
+                    sessions.add(Session.createWithTimeStamp(sessionId, userId, timestamp));
                 }
+                return sessions;
             } finally {
                 connectionPool.releaseConnection(connection);
             }
