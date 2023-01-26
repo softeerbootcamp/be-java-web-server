@@ -24,14 +24,13 @@ public class TemplatesFileReader implements FileReader {
     }
 
     private String splitPathVariable(Url url) {
-        String urlStr = url.getUrl();
+        String urlStr = "";
         if (url.getRequestDataType().equals(RequestDataType.PATH_VARIABLE)) {
             String[] parts = url.getUrl().split("/");
-            for (int i = 1; i < parts.length-1; i++) {
-                urlStr = "/" + parts[i];
+            for (int i = 0; i < parts.length-1; i++) {
+                urlStr += "/" + parts[i];
             }
         }
-        System.out.println("urlStr = " + urlStr);
         return urlStr;
     }
 
