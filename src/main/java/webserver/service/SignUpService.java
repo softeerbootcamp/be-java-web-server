@@ -1,7 +1,7 @@
 package webserver.service;
 
 import customException.AlreadyHasSameIdException;
-import db.Database;
+import db.mysql.DB_Users;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +9,7 @@ import webserver.constants.Paths;
 import webserver.httpUtils.Request;
 import webserver.httpUtils.Response;
 
+import java.sql.SQLException;
 import java.util.Map;
 
 public class SignUpService implements Service{
@@ -20,10 +21,10 @@ public class SignUpService implements Service{
         User newUser = new User(userInfo.get(User.ID), userInfo.get(User.PASS_WORD), userInfo.get(User.NAME), userInfo.get(User.EMAIL));
         try
         {
-            if(Database.findUserById(newUser.getUserId()) != Database.NOT_FOUND_USER)
+            if(DB_Users.findUserById(newUser.getUserId()) != DB_Users.NOT_FOUND_USER)
                 throw new AlreadyHasSameIdException("이미 같은 아이디의 유저가 있음");
-            Database.addUser(newUser);
-        }catch (AlreadyHasSameIdException e)
+            DB_Users.addUser(newUser);
+        }catch (AlreadyHasSameIdException | SQLException e)
         {
             logger.error(e.getMessage());
             return new Response()

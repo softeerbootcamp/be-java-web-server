@@ -1,13 +1,13 @@
 package webserver.service;
 
-import db.Database;
+import db.mysql.DB_Users;
 import model.User;
 import webserver.constants.InBody;
 import webserver.httpUtils.Request;
 import webserver.httpUtils.Response;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.sql.SQLException;
 
 public class UserListService extends AlreadyLoggedInService{
 
@@ -36,8 +36,9 @@ public class UserListService extends AlreadyLoggedInService{
     {
         StringBuffer sb = new StringBuffer();
         int idx = 0;
-        for(User user : Database.findAll())
-        {
+        try{
+            for(User user : DB_Users.findAll())
+            {
             idx++;
             sb.append("<tr>")
                     .append("<th scope=\"row\">"+idx+"</th>")
@@ -45,8 +46,12 @@ public class UserListService extends AlreadyLoggedInService{
                     .append("<td>"+user.getName()+"</td>")
                     .append("<td>"+user.getEmail()+"</td>")
                     .append("<td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td>")
-              .append("</tr>");
+                    .append("</tr>");
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
         }
+
         return sb.toString();
     }
 }

@@ -1,6 +1,6 @@
 package webserver.controller;
 
-import db.Database;
+import db.mysql.DB_Users;
 import db.UserIdSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,15 +28,16 @@ public class DynamicFileController implements Controller{
         // 로그인 부분을 현재 사용자 이름으로 변경하는 서비스
         service = new AlreadyLoggedInService(sid_userid);
 
-        if(req.getReqLine().getQuery().contains("user/list"))
+        if(req.getReqLine().getQuery().endsWith("user/list.html"))
         {
             service = new UserListService(sid_userid);
         }
+        if(req.getReqLine().getQuery().endsWith("user/create/article"))
+        {
+            service = new PostNewArticleService(sid_userid);
+        }
 
         Response res = service.exec(req);
-
-        logger.debug("sid : " + sid_userid);
-        logger.debug("name : " + Database.findUserById(UserIdSession.getUserId(sid_userid)).getName());
 
         resSender = new ResponseSender(res);
         resSender.sendRes(out);

@@ -3,7 +3,7 @@ package webserver.service;
 import customException.cannotLogIn.CannotLogInException;
 import customException.cannotLogIn.NotFoundUserException;
 import customException.cannotLogIn.PasswordMismatchException;
-import db.Database;
+import db.mysql.DB_Users;
 import db.UserIdSession;
 import model.User;
 import org.slf4j.Logger;
@@ -12,6 +12,7 @@ import webserver.constants.Paths;
 import webserver.httpUtils.Request;
 import webserver.httpUtils.Response;
 
+import java.sql.SQLException;
 import java.util.Map;
 
 public class LogInService implements Service{
@@ -23,14 +24,14 @@ public class LogInService implements Service{
         String sid = new String();
 
         try{
-            User whoIsTryingLogIn = Database.findUserById(userInfo.get(User.ID));
+            User whoIsTryingLogIn = DB_Users.findUserById(userInfo.get(User.ID));
 
-            if(whoIsTryingLogIn == Database.NOT_FOUND_USER)
+            if(whoIsTryingLogIn == DB_Users.NOT_FOUND_USER)
                 throw new NotFoundUserException("가입하지 않은 아이디입니다.");
             if(!userInfo.get(User.PASS_WORD).equals(whoIsTryingLogIn.getPassword()))
                 throw new PasswordMismatchException("비밀번호를 다시 입력하세요");
 
-        } catch(CannotLogInException e)
+        } catch(CannotLogInException | SQLException e)
         {
             return new Response()
                     .withVersion(req.getReqLine().getVersion())
