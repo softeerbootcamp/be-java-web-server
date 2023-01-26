@@ -21,10 +21,10 @@ public class DBConnectionManager {
     private static String pw;
 
     static {
-        initConnection();
+        initSecrets();
     }
 
-    private static void initConnection() {
+    private static void initSecrets() {
         try {
             BufferedReader br = new BufferedReader(new FileReader(SECRET_PATH));
             url = br.readLine();
@@ -48,7 +48,9 @@ public class DBConnectionManager {
                 statement.setString(i + 1, arguments[i]);
             }
             statement.execute();
+
             ResultSet result = statement.getResultSet();
+
             List<Map<String, String>> results = new ArrayList<>();
             while (result != null && result.next()) {
                 Map<String, String> row = new HashMap<>();
@@ -57,6 +59,7 @@ public class DBConnectionManager {
                 }
                 results.add(row);
             }
+
             return results;
         } catch (SQLException e) {
             logger.error("잘못된 SQL 입니다.");
