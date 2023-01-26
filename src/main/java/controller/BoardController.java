@@ -38,13 +38,7 @@ public class BoardController extends AbstractController {
 		boardService.addUser(httpRequest.getRequestBody("title"), httpRequest.getRequestBody("contents"),
 			httpRequest.getRequestBody("writer"));
 
-		httpResponse.setHttpResponse(HttpStatus.FOUND,
-			"", ContentType.HTML,
-			"/index.html");
-	}
-
-	public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
-
+		httpResponse.redirect("/home");
 	}
 
 }
