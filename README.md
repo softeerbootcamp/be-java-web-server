@@ -261,7 +261,7 @@ Java bytecode로 컴파일될 수 있는 언어로 구현된 프로그램을 컴
 
 ### JVM 메모리
 ![img.png](ReadmeImg/JVM메모리.png)
-- **메서드 영역** : class level의 모든 정보(이름, 부모이름, 메서드, 변수). static 변수의 경우 java 8부터 힙 영역에 저장됨
+- **메서드 영역** : class level의 모든 정보(이름, 부모이름, 메서드, 변수). static 변수의 경우 java 8 이전에는 힙 영역의 PerGen에 저장되었으나, 8부터는 Native Memory 내 MetaSpace에 저장됨
 - **힙 영역** : new로 생성되는 객체들이 저장됨
 - **스택 영역** : 스레드마다 생성되는 스택들이 저장됨. 스택은 activation record/stack frame으로 이루어져 있으며, 하나의 프레임마다 메서드 호출정보(지역변수 등)가 저장되어 있음.
 스레드가 종료되면 JVM에 의해 해당 스택이 파괴됨.
