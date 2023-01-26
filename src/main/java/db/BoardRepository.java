@@ -41,11 +41,19 @@ public class BoardRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            try {
-                if (conn != null) conn.close();
-                if (pstmt != null) pstmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            if(conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+            if(pstmt != null) {
+                try{
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -84,12 +92,27 @@ public class BoardRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            try {
-                if (conn != null) conn.close();
-                if (pstmt != null) pstmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+           if(conn != null) {
+               try {
+                   conn.close();
+               } catch (SQLException e){
+                   e.printStackTrace();
+               }
+           }
+           if(pstmt != null) {
+               try{
+                   pstmt.close();
+               } catch (SQLException e) {
+                   e.printStackTrace();
+               }
+           }
+           if(rs != null) {
+               try {
+                   rs.close();
+               } catch (SQLException e) {
+                   e.printStackTrace();
+               }
+           }
         }
         return null;
     }
