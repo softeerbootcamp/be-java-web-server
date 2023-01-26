@@ -5,9 +5,7 @@ import model.Article;
 import model.User;
 
 import java.sql.*;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 import java.util.Date;
 
 public class DB_Board {
@@ -57,8 +55,7 @@ public class DB_Board {
         }
     }
     public static Collection<Article> findAll() throws SQLException {
-        Collection<Article> allArticles = Collections.EMPTY_LIST;
-
+        Collection<Article> allArticles = new ArrayList<>();
         try
         {
             Class.forName("com.mysql.jdbc.Driver");
@@ -66,7 +63,7 @@ public class DB_Board {
                     "user=" + ADMIN_ID + "&" +
                     "password=" + ADMIN_PASSWORD);
 
-            String sql = "SELECT * FROM board";
+            String sql = "SELECT uid, content, date FROM users INEER JOIN board";
             // uid, password, name, email
             pstmt = conn.prepareStatement(sql);
 
@@ -75,7 +72,7 @@ public class DB_Board {
             {
                 allArticles.add(
                         new Article(
-                                rs.getString("writerId"),
+                                rs.getString("uid"),
                                 rs.getString("content"),
                                 rs.getString("date")
                         )
