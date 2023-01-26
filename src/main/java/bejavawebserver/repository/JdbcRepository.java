@@ -1,5 +1,6 @@
 package bejavawebserver.repository;
 
+import bejavawebserver.model.QnaForm;
 import bejavawebserver.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -110,6 +111,27 @@ public class JdbcRepository {
             logger.debug("error : {}", e.getMessage());
 
             return null;
+        } finally {
+            close(conn, pstmt, rs);
+        }
+    }
+
+    public void addQna(QnaForm qnaForm) {
+        String sql = "insert into qna values(?, ?, ?)";
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try{
+            conn = getConnection();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, qnaForm.getWriter());
+            pstmt.setString(2, qnaForm.getTitle());
+            pstmt.setString(3, qnaForm.getContents());
+            pstmt.executeUpdate();
+
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
         } finally {
             close(conn, pstmt, rs);
         }
