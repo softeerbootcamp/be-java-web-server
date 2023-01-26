@@ -2,7 +2,7 @@ package dto;
 
 import java.util.Map;
 
-public class SignUpDTO extends LogInDTO {
+public class SignUpDTO extends LoginDTO {
 
     public static final String NAME = "name";
     public static final String EMAIL = "email";
@@ -17,7 +17,7 @@ public class SignUpDTO extends LogInDTO {
     }
 
     public static SignUpDTO of(Map<String, String> parameters) {
-        return new SignUpDTO(parameters.get(USER_ID), parameters.get(PASSWORD), parameters.get(NAME), parameters.get(EMAIL));
+        return new SignUpDTO(parameters.get(LOGIN_ID), parameters.get(PASSWORD), parameters.get(NAME), parameters.get(EMAIL));
     }
 
     public String getName() {

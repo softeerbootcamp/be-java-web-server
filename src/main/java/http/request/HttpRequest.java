@@ -5,6 +5,7 @@ import http.common.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class HttpRequest {
 
@@ -24,6 +25,10 @@ public class HttpRequest {
         return startLine.getUrl();
     }
 
+    public void setUrl(String url) {
+        startLine.setUrl(url);
+    }
+
     public Method getMethod() {
         return startLine.getMethod();
     }
@@ -32,11 +37,10 @@ public class HttpRequest {
         return Cookie.cookify(header.getAttribute(HeaderAttribute.COOKIE));
     }
 
-    public Cookie getCookie(String key) {
+    public Optional<Cookie> getCookie(String key) {
         return getCookies().stream()
                 .filter(c -> c.getKey().equals(key))
-                .findAny()
-                .orElse(null);
+                .findAny();
     }
 
     public Map<String, String> getParameters(String... args) {

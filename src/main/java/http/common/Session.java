@@ -10,7 +10,7 @@ public class Session {
 
     public Session(User user) {
         this.user = user;
-        this.id = generateId(user.getUserId());
+        this.id = generateId(user.getLoginId());
     }
 
     private String generateId(String userId) {
