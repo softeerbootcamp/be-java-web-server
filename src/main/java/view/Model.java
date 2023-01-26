@@ -10,4 +10,8 @@ public class Model {
 	public void addModel(String key, Object value) {
 		model.put(key, value);
 	}
+
+	public Object getValue(String key) {
+		return model.get(key);
+	}
 }
