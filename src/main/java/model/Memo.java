@@ -13,6 +13,14 @@ public class Memo {
         this.content = content;
     }
 
+    public void setMemoId(Long memoId) {
+        this.memoId = memoId;
+    }
+
+    public Long getMemoId() {
+        return memoId;
+    }
+
     @Override
     public String toString() {
         return "Memo [memoId = " + memoId + ", writer=" + userId + ", content=" + content + "]";
