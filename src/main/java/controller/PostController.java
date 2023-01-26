@@ -4,6 +4,7 @@ import dto.PostCreateDTO;
 import filesystem.FileSystem;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import model.Post;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.AuthService;
@@ -32,7 +33,8 @@ public class PostController implements Controller {
         logger.debug("post controller called");
         try {
             getHandler(request).accept(request, response);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            logger.debug(e.getMessage());
             response.redirect(DOMAIN);
         }
     }
@@ -45,24 +47,22 @@ public class PostController implements Controller {
     }
 
     private void addNewPost(HttpRequest request, HttpResponse response) {
-        authService.getUser(request).ifPresent((user) -> {
+        authService.getUser(request).ifPresentOrElse((user) -> {
             PostCreateDTO postInfo = PostCreateDTO.of(user, request.getParameters(TITLE, CONTENT));
-            postService.create(postInfo, user);
-        });
+            postService.addNewPost(postInfo, user);
+        }, () -> logger.debug("not authorized add new post request"));
         response.redirect(DOMAIN);
     }
 
     private void getPostDetail(HttpRequest request, HttpResponse response) {
-        postService.readPost(getPostId(request.getUrl())).ifPresent((post) -> {
-            response.update(FileSystem.getPersonalizedResource(POST_DETAIL_HTML,
-                    post.getTitle(),
-                    post.getCreatedDate(),
-                    post.getUser().getName(),
-                    post.getContent()
-            ));
-            response.send();
-        });
-        response.redirect(DOMAIN);
+        Post post = postService.readPost(getPostId(request.getUrl()));
+        response.update(FileSystem.getPersonalizedResource(POST_DETAIL_HTML,
+                post.getTitle(),
+                post.getCreatedDate(),
+                post.getUser().getName(),
+                post.getContent()
+        ));
+        response.send();
     }
 
     private long getPostId(String url) {
