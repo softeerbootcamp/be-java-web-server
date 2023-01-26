@@ -17,7 +17,7 @@ public class HeaderUtils {
         return headers;
     }
 
-    public static Map<Header, String> responseCreateUserHeader() {
+    public static Map<Header, String> responseRedirectIndexHtmlHeader() {
         headers.put(Header.from("Location"), "/index.html");
 
         return headers;

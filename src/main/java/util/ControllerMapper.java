@@ -1,12 +1,10 @@
 package util;
 
-import controller.Controller;
-import controller.ViewController;
-import controller.NotFoundController;
-import controller.UserController;
+import controller.*;
 import db.Database;
 import model.request.Request;
 import model.request.RequestLine;
+import service.MemoService;
 import service.UserService;
 
 import org.slf4j.Logger;
@@ -23,6 +21,7 @@ public class ControllerMapper {
 
     static {
         controllerMap.put("user", new UserController(new UserService(new Database())));
+        controllerMap.put("memo", new MemoController(new MemoService(new Database())));
     }
 
     public static Controller selectController(Request request) {

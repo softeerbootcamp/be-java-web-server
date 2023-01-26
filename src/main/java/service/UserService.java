@@ -23,11 +23,11 @@ public class UserService {
         return Objects.nonNull(user) && user.getPassword().equals(userLoginInfo.get("password"));
     }
 
-    public Collection<User> getUserList() {
-        return database.findAll();
-    }
-
     public User getUser(String userId) {
         return database.findUserById(userId);
+    }
+
+    public Collection<User> getUserList() {
+        return database.findAll();
     }
 }
