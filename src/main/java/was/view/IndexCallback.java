@@ -1,21 +1,22 @@
 package was.view;
 
-import db.BoardDatabase;
 import model.Board;
+import service.BoardService;
+
 import java.util.Collection;
 
-public class LoginIndexCallback implements BufferedReaderCallback {
+public class IndexCallback implements BufferedReaderCallback {
     @Override
     public String createDynamicHtmlWith(String line) {
         if (line.contains("<ul class=\"list\">")) {
             StringBuilder sb = new StringBuilder();
-            Collection<Board> collection = BoardDatabase.findAll();
+            Collection<Board> collection = BoardService.getInstance().getAllBoards();
             for (Board board : collection) {
                 sb.append("\n" + "<li>\n" +
                         "                  <div class=\"wrap\">\n" +
                         "                      <div class=\"main\">\n" +
                         "                          <strong class=\"subject\">\n" +
-                        "                              <a href=\"./qna/show.html\">" + board.getTitle() + "</a>\n" +
+                        "                              <a href=\"./qna/show.html\">" + board.getContents() + "</a>\n" +
                         "                          </strong>\n" +
                         "                          <div class=\"auth-info\">\n" +
                         "                              <i class=\"icon-add-comment\"></i>\n" +

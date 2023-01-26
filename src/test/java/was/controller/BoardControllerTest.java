@@ -11,8 +11,6 @@ import webserver.domain.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class BoardControllerTest {
     @Test
     @DisplayName("board api 테스트")
@@ -33,7 +31,7 @@ class BoardControllerTest {
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(find.getWriter()).isEqualTo("박원종");
         softly.assertThat(find.getTitle()).isEqualTo("제목");
-        softly.assertThat(find.getContent()).isEqualTo("내용");
+        softly.assertThat(find.getContents()).isEqualTo("내용");
         softly.assertAll();
     }
 
