@@ -1,22 +1,21 @@
 package model.service;
 
-import controller.StaticController;
 import model.domain.User;
-import model.repository.MemoryUserRepository;
+import model.repository.MysqlUserRepository;
 import model.repository.UserRepository;
 
 import java.util.Collection;
 import java.util.Optional;
 
 public class UserService {
-    private final UserRepository userRepository = MemoryUserRepository.getInstance();
+    private final UserRepository userRepository = MysqlUserRepository.getInstance();
     private static UserService userService;
 
     private UserService(){}
 
     public static UserService getInstance(){
         if (userService == null){
-            synchronized (StaticController.class){
+            synchronized (UserService.class){
                 if (userService == null){
                     userService = new UserService();
                 }

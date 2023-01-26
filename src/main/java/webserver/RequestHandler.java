@@ -4,10 +4,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Map;
 
-import controller.Controller;
-import controller.LoginController;
-import controller.StaticController;
-import controller.UserController;
+import controller.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import view.RequestBodyMessage;

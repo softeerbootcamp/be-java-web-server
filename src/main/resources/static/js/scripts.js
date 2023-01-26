@@ -5,9 +5,14 @@ function signUpByEnter(event){
   }
 }
 
-window.onload = function (){
-  document.question.addEventListener('keyup', event => signUpByEnter(event));
+function postMemoByEnter(event){
+  let key = event.key || event.keyCode;
+  if (key === 'Enter' || key === 13){
+    memoEmptyChk();
+  }
 }
+
+
 function emptyChk(){
   var signUpForm = document.question;
   var userId = signUpForm.userId.value;
@@ -20,6 +25,16 @@ function emptyChk(){
     alert("올바른 이메일을 입력하세요.")
   } else{
     signUpForm.submit();
+  }
+}
+
+function memoEmptyChk(){
+  var memoForm = document.memoQuestion;
+  var memo = memoForm.memo.value;
+  if (!memo){
+    alert("메모를 입력하세요.")
+  } else {
+    memoForm.submit();
   }
 }
 

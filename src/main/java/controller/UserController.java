@@ -1,7 +1,6 @@
 package controller;
 
 import model.domain.User;
-import model.repository.MemoryUserRepository;
 import model.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +20,6 @@ public class UserController implements Controller{
     private static UserController userController;
 
     private final UserService userService = UserService.getInstance();
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private static final String USER_ID = "userId";
     private static final String PASSWORD = "password";
     private static final String NAME = "name";
@@ -75,7 +73,7 @@ public class UserController implements Controller{
             setLocation(Redirect.getRedirectLink(requestMessage.getRequestHeaderMessage().getRequestAttribute()), headerKV);
         } catch (IllegalStateException e){
             setLocation("/user/form_failed.html", headerKV);
-            logger.debug(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -89,14 +87,12 @@ public class UserController implements Controller{
             setCookie(Session.newLoginSession(user), headerKV);
         } catch (IllegalStateException e){
             setLocation("/user/login_failed.html", headerKV);
-
-            logger.debug(e.getMessage());
+            e.printStackTrace();
         }
     }
 
 
     private void setCookie(String sid, Map<String,String> headerKV){
-        logger.debug("sid: "+sid);
         setHeader(headerKV, "Set-Cookie","sid="+sid+"; Path=/");
     }
 

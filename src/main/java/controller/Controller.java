@@ -19,7 +19,7 @@ public interface Controller {
             try {
                 return Files.readAllBytes(new File(fileURL).toPath());
             } catch (IOException e){
-                //logger.debug(e.getMessage());
+                e.printStackTrace();
             }
         }
         return new byte[0];

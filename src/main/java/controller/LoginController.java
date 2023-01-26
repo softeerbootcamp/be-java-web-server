@@ -1,9 +1,8 @@
 package controller;
 
 import model.domain.User;
+import model.service.MemoService;
 import model.service.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import util.HtmlEditor;
 import util.HttpStatus;
 import util.Session;
@@ -17,15 +16,14 @@ import java.util.Collection;
 public class LoginController implements Controller{
     private static LoginController loginController;
     private final UserService userService = UserService.getInstance();
-
-    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+    private final MemoService memoService = MemoService.getInstance();
     private static final String RELATIVE_PATH = "./src/main/resources";
 
     private LoginController(){}
 
     public static LoginController getInstance(){
         if (loginController == null){
-            synchronized (UserController.class){
+            synchronized (LoginController.class){
                 if (loginController == null){
                     loginController = new LoginController();
                 }
@@ -37,12 +35,10 @@ public class LoginController implements Controller{
     @Override
     public void control(RequestMessage requestMessage, OutputStream out) {
         byte[] body = getStaticBody(requestMessage);
-        logger.info("body with static page:\n"+body.toString());
         if (requestMessage.getRequestHeaderMessage().getHttpOnlyURL().contains("html"))
             body = changeNavbar(body, requestMessage);
         if (requestMessage.getRequestHeaderMessage().getHttpOnlyURL().startsWith("/user/list.html"))
             body = dynamicListPage(body);
-        logger.info("body after dynamic change:\n"+body.toString());
         Response response = new Response(new DataOutputStream(out));
         response.response(body,requestMessage.getRequestHeaderMessage(), HttpStatus.Success);
     }
