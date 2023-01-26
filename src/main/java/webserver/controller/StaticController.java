@@ -17,7 +17,7 @@ public class StaticController implements Controller {
     }
     @Override
     public void chain(Request req, Response res, ModelAndView mv) {
-        ControllerInterceptor.executeController(getInstance(), req, res, mv);
+        ControllerInterceptor.getInstance().executeController(getInstance(), req, res, mv);
         String path = req.getRequestLine().getResource().getPath();  //리소스 위치 경로
         mv.setViewPath(path);
     }
