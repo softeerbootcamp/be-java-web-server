@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -22,11 +23,10 @@ public class HttpRequestUtil {
         String[] pieces = query.split(AND);
         for (String param : pieces) {
             String[] temp = param.split(EQUAL);
+
             try {
-                params.put(URLDecoder.decode(temp[0], "UTF-8"), URLDecoder.decode(temp[1], "UTF-8"));
-                logger.debug("param: " + URLDecoder.decode(temp[0], "UTF-8") + ' ' + URLDecoder.decode(temp[1], "UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
+                params.put(URLDecoder.decode(temp[0], StandardCharsets.UTF_8), URLDecoder.decode(temp[1], StandardCharsets.UTF_8));
+                logger.debug("param: " + URLDecoder.decode(temp[0], StandardCharsets.UTF_8) + ' ' + URLDecoder.decode(temp[1], StandardCharsets.UTF_8));
             } catch (ArrayIndexOutOfBoundsException e) {
                 return params;
             }
