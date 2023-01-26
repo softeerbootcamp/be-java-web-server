@@ -15,38 +15,24 @@ import java.util.Optional;
 
 public class PostRepository {
 
-    public Post save(Post post) {
-        Connection con = null;
-        PreparedStatement pstm = null;
+    public void save(Post post) {
         String sql = "INSERT INTO Post(uid, title, content, createdDate) VALUES(?, ?, ?, ?)";
-
-        try {
-            con = DBUtil.getConnection();
-            pstm = con.prepareStatement(sql);
-            pstm.setLong(1, post.getUser().getId());
-            pstm.setString(2, post.getTitle());
-            pstm.setString(3, post.getContent());
-            pstm.setString(4, post.getCreatedDate());
-            pstm.executeUpdate();
+        try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setLong(1, post.getUser().getId());
+            ps.setString(2, post.getTitle());
+            ps.setString(3, post.getContent());
+            ps.setString(4, post.getCreatedDate());
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new DBException(e);
-        } finally {
-            DBUtil.close(con, pstm, null);
         }
-
-        return post;
     }
 
     public List<PostDAO> getAllPosts() {
-        Connection con = null;
-        PreparedStatement pstm = null;
-        ResultSet rs = null;
-        List<PostDAO> posts = Lists.newArrayList();
         String sql = "SELECT * FROM Post";
-        try {
-            con = DBUtil.getConnection();
-            pstm = con.prepareStatement(sql);
-            rs = pstm.executeQuery();
+        List<PostDAO> posts = Lists.newArrayList();
+        try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 posts.add(PostDAO.of(
                         rs.getLong("id"),
@@ -55,25 +41,18 @@ public class PostRepository {
                         rs.getString("content"),
                         rs.getTimestamp("createdDate").toLocalDateTime()));
             }
+            return posts;
         } catch (SQLException e) {
             throw new DBException(e);
-        } finally {
-            DBUtil.close(con, pstm, rs);
-            return posts;
         }
     }
 
     public Optional<PostDAO> findById(long id) {
-        Connection con = null;
-        PreparedStatement pstm = null;
-        ResultSet rs = null;
-        PostDAO postDAO = null;
         String sql = "SELECT * FROM Post WHERE id = (?)";
-        try {
-            con = DBUtil.getConnection();
-            pstm = con.prepareStatement(sql);
-            pstm.setLong(1, id);
-            rs = pstm.executeQuery();
+        PostDAO postDAO = null;
+        try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setLong(1, id);
+            ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 postDAO = PostDAO.of(
                         rs.getLong("id"),
@@ -83,12 +62,9 @@ public class PostRepository {
                         rs.getTimestamp("createdDate").toLocalDateTime()
                 );
             }
-            throw new IllegalStateException("post not found");
+            return Optional.ofNullable(postDAO);
         } catch (SQLException e) {
             throw new DBException(e);
-        } finally {
-            DBUtil.close(con, pstm, rs);
-            return Optional.ofNullable(postDAO);
         }
     }
 }

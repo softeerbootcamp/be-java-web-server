@@ -17,37 +17,24 @@ import static model.User.*;
 public class UserRepository {
 
     public void save(User user) {
-        Connection con = null;
-        PreparedStatement pstm = null;
         String sql = "INSERT INTO User(login_id, password, name, email) VALUES(?, ?, ?, ?)";
-        try {
-            con = DBUtil.getConnection();
-            pstm = con.prepareStatement(sql);
-
-            pstm.setString(1, user.getLoginId());
-            pstm.setString(2, user.getPassword());
-            pstm.setString(3, user.getName());
-            pstm.setString(4, user.getEmail());
-
-            pstm.executeUpdate();
+        try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, user.getLoginId());
+            ps.setString(2, user.getPassword());
+            ps.setString(3, user.getName());
+            ps.setString(4, user.getEmail());
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new DBException(e);
-        } finally {
-            DBUtil.close(con, pstm, null);
         }
     }
 
     public Optional<User> findById(Long id) {
-        Connection con = null;
-        PreparedStatement pstm = null;
-        ResultSet rs = null;
-        User user = null;
         String sql = "SELECT * FROM User WHERE id = (?)";
-        try {
-            con = DBUtil.getConnection();
-            pstm = con.prepareStatement(sql);
-            pstm.setLong(1, id);
-            rs = pstm.executeQuery();
+        User user = null;
+        try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setLong(1, id);
+            ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 user = User.of(
                         rs.getLong(ID),
@@ -57,25 +44,18 @@ public class UserRepository {
                         rs.getString(EMAIL)
                 );
             }
+            return Optional.ofNullable(user);
         } catch (SQLException e) {
             throw new DBException(e);
-        } finally {
-            DBUtil.close(con, pstm, rs);
-            return Optional.ofNullable(user);
         }
     }
 
     public Optional<User> findByLoginId(String loginId) {
-        Connection con = null;
-        PreparedStatement pstm = null;
-        ResultSet rs = null;
-        User user = null;
         String sql = "SELECT * FROM User WHERE login_id LIKE ?";
-        try {
-            con = DBUtil.getConnection();
-            pstm = con.prepareStatement(sql);
-            pstm.setString(1, loginId);
-            rs = pstm.executeQuery();
+        User user = null;
+        try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, loginId);
+            ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 user = User.of(
                         rs.getLong(ID),
@@ -85,24 +65,17 @@ public class UserRepository {
                         rs.getString(EMAIL)
                 );
             }
+            return Optional.ofNullable(user);
         } catch (SQLException e) {
             throw new DBException(e);
-        } finally {
-            DBUtil.close(con, pstm, rs);
-            return Optional.ofNullable(user);
         }
     }
 
     public List<User> findAll() {
-        Connection con = null;
-        PreparedStatement pstm = null;
-        ResultSet rs = null;
         List<User> users = Lists.newArrayList();
         String sql = "SELECT * FROM User";
-        try {
-            con = DBUtil.getConnection();
-            pstm = con.prepareStatement(sql);
-            rs = pstm.executeQuery();
+        try (Connection con = DBUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 users.add(User.of(
                         rs.getLong(ID),
@@ -112,11 +85,9 @@ public class UserRepository {
                         rs.getString(EMAIL)
                 ));
             }
+            return users;
         } catch (SQLException e) {
             throw new DBException(e);
-        } finally {
-            DBUtil.close(con, pstm, rs);
-            return users;
         }
     }
 }
