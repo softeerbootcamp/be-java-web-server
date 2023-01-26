@@ -56,6 +56,21 @@ public class JdbcTemplate {
             }
         }
     }
+    private <T> List<T> queryForObject(String sql, Object[] objects, ResultSetExtractor<T> resultSetExtractor) {
+        return query(new DbCallback() {
+            @Override
+            public PreparedStatement makePreparedStatement(Connection con) throws SQLException {
+                PreparedStatement ps = con.prepareStatement(sql);
+
+                if (objects != null && objects.length > 0) {
+                    for (int i = 1; i < objects.length + 1; i++) {
+                        ps.setString(i, (String) objects[i - 1]);
+                    }
+                }
+                return ps;
+            }
+        }, resultSetExtractor);
+    }
 
     public <T> List<T> query(DbCallback callback, ResultSetExtractor<T> resultSetExtractor) {
         String jdbc_url = "jdbc:mysql://localhost:3306/webserver?serverTimezone=UTC";
