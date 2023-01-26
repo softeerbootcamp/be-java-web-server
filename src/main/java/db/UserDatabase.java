@@ -1,7 +1,5 @@
 package db;
 
-import com.google.common.collect.Maps;
-
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
 
 public class UserDatabase {
 
@@ -76,7 +73,7 @@ public class UserDatabase {
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 users.add(User.of(resultSet.getString("userId"), resultSet.getString("password"),
                         resultSet.getString("name"), resultSet.getString("email")));
             }
