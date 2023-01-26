@@ -1,6 +1,7 @@
 package http;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -9,12 +10,12 @@ public class HttpHeader {
     private final Map<String, String> headers;
 
 
-    private HttpHeader(Map<String, String> headers) {
-        this.headers = headers;
+    private HttpHeader() {
+        this.headers = new HashMap<>();
     }
 
-    public static HttpHeader from(Map<String, String> headers) {
-        return new HttpHeader(headers);
+    public static HttpHeader create() {
+        return new HttpHeader();
     }
 
     public void addHeader(String header, String value) {

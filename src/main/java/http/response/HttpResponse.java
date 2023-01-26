@@ -28,7 +28,7 @@ public class HttpResponse {
             throw new IllegalArgumentException("Invalid version argument passed");
         this.version = version;
         this.dos = dos;
-        this.headers = HttpHeader.from(new HashMap<>());
+        this.headers = HttpHeader.create();
         this.statusCode = StatusCode.OK;
         this.body = HttpResponseBody.createBody(new byte[0]);
     }
@@ -59,6 +59,10 @@ public class HttpResponse {
         return String.format("%s %s \r\n", this.version, this.statusCode) +
                 headers.getMessage() +
                 CRLF;
+    }
+
+    public void forward(String path) {
+        this.statusCode = StatusCode.OK;
     }
 
     public void redirect(String path) {

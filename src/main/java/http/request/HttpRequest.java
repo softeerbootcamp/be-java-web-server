@@ -6,7 +6,6 @@ import utils.enums.HttpMethod;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
 public class HttpRequest {
@@ -37,7 +36,7 @@ public class HttpRequest {
     }
 
     private static HttpHeader createRequestHeader(BufferedReader br) throws IOException {
-        HttpHeader httpHeader = HttpHeader.from(new HashMap<>());
+        HttpHeader httpHeader = HttpHeader.create();
         while (true) {
             String line = br.readLine();
             if (line.equals("")) break;
@@ -91,9 +90,5 @@ public class HttpRequest {
 
     private boolean hasSession(String cookie) {
         return cookie != null && cookie.contains("sid");
-    }
-
-    public boolean hasHtmlRequest() {
-        return getUri().getPath().contains("html");
     }
 }

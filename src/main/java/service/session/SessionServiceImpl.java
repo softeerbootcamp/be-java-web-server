@@ -1,11 +1,11 @@
 package service.session;
 
 import db.session.SessionDatabase;
+import exception.NotLogInException;
 import model.Session;
 import model.User;
 
 import java.util.Collection;
-import java.util.Optional;
 import java.util.UUID;
 
 public class SessionServiceImpl implements SessionService {
@@ -31,13 +31,19 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public Optional<Session> getSession(String sessionId) {
-        return Optional.ofNullable(sessionDatabase.findSessionById(sessionId));
+    public Session getSession(String sessionId) {
+        return sessionDatabase.findSessionById(sessionId);
     }
 
     @Override
     public void removeSession(String sessionId) {
         sessionDatabase.deleteSession(sessionId);
+    }
+
+    @Override
+    public void validateSession(String sessionId) throws NotLogInException {
+        if (sessionId == null || getSession(sessionId) == null)
+            throw new NotLogInException();
     }
 
     @Override
