@@ -2,6 +2,7 @@ package was.view;
 
 import db.Database;
 import model.User;
+import service.UserService;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

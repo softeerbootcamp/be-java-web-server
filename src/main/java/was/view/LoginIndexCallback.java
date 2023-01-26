@@ -2,6 +2,9 @@ package was.view;
 
 import db.BoardDatabase;
 import model.Board;
+import service.BoardService;
+import service.UserService;
+
 import java.util.Collection;
 
 public class LoginIndexCallback implements BufferedReaderCallback {
@@ -9,7 +12,7 @@ public class LoginIndexCallback implements BufferedReaderCallback {
     public String createDynamicHtmlWith(String line) {
         if (line.contains("<ul class=\"list\">")) {
             StringBuilder sb = new StringBuilder();
-            Collection<Board> collection = BoardDatabase.findAll();
+            Collection<Board> collection = BoardService.getInstance().getAllBoards();
             for (Board board : collection) {
                 sb.append("\n" + "<li>\n" +
                         "                  <div class=\"wrap\">\n" +
