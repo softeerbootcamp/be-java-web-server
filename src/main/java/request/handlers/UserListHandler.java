@@ -59,8 +59,8 @@ public class UserListHandler implements RequestHandler {
             int no = 1;
             for (User user : users) {
                 stringBuilder.append("<tr><th scope=\"row\">" + (no++) +
-                        "</th> <td>" + user.getUserId() +
-                        "</td> <td>" + user.getName() +
+                        "</th> <td>" + user.getId() +
+                        "</td> <td>" + user.getUsername() +
                         "</td> <td>" + user.getEmail() +
                         "</td><td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td></tr>");
             }

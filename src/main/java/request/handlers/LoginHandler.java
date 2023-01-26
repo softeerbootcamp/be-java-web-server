@@ -53,7 +53,7 @@ public class LoginHandler implements RequestHandler {
             Map<String, String> requestBody = RequestParser.parseFormEncodedBody(request);
             User user = userService.findUserByIdAndPwd(requestBody.get("userId"), requestBody.get("password")).orElseThrow(()->{ throw new IllegalArgumentException(); });
             String sid = String.valueOf(UUID.randomUUID());
-            sessionService.addSession(Session.of(sid, user.getUserId()));
+            sessionService.addSession(Session.of(sid, user.getId()));
             return Response.createFullResponse(HttpResponseStatus.FOUND.getMessage().getBytes(), request.getResourceFileContentType(), HttpResponseStatus.FOUND,
                     "Set-Cookie: sid=" + sid + ";Path=/\r\n" +
                             "Location: /index.html\r\n");

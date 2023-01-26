@@ -7,14 +7,14 @@ public class Session {
 
     public final static long SESSION_EXTEND_HOUR = 1;
 
-    private final String sid;
+    private final String id;
 
     private final String userId;
 
     private LocalDateTime expirationTime;
 
-    private Session(String sid, String user, LocalDateTime expirationTime) {
-        this.sid = sid;
+    private Session(String id, String user, LocalDateTime expirationTime) {
+        this.id = id;
         this.userId = user;
         this.expirationTime = expirationTime;
     }
@@ -23,8 +23,8 @@ public class Session {
         return new Session(sid, userId, LocalDateTime.now().plusHours(SESSION_EXPIRE_HOUR));
     }
 
-    public String getSid() {
-        return sid;
+    public String getId() {
+        return id;
     }
 
     public String getUserId() {

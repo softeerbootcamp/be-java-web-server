@@ -33,7 +33,7 @@ public class UserService {
     }
 
     public void addUser(User user) throws IllegalArgumentException, SQLException, NullPointerException {
-        if(findUserById(user.getUserId()).isPresent()) {
+        if(findUserById(user.getId()).isPresent()) {
             throw new IllegalArgumentException();
         }
         userDatabase.addUser(user);

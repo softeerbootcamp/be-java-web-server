@@ -16,7 +16,7 @@ public class SessionTest {
             SessionService service = SessionService.getInstance();
             SessionDatabase db = SessionDatabase.getInstance();
             User user = User.of("jin", "jin", "jin", "jin");
-            Session session = Session.of("uuid", user.getUserId());
+            Session session = Session.of("uuid", user.getId());
             service.addSession(session);
             assertThat(db.existsBySessionId("uuid")).isEqualTo(true);
         } catch (SQLException | NullPointerException e) {
