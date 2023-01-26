@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import http.common.Session;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class SessionDB {
     private static Map<String, Session> sessions = Maps.newHashMap();
@@ -12,7 +13,7 @@ public class SessionDB {
         sessions.put(session.getId(), session);
     }
 
-    public static Session getSession(String sid) {
-        return sessions.get(sid);
+    public static Optional<Session> getSession(String sid) {
+        return Optional.ofNullable(sessions.get(sid));
     }
 }
