@@ -14,7 +14,6 @@ import model.User;
 import util.FileIoUtil;
 
 import java.io.File;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,19 +31,16 @@ public class UserService {
         if (httpRequest.getHttpMethod().equals(HttpMethod.GET)) {
             return ResourceController.getInstance().doService(httpRequest);
         }
-
         String requestId = httpRequest.getRequestBody().get("userId");
         String requestPassword = httpRequest.getRequestBody().get("password");
 
         if (isExistUser(requestId, requestPassword)) {
             User user = UserRepository.findUserById(requestId);
             HttpSession httpSession = SessionHandler.createSession(user);
-
             HttpResponse httpResponse = HttpResponseFactory.FOUND("/index.html");
             httpResponse.addHeader("Set-Cookie", "sid=" + httpSession.getSid() + "; Path=/");
             return httpResponse;
         }
-
         return HttpResponseFactory.FOUND("/user/login_failed.html");
     }
 
@@ -52,14 +48,11 @@ public class UserService {
         Map<String, String> headers = new HashMap<>();
         if (SessionHandler.validateSession(httpRequest.getSid())) {
             HttpSession httpSession = SessionHandler.getSession(httpRequest.getSid());
-
-            Collection<User> users = UserRepository.findAll();
             File file = FileIoUtil.getFile(ResourceType.HTML, "/user/list.html");
-            byte[] body = DynamicResolver.showUserList(file, users, httpSession.getUserName());
+            byte[] body = DynamicResolver.createDynamicHtml(file, httpSession);
 
             return HttpResponseFactory.OK("text/html", headers, body);
         }
-
         return HttpResponseFactory.FOUND("/user/login.html");
     }
 

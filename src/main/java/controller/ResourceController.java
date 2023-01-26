@@ -11,7 +11,6 @@ import util.FileIoUtil;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Objects;
 
 public class ResourceController implements Controller {
     private static final ResourceController resourceController = new ResourceController();
@@ -40,9 +39,6 @@ public class ResourceController implements Controller {
 
     private byte[] renderHtml(HttpRequest httpRequest, File file) throws Exception {
         HttpSession httpSession = SessionHandler.getSession(httpRequest.getSid());
-        if (Objects.nonNull(httpSession)) {
-            return DynamicResolver.showUserName(file, httpSession.getUserName());
-        }
-        return DynamicResolver.hideLogoutButton(file);
+        return DynamicResolver.createDynamicHtml(file, httpSession);
     }
 }
