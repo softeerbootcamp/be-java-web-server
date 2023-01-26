@@ -24,7 +24,6 @@ public class UserCommentControllerTest {
 
     @BeforeEach
     void setUp() throws SQLException {
-        commentDAO.deleteAll();
         userDAO.deleteAll();
     }
 

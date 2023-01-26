@@ -53,15 +53,4 @@ public class CommentDAO {
         }
         return comments;
     }
-
-    public void deleteAll() throws SQLException {
-        PreparedStatement pstmt1 = connection.prepareStatement("set FOREIGN_KEY_CHECKS = 0");
-        pstmt1.executeUpdate();
-
-        PreparedStatement pstmt2 = connection.prepareStatement("TRUNCATE TABLE comments");
-        pstmt2.executeUpdate();
-
-        PreparedStatement pstmt3 = connection.prepareStatement("set FOREIGN_KEY_CHECKS = 1");
-        pstmt3.executeUpdate();
-    }
 }
