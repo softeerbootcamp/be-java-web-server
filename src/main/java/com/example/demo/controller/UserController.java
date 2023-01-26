@@ -27,6 +27,8 @@ public class UserController {
 
     @GetMapping("/login")
     public String loginPage(Model model) {
+        log.debug("In login page");
+        model.addAttribute("loginDto", new LoginDto());
         return "user/login";
     }
 
@@ -54,7 +56,8 @@ public class UserController {
 
     @PostMapping("/login.do")
     public String loginMember(@ModelAttribute("loginDto")LoginDto loginDto) {
-        UserService.login(loginDto.getUserId(), loginDto.getPassword());
-        return "redirect:/index";
+        boolean login = UserService.login(loginDto.getUserId(), loginDto.getPassword());
+        if(login) return "redirect:/index";
+        return "user/login";
     }
 }
