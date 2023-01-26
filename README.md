@@ -208,3 +208,22 @@ Java Web Application Server 2022
 - ORM : 데이터베이스와 객체를 매핑하는 기법
    - 생산성과 유지보수성이 좋음
    - 복잡한 비즈니스 로직은 다루기 다소 힘듦
+
+-----
+## 2일차 학습 내용
+
+### 오늘 할 일
+- [x] jdbc를 이용한 데이터베이스 접근법
+- [x] argument resolver 전략 패턴 고도화
+- [x] 데이터베이스 (레포지토리) 인터페이스화
+- [x] 팩토리 클래스를 통한 Dependency injection
+- [x] 게시글과 댓글 도메인 생성
+
+### 공부한 것
+- 타입 캐스팅의 위험성
+- JDBC의 동작원리
+- 맥북의 도커 사용법 / MySQL 설치법
+- 스프링 DI 기법
+  - 컴포넌트 스캐닝 (auto-configuration)
+  - @Configuration과 @Bean을 통한 의존관계 주입
+  - xml과 같은 외부 파일을 통한 주입
