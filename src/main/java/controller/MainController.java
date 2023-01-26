@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.AuthService;
 import service.PostService;
-import service.UserService;
+import service.user.UserService;
 
 import java.util.List;
 

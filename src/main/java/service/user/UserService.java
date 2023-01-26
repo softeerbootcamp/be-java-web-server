@@ -1,4 +1,4 @@
-package service;
+package service.user;
 
 import db.SessionDB;
 import dto.LoginDTO;
@@ -6,6 +6,9 @@ import dto.SignUpDTO;
 import http.common.Session;
 import model.User;
 import repository.UserRepository;
+import service.user.exception.LoginIdDuplicatedException;
+import service.user.exception.LoginIdNotExistException;
+import service.user.exception.PasswordNotMatchException;
 
 import java.util.List;
 
@@ -15,16 +18,14 @@ public class UserService {
 
     public String signUp(SignUpDTO signUpDto) {
         checkLoginIdDuplicated(signUpDto);
-
         User user = User.of(signUpDto.getLoginId(), signUpDto.getPassword(), signUpDto.getName(), signUpDto.getEmail());
         userRepository.save(user);
-
         return user.getLoginId();
     }
 
     private void checkLoginIdDuplicated(SignUpDTO signUpDto) {
         userRepository.findByLoginId(signUpDto.getLoginId()).ifPresent(userDAO -> {
-            throw new IllegalStateException("duplicated login id");
+            throw new LoginIdDuplicatedException("duplicated login id");
         });
     }
 
@@ -37,10 +38,10 @@ public class UserService {
 
     private User validate(LoginDTO logInDto) {
         User user = userRepository.findByLoginId(logInDto.getLoginId()).orElseThrow(() -> {
-            throw new IllegalStateException("not exist login id");
+            throw new LoginIdNotExistException("not exist login id");
         });
         if (!user.getPassword().equals(logInDto.getPassword())) {
-            throw new IllegalStateException("password not match");
+            throw new PasswordNotMatchException("password not match");
         }
         return user;
     }
