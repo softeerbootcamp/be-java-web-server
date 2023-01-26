@@ -1,7 +1,7 @@
 package service;
 
 import db.SessionRepository;
-import exception.NonLogInException;
+import exception.SessionNotFoundException;
 import model.Session;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ class SessionServiceTest {
 
     @Test
     @DisplayName("세션이 존재하는지 검증하는 메서드 성공 테스트")
-    public void testValidateSession() throws NonLogInException {
+    public void testValidateSession() throws SessionNotFoundException {
         String userId = "userId";
         String userName = "userName";
         Session session = sessionService.makeSession(userId, userName);
@@ -41,13 +41,13 @@ class SessionServiceTest {
     public void testValidateSessionFailed() {
         assertThatThrownBy(
                 () -> sessionService.validateHasSession("sessionId"))
-                .isInstanceOf(NonLogInException.class)
+                .isInstanceOf(SessionNotFoundException.class)
                 .hasMessage("Session not found");
     }
 
     @Test
     @DisplayName("세션에 들어가 있는 userId를 정상적으로 가져오는지 테스트")
-    public void testGetUserId() {
+    public void testGetUserId() throws SessionNotFoundException {
         String userId = "userId";
         String userName = "userName";
         Session session = sessionService.makeSession(userId, userName);
@@ -57,7 +57,7 @@ class SessionServiceTest {
 
     @Test
     @DisplayName("세션에 들어가 있는 userName을 정상적으로 가져오는지 테스트")
-    public void testGetUserName() {
+    public void testGetUserName() throws SessionNotFoundException {
         String userId = "userId";
         String userName = "userName";
         Session session = sessionService.makeSession(userId, userName);

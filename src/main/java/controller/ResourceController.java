@@ -1,7 +1,7 @@
 package controller;
 
 import exception.FileNotFoundException;
-import exception.NonLogInException;
+import exception.SessionNotFoundException;
 import http.ContentType;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -70,7 +70,7 @@ public class ResourceController extends AbstractController {
             byte[] body = FileIoUtils.load404ErrorFile();
             httpResponse.do404(body);
 
-        } catch (NonLogInException | RuntimeException e) {
+        } catch (SessionNotFoundException | RuntimeException e) {
             byte[] body = FileIoUtils.loadFile(filePath);
             httpResponse.forward(HttpStatusCode.OK, contentType, body);
         }

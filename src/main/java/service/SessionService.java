@@ -1,7 +1,7 @@
 package service;
 
 import db.SessionRepository;
-import exception.NonLogInException;
+import exception.SessionNotFoundException;
 import model.Session;
 
 import java.util.UUID;
@@ -22,19 +22,17 @@ public class SessionService {
         return session;
     }
 
-    public void validateHasSession(String id) throws NonLogInException, RuntimeException{
-        Session session = sessionRepository.findById(id);
-        if (session == null)
-            throw new NonLogInException("Session not found");
+    public void validateHasSession(String id) throws SessionNotFoundException {
+        sessionRepository.findById(id);
     }
 
-    public String getUserId(String sessionId) {
+    public String getUserId(String sessionId) throws SessionNotFoundException {
         return sessionRepository
                 .findById(sessionId)
                 .getUserId();
     }
 
-    public String getUserName(String sessionId) {
+    public String getUserName(String sessionId) throws SessionNotFoundException {
         return sessionRepository
                 .findById(sessionId)
                 .getUserName();

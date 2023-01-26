@@ -1,7 +1,7 @@
 package controller;
 
 import exception.FileNotFoundException;
-import exception.NonLogInException;
+import exception.SessionNotFoundException;
 import http.ContentType;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -44,7 +44,7 @@ public class IndexController extends AbstractController {
 
             httpResponse.forward(HttpStatusCode.OK, contentType, boardBody);
 
-        } catch (NonLogInException | RuntimeException e) {
+        } catch (SessionNotFoundException | RuntimeException e) {
             byte[] body = FileIoUtils.loadFile(filePath);
             byte[] boardBody = FileIoUtils.makeBoardList(boardService.findAll(), body);
 

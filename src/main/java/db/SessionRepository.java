@@ -1,5 +1,6 @@
 package db;
 
+import exception.SessionNotFoundException;
 import model.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +55,7 @@ public class SessionRepository {
         }
     }
 
-    public Session findById(String sessionId) {
+    public Session findById(String sessionId) throws SessionNotFoundException {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -80,7 +81,8 @@ public class SessionRepository {
         } catch (ClassNotFoundException e) {
             logger.error("드라이버 로드 실패");
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            throw new SessionNotFoundException("Session Not Found");
         } finally {
             if(conn != null) {
                 try {

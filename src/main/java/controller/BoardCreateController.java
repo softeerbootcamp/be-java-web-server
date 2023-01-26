@@ -1,6 +1,6 @@
 package controller;
 
-import exception.NonLogInException;
+import exception.SessionNotFoundException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.response.HttpStatusCode;
@@ -29,7 +29,7 @@ public class BoardCreateController extends AbstractController {
             boardService.addBoard(httpRequest.getParameters());
             httpResponse.sendRedirect(HttpStatusCode.FOUND, INDEX_PATH);
 
-        } catch (NonLogInException | RuntimeException e) {
+        } catch (SessionNotFoundException | RuntimeException e) {
             httpResponse.sendRedirect(HttpStatusCode.FOUND, LOGIN_PATH);
         }
     }
