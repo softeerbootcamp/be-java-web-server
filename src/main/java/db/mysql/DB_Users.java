@@ -28,7 +28,7 @@ public class DB_Users {
                     "user=" + ADMIN_ID + "&" +
                     "password=" + ADMIN_PASSWORD);
 
-            String sql = "INSERT INTO Users VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO Users(uid, password, name, email) VALUES (?, ?, ?, ?)";
             // uid, password, name, email
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, user.getUserId());
