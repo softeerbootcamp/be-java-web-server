@@ -1,18 +1,24 @@
 package service;
 
-import db.Database;
+import dao.PostDAO;
 import dto.PostCreateDTO;
 import model.Post;
 import model.User;
+import repository.PostRepository;
+import repository.UserRepository;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class PostService {
 
-    public Post create(PostCreateDTO postInfo, User user) {
+    private final PostRepository postRepository = new PostRepository();
+    private final UserRepository userRepository = new UserRepository();
+
+    public Post addNewPost(PostCreateDTO postInfo, User user) {
         validate(postInfo);
         Post post = Post.of(user, postInfo);
-        Database.savePost(Post.of(user, postInfo));
+        postRepository.save(post);
         return post;
     }
 
@@ -22,7 +28,22 @@ public class PostService {
         }
     }
 
-    public Optional<Post> readPost(long postId) {
-        return Database.getPostById(postId);
+    public Post readPost(long postId) {
+        PostDAO postDAO = postRepository.findById(postId).orElseThrow(() -> {
+            throw new IllegalArgumentException("post not found");
+        });
+        User user = userRepository.findById(postDAO.getUid()).orElseThrow(() -> {
+            throw new IllegalStateException("user not found");
+        });
+        return Post.of(user, postDAO);
+    }
+
+    public List<Post> getAllPost() {
+        return postRepository.getAllPosts().stream()
+                .map(postDAO -> {
+                    User user = userRepository.findById(postDAO.getUid()).get();
+                    return Post.of(user, postDAO);
+                })
+                .collect(Collectors.toList());
     }
 }
