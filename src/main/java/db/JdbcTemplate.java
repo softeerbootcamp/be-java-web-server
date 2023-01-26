@@ -1,5 +1,6 @@
 package db;
 
+import model.Board;
 import model.User;
 
 import java.sql.*;
@@ -7,10 +8,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcTemplate {
+    private static JdbcTemplate jdbcTemplate;
+
+    private JdbcTemplate() {
+    }
+
+    public static JdbcTemplate getInstance() {
+        if (jdbcTemplate == null) {
+            synchronized (JdbcTemplate.class) {
+                jdbcTemplate = new JdbcTemplate();
+            }
+        }
+        return jdbcTemplate;
+    }
 
     public void insertIntoUserDb(User user) {
         executeUpdate("insert into user(userId, password, name, email) values (?, ? ,?, ?)",
                 user.getUserId(), user.getPassword(), user.getName(), user.getEmail());
+    }
+    public void insertIntoBoardDb(Board board) {
+        executeUpdate("insert into board(writer, contents) values (?, ?)",
+                board.getWriter(), board.getContents());
     }
 
     public void executeUpdate(final String sql, final String... param) {

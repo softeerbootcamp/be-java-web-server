@@ -1,10 +1,14 @@
 package service;
 
 import db.BoardDatabase;
+import db.JdbcTemplate;
 import model.Board;
+
+import java.util.List;
 
 public class BoardService {
     private static BoardService boardService;
+    private static JdbcTemplate jdbcTemplate = JdbcTemplate.getInstance();
 
     private BoardService() {}
 
@@ -18,6 +22,6 @@ public class BoardService {
     }
 
     public void addBoard(Board board) {
-        BoardDatabase.addBoard(board);
+        jdbcTemplate.insertIntoBoardDb(board);
     }
 }

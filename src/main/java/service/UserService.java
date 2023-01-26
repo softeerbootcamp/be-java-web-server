@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class UserService {
     private static UserService userService;
-    private JdbcTemplate jdbcTemplate = new JdbcTemplate();
+    private JdbcTemplate jdbcTemplate = JdbcTemplate.getInstance();
 
     private UserService() {
     }
