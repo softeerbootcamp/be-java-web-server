@@ -12,7 +12,7 @@ import view.FileView;
 import java.util.Objects;
 
 public class FileController implements Controller {
-    public static final String PATH = "";
+    public static final String PATH = "file";
     private final Logger logger = LoggerFactory.getLogger(FileController.class);
     private static FileController fileController = null;
 
