@@ -2,6 +2,7 @@ package service;
 
 import db.UserRepository;
 import exception.LogInFailedException;
+import exception.UserNotFoundException;
 import model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -91,7 +92,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("유저 이름 정상적으로 반환하는지 테스트")
-    public void testGetUserName() {
+    public void testGetUserName() throws UserNotFoundException {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("userId", "user1");
         parameters.put("password", "password1");
