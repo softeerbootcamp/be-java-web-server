@@ -37,7 +37,7 @@ public class MySqlPostDatabase implements PostDatabase {
                         String dateTime = resultSet.getString("dt_created");
                         posts.add(Post.createWithDT(title, content, writer, dateTime));
                     }
-                    return posts.stream().sorted().collect(Collectors.toList());
+                    return posts.stream().sorted(Collections.reverseOrder()).collect(Collectors.toList());
                 }
             } finally {
                 connectionPool.releaseConnection(connection);
