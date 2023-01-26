@@ -1,8 +1,10 @@
 package service;
 
 import db.BoardRepository;
+import model.Board;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Map;
 
 public class BoardService {
@@ -12,11 +14,15 @@ public class BoardService {
     }
 
     public void addBoard(Map<String, String> parameters) {
-        LocalDate date = LocalDate.now();
+        LocalDateTime dateTime = LocalDateTime.now();
         boardRepository.addBoard(
-                date.toString(),
+                dateTime.toString(),
                 parameters.get("author"),
                 parameters.get("content"));
+    }
+
+    public Collection<Board> findAll() {
+        return boardRepository.findAll();
     }
 
 }

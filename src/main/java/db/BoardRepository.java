@@ -17,17 +17,14 @@ public class BoardRepository {
     }
 
     public void addBoard(String createdDate, String author, String content) {
-        String url = "jdbc:mysql://localhost:3306/WAS?serverTimezone=UTC";
-        String id = "root";
-        String pw = "codesquad123";
         Connection conn = null;
         PreparedStatement pstmt = null;
 
         String query = "INSERT INTO WAS.BOARD(createdDate,author,content) VALUES (?,?,?)";
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(url, id, pw);
+            conn = DBManager.getInstance().getConnection();
+
             logger.info("Connection 객체 생성성공");
 
             pstmt = conn.prepareStatement(query);
@@ -44,28 +41,33 @@ public class BoardRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            try {
-                if (conn != null) conn.close();
-                if (pstmt != null) pstmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            if(conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+            if(pstmt != null) {
+                try{
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
 
     public Collection<Board> findAll() {
-        String url = "jdbc:mysql://localhost:3306/WAS?serverTimezone=UTC";
-        String id = "root";
-        String pw = "codesquad123";
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
-        String query = "SELECT * FROM WAS.BOARD";
+        String query = "SELECT * FROM WAS.BOARD ORDER BY createdDate DESC LIMIT 10";
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(url, id, pw);
+            conn = DBManager.getInstance().getConnection();
+
             logger.info("Connection 객체 생성성공");
 
             pstmt = conn.prepareStatement(query);
@@ -74,7 +76,7 @@ public class BoardRepository {
             if (rs.next()) {
                 List<Board> boardList = new ArrayList<>();
                 do {
-                    Board board = new Board(
+                    Board board = Board.of(
                             rs.getString("createdDate"),
                             rs.getString("author"),
                             rs.getString("content"));
@@ -90,12 +92,27 @@ public class BoardRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            try {
-                if (conn != null) conn.close();
-                if (pstmt != null) pstmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+           if(conn != null) {
+               try {
+                   conn.close();
+               } catch (SQLException e){
+                   e.printStackTrace();
+               }
+           }
+           if(pstmt != null) {
+               try{
+                   pstmt.close();
+               } catch (SQLException e) {
+                   e.printStackTrace();
+               }
+           }
+           if(rs != null) {
+               try {
+                   rs.close();
+               } catch (SQLException e) {
+                   e.printStackTrace();
+               }
+           }
         }
         return null;
     }

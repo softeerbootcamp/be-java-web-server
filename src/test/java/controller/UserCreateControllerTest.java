@@ -13,6 +13,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.sql.SQLException;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,12 +26,12 @@ class UserCreateControllerTest {
 
     @Test
     @DisplayName("유저 회원가입 성공 테스트")
-    void doPost() throws IOException, FileNotFoundException, URISyntaxException {
+    void doPost() throws IOException, FileNotFoundException, URISyntaxException, SQLException {
         String request =
                 "POST /user/login HTTP/1.1" + System.lineSeparator() +
                         "Host: localhost:8080" + System.lineSeparator() +
                         "Connection: keep-alive" + System.lineSeparator() +
-                        "Content-Length: 59" + System.lineSeparator() +
+                        "Content-Length: 93" + System.lineSeparator() +
                         "Content-Type: application/x-www-form-urlencoded" + System.lineSeparator() +
                         "Accept: */*" + System.lineSeparator() +
                         System.lineSeparator() +
@@ -49,6 +50,8 @@ class UserCreateControllerTest {
                 () -> assertThat(response).contains("HTTP/1.1 302 Found"),
                 () -> assertThat(response).contains("/index.html")
         );
+
+        userRepository.deleteById("javajigi");
 
     }
 

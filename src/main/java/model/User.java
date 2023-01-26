@@ -1,16 +1,31 @@
 package model;
 
-public class User {
-    private String userId;
-    private String password;
-    private String name;
-    private String email;
+import java.util.Map;
 
-    public User(String userId, String password, String name, String email) {
+public class User {
+    private final String userId;
+    private final String password;
+    private final String name;
+    private final String email;
+
+    private User(String userId, String password, String name, String email) {
         this.userId = userId;
         this.password = password;
         this.name = name;
         this.email = email;
+    }
+
+    public static User of(String userId, String password, String name, String email) {
+        return new User(userId, password, name, email);
+    }
+
+    public static User from(Map<String, String> parameters) {
+        return new User(
+                parameters.get("userId"),
+                parameters.get("password"),
+                parameters.get("name"),
+                parameters.get("email")
+        );
     }
 
     public String getUserId() {

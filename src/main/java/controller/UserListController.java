@@ -1,7 +1,7 @@
 package controller;
 
 import exception.FileNotFoundException;
-import exception.NonLogInException;
+import exception.SessionNotFoundException;
 import http.ContentType;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -48,7 +48,7 @@ public class UserListController extends AbstractController {
 
             httpResponse.forward(HttpStatusCode.OK, contentType, body);
 
-        } catch (NonLogInException e) {
+        } catch (SessionNotFoundException e) {
             e.printStackTrace();
             httpResponse.sendRedirect(HttpStatusCode.FOUND, LOGIN_FORM_PATH);
 

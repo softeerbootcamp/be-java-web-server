@@ -1,6 +1,7 @@
 package utils;
 
 import exception.FileNotFoundException;
+import model.Board;
 import model.User;
 
 import java.io.IOException;
@@ -13,6 +14,8 @@ import java.util.Objects;
 
 public final class FileIoUtils {
 
+    private static final int DATE_BEGIN_INDEX = 0;
+    private static final int DATE_END_INDEX = 10;
     private static final String ERROR_PATH = "./templates/error404.html";
 
     private FileIoUtils() {
@@ -73,6 +76,22 @@ public final class FileIoUtils {
                 .replace(target_index, "")
                 .replace(target_others, "")
                 .getBytes();
+    }
+
+    public static byte[] makeBoardList(Collection<Board> boardList, byte[] originalBody) throws FileNotFoundException {
+        String fileData = new String(originalBody);
+        StringBuilder sb = new StringBuilder();
+
+        for (Board board : boardList) {
+            sb.append("<tr>");
+            sb.append("<td>").append(board.getDate(), DATE_BEGIN_INDEX, DATE_END_INDEX).append("</td>");
+            sb.append("<td>").append(board.getAuthor()).append("</td>");
+            sb.append("<td>").append(board.getContent()).append("</td>");
+            sb.append("</tr>");
+        }
+
+        return fileData.replace("<!--boardlist-->", sb.toString()).getBytes();
+
     }
 
 }

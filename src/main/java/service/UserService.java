@@ -1,7 +1,9 @@
 package service;
 
 import db.UserRepository;
+import exception.InvalidPasswordException;
 import exception.LogInFailedException;
+import exception.UserNotFoundException;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,11 +13,6 @@ import java.util.Collection;
 import java.util.Map;
 
 public class UserService {
-    private static final String USER_ID = "userId";
-    private static final String PASSWORD = "password";
-    private static final String NAME = "name";
-    private static final String EMAIL = "email";
-
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
@@ -25,27 +22,31 @@ public class UserService {
     }
 
     public void addUser(Map<String, String> parameters) throws SQLIntegrityConstraintViolationException {
-        User user = new User(
-                parameters.get(USER_ID),
-                parameters.get(PASSWORD),
-                parameters.get(NAME),
-                parameters.get(EMAIL)
-        );
-        userRepository.addUser(user);
+        userRepository.addUser(User.from(parameters));
     }
 
     public void validateUser(String requestUserId, String requestPassword) throws LogInFailedException {
-        User user = userRepository.findUserById(requestUserId);
-        if (user == null || !requestPassword.equals(user.getPassword())) {
+        try {
+            validatePassword(requestPassword, validateId(requestUserId).getPassword());
+        } catch (UserNotFoundException | InvalidPasswordException | NullPointerException e) {
             throw new LogInFailedException("로그인 실패");
         }
     }
 
+    private User validateId(String requestUserId) throws UserNotFoundException {
+        return userRepository.findUserById(requestUserId);
+    }
+
+    private void validatePassword(String requestPassword, String password) throws InvalidPasswordException {
+        if(!requestPassword.equals(password)) {
+            throw new InvalidPasswordException();
+        }
+    }
     public Collection<User> getUserList() {
         return userRepository.findAll();
     }
 
-    public String getUserName(String id) {
+    public String getUserName(String id) throws UserNotFoundException {
         return userRepository.findUserById(id).getName();
     }
 

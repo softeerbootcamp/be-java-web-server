@@ -1,7 +1,7 @@
 package controller;
 
 import exception.FileNotFoundException;
-import exception.NonLogInException;
+import exception.SessionNotFoundException;
 import http.ContentType;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
@@ -16,6 +16,7 @@ import java.net.URISyntaxException;
 
 public class ResourceController extends AbstractController {
 
+    private static final String HTML_EXTENSION = ".html";
     private static final Logger logger = LoggerFactory.getLogger(ResourceController.class);
 
     private final SessionService sessionService;
@@ -32,7 +33,7 @@ public class ResourceController extends AbstractController {
             ContentType contentType = ContentType.from(path);
             String filePath = contentType.getDirectory() + path;
 
-            if (path.endsWith(".html")) {
+            if (path.endsWith(HTML_EXTENSION)) {
                 sendDynamicFile(httpRequest, httpResponse, filePath, contentType);
                 return;
             }
@@ -69,10 +70,9 @@ public class ResourceController extends AbstractController {
             byte[] body = FileIoUtils.load404ErrorFile();
             httpResponse.do404(body);
 
-        } catch (NonLogInException e) {
+        } catch (SessionNotFoundException e) {
             byte[] body = FileIoUtils.loadFile(filePath);
             httpResponse.forward(HttpStatusCode.OK, contentType, body);
-
         }
 
     }

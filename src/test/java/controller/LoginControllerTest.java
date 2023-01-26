@@ -14,6 +14,7 @@ import service.UserService;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -30,7 +31,7 @@ public class LoginControllerTest {
 
     @Test
     @DisplayName("로그인 성공 테스트")
-    void doPost() throws IOException, FileNotFoundException, URISyntaxException {
+    void doPost() throws IOException, FileNotFoundException, URISyntaxException, SQLException {
         String request =
                 "POST /user/login HTTP/1.1" + System.lineSeparator() +
                         "Host: localhost:8080" + System.lineSeparator() +
@@ -46,13 +47,9 @@ public class LoginControllerTest {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         HttpResponse httpResponse = HttpResponse.createDefaultHttpResponse(byteArrayOutputStream);
 
-        User user = new User("javajigi", "password", "박재성", "javajigi@slipp.net");
+        User user =  User.of("javajigi", "password", "박재성", "javajigi@slipp.net");
 
-        try {
-            userRepository.addUser(user);
-        } catch (SQLIntegrityConstraintViolationException e) {
-            throw new RuntimeException(e);
-        }
+        userRepository.addUser(user);
 
         controller.service(httpRequest, httpResponse);
 
@@ -63,13 +60,12 @@ public class LoginControllerTest {
                 () -> assertThat(response).contains("Location: /index.html"),
                 () -> assertThat(response).contains("Set-Cookie: JSESSIONID=")
         );
-
-
+        userRepository.deleteById("javajigi");
     }
 
     @Test
     @DisplayName("잘못된 ID 입력 시 로그인 실패 테스트")
-    void loginFailedWithWrongId() throws IOException, FileNotFoundException, URISyntaxException {
+    void loginFailedWithWrongId() throws IOException, FileNotFoundException, URISyntaxException, SQLException {
         String request =
                 "POST /user/login HTTP/1.1" + System.lineSeparator() +
                         "Host: localhost:8080" + System.lineSeparator() +
@@ -85,11 +81,11 @@ public class LoginControllerTest {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         HttpResponse httpResponse = HttpResponse.createDefaultHttpResponse(byteArrayOutputStream);
 
-        User user = new User("javajigi", "password", "박재성", "javajigi@slipp.net");
+        User user = User.of("javajigi", "password", "박재성", "javajigi@slipp.net");
         try {
             userRepository.addUser(user);
         } catch (SQLIntegrityConstraintViolationException e) {
-            throw new RuntimeException(e);
+            throw new SQLIntegrityConstraintViolationException(e);
         }
 
         controller.service(httpRequest, httpResponse);
@@ -100,12 +96,12 @@ public class LoginControllerTest {
                 () -> assertThat(response).contains("HTTP/1.1 302 Found"),
                 () -> assertThat(response).contains("Location: /user/login_failed.html")
         );
-
+        userRepository.deleteById("javajigi");
     }
 
     @Test
     @DisplayName("잘못된 PASSWORD 입력 시 로그인 실패 테스트")
-    void loginFailedWithWrongPASSWORD() throws IOException, FileNotFoundException, URISyntaxException {
+    void loginFailedWithWrongPASSWORD() throws IOException, FileNotFoundException, URISyntaxException, SQLException {
         String request =
                 "POST /user/login HTTP/1.1" + System.lineSeparator() +
                         "Host: localhost:8080" + System.lineSeparator() +
@@ -121,7 +117,7 @@ public class LoginControllerTest {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         HttpResponse httpResponse = HttpResponse.createDefaultHttpResponse(byteArrayOutputStream);
 
-        User user = new User("javajigi", "password", "박재성", "javajigi@slipp.net");
+        User user = User.of("javajigi", "password", "박재성", "javajigi@slipp.net");
         try {
             userRepository.addUser(user);
         } catch (SQLIntegrityConstraintViolationException e) {
@@ -136,8 +132,6 @@ public class LoginControllerTest {
                 () -> assertThat(response).contains("HTTP/1.1 302 Found"),
                 () -> assertThat(response).contains("Location: /user/login_failed.html")
         );
-
+        userRepository.deleteById("javajigi");
     }
-
-
 }

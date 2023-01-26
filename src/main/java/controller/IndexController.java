@@ -1,13 +1,14 @@
 package controller;
 
 import exception.FileNotFoundException;
-import exception.NonLogInException;
+import exception.SessionNotFoundException;
 import http.ContentType;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import http.response.HttpStatusCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import service.BoardService;
 import service.SessionService;
 import utils.FileIoUtils;
 
@@ -21,9 +22,11 @@ public class IndexController extends AbstractController {
 
 
     private final SessionService sessionService;
+    private final BoardService boardService;
 
-    public IndexController(SessionService sessionService) {
+    public IndexController(SessionService sessionService, BoardService boardService) {
         this.sessionService = sessionService;
+        this.boardService = boardService;
     }
 
     @Override
@@ -37,11 +40,15 @@ public class IndexController extends AbstractController {
             logger.info(sessionId);
 
             byte[] body = FileIoUtils.replaceLoginBtnToUserName(sessionService.getUserName(sessionId), filePath);
-            httpResponse.forward(HttpStatusCode.OK, contentType, body);
+            byte[] boardBody = FileIoUtils.makeBoardList(boardService.findAll(), body);
 
-        } catch (NonLogInException e) {
+            httpResponse.forward(HttpStatusCode.OK, contentType, boardBody);
+
+        } catch (SessionNotFoundException | RuntimeException e) {
             byte[] body = FileIoUtils.loadFile(filePath);
-            httpResponse.forward(HttpStatusCode.OK, contentType, body);
+            byte[] boardBody = FileIoUtils.makeBoardList(boardService.findAll(), body);
+
+            httpResponse.forward(HttpStatusCode.OK, contentType, boardBody);
 
         } catch (FileNotFoundException e) {
             byte[] body = FileIoUtils.load404ErrorFile();
@@ -49,5 +56,4 @@ public class IndexController extends AbstractController {
             throw new RuntimeException(e);
         }
     }
-
 }
