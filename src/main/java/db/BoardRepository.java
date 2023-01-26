@@ -1,27 +1,29 @@
 package db;
 
-import model.Session;
+import model.Board;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-public class SessionRepository {
+public class BoardRepository {
 
-    private static final Logger logger = LoggerFactory.getLogger(SessionRepository.class);
+    private static final Logger logger = LoggerFactory.getLogger(BoardRepository.class);
 
-    public SessionRepository() {
+    public BoardRepository() {
     }
 
-    public void addSession(String sessionId, String userId, String userName) {
+    public void addBoard(String createdDate, String author, String content) {
         String url = "jdbc:mysql://localhost:3306/WAS?serverTimezone=UTC";
         String id = "root";
         String pw = "codesquad123";
         Connection conn = null;
         PreparedStatement pstmt = null;
 
-        String query = "INSERT INTO WAS.SESSION VALUES (?,?,?)";
-
+        String query = "INSERT INTO WAS.BOARD(createdDate,author,content) VALUES (?,?,?)";
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -29,9 +31,11 @@ public class SessionRepository {
             logger.info("Connection 객체 생성성공");
 
             pstmt = conn.prepareStatement(query);
-            pstmt.setString(1, sessionId);
-            pstmt.setString(2, userId);
-            pstmt.setString(3, userName);
+            pstmt.setString(1, createdDate);
+            pstmt.setString(2, author);
+            pstmt.setString(3, content);
+
+            logger.info(pstmt.toString());
 
             pstmt.executeUpdate();
 
@@ -49,7 +53,7 @@ public class SessionRepository {
         }
     }
 
-    public Session findById(String sessionId) {
+    public Collection<Board> findAll() {
         String url = "jdbc:mysql://localhost:3306/WAS?serverTimezone=UTC";
         String id = "root";
         String pw = "codesquad123";
@@ -57,22 +61,28 @@ public class SessionRepository {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
-        String query = "SELECT * FROM WAS.SESSION WHERE sessionID = ?";
+        String query = "SELECT * FROM WAS.BOARD";
+
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(url, id, pw);
             logger.info("Connection 객체 생성성공");
 
             pstmt = conn.prepareStatement(query);
-            pstmt.setString(1, sessionId);
 
             rs = pstmt.executeQuery();
-
             if (rs.next()) {
-                return new Session(
-                        rs.getString("sessionId"),
-                        rs.getString("userId"),
-                        rs.getString("userName"));
+                List<Board> boardList = new ArrayList<>();
+                do {
+                    Board board = new Board(
+                            rs.getString("createdDate"),
+                            rs.getString("author"),
+                            rs.getString("content"));
+
+                    boardList.add(board);
+
+                } while (rs.next());
+                return boardList;
             }
 
         } catch (ClassNotFoundException e) {
@@ -83,11 +93,11 @@ public class SessionRepository {
             try {
                 if (conn != null) conn.close();
                 if (pstmt != null) pstmt.close();
-                if (rs != null) rs.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
         return null;
     }
+
 }

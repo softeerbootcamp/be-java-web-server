@@ -43,7 +43,7 @@ public final class FileIoUtils {
         String target_index = "<li><a href=\"user/login.html\" role=\"button\">로그인</a></li>";
         String target_others = "<li><a href=\"../user/login.html\" role=\"button\">로그인</a></li>";
 
-        int idx = 3;
+        int idx = 1;
 
         for (User user : userList) {
             sb.append("<tr>");

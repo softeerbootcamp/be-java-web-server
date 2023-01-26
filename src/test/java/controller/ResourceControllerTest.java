@@ -5,7 +5,6 @@ import db.UserRepository;
 import exception.FileNotFoundException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import model.Session;
 import model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +15,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,10 +41,14 @@ class ResourceControllerTest {
         HttpResponse httpResponse = HttpResponse.createDefaultHttpResponse(byteArrayOutputStream);
 
         User user = new User("javajigi", "password", "박재성", "javajigi@slipp.net");
-        userRepository.addUser(user);
 
-        Session session = new Session("123", "javajigi", "박재성");
-        sessionRepository.addSession("123", session);
+        try {
+            userRepository.addUser(user);
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new RuntimeException(e);
+        }
+
+        sessionRepository.addSession("123", "javajigi", "박재성");
 
         controller.service(httpRequest, httpResponse);
 

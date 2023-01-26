@@ -14,6 +14,7 @@ import service.UserService;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -46,7 +47,12 @@ public class LoginControllerTest {
         HttpResponse httpResponse = HttpResponse.createDefaultHttpResponse(byteArrayOutputStream);
 
         User user = new User("javajigi", "password", "박재성", "javajigi@slipp.net");
-        userRepository.addUser(user);
+
+        try {
+            userRepository.addUser(user);
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new RuntimeException(e);
+        }
 
         controller.service(httpRequest, httpResponse);
 
@@ -80,7 +86,11 @@ public class LoginControllerTest {
         HttpResponse httpResponse = HttpResponse.createDefaultHttpResponse(byteArrayOutputStream);
 
         User user = new User("javajigi", "password", "박재성", "javajigi@slipp.net");
-        userRepository.addUser(user);
+        try {
+            userRepository.addUser(user);
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new RuntimeException(e);
+        }
 
         controller.service(httpRequest, httpResponse);
 
@@ -112,7 +122,11 @@ public class LoginControllerTest {
         HttpResponse httpResponse = HttpResponse.createDefaultHttpResponse(byteArrayOutputStream);
 
         User user = new User("javajigi", "password", "박재성", "javajigi@slipp.net");
-        userRepository.addUser(user);
+        try {
+            userRepository.addUser(user);
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new RuntimeException(e);
+        }
 
         controller.service(httpRequest, httpResponse);
 

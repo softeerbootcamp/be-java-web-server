@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import service.UserService;
 
 import java.io.IOException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Map;
 
 public class UserCreateController extends AbstractController {
@@ -20,18 +21,15 @@ public class UserCreateController extends AbstractController {
     }
 
     @Override
-    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
-        Map<String, String> queryParams = httpRequest.getParameters();
-        userService.addUser(queryParams);
-
-        httpResponse.sendRedirect(HttpStatusCode.FOUND, REDIRECT_PATH);
-    }
-
-    @Override
     public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
         Map<String, String> queryParams = httpRequest.getParameters();
         logger.debug("query params: {}", queryParams);
-        userService.addUser(queryParams);
+        try {
+            userService.addUser(queryParams);
+        } catch (SQLIntegrityConstraintViolationException e) {
+            e.printStackTrace();
+            httpResponse.sendRedirect(HttpStatusCode.FOUND, "/user/form.html");
+        }
 
         logger.info("Create User Success");
         httpResponse.sendRedirect(HttpStatusCode.FOUND, REDIRECT_PATH);
