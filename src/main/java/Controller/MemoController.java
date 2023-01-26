@@ -40,6 +40,7 @@ public class MemoController implements Controller {
             String body = request.getBody();
 
             Map<String, String> memoInfo = HttpRequestUtils.parseBodyMessage(body);
+            memoService.write(memoInfo);
 
             response.redirect(request, "/index.html");
         } catch (NullValueException e) {
