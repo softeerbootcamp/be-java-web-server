@@ -1,13 +1,17 @@
 package controller;
 
-import db.DBConnection;
+import db.QnARepository;
 import request.HttpRequest;
 import response.HttpResponse;
 import view.Model;
 
+import java.util.Map;
+
 public class QnaShowController implements Controller{
 
     private static QnaShowController instance;
+
+    private final QnARepository qnARepository;
 
     public static QnaShowController getInstance(){
         if(instance == null){
@@ -18,9 +22,14 @@ public class QnaShowController implements Controller{
         return instance;
     }
 
+    public QnaShowController(){
+        qnARepository = QnARepository.getInstance();
+    }
+
     @Override
     public String doGet(HttpRequest request, HttpResponse response, Model model) {
-        model.addAttribute("id",request.getQueryByKey("id"));
+        Map<String,String> Details = qnARepository.selectOne(request.getQueryByKey("id"));
+        model.addAttribute("details",Details);
         return "./templates/qna/show.html";
     }
 
