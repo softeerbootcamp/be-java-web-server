@@ -20,7 +20,6 @@ public class UserService {
         User user = new User(parsedUserMap.get("userId"), parsedUserMap.get("password"), parsedUserMap.get("name"), parsedUserMap.get("email"));
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
         jdbcTemplate.insertIntoUserDb(user);
-        Database.addUser(user);
     }
     public boolean login(User user) {
         User dbUser = Database.findUserById(user.getUserId());
