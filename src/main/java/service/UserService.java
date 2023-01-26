@@ -2,6 +2,7 @@ package service;
 
 import controller.ResourceController;
 import db.UserRepository;
+import exception.CustomException;
 import http.request.HttpMethod;
 import http.request.HttpRequest;
 import http.request.ResourceType;
@@ -16,12 +17,17 @@ import util.FileIoUtil;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class UserService {
 
     public HttpResponse create(HttpRequest httpRequest) {
         if (httpRequest.getHttpMethod().equals(HttpMethod.GET)) {
             return ResourceController.getInstance().doService(httpRequest);
+        }
+        String userId = httpRequest.getRequestBody().get("userId");
+        if(Objects.nonNull(UserRepository.findUserById(userId))) {
+            throw new CustomException("Duplicate Id");
         }
         UserRepository.addUser(User.from(httpRequest.getRequestBody()));
         return HttpResponseFactory.FOUND("/index.html");
