@@ -27,7 +27,7 @@ public class HomeView implements View {
 	}
 
 	@Override
-	public void render(HttpRequest httpRequest, HttpResponse httpResponse, Model model) throws IOException {
+	public void render(HttpRequest httpRequest, HttpResponse httpResponse, Model model, String menubar) throws IOException {
 		// ArrayList<User> userList = ArrayList.class.cast(userObjList);
 		List<Board> boards = ArrayList.class.cast(model.getValue("boards")); // 이게 되나?...
 		File file = new File("./webapp/index.html");
@@ -60,6 +60,7 @@ public class HomeView implements View {
 				+ "                  </div>");
 		}
 		page = page.replace("<!-- board list -->", boardList);
+		page = page.replace("<!-- menubar -->", menubar);
 		httpResponse.setHttpResponse(HttpStatus.OK, page, ContentType.HTML);
 	}
 }
