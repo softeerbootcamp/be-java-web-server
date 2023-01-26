@@ -38,6 +38,7 @@ public class HtmlController {
             return htmlService.makeLoginView(model, uri, (User)session.getAttribute("user"));
         }
         // 로그인 상태가 아닌 경우
+        if(uri.equals("/qna/form.html")) return "redirect:/user/login.html";
         return htmlService.makeNotLoginView(model, uri);
     }
 
