@@ -32,15 +32,39 @@ public class UserDatabase {
 
             psmt.close();
             conn.close();
-
-            users.put(user.getUserId(), user);
+            //users.put(user.getUserId(), user);
         } catch (SQLException e) {
             logger.error(e.getMessage());
         }
     }
 
     public static User findUserById(String userId) {
-        return users.get(userId);
+        try {
+            Connection connection = DbConnectionManager.getConnection();
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement("select * from user where userId = ?;");
+
+            preparedStatement.setString(1, userId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            resultSet.next();
+            User user = User.of(resultSet.getString("userId"), resultSet.getString("password"),
+                    resultSet.getString("name"), resultSet.getString("email"));
+
+            logger.debug("User [userId: {}, password: {}, name: {}, email: {}]",
+                    user.getUserId(), user.getPassword(), user.getName(), user.getEmail());
+
+            preparedStatement.close();
+            connection.close();
+
+            return user;
+            //return users.get(userId);
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+
+        return null;
     }
 
     public static Collection<User> findAll() {
