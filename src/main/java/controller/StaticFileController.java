@@ -9,10 +9,12 @@ import httpMock.constants.StatusCode;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import service.PostService;
 import service.SessionService;
 import service.StaticFileService;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,7 +25,7 @@ import java.util.Map;
 import static service.StaticFileService.getFileTypeFromUrl;
 
 public class StaticFileController implements RequestController {
-    private static Logger logger = LoggerFactory.getLogger(StaticFileController.class);
+    private static final Logger logger = LoggerFactory.getLogger(StaticFileController.class);
 
     private static final StaticFileController fileController = new StaticFileController();
     public static final String[] supportedFileTypes = {
@@ -38,8 +40,24 @@ public class StaticFileController implements RequestController {
     public CustomHttpResponse handleRequest(CustomHttpRequest req) {
         if (!ifFileTypeRequested(req.getUrl()))
             req.setUrl(req.getUrl() + ".html");
+        if (req.getUrl().endsWith("index.html"))
+            return getMainPage(req);
         logger.debug("req {} comes static handler", req.getUrl());
         return getFile(req);
+    }
+
+    private CustomHttpResponse getMainPage(CustomHttpRequest req) {
+        File file = StaticFileService.getFile(req.getUrl());
+        User user = SessionService.getUserBySessionId(req.getSSID()).orElse(User.GUEST);
+        try {
+            Map<String, String> matching = HtmlMakerUtility.getDefaultTemplate(user.getName());
+            matching.put("postList", HtmlMakerUtility.postListRows(PostService.findAll()));
+            String lines = StaticFileService.renderFile(file, matching);
+
+            return CustomHttpFactory.OK_HTML(lines);
+        } catch (FileNotFoundException e) {
+            return CustomHttpFactory.NOT_FOUND();
+        }
     }
 
     private CustomHttpResponse getFile(CustomHttpRequest req) {

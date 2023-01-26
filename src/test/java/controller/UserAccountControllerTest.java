@@ -3,6 +3,7 @@ package controller;
 import httpMock.CustomHttpRequest;
 import httpMock.CustomHttpResponse;
 import model.User;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,12 @@ class UserAccountControllerTest {
     @BeforeAll
     static void getUserAccountController() {
         userAccountController = UserAccountController.get();
-        UserRepo.addUser(new User("asdf", "asdfasdf123", "asdf", "asdfasdf@asdf.com"));
+        UserRepo.getInstance().addUser(new User("asdf", "asdfasdf123", "asdf", "asdfasdf@asdf.com"));
+    }
+
+    @AfterAll
+    static void deleteUserAccount() {
+        UserRepo.getInstance().delete("asdf");
     }
 
     @Test

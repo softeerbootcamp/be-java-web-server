@@ -1,6 +1,7 @@
 package webserver;
 
 
+import controller.PostController;
 import controller.RequestController;
 import controller.StaticFileController;
 import controller.UserAccountController;
@@ -18,6 +19,7 @@ public class RequestRouter {
     private static RequestRouter requestRouter;
     private final Map<String, RequestController> requestMap = new HashMap<>() {{
         put("/user", UserAccountController.get());
+        put("/qna", PostController.get());
     }};
 
     private RequestRouter() {

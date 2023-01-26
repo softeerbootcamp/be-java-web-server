@@ -16,13 +16,12 @@ import service.StaticFileService;
 import service.UserService;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 public class UserAccountController implements RequestController {
     private static final Logger logger = LoggerFactory.getLogger(UserAccountController.class);
 
-    static UserAccountController userAccountController;
+    private static UserAccountController userAccountController;
 
     private final Map<String, RequestController> routingTable = new HashMap<>() {{
         put("/user/create", (req) -> makeAccount(req));
@@ -121,7 +120,7 @@ public class UserAccountController implements RequestController {
         File file = StaticFileService.getFile("/user/list.html");
         try {
             User user = SessionService.getUserBySessionId(req.getSSID()).orElse(User.GUEST);
-            List<User> userList = new ArrayList<>(UserRepo.findAll());
+            List<User> userList = new ArrayList<>(UserRepo.getInstance().findAll());
 
             Map<String, String> defaultTemplate = HtmlMakerUtility.getDefaultTemplate(user.getName());
             defaultTemplate.put("userTable", HtmlMakerUtility.userListRows(userList));
@@ -129,7 +128,7 @@ public class UserAccountController implements RequestController {
             String listPageStr = StaticFileService.renderFile(file, defaultTemplate);
 
             return CustomHttpFactory.OK_HTML(listPageStr);
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.error("error while reading {}", file.getPath());
             return CustomHttpFactory.INTERNAL_ERROR("error while reading " + file.getPath());
         }

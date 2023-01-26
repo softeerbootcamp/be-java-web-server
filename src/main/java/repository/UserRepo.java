@@ -1,26 +1,22 @@
 package repository;
 
-import com.google.common.collect.Maps;
 import model.User;
 
 import java.util.Collection;
-import java.util.Map;
+import java.util.Optional;
 
-public class UserRepo {
-    private static final Map<String, User> users = Maps.newHashMap();
+public interface UserRepo {
+    UserRepo instance = new DBUserRepo();
 
-    private UserRepo() {
+    static UserRepo getInstance() {
+        return instance;
     }
 
-    public static void addUser(User user) {
-        users.put(user.getUserId(), user);
-    }
+    void addUser(User user);
 
-    public static User findUserById(String userId) {
-        return users.get(userId);
-    }
+    Optional<User> findUserById(String userId);
 
-    public static Collection<User> findAll() {
-        return users.values();
-    }
+    Collection<User> findAll();
+
+    void delete(String userId);
 }

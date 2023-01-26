@@ -1,5 +1,7 @@
 package model;
 
+import java.util.List;
+
 public class User {
     public static User GUEST = new User("", "", "guest", "");
     private String userId;
@@ -12,6 +14,13 @@ public class User {
         this.password = password;
         this.name = name;
         this.email = email;
+    }
+
+    public User(List<String> row){
+        this.userId = row.get(0);
+        this.password = row.get(1);
+        this.name = row.get(2);
+        this.email = row.get(3);
     }
 
     public String getUserId() {
