@@ -9,6 +9,11 @@ import java.util.Map;
 
 public class HtmlMakerUtility {
 
+    private static final String loginButton = "<li><a href=\"../user/login\" role=\"button\">로그인</a></li>";
+    private static final String logoutButton = "<li><a href=\"../user/logout\" role=\"button\">로그아웃</a></li>";
+    private static final String createButton = "<li><a href=\"../user/form\" role=\"button\">회원가입</a></li>";
+    private static final String userListRow = "<tr><th scope=\"row\">%d</th> <td>%s</td> <td>%s</td> <td>%s</td><td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td></tr>";
+
     public static String userListRows(List<User> users) {
         StringBuilder sb = new StringBuilder();
         int count = 0;
@@ -29,22 +34,18 @@ public class HtmlMakerUtility {
     }
 
     public static String userListRow(int number, String userId, String username, String email) {
-        String message = "<tr>\n" +
-                "                    <th scope=\"row\">%d</th> <td>%s</td> <td>%s</td> <td>%s</td><td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td>\n" +
-                "                </tr>\n";
-        message = String.format(message, number, userId, username, email);
-        return message;
+        return String.format(userListRow, number, userId, username, email);
     }
 
     public static Map<String, String> getDefaultTemplate(String username) {
         if (username.equals(User.GUEST.getName()))
             return new HashMap<>() {{
-                put("loginForm", loginButton());
-                put("registerForm", createButton());
+                put("loginForm", loginButton);
+                put("registerForm", createButton);
             }};
         return new HashMap<>() {{
             put("name", username);
-            put("logoutForm", logoutButton());
+            put("logoutForm", logoutButton);
         }};
     }
 
@@ -69,18 +70,6 @@ public class HtmlMakerUtility {
                         "    </div>\n" +
                         "</li>", title, date, author, postId);
         return row;
-    }
-
-    public static String loginButton() {
-        return "<li><a href=\"../user/login\" role=\"button\">로그인</a></li>";
-    }
-
-    public static String logoutButton() {
-        return " <li><a href=\"../user/logout\" role=\"button\">로그아웃</a></li>";
-    }
-
-    public static String createButton() {
-        return "<li><a href=\"../user/form\" role=\"button\">회원가입</a></li>";
     }
 
 
