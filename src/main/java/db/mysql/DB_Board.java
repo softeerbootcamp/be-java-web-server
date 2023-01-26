@@ -63,7 +63,7 @@ public class DB_Board {
                     "user=" + ADMIN_ID + "&" +
                     "password=" + ADMIN_PASSWORD);
 
-            String sql = "SELECT uid, content, date FROM users INEER JOIN board";
+            String sql = "SELECT uid, content, date FROM users RIGHT OUTER JOIN board ON users.id = board.writerId";
             // uid, password, name, email
             pstmt = conn.prepareStatement(sql);
 
