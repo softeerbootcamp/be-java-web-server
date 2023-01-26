@@ -15,7 +15,7 @@ import java.util.UUID;
 public class SessionService {
     private static final Logger logger = LoggerFactory.getLogger(SessionService.class);
 
-    private static final SessionRepo sessionRepo = new MemorySessionRepo();
+    private static final SessionRepo sessionRepo = SessionRepo.get();
 
     public static Session addUserToSession(User user) {
         Session session = new Session(UUID.randomUUID().toString(), user.getUserId());
