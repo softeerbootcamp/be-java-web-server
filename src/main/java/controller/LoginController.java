@@ -14,7 +14,22 @@ public class LoginController implements Controller{
     private static final String REDIRECT_URL ="/index.html";
     private static final String FAILED_REDIRECT_URL ="/user/login_failed.html";
     private static final String LOGINED_ATTR_KEY = "sid";
-    private LoginService service= new LoginService();
+    private static LoginController instance;
+    private final LoginService loginService;
+
+    public static LoginController getInstance(){
+        if(instance == null){
+            synchronized (LoginController.class){
+                instance = new LoginController();
+            }
+        }
+        return instance;
+    }
+
+    public LoginController(){
+        loginService = LoginService.getInstance();
+    }
+
 
     @Override
     public String doPost(HttpRequest request, HttpResponse response, Model model) {
@@ -27,7 +42,7 @@ public class LoginController implements Controller{
 
     private void doLogin(String userId, String password,HttpResponse response){
         try{
-            boolean alreadyUser = service.checkRightUser(userId,password);
+            boolean alreadyUser = loginService.checkRightUser(userId,password);
             if(alreadyUser){
                 User user = Database.findUserById(userId);
                 HttpSession session = HttpSessionManager.createSession(user);

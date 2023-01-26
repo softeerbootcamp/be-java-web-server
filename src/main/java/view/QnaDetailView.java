@@ -1,6 +1,5 @@
 package view;
 
-import db.DBConnection;
 import enums.ContentType;
 import enums.HttpStatus;
 import request.HttpRequest;
@@ -17,8 +16,7 @@ public class QnaDetailView implements View{
         response.setStatus(HttpStatus.OK);
         response.setContentType(ContentType.HTML);
         byte[] body = FileIoUtils.loadFileFromClasspath("./templates/qna/show.html");
-        String id = (String) data.getAttribute("id");
-        Map<String,String> Details = DBConnection.selectOne(id);
+        Map<String,String> Details = (Map<String, String>) data.getAttribute("details");
         body = showDetailById(body,Details).getBytes();
         response.addToHeader("Content-Length", String.valueOf(body.length));
         response.setBody(body);//body에는 요청한 파일 내용이 들어감

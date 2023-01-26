@@ -1,31 +1,39 @@
 package db;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.sql.DriverManager.getConnection;
+public class QnARepository {
 
-public class DBConnection {
-    public static List<Map<String,String>> selectAll() {
+    private final DBManager dbManager;
+    private static QnARepository instance;
+
+    public static QnARepository getInstance() {
+        if (instance == null) {
+            synchronized (QnARepository.class) {
+                instance = new QnARepository();
+            }
+        }
+        return instance;
+    }
+
+    public QnARepository(){
+        this.dbManager = DBManager.getInstance();
+    }
+
+    public List<Map<String,String>> selectAll() {
         List<Map<String,String>> result = new ArrayList<>();
-        // 트랜잭션 시작
-        // try( connection 얻어오기 ) -> 이렇게 하면 connection이 완료된 뒤에 자동으로 close된다.
-        try(Connection conn = getConnection("jdbc:mysql://127.0.0.1:3306/qna_db?useSSL=false&serverTimezone=Asia/Seoul&useUnicode=true&character_set_server-utf8mb4","root","1234")){
-            // 데이터베이스명: qna_db
-            // DB 연결 ID: root
-            // DB Password: 1234
-            //System.out.println(conn);   // null 또는 exception이 발생하면 연결 실패한 것
-            System.out.println(conn.getClass().getName());  // Connection 인터페이스의 구현부를 알 수 있다.
 
+        try(Connection conn = dbManager.getConnection()){
             // SQL 실행
             // - SQL 작성
             // writer=1234&title=1234&contents=1234
             String sql = "SELECT _id, writer, title, contents, time FROM qna_table ORDER BY time DESC";
-            System.out.println(sql);
-
             // - PreparedStatement: SQL을 DBMS에서 실행할 준비
             try(PreparedStatement ps = conn.prepareStatement(sql)){
                 ResultSet rs = ps.executeQuery();
@@ -62,11 +70,11 @@ public class DBConnection {
         return result;
     }
 
-    public static Map<String,String> selectOne(String id) {
+    public Map<String,String> selectOne(String id) {
         Map<String,String> elem = new HashMap<>();
         // 트랜잭션 시작
         // try( connection 얻어오기 ) -> 이렇게 하면 connection이 완료된 뒤에 자동으로 close된다.
-        try(Connection conn = getConnection("jdbc:mysql://127.0.0.1:3306/qna_db?useSSL=false&serverTimezone=Asia/Seoul&useUnicode=true&character_set_server-utf8mb4","root","1234")){
+        try(Connection conn = dbManager.getConnection()){
             // 데이터베이스명: qna_db
             // DB 연결 ID: root
             // DB Password: 1234
@@ -113,19 +121,10 @@ public class DBConnection {
         return elem;
     }
 
-    public static void storeInfo(String writer, String title, String contents) {
+    public void storeInfo(String writer, String title, String contents) {
         // 트랜잭션 시작
         // try( connection 얻어오기 ) -> 이렇게 하면 connection이 완료된 뒤에 자동으로 close된다.
-        try(Connection conn = getConnection("jdbc:mysql://127.0.0.1:3306/qna_db?useSSL=false&serverTimezone=Asia/Seoul&useUnicode=true&character_set_server-utf8mb4","root","1234")){
-            // 데이터베이스명: qna
-            // DB 연결 ID: root
-            // DB Password: 1234
-            //System.out.println(conn);   // null 또는 exception이 발생하면 연결 실패한 것
-            System.out.println(conn.getClass().getName());  // Connection 인터페이스의 구현부를 알 수 있다.
-
-            // SQL 실행
-            // - SQL 작성
-            // writer=1234&title=1234&contents=1234
+        try(Connection conn = dbManager.getConnection()){
             String sql = "insert into qna_table(writer, title, contents) values(?, ?, ?)";
 
             // - PreparedStatement: SQL을 DBMS에서 실행할 준비, PreparedStatement 객체 생성, 객체 생성시 sql 문장 저장
@@ -150,5 +149,6 @@ public class DBConnection {
             ex.printStackTrace();
         }
     }
+
 
 }
