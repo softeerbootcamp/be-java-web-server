@@ -42,7 +42,8 @@ public class RequestParameter {
             String[] pair = chunk.split("=");
             try {
                 parameters.put(URLDecoder.decode(pair[0], "UTF-8"), URLDecoder.decode(pair[1], "UTF-8"));
-            } catch (UnsupportedEncodingException e) {
+            } catch (UnsupportedEncodingException | ArrayIndexOutOfBoundsException e) {
+                parameters.put(pair[0], "");
             }
         }
         return parameters;
