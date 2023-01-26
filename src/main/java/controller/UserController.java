@@ -26,8 +26,6 @@ public class UserController implements Controller{
     private static final String EMAIL = "email";
 
 
-    private HttpStatus httpStatus = HttpStatus.ClientError;
-
     private UserController(){}
 
     public static UserController getInstance(){
@@ -45,10 +43,9 @@ public class UserController implements Controller{
     public void control(RequestMessage requestMessage, OutputStream out) {
         byte[] body = new byte[0];
         Map<String,String> headerKV= new HashMap<>();
-        httpStatus = HttpStatus.ClientError;
         userCommand(requestMessage,userService, headerKV);
         Response response = new Response(new DataOutputStream(out));
-        response.response(body,requestMessage.getRequestHeaderMessage(), httpStatus, headerKV);
+        response.response(body,requestMessage.getRequestHeaderMessage(), headerKV);
     }
 
     public void userCommand(RequestMessage requestMessage, UserService userService, Map<String,String> headerKV){
@@ -94,17 +91,6 @@ public class UserController implements Controller{
 
     private void setCookie(String sid, Map<String,String> headerKV){
         setHeader(headerKV, "Set-Cookie","sid="+sid+"; Path=/");
-    }
-
-    private void setLocation(String redirectLink, Map<String,String> headerKV){
-        if (!redirectLink.equals("")){
-            httpStatus = HttpStatus.Redirection;
-            setHeader(headerKV,"Location", redirectLink);
-        }
-    }
-
-    private void setHeader(Map<String,String> headerKV, String key, String value){
-        headerKV.put(key,value);
     }
 
 }

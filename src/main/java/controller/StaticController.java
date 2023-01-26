@@ -43,12 +43,11 @@ public class StaticController implements Controller{
         byte[] body = getResponseBody(requestMessage);
         Map<String,String> headerKV = new HashMap<>();
         if (forbiddenAccess(requestMessage,headerKV)){
-            response.response(body,requestMessage.getRequestHeaderMessage(),HttpStatus.Redirection,headerKV);
+            response.response(body,requestMessage.getRequestHeaderMessage(),headerKV);
             return;
         }
-        body = dynamicMemoList(body, 6);
-        HttpStatus httpStatus = setHttpStatus(body);
-        response.response(body,requestMessage.getRequestHeaderMessage(), httpStatus);
+        body = dynamicMemoList(requestMessage, body, 6);
+        response.response(body,requestMessage.getRequestHeaderMessage());
     }
 
     public byte[] getResponseBody(RequestMessage requestMessage){
@@ -56,7 +55,9 @@ public class StaticController implements Controller{
         return getBodyFile(fileURL);
     }
 
-    private byte[] dynamicMemoList(byte[] body, int count){
+    private byte[] dynamicMemoList(RequestMessage requestMessage, byte[] body, int count){
+        if (!requestMessage.getRequestHeaderMessage().getHttpOnlyURL().contains("html"))
+            return body;
         Collection<Memo> memos = memoService.findRecentMemos(count);
         body = HtmlEditor.appendMemoList(body,memos);
         return body;
