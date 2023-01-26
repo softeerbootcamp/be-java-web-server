@@ -3,7 +3,6 @@ package controller;
 import db.CommentDAO;
 import db.SessionStorage;
 import db.UserDAO;
-import model.User;
 import model.request.Request;
 import model.request.UserCreate;
 import model.response.HttpStatusCode;
@@ -25,8 +24,8 @@ public class UserCommentControllerTest {
 
     @BeforeEach
     void setUp() throws SQLException {
-        userDAO.deleteAll();
         commentDAO.deleteAll();
+        userDAO.deleteAll();
     }
 
     @Test

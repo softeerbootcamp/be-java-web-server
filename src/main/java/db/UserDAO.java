@@ -1,5 +1,6 @@
 package db;
 
+import exception.UserNotFoundException;
 import model.User;
 import model.request.UserCreate;
 import org.slf4j.Logger;
@@ -46,13 +47,13 @@ public class UserDAO {
         ResultSet resultSet = preparedStatement.executeQuery();
         if (resultSet.next()) {
             return new User(
-                    resultSet.getString("uid"),
+                    resultSet.getLong("uid"),
                     resultSet.getString("userId"),
                     resultSet.getString("password"),
                     resultSet.getString("name"),
                     resultSet.getString("email"));
         }
-        return null;
+        throw new UserNotFoundException();
     }
 
     public List<User> findAll() throws SQLException {
@@ -61,7 +62,7 @@ public class UserDAO {
         ResultSet resultSet = preparedStatement.executeQuery();
         while (resultSet.next()) {
             User user = new User(
-                    resultSet.getString("uid"),
+                    resultSet.getLong("uid"),
                     resultSet.getString("userId"),
                     resultSet.getString("password"),
                     resultSet.getString("name"),
@@ -72,7 +73,13 @@ public class UserDAO {
     }
 
     public void deleteAll() throws SQLException {
-        PreparedStatement pstmt = connection.prepareStatement("TRUNCATE TABLE users");
-        pstmt.executeUpdate();
+        PreparedStatement pstmt1 = connection.prepareStatement("set FOREIGN_KEY_CHECKS = 0");
+        pstmt1.executeUpdate();
+
+        PreparedStatement pstmt2 = connection.prepareStatement("TRUNCATE TABLE users");
+        pstmt2.executeUpdate();
+
+        PreparedStatement pstmt3 = connection.prepareStatement("set FOREIGN_KEY_CHECKS = 1");
+        pstmt3.executeUpdate();
     }
 }

@@ -27,14 +27,18 @@ public class CommentDAO {
     }
 
     public void insert(Comment comment) throws SQLException {
-        String sql = "INSERT INTO COMMENTS(author, content) VALUES (?, ?)";
+        UserDAO userDAO = new UserDAO();
+        User byUserId = userDAO.findByUserId(comment.getUserId());
+
+        String sql = "INSERT INTO COMMENTS(uid, author, content) VALUES (?, ?, ?)";
         PreparedStatement pstmt = connection.prepareStatement(sql);
 
-        pstmt.setString(1, comment.getAuthor());
-        pstmt.setString(2, comment.getContent());
+        pstmt.setLong(1, byUserId.getUid());
+        pstmt.setString(2, comment.getAuthor());
+        pstmt.setString(3, comment.getContent());
 
         pstmt.executeUpdate();
-        logger.debug(">> comment {} Saved", comment.getAuthor());
+        logger.debug(">> comment {} Saved", comment.getUserId());
     }
 
     public List<CommentResponse> findAll() throws SQLException {
@@ -51,7 +55,13 @@ public class CommentDAO {
     }
 
     public void deleteAll() throws SQLException {
-        PreparedStatement pstmt = connection.prepareStatement("TRUNCATE TABLE comments");
-        pstmt.executeUpdate();
+        PreparedStatement pstmt1 = connection.prepareStatement("set FOREIGN_KEY_CHECKS = 0");
+        pstmt1.executeUpdate();
+
+        PreparedStatement pstmt2 = connection.prepareStatement("TRUNCATE TABLE comments");
+        pstmt2.executeUpdate();
+
+        PreparedStatement pstmt3 = connection.prepareStatement("set FOREIGN_KEY_CHECKS = 1");
+        pstmt3.executeUpdate();
     }
 }

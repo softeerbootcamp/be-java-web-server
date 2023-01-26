@@ -2,18 +2,22 @@ package model;
 
 public class User {
 
-    private final String uid;
+    private final Long uid;
     private final String userId;
     private final String password;
     private final String name;
     private final String email;
 
-    public User(String uid, String userId, String password, String name, String email) {
+    public User(Long uid, String userId, String password, String name, String email) {
         this.uid = uid;
         this.userId = userId;
         this.password = password;
         this.name = name;
         this.email = email;
+    }
+
+    public Long getUid() {
+        return uid;
     }
 
     public String getUserId() {
