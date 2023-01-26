@@ -1,6 +1,6 @@
 package service;
 
-import db.Database;
+import db.SessionDB;
 import http.common.Cookie;
 import http.common.Session;
 import http.request.HttpRequest;
@@ -14,19 +14,22 @@ public class AuthService {
         if (sessionCookie == null) {
             return false;
         }
-        Session session = Database.getSession(sessionCookie.getValue());
+        Session session = SessionDB.getSession(sessionCookie.getValue());
         if (session == null) {
             return false;
         }
         return session.isValid();
     }
 
-    public Session getSession(HttpRequest request) {
-        Cookie sessionCookie = request.getCookie(Session.SESSION_FIELD_NAME);
-        return Database.getSession(sessionCookie.getValue());
-    }
-
     public Optional<User> getUser(HttpRequest request) {
-        return Optional.ofNullable(getSession(request).getUser());
+        Cookie sessionCookie = request.getCookie(Session.SESSION_FIELD_NAME);
+        if (sessionCookie == null) {
+            return Optional.ofNullable(null);
+        }
+        Session session = SessionDB.getSession(sessionCookie.getValue());
+        if (session == null) {
+            return Optional.ofNullable(null);
+        }
+        return Optional.ofNullable(session.getUser());
     }
 }
