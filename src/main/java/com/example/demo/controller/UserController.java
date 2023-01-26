@@ -32,6 +32,12 @@ public class UserController {
         return "user/login";
     }
 
+    @GetMapping("/login_fail")
+    public String loginFailPage(Model model) {
+        model.addAttribute("loginDto", new LoginDto());
+        return "user/login_failed";
+    }
+
     @GetMapping("/list")
     public String memberListPage(Model model) {
         return "user/list";
@@ -58,6 +64,6 @@ public class UserController {
     public String loginMember(@ModelAttribute("loginDto")LoginDto loginDto) {
         boolean login = UserService.login(loginDto.getUserId(), loginDto.getPassword());
         if(login) return "redirect:/index";
-        return "user/login";
+        return "redirect:/user/login_fail";
     }
 }
