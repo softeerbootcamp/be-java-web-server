@@ -14,9 +14,6 @@ public class UserRepository {
     private static final Logger logger = LoggerFactory.getLogger(UserRepository.class);
 
     public void addUser(User user) throws SQLIntegrityConstraintViolationException {
-        String url = "jdbc:mysql://localhost:3306/WAS?serverTimezone=UTC";
-        String id = "root";
-        String pw = "codesquad123";
         Connection conn = null;
         PreparedStatement pstmt = null;
 
@@ -24,8 +21,8 @@ public class UserRepository {
 
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(url, id, pw);
+            conn = DBManager.getInstance().getConnection();
+
             logger.info("Connection 객체 생성성공");
 
             pstmt = conn.prepareStatement(query);
@@ -54,9 +51,6 @@ public class UserRepository {
     }
 
     public User findUserById(String userId) {
-        String url = "jdbc:mysql://localhost:3306/WAS?serverTimezone=UTC";
-        String id = "root";
-        String pw = "codesquad123";
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -65,8 +59,8 @@ public class UserRepository {
 
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(url, id, pw);
+            DBManager.getInstance().getConnection();
+
             logger.info("Connection 객체 생성성공");
 
             pstmt = conn.prepareStatement(query);
@@ -98,9 +92,6 @@ public class UserRepository {
     }
 
     public Collection<User> findAll() {
-        String url = "jdbc:mysql://localhost:3306/WAS?serverTimezone=UTC";
-        String id = "root";
-        String pw = "codesquad123";
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -108,8 +99,8 @@ public class UserRepository {
         String query = "SELECT * FROM WAS.USER";
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(url, id, pw);
+            conn = DBManager.getInstance().getConnection();
+
             logger.info("Connection 객체 생성성공");
 
             pstmt = conn.prepareStatement(query);

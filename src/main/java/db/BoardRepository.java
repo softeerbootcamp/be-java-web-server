@@ -17,17 +17,14 @@ public class BoardRepository {
     }
 
     public void addBoard(String createdDate, String author, String content) {
-        String url = "jdbc:mysql://localhost:3306/WAS?serverTimezone=UTC";
-        String id = "root";
-        String pw = "codesquad123";
         Connection conn = null;
         PreparedStatement pstmt = null;
 
         String query = "INSERT INTO WAS.BOARD(createdDate,author,content) VALUES (?,?,?)";
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(url, id, pw);
+            conn = DBManager.getInstance().getConnection();
+
             logger.info("Connection 객체 생성성공");
 
             pstmt = conn.prepareStatement(query);
@@ -54,9 +51,6 @@ public class BoardRepository {
     }
 
     public Collection<Board> findAll() {
-        String url = "jdbc:mysql://localhost:3306/WAS?serverTimezone=UTC";
-        String id = "root";
-        String pw = "codesquad123";
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -64,8 +58,8 @@ public class BoardRepository {
         String query = "SELECT * FROM WAS.BOARD";
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(url, id, pw);
+            conn = DBManager.getInstance().getConnection();
+
             logger.info("Connection 객체 생성성공");
 
             pstmt = conn.prepareStatement(query);
