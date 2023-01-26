@@ -64,6 +64,14 @@ public class UserRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    public static void deleteAll() {
+        String SQL = "truncate users";
+        try (Connection conn = DATABASE.getConnection(); PreparedStatement pstmt = conn.prepareStatement(SQL)) {
+            pstmt.executeUpdate(SQL);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

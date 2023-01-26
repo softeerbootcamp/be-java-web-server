@@ -43,4 +43,12 @@ public class MemoRepository {
         }
     }
 
+    public static void deleteAll() {
+        String SQL = "truncate memo";
+        try (Connection conn = DATABASE.getConnection(); PreparedStatement pstmt = conn.prepareStatement(SQL)) {
+            pstmt.executeUpdate(SQL);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
