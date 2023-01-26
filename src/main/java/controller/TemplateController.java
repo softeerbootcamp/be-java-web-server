@@ -28,20 +28,25 @@ public class TemplateController implements Controller {
         String addedLine = null;
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + url).toPath());
         body = DynamicRenderer.dynamicIndex_ViewAllBoard(body);
+        // 로그인 할 경우
         if (cookie.isLogin()) {
             body = DynamicRenderer.dynamicIndex_LoginBtnToUserBtn(body, request.getRequestHeader().getHeaderValueByKey("Cookie").split("=")[1]);
             body = DynamicRenderer.dynamicIndex_LogoutBtnOn(body);
         }
+        // 로그아웃 시 작동으로 변경해야함.
+//        if(!cookie.isLogin()){
+//            body = DynamicRenderer.dynamicIndex_LogoutBtnOff(body);
+//        }
+        // 사용자 리스트 출력일 경우
         if (url.contains("list.html")) {
             body = DynamicRenderer.dynamicListHtml(body);
         }
+        // 로그인이 되지 않았는데 질문하기 접근 할 경우
         if (!cookie.isLogin() && url.contains("/qna/form.html")) {
             controllerTypeEnum = ControllerTypeEnum.REDIRECT;
             addedLine = "Location : /index.html";
         }
-        if(!cookie.isLogin()){
-            body = DynamicRenderer.dynamicIndex_LogoutBtnOff(body);
-        }
+
 
 
         ResponseFactory responseFactory = new ResponseFactory.Builder()

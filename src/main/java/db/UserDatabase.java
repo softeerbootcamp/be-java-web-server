@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
@@ -54,11 +55,20 @@ public class UserDatabase {
         return user;
     }
 
-    public static Collection<User> findAll() {
+    public static Collection<User> findAll() throws SQLException {
         conn = databaseConnHandler.dbConnection();
-        String sql = "SELECT * FROM User WHERE id = ?";
+        User user = null;
+        Collection<User> result = new ArrayList<>();
+        String sql = "SELECT * FROM User";
+        PreparedStatement psmt = conn.prepareStatement(sql);
+        ResultSet rs = psmt.executeQuery();
+        if (rs.next()) {
+            user = new User(rs.getString("ID"),rs.getString("Password"),
+                    rs.getString("Name"),rs.getString("Email") );
+            result.add(user);
+        }
 
-        return users.values();
+        return result;
     }
 
 

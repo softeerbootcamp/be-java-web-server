@@ -68,6 +68,7 @@ public class Request {
         }
         // 쿠키가 존재
         this.httpCookie = new HttpCookie(requestHeader.getHeaderValueByKey("Cookie").split("=")[1]);
+        // 해당 쿠키가 유효한지 확인
         if(!HttpSessions.cookieValidationCheck(this.httpCookie)){
             this.httpCookie.cleanCookie();
         }

@@ -11,7 +11,7 @@ import java.util.Collection;
 public class StringBuilderUtils {
     private static StringBuilder stringBuilder;
     // 현재 하드코딩으로 javajigi slipp 들어가있어서 임시로 상수 설정. 해당부분 지워도 되면 수정하겠음.
-    private static int LIST_START_INDEX = 3;
+    private static int LIST_START_INDEX = 1;
 
     public static String byteArrayToString(byte[] body) {
         stringBuilder  = new StringBuilder();

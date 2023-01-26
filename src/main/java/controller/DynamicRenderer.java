@@ -37,7 +37,7 @@ public class DynamicRenderer {
         return StringBuilderUtils.stringToByteArray(stringBody);
     }
 
-    public static byte[] dynamicListHtml(byte[] body) {
+    public static byte[] dynamicListHtml(byte[] body) throws SQLException {
         // todo : db 에서 들고오기.
         String stringBody = StringBuilderUtils.byteArrayToString(body);
         Collection<User> allUser = UserDatabase.findAll();
