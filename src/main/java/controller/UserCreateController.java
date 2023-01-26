@@ -12,7 +12,7 @@ import java.util.Map;
 
 import static utils.PathManager.HOME_PATH;
 
-public class UserCreateController implements Controller {
+public class UserCreateController extends AbstractController {
     public static final String PATH = "/user/create";
     private static final Logger logger = LoggerFactory.getLogger(UserCreateController.class);
     private final UserService userService;
@@ -32,7 +32,8 @@ public class UserCreateController implements Controller {
         throw new HttpMethodException(requestHttpMethod);
     }
 
-    private void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+    @Override
+    public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         Map<String, String> bodyParams = httpRequest.getRequestBody();
         userService.createUser(bodyParams);
         httpResponse.redirect(HOME_PATH);

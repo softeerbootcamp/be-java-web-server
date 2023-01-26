@@ -14,7 +14,7 @@ import utils.enums.HttpMethod;
 
 import java.util.Map;
 
-public class PostCreateController implements Controller {
+public class PostCreateController extends AbstractController {
     public static final String PATH = "/post/create";
     private final UserService userService;
     private final SessionService sessionService;
@@ -36,7 +36,8 @@ public class PostCreateController implements Controller {
         throw new HttpMethodException(requestHttpMethod);
     }
 
-    private void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
+    @Override
+    public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
         try {
             Map<String, String> bodyParams = httpRequest.getRequestBody();
             String sessionId = httpRequest.getSession();
@@ -45,8 +46,7 @@ public class PostCreateController implements Controller {
             User user = userService.findUser(session.getUserId());
             postService.createPost(user.getUserId(), bodyParams);
             httpResponse.redirect(PathManager.HOME_PATH);
-        }
-        catch (NotLogInException e) {
+        } catch (NotLogInException e) {
             httpResponse.redirect(PathManager.LOGIN_PATH);
         }
     }

@@ -7,7 +7,7 @@ import service.session.SessionService;
 import utils.PathManager;
 import utils.enums.HttpMethod;
 
-public class UserLogoutController implements Controller {
+public class UserLogoutController extends AbstractController {
     public static final String PATH = "/user/logout";
     private final SessionService sessionService;
 
@@ -25,7 +25,8 @@ public class UserLogoutController implements Controller {
         throw new HttpMethodException(requestHttpMethod);
     }
 
-    private void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+    @Override
+    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         sessionService.removeSession(httpRequest.getSession());
         httpResponse.redirect(PathManager.LOGIN_PATH);
     }

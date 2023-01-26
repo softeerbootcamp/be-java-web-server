@@ -17,7 +17,7 @@ import utils.enums.StatusCode;
 
 import java.util.Collection;
 
-public class HtmlFileController implements Controller {
+public class HtmlFileController extends AbstractController {
     public static final String PATH = "html";
     private final UserService userService;
     private final SessionService sessionService;
@@ -39,7 +39,8 @@ public class HtmlFileController implements Controller {
         throw new HttpMethodException(requestHttpMethod);
     }
 
-    private void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+    @Override
+    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         String path = httpRequest.getUri().getPath();
         String sessionId = httpRequest.getSession();
         if (!FileUtils.fileExists(path)) {

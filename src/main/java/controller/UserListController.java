@@ -16,7 +16,7 @@ import java.io.IOException;
 
 import static utils.PathManager.LOGIN_PATH;
 
-public class UserListController implements Controller {
+public class UserListController extends AbstractController {
     public static final String PATH = "/user/list";
     private static final Logger logger = LoggerFactory.getLogger(UserListController.class);
     private final UserService userService;
@@ -37,7 +37,8 @@ public class UserListController implements Controller {
         throw new HttpMethodException(requestHttpMethod);
     }
 
-    private void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+    @Override
+    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         String sid = httpRequest.getSession();
         try {
             sessionService.validateSession(sid);

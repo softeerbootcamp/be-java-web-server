@@ -3,7 +3,7 @@ package controller;
 import exception.HttpMethodException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import utils.*;
+import utils.FileUtils;
 import utils.enums.ContentType;
 import utils.enums.HttpMethod;
 import utils.enums.StatusCode;
@@ -11,7 +11,7 @@ import utils.enums.StatusCode;
 import java.io.IOException;
 
 
-public class StaticFileController implements Controller {
+public class StaticFileController extends AbstractController {
     public final static String PATH = "/";
 
     @Override
@@ -24,7 +24,8 @@ public class StaticFileController implements Controller {
         throw new HttpMethodException(requestHttpMethod);
     }
 
-    private void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
+    @Override
+    public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         String path = httpRequest.getUri().getPath();
         try {
             httpResponse.setBody(FileUtils.loadFile(path));
