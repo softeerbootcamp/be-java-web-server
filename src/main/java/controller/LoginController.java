@@ -1,5 +1,6 @@
 package controller;
 
+import model.domain.Memo;
 import model.domain.User;
 import model.service.MemoService;
 import model.service.UserService;
@@ -35,8 +36,11 @@ public class LoginController implements Controller{
     @Override
     public void control(RequestMessage requestMessage, OutputStream out) {
         byte[] body = getStaticBody(requestMessage);
-        if (requestMessage.getRequestHeaderMessage().getHttpOnlyURL().contains("html"))
+
+        if (requestMessage.getRequestHeaderMessage().getHttpOnlyURL().contains("html")){
             body = changeNavbar(body, requestMessage);
+            body = dynamicMemoList(body, 6);
+        }
         if (requestMessage.getRequestHeaderMessage().getHttpOnlyURL().startsWith("/user/list.html"))
             body = dynamicListPage(body);
         Response response = new Response(new DataOutputStream(out));
@@ -47,6 +51,12 @@ public class LoginController implements Controller{
         String userID = Session.loginSession.get(requestMessage.getRequestHeaderMessage().getSessionId());
         body = HtmlEditor.removeHref(body);
         body = HtmlEditor.editNavbar(body,userID);
+        return body;
+    }
+
+    private byte[] dynamicMemoList(byte[] body, int count){
+        Collection<Memo> memos = memoService.findRecentMemos(count);
+        body = HtmlEditor.appendMemoList(body,memos);
         return body;
     }
 

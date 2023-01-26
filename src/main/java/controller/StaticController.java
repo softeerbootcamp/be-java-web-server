@@ -1,5 +1,9 @@
 package controller;
 
+import model.domain.Memo;
+import model.domain.User;
+import model.service.MemoService;
+import util.HtmlEditor;
 import util.HttpStatus;
 
 import util.Redirect;
@@ -8,6 +12,7 @@ import view.Response;
 
 import java.io.DataOutputStream;
 import java.io.OutputStream;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +21,8 @@ public class StaticController implements Controller{
     private static StaticController staticController;
 
     private static final String RELATIVE_PATH = "./src/main/resources";
+
+    private final MemoService memoService = MemoService.getInstance();
 
     private StaticController(){}
 
@@ -39,6 +46,7 @@ public class StaticController implements Controller{
             response.response(body,requestMessage.getRequestHeaderMessage(),HttpStatus.Redirection,headerKV);
             return;
         }
+        body = dynamicMemoList(body, 6);
         HttpStatus httpStatus = setHttpStatus(body);
         response.response(body,requestMessage.getRequestHeaderMessage(), httpStatus);
     }
@@ -46,6 +54,12 @@ public class StaticController implements Controller{
     public byte[] getResponseBody(RequestMessage requestMessage){
         String fileURL = RELATIVE_PATH + requestMessage.getRequestHeaderMessage().getSubPath() + requestMessage.getRequestHeaderMessage().getHttpOnlyURL();
         return getBodyFile(fileURL);
+    }
+
+    private byte[] dynamicMemoList(byte[] body, int count){
+        Collection<Memo> memos = memoService.findRecentMemos(count);
+        body = HtmlEditor.appendMemoList(body,memos);
+        return body;
     }
 
     private boolean forbiddenAccess(RequestMessage requestMessage, Map<String,String> headerKV){
