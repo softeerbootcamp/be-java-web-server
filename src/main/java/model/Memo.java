@@ -15,11 +15,11 @@ public class Memo {
         this.dateTime = dateTime;
     }
 
-    public Memo create(int memoId, String content, String author) {
+    public static Memo create(int memoId, String content, String author) {
         return new Memo(memoId, content, author, LocalDateTime.now().toString());
     }
 
-    public Memo createWithDT(int memoId, String content, String author, String dateTime) {
+    public static Memo createWithDT(int memoId, String content, String author, String dateTime) {
         return new Memo(memoId, content, author, dateTime);
     }
 
