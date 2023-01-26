@@ -37,7 +37,7 @@ public class HttpRequest {
     }
 
     private static HttpHeader createRequestHeader(BufferedReader br) throws IOException {
-        HttpHeader httpHeader = HttpHeader.from(new HashMap<>());
+        HttpHeader httpHeader = HttpHeader.create();
         while (true) {
             String line = br.readLine();
             if (line.equals("")) break;

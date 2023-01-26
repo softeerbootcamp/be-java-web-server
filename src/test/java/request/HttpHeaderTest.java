@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class HttpHeaderTest {
     @Test
     void test_create_HttpHeader() {
-        HttpHeader header = HttpHeader.from(new HashMap<>());
+        HttpHeader header = HttpHeader.create();
         header.addHeader("Content-Type", "text/html");
         assertThat(header.getMessage()).contains("text/html");
     }

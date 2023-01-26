@@ -11,9 +11,9 @@ import java.util.UUID;
 public interface SessionService {
     String createSession(User data);
 
-    Optional<Session> getSession(String sessionId);
+    Session getSession(String sessionId);
 
-    void validateSession(String session) throws NotLogInException;
+    void validateSession(String sessionId) throws NotLogInException;
 
     void removeSession(String sessionId);
 
