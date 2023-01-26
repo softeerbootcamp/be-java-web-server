@@ -15,6 +15,7 @@ E[Controller] --> G;
 G(Response객체 응답) --> I; 
 I[ResponseHandler];
 ```
+
 1. 모든 HTTP 요청 메시지는 Request객체로 반환되어 FrontServlet의 인자로 들어간다.
 2. FrontServlet은 정적 리소스인지 API인지 여부를 확인하여 resources에 존재하면 바로 내려주고, 없다면 HandlerAdapter로 들어간다.
 3. HandlerAdapter는 API를 도메인별로 분류하여 알맞은 컨트롤러를 매핑해준다. 현재는 User 도메인만 존재하기 때문에 어댑터는 하나만 있으나 확장성을 고려하였다.
@@ -184,4 +185,29 @@ public Path findFilePath(String url) throws IOException {
 
 ### Step 7 - 한 줄 게시판 구현
 
+현재 구현된 데이터베이스 구조이다.
 
+**users**
+```text
++----------+--------------+------+-----+---------+----------------+
+| Field    | Type         | Null | Key | Default | Extra          |
++----------+--------------+------+-----+---------+----------------+
+| uid      | bigint       | NO   | PRI | NULL    | auto_increment |
+| userId   | varchar(64)  | NO   |     | NULL    |                |
+| password | varchar(64)  | NO   |     | NULL    |                |
+| name     | varchar(64)  | NO   |     | NULL    |                |
+| email    | varchar(255) | NO   |     | NULL    |                |
++----------+--------------+------+-----+---------+----------------+
+```
+**comments**
+```text
++-------------+-----------------+------+-----+-----------+-------------------+
+| Field       | Type            | Null | Key | Default   | Extra             |
++-------------+-----------------+------+-----+-----------+-------------------+
+| id          | bigint unsigned | NO   | PRI | NULL      | auto_increment    |
+| uid         | bigint          | YES  | MUL | NULL      |                   |
+| author      | varchar(64)     | NO   |     | NULL      |                   |
+| content     | blob            | NO   |     | NULL      |                   |
+| create_date | date            | YES  |     | curdate() | DEFAULT_GENERATED |
++-------------+-----------------+------+-----+-----------+-------------------+
+```
