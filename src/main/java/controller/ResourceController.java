@@ -16,6 +16,7 @@ import java.net.URISyntaxException;
 
 public class ResourceController extends AbstractController {
 
+    private static final String HTML_EXTENSION = ".html";
     private static final Logger logger = LoggerFactory.getLogger(ResourceController.class);
 
     private final SessionService sessionService;
@@ -32,7 +33,7 @@ public class ResourceController extends AbstractController {
             ContentType contentType = ContentType.from(path);
             String filePath = contentType.getDirectory() + path;
 
-            if (path.endsWith(".html")) {
+            if (path.endsWith(HTML_EXTENSION)) {
                 sendDynamicFile(httpRequest, httpResponse, filePath, contentType);
                 return;
             }

@@ -11,6 +11,9 @@ import java.io.IOException;
 
 public class BoardCreateController extends AbstractController {
 
+    private final static String INDEX_PATH = "/index.html";
+    private final static String LOGIN_PATH = "/user/login.html";
+
     private final SessionService sessionService;
     private final BoardService boardService;
 
@@ -24,10 +27,10 @@ public class BoardCreateController extends AbstractController {
         try {
             sessionService.validateHasSession(httpRequest.getSessionId());
             boardService.addBoard(httpRequest.getParameters());
-            httpResponse.sendRedirect(HttpStatusCode.FOUND, "/index.html");
+            httpResponse.sendRedirect(HttpStatusCode.FOUND, INDEX_PATH);
 
         } catch (NonLogInException | RuntimeException e) {
-            httpResponse.sendRedirect(HttpStatusCode.FOUND, "/user/login.html");
+            httpResponse.sendRedirect(HttpStatusCode.FOUND, LOGIN_PATH);
         }
     }
 }

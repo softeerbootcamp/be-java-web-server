@@ -12,7 +12,8 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Map;
 
 public class UserCreateController extends AbstractController {
-    public static final String REDIRECT_PATH = "/index.html";
+    public static final String INDEX_PATH = "/index.html";
+    public static final String USER_FORM_PATH = "/user/form.html";
     private static final Logger logger = LoggerFactory.getLogger(UserCreateController.class);
     private final UserService userService;
 
@@ -26,13 +27,12 @@ public class UserCreateController extends AbstractController {
         logger.debug("query params: {}", queryParams);
         try {
             userService.addUser(queryParams);
+            logger.info("Create User Success");
+            httpResponse.sendRedirect(HttpStatusCode.FOUND, INDEX_PATH);
+
         } catch (SQLIntegrityConstraintViolationException e) {
             e.printStackTrace();
-            httpResponse.sendRedirect(HttpStatusCode.FOUND, "/user/form.html");
+            httpResponse.sendRedirect(HttpStatusCode.FOUND, USER_FORM_PATH);
         }
-
-        logger.info("Create User Success");
-        httpResponse.sendRedirect(HttpStatusCode.FOUND, REDIRECT_PATH);
     }
-
 }
