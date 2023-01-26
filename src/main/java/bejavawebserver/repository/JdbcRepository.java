@@ -1,5 +1,6 @@
 package bejavawebserver.repository;
 
+import bejavawebserver.model.Qna;
 import bejavawebserver.model.QnaForm;
 import bejavawebserver.model.User;
 import org.slf4j.Logger;
@@ -113,7 +114,7 @@ public class JdbcRepository {
         }
     }
 
-    public List<QnaForm> findQnaAll() {
+    public List<Qna> findQnaAll() {
         String sql = "select * from qna";
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -125,12 +126,13 @@ public class JdbcRepository {
 
             rs = pstmt.executeQuery();
 
-            List<QnaForm> qnaList = new ArrayList<>();
+            List<Qna> qnaList = new ArrayList<>();
             while(rs.next()){
-                QnaForm qna = new QnaForm(
+                Qna qna = new Qna(
                         rs.getString("writer"),
                         rs.getString("title"),
-                        rs.getString("contents")
+                        rs.getString("contents"),
+                        rs.getString("time")
                 );
                 qnaList.add(qna);
             }
@@ -145,8 +147,8 @@ public class JdbcRepository {
         }
     }
 
-    public void addQna(QnaForm qnaForm) {
-        String sql = "insert into qna values(?, ?, ?)";
+    public void addQna(Qna qna) {
+        String sql = "insert into qna values(?, ?, ?, ?)";
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -154,9 +156,10 @@ public class JdbcRepository {
         try{
             conn = getConnection();
             pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, qnaForm.getWriter());
-            pstmt.setString(2, qnaForm.getTitle());
-            pstmt.setString(3, qnaForm.getContents());
+            pstmt.setString(1, qna.getWriter());
+            pstmt.setString(2, qna.getTitle());
+            pstmt.setString(3, qna.getContents());
+            pstmt.setString(4, qna.getTime());
             pstmt.executeUpdate();
 
         } catch (Exception e) {
