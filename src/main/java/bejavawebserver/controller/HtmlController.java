@@ -35,7 +35,7 @@ public class HtmlController {
 
         // 로그인 상태인 경우
         if(LoginService.isLogin(session)) {
-            return htmlService.makeLoginView(model, uri, (User)session.getAttribute("user"));
+            return htmlService.makeLoginView(model, uri, (User)session.getAttribute(session.getId()));
         }
         // 로그인 상태가 아닌 경우
         if(uri.equals("/qna/form.html")) return "redirect:/user/login.html";

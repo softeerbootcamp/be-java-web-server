@@ -72,7 +72,7 @@
                 <li><a th:if="${isLogin}" th:text="${userName}"></a></li>
                 <li><a href="../user/login.html" role="button" th:if="${!isLogin}">로그인</a></li>
                 <li><a href="../user/form.html" role="button" th:if="${!isLogin}">회원가입</a></li>
-                <li><a href="#" role="button" th:if="${isLogin}">로그아웃</a></li>
+                <li><a href="/user/logout" role="button" th:if="${isLogin}">로그아웃</a></li>
                 <li><a href="#" role="button" th:if="${isLogin}">개인정보수정</a></li>
             </ul>
         </div>
@@ -98,7 +98,7 @@
                     <label for="contents">내용</label>
                     <textarea class="form-control" id="contents" name="contents" rows="5"></textarea>
                 </div>
-                
+
                 <button class="btn btn-success clearfix pull-right" type="submit">질문하기</button>
                 <div class="clearfix"/>
             </form>
