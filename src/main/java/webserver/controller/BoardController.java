@@ -49,6 +49,6 @@ public class BoardController implements Controller{
 
     @Override
     public void chain(Request req, Response res, ModelAndView mv) {
-        ControllerInterceptor.executeController(getInstance(), req, res, mv);
+        ControllerInterceptor.getInstance().executeController(getInstance(), req, res, mv);
     }
 }

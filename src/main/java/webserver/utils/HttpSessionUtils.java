@@ -1,10 +1,12 @@
 
 package webserver.utils;
 
-import db.SessionDataBase;
-import db.UserDatabase;
+import db.tmpl.SessionDatabase;
+import db.tmpl.UserDatabase;
 import model.HttpSession;
 import model.User;
+import model.UserPrincipal;
+import webserver.CustomApplicationContext;
 import webserver.domain.StatusCodes;
 import webserver.domain.request.Request;
 import webserver.exception.HttpRequestException;
@@ -15,18 +17,39 @@ import java.util.UUID;
 
 public class HttpSessionUtils {
 
+    private UserDatabase userDatabase;
+    private SessionDatabase sessionDatabase;
 
-    public static HttpSession generateSession(String userid){
+    private HttpSessionUtils(){}
+
+    public static HttpSessionUtils getInstance(){
+        return HttpSessionUtils.LazyHolder.INSTANCE;
+    }
+
+    private static class LazyHolder{
+        private static final HttpSessionUtils INSTANCE = new HttpSessionUtils();
+    }
+
+    public void setUserDatabase(UserDatabase userDatabase){
+        this.userDatabase = userDatabase;
+    }
+
+    public void setSessionDatabase(SessionDatabase sessionDatabase){
+        this.sessionDatabase = sessionDatabase;
+    }
+
+
+    public HttpSession generateSession(String userid){
 
         String sessionStr = UUID.randomUUID().toString();
-        User user = UserDatabase.findUserById(userid).orElse(null);
-        HttpSession session = new HttpSession(sessionStr, userid, user.getName(), LocalDateTime.now());
-        SessionDataBase.addCookie(session);
+        User user = userDatabase.findUserById(userid).orElse(null);
+        HttpSession session = HttpSession.of(sessionStr, userid, user.getName(), LocalDateTime.now());
+        sessionDatabase.addCookie(session);
         return session;
         }
 
-    public static Optional<HttpSession> sessionUpdate (String sessionId){
-        HttpSession session = SessionDataBase.findSessionById(sessionId).orElse(null);
+    public Optional<HttpSession> sessionUpdate (String sessionId){
+        HttpSession session = sessionDatabase.findSessionById(sessionId).orElse(null);
         if(session != null){
             if(session.isValid())  //available session
                 session.updateCookieTimeInfo(LocalDateTime.now());  //renew lastAccessTime, expireDate, and maxAge of the session
@@ -37,16 +60,16 @@ public class HttpSessionUtils {
     }
 
 
-    public static String cookieInvalidation(String sessionId){
+    public String cookieInvalidation(String sessionId){
         StringBuilder newSession = new StringBuilder();
-        SessionDataBase.findSessionById(sessionId).ifPresent(session -> {
+        sessionDatabase.findSessionById(sessionId).ifPresent(session -> {
             session.invalidateSession();
             newSession.append(session.toString());
         });
         return newSession.toString();
     }
 
-    public static Optional<String> getSessionIdFromRequest(Request req){
+    public Optional<String> getSessionIdFromRequest(Request req){
         String session = req.getRequestHeader().get("Cookie");
         if(session == null)
             return Optional.empty();
@@ -54,20 +77,20 @@ public class HttpSessionUtils {
         return Optional.of(sessionID);
     }
 
-    public static boolean isSessionValid(String sessionId) {
-        HttpSession session = SessionDataBase.findSessionById(sessionId).orElse(null);
+    public boolean isSessionValid(String sessionId) {
+        HttpSession session = sessionDatabase.findSessionById(sessionId).orElse(null);
         if (session != null && session.isValid())
             return true;
         return false;
     }
 
-    public static String sessionIdToUserName(String sessionId) {
-        HttpSession session = SessionDataBase.findSessionById(sessionId).orElse(null);
+    public UserPrincipal sessionIdToUserPrincipal(String sessionId) {
+        HttpSession session = sessionDatabase.findSessionById(sessionId).orElse(null);
         if(session == null)
             throw HttpRequestException.builder()
                 .statusCode(StatusCodes.BAD_REQUEST)
                 .msg("<script>alert('로그인 세션이 종료되었습니다.'); window.location.href = 'http://localhost:8080/user/login_failed.html';</script>")
                 .build();
-        return session.getUsername();
+        return new UserPrincipal(session.getUserId(), session.getUsername());
     }
 }
