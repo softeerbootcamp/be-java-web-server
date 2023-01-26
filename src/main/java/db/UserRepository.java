@@ -171,9 +171,48 @@ public class UserRepository {
                 }
             }
         }
-
         return null;
+    }
 
+    public void deleteById(String userId) throws SQLException {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        String query = "DELETE FROM WAS.USER WHERE UID = ?";
+
+
+        try {
+            conn = DBManager.getInstance().getConnection();
+
+            logger.info("Connection 객체 생성성공");
+
+            pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, userId);
+
+            pstmt.executeUpdate();
+
+        } catch (ClassNotFoundException e) {
+            logger.error("드라이버 로드 실패");
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new SQLIntegrityConstraintViolationException();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
 }
