@@ -54,7 +54,7 @@ public class UserListController extends AbstractController {
 		model.addModel("users", users);
 
 		// rendering
-		// TODO View 다형성을 잘 못사용하고 있는데 고민중...
+		// TODO View 다형성을 잘 못 사용하고 있는데 고민중...
 		userListView.makeView(httpRequest, httpResponse, model);
 	}
 
