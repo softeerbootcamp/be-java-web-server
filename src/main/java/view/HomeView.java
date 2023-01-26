@@ -4,6 +4,7 @@ import model.Memo;
 import util.FileUtils;
 
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 
 public class HomeView {
@@ -21,7 +22,7 @@ public class HomeView {
                     .append("</strong>")
                     .append("<div class=\"auth-info\">")
                     .append("<i class=\"icon-add-comment\"></i>\n" +
-                            "<span class=\"time\">" + memo.getCreatedAt() + "</span>\n" +
+                            "<span class=\"time\">" + DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(memo.getCreatedAt()) + "</span>\n" +
                             "<a href=\"./user/profile.html\" class=\"author\">" + memo.getWriter()+ "</a>\n" +
                             "</div>")
                     .append("<div class=\"reply\" title=\"댓글\">\n" +
