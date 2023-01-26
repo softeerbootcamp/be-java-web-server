@@ -87,6 +87,7 @@ public class UserRepository {
             logger.error("드라이버 로드 실패");
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new UserNotFoundException();
         } finally {
             if (conn != null) {
                 try {
@@ -109,8 +110,8 @@ public class UserRepository {
                     e.printStackTrace();
                 }
             }
-            throw new UserNotFoundException();
         }
+        return null;
     }
 
     public Collection<User> findAll() {
