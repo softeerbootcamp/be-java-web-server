@@ -34,6 +34,6 @@ public class MemoService {
         String writer = memoInfo.get("writer");
         String content = memoInfo.get("content");
 
-        return new Memo(writer, content, LocalDateTime.now());
+        return Memo.of(writer, content, LocalDateTime.now());
     }
 }

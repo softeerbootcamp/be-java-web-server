@@ -8,10 +8,25 @@ public class Memo {
     private final String content;
     private final LocalDateTime createdAt;
 
-    public Memo(String writer, String content, LocalDateTime createdAt) {
+    private Memo(String writer, String content, LocalDateTime createdAt) {
         this.writer = writer;
         this.content = content;
         this.createdAt = createdAt;
+    }
+
+    private Memo(Long memoId, String writer, String content, LocalDateTime createdAt) {
+        this.memoId = memoId;
+        this.writer = writer;
+        this.content = content;
+        this.createdAt = createdAt;
+    }
+
+    public static Memo of(String writer, String content, LocalDateTime createdAt) {
+        return new Memo(writer, content, createdAt);
+    }
+
+    public static Memo of(Long memoId, String writer, String content, LocalDateTime createdAt) {
+        return new Memo(memoId, writer, content, createdAt);
     }
 
     public void setMemoId(Long memoId) {
