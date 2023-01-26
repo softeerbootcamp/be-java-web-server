@@ -114,7 +114,7 @@ public class JdbcRepository {
     }
 
     public List<Qna> findQnaAll() {
-        String sql = "select * from qna";
+        String sql = "select * from qna order by time desc";
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
