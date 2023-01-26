@@ -38,7 +38,7 @@ public class LoginController extends AbstractController {
 	public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
 		if (userService.matchIdPassword(httpRequest.getRequestBody("userId"), httpRequest.getRequestBody("password"))) {
 			User user = userService.findByUserId(httpRequest.getRequestBody("userId"));
-			httpResponse.setHttpResponse(HttpStatus.FOUND, "", ContentType.HTML, "/index.html");
+			httpResponse.setHttpResponse(HttpStatus.FOUND, "", ContentType.HTML, "/home");
 			Session session = new Session();
 			SessionManager.addSession(session);
 			session.setAttribuite("user", user);
