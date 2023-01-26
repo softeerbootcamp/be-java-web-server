@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import request.Request;
 import response.ResponseFactory;
 import response.ResponseSender;
+import session.HttpCookie;
+import session.HttpSessions;
 
 public class RequestResponseHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestResponseHandler.class);
@@ -30,7 +32,6 @@ public class RequestResponseHandler implements Runnable {
             Request request = new Request(br);
             // todo : 만약 쿠키가 들어오면 룩업해줘야하는데, 요구사항에 아직 없다. 조금 있다가 추가하자.
             Controller controller = ControllerSelector.setController(request);
-            logger.debug("request cookie : " + request.getRequestHeader().getHeaderValueByKey("Cookie"));
             ResponseFactory responseFactory = controller.controllerService(request);
             ResponseSender responseSender = new ResponseSender(out);
             responseSender.send(responseFactory);

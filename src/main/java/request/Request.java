@@ -3,6 +3,7 @@ package request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import session.HttpCookie;
+import session.HttpSessions;
 import webserver.RequestResponseHandler;
 
 import java.io.BufferedReader;
@@ -28,6 +29,7 @@ public class Request {
             throw new NullPointerException("아무런 요청이 없습니다!!");
         }
     }
+
     public void setRequestLine(BufferedReader bufferedReader) throws IOException {
         requestLine = new RequestLine();
         requestLine.addRequestLine(bufferedReader.readLine());
@@ -57,14 +59,21 @@ public class Request {
         logger.debug("requestBody : " + fullLine);
         requestBody.addBodyLines(fullLine);
     }
-    public void setHttpCookie(RequestHeader requestHeader){
+
+    public void setHttpCookie(RequestHeader requestHeader) {
+        // 쿠키가 없을때
         if (!requestHeader.isHeaderMapContains("Cookie")) {
             this.httpCookie = new HttpCookie(null);
             return;
         }
+        // 쿠키가 존재
         this.httpCookie = new HttpCookie(requestHeader.getHeaderValueByKey("Cookie").split("=")[1]);
-
+        if(!HttpSessions.cookieValidationCheck(this.httpCookie)){
+            this.httpCookie.cleanCookie();
+        }
     }
+
+
     public HttpCookie getHttpCookie() {
         return httpCookie;
     }

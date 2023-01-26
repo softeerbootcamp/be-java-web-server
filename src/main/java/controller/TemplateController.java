@@ -28,11 +28,6 @@ public class TemplateController implements Controller {
         String addedLine = null;
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + url).toPath());
         body = DynamicRenderer.dynamicIndex_ViewAllBoard(body);
-        // 쿠키가 있는데 유효하지 않으면 쿠키 삭제
-        if(cookie!=null && !HttpSessions.cookieValidationCheck(cookie)){
-            addedLine += "Cookie : null";
-            cookie.cleanCookie();
-        }
         if (cookie.isLogin()) {
             body = DynamicRenderer.dynamicIndex_LoginBtnToUserBtn(body, request.getRequestHeader().getHeaderValueByKey("Cookie").split("=")[1]);
             body = DynamicRenderer.dynamicIndex_LogoutBtnOn(body);
@@ -43,6 +38,9 @@ public class TemplateController implements Controller {
         if (!cookie.isLogin() && url.contains("/qna/form.html")) {
             controllerTypeEnum = ControllerTypeEnum.REDIRECT;
             addedLine = "Location : /index.html";
+        }
+        if(!cookie.isLogin()){
+            body = DynamicRenderer.dynamicIndex_LogoutBtnOff(body);
         }
 
 

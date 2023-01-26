@@ -15,7 +15,7 @@ public class HttpSessions {
     }
     public static boolean cookieValidationCheck(HttpCookie cookie){
         for(HttpSession session : httpSessions.values()){
-            if(session.getSessionId() == cookie.getSid()){
+            if(session.getSessionId().equals(cookie.getSid())){
                 return true;
             }
         }

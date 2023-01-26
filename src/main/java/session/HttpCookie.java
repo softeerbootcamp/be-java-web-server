@@ -5,7 +5,6 @@ public class HttpCookie {
 
     public HttpCookie(String sid){
         this.sid = sid;
-
     }
 
     public String getSid() {
