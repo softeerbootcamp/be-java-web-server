@@ -19,7 +19,8 @@ repositories {
 }
 
 dependencies {
-	runtimeOnly 'mysql:mysql-connector-java'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'

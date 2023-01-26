@@ -1,0 +1,15 @@
+server:
+  port: 8082
+
+spring:
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/board?serverTimezone=UTC&characterEncoding=UTF-8
+    username: root
+    password: td134579
+
+logging:
+  level: debug
