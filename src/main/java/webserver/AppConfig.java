@@ -1,11 +1,15 @@
 package webserver;
 
+import db.post.MySqlPostDatabase;
+import db.post.PostDatabase;
 import db.session.MySqlSessionDatabase;
 import db.session.SessionDatabase;
 import db.user.MySqlUserDatabase;
 import db.user.UserDatabase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import service.post.PostService;
+import service.post.PostServiceImpl;
 import service.session.SessionService;
 import service.session.SessionServiceImpl;
 import service.user.UserService;
@@ -38,6 +42,9 @@ public class AppConfig {
         return SessionServiceImpl.getInstance(createMySqlSessionDatabase());
     }
 
+    public PostService postService() {
+        return PostServiceImpl.getInstance(createMySqlPostDatabase());
+    }
 
     private UserDatabase createMySqlUserDatabase() {
         return new MySqlUserDatabase(connectionPool);
@@ -45,5 +52,9 @@ public class AppConfig {
 
     private SessionDatabase createMySqlSessionDatabase() {
         return new MySqlSessionDatabase(connectionPool);
+    }
+
+    private PostDatabase createMySqlPostDatabase() {
+        return new MySqlPostDatabase(connectionPool);
     }
 }

@@ -20,7 +20,8 @@ public class Dispatcher {
                 StaticFileController.PATH, new StaticFileController(),
                 UserLoginController.PATH, new UserLoginController(appConfig.userService(), appConfig.sessionService()),
                 UserListController.PATH, new UserListController(appConfig.userService(), appConfig.sessionService()),
-                HtmlFileController.PATH, new HtmlFileController(appConfig.userService(), appConfig.sessionService())
+                HtmlFileController.PATH, new HtmlFileController(appConfig.userService(), appConfig.sessionService(), appConfig.postService()),
+                PostCreateController.PATH, new PostCreateController(appConfig.userService(), appConfig.sessionService(), appConfig.postService())
         );
     }
 
