@@ -63,12 +63,15 @@ public class DB_Board {
                     "user=" + ADMIN_ID + "&" +
                     "password=" + ADMIN_PASSWORD);
 
-            String sql = "SELECT uid, content, date FROM users RIGHT OUTER JOIN board ON users.id = board.writerId";
+            String sql = "SELECT uid, content, date " +
+                                "FROM users RIGHT OUTER JOIN board " +
+                                "ON users.id = board.writerId ORDER BY board.id DESC";
             // 탈퇴한 유저의 글은 디비에 남아있음.
             // 구현은 안했지만, 탈퇴한 유저의 (작성자 ID)를 바꾸는 기능을 위해 right outer join으로 남겨놓음.
             pstmt = conn.prepareStatement(sql);
 
             rs = pstmt.executeQuery();
+            int addNum = 0;
             while(rs.next())
             {
                 allArticles.add(
@@ -78,6 +81,8 @@ public class DB_Board {
                                 rs.getString("date")
                         )
                 );
+                addNum++;
+                if(addNum >= 5) break;
             }
         }catch (SQLException e) {
             e.printStackTrace();
