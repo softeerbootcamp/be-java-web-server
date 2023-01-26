@@ -81,7 +81,7 @@ public class Database {
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 users.add(User.of(resultSet.getString("userId"), resultSet.getString("password"),
                         resultSet.getString("name"), resultSet.getString("email")));
             }
@@ -138,20 +138,24 @@ public class Database {
         }
     }
 
-    public static List<String> findAllMemos() {
-        List<String> memos = new ArrayList<>();
+    public static List<List<String>> findAllMemos() {
+        List<List<String>> memos = new ArrayList<>();
 
         try {
             Connection connection =
                     DriverManager.getConnection(DB_URL.getDBInfo(), DB_USER_NAME.getDBInfo(), DB_PASSWORD.getDBInfo());
 
             PreparedStatement preparedStatement =
-                    connection.prepareStatement("select * from memo;");
+                    connection.prepareStatement("select name, contents, createdAt from memo inner join user on user.idx = memo.userIdx;");
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            while(resultSet.next()) {
-                memos.add(resultSet.getString("contents"));
+            while (resultSet.next()) {
+                List<String> tempList = new ArrayList<>();
+                tempList.add(resultSet.getString("name"));
+                tempList.add(resultSet.getString("contents"));
+                tempList.add(resultSet.getString("createdAt"));
+                memos.add(tempList);
             }
 
             preparedStatement.close();

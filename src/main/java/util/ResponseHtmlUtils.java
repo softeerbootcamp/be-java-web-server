@@ -48,17 +48,24 @@ public class ResponseHtmlUtils {
         return resultListHtml.getBytes();
     }
 
-    public static byte[] makeResponseHtmlMemoList(byte[] body, List<String> memos) {
+    public static byte[] makeResponseHtmlMemoList(byte[] body, List<List<String>> memos) {
         StringBuilder memoList = new StringBuilder();
 
-        for(String memo : memos) {
+        for(List<String> memo : memos) {
             memoList.append("<li>")
                     .append("<div class=\"wrap\">")
                     .append("<div class=\"main\">")
-                    .append("<strong class=\"subject\">")
-                    .append(memo)
-                    .append("</strong>")
-                    .append("</div></div></li>");
+                    .append("<strong class=\"subject\"><a>")
+                    .append(memo.get(1))
+                    .append("</a></strong>")
+                    .append("<div class=\"auth-info\">")
+                    .append("<i class=\"icon-add-comment\"></i>")
+                    .append("<span class=\"time\">")
+                    .append(memo.get(2))
+                    .append(" </span>")
+                    .append("<a class=\"author\">")
+                    .append(memo.get(0))
+                    .append("</a></div></div></div></li>");
         }
 
         String originalHtml = new String(body);
