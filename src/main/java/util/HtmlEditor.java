@@ -59,12 +59,12 @@ public class HtmlEditor {
                 "    </div>\n" +
                 "</li>\n";
         for (Memo memo: memos){
+            System.out.println("메모 append");
             String dynamicHtml = String.format(staticHtml,memo.getContent(),memo.getUserId());
             memoList.append(dynamicHtml);
         }
         bodyStr = bodyStr.replace("<ul class=\"list\" name=\"memoList\">", memoList);
-        //todo: memoList 동적으로 보이도록 html 편집 코드 작성
-        return null;
+        return bodyStr.getBytes();
     }
 
 }

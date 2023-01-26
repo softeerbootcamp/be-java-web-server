@@ -32,13 +32,12 @@ public class MysqlMemoRepository implements MemoRepository{
 
     @Override
     public Memo addMemo(Memo memo) {
-        String sql = "insert into memo(memoId, content, userId) values(?, ?, ?)";
+        String sql = "insert into memos(content, userId) values(?, ?)";
         try {
             conn = DriverManager.getConnection(url,userName,password);
             pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, memo.getMemoId());
-            pstmt.setString(2, memo.getContent());
-            pstmt.setString(3, memo.getUserId());
+            pstmt.setString(1, memo.getContent());
+            pstmt.setString(2, memo.getUserId());
             pstmt.executeUpdate();
             pstmt.close();
             conn.close();

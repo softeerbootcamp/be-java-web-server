@@ -5,8 +5,13 @@ public class Memo {
     private String content;
     private String userId;
 
-    public Memo(int memoId, String content, String userId) {
+    public Memo(int memoId, String content, String userId){
         this.memoId = memoId;
+        this.content = content;
+        this.userId = userId;
+    }
+
+    public Memo(String content, String userId){
         this.content = content;
         this.userId = userId;
     }

@@ -18,14 +18,28 @@ public class Response {
         this.dos = dos;
     }
 
-    public void response(byte[] body, RequestHeaderMessage requestHeaderMessage, HttpStatus httpStatus){
+    public void response(byte[] body, RequestHeaderMessage requestHeaderMessage){
+        HttpStatus httpStatus = getHttpStatus(body);
         responseHeader(requestHeaderMessage,body,httpStatus,new HashMap<>());
         responseBody(body);
     }
 
-    public void response(byte[] body, RequestHeaderMessage requestHeaderMessage, HttpStatus httpStatus, Map<String,String> header){
+    public void response(byte[] body, RequestHeaderMessage requestHeaderMessage, Map<String,String> header){
+        HttpStatus httpStatus = getHttpStatus(body, header);
         responseHeader(requestHeaderMessage,body,httpStatus,header);
         responseBody(body);
+    }
+
+    private HttpStatus getHttpStatus(byte[] body){
+        if (body.length > 0)
+            return HttpStatus.Success;
+        return HttpStatus.ClientError;
+    }
+
+    private HttpStatus getHttpStatus(byte[] body, Map<String,String> header){
+        if (!(header.getOrDefault("Location","").equals("")))
+            return HttpStatus.Redirection;
+        return getHttpStatus(body);
     }
 
     private void responseHeader(RequestHeaderMessage requestHeaderMessage, byte[] body, HttpStatus httpStatus, Map<String,String> header){

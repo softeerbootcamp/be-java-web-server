@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.util.Map;
 
 public interface Controller {
 
@@ -25,10 +26,14 @@ public interface Controller {
         return new byte[0];
     }
 
-    default HttpStatus setHttpStatus(byte[] body){
-        if (body.length > 0)
-            return HttpStatus.Success;
-        return HttpStatus.ClientError;
+    default void setLocation(String redirectLink, Map<String,String> headerKV){
+        if (!redirectLink.equals("")){
+            setHeader(headerKV,"Location", redirectLink);
+        }
+    }
+
+    default void setHeader(Map<String,String> headerKV, String key, String value){
+        headerKV.put(key,value);
     }
 
 }
