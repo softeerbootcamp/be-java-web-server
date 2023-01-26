@@ -2,7 +2,7 @@ package dto;
 
 import java.util.Map;
 
-public class SignUpDTO extends LogInDTO {
+public class SignUpDTO extends LoginDTO {
 
     public static final String NAME = "name";
     public static final String EMAIL = "email";
