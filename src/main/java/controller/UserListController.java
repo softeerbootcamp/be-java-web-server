@@ -1,6 +1,7 @@
 package controller;
 
 import exception.HttpMethodException;
+import exception.NotLogInException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.Session;
@@ -11,7 +12,6 @@ import service.user.UserService;
 import utils.FileUtils;
 import utils.enums.HttpMethod;
 
-import javax.naming.AuthenticationException;
 import java.io.IOException;
 
 import static utils.PathManager.LOGIN_PATH;
@@ -40,9 +40,10 @@ public class UserListController implements Controller {
     private void doGet(HttpRequest httpRequest, HttpResponse httpResponse) {
         String sid = httpRequest.getSession();
         try {
-            Session session = sessionService.getSession(sid).orElseThrow(AuthenticationException::new);
+            sessionService.validateSession(sid);
+            Session session = sessionService.getSession(sid);
             httpResponse.setBody(FileUtils.createUserListPage(userService.findAllUsers(), userService.findUser(session.getUserId())));
-        } catch (NullPointerException | AuthenticationException | IOException e) {
+        } catch (NullPointerException | NotLogInException | IOException e) {
             httpResponse.redirect(LOGIN_PATH);
         }
     }

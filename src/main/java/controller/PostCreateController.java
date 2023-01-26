@@ -41,7 +41,7 @@ public class PostCreateController implements Controller {
             Map<String, String> bodyParams = httpRequest.getRequestBody();
             String sessionId = httpRequest.getSession();
             sessionService.validateSession(sessionId);
-            Session session = sessionService.getSession(httpRequest.getSession()).orElseThrow(NotLogInException::new);
+            Session session = sessionService.getSession(httpRequest.getSession());
             User user = userService.findUser(session.getUserId());
             postService.createPost(user.getUserId(), bodyParams);
             httpResponse.redirect(PathManager.HOME_PATH);
