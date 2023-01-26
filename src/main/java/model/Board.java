@@ -22,4 +22,10 @@ public class Board {
     public String getContent() {
         return content;
     }
+
+    @Override
+    public String toString() {
+        return "Board [date=" + date + ", author=" + author + ", content=" + content + "]";
+    }
+
 }

@@ -23,4 +23,10 @@ public class Session {
     public String getUserName() {
         return userName;
     }
+
+    @Override
+    public String toString() {
+        return "Session [sessionId=" + sessionId + ", userId=" + userId + ", userName=" + userName + "]";
+    }
+
 }
