@@ -44,22 +44,23 @@ public class BoardDataBase {
     }
 
     public Board findById(Long boardId) {
-        String sql = "SELECT * FROM Board b Where b.id=" + boardId;
+        String sql = "SELECT * FROM Board b WHERE b.id=" + boardId;
 
         Board board = null;
         try (Connection connection = new DBConnector().getConnection();
              PreparedStatement pstmt = connection.prepareStatement(sql);
              ResultSet resultSet = pstmt.executeQuery()) {
-
-            Long id = Long.valueOf(resultSet.getString("id"));
-            String writer = resultSet.getString("writer");
-            String title = resultSet.getString("title");
-            String content = resultSet.getString("content");
-            Timestamp createTime = resultSet.getTimestamp("create_time");
-            board = new Board(id, writer, title, content, createTime);
+            while (resultSet.next()) {
+                Long id = Long.valueOf(resultSet.getString("id"));
+                String writer = resultSet.getString("writer");
+                String title = resultSet.getString("title");
+                String content = resultSet.getString("content");
+                Timestamp createTime = resultSet.getTimestamp("create_time");
+                board = new Board(id, writer, title, content, createTime);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            logger.error("[ERROR] BoardDatabase selectQuery에서의 에러 sql");
+            logger.error("[ERROR] BoardDatabase selectQuery에서의 에러 sql: {}",sql);
         }
 
         return board;

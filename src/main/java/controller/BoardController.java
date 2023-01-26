@@ -22,6 +22,7 @@ import util.Cookie;
 import util.FileType;
 import util.HttpMethod;
 import util.HttpStatus;
+import view.BoardRender;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -33,6 +34,8 @@ public class BoardController implements Controller {
     private FileReader fileReader;
 
     private RequestReader requestReader;
+
+    private BoardRender boardRender = BoardRender.getInstance();
 
     private BoardDataBase boardDataBase = BoardDataBase.getInstance();
     private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
@@ -81,8 +84,10 @@ public class BoardController implements Controller {
         byte[] data = fileReader.readFile(httpRequest.getUrl());
         requestReader = new RequestGetReader();
         String boardId = requestReader.readData(httpRequest).get(RequestGetReader.PATH_VARIABLE_KEY);
+        Board board = boardDataBase.findById(Long.valueOf(boardId));
+        byte[] fixedData = boardRender.addBoardInfo(data, board);
         return new HttpResponse.Builder()
-                .setData(new Data(dataOutputStream, data))
+                .setData(new Data(dataOutputStream, fixedData))
                 .setFileType(FileType.HTML)
                 .setHttpStatus(HttpStatus.OK)
                 .build();

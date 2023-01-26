@@ -24,8 +24,9 @@ public class TemplatesFileReader implements FileReader {
     }
 
     private String splitPathVariable(Url url) {
-        String urlStr = "";
+        String urlStr = url.getUrl();
         if (url.getRequestDataType().equals(RequestDataType.PATH_VARIABLE)) {
+            urlStr = "";
             String[] parts = url.getUrl().split("/");
             for (int i = 0; i < parts.length-1; i++) {
                 urlStr += "/" + parts[i];
