@@ -29,7 +29,7 @@ public interface View {
             //if a user has logged in
             menuBar = "<li><a href=\"../user/login.html\" role=\"button\">로그인</a></li>\n" +
                     "                <li><a href=\"../user/form.html\" role=\"button\">회원가입</a></li>";
-            String username = HttpSessionUtils.sessionIdToUserName(mv.getViewModel().get("session-id").toString());
+            String username = SecurityContext.getContext().getName();
             nameTag = "<li id=\"username\"><a href=\"#\">" + username +"님 </a></li>";
         }
 
