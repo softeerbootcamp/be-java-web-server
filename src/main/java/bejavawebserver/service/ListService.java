@@ -10,9 +10,10 @@ import java.util.List;
 
 @Service
 public class ListService {
-    @Autowired JdbcRepository jdbcRepository;
+    @Autowired
+    JdbcRepository jdbcRepository;
 
-    public void makeUserList(Model model){
+    public void makeUserList(Model model) {
         List<User> userList = jdbcRepository.findUserAll();
         model.addAttribute("userList", userList);
     }

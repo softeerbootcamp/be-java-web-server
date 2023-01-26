@@ -1,7 +1,6 @@
 package bejavawebserver.repository;
 
 import bejavawebserver.model.Qna;
-import bejavawebserver.model.QnaForm;
 import bejavawebserver.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,13 +12,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class JdbcRepository {
-    private final DataSource dataSource;
-
     private static final Logger logger = LoggerFactory.getLogger(JdbcRepository.class);
+    private final DataSource dataSource;
 
     public JdbcRepository(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -35,7 +34,7 @@ public class JdbcRepository {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
-        try{
+        try {
             conn = getConnection();
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, user.getUserId());
@@ -57,13 +56,13 @@ public class JdbcRepository {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         User findUser = null;
-        try{
+        try {
             conn = getConnection();
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, userId);
 
             rs = pstmt.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 findUser = new User(
                         rs.getString("user_id"),
                         rs.getString("password"),
@@ -87,14 +86,14 @@ public class JdbcRepository {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
-        try{
+        try {
             conn = getConnection();
             pstmt = conn.prepareStatement(sql);
 
             rs = pstmt.executeQuery();
 
             List<User> userList = new ArrayList<>();
-            while(rs.next()){
+            while (rs.next()) {
                 User user = new User(
                         rs.getString("user_id"),
                         rs.getString("password"),
@@ -120,14 +119,14 @@ public class JdbcRepository {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
-        try{
+        try {
             conn = getConnection();
             pstmt = conn.prepareStatement(sql);
 
             rs = pstmt.executeQuery();
 
             List<Qna> qnaList = new ArrayList<>();
-            while(rs.next()){
+            while (rs.next()) {
                 Qna qna = new Qna(
                         rs.getString("writer"),
                         rs.getString("contents"),
@@ -152,7 +151,7 @@ public class JdbcRepository {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
-        try{
+        try {
             conn = getConnection();
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, qna.getWriter());
@@ -167,27 +166,26 @@ public class JdbcRepository {
         }
     }
 
-    private Connection getConnection(){
+    private Connection getConnection() {
         return DataSourceUtils.getConnection(dataSource);
     }
 
-    private void close(Connection conn, PreparedStatement pstmt, ResultSet rs){
+    private void close(Connection conn, PreparedStatement pstmt, ResultSet rs) {
         // 역순으로 닫아주어야 한다
-        try{
-            if(pstmt != null){
+        try {
+            if (pstmt != null) {
                 pstmt.close();
             }
-            if(conn != null){
+            if (conn != null) {
                 conn.close();
             }
-            if(rs != null){
+            if (rs != null) {
                 rs.close();
             }
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
 
 
 }

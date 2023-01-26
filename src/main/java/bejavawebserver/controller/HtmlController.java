@@ -15,9 +15,12 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 public class HtmlController {
-    @Autowired HtmlService htmlService;
-    @Autowired ListService listService;
-    @Autowired QnaService qnaService;
+    @Autowired
+    HtmlService htmlService;
+    @Autowired
+    ListService listService;
+    @Autowired
+    QnaService qnaService;
 
     @GetMapping(value = {
             "/index.html",
@@ -27,30 +30,30 @@ public class HtmlController {
             "/user/login.html",
             "/user/login_failed.html",
             "/user/profile.html"})
-    public String indexHtml(HttpServletRequest httpServletRequest, Model model){
+    public String indexHtml(HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         String uri = httpServletRequest.getRequestURI();
 
-        if(uri.equals("/index.html")) qnaService.makeQnaList(model);
+        if (uri.equals("/index.html")) qnaService.makeQnaList(model);
 
         // 로그인 상태인 경우
-        if(LoginService.isLogin(session)) {
-            return htmlService.makeLoginView(model, uri, (User)session.getAttribute(session.getId()));
+        if (LoginService.isLogin(session)) {
+            return htmlService.makeLoginView(model, uri, (User) session.getAttribute(session.getId()));
         }
         // 로그인 상태가 아닌 경우
-        if(uri.equals("/qna/form.html")) return "redirect:/user/login.html";
+        if (uri.equals("/qna/form.html")) return "redirect:/user/login.html";
         return htmlService.makeNotLoginView(model, uri);
     }
 
     @GetMapping("/user/list.html")
-    public String listHtml(HttpServletRequest httpServletRequest, Model model){
+    public String listHtml(HttpServletRequest httpServletRequest, Model model) {
         HttpSession session = httpServletRequest.getSession(false);
         String uri = httpServletRequest.getRequestURI();
 
         // 로그인 상태인 경우
-        if(LoginService.isLogin(session)) {
+        if (LoginService.isLogin(session)) {
             listService.makeUserList(model);
-            return htmlService.makeLoginView(model, uri, (User)session.getAttribute("user"));
+            return htmlService.makeLoginView(model, uri, (User) session.getAttribute("user"));
         }
 
         // 로그인 상태가 아닌 경우

@@ -1,7 +1,6 @@
 package bejavawebserver.model;
 
 import lombok.Data;
-import lombok.NonNull;
 
 @Data
 public class Qna {
