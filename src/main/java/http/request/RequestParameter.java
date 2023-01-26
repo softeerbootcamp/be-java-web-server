@@ -3,6 +3,8 @@ package http.request;
 import com.google.common.collect.Maps;
 import http.common.Body;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,7 +40,10 @@ public class RequestParameter {
         String[] chunks = queryString.split("&");
         for (String chunk : chunks) {
             String[] pair = chunk.split("=");
-            parameters.put(pair[0], pair[1]);
+            try {
+                parameters.put(URLDecoder.decode(pair[0], "UTF-8"), URLDecoder.decode(pair[1], "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+            }
         }
         return parameters;
     }
