@@ -47,7 +47,7 @@ public class DynamicResolver {
 
     private static String loginDynamicHtml(String line, String userName) {
         if (line.contains("Posts")) {
-            return String.format(POSTS_TAG, userName) + System.lineSeparator();
+            return line + String.format(POSTS_TAG, userName) + System.lineSeparator();
         }
         if (line.contains("로그인") || line.contains("회원가입")) {
             return "";
