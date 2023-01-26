@@ -4,6 +4,7 @@ import bejavawebserver.model.User;
 import bejavawebserver.service.HtmlService;
 import bejavawebserver.service.ListService;
 import bejavawebserver.service.LoginService;
+import bejavawebserver.service.QnaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpSession;
 public class HtmlController {
     @Autowired HtmlService htmlService;
     @Autowired ListService listService;
+    @Autowired QnaService qnaService;
 
     @GetMapping(value = {
             "/index.html",
@@ -29,6 +31,7 @@ public class HtmlController {
         HttpSession session = httpServletRequest.getSession(false);
         String uri = httpServletRequest.getRequestURI();
 
+        if(uri.equals("/index.html")) qnaService.makeQnaList(model);
 
         // 로그인 상태인 경우
         if(LoginService.isLogin(session)) {
@@ -44,7 +47,10 @@ public class HtmlController {
         String uri = httpServletRequest.getRequestURI();
 
         // 로그인 상태인 경우
-        if(LoginService.isLogin(session)) return listService.makeUserList(model, uri, (User)session.getAttribute("user"));
+        if(LoginService.isLogin(session)) {
+            listService.makeUserList(model);
+            return htmlService.makeLoginView(model, uri, (User)session.getAttribute("user"));
+        }
 
         // 로그인 상태가 아닌 경우
         return "redirect:/user/login.html";

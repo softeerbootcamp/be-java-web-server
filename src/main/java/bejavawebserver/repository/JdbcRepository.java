@@ -4,9 +4,6 @@ import bejavawebserver.model.QnaForm;
 import bejavawebserver.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 
@@ -83,7 +80,7 @@ public class JdbcRepository {
         }
     }
 
-    public List<User> findAll() {
+    public List<User> findUserAll() {
         String sql = "select * from User";
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -106,6 +103,38 @@ public class JdbcRepository {
                 userList.add(user);
             }
             return userList;
+
+        } catch (Exception e) {
+            logger.debug("error : {}", e.getMessage());
+
+            return null;
+        } finally {
+            close(conn, pstmt, rs);
+        }
+    }
+
+    public List<QnaForm> findQnaAll() {
+        String sql = "select * from qna";
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try{
+            conn = getConnection();
+            pstmt = conn.prepareStatement(sql);
+
+            rs = pstmt.executeQuery();
+
+            List<QnaForm> qnaList = new ArrayList<>();
+            while(rs.next()){
+                QnaForm qna = new QnaForm(
+                        rs.getString("writer"),
+                        rs.getString("title"),
+                        rs.getString("contents")
+                );
+                qnaList.add(qna);
+            }
+            return qnaList;
 
         } catch (Exception e) {
             logger.debug("error : {}", e.getMessage());
