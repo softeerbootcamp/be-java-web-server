@@ -10,13 +10,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
 public class UserDatabase {
 
     private static final Logger logger = LoggerFactory.getLogger(UserDatabase.class);
-    private static Map<String, User> users = Maps.newHashMap();
 
     public static void addUser(User user) {
         try {
@@ -32,13 +32,14 @@ public class UserDatabase {
 
             psmt.close();
             conn.close();
-            //users.put(user.getUserId(), user);
         } catch (SQLException e) {
             logger.error(e.getMessage());
         }
     }
 
     public static User findUserById(String userId) {
+        User user = null;
+
         try {
             Connection connection = DbConnectionManager.getConnection();
             PreparedStatement preparedStatement =
@@ -49,7 +50,7 @@ public class UserDatabase {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             resultSet.next();
-            User user = User.of(resultSet.getString("userId"), resultSet.getString("password"),
+            user = User.of(resultSet.getString("userId"), resultSet.getString("password"),
                     resultSet.getString("name"), resultSet.getString("email"));
 
             logger.debug("User [userId: {}, password: {}, name: {}, email: {}]",
@@ -58,16 +59,35 @@ public class UserDatabase {
             preparedStatement.close();
             connection.close();
 
-            return user;
-            //return users.get(userId);
         } catch (SQLException e) {
             logger.error(e.getMessage());
         }
 
-        return null;
+        return user;
     }
 
     public static Collection<User> findAll() {
-        return users.values();
+        Collection<User> users = new ArrayList<>();
+
+        try {
+            Connection connection = DbConnectionManager.getConnection();
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement("select * from user;");
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next()) {
+                users.add(User.of(resultSet.getString("userId"), resultSet.getString("password"),
+                        resultSet.getString("name"), resultSet.getString("email")));
+            }
+
+            preparedStatement.close();
+            connection.close();
+
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+
+        return users;
     }
 }
