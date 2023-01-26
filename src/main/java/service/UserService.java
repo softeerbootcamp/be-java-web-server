@@ -24,22 +24,22 @@ public class UserService {
         return instance;
     }
 
-    public Optional<User> findUserById(String userId) throws SQLException, NullPointerException {
+    public Optional<User> findUserById(String userId) throws SQLException {
         return userDatabase.findUserById(userId);
     }
 
-    public Optional<User> findUserByIdAndPwd(String userId, String pwd) throws SQLException, NullPointerException {
+    public Optional<User> findUserByIdAndPwd(String userId, String pwd) throws SQLException {
         return userDatabase.findUserByIdAndPwd(userId, pwd);
     }
 
-    public void addUser(User user) throws IllegalArgumentException, SQLException, NullPointerException {
+    public void addUser(User user) throws IllegalArgumentException, SQLException {
         if(findUserById(user.getId()).isPresent()) {
             throw new IllegalArgumentException();
         }
         userDatabase.addUser(user);
     }
 
-    public Collection<User> findAllUsers() throws SQLException, NullPointerException {
+    public Collection<User> findAllUsers() throws SQLException {
         return userDatabase.findAll();
     }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class QueryExecutor {
-    public static List<Map<String, String>> executeSelectQuery(String query, String[] args) throws SQLException, NullPointerException {
+    public static List<Map<String, String>> executeSelectQuery(String query, String[] args) throws SQLException {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement pstmt = con.prepareStatement(query)) {
             if (args != null) {
@@ -39,7 +39,7 @@ public class QueryExecutor {
         }
     }
 
-    public static void executeUpdateQuery(String query, String[] args) throws SQLException, NullPointerException {
+    public static void executeUpdateQuery(String query, String[] args) throws SQLException {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement pstmt = con.prepareStatement(query)) {
             if (args != null) {

@@ -24,7 +24,7 @@ public class SessionDatabase {
         return instance;
     }
 
-    public void add(Session session) throws SQLException, NullPointerException {
+    public void add(Session session) throws SQLException {
         String query = "INSERT INTO Sessions (id, expirationTime, userId) VALUES(?, ?, ?)";
         String[] args = new String[3];
         args[0] = session.getId();
@@ -34,7 +34,7 @@ public class SessionDatabase {
         QueryExecutor.executeUpdateQuery(query, args);
     }
 
-    public Optional<Session> findById(String sid) throws SQLException, NullPointerException {
+    public Optional<Session> findById(String sid) throws SQLException {
         String query = "SELECT * FROM Sessions WHERE id = ?";
         String[] args = new String[1];
         args[0] = sid;
@@ -51,7 +51,7 @@ public class SessionDatabase {
         return Optional.of(Session.of(id, userId));
     }
 
-    public boolean existsBySessionId(String sid) throws SQLException, NullPointerException {
+    public boolean existsBySessionId(String sid) throws SQLException {
         String query = "SELECT * FROM Sessions WHERE id = ?";
         String[] args = new String[1];
         args[0] = sid;
@@ -61,7 +61,7 @@ public class SessionDatabase {
         return !result.isEmpty();
     }
 
-    public void deleteSession(String sid) throws SQLException, NullPointerException {
+    public void deleteSession(String sid) throws SQLException {
         String query = "DELETE FROM Sessions WHERE id = ?";
         String[] args = new String[1];
         args[0] = sid;

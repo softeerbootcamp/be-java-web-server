@@ -22,7 +22,7 @@ public class UserDatabase {
         return instance;
     }
 
-    public void addUser(User user) throws IllegalArgumentException, SQLException, NullPointerException {
+    public void addUser(User user) throws SQLException {
         String query = "INSERT INTO Users (id, pwd, userName, email) VALUES(?, ?, ?, ?)";
         String[] args = new String[4];
         args[0] = user.getId();
@@ -33,7 +33,7 @@ public class UserDatabase {
         QueryExecutor.executeUpdateQuery(query, args);
     }
 
-    public Optional<User> findUserById(String userId) throws SQLException, NullPointerException {
+    public Optional<User> findUserById(String userId) throws SQLException {
         String query = "SELECT * FROM Users WHERE id = ?";
         String[] args = new String[1];
         args[0] = userId;
@@ -52,7 +52,7 @@ public class UserDatabase {
         return Optional.of(User.of(id, pwd, userName, email));
     }
 
-    public Optional<User> findUserByIdAndPwd(String userId, String pwd) throws SQLException, NullPointerException {
+    public Optional<User> findUserByIdAndPwd(String userId, String pwd) throws SQLException {
         String query = "SELECT * FROM Users WHERE id = ? AND pwd = ?";
         String[] args = new String[2];
         args[0] = userId;
@@ -72,7 +72,7 @@ public class UserDatabase {
         return Optional.of(User.of(id, password, username, email));
     }
 
-    public Collection<User> findAll() throws SQLException, NullPointerException {
+    public Collection<User> findAll() throws SQLException {
         String query = "SELECT * FROM Users";
         String[] args = new String[0];
 
