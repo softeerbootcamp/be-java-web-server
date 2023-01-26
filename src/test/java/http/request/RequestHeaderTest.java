@@ -1,3 +1,5 @@
+package http.request;
+
 import http.request.RequestHeader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -9,7 +11,7 @@ import java.util.List;
 
 public class RequestHeaderTest {
 
-    @DisplayName("RequestHeaderTest")
+    @DisplayName("http.request.RequestHeaderTest")
     @Test
     public void RequestHeaderTest() {
         List<String> requestHeaders = Arrays.asList("Host: localhost:8080", "Accept: text/plain", "Accept-Language: ko-KR");

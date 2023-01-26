@@ -1,14 +1,12 @@
+package http.response;
+
 import controller.ControllerHandler;
 import http.request.HttpRequest;
-import http.response.HttpResponse;
-import http.response.HttpStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.StringReader;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,10 +23,10 @@ public class HttpResponseTest {
         HttpRequest request = HttpRequest.from(br);
         HttpResponse response = ControllerHandler.handle(request);
 
-        assertEquals("HTTP/1.1",response.getHttpVersion());
+        assertEquals("HTTP/1.1", request.getHttpVersion());
         assertEquals("text/html", response.getContentType());
         assertEquals(HttpStatus.OK, response.getHttpStatus());
-        assertEquals(new HashMap<>(),response.getHeaders());
+        assertEquals(new HashMap<>(), response.getHeaders());
     }
 
     @DisplayName("쿼리 파라미터가 있는 경우")
@@ -42,10 +40,10 @@ public class HttpResponseTest {
         HttpRequest request = HttpRequest.from(br);
         HttpResponse response = ControllerHandler.handle(request);
 
-        assertEquals("HTTP/1.1",response.getHttpVersion());
+        assertEquals("HTTP/1.1", request.getHttpVersion());
         assertEquals("", response.getContentType());
         assertEquals(HttpStatus.FOUND, response.getHttpStatus());
-        assertEquals("/index.html",response.getHeaders().get("Location"));
+        assertEquals("/index.html", response.getHeaders().get("Location"));
     }
 
     @DisplayName("Post 회원가입 테스트")
@@ -62,9 +60,9 @@ public class HttpResponseTest {
         BufferedReader br = new BufferedReader(new StringReader(input));
         HttpRequest request = HttpRequest.from(br);
         HttpResponse response = ControllerHandler.handle(request);
-        assertEquals("HTTP/1.1",response.getHttpVersion());
+        assertEquals("HTTP/1.1", request.getHttpVersion());
         assertEquals("", response.getContentType());
         assertEquals(HttpStatus.FOUND, response.getHttpStatus());
-        assertEquals("/index.html",response.getHeaders().get("Location"));
+        assertEquals("/index.html", response.getHeaders().get("Location"));
     }
 }

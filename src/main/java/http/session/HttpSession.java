@@ -1,4 +1,4 @@
-package http;
+package http.session;
 
 import java.time.LocalDateTime;
 
@@ -36,10 +36,6 @@ public class HttpSession {
 
     public LocalDateTime getExpiredAt() {
         return expiredAt;
-    }
-
-    public void expire() {
-        expiredAt = LocalDateTime.now();
     }
 
 }

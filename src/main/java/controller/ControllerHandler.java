@@ -4,27 +4,25 @@ import exception.ControllerNotFoundException;
 import exception.ResourceTypeNotFoundException;
 import http.request.HttpRequest;
 import http.request.HttpUri;
-import http.request.RequestLine;
 import http.response.HttpResponse;
 import http.response.HttpResponseFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ControllerHandler {
     private static final Logger logger = LoggerFactory.getLogger(ControllerHandler.class);
 
-    private static List<Controller> controllers = new ArrayList<>();
-
-    static {
-        controllers.add(new UserController());
-    }
+    private static final Map<String, Controller> controllers = new HashMap<>() {{
+        put("user", new UserController());
+        put("memo", new MemoController());
+    }};
 
     public static HttpResponse handle(HttpRequest httpRequest) throws Exception {
         try {
-            Controller controller = findController(httpRequest);
+            Controller controller = findController(httpRequest.getUri());
             return controller.doService(httpRequest);
         } catch (ResourceTypeNotFoundException | ControllerNotFoundException e) {
             logger.error(e.getMessage());
@@ -32,20 +30,7 @@ public class ControllerHandler {
         }
     }
 
-    public static Controller findController(HttpRequest httpRequest) {
-        RequestLine requestLine = httpRequest.getRequestLine();
-        HttpUri httpUri = requestLine.getHttpUri();
-        if (httpUri.isEndWithResourceType() && !httpUri.isEndWithHtml()) {
-            return new StaticController();
-        }
-        if (httpUri.isEndWithHtml()) {
-            return new DynamicController();
-        }
-
-        return controllers
-                .stream()
-                .filter(controller -> controller.isMatch(httpRequest))
-                .findFirst()
-                .orElseThrow(() -> new ControllerNotFoundException("Not Found Controller"));
+    public static Controller findController(HttpUri httpUri) {
+        return controllers.getOrDefault(httpUri.getDetachControllerPath(), ResourceController.getInstance());
     }
 }

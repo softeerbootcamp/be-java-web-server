@@ -23,6 +23,9 @@ public class HttpUri {
         if (splitUri.length == 2) {
             return new HttpUri(splitUri[0], QueryParameters.from(splitUri[1]));
         }
+        if (splitUri[0].equals("/") || splitUri[0].equals("")) {
+            splitUri[0] = "/index.html";
+        }
         return new HttpUri(splitUri[0], null);
     }
 

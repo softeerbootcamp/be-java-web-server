@@ -7,5 +7,4 @@ public interface Controller {
 
     HttpResponse doService(HttpRequest httpRequest) throws Exception;
 
-    boolean isMatch(HttpRequest httpRequest);
 }
