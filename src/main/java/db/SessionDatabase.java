@@ -27,7 +27,7 @@ public class SessionDatabase {
     public void add(Session session) throws SQLException, NullPointerException {
         String query = "INSERT INTO Sessions (id, expirationTime, userId) VALUES(?, ?, ?)";
         String[] args = new String[3];
-        args[0] = session.getSid();
+        args[0] = session.getId();
         args[1] = session.getExpirationTime().toString();
         args[2] = session.getUserId();
 
