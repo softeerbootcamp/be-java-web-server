@@ -6,8 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Stack;
 
 public class ConnectionPool implements Runnable {
     private final static Logger logger = LoggerFactory.getLogger(ConnectionPool.class);
@@ -15,14 +14,14 @@ public class ConnectionPool implements Runnable {
     private final String url;
     private final String user;
     private final String password;
-    private List<Connection> connections;
+    private Stack<Connection> connections;
 
     public ConnectionPool(int poolSize, String url, String user, String password) {
         this.poolSize = poolSize;
         this.url = url;
         this.user = user;
         this.password = password;
-        connections = new ArrayList<>();
+        connections = new Stack<>();
     }
 
     public void run() {
@@ -46,7 +45,7 @@ public class ConnectionPool implements Runnable {
                 logger.error("Error waiting for connection" + e.getMessage());
             }
         }
-        return connections.remove(0);
+        return connections.pop();
     }
 
     public void releaseConnection(Connection connection) {
