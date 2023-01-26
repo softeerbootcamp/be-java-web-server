@@ -22,6 +22,7 @@ import util.Cookie;
 import util.FileType;
 import util.HttpMethod;
 import util.HttpStatus;
+import view.BoardRender;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -30,9 +31,11 @@ import java.util.Map;
 
 @ControllerInfo
 public class BoardController implements Controller {
-    private FileReader fileReader;
+    private FileReader fileReader = new TemplatesFileReader();
 
     private RequestReader requestReader;
+
+    private BoardRender boardRender = BoardRender.getInstance();
 
     private BoardDataBase boardDataBase = BoardDataBase.getInstance();
     private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
@@ -77,14 +80,20 @@ public class BoardController implements Controller {
     //TODO Pathvariable을 이용하여 Board객체 렌더링 진행중
     @ControllerMethodInfo(path = "^/qna/show/[0-9]+$", method = HttpMethod.GET)
     public HttpResponse boardShowHtml(DataOutputStream dataOutputStream, HttpRequest httpRequest) throws IOException {
-        fileReader = new TemplatesFileReader();
         byte[] data = fileReader.readFile(httpRequest.getUrl());
         requestReader = new RequestGetReader();
-        String boardId = requestReader.readData(httpRequest).get(RequestGetReader.PATH_VARIABLE_KEY);
+        Board board = findBoard(httpRequest);
+        byte[] fixedData = boardRender.addBoardInfo(data, board);
         return new HttpResponse.Builder()
-                .setData(new Data(dataOutputStream, data))
+                .setData(new Data(dataOutputStream, fixedData))
                 .setFileType(FileType.HTML)
                 .setHttpStatus(HttpStatus.OK)
                 .build();
+    }
+
+    private Board findBoard(HttpRequest httpRequest) {
+        String boardId = requestReader.readData(httpRequest).get(RequestGetReader.PATH_VARIABLE_KEY);
+        Board board = boardDataBase.findById(Long.valueOf(boardId));
+        return board;
     }
 }
