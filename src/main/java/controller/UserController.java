@@ -1,6 +1,6 @@
 package controller;
 
-import dto.LogInDTO;
+import dto.LoginDTO;
 import dto.SignUpDTO;
 import http.common.Cookie;
 import http.common.Session;
@@ -30,24 +30,29 @@ public class UserController implements Controller {
     @Override
     public void service(HttpRequest request, HttpResponse response) {
         logger.debug("user controller called");
-        handlers.getOrDefault(request.getUrl(), Controller::handleInvalidRequest)
-                .accept(request, response);
+        try {
+            handlers.getOrDefault(request.getUrl(), Controller::handleInvalidRequest)
+                    .accept(request, response);
+        } catch () {
+
+        } catch () {
+            response.redirect(LOGIN_FAILED_HTML);
+        }
     }
 
     private void logIn(HttpRequest request, HttpResponse response) {
-        LogInDTO userInfo = LogInDTO.of(request.getParameters(LOGIN_ID, PASSWORD));
-        Session session = userService.logIn(userInfo);
-        if (session != null) {
+        Session session = userService.logIn(LoginDTO.of(request.getParameters(LOGIN_ID, PASSWORD)));
             response.setCookie(Cookie.of(SESSION_FIELD_NAME, session.getId()));
             response.redirect(DOMAIN);
-            return;
-        }
-        response.redirect(LOGIN_FAILED_HTML);
     }
 
     private void signUp(HttpRequest request, HttpResponse response) {
-        SignUpDTO userInfo = SignUpDTO.of(request.getParameters(LOGIN_ID, PASSWORD, NAME, EMAIL));
-        userService.signUp(userInfo);
-        response.redirect(DOMAIN);
+        try {
+            SignUpDTO userInfo = SignUpDTO.of(request.getParameters(LOGIN_ID, PASSWORD, NAME, EMAIL));
+            userService.signUp(userInfo);
+        } catch (IllegalStateException e) {
+        } finally {
+            response.redirect(DOMAIN);
+        }
     }
 }

@@ -1,7 +1,7 @@
 package service;
 
 import db.SessionDB;
-import dto.LogInDTO;
+import dto.LoginDTO;
 import dto.SignUpDTO;
 import http.common.Session;
 import model.User;
@@ -28,14 +28,14 @@ public class UserService {
         });
     }
 
-    public Session logIn(LogInDTO logInDto) {
+    public Session logIn(LoginDTO logInDto) {
         User user = validate(logInDto);
         Session session = new Session(user);
         SessionDB.addSession(session);
         return session;
     }
 
-    private User validate(LogInDTO logInDto) {
+    private User validate(LoginDTO logInDto) {
         User user = userRepository.findByLoginId(logInDto.getLoginId()).orElseThrow(() -> {
             throw new IllegalStateException("not exist login id");
         });
