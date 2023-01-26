@@ -1,8 +1,10 @@
 package service;
 
 import db.BoardRepository;
+import model.Board;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.Map;
 
 public class BoardService {
@@ -17,6 +19,10 @@ public class BoardService {
                 date.toString(),
                 parameters.get("author"),
                 parameters.get("content"));
+    }
+
+    public Collection<Board> findAll() {
+        return boardRepository.findAll();
     }
 
 }

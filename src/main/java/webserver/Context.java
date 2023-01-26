@@ -26,7 +26,7 @@ public class Context {
         controllers.put("file", new ResourceController(sessionService));
         controllers.put("/user/create", new UserCreateController(userService));
         controllers.put("/user/login", new UserLogInController(sessionService, userService));
-        controllers.put("/index.html", new IndexController(sessionService));
+        controllers.put("/index.html", new IndexController(sessionService, boardService));
         controllers.put("/user/list.html", new UserListController(sessionService, userService));
         controllers.put("/board/create", new BoardCreateController(sessionService, boardService));
         return controllers;

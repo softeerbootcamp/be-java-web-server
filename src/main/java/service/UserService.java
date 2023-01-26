@@ -34,7 +34,7 @@ public class UserService {
         userRepository.addUser(user);
     }
 
-    public void validateUser(String requestUserId, String requestPassword) throws LogInFailedException {
+    public void validateUser(String requestUserId, String requestPassword) throws LogInFailedException, RuntimeException {
         User user = userRepository.findUserById(requestUserId);
         if (user == null || !requestPassword.equals(user.getPassword())) {
             throw new LogInFailedException("로그인 실패");

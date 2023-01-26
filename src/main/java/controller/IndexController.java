@@ -8,6 +8,7 @@ import http.response.HttpResponse;
 import http.response.HttpStatusCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import service.BoardService;
 import service.SessionService;
 import utils.FileIoUtils;
 
@@ -21,9 +22,11 @@ public class IndexController extends AbstractController {
 
 
     private final SessionService sessionService;
+    private final BoardService boardService;
 
-    public IndexController(SessionService sessionService) {
+    public IndexController(SessionService sessionService, BoardService boardService) {
         this.sessionService = sessionService;
+        this.boardService = boardService;
     }
 
     @Override
@@ -37,9 +40,12 @@ public class IndexController extends AbstractController {
             logger.info(sessionId);
 
             byte[] body = FileIoUtils.replaceLoginBtnToUserName(sessionService.getUserName(sessionId), filePath);
-            httpResponse.forward(HttpStatusCode.OK, contentType, body);
+            httpResponse.forward(
+                    HttpStatusCode.OK,
+                    contentType,
+                    FileIoUtils.makeBoardList(boardService.findAll(), body));
 
-        } catch (NonLogInException e) {
+        } catch (NonLogInException | RuntimeException e) {
             byte[] body = FileIoUtils.loadFile(filePath);
             httpResponse.forward(HttpStatusCode.OK, contentType, body);
 
