@@ -1,16 +1,12 @@
 package bejavawebserver.controller;
 
 import bejavawebserver.model.User;
-import bejavawebserver.repository.memoryRepository;
 import bejavawebserver.service.HtmlService;
 import bejavawebserver.service.ListService;
 import bejavawebserver.service.LoginService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -30,6 +26,7 @@ public class HtmlController {
     public String indexHtml(HttpServletRequest httpServletRequest, Model model){
         HttpSession session = httpServletRequest.getSession(false);
         String uri = httpServletRequest.getRequestURI();
+
 
         // 로그인 상태인 경우
         if(LoginService.isLogin(session)) {
