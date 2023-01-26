@@ -5,6 +5,7 @@ import db.UserDAO;
 import model.User;
 import model.UserSession;
 import model.request.Request;
+import model.request.UserCreate;
 import model.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -33,7 +34,7 @@ public class UserLoginControllerTest {
     @DisplayName("유저 로그인 성공 (세션 저장 확인)")
     void login_session() throws Exception {
         //given
-        userDAO.insert(new User("javajigi", "password", "tester", "test@test.com"));
+        userDAO.insert(new UserCreate("javajigi", "password", "tester", "test@test.com"));
 
         //when
         String body = "userId=javajigi&password=password";
@@ -65,7 +66,7 @@ public class UserLoginControllerTest {
     @DisplayName("유저 로그인 실패 (login_failed 리다이렉트 여부, set-cookie 안하는지)")
     void login_failed() throws Exception {
         //given
-        userDAO.insert(new User("javajigi", "password", "tester", "test@test.com"));
+        userDAO.insert(new UserCreate("javajigi", "password", "tester", "test@test.com"));
 
         //when
         String body = "userId=javajigi&password=wrong";

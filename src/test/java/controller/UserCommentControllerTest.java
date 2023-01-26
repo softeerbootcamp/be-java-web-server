@@ -5,6 +5,7 @@ import db.SessionStorage;
 import db.UserDAO;
 import model.User;
 import model.request.Request;
+import model.request.UserCreate;
 import model.response.HttpStatusCode;
 import model.response.Response;
 import org.assertj.core.api.SoftAssertions;
@@ -32,10 +33,10 @@ public class UserCommentControllerTest {
     @DisplayName("한 줄 메모 작성 (로그인)")
     void commentSave() throws Exception{
         //given
-        User user = new User("test", "123", "tester", "test@test");
+        UserCreate user = new UserCreate("test", "123", "tester", "test@test");
         userDAO.insert(user);
         String sid = "123";
-        SessionStorage.addSession(sid, user);
+        SessionStorage.addSession(sid, userDAO.findByUserId("test"));
 
         //when
         String content = "이것은 내용입니다. 하하";

@@ -5,6 +5,7 @@ import db.UserDAO;
 import exception.SessionNotFoundException;
 import model.User;
 import model.request.Request;
+import model.request.UserCreate;
 import model.response.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -70,7 +71,7 @@ public class UserRequestHandlerTest {
     @DisplayName("잘못된 쿠키값 브라우저에서 인덱스.html로 전송시 무시")
     void session_expired() throws Exception {
         //given
-        userDAO.insert(new User("javajigi", "password", "tester", "test@test.com"));
+        userDAO.insert(new UserCreate("javajigi", "password", "tester", "test@test.com"));
 
         //when
         String sid = "123456";

@@ -4,6 +4,7 @@ import db.SessionStorage;
 import db.UserDAO;
 import model.User;
 import model.request.Request;
+import model.request.UserCreate;
 import model.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -32,10 +33,10 @@ public class UserLogoutControllerTest {
     @DisplayName("유저 로그아웃 테스트")
     void userLogout() throws Exception {
         //given
-        User user = new User("test", "123", "tester", "test@test.com");
+        UserCreate user = new UserCreate("test", "123", "tester", "test@test.com");
         userDAO.insert(user);
         String sid = "123456";
-        SessionStorage.addSession(sid, user);
+        SessionStorage.addSession(sid, userDAO.findByUserId("test"));
 
         //when
         String requestMessage = "POST /user/logout HTTP/1.1\n"

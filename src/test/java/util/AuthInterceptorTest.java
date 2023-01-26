@@ -4,6 +4,7 @@ import db.SessionStorage;
 import db.UserDAO;
 import model.User;
 import model.request.Request;
+import model.request.UserCreate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,10 +28,10 @@ public class AuthInterceptorTest {
     @DisplayName("Auth Interceptor 기능 테스트")
     void authInterceptorTest() throws Exception {
         //given
-        User user = new User("aa", "bb", "cc", "test@test");
+        UserCreate user = new UserCreate("aa", "bb", "cc", "test@test");
         userDAO.insert(user);
         String sid = String.valueOf(UUID.randomUUID());
-        SessionStorage.addSession(sid, user);
+        SessionStorage.addSession(sid, userDAO.findByUserId("aa"));
 
         //when
         String requestMessage = "GET /user/list.html HTTP/1.1\n"
@@ -67,10 +68,10 @@ public class AuthInterceptorTest {
     @DisplayName("Auth Interceptor 복수 쿠키 요청 테스트")
     void authInterceptor_multiCookie() throws Exception {
         //given
-        User user = new User("aa", "bb", "cc", "test@test");
+        UserCreate user = new UserCreate("aa", "bb", "cc", "test@test");
         userDAO.insert(user);
         String sid = String.valueOf(UUID.randomUUID());
-        SessionStorage.addSession(sid, user);
+        SessionStorage.addSession(sid, userDAO.findByUserId("aa"));
 
         //when
         String requestMessage = "GET /user/list.html HTTP/1.1\n"

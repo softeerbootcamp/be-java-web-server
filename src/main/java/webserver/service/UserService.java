@@ -5,6 +5,7 @@ import db.UserDAO;
 import model.User;
 import model.UserSession;
 import model.request.Request;
+import model.request.UserCreate;
 import model.response.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,12 +24,12 @@ public class UserService {
 
     public void signUpUser(Request request) {
         Map<String, String> requestParams = request.getRequestParams();
-        User user = new User(requestParams.get("userId"),
+        UserCreate userCreate = new UserCreate(requestParams.get("userId"),
                 requestParams.get("password"),
                 requestParams.get("name"),
                 requestParams.get("email"));
         try {
-            userDAO.insert(user);
+            userDAO.insert(userCreate);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

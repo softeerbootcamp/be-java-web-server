@@ -3,6 +3,7 @@ package repository;
 import db.Database;
 import db.UserDAO;
 import model.User;
+import model.request.UserCreate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,11 +22,11 @@ public class UserDAOTest {
     @DisplayName("유저정보 저장 테스트")
     void userSave() throws Exception {
         //given
-        User user = new User("test", "123123", "tester", "test.com");
+        UserCreate userCreate = new UserCreate("test", "123123", "tester", "test.com");
 
         //when
         UserDAO userDAO = new UserDAO();
-        userDAO.insert(user);
+        userDAO.insert(userCreate);
 
         //then
 //        Assertions.assertThat();

@@ -6,6 +6,7 @@ import exception.DuplicateUserIdException;
 import model.User;
 import model.UserSession;
 import model.request.Request;
+import model.request.UserCreate;
 import model.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -60,7 +61,7 @@ public class UserServiceTest {
     void duplicateUserIdException() throws IOException, SQLException {
         //given
 
-        userDAO.insert(new User("javajigi", "pwd", "tester", "test@test.com"));
+        userDAO.insert(new UserCreate("javajigi", "pwd", "tester", "test@test.com"));
 
         //when
         String body = "userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net";
@@ -121,7 +122,7 @@ public class UserServiceTest {
     @DisplayName("유저 로그인 실패 (비밀번호 틀림)")
     void login_fail() throws Exception {
         //given
-        userDAO.insert(new User("11", "22", "abc", "test@test"));
+        userDAO.insert(new UserCreate("11", "22", "abc", "test@test"));
         UserService userService = new UserService();
 
         //when
@@ -145,7 +146,7 @@ public class UserServiceTest {
     @DisplayName("유저 로그인 실패 (존재하지 않는 계정)")
     void login_fail_UserNotFound() throws Exception {
         //given
-        userDAO.insert(new User("11", "22", "abc", "test@test"));
+        userDAO.insert(new UserCreate("11", "22", "abc", "test@test"));
         UserService userService = new UserService();
 
         //when
