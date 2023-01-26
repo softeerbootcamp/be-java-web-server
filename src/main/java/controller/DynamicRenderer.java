@@ -31,6 +31,7 @@ public class DynamicRenderer {
     public static byte[] dynamicListHtml(byte[] body){
         byte[] manualBody;
         String stringBody;
+        // todo : db 에서 들고오기.
         stringBody = StringBuilderUtils.byteArrayToString(body);
         Collection<User> allUser = UserDatabase.findAll();
         stringBody = stringBody.replace("              </tbody>",StringBuilderUtils.userListStringBuilder(allUser)+"              </tbody>");
