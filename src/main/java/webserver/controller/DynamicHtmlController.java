@@ -27,42 +27,51 @@ public class DynamicHtmlController {
     public Response service(Request request) throws IOException {
         Path filePath = ViewResolver.findFilePath(request.getUrl());
         BufferedReader br = new BufferedReader(new FileReader(filePath.toFile()));
-        String line;
         StringBuilder body = new StringBuilder();
 
-
         if (AuthInterceptor.isAuthUser(request)) {
-            while ((line = br.readLine()) != null) {
-                if (line.contains("로그인") || line.contains("회원가입")) {
-                    continue;
-                }
-                if (line.contains("class=\"dropdown-toggle\"")) {
-                    try {
-                        String name = AuthInterceptor.findUserSession(request).getName();
-                        body.append("<a>").append(name).append("님</a></li><li>");
-
-                    } catch (SessionExpiredException | SessionNotFoundException e) {
-                        body.append(line);
-                    }
-                }
-                body.append(line);
-            }
-            String fileData = extracted(body);
-
-            return Response.of(request.getHttpVersion(), OK, Map.of("Content-Type", Files.probeContentType(filePath)), fileData.getBytes());
+            return loginUserIndex(request, filePath, br, body);
         }
 
+        return GuestIndex(request, filePath, br, body);
+    }
+
+    private Response GuestIndex(Request request, Path filePath, BufferedReader br, StringBuilder body) throws IOException {
+        String line;
         while ((line = br.readLine()) != null) {
             if (line.contains("로그아웃")) {
                 continue;
             }
             body.append(line);
         }
-        String fileData = extracted(body);
+
+        String fileData = writeCommentLists(body);
         return Response.of(request.getHttpVersion(), OK, Map.of("Content-Type", Files.probeContentType(filePath)), fileData.getBytes());
     }
 
-    private static String extracted(StringBuilder body) {
+    private Response loginUserIndex(Request request, Path filePath, BufferedReader br, StringBuilder body) throws IOException {
+        String line;
+        while ((line = br.readLine()) != null) {
+            if (line.contains("로그인") || line.contains("회원가입")) {
+                continue;
+            }
+            if (line.contains("class=\"dropdown-toggle\"")) {
+                try {
+                    String name = AuthInterceptor.findUserSession(request).getName();
+                    body.append("<a>").append(name).append("님</a></li><li>");
+
+                } catch (SessionExpiredException | SessionNotFoundException e) {
+                    body.append(line);
+                }
+            }
+            body.append(line);
+        }
+
+        String fileData = writeCommentLists(body);
+        return Response.of(request.getHttpVersion(), OK, Map.of("Content-Type", Files.probeContentType(filePath)), fileData.getBytes());
+    }
+
+    private String writeCommentLists(StringBuilder body) {
         CommentDAO commentDAO = new CommentDAO();
 
         try {
