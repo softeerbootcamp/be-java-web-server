@@ -6,11 +6,12 @@ public class Memo {
     private Long memoId;
     private final String writer;
     private final String content;
-    private LocalDateTime createdAt;
+    private final LocalDateTime createdAt;
 
-    public Memo(String writer, String content) {
+    public Memo(String writer, String content, LocalDateTime createdAt) {
         this.writer = writer;
         this.content = content;
+        this.createdAt = createdAt;
     }
 
     public void setMemoId(Long memoId) {
@@ -23,6 +24,6 @@ public class Memo {
 
     @Override
     public String toString() {
-        return "Memo [memoId = " + memoId + ", writer=" + writer + ", content=" + content + "]";
+        return "Memo [memoId = " + memoId + ", writer=" + writer + ", content=" + content + ", createdAt=" + createdAt + "]";
     }
 }
