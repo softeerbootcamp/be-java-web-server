@@ -25,6 +25,10 @@ public class HttpRequest {
         return startLine.getUrl();
     }
 
+    public void setUrl(String url) {
+        startLine.setUrl(url);
+    }
+
     public Method getMethod() {
         return startLine.getMethod();
     }

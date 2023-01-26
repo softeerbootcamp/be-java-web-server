@@ -12,6 +12,7 @@ public class PathResolver {
     public static final String LOGIN_FAILED_HTML = "login_failed.html";
     public static final String POST_DETAIL_HTML = "/qna/show.html";
     public static final String POST_CREATE_HTML = "/qna/form.html";
+    public static final String SERVER_ERROR_HTML = "server-error.html";
 
     private static final Map<Extension, String> mappingInfo = Map.of(
             Extension.INDEX, TEMPLATE_PATH.substring(0, TEMPLATE_PATH.length() - 2) + INDEX_HTML,

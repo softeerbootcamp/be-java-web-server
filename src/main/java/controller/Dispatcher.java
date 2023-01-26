@@ -1,6 +1,7 @@
 package controller;
 
 import exception.ConnectionClosedException;
+import exception.DBException;
 import exception.FileSystemException;
 import exception.HttpNotFoundException;
 import http.request.HttpRequest;
@@ -39,7 +40,11 @@ public class Dispatcher implements Runnable {
             LoginIdNotExistException.class, ((request, response) -> response.redirect(LOGIN_FAILED_HTML)),
             EmptyInputException.class, ((request, response) -> response.redirect(POST_CREATE_HTML)),
             LoginIdDuplicatedException.class, ((request, response) -> response.redirect(DOMAIN)),
-            NotFoundException.class, ((request, response) -> response.redirect(DOMAIN))
+            NotFoundException.class, ((request, response) -> response.redirect(DOMAIN)),
+            DBException.class, ((request, response) -> {
+                request.setUrl(SERVER_ERROR_HTML);
+                controllers.get(Domain.MAIN).service(request, response);
+            })
     );
 
     private Socket connection;

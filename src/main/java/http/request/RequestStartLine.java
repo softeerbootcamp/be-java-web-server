@@ -19,6 +19,10 @@ public class RequestStartLine {
         return url;
     }
 
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     public Method getMethod() {
         return method;
     }
