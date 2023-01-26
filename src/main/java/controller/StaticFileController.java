@@ -27,15 +27,20 @@ import static service.StaticFileService.getFileTypeFromUrl;
 public class StaticFileController implements RequestController {
     private static final Logger logger = LoggerFactory.getLogger(StaticFileController.class);
 
-    private static final StaticFileController fileController = new StaticFileController();
+    private static StaticFileController fileController;
     public static final String[] supportedFileTypes = {
             "html", "ico", "css", "js", "ttf", "woff", "svg", "eot", "woff2", "png", "jpeg", "gif"
     };
 
+
     public static StaticFileController get() {
+        if (fileController == null) {
+            synchronized (StaticFileController.class) {
+                fileController = new StaticFileController();
+            }
+        }
         return fileController;
     }
-
     @Override
     public CustomHttpResponse handleRequest(CustomHttpRequest req) {
         if (!ifFileTypeRequested(req.getUrl()))

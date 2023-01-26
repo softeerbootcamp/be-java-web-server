@@ -29,8 +29,11 @@ public class PostController implements RequestController {
     }
 
     public static PostController get() {
-        if (postController == null)
-            postController = new PostController();
+        if (postController == null) {
+            synchronized (PostController.class) {
+                postController = new PostController();
+            }
+        }
         return postController;
     }
 
