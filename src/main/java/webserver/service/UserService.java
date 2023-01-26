@@ -36,7 +36,7 @@ public class UserService {
         }
     }
 
-    public Response loginUser(Request request) throws SQLException {
+    public Response loginUser(Request request) {
         try {
             User user = validateAccount(request);
             String sid = String.valueOf(UUID.randomUUID());
