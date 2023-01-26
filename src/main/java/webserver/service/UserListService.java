@@ -25,9 +25,11 @@ public class UserListService extends AlreadyLoggedInService{
 
         String bodyStr = new String(bodyByte);
         bodyStr = bodyStr.replace(InBody.beforeReplaced_UserList, generateAllUserList());
+        bodyByte = bodyStr.getBytes();
 
-        return res.
-                withBodyString(bodyStr);
+        return res
+                .withHeaderKeyVal("Content-Length", Integer.toString(bodyByte.length))
+                .withBodyBytes(bodyByte);
     }
 
     private String generateAllUserList()

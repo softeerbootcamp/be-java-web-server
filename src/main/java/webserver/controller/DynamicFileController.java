@@ -18,18 +18,10 @@ public class DynamicFileController implements Controller{
     private ResponseSender resSender;
     @Override
     public void exec(Request req, OutputStream out) throws IOException {
-        String cookieStr = new String();
-        String sid_userid = new String();
-        if(req.hasCookie())
-        {
-            cookieStr = req.getCookie();
-            sid_userid = getSid(cookieStr);
-        }
+        String cookieStr = req.getCookie();
+        String sid_userid = getSid(cookieStr);
 
-        Service service = new Service() {};
-
-        // 로그인 부분을 현재 사용자 이름으로 변경하는 서비스
-        service = new AlreadyLoggedInService(sid_userid);
+        Service service = new AlreadyLoggedInService(sid_userid);
 
         String query = req.getReqLine().getQuery();
         if(query.endsWith("user/list.html"))
@@ -39,10 +31,6 @@ public class DynamicFileController implements Controller{
         if(query.endsWith("user/create/article"))
         {
             service = new PostNewArticleService(sid_userid);
-        }
-        if(query.endsWith("index.html"))
-        {
-            service = new ArticleListService();
         }
 
         Response res = service.exec(req);

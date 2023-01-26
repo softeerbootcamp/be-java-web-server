@@ -16,9 +16,15 @@ import java.sql.SQLException;
 public class AlreadyLoggedInService implements Service{
     private static final Logger logger = LoggerFactory.getLogger(AlreadyLoggedInService.class);
     private String sid_usrid;
+    private byte[] changedBody;
     public AlreadyLoggedInService(String sid_usrid){
         this.sid_usrid = sid_usrid;
     }
+    public AlreadyLoggedInService(String sid_usrid, byte[] changedBody){
+        this.sid_usrid = sid_usrid;
+        this.changedBody = changedBody;
+    }
+
 
     @Override
     public Response exec(Request req) throws IOException
@@ -26,6 +32,11 @@ public class AlreadyLoggedInService implements Service{
         String reqQuery = req.getReqLine().getQuery();
         String contentType = Files.probeContentType(new File(reqQuery).toPath());
         byte bodyByte[] = Service.urlToByte(reqQuery);
+        if(null != changedBody)
+        {
+            logger.debug("changedBody is not null");
+            bodyByte = changedBody;
+        }
 
         String bodyString = new String(bodyByte);
         String disabledLoginButt = generateUserNameButt();
