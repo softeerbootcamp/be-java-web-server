@@ -7,8 +7,8 @@ import model.session.Sessions;
 import java.util.Collection;
 import java.util.List;
 
-public class ResponseBodyUtils {
-    public static byte[] makeResponseBodyWhenLoginSuccess(byte[] body, Request request) {
+public class ResponseHtmlUtils {
+    public static byte[] makeResponseHtmlWhenLoginSuccess(byte[] body, Request request) {
         User user = (User) Sessions.getSession(request.getSessionId()).getSessionData().get("user");
         String originalIndexHtml = new String(body);
         String resultIndexHtml = originalIndexHtml.replace("로그인", user.getName());
@@ -16,7 +16,7 @@ public class ResponseBodyUtils {
         return resultIndexHtml.getBytes();
     }
 
-    public static byte[] makeResponseBodyWhenLoginAndProfileHtml(byte[] body, Request request) {
+    public static byte[] makeResponseHtmlWhenLoginAndProfileHtml(byte[] body, Request request) {
         User user = (User) Sessions.getSession(request.getSessionId()).getSessionData().get("user");
         String originalProfileHtml = new String(body);
         String resultProfileHtml = originalProfileHtml.replace("자바지기", user.getName());
@@ -24,7 +24,7 @@ public class ResponseBodyUtils {
         return resultProfileHtml.getBytes();
     }
 
-    public static byte[] makeResponseBodyWhenLoginAndUserList(byte[] body, Request request, Collection<User> users) {
+    public static byte[] makeResponseHtmlWhenLoginAndUserList(byte[] body, Request request, Collection<User> users) {
         StringBuilder userList = new StringBuilder();
         int row = 0;
 
@@ -48,7 +48,7 @@ public class ResponseBodyUtils {
         return resultListHtml.getBytes();
     }
 
-    public static byte[] makeResponseBodyMemoList(byte[] body, List<String> memos) {
+    public static byte[] makeResponseHtmlMemoList(byte[] body, List<String> memos) {
         StringBuilder memoList = new StringBuilder();
 
         for(String memo : memos) {

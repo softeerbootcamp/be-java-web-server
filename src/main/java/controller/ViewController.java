@@ -9,7 +9,7 @@ import model.request.RequestLine;
 import model.response.Response;
 import model.response.StatusLine;
 import model.session.Sessions;
-import util.ResponseBodyUtils;
+import util.ResponseHtmlUtils;
 import util.HeaderUtils;
 
 import org.slf4j.Logger;
@@ -73,13 +73,13 @@ public class ViewController implements Controller {
         }
 
         if(requestLine.getUri().equals("/index.html"))
-            body = ResponseBodyUtils.makeResponseBodyMemoList(body, Database.findAllMemos());
+            body = ResponseHtmlUtils.makeResponseHtmlMemoList(body, Database.findAllMemos());
 
         if (isLogin && requestLine.getContentType().equals(HTML))
-            body = ResponseBodyUtils.makeResponseBodyWhenLoginSuccess(body, request);
+            body = ResponseHtmlUtils.makeResponseHtmlWhenLoginSuccess(body, request);
 
         if (isLogin && requestLine.getUri().equals("/user/profile.html"))
-            body = ResponseBodyUtils.makeResponseBodyWhenLoginAndProfileHtml(body, request);
+            body = ResponseHtmlUtils.makeResponseHtmlWhenLoginAndProfileHtml(body, request);
 
         return body;
     }

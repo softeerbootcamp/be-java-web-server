@@ -13,7 +13,7 @@ import model.session.Session;
 import model.session.Sessions;
 import service.UserService;
 import util.HeaderUtils;
-import util.ResponseBodyUtils;
+import util.ResponseHtmlUtils;
 import util.SessionUtils;
 
 import org.slf4j.Logger;
@@ -92,7 +92,7 @@ public class UserController implements Controller {
             } catch(IOException e) {
                 return Response.from(StatusLine.of(requestLine.getHttpVersion(), Status.NOT_FOUND));
             }
-            body = ResponseBodyUtils.makeResponseBodyWhenLoginAndUserList(body, request, userService.getUserList());
+            body = ResponseHtmlUtils.makeResponseHtmlWhenLoginAndUserList(body, request, userService.getUserList());
 
             headers = HeaderUtils.response200Header(ContentType.HTML, body.length);
 
