@@ -4,12 +4,12 @@ import java.time.LocalDateTime;
 
 public class Memo {
     private Long memoId;
-    private final String userId;
+    private final String writer;
     private final String content;
     private LocalDateTime createdAt;
 
-    public Memo(String userId, String content) {
-        this.userId = userId;
+    public Memo(String writer, String content) {
+        this.writer = writer;
         this.content = content;
     }
 
@@ -23,6 +23,6 @@ public class Memo {
 
     @Override
     public String toString() {
-        return "Memo [memoId = " + memoId + ", writer=" + userId + ", content=" + content + "]";
+        return "Memo [memoId = " + memoId + ", writer=" + writer + ", content=" + content + "]";
     }
 }
