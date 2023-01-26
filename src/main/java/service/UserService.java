@@ -67,6 +67,6 @@ public class UserService {
         String name = userInfo.get("name");
         String email = userInfo.get("email");
 
-        return new User(userId, password, name, email);
+        return User.of(userId, password, name, email);
     }
 }
