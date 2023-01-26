@@ -1,24 +1,29 @@
 package model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import model.dto.UserDto;
 
 import java.net.URLDecoder;
 
+@Builder
 @Getter
-public class User extends UserPrincipal{
+@AllArgsConstructor
+public class User {
+
+    private String userId;
     private String password;
+    private String name;
     private String email;
-
-    public User(String userId, String password, String name, String email) {
-        super(userId, name);
-        this.password = password;
-        this.email = URLDecoder.decode(email);
-    }
-
 
 
     public static User from(UserDto dto){
         return new User(dto.getUserId(), dto.getPassword(), dto.getName(), dto.getEmail());
     }
+
+    public UserPrincipal toPrincipal(){
+        return new UserPrincipal(userId, name);
+    }
+
 }
