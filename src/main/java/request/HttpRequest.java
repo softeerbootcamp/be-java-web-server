@@ -1,4 +1,4 @@
-package Request;
+package request;
 
 import java.io.BufferedReader;
 import java.util.Map;
@@ -27,6 +27,10 @@ public class HttpRequest {
     public void setPath(String path) {
         httpRequestStartLine.setPath(path);
     }
+    public String getUrl() {
+        return httpRequestStartLine.getMappingUrl();
+    }
+
     public String getPath() {
         return httpRequestStartLine.getPath();
     }

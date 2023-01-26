@@ -33,7 +33,8 @@ public class HtmlBuildUtil {
         StringBuilder content = new StringBuilder();
         for (Qna qna : qnas) {
             content.append("<li><div class=\"wrap\"><div class=\"main\"><strong class=\"subject\"><a href=\"./qna/show/")
-                    .append(qna.getId()).append("\">")
+                    .append(qna.getId())
+                    .append("\">")
                     .append(qna.getSubject())
                     .append("</a></strong><div style=\"display: flex; gap:12px\" class=\"auth-info\"> <i class=\"icon-add-comment\"></i><span class=\"time\">")
                     .append(qna.getDate())
@@ -48,7 +49,7 @@ public class HtmlBuildUtil {
     public static String buildQnaShow(Qna qna) {
         String showHtml = new String(HttpResponseUtil.generateBytesBody("/qna/show.html"));
 
-        return showHtml.replace("<!--username location-->", qna.getName())
+        return showHtml.replace("<!--name location-->", qna.getName())
                 .replace("<!--title location-->", qna.getSubject())
                 .replace("<!--time location-->", qna.getDate())
                 .replace("<!--content location-->", qna.getContent());

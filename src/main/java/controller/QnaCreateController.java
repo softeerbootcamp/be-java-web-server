@@ -1,11 +1,11 @@
-package Controller;
+package controller;
 
-import Request.HttpRequest;
+import request.HttpRequest;
 import db.DBConnector;
 import model.Qna;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import repository.QnaRepository;
+import db.QnaRepository;
 import response.HttpResponse;
 
 import java.util.Objects;

@@ -1,9 +1,8 @@
 package model;
 
-import Request.HttpRequest;
+import request.HttpRequest;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class Qna {
     private int id;

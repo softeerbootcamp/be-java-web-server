@@ -5,18 +5,18 @@
     <meta charset="utf-8">
     <title>SLiPP Java Web Programming</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
     <!--[if lt IE 9]>
     <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link href="../css/styles.css" rel="stylesheet">
+    <link href="../../css/styles.css" rel="stylesheet">
 </head>
 <body>
 <nav class="navbar navbar-fixed-top header">
     <div class="col-md-12">
         <div class="navbar-header">
 
-            <a href="../index" class="navbar-brand">SLiPP</a>
+            <a href="../../index" class="navbar-brand">SLiPP</a>
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse1">
                 <i class="glyphicon glyphicon-search"></i>
             </button>
@@ -40,7 +40,7 @@
                         <li><a href="https://facebook.com" target="_blank">Facebook</a></li>
                     </ul>
                 </li>
-                <li><a href="../user/list"><i class="glyphicon glyphicon-user"></i></a></li>
+                <li><a href="../../user/list"><i class="glyphicon glyphicon-user"></i></a></li>
             </ul>
         </div>
     </div>
@@ -50,7 +50,7 @@
         <div class="navbar-header">
             <a href="#" style="margin-left:15px;" class="navbar-btn btn btn-default btn-plus dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-home" style="color:#dd1111;"></i> Home <small><i class="glyphicon glyphicon-chevron-down"></i></small></a>
             <ul class="nav dropdown-menu">
-                <li><a href="../user/profile.html"><i class="glyphicon glyphicon-user" style="color:#1111dd;"></i> Profile</a></li>
+                <li><a href="../../user/profile.html"><i class="glyphicon glyphicon-user" style="color:#1111dd;"></i> Profile</a></li>
                 <li class="nav-divider"></li>
                 <li><a href="#"><i class="glyphicon glyphicon-cog" style="color:#dd1111;"></i> Settings</a></li>
             </ul>
@@ -64,9 +64,9 @@
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse2">
             <ul class="nav navbar-nav navbar-right">
-                <li class="active"><a href="../index">Posts</a></li>
-                <li><a href="../user/login.html" role="button">로그인</a></li>
-                <li><a href="../user/form.html" role="button">회원가입</a></li>
+                <li class="active"><a href="../../index">Posts</a></li>
+                <li><a href="../../user/login.html" role="button">로그인</a></li>
+                <li><a href="../../user/form.html" role="button">회원가입</a></li>
                 <li><a href="#" role="button">로그아웃</a></li>
                 <li><a href="#" role="button">개인정보수정</a></li>
             </ul>
@@ -95,26 +95,24 @@
                       </div>
                   </div>
                   <div class="article-doc">
-                    <!--content location-->
-<!--                      <p>A 에 의존성을 가지는 B라는 클래스가 있습니다.</p><p>B라는 클래스는 InitializingBean 을 상속하고 afterPropertiesSet을 구현하고 있습니다.-->
-<!--                      서버가 가동되면서 bean들이 초기화되는 시점에 B라는 클래스의 afterPropertiesSet 메소드는</p><p>A라는 클래스의 특정 메소드인 afunc()를 호출하고 있습니다.</p>-->
+                      <p><!--content location--></p>
                   </div>
-                  <div class="article-utils">
-                      <ul class="article-utils-list">
-                          <li>
-                              <a class="link-modify-article" href="/questions/423/form">수정</a>
-                          </li>
-                          <li>
-                              <form class="form-delete" action="/questions/423" method="POST">
-                                  <input type="hidden" name="_method" value="DELETE">
-                                  <button class="link-delete-article" type="submit">삭제</button>
-                              </form>
-                          </li>
-                          <li>
-                              <a class="link-modify-article" href="/index">목록</a>
-                          </li>
-                      </ul>
-                  </div>
+<!--                  <div class="article-utils">-->
+<!--                      <ul class="article-utils-list">-->
+<!--                          <li>-->
+<!--                              <a class="link-modify-article" href="/questions/423/form">수정</a>-->
+<!--                          </li>-->
+<!--                          <li>-->
+<!--                              <form class="form-delete" action="/questions/423" method="POST">-->
+<!--                                  <input type="hidden" name="_method" value="DELETE">-->
+<!--                                  <button class="link-delete-article" type="submit">삭제</button>-->
+<!--                              </form>-->
+<!--                          </li>-->
+<!--                          <li>-->
+<!--                              <a class="link-modify-article" href="/index">목록</a>-->
+<!--                          </li>-->
+<!--                      </ul>-->
+<!--                  </div>-->
               </article>
 
 <!--              <div class="qna-comment">-->
@@ -195,39 +193,39 @@
     </div>
 </div>
 
-<script type="text/template" id="answerTemplate">
-	<article class="article">
-		<div class="article-header">
-			<div class="article-header-thumb">
-				<img src="https://graph.facebook.com/v2.3/1324855987/picture" class="article-author-thumb" alt="">
-			</div>
-			<div class="article-header-text">
-				<a href="#" class="article-author-name">{0}</a>
-				<div class="article-header-time">{1}</div>
-			</div>
-		</div>
-		<div class="article-doc comment-doc">
-			{2}
-		</div>
-		<div class="article-utils">
-		<ul class="article-utils-list">
-			<li>
-				<a class="link-modify-article" href="/api/questions/{3}/answers/{4}/form">수정</a>				
-			</li>
-			<li>
-				<form class="delete-answer-form" action="/api/questions/{3}/answers/{4}" method="POST">
-					<input type="hidden" name="_method" value="DELETE">
-                     <button type="submit" class="delete-answer-button">삭제</button>
-				</form>
-			</li>
-		</ul>
-		</div>
-	</article>
-</script>
+<!--<script type="text/template" id="answerTemplate">-->
+<!--	<article class="article">-->
+<!--		<div class="article-header">-->
+<!--			<div class="article-header-thumb">-->
+<!--				<img src="https://graph.facebook.com/v2.3/1324855987/picture" class="article-author-thumb" alt="">-->
+<!--			</div>-->
+<!--			<div class="article-header-text">-->
+<!--				<a href="#" class="article-author-name">{0}</a>-->
+<!--				<div class="article-header-time">{1}</div>-->
+<!--			</div>-->
+<!--		</div>-->
+<!--		<div class="article-doc comment-doc">-->
+<!--			{2}-->
+<!--		</div>-->
+<!--		<div class="article-utils">-->
+<!--		<ul class="article-utils-list">-->
+<!--			<li>-->
+<!--				<a class="link-modify-article" href="/api/questions/{3}/answers/{4}/form">수정</a>				-->
+<!--			</li>-->
+<!--			<li>-->
+<!--				<form class="delete-answer-form" action="/api/questions/{3}/answers/{4}" method="POST">-->
+<!--					<input type="hidden" name="_method" value="DELETE">-->
+<!--                     <button type="submit" class="delete-answer-button">삭제</button>-->
+<!--				</form>-->
+<!--			</li>-->
+<!--		</ul>-->
+<!--		</div>-->
+<!--	</article>-->
+<!--</script>-->
 
 <!-- script references -->
-<script src="../js/jquery-2.2.0.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
-<script src="../js/scripts.js"></script>
+<script src="../../js/jquery-2.2.0.min.js"></script>
+<script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/scripts.js"></script>
 	</body>
 </html>

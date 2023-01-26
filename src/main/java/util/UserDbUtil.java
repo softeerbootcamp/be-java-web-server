@@ -1,6 +1,6 @@
 package util;
 
-import Request.HttpRequest;
+import request.HttpRequest;
 import db.Database;
 import model.User;
 import org.slf4j.Logger;

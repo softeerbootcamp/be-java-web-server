@@ -1,18 +1,18 @@
-package Controller;
+package controller;
 
-import Request.HttpRequest;
+import request.HttpRequest;
 import response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import Request.StatusCode;
+import request.StatusCode;
 import util.FileIoUtil;
-import Exception.*;
+import exception.*;
 import view.FileView;
 
 import java.util.Objects;
 
 public class FileController implements Controller {
-    public static final String PATH = "";
+    public static final String PATH = "file";
     private final Logger logger = LoggerFactory.getLogger(FileController.class);
     private static FileController fileController = null;
 

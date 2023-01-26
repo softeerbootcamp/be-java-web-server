@@ -1,7 +1,6 @@
 package controller;
 
-import Controller.Controller;
-import Request.*;
+import request.*;
 import response.HttpResponse;
 import db.SessionDb;
 import model.User;
@@ -9,7 +8,6 @@ import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import Controller.FileController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.*;
@@ -22,7 +20,7 @@ public class FileControllerTest {
     @Test
     void NonExistFileTest(){
         //given
-        HttpRequest httpRequest = new HttpRequest(new HttpRequestStartLine(HttpMethod.GET.toString(), "/Iamgroot.html", "HTTP/1.1"),
+        HttpRequest httpRequest = new HttpRequest(new HttpRequestStartLine(HttpMethod.GET.toString(), "/Iamgroot.html", "HTTP/1.1", RequestDataType.getUrlType("/Iamgroot.html")),
                 new HttpRequestParams(new HashMap<>()),
                 new HttpRequestHeaders(new HashMap<>(){{
                     put("Host","localhost:8080");
@@ -38,7 +36,7 @@ public class FileControllerTest {
     @DisplayName("동적 html 생성을 테스트")
     void DynamicFileTest(){
         //given
-        HttpRequest joinRequest = new HttpRequest(new HttpRequestStartLine(HttpMethod.POST.toString(), "/user/create", "HTTP/1.1"),
+        HttpRequest joinRequest = new HttpRequest(new HttpRequestStartLine(HttpMethod.POST.toString(), "/user/create", "HTTP/1.1", RequestDataType.getUrlType("/user/create")),
                 new HttpRequestParams(HttpRequestUtil.extractParams("userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net")),
                 new HttpRequestHeaders(new HashMap<>(){{
                     put("Host","localhost:8080");
@@ -50,7 +48,7 @@ public class FileControllerTest {
         UserDbUtil.saveUser(joinRequest);
 
         String sessionId = SessionDb.saveNewSession(joinRequest);
-        HttpRequest httpRequest = new HttpRequest(new HttpRequestStartLine(HttpMethod.GET.toString(), "/index.html", "HTTP/1.1"),
+        HttpRequest httpRequest = new HttpRequest(new HttpRequestStartLine(HttpMethod.GET.toString(), "/index.html", "HTTP/1.1", RequestDataType.getUrlType("/index.html")),
                 new HttpRequestParams(new HashMap<>()),
                 new HttpRequestHeaders(new HashMap<>(){{
                     put("Host","localhost:8080");

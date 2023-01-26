@@ -1,10 +1,10 @@
 package view;
 
-import Request.HttpRequest;
+import request.HttpRequest;
 import db.DBConnector;
 import model.Qna;
 import model.User;
-import repository.QnaRepository;
+import db.QnaRepository;
 import util.HtmlBuildUtil;
 import util.LoginUtil;
 

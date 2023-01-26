@@ -1,6 +1,6 @@
 package util;
 
-import Request.HttpRequest;
+import request.HttpRequest;
 import model.User;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;

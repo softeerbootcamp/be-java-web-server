@@ -1,11 +1,11 @@
-package Controller;
+package controller;
 
-import Request.HttpRequest;
+import request.HttpRequest;
 import response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.UserDbUtil;
-import Request.StatusCode;
+import request.StatusCode;
 
 import java.util.Objects;
 

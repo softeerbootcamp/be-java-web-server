@@ -1,7 +1,6 @@
 package controller;
 
-import Controller.JoinController;
-import Request.*;
+import request.*;
 import response.HttpResponse;
 import model.User;
 import org.assertj.core.api.SoftAssertions;
@@ -17,7 +16,7 @@ public class JoinContorllerTest {
     @DisplayName("회원가입 테스트")
     void joinTest(){
         //given
-        HttpRequest joinRequest = new HttpRequest(new HttpRequestStartLine(HttpMethod.POST.toString(), "/user/create", "HTTP/1.1"),
+        HttpRequest joinRequest = new HttpRequest(new HttpRequestStartLine(HttpMethod.POST.toString(), "/user/create", "HTTP/1.1", RequestDataType.getUrlType("/user/create")),
                             new HttpRequestParams(HttpRequestUtil.extractParams("userId=javajigi&password=password&name=%EB%B0%95%EC%9E%AC%EC%84%B1&email=javajigi%40slipp.net")),
                             new HttpRequestHeaders(new HashMap<>(){{
                                 put("Host","localhost:8080");

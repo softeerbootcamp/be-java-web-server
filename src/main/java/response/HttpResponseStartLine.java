@@ -1,6 +1,6 @@
 package response;
 
-import Request.StatusCode;
+import request.StatusCode;
 
 import static response.HttpResponse.NEWLINE;
 
