@@ -2,18 +2,18 @@ package model;
 
 public class Board {
     private String writer;
-    private String content;
+    private String contents;
 
-    public Board(String writer, String content) {
+    public Board(String writer, String contents) {
         this.writer = writer;
-        this.content = content;
+        this.contents = contents;
     }
 
     public String getWriter() {
         return writer;
     }
 
-    public String getContent() {
-        return content;
+    public String getContents() {
+        return contents;
     }
 }
