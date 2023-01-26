@@ -40,14 +40,15 @@ public class IndexController extends AbstractController {
             logger.info(sessionId);
 
             byte[] body = FileIoUtils.replaceLoginBtnToUserName(sessionService.getUserName(sessionId), filePath);
-            httpResponse.forward(
-                    HttpStatusCode.OK,
-                    contentType,
-                    FileIoUtils.makeBoardList(boardService.findAll(), body));
+            byte[] boardBody = FileIoUtils.makeBoardList(boardService.findAll(), body);
+
+            httpResponse.forward(HttpStatusCode.OK, contentType, boardBody);
 
         } catch (NonLogInException | RuntimeException e) {
             byte[] body = FileIoUtils.loadFile(filePath);
-            httpResponse.forward(HttpStatusCode.OK, contentType, body);
+            byte[] boardBody = FileIoUtils.makeBoardList(boardService.findAll(), body);
+
+            httpResponse.forward(HttpStatusCode.OK, contentType, boardBody);
 
         } catch (FileNotFoundException e) {
             byte[] body = FileIoUtils.load404ErrorFile();
@@ -55,5 +56,4 @@ public class IndexController extends AbstractController {
             throw new RuntimeException(e);
         }
     }
-
 }
