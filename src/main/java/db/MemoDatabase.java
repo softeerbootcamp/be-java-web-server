@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 public class MemoDatabase {
     private static final Logger logger = LoggerFactory.getLogger(UserDatabase.class);
@@ -31,8 +31,8 @@ public class MemoDatabase {
         }
     }
 
-    public static Collection<Memo> findAll() {
-        Collection<Memo> memos = new ArrayList<>();
+    public static List<Memo> findAll() {
+        List<Memo> memos = new ArrayList<>();
 
         try {
             Connection connection = DbConnectionManager.getConnection();
@@ -42,11 +42,10 @@ public class MemoDatabase {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                memos.add(Memo.of(resultSet.getLong("memoId"),
+                memos.add(0, Memo.of(resultSet.getLong("memoId"),
                         resultSet.getString("writer"),
                         resultSet.getString("content"),
-                        resultSet.getTimestamp("createdAt").toLocalDateTime()
-                ));
+                        resultSet.getTimestamp("createdAt").toLocalDateTime()));
             }
 
             preparedStatement.close();
