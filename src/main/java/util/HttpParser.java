@@ -77,6 +77,6 @@ public class HttpParser {
     }
 
     public static Board parseToBoard(Map<String, String> httpBody) {
-        return new Board(httpBody.get("writer"), httpBody.get("title"), httpBody.get("content"));
+        return new Board(httpBody.get("writer"), httpBody.get("content"));
     }
 }
