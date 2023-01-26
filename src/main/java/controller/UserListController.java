@@ -13,6 +13,8 @@ import request.HttpRequest;
 import response.ContentType;
 import response.HttpResponse;
 import service.UserService;
+import view.Model;
+import view.UserListView;
 import webserver.HttpStatus;
 
 public class UserListController extends AbstractController {
@@ -23,6 +25,8 @@ public class UserListController extends AbstractController {
 	private static UserListController instance;
 
 	private final UserService userService;
+
+	private final UserListView userListView;
 
 	public static UserListController getInstance() {
 		if (instance == null) {
@@ -35,38 +39,23 @@ public class UserListController extends AbstractController {
 
 	private UserListController() {
 		this.userService = UserService.getInstance();
+		this.userListView = UserListView.getInstance();
 	}
 
 	public void doGet(HttpRequest httpRequest, HttpResponse httpResponse) throws IOException {
+
 		if (httpRequest.getSessionUser().equals(User.GUEST)) {
 			httpResponse.redirect("/user/login.html");
 			return;
 		}
 
-		// rendering
-		File file = new File("./webapp/user/list.html");
-		String page = new String(Files.readAllBytes(file.toPath()));
-		StringBuilder userList = new StringBuilder();
+		Model model = new Model();
 		List<User> users = userService.findAll();
-		for (int i = 0; i < users.size(); i++) {
-			userList.append("<tr>");
-			userList.append("<th scope=\"row\">");
-			userList.append(i + 1);
-			userList.append("</th> <td>");
-			userList.append(users.get(i).getUserId());
-			userList.append(" </td> <td>");
-			userList.append(users.get(i).getName());
-			userList.append(" </td> <td>");
-			userList.append(users.get(i).getEmail());
-			userList.append("</td><td>");
-			if (httpRequest.getSessionUser().getUserId().equals(users.get(i).getUserId())) {
-				userList.append("<a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a>");
-			}
-			userList.append("</td></tr>");
-		}
+		model.addModel("users", users);
 
-		page = page.replace("<!-- userList -->", userList);
-		httpResponse.setHttpResponse(HttpStatus.OK, page, ContentType.HTML);
+		// rendering
+		// TODO View 다형성을 잘 못사용하고 있는데 고민중...
+		userListView.makeView(httpRequest, httpResponse, model);
 	}
 
 }
