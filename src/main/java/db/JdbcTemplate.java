@@ -70,6 +70,20 @@ public class JdbcTemplate {
                     }
                 }).get(0);
     }
+    public List<User> findAllUser() {
+        return queryForObject("select * from user",
+                new Object[]{},
+                new ResultSetExtractor<User>() {
+                    @Override
+                    public List<User> extractData(ResultSet rs) throws SQLException {
+                        List<User> list = new ArrayList<>();
+                        while (rs.next()) {
+                            list.add(new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"), rs.getString("email")));
+                        }
+                        return list;
+                    }
+                });
+    }
 
     private <T> List<T> queryForObject(String sql, Object[] objects, ResultSetExtractor<T> resultSetExtractor) {
         return query(new DbCallback() {
