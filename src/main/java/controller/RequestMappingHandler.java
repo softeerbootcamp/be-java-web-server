@@ -10,9 +10,9 @@ public enum RequestMappingHandler {
 
 	USER_CONTROLLER(UserController.PATH, UserController.getInstance()),
 	LOGIN_CONTROLLER(LoginController.PATH, LoginController.getInstance()),
-
 	USER_LIST_CONTROLLER(UserListController.PATH, UserListController.getInstance()),
-	BOARD_CONTROLLER(BoardController.PATH, BoardController.getInstance());
+	BOARD_CONTROLLER(BoardController.PATH, BoardController.getInstance()),
+	HOME_CONTROLLER(HomeController.PATH, HomeController.getInstance()),;
 	private String path;
 	private Controller controller;
 
