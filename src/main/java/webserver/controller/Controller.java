@@ -8,6 +8,4 @@ import java.io.OutputStream;
 
 public interface Controller {
     public void exec(Request req, OutputStream out) throws IOException;
-
-    ResponseSender resHandler = null;
 }
