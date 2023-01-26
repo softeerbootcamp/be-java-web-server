@@ -22,6 +22,18 @@ public class Memo {
         return memoId;
     }
 
+    public String getWriter() {
+        return writer;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
     @Override
     public String toString() {
         return "Memo [memoId = " + memoId + ", writer=" + writer + ", content=" + content + ", createdAt=" + createdAt + "]";
