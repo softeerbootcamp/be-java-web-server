@@ -8,7 +8,10 @@ import http.request.HttpRequest;
 import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import service.UserService;
+import service.user.UserService;
+import service.user.exception.LoginIdDuplicatedException;
+import service.user.exception.LoginIdNotExistException;
+import service.user.exception.PasswordNotMatchException;
 
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -20,6 +23,11 @@ import static http.common.Session.SESSION_FIELD_NAME;
 
 public class UserController implements Controller {
 
+    private static final Map<Class, String> redirectUrls = Map.of(
+            LoginIdNotExistException.class, LOGIN_FAILED_HTML,
+            PasswordNotMatchException.class, LOGIN_FAILED_HTML,
+            LoginIdDuplicatedException.class, DOMAIN
+    );
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService = new UserService();
     private final Map<String, BiConsumer<HttpRequest, HttpResponse>> handlers = Map.of(
@@ -33,26 +41,19 @@ public class UserController implements Controller {
         try {
             handlers.getOrDefault(request.getUrl(), Controller::handleInvalidRequest)
                     .accept(request, response);
-        } catch () {
-
-        } catch () {
-            response.redirect(LOGIN_FAILED_HTML);
+        } catch (RuntimeException e) {
+            response.redirect(redirectUrls.get(e.getClass()));
         }
     }
 
     private void logIn(HttpRequest request, HttpResponse response) {
         Session session = userService.logIn(LoginDTO.of(request.getParameters(LOGIN_ID, PASSWORD)));
-            response.setCookie(Cookie.of(SESSION_FIELD_NAME, session.getId()));
-            response.redirect(DOMAIN);
+        response.setCookie(Cookie.of(SESSION_FIELD_NAME, session.getId()));
+        response.redirect(DOMAIN);
     }
 
     private void signUp(HttpRequest request, HttpResponse response) {
-        try {
-            SignUpDTO userInfo = SignUpDTO.of(request.getParameters(LOGIN_ID, PASSWORD, NAME, EMAIL));
-            userService.signUp(userInfo);
-        } catch (IllegalStateException e) {
-        } finally {
-            response.redirect(DOMAIN);
-        }
+        userService.signUp(SignUpDTO.of(request.getParameters(LOGIN_ID, PASSWORD, NAME, EMAIL)));
+        response.redirect(DOMAIN);
     }
 }
