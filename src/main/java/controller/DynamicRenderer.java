@@ -29,7 +29,11 @@ public class DynamicRenderer {
                 "                <li><a href=\"#\" role=\"button\">개인정보수정</a></li>", StringBuilderUtils.userLogoutButtonOffBuilder());
         return StringBuilderUtils.stringToByteArray(stringBody);
     }
-
+    public static byte[] dynamicIndex_SignUpBtnOff(byte[] body){
+        String stringBody = StringBuilderUtils.byteArrayToString(body);
+        stringBody = stringBody.replace("                <li><a href=\"user/form.html\" role=\"button\">회원가입</a></li>\n", StringBuilderUtils.signUpButtonHideBuilder());
+        return StringBuilderUtils.stringToByteArray(stringBody);
+    }
     // 게시판 전체 출력
     public static byte[] dynamicIndex_ViewAllBoard(byte[] body) throws SQLException {
         String stringBody = StringBuilderUtils.byteArrayToString(body);

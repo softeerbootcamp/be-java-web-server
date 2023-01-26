@@ -40,7 +40,11 @@ public class StringBuilderUtils {
         }
         return stringBuilder.toString();
     }
-    public static String userNameButtonBuilder(User user){
+    public static String signUpButtonHideBuilder(){
+        stringBuilder = new StringBuilder();
+        stringBuilder.append("<!--                <li><a href=\"user/form.html\" role=\"button\">회원가입</a></li>-->\n");
+        return stringBuilder.toString();
+    }    public static String userNameButtonBuilder(User user){
         stringBuilder = new StringBuilder();
         stringBuilder.append("<a>");
         stringBuilder.append(user.getName());

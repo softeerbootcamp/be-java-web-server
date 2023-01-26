@@ -28,13 +28,14 @@ public class TemplateController implements Controller {
         String addedLine = null;
         byte[] body = Files.readAllBytes(new File("./src/main/resources/templates" + url).toPath());
         body = DynamicRenderer.dynamicIndex_ViewAllBoard(body);
-        // 로그인 할 경우
+        // 로그인 할 경우 Dynamic renderer
         if (cookie.isLogin()) {
             body = DynamicRenderer.dynamicIndex_LoginBtnToUserBtn(body, request.getRequestHeader().getHeaderValueByKey("Cookie").split("=")[1]);
             body = DynamicRenderer.dynamicIndex_LogoutBtnOn(body);
+            body = DynamicRenderer.dynamicIndex_SignUpBtnOff(body);
         }
         // 로그아웃 시 작동으로 변경해야함.
-        if(!cookie.isLogin()){
+        if (!cookie.isLogin()) {
             body = DynamicRenderer.dynamicIndex_LogoutBtnOff(body);
         }
         // 사용자 리스트 출력일 경우
@@ -46,9 +47,6 @@ public class TemplateController implements Controller {
             controllerTypeEnum = ControllerTypeEnum.REDIRECT;
             addedLine = "Location : /index.html";
         }
-
-
-
         ResponseFactory responseFactory = new ResponseFactory.Builder()
                 .setResponseStatusLine(controllerTypeEnum)
                 .setResponseHeader(ContentTypeEnum.HTML, body.length)
