@@ -5,10 +5,14 @@ public class Board {
     private final String author;
     private final String content;
 
-    public Board(String date, String author, String content) {
+    private Board(String date, String author, String content) {
         this.date = date;
         this.author = author;
         this.content = content;
+    }
+
+    public static Board of(String date, String author, String content) {
+        return new Board(date, author, content);
     }
 
     public String getDate() {

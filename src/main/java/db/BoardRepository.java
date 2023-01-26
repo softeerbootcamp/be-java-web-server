@@ -76,7 +76,7 @@ public class BoardRepository {
             if (rs.next()) {
                 List<Board> boardList = new ArrayList<>();
                 do {
-                    Board board = new Board(
+                    Board board = Board.of(
                             rs.getString("createdDate"),
                             rs.getString("author"),
                             rs.getString("content"));
