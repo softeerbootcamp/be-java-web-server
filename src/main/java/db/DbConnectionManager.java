@@ -13,8 +13,8 @@ public class DbConnectionManager {
 
     public static Connection getConnection() {
         try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/was",
-                    "root", "0000");
+            Connection conn = DriverManager.getConnection(DbConnection.URL,
+                    DbConnection.USER, DbConnection.PASSWORD);
             logger.debug("DB Connection Success!");
             return conn;
         } catch (SQLException e) {
