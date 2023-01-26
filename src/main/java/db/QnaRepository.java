@@ -1,4 +1,4 @@
-package repository;
+package db;
 
 import model.Qna;
 import org.slf4j.Logger;
@@ -41,7 +41,7 @@ public class QnaRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
+        close(Objects.requireNonNull(ps), conn);
     }
 
     public Qna findOneById(int id, Connection conn) {
@@ -56,6 +56,8 @@ public class QnaRepository {
             String subject = rs.getString("subject");
             String content = rs.getString("content");
             String date = rs.getString("date");
+
+            close(Objects.requireNonNull(ps), conn);
             return new Qna(id, name, subject, content, date);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -71,6 +73,8 @@ public class QnaRepository {
         String subject = rs.getString("subject");
         String content = rs.getString("content");
         String date = rs.getString("date");
+
+        close(Objects.requireNonNull(ps), conn);
         return new Qna(id, name, subject, content, date);
     }
     public List<Qna> find10Qna(Connection conn) {
@@ -91,8 +95,18 @@ public class QnaRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
+        close(Objects.requireNonNull(ps), conn);
         qnas.stream().forEach(q -> logger.debug(q.toString()));
         return qnas;
+    }
+    private void close(PreparedStatement ps, Connection conn) {
+        try {
+            ps.close();
+            conn.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (NullPointerException e) {
+            logger.debug("ps null");
+        }
     }
 }
