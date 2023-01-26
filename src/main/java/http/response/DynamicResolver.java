@@ -27,22 +27,15 @@ public class DynamicResolver {
             String line;
             while ((line = br.readLine()) != null) {
                 if (Objects.nonNull(session)) {
-                    if (line.contains("Posts")) {
-                        sb.append(String.format(POSTS_TAG, session.getUserName())).append(System.lineSeparator());
-                    }
-                    if (line.contains("로그인") || line.contains("회원가입")) {
-                        continue;
-                    }
+                    line = loginDynamicHtml(line, session.getUserName());
                 } else if (line.contains("로그아웃")) {
-                    continue;
+                    line = "";
                 }
                 if (line.contains("%userList%")) {
-                    appendUserList(sb);
-                    continue;
+                    line = appendUserList();
                 }
                 if (line.contains("<ul class=\"list\">")) {
-                    appendMemoList(sb);
-                    continue;
+                    line = appendMemoList();
                 }
                 sb.append(line).append(System.lineSeparator());
             }
@@ -52,20 +45,34 @@ public class DynamicResolver {
         }
     }
 
-    private static void appendUserList(StringBuilder sb) {
+    private static String loginDynamicHtml(String line, String userName) {
+        if (line.contains("Posts")) {
+            return String.format(POSTS_TAG, userName) + System.lineSeparator();
+        }
+        if (line.contains("로그인") || line.contains("회원가입")) {
+            return "";
+        }
+        return line;
+    }
+
+    private static String appendUserList() {
         int idx = 1;
         Collection<User> users = UserRepository.findAll();
+        StringBuilder sb = new StringBuilder();
         for (User user : users) {
             sb.append(String.format(USER_LIST_TAG, idx, user.getUserId(), user.getName(), user.getEmail()));
             idx++;
         }
+        return sb.toString();
     }
 
-    private static void appendMemoList(StringBuilder sb) {
+    private static String appendMemoList() {
         Collection<Memo> memos = MemoRepository.findAll();
+        StringBuilder sb = new StringBuilder();
         sb.append("<ul class=\"list\">").append(System.lineSeparator());
         for (Memo memo : memos) {
             sb.append(String.format(MEMO_LIST_TAG, memo.getContent(), memo.getCreatedAt(), memo.getUserName()));
         }
+        return sb.toString();
     }
 }
