@@ -18,12 +18,11 @@ public class HtmlMakerUtility {
         StringBuilder sb = new StringBuilder();
         int count = 0;
         for (User user : users) {
-            sb.append(userListRow(count++, user.getUserId(), user.getName(), user.getEmail()));
+            sb.append(String.format(userListRow, count++, user.getUserId(), user.getName(), user.getEmail()));
         }
 
         return sb.toString();
     }
-
 
     public static String postListRows(List<Post> posts) {
         StringBuilder sb = new StringBuilder();
@@ -31,22 +30,6 @@ public class HtmlMakerUtility {
             sb.append(postListRow(post.getPostId(), post.getAuthor(), post.getTitle(), post.getCreatedAt()));
         }
         return sb.toString();
-    }
-
-    public static String userListRow(int number, String userId, String username, String email) {
-        return String.format(userListRow, number, userId, username, email);
-    }
-
-    public static Map<String, String> getDefaultTemplate(String username) {
-        if (username.equals(User.GUEST.getName()))
-            return new HashMap<>() {{
-                put("loginForm", loginButton);
-                put("registerForm", createButton);
-            }};
-        return new HashMap<>() {{
-            put("name", username);
-            put("logoutForm", logoutButton);
-        }};
     }
 
     public static String postListRow(Long postId, String author, String title, String date) {
@@ -73,4 +56,15 @@ public class HtmlMakerUtility {
     }
 
 
+    public static Map<String, String> getDefaultTemplate(String username) {
+        if (username.equals(User.GUEST.getName()))
+            return new HashMap<>() {{
+                put("loginForm", loginButton);
+                put("registerForm", createButton);
+            }};
+        return new HashMap<>() {{
+            put("name", username);
+            put("logoutForm", logoutButton);
+        }};
+    }
 }
