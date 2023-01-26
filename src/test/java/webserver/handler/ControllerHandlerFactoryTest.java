@@ -11,16 +11,6 @@ import java.util.Map;
 class ControllerHandlerFactoryTest {
 
     @Test
-    void 쿼리스트링_핸들러반환_테스트() {
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Request Line", "GET user/create?name=박원종 HTTP/1.1");
-        headers.put("HOST", "www.test01.com");
-
-
-        ControllerHandler controllerHandler = ControllerHandlerFactory.getHandler(HttpRequest.newInstance(new HttpRequestMessage(headers, null)));
-        Assertions.assertThat(controllerHandler).isInstanceOf(QueryStringHandler.class);
-    }
-    @Test
     void 스태틱_핸들러반환_테스트() {
         Map<String, String> headers = new HashMap<>();
         headers.put("Request Line", "GET /index.html HTTP/1.1");

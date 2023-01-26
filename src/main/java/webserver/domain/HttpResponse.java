@@ -1,10 +1,10 @@
 package webserver.domain;
 
 import db.SessionStorage;
-import enums.UserEnum;
-import model.User;
 import util.FileFinder;
-import was.view.ViewResolver;
+import was.view.LoginIndexCallback;
+import was.view.LoginListCallback;
+import was.view.ViewTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,34 +19,19 @@ public class HttpResponse {
     private String statusLine;
     private Map<String, String> headers = new HashMap<>();
 
-    public String unauthorized() {
-        sendRedirect("/user/login_failed.html");
-        return "HTTP/1.1 302 Found\r\n" + processHeaders();
-    }
-
-    public String sendCookieWithRedirect(UUID sid, String url) {
-        addHeader("Set-Cookie", "SID=" + sid + "; Path=/");
-        return sendRedirect(url);
-    }
-
-    public String sendRedirect(String url) {
-        addHeader("Location", url);
-        return createRedirectMessage();
-    }
-
-    private String createRedirectMessage() {
+    public void sendCookieWithRedirect(UUID sid, String url) {
         statusLine = "HTTP/1.1 302 Found \r\n";
-        return statusLine + processHeaders();
+        addHeader("Location", url);
+        addHeader("Set-Cookie", "SID=" + sid + "; Path=/");
     }
 
-    private String createForwardMessage() {
-        statusLine = "HTTP/1.1 200 OK \r\n";
-        return statusLine + processHeaders();
+    public void sendRedirect(String url) {
+        statusLine = "HTTP/1.1 302 Found \r\n";
+        addHeader("Location", url);
     }
 
-    private String create404Message() {
+    public void notFound() {
         statusLine = "HTTP/1.1 404 Not Found \r\n";
-        return statusLine;
     }
 
     public void addHeader(String key, String value) {
@@ -63,13 +48,16 @@ public class HttpResponse {
         return HTML;
     }
 
-    private String processHeaders() {
+    private String getHeaderToString() {
         StringBuilder header = new StringBuilder();
         for (String key : headers.keySet()) {
             header.append(key + ": " + headers.get(key) + "\r\n");
         }
         header.append("\r\n");
         return header.toString();
+    }
+    public String getResponseMessageHeader() {
+        return statusLine + getHeaderToString();
     }
 
     public byte[] getBody() {
@@ -83,29 +71,37 @@ public class HttpResponse {
         return FILEPATH + "/static" + uri;
     }
 
-    public String forward(String uri) {
+    public void forward(String uri) {
         if (!FileFinder.isFind(uri)) {
-            return create404Message();
+            notFound();
+            return;
         }
+        statusLine = "HTTP/1.1 200 OK \r\n";
         this.body = FileFinder.findFile(uri);
+
+        if (uri.contains("index.html")) {
+            this.body = ViewTemplate.fileReadTemplate(null, uri, new LoginIndexCallback());
+        }
         addHeader("Content-Type", mime(uri) + ";charset=utf-8");
-        return createForwardMessage();
     }
 
-    public String forward(String uri, UUID sessionId) {
+    public void forward(String uri, UUID sessionId) {
         if (!FileFinder.isFind(uri)) {
-            return create404Message();
+            notFound();
+            return;
         }
-        this.body = ViewResolver.makeDynamicHtml(SessionStorage.findSessionBy(sessionId).getUserId(), uri);
+        statusLine = "HTTP/1.1 200 OK \r\n";
+        this.body = ViewTemplate.fileReadTemplate(SessionStorage.findSessionBy(sessionId).getUserId(), uri, new LoginIndexCallback());
         addHeader("Content-Type", mime(uri) + ";charset=utf-8");
-        return createForwardMessage();
     }
-    public String forwardListPageHeaderMessage(String userId, String uri) {
+
+    public void forwardListPage(String uri, UUID sessionId) {
         if (!FileFinder.isFind(uri)) {
-            return create404Message();
+            notFound();
+            return;
         }
-        this.body = ViewResolver.makeListHtml(userId, uri);
+        statusLine = "HTTP/1.1 200 OK \r\n";
+        this.body = ViewTemplate.fileReadTemplate(SessionStorage.findSessionBy(sessionId).getUserId(), uri, new LoginListCallback());
         addHeader("Content-Type", mime(uri) + ";charset=utf-8");
-        return createForwardMessage();
     }
 }

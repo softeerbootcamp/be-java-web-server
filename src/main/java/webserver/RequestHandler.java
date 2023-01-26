@@ -6,10 +6,10 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpParser;
+import webserver.domain.HttpResponse;
 import webserver.handler.ControllerHandler;
 import webserver.handler.ControllerHandlerFactory;
 import webserver.domain.HttpRequest;
-import webserver.domain.HttpResponseMessage;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -28,17 +28,24 @@ public class RequestHandler implements Runnable {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             DataOutputStream dos = new DataOutputStream(out);
 
-            HttpRequest httpRequest = HttpRequest.newInstance(HttpParser.parseHttpRequest(in));
-            ControllerHandler controllerHandler = ControllerHandlerFactory.getHandler(httpRequest);
-            response(dos, controllerHandler.handle(httpRequest));
+            try {
+                HttpRequest httpRequest = HttpRequest.newInstance(HttpParser.parseHttpRequest(in));
+                ControllerHandler controllerHandler = ControllerHandlerFactory.getHandler(httpRequest);
+                response(dos, controllerHandler.handle(httpRequest));
+            } catch (NullPointerException e) {
+                logger.error(e.getMessage());
+                HttpResponse httpResponse = new HttpResponse();
+                httpResponse.notFound();
+                response(dos, httpResponse);
+            }
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
-    private void response(DataOutputStream dos, HttpResponseMessage httpResponseMessage) {
+    private void response(DataOutputStream dos, HttpResponse httpResponse) {
         try {
-            byte[] body = httpResponseMessage.getBody();
-            dos.writeBytes(httpResponseMessage.getHeader());
+            byte[] body = httpResponse.getBody();
+            dos.writeBytes(httpResponse.getResponseMessageHeader());
             dos.write(body, 0, body.length);
             dos.flush();
         } catch (IOException e) {

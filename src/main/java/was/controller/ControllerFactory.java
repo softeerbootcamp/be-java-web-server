@@ -9,8 +9,11 @@ public class ControllerFactory {
 
     public static Controller getControllerInstance(HttpRequest httpRequest) {
         String path = httpRequest.getRequestLine().getUrl();
-        if (path.contains("user")) {
+        if (path.startsWith("/user")) {
             return UserController.getInstance();
+        }
+        if (path.startsWith("/boards")) {
+            return BoardController.getInstance();
         }
         throw new RuntimeException();
     }

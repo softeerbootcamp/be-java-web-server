@@ -1,8 +1,8 @@
 package util;
 
+import model.Board;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.RequestHandler;
 import webserver.domain.HttpRequestMessage;
 
 import java.io.BufferedReader;
@@ -64,6 +64,9 @@ public class HttpParser {
         Map<String, String> map = new HashMap<>();
         for (String p : param) {
             String[] attributes = p.split("=");
+            if (attributes.length != 2) {
+                throw new NullPointerException();
+            }
             map.put(attributes[0], attributes[1]);
         }
         return map;
@@ -71,5 +74,9 @@ public class HttpParser {
 
     public static String parseSessionId(String query) {
         return query.substring(query.indexOf("=") + 1);
+    }
+
+    public static Board parseToBoard(Map<String, String> httpBody) {
+        return new Board(httpBody.get("writer"), httpBody.get("content"));
     }
 }

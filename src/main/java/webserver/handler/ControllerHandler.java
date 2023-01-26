@@ -1,8 +1,8 @@
 package webserver.handler;
 
 import webserver.domain.HttpRequest;
-import webserver.domain.HttpResponseMessage;
+import webserver.domain.HttpResponse;
 
 public interface ControllerHandler {
-    public HttpResponseMessage handle(HttpRequest httpRequest);
+    public HttpResponse handle(HttpRequest httpRequest);
 }

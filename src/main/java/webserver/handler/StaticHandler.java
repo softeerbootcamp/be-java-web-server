@@ -2,12 +2,8 @@ package webserver.handler;
 
 
 import db.SessionStorage;
-import util.HttpParser;
-import was.view.ViewResolver;
 import webserver.domain.HttpRequest;
 import webserver.domain.HttpResponse;
-import webserver.domain.HttpResponseMessage;
-import webserver.session.Session;
 
 import java.util.UUID;
 
@@ -26,14 +22,16 @@ public class StaticHandler implements ControllerHandler {
     }
 
     @Override
-    public HttpResponseMessage handle(HttpRequest httpRequest) {
+    public HttpResponse handle(HttpRequest httpRequest) {
         String uri = httpRequest.getRequestLine().getUrl();
         HttpResponse httpResponse = new HttpResponse();
         String path = httpResponse.findPath(uri);
         UUID sessionId = httpRequest.getSessionId().orElse(null);
         if (SessionStorage.isExist(sessionId) && uri.contains(".html")) {
-            return new HttpResponseMessage(httpResponse.forward(path, sessionId), httpResponse.getBody());
+            httpResponse.forward(path, sessionId);
+            return httpResponse;
         }
-        return new HttpResponseMessage(httpResponse.forward(path), httpResponse.getBody());
+        httpResponse.forward(path);
+        return httpResponse;
     }
 }
