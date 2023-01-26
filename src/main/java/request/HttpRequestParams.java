@@ -2,6 +2,7 @@ package request;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.FileIoUtil;
 import util.HttpRequestUtil;
 
 import java.util.HashMap;
@@ -17,8 +18,10 @@ public class HttpRequestParams {
     }
 
     public static HttpRequestParams from(String query) {
-        Map<String, String> params = HttpRequestUtil.extractParams(query);
-        return new HttpRequestParams(params);
+        if(query.contains("=")) {
+            return new HttpRequestParams(HttpRequestUtil.extractParams(query));
+        }
+        return new HttpRequestParams(Map.of("path_variable", query));
     }
 
     public Map<String, String> getParams() {
