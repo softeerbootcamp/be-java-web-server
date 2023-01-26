@@ -12,7 +12,6 @@ import java.lang.reflect.Parameter;
 import java.util.List;
 import java.util.Map;
 
-//Todo : 상속 이외의 구조를 사용, 하나 이상의 annotation 종류를 사용했을 때의 처리
 public abstract class ArgumentResolver {
 
     private ArgResolveStrategy argResolveStrategy;  //전략 패턴
