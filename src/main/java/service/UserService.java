@@ -2,7 +2,6 @@ package service;
 
 import db.Database;
 import model.User;
-
 import java.util.Map;
 
 public class UserService {
