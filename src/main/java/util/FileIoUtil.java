@@ -50,18 +50,14 @@ public class FileIoUtil {
         }
     }
 
-    public static String splitQuery(String path) throws RuntimeException {
-        if (path.startsWith("/user/create")) {
-            int idx = path.indexOf(URL_PARAM_DELIMITER);
-            return path.substring(idx + 1);
-        }
-        if (path.startsWith("/qna/show")) {
-            String[] split = path.split("/");
-            return "id="+split[split.length-1];
-        }
-        return "";
+    public static String getQueryString(String path) {
+        int idx = path.indexOf(URL_PARAM_DELIMITER);
+        return path.substring(idx + 1);
     }
-
+    public static String getPathVariable(String path) {
+        String[] split = path.split("/");
+        return split[split.length-1];
+    }
     public static Path mappingDirectoryPath(String path) throws NullPointerException {
         String ex = findExtension(path);
         if (templateTypes.contains(ex)) return new File(TEMPLATE_DIR + path).toPath();
