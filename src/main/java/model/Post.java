@@ -1,5 +1,6 @@
 package model;
 
+import dao.PostDAO;
 import dto.PostCreateDTO;
 
 import java.time.LocalDateTime;
@@ -10,19 +11,24 @@ public class Post {
     private User user;
     private String title;
     private String content;
-
     private LocalDateTime createdDate;
 
-    public Post(User user, PostCreateDTO postCreateDTO) {
+    private Post(Long id, User user, String title, String content, LocalDateTime createdDate) {
+        this.id = id;
         this.user = user;
-        this.title = postCreateDTO.getTitle();
-        this.content = postCreateDTO.getContent();
-        this.createdDate = LocalDateTime.now();
+        this.title = title;
+        this.content = content;
+        this.createdDate = createdDate;
     }
 
     public static Post of(User user, PostCreateDTO postCreateDTO) {
-        return new Post(user, postCreateDTO);
+        return new Post(null, user, postCreateDTO.getTitle(), postCreateDTO.getContent(), postCreateDTO.getCreatedDate());
     }
+
+    public static Post of(User user, PostDAO postDAO) {
+        return new Post(postDAO.getId(), user, postDAO.getTitle(), postDAO.getContent(), postDAO.getCreatedDate());
+    }
+
 
     public void setId(Long id) {
         this.id = id;
