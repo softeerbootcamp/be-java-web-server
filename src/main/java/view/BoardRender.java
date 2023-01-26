@@ -18,10 +18,15 @@ public class BoardRender {
 
     public byte[] addBoardInfo(byte[] homeData, Board board) {
         String homeStr = new String(homeData);
-        homeStr = homeStr.replace("<!--                <li><a href=\"user/login.html\" role=\"button\">로그인</a></li>-->",
-                "                <li><a href=\"user/login.html\" role=\"button\">로그인</a></li>");
-        homeStr = homeStr.replace("<!--                <li><a href=\"user/form.html\" role=\"button\">회원가입</a></li>-->",
-                "                <li><a href=\"user/form.html\" role=\"button\">회원가입</a></li>");
+
+        homeStr = homeStr.replace("<!--author-->",
+                board.getWriter());
+        homeStr = homeStr.replace("<!--createTime-->",
+                board.getCreateTime().toString());
+        homeStr = homeStr.replace("<!--content-->",
+                board.getContent());
+        homeStr = homeStr.replace("<!--title-->",
+                board.getTitle());
         return homeStr.getBytes();
     }
 
