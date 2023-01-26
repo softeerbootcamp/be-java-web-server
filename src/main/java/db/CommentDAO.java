@@ -49,4 +49,9 @@ public class CommentDAO {
         }
         return comments;
     }
+
+    public void deleteAll() throws SQLException {
+        PreparedStatement pstmt = connection.prepareStatement("TRUNCATE TABLE comments");
+        pstmt.executeUpdate();
+    }
 }
