@@ -56,4 +56,44 @@ public class JdbcTemplate {
             }
         }
     }
+
+    public <T> List<T> query(DbCallback callback, ResultSetExtractor<T> resultSetExtractor) {
+        String jdbc_url = "jdbc:mysql://localhost:3306/webserver?serverTimezone=UTC";
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = DriverManager.getConnection(jdbc_url, "root", "84338253");
+
+            ps = callback.makePreparedStatement(con);
+            rs = ps.executeQuery();
+            return resultSetExtractor.extractData(rs);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+
+                }
+            }
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    //TODO 나중에 구현
+                }
+            }
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    //TODO 나중에 구현
+                }
+            }
+        }
+    }
+
 }
