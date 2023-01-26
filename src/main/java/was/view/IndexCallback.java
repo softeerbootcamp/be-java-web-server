@@ -1,13 +1,11 @@
 package was.view;
 
-import db.BoardDatabase;
 import model.Board;
 import service.BoardService;
-import service.UserService;
 
 import java.util.Collection;
 
-public class LoginIndexCallback implements BufferedReaderCallback {
+public class IndexCallback implements BufferedReaderCallback {
     @Override
     public String createDynamicHtmlWith(String line) {
         if (line.contains("<ul class=\"list\">")) {
