@@ -24,8 +24,6 @@ public class MemoService {
     public void write(Map<String, String> memoInfo) {
         Memo memo = createMemo(memoInfo);
         MemoDatabase.addMemo(memo);
-
-        logger.debug("Memo: {}", memo);
     }
 
     public Collection<Memo> findMemoList() {
