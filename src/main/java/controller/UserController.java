@@ -35,10 +35,10 @@ public class UserController implements Controller {
     }
 
     private void logIn(HttpRequest request, HttpResponse response) {
-        LogInDTO userInfo = LogInDTO.of(request.getParameters(USER_ID, PASSWORD));
+        LogInDTO userInfo = LogInDTO.of(request.getParameters(LOGIN_ID, PASSWORD));
         Session session = userService.logIn(userInfo);
         if (session != null) {
-            response.setCookie(new Cookie(SESSION_FIELD_NAME, session.getId()));
+            response.setCookie(Cookie.of(SESSION_FIELD_NAME, session.getId()));
             response.redirect(DOMAIN);
             return;
         }
@@ -46,7 +46,7 @@ public class UserController implements Controller {
     }
 
     private void signUp(HttpRequest request, HttpResponse response) {
-        SignUpDTO userInfo = SignUpDTO.of(request.getParameters(USER_ID, PASSWORD, NAME, EMAIL));
+        SignUpDTO userInfo = SignUpDTO.of(request.getParameters(LOGIN_ID, PASSWORD, NAME, EMAIL));
         userService.signUp(userInfo);
         response.redirect(DOMAIN);
     }
