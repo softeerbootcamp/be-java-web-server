@@ -1,15 +1,15 @@
 package dao;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class PostDAO {
     private Long id;
     private Long uid;
     private String title;
     private String content;
-    private Date createdDate;
+    private LocalDateTime createdDate;
 
-    private PostDAO(Long id, Long uid, String title, String content, Date createdDate) {
+    private PostDAO(Long id, Long uid, String title, String content, LocalDateTime createdDate) {
         this.id = id;
         this.uid = uid;
         this.title = title;
@@ -17,7 +17,7 @@ public class PostDAO {
         this.createdDate = createdDate;
     }
 
-    public static PostDAO of(Long postId, Long userId, String title, String content, Date createdDate) {
+    public static PostDAO of(Long postId, Long userId, String title, String content, LocalDateTime createdDate) {
         return new PostDAO(postId, userId, title, content, createdDate);
     }
 
@@ -37,7 +37,7 @@ public class PostDAO {
         return content;
     }
 
-    public Date getCreatedDate() {
+    public LocalDateTime getCreatedDate() {
         return createdDate;
     }
 }
