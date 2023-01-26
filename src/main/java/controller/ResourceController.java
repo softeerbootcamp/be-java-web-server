@@ -6,14 +6,18 @@ import http.response.HttpResponse;
 import http.response.HttpResponseFactory;
 import http.session.HttpSession;
 import http.session.SessionHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.FileIoUtil;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Objects;
 
 public class ResourceController implements Controller {
+
+    private static final Logger logger = LoggerFactory.getLogger(ResourceController.class);
     private static final ResourceController resourceController = new ResourceController();
 
     private ResourceController() {
@@ -33,16 +37,14 @@ public class ResourceController implements Controller {
                 body = renderHtml(httpRequest, file);
             }
             return HttpResponseFactory.OK(httpRequest.getContentType(), body);
-        } catch (Exception e) {
-            return HttpResponseFactory.NOT_FOUND("Not Found");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+            return HttpResponseFactory.NOT_FOUND(e.getMessage());
         }
     }
 
-    private byte[] renderHtml(HttpRequest httpRequest, File file) throws Exception {
+    private byte[] renderHtml(HttpRequest httpRequest, File file) {
         HttpSession httpSession = SessionHandler.getSession(httpRequest.getSid());
-        if (Objects.nonNull(httpSession)) {
-            return DynamicResolver.showUserName(file, httpSession.getUserName());
-        }
-        return DynamicResolver.hideLogoutButton(file);
+        return DynamicResolver.createDynamicHtml(file, httpSession);
     }
 }

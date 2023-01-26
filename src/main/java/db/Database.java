@@ -2,11 +2,11 @@ package db;
 
 import util.FileIoUtil;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
+import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Objects;
 
 public class Database {
@@ -19,21 +19,28 @@ public class Database {
         return database;
     }
 
-    public Connection getConnection() throws Exception {
-        String url = "jdbc:mysql://localhost:3306/jdbc";
-        String name = null;
-        String password = null;
-        File file = new File(Objects.requireNonNull(FileIoUtil.class.getClassLoader().getResource("SQL_INFO.txt")).toURI());
-        BufferedReader br = new BufferedReader(new FileReader(file));
-        String line;
-        while ((line = br.readLine()) != null) {
-            if(line.contains("name")) {
-                name = line.split(":")[1];
+    public Connection getConnection() {
+        try {
+            String url = null;
+            String name = null;
+            String password = null;
+            File file = new File(Objects.requireNonNull(FileIoUtil.class.getClassLoader().getResource("SQL_INFO.txt")).toURI());
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.contains("url")) {
+                    url = line.split("=")[1];
+                }
+                if (line.contains("name")) {
+                    name = line.split("=")[1];
+                }
+                if (line.contains("password")) {
+                    password = line.split("=")[1];
+                }
             }
-            if(line.contains("password")) {
-                password = line.split(":")[1];
-            }
+            return DriverManager.getConnection(url, name, password);
+        } catch (IOException | SQLException | URISyntaxException e) {
+            throw new RuntimeException(e);
         }
-        return DriverManager.getConnection(url, name, password);
     }
 }

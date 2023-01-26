@@ -5,6 +5,7 @@ import model.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -12,40 +13,25 @@ public class UserRepository {
 
     private static final Database DATABASE = Database.getInstance();
 
-    public static void addUser(User user) throws Exception {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        try {
-            conn = DATABASE.getConnection();
-            String SQL = "insert into users(userId, password, name, email) values(?, ?, ?, ?)";
-            pstmt = conn.prepareStatement(SQL);
-
+    public static void addUser(User user) {
+        String SQL = "insert into users(userId, password, name, email) values(?, ?, ?, ?)";
+        try (Connection conn = DATABASE.getConnection(); PreparedStatement pstmt = conn.prepareStatement(SQL)) {
             pstmt.setString(1, user.getUserId());
             pstmt.setString(2, user.getPassword());
             pstmt.setString(3, user.getName());
             pstmt.setString(4, user.getEmail());
             pstmt.executeUpdate();
 
-        } finally {
-            if (pstmt != null) {
-                pstmt.close();
-            }
-            if (conn != null) {
-                conn.close();
-            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public static User findUserById(String userId) throws Exception {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        User user = null;
-        try {
-            conn = DATABASE.getConnection();
-            String SQL = "select * from users where userId = ?";
-            pstmt = conn.prepareStatement(SQL);
+    public static User findUserById(String userId) {
+        String SQL = "select * from users where userId = ?";
+        try (Connection conn = DATABASE.getConnection(); PreparedStatement pstmt = conn.prepareStatement(SQL)) {
             pstmt.setString(1, userId);
-
+            User user = null;
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 String id = rs.getString("userId");
@@ -54,28 +40,18 @@ public class UserRepository {
                 String email = rs.getString("email");
                 user = User.from(id, password, name, email);
             }
+            return user;
 
-        } finally {
-            if (pstmt != null) {
-                pstmt.close();
-            }
-            if (conn != null) {
-                conn.close();
-            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return user;
     }
 
-    public static Collection<User> findAll() throws Exception {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        Collection<User> users = new ArrayList<>();
-        try {
-            conn = DATABASE.getConnection();
-            String SQL = "select * from users";
-            pstmt = conn.prepareStatement(SQL);
+    public static Collection<User> findAll() {
+        String SQL = "select * from users";
+        try (Connection conn = DATABASE.getConnection(); PreparedStatement pstmt = conn.prepareStatement(SQL)) {
             ResultSet rs = pstmt.executeQuery();
-
+            Collection<User> users = new ArrayList<>();
             while (rs.next()) {
                 String id = rs.getString("userId");
                 String password = rs.getString("password");
@@ -83,15 +59,19 @@ public class UserRepository {
                 String email = rs.getString("email");
                 users.add(User.from(id, password, name, email));
             }
+            return users;
 
-        } finally {
-            if (pstmt != null) {
-                pstmt.close();
-            }
-            if (conn != null) {
-                conn.close();
-            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return users;
+    }
+
+    public static void deleteAll() {
+        String SQL = "truncate users";
+        try (Connection conn = DATABASE.getConnection(); PreparedStatement pstmt = conn.prepareStatement(SQL)) {
+            pstmt.executeUpdate(SQL);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

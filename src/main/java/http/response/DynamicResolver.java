@@ -1,102 +1,78 @@
 package http.response;
 
 import db.MemoRepository;
+import db.UserRepository;
+import http.session.HttpSession;
 import model.Memo;
 import model.User;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 import java.util.Collection;
+import java.util.Objects;
 
 public class DynamicResolver {
 
-    public static byte[] showUserName(File file, String userName) throws Exception {
-        BufferedReader br = new BufferedReader(new FileReader(file));
-        String line;
+    private static final String POSTS_TAG = "<li><a>%s</a></li>";
+    private static final String USER_LIST_TAG = "<tr><th scope=\"row\">%d</th><td>%s</td><td>%s</td><td>%s</td><td><tr>";
+    private static final String MEMO_LIST_TAG = "<li><div class=\"wrap\"><div class=\"main\">" +
+                                                "<h4>%s</h4>" +
+                                                "<div class=\"auth-info\">" +
+                                                "<span class=\"time\">%s</span>" +
+                                                "<span class=\"tag\">%s</span>" +
+                                                "</div></div></div></li>";
+
+    public static byte[] createDynamicHtml(File file, HttpSession session) {
         StringBuilder sb = new StringBuilder();
-        while ((line = br.readLine()) != null) {
-            if (line.contains("로그인") || line.contains("회원가입")) {
-                continue;
-            }
-            if (line.contains("Posts")) {
-                sb.append("<li><a>").append(userName).append("</a></li>").append(System.lineSeparator());
-            }
-            if (line.contains("<ul class=\"list\">")) {
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (Objects.nonNull(session)) {
+                    line = loginDynamicHtml(line, session.getUserName());
+                } else if (line.contains("로그아웃")) {
+                    line = "";
+                }
+                if (line.contains("%userList%")) {
+                    line = appendUserList();
+                }
+                if (line.contains("<ul class=\"list\">")) {
+                    line = appendMemoList();
+                }
                 sb.append(line).append(System.lineSeparator());
-                appendMemoList(sb);
-                continue;
             }
-            sb.append(line).append(System.lineSeparator());
+            return sb.toString().getBytes();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        return sb.toString().getBytes();
     }
 
-    public static byte[] showUserList(File file, Collection<User> users, String userName) throws Exception {
-        BufferedReader br = new BufferedReader(new FileReader(file));
-        String line;
-        StringBuilder sb = new StringBuilder();
-        while ((line = br.readLine()) != null) {
-            if (line.contains("로그인") || line.contains("회원가입")) {
-                continue;
-            }
-            if (line.contains("Posts")) {
-                sb.append("<li><a>").append(userName).append("</a></li>").append(System.lineSeparator());
-            }
-            if (line.contains("%userList%")) {
-                appendUserList(sb, users);
-                continue;
-            }
-            if (line.contains("<ul class=\"list\">")) {
-                appendMemoList(sb);
-                continue;
-            }
-            sb.append(line).append(System.lineSeparator());
+    private static String loginDynamicHtml(String line, String userName) {
+        if (line.contains("Posts")) {
+            return line + String.format(POSTS_TAG, userName) + System.lineSeparator();
         }
-        return sb.toString().getBytes();
+        if (line.contains("로그인") || line.contains("회원가입")) {
+            return "";
+        }
+        return line;
     }
 
-    public static byte[] hideLogoutButton(File file) throws Exception {
-        BufferedReader br = new BufferedReader(new FileReader(file));
-        String line;
-        StringBuilder sb = new StringBuilder();
-        while ((line = br.readLine()) != null) {
-            if (line.contains("로그아웃")) {
-                continue;
-            }
-            if (line.contains("<ul class=\"list\">")) {
-                appendMemoList(sb);
-                continue;
-            }
-            sb.append(line).append(System.lineSeparator());
-        }
-        return sb.toString().getBytes();
-    }
-
-    private static void appendUserList(StringBuilder sb, Collection<User> users) {
+    private static String appendUserList() {
         int idx = 1;
+        Collection<User> users = UserRepository.findAll();
+        StringBuilder sb = new StringBuilder();
         for (User user : users) {
-            sb.append("<tr>");
-            sb.append("<th scope=\"row\">").append(idx).append("</th>");
-            sb.append("<td>").append(user.getUserId()).append("</td>");
-            sb.append("<td>").append(user.getName()).append("</td>");
-            sb.append("<td>").append(user.getEmail()).append("</td>");
-            sb.append("<td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td>");
-            sb.append("<tr>");
+            sb.append(String.format(USER_LIST_TAG, idx, user.getUserId(), user.getName(), user.getEmail()));
             idx++;
         }
+        return sb.toString();
     }
 
-    private static void appendMemoList(StringBuilder sb) throws Exception {
+    private static String appendMemoList() {
         Collection<Memo> memos = MemoRepository.findAll();
+        StringBuilder sb = new StringBuilder();
         sb.append("<ul class=\"list\">").append(System.lineSeparator());
         for (Memo memo : memos) {
-            sb.append("<li><div class=\"wrap\"><div class=\"main\">");
-            sb.append("<h4>").append(memo.getContent()).append("</h4>");
-            sb.append("<div class=\"auth-info\">");
-            sb.append("<span class=\"time\">").append(memo.getCreatedAt()).append("</span>");
-            sb.append("<span class=\"tag\">").append(memo.getUserName()).append("</span>");
-            sb.append("</div></div></div></li>");
+            sb.append(String.format(MEMO_LIST_TAG, memo.getContent(), memo.getCreatedAt(), memo.getUserName()));
         }
+        return sb.toString();
     }
 }

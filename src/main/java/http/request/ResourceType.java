@@ -1,7 +1,5 @@
 package http.request;
 
-import exception.ResourceTypeNotFoundException;
-
 import java.util.Optional;
 import java.util.stream.Stream;
 
