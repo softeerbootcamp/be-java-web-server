@@ -16,7 +16,7 @@ public class SessionService {
 
     public Session makeSession(String userId, String userName) {
         String sessionId = UUID.randomUUID().toString();
-        Session session = new Session(sessionId, userId, userName);
+        Session session = Session.of(sessionId, userId, userName);
         sessionRepository.addSession(sessionId, userId, userName);
 
         return session;

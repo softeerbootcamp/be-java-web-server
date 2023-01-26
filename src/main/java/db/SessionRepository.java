@@ -72,7 +72,7 @@ public class SessionRepository {
             rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                return new Session(
+                return Session.of(
                         rs.getString("sessionId"),
                         rs.getString("userId"),
                         rs.getString("userName"));
