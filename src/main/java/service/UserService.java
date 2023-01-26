@@ -1,43 +1,51 @@
 package service;
 
-import db.Database;
+import db.SessionDB;
 import dto.LogInDTO;
 import dto.SignUpDTO;
 import http.common.Session;
 import model.User;
+import repository.UserRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserService {
-    public String signUp(SignUpDTO signUpUserInfo) {
-        User findUser = Database.findUserById(signUpUserInfo.getUserId());
 
-        if (findUser != null) {
-            return null;
-        }
+    private final UserRepository userRepository = new UserRepository();
 
-        User user = new User(signUpUserInfo.getUserId(), signUpUserInfo.getPassword(), signUpUserInfo.getName(), signUpUserInfo.getEmail());
-        Database.addUser(user);
+    public String signUp(SignUpDTO signUpDto) {
+        checkLoginIdDuplicated(signUpDto);
 
-        return user.getUserId();
+        User user = User.of(signUpDto.getLoginId(), signUpDto.getPassword(), signUpDto.getName(), signUpDto.getEmail());
+        userRepository.save(user);
+
+        return user.getLoginId();
     }
 
-    public Session logIn(LogInDTO logInUserInfo) {
-        User findUser = Database.findUserById(logInUserInfo.getUserId());
-        if (findUser != null && passwordMatch(findUser, logInUserInfo)) {
-            Session session = new Session(findUser);
-            Database.addSession(session);
-            return session;
-        }
-        return null;
+    private void checkLoginIdDuplicated(SignUpDTO signUpDto) {
+        userRepository.findByLoginId(signUpDto.getLoginId()).ifPresent(userDAO -> {
+            throw new IllegalStateException("duplicated login id");
+        });
     }
 
-    private boolean passwordMatch(User findUser, LogInDTO logInUserInfo) {
-        return findUser.getPassword().equals(logInUserInfo.getPassword());
+    public Session logIn(LogInDTO logInDto) {
+        User user = validate(logInDto);
+        Session session = new Session(user);
+        SessionDB.addSession(session);
+        return session;
+    }
+
+    private User validate(LogInDTO logInDto) {
+        User user = userRepository.findByLoginId(logInDto.getLoginId()).orElseThrow(() -> {
+            throw new IllegalStateException("not exist login id");
+        });
+        if (!user.getPassword().equals(logInDto.getPassword())) {
+            throw new IllegalStateException("password not match");
+        }
+        return user;
     }
 
     public List<User> getAllUser() {
-        return new ArrayList<>(Database.findAll());
+        return userRepository.findAll();
     }
 }
