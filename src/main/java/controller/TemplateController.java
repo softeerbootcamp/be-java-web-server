@@ -30,6 +30,7 @@ public class TemplateController implements Controller {
 
         if (isLogined) {
             body = DynamicRenderer.dynamicIndex_LoginBtnToUserBtn(body, request.getRequestHeader().getHeaderValueByKey("Cookie").split("=")[1]);
+            body = DynamicRenderer.dynamicIndex_LogoutBtnOn(body);
         }
         if (url.contains("list.html")) {
             body = DynamicRenderer.dynamicListHtml(body);

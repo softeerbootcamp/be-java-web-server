@@ -46,6 +46,18 @@ public class StringBuilderUtils {
         stringBuilder.append(user.getName());
         return stringBuilder.toString();
     }
+    public static String userLogoutButtonOnBuilder(){
+        stringBuilder = new StringBuilder();
+        stringBuilder.append("<li><a href=\"#\" role=\"button\">로그아웃</a></li>\n" +
+                "                <li><a href=\"#\" role=\"button\">개인정보수정</a></li>");
+        return  stringBuilder.toString();
+    }
+    public static String userLogoutButtonOffBuilder(){
+        stringBuilder = new StringBuilder();
+        stringBuilder.append("<!--                <li><a href=\"#\" role=\"button\">로그아웃</a></li>-->\n" +
+                "<!--                <li><a href=\"#\" role=\"button\">개인정보수정</a></li>-->");
+        return  stringBuilder.toString();
+    }
     public static String viewAllBoardBuilder() throws SQLException {
         stringBuilder = new StringBuilder();
         Collection<Article> board = BoardDatabase.getAllArticles();
