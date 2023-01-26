@@ -1,9 +1,11 @@
 package service.session;
 
 import db.session.SessionDatabase;
+import exception.NotLogInException;
 import model.Session;
 import model.User;
 
+import javax.naming.AuthenticationException;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
@@ -38,6 +40,12 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public void removeSession(String sessionId) {
         sessionDatabase.deleteSession(sessionId);
+    }
+
+    @Override
+    public void validateSession(String sessionId) throws NotLogInException {
+        if (sessionId == null || getSession(sessionId).isEmpty())
+            throw new NotLogInException();
     }
 
     @Override
