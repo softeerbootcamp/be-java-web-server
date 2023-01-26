@@ -1,8 +1,10 @@
 package webserver.controller;
 
+import db.CommentDAO;
 import exception.SessionExpiredException;
 import exception.SessionNotFoundException;
 import model.request.Request;
+import model.response.CommentResponse;
 import model.response.Response;
 import util.AuthInterceptor;
 import util.ViewResolver;
@@ -10,8 +12,12 @@ import util.ViewResolver;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 import static model.response.HttpStatusCode.OK;
@@ -23,6 +29,7 @@ public class DynamicHtmlController {
         BufferedReader br = new BufferedReader(new FileReader(filePath.toFile()));
         String line;
         StringBuilder body = new StringBuilder();
+
 
         if (AuthInterceptor.isAuthUser(request)) {
             while ((line = br.readLine()) != null) {
@@ -40,7 +47,9 @@ public class DynamicHtmlController {
                 }
                 body.append(line);
             }
-            return Response.of(request.getHttpVersion(), OK, Map.of("Content-Type", Files.probeContentType(filePath)), body.toString().getBytes());
+            String fileData = extracted(body);
+
+            return Response.of(request.getHttpVersion(), OK, Map.of("Content-Type", Files.probeContentType(filePath)), fileData.getBytes());
         }
 
         while ((line = br.readLine()) != null) {
@@ -49,6 +58,24 @@ public class DynamicHtmlController {
             }
             body.append(line);
         }
-        return Response.of(request.getHttpVersion(), OK, Map.of("Content-Type", Files.probeContentType(filePath)), body.toString().getBytes());
+        String fileData = extracted(body);
+        return Response.of(request.getHttpVersion(), OK, Map.of("Content-Type", Files.probeContentType(filePath)), fileData.getBytes());
+    }
+
+    private static String extracted(StringBuilder body) {
+        CommentDAO commentDAO = new CommentDAO();
+
+        try {
+            List<CommentResponse> commentResponseList = commentDAO.findAll();
+            StringBuilder sb = new StringBuilder();
+            sb.append("<tr>");
+            for (CommentResponse commentResponse : commentResponseList) {
+                sb.append("<tr> <th scope=\"row\"><span class=\"time\">").append(commentResponse.getCreatedDate()).append("</span></th> <td class=\"auth-info\"> ").append("<a href= \"./user/profile.html\" class=\"author\">").append(commentResponse.getAuthor()).append("</a> </td> <td class=\"body\"> <span>").append(commentResponse.getContent()).append("</span> </td> </tr>");
+            }
+            return body.toString().replace("%commentsList%", URLDecoder.decode(sb.toString(), StandardCharsets.UTF_8));
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
