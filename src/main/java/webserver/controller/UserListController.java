@@ -1,6 +1,6 @@
 package webserver.controller;
 
-import db.Database;
+import db.UserDAO;
 import model.User;
 import model.request.Request;
 import model.response.Response;
@@ -12,6 +12,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Map;
 
@@ -24,8 +25,9 @@ public class UserListController implements UserController{
 
         if (AuthInterceptor.isAuthUser(request)) {
             try {
+                UserDAO userDAO = new UserDAO();
                 int idx = 3;
-                Collection<User> users = Database.findAll();
+                Collection<User> users = userDAO.findAll();
 
                 StringBuilder sb = new StringBuilder();
                 sb.append("<tr>");
@@ -41,6 +43,8 @@ public class UserListController implements UserController{
             } catch (IOException e) {
                 e.printStackTrace();
                 return Response.of(request.getHttpVersion(), NOT_FOUND, Map.of(), new byte[0]);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
         }
         return Response.of(request.getHttpVersion(), FOUND, Map.of("Location", "/user/login.html"), new byte[0]);

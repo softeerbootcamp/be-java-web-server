@@ -20,6 +20,7 @@ public class UserHandlerAdapter implements WasHandlerAdapter {
         controllerMap.put("/user/login", new UserLoginController());
         controllerMap.put("/user/list", new UserListController());
         controllerMap.put("/user/logout", new UserLogoutController());
+        controllerMap.put("/user/comment", new UserCommentController());
     }
 
     public Response process(Request request) {

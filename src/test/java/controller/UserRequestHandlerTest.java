@@ -1,7 +1,7 @@
 package controller;
 
-import db.Database;
 import db.SessionStorage;
+import db.UserDAO;
 import exception.SessionNotFoundException;
 import model.User;
 import model.request.Request;
@@ -15,15 +15,18 @@ import webserver.controller.DynamicHtmlController;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
 
 import static model.response.HttpStatusCode.OK;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserRequestHandlerTest {
 
+    UserDAO userDAO = new UserDAO();
+
     @BeforeEach
-    void cleanDb() {
-        Database.cleanAll();
+    void cleanDb() throws SQLException {
+        userDAO.deleteAll();
         SessionStorage.cleanAll();
     }
 
@@ -67,7 +70,7 @@ public class UserRequestHandlerTest {
     @DisplayName("잘못된 쿠키값 브라우저에서 인덱스.html로 전송시 무시")
     void session_expired() throws Exception {
         //given
-        Database.addUser(new User("javajigi", "password", "tester", "test@test.com"));
+        userDAO.insert(new User("javajigi", "password", "tester", "test@test.com"));
 
         //when
         String sid = "123456";

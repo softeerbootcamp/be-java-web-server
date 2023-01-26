@@ -1,7 +1,7 @@
 package controller;
 
-import db.Database;
 import db.SessionStorage;
+import db.UserDAO;
 import model.User;
 import model.request.Request;
 import model.response.Response;
@@ -11,12 +11,15 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.sql.SQLException;
 
 public class UserListControllerTest {
 
+    UserDAO userDAO = new UserDAO();
+
     @BeforeEach
-    void cleanDb() {
-        Database.cleanAll();
+    void cleanDb() throws SQLException {
+        userDAO.deleteAll();
         SessionStorage.cleanAll();
     }
 
@@ -25,7 +28,7 @@ public class UserListControllerTest {
     void userList() throws Exception {
         //given
         User user = new User("aa", "bb", "cc", "test@test");
-        Database.addUser(user);
+        userDAO.insert(user);
 
         //when
         String requestMessage = "GET /user/list.html HTTP/1.1\n"

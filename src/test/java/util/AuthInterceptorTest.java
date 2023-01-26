@@ -1,7 +1,7 @@
 package util;
 
-import db.Database;
 import db.SessionStorage;
+import db.UserDAO;
 import model.User;
 import model.request.Request;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,13 +10,16 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.UUID;
 
 public class AuthInterceptorTest {
 
+    UserDAO userDAO = new UserDAO();
+
     @BeforeEach
-    void cleanDb() {
-        Database.cleanAll();
+    void cleanDb() throws SQLException {
+        userDAO.deleteAll();
         SessionStorage.cleanAll();
     }
 
@@ -25,7 +28,7 @@ public class AuthInterceptorTest {
     void authInterceptorTest() throws Exception {
         //given
         User user = new User("aa", "bb", "cc", "test@test");
-        Database.addUser(user);
+        userDAO.insert(user);
         String sid = String.valueOf(UUID.randomUUID());
         SessionStorage.addSession(sid, user);
 
@@ -65,7 +68,7 @@ public class AuthInterceptorTest {
     void authInterceptor_multiCookie() throws Exception {
         //given
         User user = new User("aa", "bb", "cc", "test@test");
-        Database.addUser(user);
+        userDAO.insert(user);
         String sid = String.valueOf(UUID.randomUUID());
         SessionStorage.addSession(sid, user);
 

@@ -1,12 +1,11 @@
 package controller;
 
-import db.Database;
 import db.SessionStorage;
+import db.UserDAO;
 import model.User;
 import model.request.Request;
-import model.response.HttpStatusCode;
 import model.response.Response;
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import util.AuthInterceptor;
@@ -14,18 +13,27 @@ import webserver.controller.UserLogoutController;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.sql.SQLException;
 
 import static model.response.HttpStatusCode.FOUND;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserLogoutControllerTest {
+
+    UserDAO userDAO = new UserDAO();
+
+    @BeforeEach
+    void cleanDb() throws SQLException {
+        userDAO.deleteAll();
+        SessionStorage.cleanAll();
+    }
 
     @Test
     @DisplayName("유저 로그아웃 테스트")
     void userLogout() throws Exception {
         //given
         User user = new User("test", "123", "tester", "test@test.com");
-        Database.addUser(user);
+        userDAO.insert(user);
         String sid = "123456";
         SessionStorage.addSession(sid, user);
 
