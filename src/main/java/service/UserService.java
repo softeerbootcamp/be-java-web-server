@@ -12,6 +12,14 @@ import java.util.Map;
 public class UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+    private static final UserService instance = new UserService();
+
+    public static UserService getInstance() {
+        return instance;
+    }
+
+    private UserService() {
+    }
 
     public void signUp(Map<String, String> userInfo) {
         validateDuplication(userInfo.get("userId"));
@@ -37,6 +45,10 @@ public class UserService {
         }
 
         return findUser;
+    }
+
+    public User findUserById(String userId) {
+        return UserDatabase.findUserById(userId);
     }
 
     public Collection<User> findUserList() {

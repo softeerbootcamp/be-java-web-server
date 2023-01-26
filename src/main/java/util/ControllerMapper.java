@@ -15,7 +15,7 @@ public class ControllerMapper {
     private static final Map<String, Controller> controllerMap = new LinkedHashMap<>();
 
     static {
-        controllerMap.put(UserController.PREFIX, new UserController(new UserService()));
+        controllerMap.put(UserController.PREFIX, new UserController(UserService.getInstance()));
     }
 
     public static Controller getController(HttpRequest request) {

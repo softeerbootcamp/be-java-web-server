@@ -1,11 +1,11 @@
 package Controller;
 
-import db.UserDatabase;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import service.UserService;
 import view.HomeLoginView;
 import webserver.session.Session;
 import webserver.session.SessionConst;
@@ -40,7 +40,7 @@ public class DynamicResourceController implements Controller {
         Session session = request.getSession();
         String userId = session.getAttribute(SessionConst.USER_ID);
 
-        User loginUser = UserDatabase.findUserById(userId);
+        User loginUser = UserService.getInstance().findUserById(userId);
 
         try {
             String body = HomeLoginView.render(loginUser.getName(), url);

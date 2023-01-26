@@ -1,6 +1,5 @@
 package Controller;
 
-import db.UserDatabase;
 import exception.NullValueException;
 import exception.UrlNotFoundException;
 import exception.UserValidationException;
@@ -100,7 +99,7 @@ public class UserController implements Controller {
         try {
             Session session = request.getSession();
             String userId = session.getAttribute(SessionConst.USER_ID);
-            User loginUser = UserDatabase.findUserById(userId);
+            User loginUser = userService.findUserById(userId);
 
             Collection<User> users = userService.findUserList();
             String body = UserListView.render(users, loginUser.getName());
