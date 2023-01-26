@@ -83,6 +83,12 @@ Java Web Application Server 2022
   - 서비스 객체가 응답을 하면, 컨트롤러는 ResponseSender에게 응답을 클라이언트에게 전해달라고 요청
 - ResponseSender : 받은 응답을 클라이언트에게 전송함.
 
+### ERD
+![ERD.png](ReadmeImg%2FERD.png)
+- Users : 사용자의 "유저 아이디", "비밀번호", "이름", "이메일" 정보를 저장하는 테이블
+- board : 게시물의 "작성자 id(uid X)", "글 내용", "날짜" 정보를 저장하는 테이블
+
+각 테이블의 id는 PK 역할을 함. board의 writerid는 Users의 id를 참조하는 FK임.
 
 ## 알게된 것 정리
 
