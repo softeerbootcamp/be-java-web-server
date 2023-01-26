@@ -11,11 +11,9 @@ import java.sql.SQLException;
 
 public class UserListService extends AlreadyLoggedInService{
 
-    private String sid_userid;
 
     public UserListService(String sid_usrid) {
         super(sid_usrid);
-        this.sid_userid = sid_usrid;
     }
 
     @Override
