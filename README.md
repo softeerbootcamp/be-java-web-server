@@ -8,98 +8,54 @@ Java Web Application Server 2022
 를 참고하여 작성되었습니다.
 
 ### 프로젝트 구조
-    ├─src/main/java
-    │  ├─java
-    │  │  ├─customException
-    │  │  │  │  AlreadyHasSameIdException.java
-    │  │  │  │  
-    │  │  │  └─cannotLogIn
-    │  │  │          CannotLogInException.java
-    │  │  │          NotFoundUserException.java
-    │  │  │          PasswordMismatchException.java
-    │  │  │          
-    │  │  ├─db
-    │  │  │      Database.java
-    │  │  │      UserIdSession.java
-    │  │  │      
-    │  │  ├─model
-    │  │  │      User.java
-    │  │  │      
-    │  │  ├─utils
-    │  │  │      SessionIdGenerator.java
-    │  │  │      
-    │  │  └─webserver
-    │  │      │  RequestHandler.java
-    │  │      │  WebServer.java
-    │  │      │  
-    │  │      ├─constants
-    │  │      │      InBody.java
-    │  │      │      Paths.java
-    │  │      │      
-    │  │      ├─controller
-    │  │      │      Controller.java
-    │  │      │      ControllerMapper.java
-    │  │      │      DynamicFileController.java
-    │  │      │      StaticFileController.java
-    │  │      │      
-    │  │      ├─httpUtils
-    │  │      │  │  Request.java
-    │  │      │  │  RequestGetter.java
-    │  │      │  │  Response.java
-    │  │      │  │  ResponseSender.java
-    │  │      │  │  
-    │  │      │  └─entity
-    │  │      │          Body.java
-    │  │      │          Header.java
-    │  │      │          ReqLine.java
-    │  │      │          ResLine.java
-    │  │      │          
-    │  │      └─service
-    │  │              AlreadyLoggedInService.java
-    │  │              InvalidAccesstoUserListService.java
-    │  │              LogInService.java
-    │  │              Service.java
-    │  │              SignUpService.java
-    │  │              UserListService.java
-    │  │              
-    │  └─resources
-    │      │  logback.xml
-    │      │  
-    │      ├─static
-    │      │  ├─css
-    │      │  │      bootstrap.min.css
-    │      │  │      styles.css
-    │      │  │      
-    │      │  ├─fonts
-    │      │  │      glyphicons-halflings-regular.eot
-    │      │  │      glyphicons-halflings-regular.svg
-    │      │  │      glyphicons-halflings-regular.ttf
-    │      │  │      glyphicons-halflings-regular.woff
-    │      │  │      glyphicons-halflings-regular.woff2
-    │      │  │      
-    │      │  ├─images
-    │      │  │      80-text.png
-    │      │  │      
-    │      │  └─js
-    │      │          bootstrap.min.js
-    │      │          jquery-2.2.0.min.js
-    │      │          scripts.js
-    │      │          
-    │      └─templates
-    │          │  favicon.ico
-    │          │  index.html
-    │          │  
-    │          ├─qna
-    │          │      form.html
-    │          │      show.html
-    │          │      
-    │          └─user
-    │                  form.html
-    │                  form_failed.html
-    │                  list.html
-    │                  login.html
-    │                  login_failed.html
-    │                  profile.html
+    ./src/main/java
+    ├── customException
+    │   ├── AlreadyHasSameIdException.java
+    │   └── cannotLogIn
+    │       ├── CannotLogInException.java
+    │       ├── NotFoundUserException.java
+    │       └── PasswordMismatchException.java
+    ├── db
+    │   ├── UserIdSession.java
+    │   └── mysql
+    │       ├── DB_Board.java
+    │       └── DB_Users.java
+    ├── model
+    │   ├── Article.java
+    │   └── User.java
+    ├── utils
+    │   └── SessionIdGenerator.java
+    └── webserver
+    ├── RequestHandler.java
+    ├── WebServer.java
+    ├── constants
+    │   ├── InBody.java
+    │   └── Paths.java
+    ├── controller
+    │   ├── Controller.java
+    │   ├── ControllerMapper.java
+    │   ├── DynamicFileController.java
+    │   ├── HomePathController.java
+    │   └── StaticFileController.java
+    ├── httpUtils
+    │   ├── Request.java
+    │   ├── RequestGetter.java
+    │   ├── Response.java
+    │   ├── ResponseSender.java
+    │   └── entity
+    │       ├── Body.java
+    │       ├── Header.java
+    │       ├── ReqLine.java
+    │       └── ResLine.java
+    └── service
+        ├── AlreadyLoggedInService.java
+        ├── ArticleListService.java
+        ├── InvalidAccesstoUserListService.java
+        ├── LogInService.java
+        ├── PostNewArticleService.java
+        ├── Service.java
+        ├── SignUpService.java
+        └── UserListService.java
 
 - customException
   - AreadyHasSameIdException : 이미 디비에 저장된 아이디로 회원가입 요청이 들어올 경우 던져지는 예외.
@@ -107,9 +63,10 @@ Java Web Application Server 2022
     - NotFoundUserException : 디비에 없는 아이디로 로그인 요청이 들어올 경우 던져지는 예외.
     - PasswordMismatchException : 아이디는 맞지만, 비밀번호가 디비에 저장되어있는 것과 다를 때 던져지는 예외.
 - db
-  - 유저에 관한 정보가 저장되어 있는 디비와 세션
+  - 유저에 관한 정보와 작성글이 저장되어 있는 디비와 세션
 - model
   - User : 유저 관련
+  - Article : 유저가 작성한 글
 - utils
   - SessionIdGenerator : 세션아이디를 만들어주는 클래스
 - webserver : 웹 서버 관련 객체들이 들어있는 패키지
@@ -126,6 +83,12 @@ Java Web Application Server 2022
   - 서비스 객체가 응답을 하면, 컨트롤러는 ResponseSender에게 응답을 클라이언트에게 전해달라고 요청
 - ResponseSender : 받은 응답을 클라이언트에게 전송함.
 
+### ERD
+![ERD.png](ReadmeImg%2FERD.png)
+- Users : 사용자의 "유저 아이디", "비밀번호", "이름", "이메일" 정보를 저장하는 테이블
+- board : 게시물의 "작성자 id(uid X)", "글 내용", "날짜" 정보를 저장하는 테이블
+
+각 테이블의 id는 PK 역할을 함. board의 writerid는 Users의 id를 참조하는 FK임.
 
 ## 알게된 것 정리
 
@@ -266,3 +229,51 @@ ex) inetd, httpd, nfsd, sshd, named, and lpd
 [출처](https://kb.iu.edu/d/aiau)
 
 [참고](https://blogger.pe.kr/770)
+
+### JVM이란?
+Java bytecode로 컴파일될 수 있는 언어로 구현된 프로그램을 컴퓨터가 실행시킬 수 있도록 해주는 가상머신(소프트웨어)
+
+### JVM의 동작과정
+.java 파일은 컴파일러에 의해 .class 파일로 변환됨. 이 클래스 파일들은 프로그램 실행 시 다음과 같은 일련의 과정을 거침
+![img.png](ReadmeImg/JVM동작과정.png)
+- 간소화된 버전
+![img.png](ReadmeImg/JVM동작과정_간편ver.png)
+
+### Class loader
+클래스로더는 Loading, Linking, Initialization이라는 세 가지의 임무를 맡고 있음
+- **Loading** : 
+.class 파일을 읽고, 각 파일에 맞는 이진 데이터를 만들어 메서드 영역에 저장함. 각각의 데이터들은 다음과 같이 나타남
+  - 클래스의 이름과, 바로 위 부모클래스의 이름(정규화; FQCN - Fully Qualified Class Name)
+  - 각 .class 파일이 클래스인지, 인터페이스인지, 열거체인지
+  - 제어자, 변수, 메서드 정보 등등
+  
+[Loading 과정의 세부사항(참고)](https://tecoble.techcourse.co.kr/post/2021-07-15-jvm-classloader/)
+
+로딩이 끝나면, JVM은 각 파일에 맞는 Class 타입(java.lang)의 오브젝트를 만들어 힙 영역에 저장한다.
+
+- **Linking** : 증명(verification), 준비(preparation), 해결(resolution) 수행
+  - 증명 : .class 파일이 올바른 컴파일러에 의해 적절히 format되고 생성되었는지 검사.
+  - 준비 : static 변수들을 할당하고 default 값으로 초기화.
+  - 해결(optionally) : 메서드 영역의 런타임 환경풀을 통하여 Symbolic reference를 Direct reference로 replace.
+
+  [Symbolic references와 Direct references에 관한 글(참고)](https://topic.alibabacloud.com/a/java-virtual-machines-symbolic-references-and-font-colorreddirectfont-reference-understanding_1_27_30293654.html)
+- **Initialization** : 모든 static 변수들이 코드상에 있는 값(혹은 block)으로 초기화됨. 코드 상 top-down으로 진행되고 부모를 먼저 초기화한 후 자식이 초기화됨.
+
+### JVM 메모리
+![img.png](ReadmeImg/JVM메모리.png)
+- **메서드 영역** : class level의 모든 정보(이름, 부모이름, 메서드, 변수). static 변수의 경우 java 8 이전에는 힙 영역의 PerGen에 저장되었으나, 8부터는 Native Memory 내 MetaSpace에 저장됨
+- **힙 영역** : new로 생성되는 객체들이 저장됨
+- **스택 영역** : 스레드마다 생성되는 스택들이 저장됨. 스택은 activation record/stack frame으로 이루어져 있으며, 하나의 프레임마다 메서드 호출정보(지역변수 등)가 저장되어 있음.
+스레드가 종료되면 JVM에 의해 해당 스택이 파괴됨.
+- **PC Registers** : 스레드마다의 pc 값 저장
+- **Native 메서드 스택** : native method를 호출하는 코드를 수행하기 위한 스택(c, c++ 등)
+
+### JVM Execution Engine
+메모리 영역들과의 소통을 통해 바이트코드를 한줄씩 수행하는 부분. 크게 인터프리터와 JIT 컴파일러, GC 3개의 하위 컴포넌트로 구분지을 수 있다.
+
+[각 영역에 대한 설명(참고)](https://www.tutorialspoint.com/What-is-execution-engine-in-JAVA)
+
+- JVM을 학습하고 나서 생각해볼 것들
+  - 바이트코드는 어디에 저장되나?
+  - 정적변수는 어디에? 언제?
+  - 인스턴스 변수는 어디에? 언제?

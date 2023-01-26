@@ -3,8 +3,6 @@ package webserver.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.httpUtils.Request;
-import webserver.httpUtils.RequestGetter;
-import webserver.httpUtils.entity.ReqLine;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,12 +13,14 @@ public class ControllerMapper {
 
     public static final String DYNAMIC = "Dynamic";
     public static final String STATIC = "Static";
+    public static final String HOMEPATH = "Home";
 
     private ControllerMapper()
     {
         controllerMap = new HashMap<>();
         controllerMap.put(STATIC, new StaticFileController());
         controllerMap.put(DYNAMIC, new DynamicFileController());
+        controllerMap.put(HOMEPATH, new HomePathController());
     }
 
     public static ControllerMapper getInstance()
@@ -34,12 +34,18 @@ public class ControllerMapper {
 
     public Controller getController(Request req)
     {
-        if(req.hasCookie() && req.getReqLine().getQuery().endsWith(".html"))
+        String reqQuery = req.getReqLine().getQuery();
+        if(reqQuery.endsWith("index.html"))
+        {
+            logger.debug("current controller : home");
+            return controllerMap.get(HOMEPATH);
+        }
+        if(req.hasCookie() && (reqQuery.endsWith(".html") || reqQuery.endsWith("user/create/article")))
         {
             logger.debug("current controller : dynamic");
-            return new DynamicFileController();
+            return controllerMap.get(DYNAMIC);
         }
         logger.debug("current controller : static");
-        return new StaticFileController();
+        return controllerMap.get(STATIC);
     }
 }

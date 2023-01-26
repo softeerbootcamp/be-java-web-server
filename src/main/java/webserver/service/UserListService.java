@@ -11,11 +11,9 @@ import java.sql.SQLException;
 
 public class UserListService extends AlreadyLoggedInService{
 
-    private String sid_userid;
 
     public UserListService(String sid_usrid) {
         super(sid_usrid);
-        this.sid_userid = sid_usrid;
     }
 
     @Override
@@ -27,9 +25,11 @@ public class UserListService extends AlreadyLoggedInService{
 
         String bodyStr = new String(bodyByte);
         bodyStr = bodyStr.replace(InBody.beforeReplaced_UserList, generateAllUserList());
+        bodyByte = bodyStr.getBytes();
 
-        return res.
-                withBodyString(bodyStr);
+        return res
+                .withHeaderKeyVal("Content-Length", Integer.toString(bodyByte.length))
+                .withBodyBytes(bodyByte);
     }
 
     private String generateAllUserList()
