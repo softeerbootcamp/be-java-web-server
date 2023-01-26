@@ -60,4 +60,6 @@ public class AlreadyLoggedInService implements Service{
     {
         return new String("href=\"#articleModal\"");
     }
+
+    public String getSid_usrid(){return sid_usrid;}
 }
