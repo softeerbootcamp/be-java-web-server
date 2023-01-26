@@ -130,7 +130,6 @@ public class JdbcRepository {
             while(rs.next()){
                 Qna qna = new Qna(
                         rs.getString("writer"),
-                        rs.getString("title"),
                         rs.getString("contents"),
                         rs.getString("time")
                 );
@@ -148,7 +147,7 @@ public class JdbcRepository {
     }
 
     public void addQna(Qna qna) {
-        String sql = "insert into qna values(?, ?, ?, ?)";
+        String sql = "insert into qna values(?, ?, ?)";
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -157,9 +156,8 @@ public class JdbcRepository {
             conn = getConnection();
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, qna.getWriter());
-            pstmt.setString(2, qna.getTitle());
-            pstmt.setString(3, qna.getContents());
-            pstmt.setString(4, qna.getTime());
+            pstmt.setString(2, qna.getContents());
+            pstmt.setString(3, qna.getTime());
             pstmt.executeUpdate();
 
         } catch (Exception e) {

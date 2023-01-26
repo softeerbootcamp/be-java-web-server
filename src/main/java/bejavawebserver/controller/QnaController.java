@@ -19,7 +19,7 @@ public class QnaController {
     @Autowired QnaService qnaService;
     @PostMapping("/qna/form")
     public String writeQna(QnaForm qnaForm){
-        String time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-mm-dd HH:mm"));
+        String time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         qnaService.addQna(new Qna(qnaForm, time));
         return "redirect:/index.html";
     }
