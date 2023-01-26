@@ -34,7 +34,7 @@ public class ControllerMapper {
 
     public Controller getController(Request req)
     {
-        if(req.hasCookie() && req.getReqLine().getQuery().endsWith(".html"))
+        if(req.hasCookie() && (req.getReqLine().getQuery().endsWith(".html") || req.getReqLine().getQuery().endsWith("user/create/article")))
         {
             logger.debug("current controller : dynamic");
             return new DynamicFileController();
