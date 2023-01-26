@@ -1,6 +1,5 @@
 package controller;
 
-import db.Database;
 import filesystem.FileSystem;
 import filesystem.FindResource;
 import filesystem.HtmlGenerator;
@@ -9,6 +8,7 @@ import http.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.AuthService;
+import service.PostService;
 import service.UserService;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public class MainController implements Controller {
     private final Logger logger = LoggerFactory.getLogger(MainController.class);
     private final AuthService authService = new AuthService();
     private final UserService userService = new UserService();
-
+    private final PostService postService = new PostService();
 
     @Override
     public void service(HttpRequest request, HttpResponse response) {
@@ -53,7 +53,7 @@ public class MainController implements Controller {
             if (authService.isAuthenticated(request)) {
                 return FileSystem.getPersonalizedResource(request.getUrl(),
                         HtmlGenerator.getUserAnchor(authService.getUser(request).get()),
-                        HtmlGenerator.getPostElementHTML(Database.getAllPosts()));
+                        HtmlGenerator.getPostElementHTML(postService.getAllPost()));
             }
         }
         return FileSystem.getStaticResource(request.getUrl());
