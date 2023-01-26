@@ -8,98 +8,54 @@ Java Web Application Server 2022
 를 참고하여 작성되었습니다.
 
 ### 프로젝트 구조
-    ├─src/main/java
-    │  ├─java
-    │  │  ├─customException
-    │  │  │  │  AlreadyHasSameIdException.java
-    │  │  │  │  
-    │  │  │  └─cannotLogIn
-    │  │  │          CannotLogInException.java
-    │  │  │          NotFoundUserException.java
-    │  │  │          PasswordMismatchException.java
-    │  │  │          
-    │  │  ├─db
-    │  │  │      Database.java
-    │  │  │      UserIdSession.java
-    │  │  │      
-    │  │  ├─model
-    │  │  │      User.java
-    │  │  │      
-    │  │  ├─utils
-    │  │  │      SessionIdGenerator.java
-    │  │  │      
-    │  │  └─webserver
-    │  │      │  RequestHandler.java
-    │  │      │  WebServer.java
-    │  │      │  
-    │  │      ├─constants
-    │  │      │      InBody.java
-    │  │      │      Paths.java
-    │  │      │      
-    │  │      ├─controller
-    │  │      │      Controller.java
-    │  │      │      ControllerMapper.java
-    │  │      │      DynamicFileController.java
-    │  │      │      StaticFileController.java
-    │  │      │      
-    │  │      ├─httpUtils
-    │  │      │  │  Request.java
-    │  │      │  │  RequestGetter.java
-    │  │      │  │  Response.java
-    │  │      │  │  ResponseSender.java
-    │  │      │  │  
-    │  │      │  └─entity
-    │  │      │          Body.java
-    │  │      │          Header.java
-    │  │      │          ReqLine.java
-    │  │      │          ResLine.java
-    │  │      │          
-    │  │      └─service
-    │  │              AlreadyLoggedInService.java
-    │  │              InvalidAccesstoUserListService.java
-    │  │              LogInService.java
-    │  │              Service.java
-    │  │              SignUpService.java
-    │  │              UserListService.java
-    │  │              
-    │  └─resources
-    │      │  logback.xml
-    │      │  
-    │      ├─static
-    │      │  ├─css
-    │      │  │      bootstrap.min.css
-    │      │  │      styles.css
-    │      │  │      
-    │      │  ├─fonts
-    │      │  │      glyphicons-halflings-regular.eot
-    │      │  │      glyphicons-halflings-regular.svg
-    │      │  │      glyphicons-halflings-regular.ttf
-    │      │  │      glyphicons-halflings-regular.woff
-    │      │  │      glyphicons-halflings-regular.woff2
-    │      │  │      
-    │      │  ├─images
-    │      │  │      80-text.png
-    │      │  │      
-    │      │  └─js
-    │      │          bootstrap.min.js
-    │      │          jquery-2.2.0.min.js
-    │      │          scripts.js
-    │      │          
-    │      └─templates
-    │          │  favicon.ico
-    │          │  index.html
-    │          │  
-    │          ├─qna
-    │          │      form.html
-    │          │      show.html
-    │          │      
-    │          └─user
-    │                  form.html
-    │                  form_failed.html
-    │                  list.html
-    │                  login.html
-    │                  login_failed.html
-    │                  profile.html
+    ./src/main/java
+    ├── customException
+    │   ├── AlreadyHasSameIdException.java
+    │   └── cannotLogIn
+    │       ├── CannotLogInException.java
+    │       ├── NotFoundUserException.java
+    │       └── PasswordMismatchException.java
+    ├── db
+    │   ├── UserIdSession.java
+    │   └── mysql
+    │       ├── DB_Board.java
+    │       └── DB_Users.java
+    ├── model
+    │   ├── Article.java
+    │   └── User.java
+    ├── utils
+    │   └── SessionIdGenerator.java
+    └── webserver
+    ├── RequestHandler.java
+    ├── WebServer.java
+    ├── constants
+    │   ├── InBody.java
+    │   └── Paths.java
+    ├── controller
+    │   ├── Controller.java
+    │   ├── ControllerMapper.java
+    │   ├── DynamicFileController.java
+    │   ├── HomePathController.java
+    │   └── StaticFileController.java
+    ├── httpUtils
+    │   ├── Request.java
+    │   ├── RequestGetter.java
+    │   ├── Response.java
+    │   ├── ResponseSender.java
+    │   └── entity
+    │       ├── Body.java
+    │       ├── Header.java
+    │       ├── ReqLine.java
+    │       └── ResLine.java
+    └── service
+        ├── AlreadyLoggedInService.java
+        ├── ArticleListService.java
+        ├── InvalidAccesstoUserListService.java
+        ├── LogInService.java
+        ├── PostNewArticleService.java
+        ├── Service.java
+        ├── SignUpService.java
+        └── UserListService.java
 
 - customException
   - AreadyHasSameIdException : 이미 디비에 저장된 아이디로 회원가입 요청이 들어올 경우 던져지는 예외.
@@ -107,9 +63,10 @@ Java Web Application Server 2022
     - NotFoundUserException : 디비에 없는 아이디로 로그인 요청이 들어올 경우 던져지는 예외.
     - PasswordMismatchException : 아이디는 맞지만, 비밀번호가 디비에 저장되어있는 것과 다를 때 던져지는 예외.
 - db
-  - 유저에 관한 정보가 저장되어 있는 디비와 세션
+  - 유저에 관한 정보와 작성글이 저장되어 있는 디비와 세션
 - model
   - User : 유저 관련
+  - Article : 유저가 작성한 글
 - utils
   - SessionIdGenerator : 세션아이디를 만들어주는 클래스
 - webserver : 웹 서버 관련 객체들이 들어있는 패키지
