@@ -39,6 +39,7 @@ public class HttpRequestUtils {
             for (String parameter : query.split("&")) {
                 String[] info = parameter.split("=");
                 result.put(info[0], decode(info[1]));
+                logger.debug("bodyKey:{}, bodyValue:{}", info[0], decode(info[1]));
             }
 
             return result;
