@@ -45,7 +45,7 @@ public class StaticResourceControllerTest {
         assertAll(
                 () -> assertEquals(HttpStatus.OK, response.getStatus()),
                 () -> assertEquals(ContentType.TEXT_HTML.getType(), headers.getValue("Content-Type")),
-                () -> assertEquals(6963, response.getBody().length)
+                () -> assertEquals(5218, response.getBody().length)
         );
     }
 

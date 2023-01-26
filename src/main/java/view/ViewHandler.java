@@ -12,7 +12,8 @@ public class ViewHandler {
                 "/index.html", new IndexView(),
                 "/user/list.html", new UserListView(),
                 "/user/login.html", new LoginView(),
-                "/user/form.html", new SignUpView()
+                "/user/form.html", new SignUpView(),
+                "/qna/form.html", new PostFormView()
         );
     }
 

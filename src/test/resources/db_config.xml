@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<db>
+    <host>127.0.0.1</host>
+    <port>3306</port>
+    <database>test</database>
+    <user>root</user>
+    <password>1234</password>
+</db>
