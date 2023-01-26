@@ -40,15 +40,15 @@ public class UserRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            if(conn != null) {
+            if (conn != null) {
                 try {
                     conn.close();
-                } catch (SQLException e){
+                } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
-            if(pstmt != null) {
-                try{
+            if (pstmt != null) {
+                try {
                     pstmt.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -73,8 +73,9 @@ public class UserRepository {
             pstmt = conn.prepareStatement(query);
             pstmt.setString(1, userId);
             rs = pstmt.executeQuery();
+
             if (rs.next()) {
-                return new User(
+                return User.of(
                         rs.getString("uid"),
                         rs.getString("password"),
                         rs.getString("name"),
@@ -86,21 +87,21 @@ public class UserRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if(conn != null) {
+            if (conn != null) {
                 try {
                     conn.close();
-                } catch (SQLException e){
+                } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
-            if(pstmt != null) {
-                try{
+            if (pstmt != null) {
+                try {
                     pstmt.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
-            if(rs != null) {
+            if (rs != null) {
                 try {
                     rs.close();
                 } catch (SQLException e) {
@@ -130,7 +131,7 @@ public class UserRepository {
             if (rs.next()) {
                 List<User> userList = new ArrayList<>();
                 do {
-                    User user = new User(
+                    User user = User.of(
                             rs.getString("uid"),
                             rs.getString("password"),
                             rs.getString("name"),
@@ -147,21 +148,21 @@ public class UserRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if(conn != null) {
+            if (conn != null) {
                 try {
                     conn.close();
-                } catch (SQLException e){
+                } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
-            if(pstmt != null) {
-                try{
+            if (pstmt != null) {
+                try {
                     pstmt.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
-            if(rs != null) {
+            if (rs != null) {
                 try {
                     rs.close();
                 } catch (SQLException e) {

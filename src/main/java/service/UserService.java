@@ -11,11 +11,6 @@ import java.util.Collection;
 import java.util.Map;
 
 public class UserService {
-    private static final String USER_ID = "userId";
-    private static final String PASSWORD = "password";
-    private static final String NAME = "name";
-    private static final String EMAIL = "email";
-
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
@@ -25,13 +20,7 @@ public class UserService {
     }
 
     public void addUser(Map<String, String> parameters) throws SQLIntegrityConstraintViolationException {
-        User user = new User(
-                parameters.get(USER_ID),
-                parameters.get(PASSWORD),
-                parameters.get(NAME),
-                parameters.get(EMAIL)
-        );
-        userRepository.addUser(user);
+        userRepository.addUser(User.from(parameters));
     }
 
     public void validateUser(String requestUserId, String requestPassword) throws LogInFailedException, RuntimeException {
