@@ -11,7 +11,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 @Slf4j
 @Controller
@@ -38,6 +42,16 @@ public class UserController {
         return "user/login_failed";
     }
 
+    @RequestMapping("/logout")
+    public String logout(HttpServletResponse response) {
+        Cookie cookie = new Cookie("userId", null);
+        cookie.setMaxAge(0);
+        cookie.setPath("/index");
+        response.addCookie(cookie);
+
+        return "redirect:/index";
+    }
+
     @GetMapping("/list")
     public String memberListPage(Model model) {
         return "user/list";
@@ -45,10 +59,10 @@ public class UserController {
 
     @PostMapping("/create.do")
     public String GenerateMember(@ModelAttribute("userDto") UserDto userDto
-    ) {
+    ) throws UnsupportedEncodingException {
         log.debug("user create post");
 
-        User user = new User(userDto.getUserId(), userDto.getPassword(), userDto.getName(), userDto.getEmail());
+        User user = new User(userDto.getUserId(), userDto.getPassword(), URLEncoder.encode(userDto.getName(),"UTF-8"), userDto.getEmail());
 //        User user = new User(userId, password, name, email);
         UserService.join(user);
 
@@ -61,9 +75,16 @@ public class UserController {
     }
 
     @PostMapping("/login.do")
-    public String loginMember(@ModelAttribute("loginDto")LoginDto loginDto) {
+    public String loginMember(@ModelAttribute("loginDto")LoginDto loginDto, HttpServletResponse response) {
         boolean login = UserService.login(loginDto.getUserId(), loginDto.getPassword());
-        if(login) return "redirect:/index";
+        if(login) {
+            Cookie cookie = new Cookie("userId", loginDto.getUserId());
+            cookie.setPath("/index");
+            cookie.setMaxAge(60*60*24*30);
+            response.addCookie(cookie);
+
+            return "redirect:/index";
+        }
         return "redirect:/user/login_fail";
     }
 }
