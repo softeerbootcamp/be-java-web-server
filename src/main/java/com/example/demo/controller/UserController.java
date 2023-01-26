@@ -1,19 +1,21 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.LoginDto;
 import com.example.demo.model.User;
 import com.example.demo.model.UserDto;
 import com.example.demo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 @Slf4j
 @Controller
@@ -21,13 +23,33 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class UserController {
 
     @GetMapping("/form")
-    public String joinPage() {
+    public String joinPage(Model model) {
+        log.debug("In join page");
+        model.addAttribute("userDto", new UserDto());
         return "user/form";
     }
 
     @GetMapping("/login")
     public String loginPage(Model model) {
+        log.debug("In login page");
+        model.addAttribute("loginDto", new LoginDto());
         return "user/login";
+    }
+
+    @GetMapping("/login_fail")
+    public String loginFailPage(Model model) {
+        model.addAttribute("loginDto", new LoginDto());
+        return "user/login_failed";
+    }
+
+    @RequestMapping("/logout")
+    public String logout(HttpServletResponse response) {
+        Cookie cookie = new Cookie("userId", null);
+        cookie.setMaxAge(0);
+        cookie.setPath("/index");
+        response.addCookie(cookie);
+
+        return "redirect:/index";
     }
 
     @GetMapping("/list")
@@ -35,16 +57,34 @@ public class UserController {
         return "user/list";
     }
 
-    @PostMapping("/user/create")
-    public String GenerateMember(@ModelAttribute("userDto") UserDto userDto, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+    @PostMapping("/create.do")
+    public String GenerateMember(@ModelAttribute("userDto") UserDto userDto
+    ) throws UnsupportedEncodingException {
         log.debug("user create post");
 
-        User user = new User(userDto.getUserId(), userDto.getPassword(), userDto.getName(), userDto.getEmail());
-        model.addAttribute("user", user);
-
+        User user = new User(userDto.getUserId(), userDto.getPassword(), URLEncoder.encode(userDto.getName(),"UTF-8"), userDto.getEmail());
+//        User user = new User(userId, password, name, email);
         UserService.join(user);
 
-        redirectAttributes.addAttribute("user", user);
+        log.debug("userId : {}", userDto.getUserId());
+        log.debug("password : {}", userDto.getPassword());
+        log.debug("name : {}", userDto.getName());
+        log.debug("email : {}", userDto.getEmail());
+
         return "redirect:/index";
+    }
+
+    @PostMapping("/login.do")
+    public String loginMember(@ModelAttribute("loginDto")LoginDto loginDto, HttpServletResponse response) {
+        boolean login = UserService.login(loginDto.getUserId(), loginDto.getPassword());
+        if(login) {
+            Cookie cookie = new Cookie("userId", loginDto.getUserId());
+            cookie.setPath("/index");
+            cookie.setMaxAge(60*60*24*30);
+            response.addCookie(cookie);
+
+            return "redirect:/index";
+        }
+        return "redirect:/user/login_fail";
     }
 }
